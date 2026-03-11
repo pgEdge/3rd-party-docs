@@ -18,7 +18,7 @@
 -  Querying JSON data using SQL/JSON query functions and SQL/JSON path language expressions.
 
 
- To learn more about the SQL/JSON standard, see [SQL Technical Report](../../.#sqltr-19075-6). For details on JSON types supported in PostgreSQL, see [JSON Types](../data-types/json-types.md#datatype-json).
+ To learn more about the SQL/JSON standard, see [SQL Technical Report](../../bibliography.md#sqltr-19075-6). For details on JSON types supported in PostgreSQL, see [JSON Types](../data-types/json-types.md#datatype-json).
 
 
 ### Processing and Creating JSON Data { #functions-json-processing }

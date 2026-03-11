@@ -1194,4 +1194,5 @@ nav:
       - '`pg_xlogdump` renamed to `pg_waldump`': appendixes/obsolete-or-renamed-features/pg_xlogdump-renamed-to-pg_waldump.md
       - '`pg_resetxlog` renamed to `pg_resetwal`': appendixes/obsolete-or-renamed-features/pg_resetxlog-renamed-to-pg_resetwal.md
       - '`pg_receivexlog` renamed to `pg_receivewal`': appendixes/obsolete-or-renamed-features/pg_receivexlog-renamed-to-pg_receivewal.md
+  - Bibliography: bibliography.md
 

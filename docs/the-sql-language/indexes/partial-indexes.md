@@ -156,4 +156,4 @@ CREATE INDEX mytable_cat_data ON mytable (category, data);
  If your table is large enough that a single index really is a bad idea, you should look into using partitioning instead (see [Table Partitioning](../data-definition/table-partitioning.md#ddl-partitioning)). With that mechanism, the system does understand that the tables and indexes are non-overlapping, so far better performance is possible.
 
 
- More information about partial indexes can be found in [ston89b](../../.#ston89b), [[Partial indexing in POSTGRES: research project](https://search.library.berkeley.edu/permalink/01UCS_BER/iqob43/alma991082339239706532)](../../.#olson93), and [seshadri95](../../.#seshadri95).
+ More information about partial indexes can be found in [ston89b](../../bibliography.md#ston89b), [[Partial indexing in POSTGRES: research project](https://search.library.berkeley.edu/permalink/01UCS_BER/iqob43/alma991082339239706532)](../../bibliography.md#olson93), and [seshadri95](../../bibliography.md#seshadri95).
