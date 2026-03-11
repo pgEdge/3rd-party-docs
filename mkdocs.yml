@@ -1,4 +1,4 @@
-site_name: PostgreSQL 19devel
+site_name: PostgreSQL 18.3
 
 extra_css:
   - stylesheets/extra.css
@@ -101,7 +101,6 @@ nav:
       - Generated Columns: the-sql-language/data-definition/generated-columns.md
       - Constraints: the-sql-language/data-definition/constraints.md
       - System Columns: the-sql-language/data-definition/system-columns.md
-      - Temporal Tables: the-sql-language/data-definition/temporal-tables.md
       - Modifying Tables: the-sql-language/data-definition/modifying-tables.md
       - Privileges: the-sql-language/data-definition/privileges.md
       - Row Security Policies: the-sql-language/data-definition/row-security-policies.md
@@ -365,7 +364,6 @@ nav:
       - Row Filters: server-administration/logical-replication/row-filters.md
       - Column Lists: server-administration/logical-replication/column-lists.md
       - Generated Column Replication: server-administration/logical-replication/generated-column-replication.md
-      - Replicating Sequences: server-administration/logical-replication/replicating-sequences.md
       - Conflicts: server-administration/logical-replication/conflicts.md
       - Restrictions: server-administration/logical-replication/restrictions.md
       - Architecture: server-administration/logical-replication/architecture.md
@@ -601,7 +599,6 @@ nav:
       - Sharing Data: server-programming/pl-python-python-procedural-language/sharing-data.md
       - Anonymous Code Blocks: server-programming/pl-python-python-procedural-language/anonymous-code-blocks.md
       - Trigger Functions: server-programming/pl-python-python-procedural-language/trigger-functions.md
-      - Event Trigger Functions: server-programming/pl-python-python-procedural-language/event-trigger-functions.md
       - Database Access: server-programming/pl-python-python-procedural-language/database-access.md
       - Explicit Subtransactions: server-programming/pl-python-python-procedural-language/explicit-subtransactions.md
       - Transaction Management: server-programming/pl-python-python-procedural-language/transaction-management.md
@@ -625,7 +622,6 @@ nav:
       - Logical Decoding SQL Interface: server-programming/logical-decoding/logical-decoding-sql-interface.md
       - System Catalogs Related to Logical Decoding: server-programming/logical-decoding/system-catalogs-related-to-logical-decoding.md
       - Logical Decoding Output Plugins: server-programming/logical-decoding/logical-decoding-output-plugins.md
-      - Writing Logical Decoding Output Plugins: server-programming/logical-decoding/writing-logical-decoding-output-plugins.md
       - Logical Decoding Output Writers: server-programming/logical-decoding/logical-decoding-output-writers.md
       - Synchronous Replication Support for Logical Decoding: server-programming/logical-decoding/synchronous-replication-support-for-logical-decoding.md
       - Streaming of Large Transactions for Logical Decoding: server-programming/logical-decoding/streaming-of-large-transactions-for-logical-decoding.md
@@ -806,7 +802,6 @@ nav:
       - REFRESH MATERIALIZED VIEW: reference/sql-commands/refresh-materialized-view.md
       - REINDEX: reference/sql-commands/reindex.md
       - RELEASE SAVEPOINT: reference/sql-commands/release-savepoint.md
-      - REPACK: reference/sql-commands/repack.md
       - RESET: reference/sql-commands/reset.md
       - REVOKE: reference/sql-commands/revoke.md
       - ROLLBACK: reference/sql-commands/rollback.md
@@ -828,7 +823,6 @@ nav:
       - UPDATE: reference/sql-commands/update.md
       - VACUUM: reference/sql-commands/vacuum.md
       - VALUES: reference/sql-commands/values.md
-      - WAIT FOR: reference/sql-commands/wait-for.md
     - PostgreSQL Client Applications:
       - reference/postgresql-client-applications/index.md
       - clusterdb: reference/postgresql-client-applications/clusterdb.md
@@ -954,7 +948,6 @@ nav:
       - '`pg_backend_memory_contexts`': internals/system-views/pg_backend_memory_contexts.md
       - '`pg_config`': internals/system-views/pg_config.md
       - '`pg_cursors`': internals/system-views/pg_cursors.md
-      - '`pg_dsm_registry_allocations`': internals/system-views/pg_dsm_registry_allocations.md
       - '`pg_file_settings`': internals/system-views/pg_file_settings.md
       - '`pg_group`': internals/system-views/pg_group.md
       - '`pg_hba_file_rules`': internals/system-views/pg_hba_file_rules.md
@@ -965,7 +958,6 @@ nav:
       - '`pg_policies`': internals/system-views/pg_policies.md
       - '`pg_prepared_statements`': internals/system-views/pg_prepared_statements.md
       - '`pg_prepared_xacts`': internals/system-views/pg_prepared_xacts.md
-      - '`pg_publication_sequences`': internals/system-views/pg_publication_sequences.md
       - '`pg_publication_tables`': internals/system-views/pg_publication_tables.md
       - '`pg_replication_origin_status`': internals/system-views/pg_replication_origin_status.md
       - '`pg_replication_slots`': internals/system-views/pg_replication_slots.md
@@ -1105,7 +1097,10 @@ nav:
       - XML Limits and Conformance to SQL/XML: appendixes/sql-conformance/xml-limits-and-conformance-to-sql-xml.md
     - Release Notes:
       - appendixes/release-notes/index.md
-      - Release 19: appendixes/release-notes/release-19.md
+      - Release 18.3: appendixes/release-notes/release-18-3.md
+      - Release 18.2: appendixes/release-notes/release-18-2.md
+      - Release 18.1: appendixes/release-notes/release-18-1.md
+      - Release 18: appendixes/release-notes/release-18.md
       - Prior Releases: appendixes/release-notes/prior-releases.md
     - Additional Supplied Modules and Extensions:
       - appendixes/additional-supplied-modules-and-extensions/index.md
