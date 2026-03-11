@@ -22,7 +22,7 @@
 <tbody>
 <tr>
 <td><p><code>locktype</code> <code>text</code></p>
-<p>Type of the lockable object: <code>relation</code>, <code>extend</code>, <code>frozenid</code>, <code>page</code>, <code>tuple</code>, <code>transactionid</code>, <code>virtualxid</code>, <code>spectoken</code>, <code>object</code>, <code>userlock</code>, <code>advisory</code>, or <code>applytransaction</code>. (See also <a href="#wait-event-lock-table">wait-event-lock-table</a>.)</p></td>
+<p>Type of the lockable object: <code>relation</code>, <code>extend</code>, <code>frozenid</code>, <code>page</code>, <code>tuple</code>, <code>transactionid</code>, <code>virtualxid</code>, <code>spectoken</code>, <code>object</code>, <code>userlock</code>, <code>advisory</code>, or <code>applytransaction</code>. (See also <a href="../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#wait-event-lock-table">Wait Events of Type <code>Lock</code></a>.)</p></td>
 </tr>
 <tr>
 <td><p><code>database</code> <code>oid</code> (references <a href="../system-catalogs/pg_database.md#catalog-pg-database"><code>pg_database</code></a>.<code>oid</code>)</p>

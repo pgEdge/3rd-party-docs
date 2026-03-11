@@ -199,7 +199,7 @@
 </tr>
 <tr>
 <td><p><code>wait_event</code> <code>text</code></p>
-<p>Wait event name if backend is currently waiting, otherwise NULL. See <a href="#wait-event-activity-table">wait-event-activity-table</a> through <a href="#wait-event-timeout-table">wait-event-timeout-table</a>.</p></td>
+<p>Wait event name if backend is currently waiting, otherwise NULL. See <a href="#wait-event-activity-table">Wait Events of Type <code>Activity</code></a> through <a href="#wait-event-timeout-table">Wait Events of Type <code>Timeout</code></a>.</p></td>
 </tr>
 <tr>
 <td><p><code>state</code> <code>text</code></p>
@@ -246,16 +246,363 @@
 
 | Wait Event Type | Description |
 | --- | --- |
-| `Activity` | The server process is idle. This event type indicates a process waiting for activity in its main processing loop. `wait_event` will identify the specific wait point; see [wait-event-activity-table](#wait-event-activity-table). |
-| `Buffer` | The server process is waiting for access to a data buffer. See [wait-event-buffer-table](#wait-event-buffer-table). |
-| `Client` | The server process is waiting for activity on a socket connected to a user application. Thus, the server expects something to happen that is independent of its internal processes. `wait_event` will identify the specific wait point; see [wait-event-client-table](#wait-event-client-table). |
-| `Extension` | The server process is waiting for some condition defined by an extension module. See [wait-event-extension-table](#wait-event-extension-table). |
+| `Activity` | The server process is idle. This event type indicates a process waiting for activity in its main processing loop. `wait_event` will identify the specific wait point; see [Wait Events of Type `Activity`](#wait-event-activity-table). |
+| `Buffer` | The server process is waiting for access to a data buffer. See [Wait Events of Type `Buffer`](#wait-event-buffer-table). |
+| `Client` | The server process is waiting for activity on a socket connected to a user application. Thus, the server expects something to happen that is independent of its internal processes. `wait_event` will identify the specific wait point; see [Wait Events of Type `Client`](#wait-event-client-table). |
+| `Extension` | The server process is waiting for some condition defined by an extension module. See [Wait Events of Type `Extension`](#wait-event-extension-table). |
 | `InjectionPoint` | The server process is waiting for an injection point to reach an outcome defined in a test. See [Injection Points](../../server-programming/extending-sql/c-language-functions.md#xfunc-addin-injection-points) for more details. This type has no predefined wait points. |
-| `IO` | The server process is waiting for an I/O operation to complete. `wait_event` will identify the specific wait point; see [wait-event-io-table](#wait-event-io-table). |
-| `IPC` | The server process is waiting for some interaction with another server process. `wait_event` will identify the specific wait point; see [wait-event-ipc-table](#wait-event-ipc-table). |
-| `Lock` | The server process is waiting for a heavyweight lock. Heavyweight locks, also known as lock manager locks or simply locks, primarily protect SQL-visible objects such as tables. However, they are also used to ensure mutual exclusion for certain internal operations such as relation extension. `wait_event` will identify the type of lock awaited; see [wait-event-lock-table](#wait-event-lock-table). |
-| `LWLock` | The server process is waiting for a lightweight lock. Most such locks protect a particular data structure in shared memory. `wait_event` will contain a name identifying the purpose of the lightweight lock. (Some locks have specific names; others are part of a group of locks each with a similar purpose.) See [wait-event-lwlock-table](#wait-event-lwlock-table). |
-| `Timeout` | The server process is waiting for a timeout to expire. `wait_event` will identify the specific wait point; see [wait-event-timeout-table](#wait-event-timeout-table). |
+| `IO` | The server process is waiting for an I/O operation to complete. `wait_event` will identify the specific wait point; see [Wait Events of Type `Io`](#wait-event-io-table). |
+| `IPC` | The server process is waiting for some interaction with another server process. `wait_event` will identify the specific wait point; see [Wait Events of Type `Ipc`](#wait-event-ipc-table). |
+| `Lock` | The server process is waiting for a heavyweight lock. Heavyweight locks, also known as lock manager locks or simply locks, primarily protect SQL-visible objects such as tables. However, they are also used to ensure mutual exclusion for certain internal operations such as relation extension. `wait_event` will identify the type of lock awaited; see [Wait Events of Type `Lock`](#wait-event-lock-table). |
+| `LWLock` | The server process is waiting for a lightweight lock. Most such locks protect a particular data structure in shared memory. `wait_event` will contain a name identifying the purpose of the lightweight lock. (Some locks have specific names; others are part of a group of locks each with a similar purpose.) See [Wait Events of Type `Lwlock`](#wait-event-lwlock-table). |
+| `Timeout` | The server process is waiting for a timeout to expire. `wait_event` will identify the specific wait point; see [Wait Events of Type `Timeout`](#wait-event-timeout-table). |
+
+
+<a id="wait-event-activity-table"></a>
+**Table: Wait Events of Type `Activity`**
+
+| `Activity` Wait Event | Description |
+| --- | --- |
+| `ArchiverMain` | Waiting in main loop of archiver process. |
+| `AutovacuumMain` | Waiting in main loop of autovacuum launcher process. |
+| `BgwriterHibernate` | Waiting in background writer process, hibernating. |
+| `BgwriterMain` | Waiting in main loop of background writer process. |
+| `CheckpointerMain` | Waiting in main loop of checkpointer process. |
+| `CheckpointerShutdown` | Waiting for checkpointer process to be terminated. |
+| `IoWorkerMain` | Waiting in main loop of IO Worker process. |
+| `LogicalApplyMain` | Waiting in main loop of logical replication apply process. |
+| `LogicalLauncherMain` | Waiting in main loop of logical replication launcher process. |
+| `LogicalParallelApplyMain` | Waiting in main loop of logical replication parallel apply process. |
+| `RecoveryWalStream` | Waiting in main loop of startup process for WAL to arrive, during streaming recovery. |
+| `ReplicationSlotsyncMain` | Waiting in main loop of slot synchronization. |
+| `ReplicationSlotsyncShutdown` | Waiting for slot sync worker to shut down. |
+| `SysloggerMain` | Waiting in main loop of syslogger process. |
+| `WalReceiverMain` | Waiting in main loop of WAL receiver process. |
+| `WalSenderMain` | Waiting in main loop of WAL sender process. |
+| `WalSummarizerWal` | Waiting in WAL summarizer for more WAL to be generated. |
+| `WalWriterMain` | Waiting in main loop of WAL writer process. |
+
+
+<a id="wait-event-buffer-table"></a>
+**Table: Wait Events of Type `Buffer`**
+
+| `Buffer` Wait Event | Description |
+| --- | --- |
+| `BufferCleanup` | Waiting to acquire an exclusive pin on a buffer. Buffer pin waits can be protracted if another process holds an open cursor that last read data from the buffer in question. |
+| `BufferExclusive` | Waiting to acquire a exclusive lock on a buffer. |
+| `BufferShared` | Waiting to acquire a shared lock on a buffer. |
+| `BufferShareExclusive` | Waiting to acquire a share exclusive lock on a buffer. |
+
+
+<a id="wait-event-client-table"></a>
+**Table: Wait Events of Type `Client`**
+
+| `Client` Wait Event | Description |
+| --- | --- |
+| `ClientRead` | Waiting to read data from the client. |
+| `ClientWrite` | Waiting to write data to the client. |
+| `GssOpenServer` | Waiting to read data from the client while establishing a GSSAPI session. |
+| `LibpqwalreceiverConnect` | Waiting in WAL receiver to establish connection to remote server. |
+| `LibpqwalreceiverReceive` | Waiting in WAL receiver to receive data from remote server. |
+| `SslOpenServer` | Waiting for SSL while attempting connection. |
+| `WaitForStandbyConfirmation` | Waiting for WAL to be received and flushed by the physical standby. |
+| `WaitForWalFlush` | Waiting for WAL flush to reach a target LSN on a primary or standby. |
+| `WaitForWalReplay` | Waiting for WAL replay to reach a target LSN on a standby. |
+| `WaitForWalWrite` | Waiting for WAL write to reach a target LSN on a standby. |
+| `WalSenderWaitForWal` | Waiting for WAL to be flushed in WAL sender process. |
+| `WalSenderWriteData` | Waiting for any activity when processing replies from WAL receiver in WAL sender process. |
+
+
+<a id="wait-event-extension-table"></a>
+**Table: Wait Events of Type `Extension`**
+
+| `Extension` Wait Event | Description |
+| --- | --- |
+| `Extension` | Waiting in an extension. |
+
+
+<a id="wait-event-io-table"></a>
+**Table: Wait Events of Type `Io`**
+
+| `IO` Wait Event | Description |
+| --- | --- |
+| `AioIoCompletion` | Waiting for another process to complete IO. |
+| `AioIoUringExecution` | Waiting for IO execution via io_uring. |
+| `AioIoUringSubmit` | Waiting for IO submission via io_uring. |
+| `BasebackupRead` | Waiting for base backup to read from a file. |
+| `BasebackupSync` | Waiting for data written by a base backup to reach durable storage. |
+| `BasebackupWrite` | Waiting for base backup to write to a file. |
+| `BuffileRead` | Waiting for a read from a buffered file. |
+| `BuffileTruncate` | Waiting for a buffered file to be truncated. |
+| `BuffileWrite` | Waiting for a write to a buffered file. |
+| `ControlFileRead` | Waiting for a read from the `pg_control` file. |
+| `ControlFileSync` | Waiting for the `pg_control` file to reach durable storage. |
+| `ControlFileSyncUpdate` | Waiting for an update to the `pg_control` file to reach durable storage. |
+| `ControlFileWrite` | Waiting for a write to the `pg_control` file. |
+| `ControlFileWriteUpdate` | Waiting for a write to update the `pg_control` file. |
+| `CopyFileCopy` | Waiting for a file copy operation. |
+| `CopyFileRead` | Waiting for a read during a file copy operation. |
+| `CopyFileWrite` | Waiting for a write during a file copy operation. |
+| `CopyFromRead` | Waiting to read data from a pipe, a file or a program during COPY FROM. |
+| `CopyToWrite` | Waiting to write data to a pipe, a file or a program during COPY TO. |
+| `DataFileExtend` | Waiting for a relation data file to be extended. |
+| `DataFileFlush` | Waiting for a relation data file to reach durable storage. |
+| `DataFileImmediateSync` | Waiting for an immediate synchronization of a relation data file to durable storage. |
+| `DataFilePrefetch` | Waiting for an asynchronous prefetch from a relation data file. |
+| `DataFileRead` | Waiting for a read from a relation data file. |
+| `DataFileSync` | Waiting for changes to a relation data file to reach durable storage. |
+| `DataFileTruncate` | Waiting for a relation data file to be truncated. |
+| `DataFileWrite` | Waiting for a write to a relation data file. |
+| `DsmAllocate` | Waiting for a dynamic shared memory segment to be allocated. |
+| `DsmFillZeroWrite` | Waiting to fill a dynamic shared memory backing file with zeroes. |
+| `LockFileAddtodatadirRead` | Waiting for a read while adding a line to the data directory lock file. |
+| `LockFileAddtodatadirSync` | Waiting for data to reach durable storage while adding a line to the data directory lock file. |
+| `LockFileAddtodatadirWrite` | Waiting for a write while adding a line to the data directory lock file. |
+| `LockFileCreateRead` | Waiting to read while creating the data directory lock file. |
+| `LockFileCreateSync` | Waiting for data to reach durable storage while creating the data directory lock file. |
+| `LockFileCreateWrite` | Waiting for a write while creating the data directory lock file. |
+| `LockFileRecheckdatadirRead` | Waiting for a read during recheck of the data directory lock file. |
+| `LogicalRewriteCheckpointSync` | Waiting for logical rewrite mappings to reach durable storage during a checkpoint. |
+| `LogicalRewriteMappingSync` | Waiting for mapping data to reach durable storage during a logical rewrite. |
+| `LogicalRewriteMappingWrite` | Waiting for a write of mapping data during a logical rewrite. |
+| `LogicalRewriteSync` | Waiting for logical rewrite mappings to reach durable storage. |
+| `LogicalRewriteTruncate` | Waiting for truncate of mapping data during a logical rewrite. |
+| `LogicalRewriteWrite` | Waiting for a write of logical rewrite mappings. |
+| `RelationMapRead` | Waiting for a read of the relation map file. |
+| `RelationMapReplace` | Waiting for durable replacement of a relation map file. |
+| `RelationMapWrite` | Waiting for a write to the relation map file. |
+| `ReorderBufferRead` | Waiting for a read during reorder buffer management. |
+| `ReorderBufferWrite` | Waiting for a write during reorder buffer management. |
+| `ReorderLogicalMappingRead` | Waiting for a read of a logical mapping during reorder buffer management. |
+| `ReplicationSlotRead` | Waiting for a read from a replication slot control file. |
+| `ReplicationSlotRestoreSync` | Waiting for a replication slot control file to reach durable storage while restoring it to memory. |
+| `ReplicationSlotSync` | Waiting for a replication slot control file to reach durable storage. |
+| `ReplicationSlotWrite` | Waiting for a write to a replication slot control file. |
+| `SlruFlushSync` | Waiting for SLRU data to reach durable storage during a checkpoint or database shutdown. |
+| `SlruRead` | Waiting for a read of an SLRU page. |
+| `SlruSync` | Waiting for SLRU data to reach durable storage following a page write. |
+| `SlruWrite` | Waiting for a write of an SLRU page. |
+| `SnapbuildRead` | Waiting for a read of a serialized historical catalog snapshot. |
+| `SnapbuildSync` | Waiting for a serialized historical catalog snapshot to reach durable storage. |
+| `SnapbuildWrite` | Waiting for a write of a serialized historical catalog snapshot. |
+| `TimelineHistoryFileSync` | Waiting for a timeline history file received via streaming replication to reach durable storage. |
+| `TimelineHistoryFileWrite` | Waiting for a write of a timeline history file received via streaming replication. |
+| `TimelineHistoryRead` | Waiting for a read of a timeline history file. |
+| `TimelineHistorySync` | Waiting for a newly created timeline history file to reach durable storage. |
+| `TimelineHistoryWrite` | Waiting for a write of a newly created timeline history file. |
+| `TwophaseFileRead` | Waiting for a read of a two phase state file. |
+| `TwophaseFileSync` | Waiting for a two phase state file to reach durable storage. |
+| `TwophaseFileWrite` | Waiting for a write of a two phase state file. |
+| `VersionFileSync` | Waiting for the version file to reach durable storage while creating a database. |
+| `VersionFileWrite` | Waiting for the version file to be written while creating a database. |
+| `WalsenderTimelineHistoryRead` | Waiting for a read from a timeline history file during a walsender timeline command. |
+| `WalBootstrapSync` | Waiting for WAL to reach durable storage during bootstrapping. |
+| `WalBootstrapWrite` | Waiting for a write of a WAL page during bootstrapping. |
+| `WalCopyRead` | Waiting for a read when creating a new WAL segment by copying an existing one. |
+| `WalCopySync` | Waiting for a new WAL segment created by copying an existing one to reach durable storage. |
+| `WalCopyWrite` | Waiting for a write when creating a new WAL segment by copying an existing one. |
+| `WalInitSync` | Waiting for a newly initialized WAL file to reach durable storage. |
+| `WalInitWrite` | Waiting for a write while initializing a new WAL file. |
+| `WalRead` | Waiting for a read from a WAL file. |
+| `WalSummaryRead` | Waiting for a read from a WAL summary file. |
+| `WalSummaryWrite` | Waiting for a write to a WAL summary file. |
+| `WalSync` | Waiting for a WAL file to reach durable storage. |
+| `WalSyncMethodAssign` | Waiting for data to reach durable storage while assigning a new WAL sync method. |
+| `WalWrite` | Waiting for a write to a WAL file. |
+
+
+<a id="wait-event-ipc-table"></a>
+**Table: Wait Events of Type `Ipc`**
+
+| `IPC` Wait Event | Description |
+| --- | --- |
+| `AppendReady` | Waiting for subplan nodes of an `Append` plan node to be ready. |
+| `ArchiveCleanupCommand` | Waiting for [archive_cleanup_command](../server-configuration/write-ahead-log.md#guc-archive-cleanup-command) to complete. |
+| `ArchiveCommand` | Waiting for [archive_command](../server-configuration/write-ahead-log.md#guc-archive-command) to complete. |
+| `BackendTermination` | Waiting for the termination of another backend. |
+| `BackupWaitWalArchive` | Waiting for WAL files required for a backup to be successfully archived. |
+| `BgworkerShutdown` | Waiting for background worker to shut down. |
+| `BgworkerStartup` | Waiting for background worker to start up. |
+| `BtreePage` | Waiting for the page number needed to continue a parallel B-tree scan to become available. |
+| `BufferIo` | Waiting for buffer I/O to complete. |
+| `CheckpointDelayComplete` | Waiting for a backend that blocks a checkpoint from completing. |
+| `CheckpointDelayStart` | Waiting for a backend that blocks a checkpoint from starting. |
+| `CheckpointDone` | Waiting for a checkpoint to complete. |
+| `CheckpointStart` | Waiting for a checkpoint to start. |
+| `ExecuteGather` | Waiting for activity from a child process while executing a `Gather` plan node. |
+| `HashBatchAllocate` | Waiting for an elected Parallel Hash participant to allocate a hash table. |
+| `HashBatchElect` | Waiting to elect a Parallel Hash participant to allocate a hash table. |
+| `HashBatchLoad` | Waiting for other Parallel Hash participants to finish loading a hash table. |
+| `HashBuildAllocate` | Waiting for an elected Parallel Hash participant to allocate the initial hash table. |
+| `HashBuildElect` | Waiting to elect a Parallel Hash participant to allocate the initial hash table. |
+| `HashBuildHashInner` | Waiting for other Parallel Hash participants to finish hashing the inner relation. |
+| `HashBuildHashOuter` | Waiting for other Parallel Hash participants to finish partitioning the outer relation. |
+| `HashGrowBatchesDecide` | Waiting to elect a Parallel Hash participant to decide on future batch growth. |
+| `HashGrowBatchesElect` | Waiting to elect a Parallel Hash participant to allocate more batches. |
+| `HashGrowBatchesFinish` | Waiting for an elected Parallel Hash participant to decide on future batch growth. |
+| `HashGrowBatchesReallocate` | Waiting for an elected Parallel Hash participant to allocate more batches. |
+| `HashGrowBatchesRepartition` | Waiting for other Parallel Hash participants to finish repartitioning. |
+| `HashGrowBucketsElect` | Waiting to elect a Parallel Hash participant to allocate more buckets. |
+| `HashGrowBucketsReallocate` | Waiting for an elected Parallel Hash participant to finish allocating more buckets. |
+| `HashGrowBucketsReinsert` | Waiting for other Parallel Hash participants to finish inserting tuples into new buckets. |
+| `LogicalApplySendData` | Waiting for a logical replication leader apply process to send data to a parallel apply process. |
+| `LogicalParallelApplyStateChange` | Waiting for a logical replication parallel apply process to change state. |
+| `LogicalSyncData` | Waiting for a logical replication remote server to send data for initial table synchronization. |
+| `LogicalSyncStateChange` | Waiting for a logical replication remote server to change state. |
+| `MessageQueueInternal` | Waiting for another process to be attached to a shared message queue. |
+| `MessageQueuePutMessage` | Waiting to write a protocol message to a shared message queue. |
+| `MessageQueueReceive` | Waiting to receive bytes from a shared message queue. |
+| `MessageQueueSend` | Waiting to send bytes to a shared message queue. |
+| `MultixactCreation` | Waiting for a multixact creation to complete. |
+| `ParallelBitmapScan` | Waiting for parallel bitmap scan to become initialized. |
+| `ParallelCreateIndexScan` | Waiting for parallel `CREATE INDEX` workers to finish heap scan. |
+| `ParallelFinish` | Waiting for parallel workers to finish computing. |
+| `ProcarrayGroupUpdate` | Waiting for the group leader to clear the transaction ID at transaction end. |
+| `ProcSignalBarrier` | Waiting for a barrier event to be processed by all backends. |
+| `Promote` | Waiting for standby promotion. |
+| `RecoveryConflictSnapshot` | Waiting for recovery conflict resolution for a vacuum cleanup. |
+| `RecoveryConflictTablespace` | Waiting for recovery conflict resolution for dropping a tablespace. |
+| `RecoveryEndCommand` | Waiting for [recovery_end_command](../server-configuration/write-ahead-log.md#guc-recovery-end-command) to complete. |
+| `RecoveryPause` | Waiting for recovery to be resumed. |
+| `ReplicationOriginDrop` | Waiting for a replication origin to become inactive so it can be dropped. |
+| `ReplicationSlotDrop` | Waiting for a replication slot to become inactive so it can be dropped. |
+| `RestoreCommand` | Waiting for [restore_command](../server-configuration/write-ahead-log.md#guc-restore-command) to complete. |
+| `SafeSnapshot` | Waiting to obtain a valid snapshot for a `READ ONLY DEFERRABLE` transaction. |
+| `SyncRep` | Waiting for confirmation from a remote server during synchronous replication. |
+| `WalReceiverExit` | Waiting for the WAL receiver to exit. |
+| `WalReceiverWaitStart` | Waiting for startup process to send initial data for streaming replication. |
+| `WalSummaryReady` | Waiting for a new WAL summary to be generated. |
+| `XactGroupUpdate` | Waiting for the group leader to update transaction status at transaction end. |
+
+
+<a id="wait-event-lock-table"></a>
+**Table: Wait Events of Type `Lock`**
+
+| `Lock` Wait Event | Description |
+| --- | --- |
+| `advisory` | Waiting to acquire an advisory user lock. |
+| `applytransaction` | Waiting to acquire a lock on a remote transaction being applied by a logical replication subscriber. |
+| `extend` | Waiting to extend a relation. |
+| `frozenid` | Waiting to update `pg_database`.`datfrozenxid` and `pg_database`.`datminmxid`. |
+| `object` | Waiting to acquire a lock on a non-relation database object. |
+| `page` | Waiting to acquire a lock on a page of a relation. |
+| `relation` | Waiting to acquire a lock on a relation. |
+| `spectoken` | Waiting to acquire a speculative insertion lock. |
+| `transactionid` | Waiting for a transaction to finish. |
+| `tuple` | Waiting to acquire a lock on a tuple. |
+| `userlock` | Waiting to acquire a user lock. |
+| `virtualxid` | Waiting to acquire a virtual transaction ID lock; see [Transactions and Identifiers](../../internals/transaction-processing/transactions-and-identifiers.md#transaction-id). |
+
+
+<a id="wait-event-lwlock-table"></a>
+**Table: Wait Events of Type `Lwlock`**
+
+| `LWLock` Wait Event | Description |
+| --- | --- |
+| `AddinShmemInit` | Waiting to manage an extension's space allocation in shared memory. |
+| `AioUringCompletion` | Waiting for another process to complete IO via io_uring. |
+| `AioWorkerSubmissionQueue` | Waiting to access AIO worker submission queue. |
+| `AutoFile` | Waiting to update the `postgresql.auto.conf` file. |
+| `Autovacuum` | Waiting to read or update the current state of autovacuum workers. |
+| `AutovacuumSchedule` | Waiting to ensure that a table selected for autovacuum still needs vacuuming. |
+| `BackgroundWorker` | Waiting to read or update background worker state. |
+| `BtreeVacuum` | Waiting to read or update vacuum-related information for a B-tree index. |
+| `BufferMapping` | Waiting to associate a data block with a buffer in the buffer pool. |
+| `CheckpointerComm` | Waiting to manage fsync requests. |
+| `CommitTs` | Waiting to read or update the last value set for a transaction commit timestamp. |
+| `CommitTsBuffer` | Waiting for I/O on a commit timestamp SLRU buffer. |
+| `CommitTsSLRU` | Waiting to access the commit timestamp SLRU cache. |
+| `ControlFile` | Waiting to read or update the `pg_control` file or create a new WAL file. |
+| `DSMRegistry` | Waiting to read or update the dynamic shared memory registry. |
+| `DSMRegistryDSA` | Waiting to access dynamic shared memory registry's dynamic shared memory allocator. |
+| `DSMRegistryHash` | Waiting to access dynamic shared memory registry's shared hash table. |
+| `DynamicSharedMemoryControl` | Waiting to read or update dynamic shared memory allocation information. |
+| `InjectionPoint` | Waiting to read or update information related to injection points. |
+| `LockFastPath` | Waiting to read or update a process' fast-path lock information. |
+| `LockManager` | Waiting to read or update information about “heavyweight” locks. |
+| `LogicalDecodingControl` | Waiting to read or update logical decoding status information. |
+| `LogicalRepLauncherDSA` | Waiting to access logical replication launcher's dynamic shared memory allocator. |
+| `LogicalRepLauncherHash` | Waiting to access logical replication launcher's shared hash table. |
+| `LogicalRepWorker` | Waiting to read or update the state of logical replication workers. |
+| `MultiXactGen` | Waiting to read or update shared multixact state. |
+| `MultiXactMemberBuffer` | Waiting for I/O on a multixact member SLRU buffer. |
+| `MultiXactMemberSLRU` | Waiting to access the multixact member SLRU cache. |
+| `MultiXactOffsetBuffer` | Waiting for I/O on a multixact offset SLRU buffer. |
+| `MultiXactOffsetSLRU` | Waiting to access the multixact offset SLRU cache. |
+| `MultiXactTruncation` | Waiting to read or truncate multixact information. |
+| `NotifyBuffer` | Waiting for I/O on a `NOTIFY` message SLRU buffer. |
+| `NotifyChannelHash` | Waiting to access the `NOTIFY` channel hash table. |
+| `NotifyQueue` | Waiting to read or update `NOTIFY` messages. |
+| `NotifyQueueTail` | Waiting to update limit on `NOTIFY` message storage. |
+| `NotifySLRU` | Waiting to access the `NOTIFY` message SLRU cache. |
+| `OidGen` | Waiting to allocate a new OID. |
+| `ParallelAppend` | Waiting to choose the next subplan during Parallel Append plan execution. |
+| `ParallelBtreeScan` | Waiting to synchronize workers during Parallel B-tree scan plan execution. |
+| `ParallelHashJoin` | Waiting to synchronize workers during Parallel Hash Join plan execution. |
+| `ParallelQueryDSA` | Waiting for parallel query dynamic shared memory allocation. |
+| `ParallelVacuumDSA` | Waiting for parallel vacuum dynamic shared memory allocation. |
+| `PerSessionDSA` | Waiting for parallel query dynamic shared memory allocation. |
+| `PerSessionRecordType` | Waiting to access a parallel query's information about composite types. |
+| `PerSessionRecordTypmod` | Waiting to access a parallel query's information about type modifiers that identify anonymous record types. |
+| `PerXactPredicateList` | Waiting to access the list of predicate locks held by the current serializable transaction during a parallel query. |
+| `PgStatsData` | Waiting for shared memory stats data access. |
+| `PgStatsDSA` | Waiting for stats dynamic shared memory allocator access. |
+| `PgStatsHash` | Waiting for stats shared memory hash table access. |
+| `PredicateLockManager` | Waiting to access predicate lock information used by serializable transactions. |
+| `ProcArray` | Waiting to access the shared per-process data structures (typically, to get a snapshot or report a session's transaction ID). |
+| `RelationMapping` | Waiting to read or update a `pg_filenode.map` file (used to track the filenode assignments of certain system catalogs). |
+| `RelCacheInit` | Waiting to read or update a `pg_internal.init` relation cache initialization file. |
+| `ReplicationOrigin` | Waiting to create, drop or use a replication origin. |
+| `ReplicationOriginState` | Waiting to read or update the progress of one replication origin. |
+| `ReplicationSlotAllocation` | Waiting to allocate or free a replication slot. |
+| `ReplicationSlotControl` | Waiting to read or update replication slot state. |
+| `ReplicationSlotIO` | Waiting for I/O on a replication slot. |
+| `SerialBuffer` | Waiting for I/O on a serializable transaction conflict SLRU buffer. |
+| `SerialControl` | Waiting to read or update shared `pg_serial` state. |
+| `SerializableFinishedList` | Waiting to access the list of finished serializable transactions. |
+| `SerializablePredicateList` | Waiting to access the list of predicate locks held by serializable transactions. |
+| `SerializableXactHash` | Waiting to read or update information about serializable transactions. |
+| `SerialSLRU` | Waiting to access the serializable transaction conflict SLRU cache. |
+| `SharedTidBitmap` | Waiting to access a shared TID bitmap during a parallel bitmap index scan. |
+| `SharedTupleStore` | Waiting to access a shared tuple store during parallel query. |
+| `ShmemIndex` | Waiting to find or allocate space in shared memory. |
+| `SInvalRead` | Waiting to retrieve messages from the shared catalog invalidation queue. |
+| `SInvalWrite` | Waiting to add a message to the shared catalog invalidation queue. |
+| `SubtransBuffer` | Waiting for I/O on a sub-transaction SLRU buffer. |
+| `SubtransSLRU` | Waiting to access the sub-transaction SLRU cache. |
+| `SyncRep` | Waiting to read or update information about the state of synchronous replication. |
+| `SyncScan` | Waiting to select the starting location of a synchronized table scan. |
+| `TablespaceCreate` | Waiting to create or drop a tablespace. |
+| `TwoPhaseState` | Waiting to read or update the state of prepared transactions. |
+| `WaitEventCustom` | Waiting to read or update custom wait events information. |
+| `WaitLSN` | Waiting to read or update shared Wait-for-LSN state. |
+| `WALBufMapping` | Waiting to replace a page in WAL buffers. |
+| `WALInsert` | Waiting to insert WAL data into a memory buffer. |
+| `WALSummarizer` | Waiting to read or update WAL summarization state. |
+| `WALWrite` | Waiting for WAL buffers to be written to disk. |
+| `WrapLimitsVacuum` | Waiting to update limits on transaction id and multixact consumption. |
+| `XactBuffer` | Waiting for I/O on a transaction status SLRU buffer. |
+| `XactSLRU` | Waiting to access the transaction status SLRU cache. |
+| `XactTruncation` | Waiting to execute `pg_xact_status` or update the oldest transaction ID available to it. |
+| `XidGen` | Waiting to allocate a new transaction ID. |
+
+
+<a id="wait-event-timeout-table"></a>
+**Table: Wait Events of Type `Timeout`**
+
+| `Timeout` Wait Event | Description |
+| --- | --- |
+| `BaseBackupThrottle` | Waiting during base backup when throttling activity. |
+| `CheckpointWriteDelay` | Waiting between writes while performing a checkpoint. |
+| `CommitDelay` | Waiting for commit delay before WAL flush. |
+| `PgSleep` | Waiting due to a call to `pg_sleep` or a sibling function. |
+| `RecoveryApplyDelay` | Waiting to apply WAL during recovery because of a delay setting. |
+| `RecoveryRetrieveRetryInterval` | Waiting during recovery when WAL data is not available from any source (`pg_wal`, archive or stream). |
+| `RegisterSyncRequest` | Waiting while sending synchronization requests to the checkpointer, because the request queue is full. |
+| `SpinDelay` | Waiting while acquiring a contended spinlock. |
+| `VacuumDelay` | Waiting in a cost-based vacuum delay point. |
+| `VacuumTruncate` | Waiting to acquire an exclusive lock to truncate off any empty pages at the end of a table vacuumed. |
+| `WalSummarizerError` | Waiting after a WAL summarizer error. |
 
 
  Here are examples of how wait events can be viewed:
@@ -287,7 +634,7 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 
 !!! note
 
-    Extensions can add `Extension`, `InjectionPoint`, and `LWLock` events to the lists shown in [wait-event-extension-table](#wait-event-extension-table) and [wait-event-lwlock-table](#wait-event-lwlock-table). In some cases, the name of an `LWLock` assigned by an extension will not be available in all server processes. It might be reported as just “`extension`” rather than the extension-assigned name.
+    Extensions can add `Extension`, `InjectionPoint`, and `LWLock` events to the lists shown in [Wait Events of Type `Extension`](#wait-event-extension-table) and [Wait Events of Type `Lwlock`](#wait-event-lwlock-table). In some cases, the name of an `LWLock` assigned by an extension will not be available in all server processes. It might be reported as just “`extension`” rather than the extension-assigned name.
 
 
 ### `pg_stat_replication` { #monitoring-pg-stat-replication-view }
@@ -2147,7 +2494,7 @@ FROM pg_stat_get_backend_idset() AS backendid;
 </tr>
 <tr>
 <td><code>pg_stat_get_backend_wait_event</code> ( <code>integer</code> ) <code>text</code></td>
-<td>Returns the wait event name if this backend is currently waiting, otherwise NULL. See <a href="#wait-event-activity-table">wait-event-activity-table</a> through <a href="#wait-event-timeout-table">wait-event-timeout-table</a>.</td>
+<td>Returns the wait event name if this backend is currently waiting, otherwise NULL. See <a href="#wait-event-activity-table">Wait Events of Type <code>Activity</code></a> through <a href="#wait-event-timeout-table">Wait Events of Type <code>Timeout</code></a>.</td>
 <td></td>
 </tr>
 <tr>
