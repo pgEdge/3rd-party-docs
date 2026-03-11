@@ -5,10 +5,9 @@
 MkDocs Material site for the PostgreSQL documentation, converted
 from the upstream SGML sources.
 
-The `main` branch contains the builder tooling and PostgreSQL
-development docs (from upstream `master`). Additional branches
-contain docs from released major versions, named after the
-corresponding upstream branch (e.g. `REL_17_STABLE`).
+The `main` branch contains the builder tooling. Additional
+branches contain generated docs for each major version, named
+`pg<version>` (e.g. `pg17`, `pg18`).
 
 ## Prerequisites
 
