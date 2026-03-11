@@ -1,4 +1,6 @@
-## Automatic Vacuuming { #runtime-config-autovacuum }
+<a id="runtime-config-autovacuum"></a>
+
+## Automatic Vacuuming
 
 
  These settings control the behavior of the *autovacuum* feature. Refer to [The Autovacuum Daemon](../routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) for more information. Note that many of these settings can be overridden on a per-table basis; see [Storage Parameters](../../reference/sql-commands/create-table.md#sql-createtable-storage-parameters).

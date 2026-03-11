@@ -1,7 +1,9 @@
-## Miscellaneous Coding Conventions { #source-conventions }
+<a id="source-conventions"></a>
 
+## Miscellaneous Coding Conventions
+  <a id="source-conventions-c-standard"></a>
 
-## C Standard { #source-conventions-c-standard }
+## C Standard
 
 
  Code in PostgreSQL should only rely on language features available in the C99 standard. That means a conforming C99 compiler has to be able to compile postgres, at least aside from a few platform dependent pieces.
@@ -14,9 +16,9 @@
 
 
  For example `_Static_assert()` and `__builtin_constant_p` are currently used, even though they are from newer revisions of the C standard and a GCC extension respectively. If not available we respectively fall back to using a C99 compatible replacement that performs the same checks, but emits rather cryptic messages and do not use `__builtin_constant_p`.
+  <a id="source-conventions-macros-inline"></a>
 
-
-## Function-Like Macros and Inline Functions { #source-conventions-macros-inline }
+## Function-Like Macros and Inline Functions
 
 
  Both macros with arguments and `static inline` functions may be used. The latter are preferable if there are multiple-evaluation hazards when written as a macro, as e.g., the case with
@@ -44,9 +46,9 @@ MemoryContextSwitchTo(MemoryContext context)
 #endif   /* FRONTEND */
 ```
  In this example `CurrentMemoryContext`, which is only available in the backend, is referenced and the function thus hidden with a `#ifndef FRONTEND`. This rule exists because some compilers emit references to symbols contained in inline functions even if the function is not used.
+  <a id="source-conventions-signal-handlers"></a>
 
-
-## Writing Signal Handlers { #source-conventions-signal-handlers }
+## Writing Signal Handlers
 
 
  To be suitable to run inside a signal handler code has to be written very carefully. The fundamental problem is that, unless blocked, a signal handler can interrupt code at any time. If code inside the signal handler uses the same state as code outside chaos may ensue. As an example consider what happens if a signal handler tries to acquire a lock that's already held in the interrupted code.
@@ -67,8 +69,9 @@ handle_sighup(SIGNAL_ARGS)
 }
 ```
 
+  <a id="source-conventions-function-pointers"></a>
 
-## Calling Function Pointers { #source-conventions-function-pointers }
+## Calling Function Pointers
 
 
  For clarity, it is preferred to explicitly dereference a function pointer when calling the pointed-to function if the pointer is a simple variable, for example:

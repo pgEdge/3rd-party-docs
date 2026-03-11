@@ -1,4 +1,6 @@
-# pgbench { #pgbench }
+<a id="pgbench"></a>
+
+# pgbench
 
 run a benchmark test on PostgreSQL
 
@@ -83,9 +85,9 @@ pgbench [ OPTIONS ] DBNAME
 
 
  The following is divided into three subsections. Different options are used during database initialization and while running benchmarks, but some options are useful in both cases.
+ <a id="pgbench-init-options"></a>
 
-
-### Initialization Options { #pgbench-init-options }
+### Initialization Options
 
 
  pgbench accepts the following command-line initialization arguments:
@@ -180,8 +182,9 @@ pgbench [ OPTIONS ] DBNAME
 `--unlogged-tables`
 :   Create all tables as unlogged tables, rather than permanent tables.
 
+  <a id="pgbench-run-options"></a>
 
-### Benchmarking Options { #pgbench-run-options }
+### Benchmarking Options
 
 
  pgbench accepts the following command-line benchmarking arguments:
@@ -348,8 +351,9 @@ pgbench [ OPTIONS ] DBNAME
 `--verbose-errors`
 :   Print messages about all errors and failures (errors without retrying) including which limit for retries was exceeded and how far it was exceeded for the serialization/deadlock failures. (Note that in this case the output can be significantly increased.) See [Failures and Serialization/Deadlock Retries](#failures-and-retries) for more information.
 
+  <a id="pgbench-common-options"></a>
 
-### Common Options { #pgbench-common-options }
+### Common Options
 
 
  pgbench also accepts the following common command-line arguments for connection parameters and other common settings:
@@ -402,9 +406,9 @@ pgbench [ OPTIONS ] DBNAME
 
 
 ## Notes
+  <a id="transactions-and-scripts"></a>
 
-
-### What Is the “Transaction” Actually Performed in pgbench? { #transactions-and-scripts }
+### What Is the “Transaction” Actually Performed in pgbench?
 
 
  pgbench executes test scripts chosen randomly from a specified list. The scripts may include built-in scripts specified with `-b` and user-provided scripts specified with `-f`. Each script may be given a relative weight specified after an `@` so as to change its selection probability. The default weight is `1`. Scripts with a weight of `0` are ignored.
@@ -446,9 +450,8 @@ pgbench [ OPTIONS ] DBNAME
 
 
  There is a simple variable-substitution facility for script files. Variable names must consist of letters (including non-Latin letters), digits, and underscores, with the first character not being a digit. Variables can be set by the command-line `-D` option, explained above, or by the meta commands explained below. In addition to any variables preset by `-D` command-line options, there are a few variables that are preset automatically, listed in [pgbench Automatic Variables](#pgbench-automatic-variables). A value specified for these variables using `-D` takes precedence over the automatic presets. Once set, a variable's value can be inserted into an SQL command by writing `:`*variablename*. When running more than one client session, each session has its own set of variables. pgbench supports up to 255 variable uses in one statement.
+ <a id="pgbench-automatic-variables"></a>
 
-
-<a id="pgbench-automatic-variables"></a>
 **Table: pgbench Automatic Variables**
 
 | Variable | Description |
@@ -564,15 +567,14 @@ pgbench [ OPTIONS ] DBNAME
 
 `\startpipeline`, `\syncpipeline`, `\endpipeline`
 :   This group of commands implements pipelining of SQL statements. A pipeline must begin with a `\startpipeline` and end with an `\endpipeline`. In between there may be any number of `\syncpipeline` commands, which sends a [sync message](../../internals/frontend-backend-protocol/message-flow.md#protocol-flow-ext-query) without ending the ongoing pipeline and flushing the send buffer. In pipeline mode, statements are sent to the server without waiting for the results of previous statements. See [Pipeline Mode](../../client-interfaces/libpq-c-library/pipeline-mode.md#libpq-pipeline-mode) for more details. Pipeline mode requires the use of extended query protocol.
+  <a id="pgbench-builtin-operators"></a>
 
-
-### Built-in Operators { #pgbench-builtin-operators }
+### Built-in Operators
 
 
  The arithmetic, bitwise, comparison and logical operators listed in [pgbench Operators](#pgbench-operators) are built into pgbench and may be used in expressions appearing in [`\set`](#pgbench-metacommand-set). The operators are listed in increasing precedence order. Except as noted, operators taking two numeric inputs will produce a double value if either input is double, otherwise they produce an integer result.
+ <a id="pgbench-operators"></a>
 
-
-<a id="pgbench-operators"></a>
 **Table: pgbench Operators**
 
 <table>
@@ -706,15 +708,14 @@ pgbench [ OPTIONS ] DBNAME
 </tr>
 </tbody>
 </table>
+  <a id="pgbench-builtin-functions"></a>
 
-
-### Built-In Functions { #pgbench-builtin-functions }
+### Built-In Functions
 
 
  The functions listed in [pgbench Functions](#pgbench-functions) are built into pgbench and may be used in expressions appearing in [`\set`](#pgbench-metacommand-set).
+  <a id="pgbench-functions"></a>
 
-
-<a id="pgbench-functions"></a>
 **Table: pgbench Functions**
 
 <table>
@@ -1161,9 +1162,9 @@ statement latencies in milliseconds, failures and retries:
 
 
  Note that collecting the additional timing information needed for per-statement latency computation adds some overhead. This will slow average execution speed and lower the computed TPS. The amount of slowdown varies significantly depending on platform and hardware. Comparing average TPS values with and without latency reporting enabled is a good way to measure if the timing overhead is significant.
+  <a id="failures-and-retries"></a>
 
-
-### Failures and Serialization/Deadlock Retries { #failures-and-retries }
+### Failures and Serialization/Deadlock Retries
 
 
  When executing pgbench, there are three main types of errors:

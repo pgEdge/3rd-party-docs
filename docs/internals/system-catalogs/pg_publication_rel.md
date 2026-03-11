@@ -1,4 +1,6 @@
-## `pg_publication_rel` { #catalog-pg-publication-rel }
+<a id="catalog-pg-publication-rel"></a>
+
+## `pg_publication_rel`
 
 
  The catalog `pg_publication_rel` contains the mapping between relations and publications in the database. This is a many-to-many mapping. See also [`pg_publication_tables`](../system-views/pg_publication_tables.md#view-pg-publication-tables) for a more user-friendly view of this information.

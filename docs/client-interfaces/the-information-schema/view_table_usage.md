@@ -1,4 +1,6 @@
-## `view_table_usage` { #infoschema-view-table-usage }
+<a id="infoschema-view-table-usage"></a>
+
+## `view_table_usage`
 
 
  The view `view_table_usage` identifies all tables that are used in the query expression of a view (the `SELECT` statement that defines the view). A table is only included if that table is owned by a currently enabled role.

@@ -1,4 +1,6 @@
-## Comparison of Different Solutions { #different-replication-solutions }
+<a id="different-replication-solutions"></a>
+
+## Comparison of Different Solutions
 
 
 Shared Disk Failover
@@ -42,9 +44,8 @@ Synchronous Multimaster Replication
 
 
  [High Availability, Load Balancing, and Replication Feature Matrix](#high-availability-matrix) summarizes the capabilities of the various solutions listed above.
+ <a id="high-availability-matrix"></a>
 
-
-<a id="high-availability-matrix"></a>
 **Table: High Availability, Load Balancing, and Replication Feature Matrix**
 
 | Feature | Shared Disk | File System Repl. | Write-Ahead Log Shipping | Logical Repl. | Trigger-​Based Repl. | SQL Repl. Middle-ware | Async. MM Repl. | Sync. MM Repl. |

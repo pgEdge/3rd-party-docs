@@ -1,4 +1,6 @@
-## Shutting Down the Server { #server-shutdown }
+<a id="server-shutdown"></a>
+
+## Shutting Down the Server
 
 
  There are several ways to shut down the database server. Under the hood, they all reduce to sending a signal to the supervisor `postgres` process.

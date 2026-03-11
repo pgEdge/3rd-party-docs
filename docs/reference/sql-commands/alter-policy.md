@@ -1,4 +1,6 @@
-# ALTER POLICY { #sql-alterpolicy }
+<a id="sql-alterpolicy"></a>
+
+# ALTER POLICY
 
 change the definition of a row-level security policy
 

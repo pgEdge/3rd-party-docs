@@ -1,4 +1,6 @@
-## `character_sets` { #infoschema-character-sets }
+<a id="infoschema-character-sets"></a>
+
+## `character_sets`
 
 
  The view `character_sets` identifies the character sets available in the current database. Since PostgreSQL does not support multiple character sets within one database, this view only shows one, which is the database encoding.

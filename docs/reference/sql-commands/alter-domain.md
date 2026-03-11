@@ -1,4 +1,6 @@
-# ALTER DOMAIN { #sql-alterdomain }
+<a id="sql-alterdomain"></a>
+
+# ALTER DOMAIN
 
 change the definition of a domain
 
@@ -160,13 +162,13 @@ ALTER DOMAIN zipcode RENAME CONSTRAINT zipchk TO zip_check;
 
 ALTER DOMAIN zipcode SET SCHEMA customers;
 ```
+ <a id="sql-alterdomain-compatibility"></a>
 
-
-## Compatibility { #sql-alterdomain-compatibility }
+## Compatibility
 
 
  `ALTER DOMAIN` conforms to the SQL standard, except for the `OWNER`, `RENAME`, `SET SCHEMA`, and `VALIDATE CONSTRAINT` variants, which are PostgreSQL extensions. The `NOT VALID` clause of the `ADD CONSTRAINT` variant is also a PostgreSQL extension.
+ <a id="sql-alterdomain-see-also"></a>
 
-
-## See Also { #sql-alterdomain-see-also }
+## See Also
   [sql-createdomain](create-domain.md#sql-createdomain), [sql-dropdomain](drop-domain.md#sql-dropdomain)

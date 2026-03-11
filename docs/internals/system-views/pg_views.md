@@ -1,4 +1,6 @@
-## `pg_views` { #view-pg-views }
+<a id="view-pg-views"></a>
+
+## `pg_views`
 
 
  The view `pg_views` provides access to useful information about each view in the database.

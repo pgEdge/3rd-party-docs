@@ -1,4 +1,6 @@
-## Index Access Method Functions { #index-functions }
+<a id="index-functions"></a>
+
+## Index Access Method Functions
 
 
  The index construction and maintenance functions that an index access method must provide in `IndexAmRoutine` are:

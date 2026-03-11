@@ -1,4 +1,6 @@
-## Release 17.8 { #release-17-8 }
+<a id="release-17-8"></a>
+
+## Release 17.8
 
 
 **Release date:.**
@@ -8,18 +10,18 @@
 
 
  This release contains a variety of fixes from 17.7. For information about new features in major release 17, see [Release 17](release-17.md#release-17).
+ <a id="release-17-8-migration"></a>
 
-
-### Migration to Version 17.8 { #release-17-8-migration }
+### Migration to Version 17.8
 
 
  A dump/restore is not required for those running 17.X.
 
 
  However, if you are upgrading from a version earlier than 17.6, see [Release 17.6](release-17-6.md#release-17-6).
+  <a id="release-17-8-changes"></a>
 
-
-### Changes { #release-17-8-changes }
+### Changes
 
 
 -  Guard against unexpected dimensions of `oidvector`/`int2vector` (Tom Lane) [&sect;](https://postgr.es/c/3d160401b)

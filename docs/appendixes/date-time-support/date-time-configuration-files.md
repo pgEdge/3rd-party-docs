@@ -1,4 +1,6 @@
-## Date/Time Configuration Files { #datetime-config-files }
+<a id="datetime-config-files"></a>
+
+## Date/Time Configuration Files
 
 
  Since timezone abbreviations are not well standardized, PostgreSQL provides a means to customize the set of abbreviations accepted by the server. The [timezone_abbreviations](../../server-administration/server-configuration/client-connection-defaults.md#guc-timezone-abbreviations) run-time parameter determines the active set of abbreviations. While this parameter can be altered by any database user, the possible values for it are under the control of the database administrator — they are in fact names of configuration files stored in `.../share/timezonesets/` of the installation directory. By adding or altering files in that directory, the administrator can set local policy for timezone abbreviations.

@@ -1,4 +1,6 @@
-## PL/Tcl Configuration { #pltcl-config }
+<a id="pltcl-config"></a>
+
+## PL/Tcl Configuration
 
 
  This section lists configuration parameters that affect PL/Tcl.

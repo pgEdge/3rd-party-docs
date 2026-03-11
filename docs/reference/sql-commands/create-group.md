@@ -1,4 +1,6 @@
-# CREATE GROUP { #sql-creategroup }
+<a id="sql-creategroup"></a>
+
+# CREATE GROUP
 
 define a new database role
 

@@ -1,4 +1,6 @@
-## `pg_rules` { #view-pg-rules }
+<a id="view-pg-rules"></a>
+
+## `pg_rules`
 
 
  The view `pg_rules` provides access to useful information about query rewrite rules.

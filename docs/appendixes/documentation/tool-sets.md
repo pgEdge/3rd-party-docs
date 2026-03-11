@@ -1,4 +1,6 @@
-## Tool Sets { #docguide-toolsets }
+<a id="docguide-toolsets"></a>
+
+## Tool Sets
 
 
  The following tools are used to process the documentation. Some might be optional, as noted.
@@ -29,9 +31,9 @@
 
 
  We have documented experience with several installation methods for the various tools that are needed to process the documentation. These will be described below. There might be some other packaged distributions for these tools. Please report package status to the documentation mailing list, and we will include that information here.
+ <a id="docguide-toolsets-inst-fedora-et-al"></a>
 
-
-### Installation on Fedora, RHEL, and Derivatives { #docguide-toolsets-inst-fedora-et-al }
+### Installation on Fedora, RHEL, and Derivatives
 
 
  To install the required packages, use:
@@ -41,8 +43,9 @@
 yum install docbook-dtds docbook-style-xsl libxslt fop
 ```
 
+  <a id="docguide-toolsets-inst-freebsd"></a>
 
-### Installation on FreeBSD { #docguide-toolsets-inst-freebsd }
+### Installation on FreeBSD
 
 
  To install the required packages with `pkg`, use:
@@ -54,9 +57,9 @@ pkg install docbook-xml docbook-xsl libxslt fop
 
 
  When building the documentation from the `doc` directory you'll need to use `gmake`, because the makefile provided is not suitable for FreeBSD's `make`.
+  <a id="docguide-toolsets-inst-debian"></a>
 
-
-### Debian Packages { #docguide-toolsets-inst-debian }
+### Debian Packages
 
 
  There is a full set of packages of the documentation tools available for Debian GNU/Linux. To install, simply use:
@@ -66,8 +69,9 @@ pkg install docbook-xml docbook-xsl libxslt fop
 apt-get install docbook-xml docbook-xsl libxml2-utils xsltproc fop
 ```
 
+  <a id="docguide-toolsets-inst-macos"></a>
 
-### macOS { #docguide-toolsets-inst-macos }
+### macOS
 
 
  If you use MacPorts, the following will get you set up:
@@ -107,9 +111,9 @@ postgres.sgml:21: warning: failed to load external entity "http://www.oasis-open
 
 
  While it is possible to use the Apple-provided versions of `xmllint` and `xsltproc` instead of those from MacPorts or Homebrew, you'll still need to install the DocBook DTD and stylesheets, and set up a catalog file that points to them.
+  <a id="docguide-toolsets-configure"></a>
 
-
-### Detection by `configure` { #docguide-toolsets-configure }
+### Detection by `configure`
 
 
  Before you can build the documentation you need to run the `configure` script, as you would when building the PostgreSQL programs themselves. Check the output near the end of the run; it should look something like this:

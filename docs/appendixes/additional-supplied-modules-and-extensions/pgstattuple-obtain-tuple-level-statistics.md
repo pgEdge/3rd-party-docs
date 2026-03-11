@@ -1,13 +1,15 @@
-## pgstattuple — obtain tuple-level statistics { #pgstattuple }
+<a id="pgstattuple"></a>
+
+## pgstattuple — obtain tuple-level statistics
 
 
  The `pgstattuple` module provides various functions to obtain tuple-level statistics.
 
 
  Because these functions return detailed page-level information, access is restricted by default. By default, only the role `pg_stat_scan_tables` has `EXECUTE` privilege. Superusers of course bypass this restriction. After the extension has been installed, users may issue `GRANT` commands to change the privileges on the functions to allow others to execute them. However, it might be preferable to add those users to the `pg_stat_scan_tables` role instead.
+ <a id="pgstattuple-funcs"></a>
 
-
-### Functions { #pgstattuple-funcs }
+### Functions
 
 
 `pgstattuple(regclass) returns record`
@@ -28,9 +30,8 @@
     free_percent       | 1.95
     ```
      The output columns are described in [`pgstattuple` Output Columns](#pgstattuple-columns).
+     <a id="pgstattuple-columns"></a>
 
-
-    <a id="pgstattuple-columns"></a>
     **Table: `pgstattuple` Output Columns**
 
     | Column | Type | Description |
@@ -189,9 +190,8 @@
 
 
      For pages that cannot be skipped, it scans each tuple, recording its presence and size in the appropriate counters, and adding up the free space on the page. At the end, it estimates the total number of live tuples based on the number of pages and tuples scanned (in the same way that VACUUM estimates pg_class.reltuples).
+     <a id="pgstatapprox-columns"></a>
 
-
-    <a id="pgstatapprox-columns"></a>
     **Table: `pgstattuple_approx` Output Columns**
 
     | Column | Type | Description |
@@ -209,9 +209,9 @@
 
 
      In the above output, the free space figures may not match the `pgstattuple` output exactly, because the free space map gives us an exact figure, but is not guaranteed to be accurate to the byte.
+  <a id="pgstattuple-authors"></a>
 
-
-### Authors { #pgstattuple-authors }
+### Authors
 
 
  Tatsuo Ishii, Satoshi Nagayasu and Abhijit Menon-Sen

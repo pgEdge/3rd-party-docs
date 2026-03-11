@@ -1,4 +1,6 @@
-# SQL Key Words { #sql-keywords-appendix }
+<a id="sql-keywords-appendix"></a>
+
+# SQL Key Words
 
 
  [SQL Key Words](#keywords-table) lists all tokens that are key words in the SQL standard and in PostgreSQL 17.9. Background information can be found in [Identifiers and Key Words](../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-identifiers). (For space reasons, only the latest two versions of the SQL standard, and SQL-92 for historical comparison, are included. The differences between those and the other intermediate standard versions are small.)
@@ -20,9 +22,8 @@
 
 
  It is important to understand before studying [SQL Key Words](#keywords-table) that the fact that a key word is not reserved in PostgreSQL does not mean that the feature related to the word is not implemented. Conversely, the presence of a key word does not indicate the existence of a feature.
+  <a id="keywords-table"></a>
 
-
-<a id="keywords-table"></a>
 **Table: SQL Key Words**
 
 | Key Word | PostgreSQL | SQL:2023 | SQL:2016 | SQL-92 |

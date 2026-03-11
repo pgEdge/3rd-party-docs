@@ -1,4 +1,6 @@
-## Creating Custom Scan Paths { #custom-scan-path }
+<a id="custom-scan-path"></a>
+
+## Creating Custom Scan Paths
 
 
  A custom scan provider will typically add paths for a base relation by setting the following hook, which is called after the core code has generated all the access paths it can for the relation (except for Gather and Gather Merge paths, which are made after this call so that they can use partial paths added by the hook):
@@ -48,9 +50,9 @@ extern PGDLLIMPORT set_join_pathlist_hook_type set_join_pathlist_hook;
 
 
  Note also that the set of join clauses to apply to the join, which is passed as `extra->restrictlist`, varies depending on the combination of inner and outer relations. A `CustomPath` path generated for the `joinrel` must contain the set of join clauses it uses, which will be used by the planner to convert the `CustomPath` path into a plan, if it is selected by the planner as the best path for the `joinrel`.
+ <a id="custom-scan-path-callbacks"></a>
 
-
-### Custom Scan Path Callbacks { #custom-scan-path-callbacks }
+### Custom Scan Path Callbacks
 
 
 ```

@@ -1,10 +1,11 @@
-## Event Trigger Firing Matrix { #event-trigger-matrix }
+<a id="event-trigger-matrix"></a>
+
+## Event Trigger Firing Matrix
 
 
  [Event Trigger Support by Command Tag](#event-trigger-by-command-tag) lists all commands for which event triggers are supported.
+ <a id="event-trigger-by-command-tag"></a>
 
-
-<a id="event-trigger-by-command-tag"></a>
 **Table: Event Trigger Support by Command Tag**
 
 | Command Tag | `ddl_​command_​start` | `ddl_​command_​end` | `sql_​drop` | `table_​rewrite` | Notes |

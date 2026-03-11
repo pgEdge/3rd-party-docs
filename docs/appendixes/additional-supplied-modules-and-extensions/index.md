@@ -1,4 +1,6 @@
-# Additional Supplied Modules and Extensions { #contrib }
+<a id="contrib"></a>
+
+# Additional Supplied Modules and Extensions
 
  This appendix and the next one contain information on the optional components found in the `contrib` directory of the PostgreSQL distribution. These include porting tools, analysis utilities, and plug-in features that are not part of the core PostgreSQL system. They are separate mainly because they address a limited audience or are too experimental to be part of the main source tree. This does not preclude their usefulness.
 
@@ -36,6 +38,7 @@ CREATE EXTENSION EXTENSION_NAME;
  This command registers the new SQL objects in the current database only, so you need to run it in every database in which you want the extension's facilities to be available. Alternatively, run it in database `template1` so that the extension will be copied into subsequently-created databases by default.
 
  For all extensions, the `CREATE EXTENSION` command must be run by a database superuser, unless the extension is considered “trusted”. Trusted extensions can be run by any user who has `CREATE` privilege on the current database. Extensions that are trusted are identified as such in the sections that follow. Generally, trusted extensions are ones that cannot provide access to outside-the-database functionality.
+<a id="contrib-trusted-extensions"></a>
 
  The following extensions are trusted in a default installation:
 

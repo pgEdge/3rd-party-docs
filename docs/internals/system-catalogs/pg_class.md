@@ -1,4 +1,6 @@
-## `pg_class` { #catalog-pg-class }
+<a id="catalog-pg-class"></a>
+
+## `pg_class`
 
 
  The catalog `pg_class` describes tables and other objects that have columns or are otherwise similar to a table. This includes indexes (but see also [`pg_index`](pg_index.md#catalog-pg-index)), sequences (but see also [`pg_sequence`](pg_sequence.md#catalog-pg-sequence)), views, materialized views, composite types, and TOAST tables; see `relkind`. Below, when we mean all of these kinds of objects we speak of “relations”. Not all of `pg_class`'s columns are meaningful for all relation kinds.

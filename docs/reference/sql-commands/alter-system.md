@@ -1,4 +1,6 @@
-# ALTER SYSTEM { #sql-altersystem }
+<a id="sql-altersystem"></a>
+
+# ALTER SYSTEM
 
 change a server configuration parameter
 

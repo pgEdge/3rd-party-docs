@@ -1,4 +1,6 @@
-# dropuser { #app-dropuser }
+<a id="app-dropuser"></a>
+
+# dropuser
 
 remove a PostgreSQL user account
 

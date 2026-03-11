@@ -1,13 +1,15 @@
-## pg_freespacemap — examine the free space map { #pgfreespacemap }
+<a id="pgfreespacemap"></a>
+
+## pg_freespacemap — examine the free space map
 
 
  The `pg_freespacemap` module provides a means for examining the [free space map](../../internals/database-physical-storage/free-space-map.md#storage-fsm) (FSM). It provides a function called `pg_freespace`, or two overloaded functions, to be precise. The functions show the value recorded in the free space map for a given page, or for all pages in the relation.
 
 
  By default use is restricted to superusers and roles with privileges of the `pg_stat_scan_tables` role. Access may be granted to others using `GRANT`.
+ <a id="pgfreespacemap-funcs"></a>
 
-
-### Functions { #pgfreespacemap-funcs }
+### Functions
 
 
 `pg_freespace(rel regclass IN, blkno bigint IN) returns int2`
@@ -21,9 +23,9 @@
 
 
  For indexes, what is tracked is entirely-unused pages, rather than free space within pages. Therefore, the values are not meaningful, just whether a page is in-use or empty.
+  <a id="pgfreespacemap-sample-output"></a>
 
-
-### Sample Output { #pgfreespacemap-sample-output }
+### Sample Output
 
 
 ```
@@ -59,9 +61,9 @@ postgres=# SELECT * FROM pg_freespace('foo', 7);
          1216
 (1 row)
 ```
+  <a id="pgfreespacemap-author"></a>
 
-
-### Author { #pgfreespacemap-author }
+### Author
 
 
  Original version by Mark Kirkwood [markir@paradise.net.nz](mailto:markir@paradise.net.nz). Rewritten in version 8.4 to suit new FSM implementation by Heikki Linnakangas [heikki@enterprisedb.com](mailto:heikki@enterprisedb.com)

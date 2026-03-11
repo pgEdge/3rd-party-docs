@@ -1,4 +1,6 @@
-# START TRANSACTION { #sql-start-transaction }
+<a id="sql-start-transaction"></a>
+
+# START TRANSACTION
 
 start a transaction block
 

@@ -1,19 +1,20 @@
-## Character Set Support { #multibyte }
+<a id="multibyte"></a>
+
+## Character Set Support
 
 
  The character set support in PostgreSQL allows you to store text in a variety of character sets (also called encodings), including single-byte character sets such as the ISO 8859 series and multiple-byte character sets such as EUC (Extended Unix Code), UTF-8, and Mule internal code. All supported character sets can be used transparently by clients, but a few are not supported for use within the server (that is, as a server-side encoding). The default character set is selected while initializing your PostgreSQL database cluster using `initdb`. It can be overridden when you create a database, so you can have multiple databases each with a different character set.
 
 
  An important restriction, however, is that each database's character set must be compatible with the database's `LC_CTYPE` (character classification) and `LC_COLLATE` (string sort order) locale settings. For `C` or `POSIX` locale, any character set is allowed, but for other libc-provided locales there is only one character set that will work correctly. (On Windows, however, UTF-8 encoding can be used with any locale.) If you have ICU support configured, ICU-provided locales can be used with most but not all server-side encodings.
+ <a id="multibyte-charset-supported"></a>
 
-
-### Supported Character Sets { #multibyte-charset-supported }
+### Supported Character Sets
 
 
  [PostgreSQL Character Sets](#charset-table) shows the character sets available for use in PostgreSQL.
+ <a id="charset-table"></a>
 
-
-<a id="charset-table"></a>
 **Table: PostgreSQL Character Sets**
 
 | Name | Description | Language | Server? | ICU? | Bytes/​Char | Aliases |
@@ -66,9 +67,9 @@
 
 
  The `SQL_ASCII` setting behaves considerably differently from the other settings. When the server character set is `SQL_ASCII`, the server interprets byte values 0–127 according to the ASCII standard, while byte values 128–255 are taken as uninterpreted characters. No encoding conversion will be done when the setting is `SQL_ASCII`. Thus, this setting is not so much a declaration that a specific encoding is in use, as a declaration of ignorance about the encoding. In most cases, if you are working with any non-ASCII data, it is unwise to use the `SQL_ASCII` setting because PostgreSQL will be unable to help you by converting or validating non-ASCII characters.
+  <a id="multibyte-setting"></a>
 
-
-### Setting the Character Set { #multibyte-setting }
+### Setting the Character Set
 
 
  `initdb` defines the default character set (encoding) for a PostgreSQL cluster. For example,
@@ -120,9 +121,9 @@ $ psql -l
 
 
      PostgreSQL will allow superusers to create databases with `SQL_ASCII` encoding even when `LC_CTYPE` is not `C` or `POSIX`. As noted above, `SQL_ASCII` does not enforce that the data stored in the database has any particular encoding, and so this choice poses risks of locale-dependent misbehavior. Using this combination of settings is deprecated and may someday be forbidden altogether.
+  <a id="multibyte-automatic-conversion"></a>
 
-
-### Automatic Character Set Conversion Between Server and Client { #multibyte-automatic-conversion }
+### Automatic Character Set Conversion Between Server and Client
 
 
  PostgreSQL supports automatic character set conversion between server and client for many combinations of character sets ([Available Character Set Conversions](#multibyte-conversions-supported) shows which ones).
@@ -171,15 +172,14 @@ RESET client_encoding;
 
 
  If the client character set is defined as `SQL_ASCII`, encoding conversion is disabled, regardless of the server's character set. (However, if the server's character set is not `SQL_ASCII`, the server will still check that incoming data is valid for that encoding; so the net effect is as though the client character set were the same as the server's.) Just as for the server, use of `SQL_ASCII` is unwise unless you are working with all-ASCII data.
+  <a id="multibyte-conversions-supported"></a>
 
-
-### Available Character Set Conversions { #multibyte-conversions-supported }
+### Available Character Set Conversions
 
 
  PostgreSQL allows conversion between any two character sets for which a conversion function is listed in the [`pg_conversion`](../../internals/system-catalogs/pg_conversion.md#catalog-pg-conversion) system catalog. PostgreSQL comes with some predefined conversions, as summarized in [Built-in Client/Server Character Set Conversions](#multibyte-translation-table) and shown in more detail in [All Built-in Character Set Conversions](#builtin-conversions-table). You can create a new conversion using the SQL command [sql-createconversion](../../reference/sql-commands/create-conversion.md#sql-createconversion). (To be used for automatic client/server conversions, a conversion must be marked as “default” for its character set pair.)
+ <a id="multibyte-translation-table"></a>
 
-
-<a id="multibyte-translation-table"></a>
 **Table: Built-in Client/Server Character Set Conversions**
 
 | Server Character Set | Available Client Character Sets |
@@ -226,9 +226,8 @@ RESET client_encoding;
 | `WIN1256` | *WIN1256*, `UTF8` |
 | `WIN1257` | *WIN1257*, `UTF8` |
 | `WIN1258` | *WIN1258*, `UTF8` |
+ <a id="builtin-conversions-table"></a>
 
-
-<a id="builtin-conversions-table"></a>
 **Table: All Built-in Character Set Conversions**
 
 | Conversion Name  (The conversion names follow a standard naming scheme: The official name of the source encoding with all non-alphanumeric characters replaced by underscores, followed by `_to_`, followed by the similarly processed destination encoding name. Therefore, these names sometimes deviate from the customary encoding names shown in [PostgreSQL Character Sets](#charset-table).) | Source Encoding | Destination Encoding |
@@ -357,9 +356,9 @@ RESET client_encoding;
 | `utf8_to_shift_jis_2004` | `UTF8` | `SHIFT_JIS_2004` |
 | `euc_jis_2004_to_shift_jis_2004` | `EUC_JIS_2004` | `SHIFT_JIS_2004` |
 | `shift_jis_2004_to_euc_jis_2004` | `SHIFT_JIS_2004` | `EUC_JIS_2004` |
+  <a id="multibyte-further-reading"></a>
 
-
-### Further Reading { #multibyte-further-reading }
+### Further Reading
 
 
  These are good sources to start learning about various kinds of encoding systems.

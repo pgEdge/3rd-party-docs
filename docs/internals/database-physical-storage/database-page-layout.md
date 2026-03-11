@@ -1,4 +1,6 @@
-## Database Page Layout { #storage-page-layout }
+<a id="storage-page-layout"></a>
+
+## Database Page Layout
 
 
  This section provides an overview of the page format used within PostgreSQL tables and indexes. (Actually, use of this page format is not required for either table or index access methods. The `heap` table access method always uses this format. All the existing index methods also use the basic format, but the data kept on index metapages usually doesn't follow the item layout rules.) Sequences and TOAST tables are formatted just like a regular table.
@@ -11,9 +13,8 @@
 
 
  [Overall Page Layout](#page-table) shows the overall layout of a page. There are five parts to each page.
+ <a id="page-table"></a>
 
-
-<a id="page-table"></a>
 **Table: Overall Page Layout**
 
 | Item | Description |
@@ -26,9 +27,8 @@
 
 
  The first 24 bytes of each page consists of a page header (`PageHeaderData`). Its format is detailed in [PageHeaderData Layout](#pageheaderdata-table). The first field tracks the most recent WAL entry related to this page. The second field contains the page checksum if [data checksums](../../reference/postgresql-server-applications/initdb.md#app-initdb-data-checksums) are enabled. Next is a 2-byte field containing flag bits. This is followed by three 2-byte integer fields (`pd_lower`, `pd_upper`, and `pd_special`). These contain byte offsets from the page start to the start of unallocated space, to the end of unallocated space, and to the start of the special space. The next 2 bytes of the page header, `pd_pagesize_version`, store both the page size and a version indicator. Beginning with PostgreSQL 8.3 the version number is 4; PostgreSQL 8.1 and 8.2 used version number 3; PostgreSQL 8.0 used version number 2; PostgreSQL 7.3 and 7.4 used version number 1; prior releases used version number 0. (The basic page layout and header format has not changed in most of these versions, but the layout of heap row headers has.) The page size is basically only present as a cross-check; there is no support for having more than one page size in an installation. The last field is a hint that shows whether pruning the page is likely to be profitable: it tracks the oldest un-pruned XMAX on the page.
+ <a id="pageheaderdata-table"></a>
 
-
-<a id="pageheaderdata-table"></a>
 **Table: PageHeaderData Layout**
 
 | Field | Type | Length | Description |
@@ -56,21 +56,20 @@
 
 
  [Page Layout](#storage-page-layout-figure) illustrates how these parts are laid out in a page.
-
+ <a id="storage-page-layout-figure"></a>
 
 **Page Layout**
 
 
 ![image](images/pagelayout.svg)
+    <a id="storage-tuple-layout"></a>
 
-
-### Table Row Layout { #storage-tuple-layout }
+### Table Row Layout
 
 
  All table rows are structured in the same way. There is a fixed-size header (occupying 23 bytes on most machines), followed by an optional null bitmap, an optional object ID field, and the user data. The header is detailed in [HeapTupleHeaderData Layout](#heaptupleheaderdata-table). The actual user data (columns of the row) begins at the offset indicated by `t_hoff`, which must always be a multiple of the MAXALIGN distance for the platform. The null bitmap is only present if the *HEAP_HASNULL* bit is set in `t_infomask`. If it is present it begins just after the fixed header and occupies enough bytes to have one bit per data column (that is, the number of bits that equals the attribute count in `t_infomask2`). In this list of bits, a 1 bit indicates not-null, a 0 bit is a null. When the bitmap is not present, all columns are assumed not-null. The object ID is only present if the *HEAP_HASOID_OLD* bit is set in `t_infomask`. If present, it appears just before the `t_hoff` boundary. Any padding needed to make `t_hoff` a MAXALIGN multiple will appear between the null bitmap and the object ID. (This in turn ensures that the object ID is suitably aligned.)
+ <a id="heaptupleheaderdata-table"></a>
 
-
-<a id="heaptupleheaderdata-table"></a>
 **Table: HeapTupleHeaderData Layout**
 
 | Field | Type | Length | Description |

@@ -1,4 +1,6 @@
-# CREATE DATABASE { #sql-createdatabase }
+<a id="sql-createdatabase"></a>
+
+# CREATE DATABASE
 
 create a new database
 

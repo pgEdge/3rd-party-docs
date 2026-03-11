@@ -1,4 +1,6 @@
-## Error Handling { #runtime-config-error-handling }
+<a id="runtime-config-error-handling"></a>
+
+## Error Handling
 
 
 <a id="guc-exit-on-error"></a>

@@ -1,4 +1,6 @@
-## `routines` { #infoschema-routines }
+<a id="infoschema-routines"></a>
+
+## `routines`
 
 
  The view `routines` contains all functions and procedures in the current database. Only those functions and procedures are shown that the current user has access to (by way of being the owner or having some privilege).

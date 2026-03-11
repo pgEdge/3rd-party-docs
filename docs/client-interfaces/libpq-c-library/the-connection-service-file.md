@@ -1,4 +1,6 @@
-## The Connection Service File { #libpq-pgservice }
+<a id="libpq-pgservice"></a>
+
+## The Connection Service File
 
 
  The connection service file allows libpq connection parameters to be associated with a single service name. That service name can then be specified in a libpq connection string, and the associated settings will be used. This allows connection parameters to be modified without requiring a recompile of the libpq-using application. The service name can also be specified using the `PGSERVICE` environment variable.

@@ -1,4 +1,6 @@
-## `foreign_table_options` { #infoschema-foreign-table-options }
+<a id="infoschema-foreign-table-options"></a>
+
+## `foreign_table_options`
 
 
  The view `foreign_table_options` contains all the options defined for foreign tables in the current database. Only those foreign tables are shown that the current user has access to (by way of being the owner or having some privilege).

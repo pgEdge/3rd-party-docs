@@ -1,10 +1,12 @@
-## Running SQL Commands { #ecpg-commands }
+<a id="ecpg-commands"></a>
+
+## Running SQL Commands
 
 
  Any SQL command can be run from within an embedded SQL application. Below are some examples of how to do that.
+ <a id="ecpg-executing"></a>
 
-
-### Executing SQL Statements { #ecpg-executing }
+### Executing SQL Statements
 
 
  Creating a table:
@@ -66,9 +68,9 @@ EXEC SQL SHOW search_path INTO :var;
 
 
  The tokens of the form <code>:</code><em>something</em> are *host variables*, that is, they refer to variables in the C program. They are explained in [Using Host Variables](using-host-variables.md#ecpg-variables).
+  <a id="ecpg-cursors"></a>
 
-
-### Using Cursors { #ecpg-cursors }
+### Using Cursors
 
 
  To retrieve a result set holding multiple rows, an application has to declare a cursor and fetch each row from the cursor. The steps to use a cursor are the following: declare a cursor, open it, fetch a row from the cursor, repeat, and finally close it.
@@ -95,9 +97,9 @@ EXEC SQL COMMIT;
 !!! note
 
     The ECPG `DECLARE` command does not actually cause a statement to be sent to the PostgreSQL backend. The cursor is opened in the backend (using the backend's `DECLARE` command) at the point when the `OPEN` command is executed.
+  <a id="ecpg-transactions"></a>
 
-
-### Managing Transactions { #ecpg-transactions }
+### Managing Transactions
 
 
  In the default mode, statements are committed only when `EXEC SQL COMMIT` is issued. The embedded SQL interface also supports autocommit of transactions (similar to psql's default behavior) via the `-t` command-line option to `ecpg` (see [app-ecpg](../../reference/postgresql-client-applications/ecpg.md#app-ecpg)) or via the `EXEC SQL SET AUTOCOMMIT TO ON` statement. In autocommit mode, each command is automatically committed unless it is inside an explicit transaction block. This mode can be explicitly turned off using `EXEC SQL SET AUTOCOMMIT TO OFF`.
@@ -134,8 +136,9 @@ EXEC SQL COMMIT;
 `EXEC SQL SET AUTOCOMMIT TO OFF`
 :   Disable autocommit mode. This is the default.
 
+  <a id="ecpg-prepared"></a>
 
-### Prepared Statements { #ecpg-prepared }
+### Prepared Statements
 
 
  When the values to be passed to an SQL statement are not known at compile time, or the same statement is going to be used many times, then prepared statements can be useful.

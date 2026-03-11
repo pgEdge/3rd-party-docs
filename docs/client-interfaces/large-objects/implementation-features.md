@@ -1,4 +1,6 @@
-## Implementation Features { #lo-implementation }
+<a id="lo-implementation"></a>
+
+## Implementation Features
 
 
  The large object implementation breaks large objects up into “chunks” and stores the chunks in rows in the database. A B-tree index guarantees fast searches for the correct chunk number when doing random access reads and writes.

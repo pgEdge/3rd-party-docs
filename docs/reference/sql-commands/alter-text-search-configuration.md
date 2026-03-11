@@ -1,4 +1,6 @@
-# ALTER TEXT SEARCH CONFIGURATION { #sql-altertsconfig }
+<a id="sql-altertsconfig"></a>
+
+# ALTER TEXT SEARCH CONFIGURATION
 
 change the definition of a text search configuration
 

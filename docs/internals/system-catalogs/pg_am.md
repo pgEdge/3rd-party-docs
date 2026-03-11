@@ -1,4 +1,6 @@
-## `pg_am` { #catalog-pg-am }
+<a id="catalog-pg-am"></a>
+
+## `pg_am`
 
 
  The catalog `pg_am` stores information about relation access methods. There is one row for each access method supported by the system. Currently, only tables and indexes have access methods. The requirements for table and index access methods are discussed in detail in [Table Access Method Interface Definition](../table-access-method-interface-definition.md#tableam) and [Index Access Method Interface Definition](../index-access-method-interface-definition/index.md#indexam) respectively.

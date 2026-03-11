@@ -1,4 +1,6 @@
-# ALTER SEQUENCE { #sql-altersequence }
+<a id="sql-altersequence"></a>
+
+# ALTER SEQUENCE
 
 change the definition of a sequence generator
 

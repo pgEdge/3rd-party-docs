@@ -1,4 +1,6 @@
-# Archive Modules { #archive-modules }
+<a id="archive-modules"></a>
+
+# Archive Modules
 
  PostgreSQL provides infrastructure to create custom modules for continuous archiving (see [Continuous Archiving and Point-in-Time Recovery (PITR)](../../server-administration/backup-and-restore/continuous-archiving-and-point-in-time-recovery-pitr.md#continuous-archiving)). While archiving via a shell command (i.e., [archive_command](../../server-administration/server-configuration/write-ahead-log.md#guc-archive-command)) is much simpler, a custom archive module will often be considerably more robust and performant.
 

@@ -1,4 +1,6 @@
-# CREATE TEXT SEARCH DICTIONARY { #sql-createtsdictionary }
+<a id="sql-createtsdictionary"></a>
+
+# CREATE TEXT SEARCH DICTIONARY
 
 define a new text search dictionary
 

@@ -1,4 +1,6 @@
-## `routine_table_usage` { #infoschema-routine-table-usage }
+<a id="infoschema-routine-table-usage"></a>
+
+## `routine_table_usage`
 
 
  The view `routine_table_usage` is meant to identify all tables that are used by a function or procedure. This information is currently not tracked by PostgreSQL.

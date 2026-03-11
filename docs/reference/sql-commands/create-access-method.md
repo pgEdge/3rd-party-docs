@@ -1,4 +1,6 @@
-# CREATE ACCESS METHOD { #sql-create-access-method }
+<a id="sql-create-access-method"></a>
+
+# CREATE ACCESS METHOD
 
 define a new access method
 

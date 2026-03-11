@@ -1,4 +1,6 @@
-## Oracle Compatibility Mode { #ecpg-oracle-compat }
+<a id="ecpg-oracle-compat"></a>
+
+## Oracle Compatibility Mode
 
 
  `ecpg` can be run in a so-called *Oracle compatibility mode*. If this mode is active, it tries to behave as if it were Oracle Pro*C.

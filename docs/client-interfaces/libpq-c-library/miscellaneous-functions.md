@@ -1,4 +1,6 @@
-## Miscellaneous Functions { #libpq-misc }
+<a id="libpq-misc"></a>
+
+## Miscellaneous Functions
 
 
  As always, there are some functions that just don't fit anywhere.

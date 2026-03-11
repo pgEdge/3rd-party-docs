@@ -1,10 +1,12 @@
-## Write Ahead Log { #runtime-config-wal }
+<a id="runtime-config-wal"></a>
+
+## Write Ahead Log
 
 
  For additional information on tuning these settings, see [WAL Configuration](../reliability-and-the-write-ahead-log/wal-configuration.md#wal-configuration).
+ <a id="runtime-config-wal-settings"></a>
 
-
-### Settings { #runtime-config-wal-settings }
+### Settings
 
 
 <a id="guc-wal-level"></a>
@@ -66,9 +68,8 @@
 
 
      [synchronous_commit Modes](#synchronous-commit-matrix) summarizes the capabilities of the `synchronous_commit` settings.
+     <a id="synchronous-commit-matrix"></a>
 
-
-    <a id="synchronous-commit-matrix"></a>
     **Table: synchronous_commit Modes**
 
     | synchronous_commit setting | local durable commit | standby durable commit after PG crash | standby durable commit after OS crash | standby query consistency |
@@ -160,9 +161,9 @@
 
 `commit_siblings` (`integer`)
 :   Minimum number of concurrent open transactions to require before performing the `commit_delay` delay. A larger value makes it more probable that at least one other transaction will become ready to commit during the delay interval. The default is five transactions.
+  <a id="runtime-config-wal-checkpoints"></a>
 
-
-### Checkpoints { #runtime-config-wal-checkpoints }
+### Checkpoints
 
 
 <a id="guc-checkpoint-timeout"></a>
@@ -189,9 +190,9 @@
 
 `min_wal_size` (`integer`)
 :   As long as WAL disk usage stays below this setting, old WAL files are always recycled for future use at a checkpoint, rather than removed. This can be used to ensure that enough WAL space is reserved to handle spikes in WAL usage, for example when running large batch jobs. If this value is specified without units, it is taken as megabytes. The default is 80 MB. This parameter can only be set in the `postgresql.conf` file or on the server command line.
+  <a id="runtime-config-wal-archiving"></a>
 
-
-### Archiving { #runtime-config-wal-archiving }
+### Archiving
 
 
 <a id="guc-archive-mode"></a>
@@ -219,9 +220,9 @@
 
 `archive_timeout` (`integer`)
 :   The [archive_command](#guc-archive-command) or [archive_library](#guc-archive-library) is only invoked for completed WAL segments. Hence, if your server generates little WAL traffic (or has slack periods where it does so), there could be a long delay between the completion of a transaction and its safe recording in archive storage. To limit how old unarchived data can be, you can set `archive_timeout` to force the server to switch to a new WAL segment file periodically. When this parameter is greater than zero, the server will switch to a new segment file whenever this amount of time has elapsed since the last segment file switch, and there has been any database activity, including a single checkpoint (checkpoints are skipped if there is no database activity). Note that archived files that are closed early due to a forced switch are still the same length as completely full files. Therefore, it is unwise to use a very short `archive_timeout` — it will bloat your archive storage. `archive_timeout` settings of a minute or so are usually reasonable. You should consider using streaming replication, instead of archiving, if you want data to be copied off the primary server more quickly than that. If this value is specified without units, it is taken as seconds. This parameter can only be set in the `postgresql.conf` file or on the server command line.
+  <a id="runtime-config-wal-recovery"></a>
 
-
-### Recovery { #runtime-config-wal-recovery }
+### Recovery
 
 
  This section describes the settings that apply to recovery in general, affecting crash recovery, streaming replication and archive-based replication.
@@ -238,9 +239,9 @@
 
 `wal_decode_buffer_size` (`integer`)
 :   A limit on how far ahead the server can look in the WAL, to find blocks to prefetch. If this value is specified without units, it is taken as bytes. The default is 512kB. This parameter can only be set at server start.
+  <a id="runtime-config-wal-archive-recovery"></a>
 
-
-### Archive Recovery { #runtime-config-wal-archive-recovery }
+### Archive Recovery
 
 
  This section describes the settings that apply only for the duration of the recovery. They must be reset for any subsequent recovery you wish to perform.
@@ -297,9 +298,9 @@
 
 
      This parameter can only be set in the `postgresql.conf` file or on the server command line.
+  <a id="runtime-config-wal-recovery-target"></a>
 
-
-### Recovery Target { #runtime-config-wal-recovery-target }
+### Recovery Target
 
 
  By default, recovery will recover to the end of the WAL log. The following parameters can be used to specify an earlier stopping point. At most one of `recovery_target`, `recovery_target_lsn`, `recovery_target_name`, `recovery_target_time`, or `recovery_target_xid` can be used; if more than one of these is specified in the configuration file, an error will be raised. These parameters can only be set at server start.
@@ -369,9 +370,9 @@
 
 
      In any case, if a recovery target is configured but the archive recovery ends before the target is reached, the server will shut down with a fatal error.
+  <a id="runtime-config-wal-summarization"></a>
 
-
-### WAL Summarization { #runtime-config-wal-summarization }
+### WAL Summarization
 
 
  These settings control WAL summarization, a feature which must be enabled in order to perform an [incremental backup](../backup-and-restore/continuous-archiving-and-point-in-time-recovery-pitr.md#backup-incremental-backup).

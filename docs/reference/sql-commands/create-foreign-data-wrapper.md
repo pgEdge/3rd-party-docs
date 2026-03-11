@@ -1,4 +1,6 @@
-# CREATE FOREIGN DATA WRAPPER { #sql-createforeigndatawrapper }
+<a id="sql-createforeigndatawrapper"></a>
+
+# CREATE FOREIGN DATA WRAPPER
 
 define a new foreign-data wrapper
 

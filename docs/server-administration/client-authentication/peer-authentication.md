@@ -1,4 +1,6 @@
-## Peer Authentication { #auth-peer }
+<a id="auth-peer"></a>
+
+## Peer Authentication
 
 
  The peer authentication method works by obtaining the client's operating system user name from the kernel and using it as the allowed database user name (with optional user name mapping). This method is only supported on local connections.

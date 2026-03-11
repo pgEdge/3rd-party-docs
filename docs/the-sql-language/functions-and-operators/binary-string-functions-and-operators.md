@@ -1,13 +1,14 @@
-## Binary String Functions and Operators { #functions-binarystring }
+<a id="functions-binarystring"></a>
+
+## Binary String Functions and Operators
 
 
  This section describes functions and operators for examining and manipulating binary strings, that is values of type `bytea`. Many of these are equivalent, in purpose and syntax, to the text-string functions described in the previous section.
 
 
  SQL defines some string functions that use key words, rather than commas, to separate arguments. Details are in [SQL Binary String Functions and Operators](#functions-binarystring-sql). PostgreSQL also provides versions of these functions that use the regular function invocation syntax (see [Other Binary String Functions](#functions-binarystring-other)).
+ <a id="functions-binarystring-sql"></a>
 
-
-<a id="functions-binarystring-sql"></a>
 **Table: SQL Binary String Functions and Operators**
 
 <table>
@@ -79,9 +80,8 @@
 
 
  Additional binary string manipulation functions are available and are listed in [Other Binary String Functions](#functions-binarystring-other). Some of them are used internally to implement the SQL-standard string functions listed in [SQL Binary String Functions and Operators](#functions-binarystring-sql).
+ <a id="functions-binarystring-other"></a>
 
-
-<a id="functions-binarystring-other"></a>
 **Table: Other Binary String Functions**
 
 <table>
@@ -160,18 +160,17 @@
 </tr>
 </tbody>
 </table>
-
+ <a id="functions-zerobased-note"></a>
 
  Functions `get_byte` and `set_byte` number the first byte of a binary string as byte 0. Functions `get_bit` and `set_bit` number bits from the right within each byte; for example bit 0 is the least significant bit of the first byte, and bit 15 is the most significant bit of the second byte.
-
+ <a id="functions-hash-note"></a>
 
  For historical reasons, the function `md5` returns a hex-encoded value of type `text` whereas the SHA-2 functions return type `bytea`. Use the functions [`encode`](#function-encode) and [`decode`](#function-decode) to convert between the two. For example write `encode(sha256('abc'), 'hex')` to get a hex-encoded text representation, or `decode(md5('abc'), 'hex')` to get a `bytea` value.
 
 
    Functions for converting strings between different character sets (encodings), and for representing arbitrary binary data in textual form, are shown in [Text/Binary String Conversion Functions](#functions-binarystring-conversions). For these functions, an argument or result of type `text` is expressed in the database's default encoding, while arguments or results of type `bytea` are in an encoding named by another argument.
+ <a id="functions-binarystring-conversions"></a>
 
-
-<a id="functions-binarystring-conversions"></a>
 **Table: Text/Binary String Conversion Functions**
 
 <table>
@@ -199,12 +198,14 @@
 <td><code>convert_to('some_text', 'UTF8')</code> <code>\x736f6d655f74657874</code></td>
 </tr>
 <tr>
-<td><code>encode</code> ( <code>bytes</code> <code>bytea</code>, <code>format</code> <code>text</code> ) <code>text</code></td>
+<td><a id="function-encode"></a>
+ `encode` ( `bytes` `bytea`, `format` `text` ) `text`</td>
 <td>Encodes binary data into a textual representation; supported <code>format</code> values are: <a href="#encode-format-base64"><code>base64</code></a>, <a href="#encode-format-escape"><code>escape</code></a>, <a href="#encode-format-hex"><code>hex</code></a>.</td>
 <td><code>encode('123\000\001', 'base64')</code> <code>MTIzAAE=</code></td>
 </tr>
 <tr>
-<td><code>decode</code> ( <code>string</code> <code>text</code>, <code>format</code> <code>text</code> ) <code>bytea</code></td>
+<td><a id="function-decode"></a>
+ `decode` ( `string` `text`, `format` `text` ) `bytea`</td>
 <td>Decodes binary data from a textual representation; supported <code>format</code> values are the same as for <code>encode</code>.</td>
 <td><code>decode('MTIzAAE=', 'base64')</code> <code>\x3132330001</code></td>
 </tr>

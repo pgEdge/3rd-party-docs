@@ -1,4 +1,6 @@
-## `pg_cast` { #catalog-pg-cast }
+<a id="catalog-pg-cast"></a>
+
+## `pg_cast`
 
 
  The catalog `pg_cast` stores data type conversion paths, both built-in and user-defined.

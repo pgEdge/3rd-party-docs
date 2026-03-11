@@ -1,4 +1,6 @@
-## PL/Perl Triggers { #plperl-triggers }
+<a id="plperl-triggers"></a>
+
+## PL/Perl Triggers
 
 
  PL/Perl can be used to write trigger functions. In a trigger function, the hash reference `$_TD` contains information about the current trigger event. `$_TD` is a global variable, which gets a separate local value for each invocation of the trigger. The fields of the `$_TD` hash reference are:

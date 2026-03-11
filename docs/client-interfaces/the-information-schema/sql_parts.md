@@ -1,4 +1,6 @@
-## `sql_parts` { #infoschema-sql-parts }
+<a id="infoschema-sql-parts"></a>
+
+## `sql_parts`
 
 
  The table `sql_parts` contains information about which of the several parts of the SQL standard are supported by PostgreSQL.

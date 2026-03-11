@@ -1,4 +1,6 @@
-## Quick Setup { #logical-replication-quick-setup }
+<a id="logical-replication-quick-setup"></a>
+
+## Quick Setup
 
 
  First set the configuration options in `postgresql.conf`:

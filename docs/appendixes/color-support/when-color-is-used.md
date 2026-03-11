@@ -1,4 +1,6 @@
-## When Color is Used { #color-when }
+<a id="color-when"></a>
+
+## When Color is Used
 
 
  To use colorized output, set the environment variable `PG_COLOR` as follows:

@@ -1,4 +1,6 @@
-# DROP EXTENSION { #sql-dropextension }
+<a id="sql-dropextension"></a>
+
+# DROP EXTENSION
 
 remove an extension
 

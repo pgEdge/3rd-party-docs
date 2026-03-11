@@ -1,4 +1,6 @@
-## `pg_replication_origin` { #catalog-pg-replication-origin }
+<a id="catalog-pg-replication-origin"></a>
+
+## `pg_replication_origin`
 
 
  The `pg_replication_origin` catalog contains all replication origins created. For more on replication origins see [Replication Progress Tracking](../../server-programming/replication-progress-tracking.md#replication-origins).

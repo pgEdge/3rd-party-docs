@@ -1,4 +1,6 @@
-## `pg_range` { #catalog-pg-range }
+<a id="catalog-pg-range"></a>
+
+## `pg_range`
 
 
  The catalog `pg_range` stores information about range types. This is in addition to the types' entries in [`pg_type`](pg_type.md#catalog-pg-type).

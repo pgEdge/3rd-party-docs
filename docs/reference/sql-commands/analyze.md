@@ -1,4 +1,6 @@
-# ANALYZE { #sql-analyze }
+<a id="sql-analyze"></a>
+
+# ANALYZE
 
 collect statistics about a database
 

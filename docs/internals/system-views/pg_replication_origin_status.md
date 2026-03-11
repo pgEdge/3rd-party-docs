@@ -1,4 +1,6 @@
-## `pg_replication_origin_status` { #view-pg-replication-origin-status }
+<a id="view-pg-replication-origin-status"></a>
+
+## `pg_replication_origin_status`
 
 
  The `pg_replication_origin_status` view contains information about how far replay for a certain origin has progressed. For more on replication origins see [Replication Progress Tracking](../../server-programming/replication-progress-tracking.md#replication-origins).

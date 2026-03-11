@@ -1,4 +1,6 @@
-## LDAP Lookup of Connection Parameters { #libpq-ldap }
+<a id="libpq-ldap"></a>
+
+## LDAP Lookup of Connection Parameters
 
 
  If libpq has been compiled with LDAP support (option ``--with-ldap`` for `configure`) it is possible to retrieve connection options like `host` or `dbname` via LDAP from a central server. The advantage is that if the connection parameters for a database change, the connection information doesn't have to be updated on all client machines.

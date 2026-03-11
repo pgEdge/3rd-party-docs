@@ -1,4 +1,6 @@
-## `enabled_roles` { #infoschema-enabled-roles }
+<a id="infoschema-enabled-roles"></a>
+
+## `enabled_roles`
 
 
  The view `enabled_roles` identifies the currently “enabled roles”. The enabled roles are recursively defined as the current user together with all roles that have been granted to the enabled roles with automatic inheritance. In other words, these are all roles that the current user has direct or indirect, automatically inheriting membership in.

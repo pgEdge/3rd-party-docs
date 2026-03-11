@@ -1,4 +1,6 @@
-# CREATE OPERATOR CLASS { #sql-createopclass }
+<a id="sql-createopclass"></a>
+
+# CREATE OPERATOR CLASS
 
 define a new operator class
 

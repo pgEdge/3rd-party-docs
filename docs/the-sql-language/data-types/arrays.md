@@ -1,10 +1,12 @@
-## Arrays { #arrays }
+<a id="arrays"></a>
+
+## Arrays
 
 
  PostgreSQL allows columns of a table to be defined as variable-length multidimensional arrays. Arrays of any built-in or user-defined base type, enum type, composite type, range type, or domain can be created.
+ <a id="arrays-declaration"></a>
 
-
-### Declaration of Array Types { #arrays-declaration }
+### Declaration of Array Types
 
 
  To illustrate the use of array types, we create this table:
@@ -47,9 +49,9 @@ CREATE TABLE tictactoe (
     pay_by_quarter  integer ARRAY,
 ```
  As before, however, PostgreSQL does not enforce the size restriction in any case.
+  <a id="arrays-input"></a>
 
-
-### Array Value Input { #arrays-input }
+### Array Value Input
 
 
  To write an array value as a literal constant, enclose the element values within curly braces and separate them by commas. (If you know C, this is not unlike the C syntax for initializing structures.) You can put double quotes around any element value, and must do so if it contains commas or curly braces. (More details appear below.) Thus, the general format of an array constant is the following:
@@ -130,9 +132,9 @@ INSERT INTO sal_emp
     ARRAY[['breakfast', 'consulting'], ['meeting', 'lunch']]);
 ```
  Notice that the array elements are ordinary SQL constants or expressions; for instance, string literals are single quoted, instead of double quoted as they would be in an array literal. The `ARRAY` constructor syntax is discussed in more detail in [Array Constructors](../sql-syntax/value-expressions.md#sql-syntax-array-constructors).
+  <a id="arrays-accessing"></a>
 
-
-### Accessing Arrays { #arrays-accessing }
+### Accessing Arrays
 
 
  Now, we can run some queries on the table. First, we show how to access a single element of an array. This query retrieves the names of the employees whose pay changed in the second quarter:
@@ -259,8 +261,9 @@ SELECT cardinality(schedule) FROM sal_emp WHERE name = 'Carol';
 (1 row)
 ```
 
+  <a id="arrays-modifying"></a>
 
-### Modifying Arrays { #arrays-modifying }
+### Modifying Arrays
 
 
  An array value can be replaced completely:
@@ -428,9 +431,9 @@ SELECT array_append(ARRAY[1, 2], NULL);    -- this might have been meant
  {1,2,NULL}
 ```
  In the examples above, the parser sees an integer array on one side of the concatenation operator, and a constant of undetermined type on the other. The heuristic it uses to resolve the constant's type is to assume it's of the same type as the operator's other input — in this case, integer array. So the concatenation operator is presumed to represent `array_cat`, not `array_append`. When that's the wrong choice, it could be fixed by casting the constant to the array's element type; but explicit use of `array_append` might be a preferable solution.
+  <a id="arrays-searching"></a>
 
-
-### Searching in Arrays { #arrays-searching }
+### Searching in Arrays
 
 
  To search for a value in an array, each value must be checked. This can be done manually, if you know the size of the array. For example:
@@ -499,9 +502,9 @@ SELECT array_positions(ARRAY[1, 4, 3, 1, 3, 4, 2, 1], 1);
 !!! tip
 
     Arrays are not sets; searching for specific array elements can be a sign of database misdesign. Consider using a separate table with a row for each item that would be an array element. This will be easier to search, and is likely to scale better for a large number of elements.
+  <a id="arrays-io"></a>
 
-
-### Array Input and Output Syntax { #arrays-io }
+### Array Input and Output Syntax
 
 
  The external text representation of an array value consists of items that are interpreted according to the I/O conversion rules for the array's element type, plus decoration that indicates the array structure. The decoration consists of curly braces (`{` and `}`) around the array value plus delimiter characters between adjacent items. The delimiter character is usually a comma (`,`) but can be something else: it is determined by the `typdelim` setting for the array's element type. Among the standard data types provided in the PostgreSQL distribution, all use a comma, except for type `box`, which uses a semicolon (`;`). In a multidimensional array, each dimension (row, plane, cube, etc.) gets its own level of curly braces, and delimiters must be written between adjacent curly-braced entities of the same level.

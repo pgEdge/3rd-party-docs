@@ -1,4 +1,6 @@
-# DROP EVENT TRIGGER { #sql-dropeventtrigger }
+<a id="sql-dropeventtrigger"></a>
+
+# DROP EVENT TRIGGER
 
 remove an event trigger
 
@@ -31,9 +33,9 @@ DROP EVENT TRIGGER [ IF EXISTS ] NAME [ CASCADE | RESTRICT ]
 
 `RESTRICT`
 :   Refuse to drop the trigger if any objects depend on it. This is the default.
+ <a id="sql-dropeventtrigger-examples"></a>
 
-
-## Examples { #sql-dropeventtrigger-examples }
+## Examples
 
 
  Destroy the trigger `snitch`:
@@ -42,9 +44,9 @@ DROP EVENT TRIGGER [ IF EXISTS ] NAME [ CASCADE | RESTRICT ]
 
 DROP EVENT TRIGGER snitch;
 ```
+ <a id="sql-dropeventtrigger-compatibility"></a>
 
-
-## Compatibility { #sql-dropeventtrigger-compatibility }
+## Compatibility
 
 
  There is no `DROP EVENT TRIGGER` statement in the SQL standard.

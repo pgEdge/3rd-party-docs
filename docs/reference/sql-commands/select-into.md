@@ -1,4 +1,6 @@
-# SELECT INTO { #sql-selectinto }
+<a id="sql-selectinto"></a>
+
+# SELECT INTO
 
 define a new table from the results of a query
 

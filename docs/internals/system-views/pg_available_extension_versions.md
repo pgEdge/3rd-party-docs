@@ -1,4 +1,6 @@
-## `pg_available_extension_versions` { #view-pg-available-extension-versions }
+<a id="view-pg-available-extension-versions"></a>
+
+## `pg_available_extension_versions`
 
 
  The `pg_available_extension_versions` view lists the specific extension versions that are available for installation. See also the [`pg_extension`](../system-catalogs/pg_extension.md#catalog-pg-extension) catalog, which shows the extensions currently installed.

@@ -1,4 +1,6 @@
-## `pg_ident_file_mappings` { #view-pg-ident-file-mappings }
+<a id="view-pg-ident-file-mappings"></a>
+
+## `pg_ident_file_mappings`
 
 
  The view `pg_ident_file_mappings` provides a summary of the contents of the client user name mapping configuration file, [`pg_ident.conf`](../../server-administration/client-authentication/user-name-maps.md#auth-username-maps). A row appears in this view for each non-empty, non-comment line in the file, with annotations indicating whether the map could be applied successfully.

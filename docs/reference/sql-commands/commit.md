@@ -1,4 +1,6 @@
-# COMMIT { #sql-commit }
+<a id="sql-commit"></a>
+
+# COMMIT
 
 commit the current transaction
 

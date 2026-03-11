@@ -1,4 +1,6 @@
-## The Concept { #ecpg-concept }
+<a id="ecpg-concept"></a>
+
+## The Concept
 
 
  An embedded SQL program consists of code written in an ordinary programming language, in this case C, mixed with SQL commands in specially marked sections. To build the program, the source code (`*.pgc`) is first passed through the embedded SQL preprocessor, which converts it to an ordinary C program (`*.c`), and afterwards it can be processed by a C compiler. (For details about the compiling and linking see [Processing Embedded SQL Programs](processing-embedded-sql-programs.md#ecpg-process).) Converted ECPG applications call functions in the libpq library through the embedded SQL library (ecpglib), and communicate with the PostgreSQL server using the normal frontend-backend protocol.

@@ -1,4 +1,6 @@
-## Asynchronous Command Processing { #libpq-async }
+<a id="libpq-async"></a>
+
+## Asynchronous Command Processing
 
 
  The [PQexec](command-execution-functions.md#libpq-PQexec) function is adequate for submitting commands in normal, synchronous applications. It has a few deficiencies, however, that can be of importance to some users:

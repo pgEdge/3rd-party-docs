@@ -1,16 +1,18 @@
-## Control Structures { #plpgsql-control-structures }
+<a id="plpgsql-control-structures"></a>
+
+## Control Structures
 
 
  Control structures are probably the most useful (and important) part of PL/pgSQL. With PL/pgSQL's control structures, you can manipulate PostgreSQL data in a very flexible and powerful way.
+ <a id="plpgsql-statements-returning"></a>
 
-
-### Returning from a Function { #plpgsql-statements-returning }
+### Returning from a Function
 
 
  There are two commands available that allow you to return data from a function: `RETURN` and `RETURN NEXT`.
+ <a id="plpgsql-statements-returning-return"></a>
 
-
-#### `RETURN` { #plpgsql-statements-returning-return }
+#### `RETURN`
 
 
 ```
@@ -47,8 +49,9 @@ RETURN composite_type_var;
 RETURN (1, 2, 'three'::text);  -- must cast columns to correct types
 ```
 
+  <a id="plpgsql-statements-returning-return-next"></a>
 
-#### `RETURN NEXT` and `RETURN QUERY` { #plpgsql-statements-returning-return-next }
+#### `RETURN NEXT` and `RETURN QUERY`
 
 
 ```
@@ -131,18 +134,18 @@ SELECT * FROM get_available_flightid(CURRENT_DATE);
 !!! note
 
     The current implementation of `RETURN NEXT` and `RETURN QUERY` stores the entire result set before returning from the function, as discussed above. That means that if a PL/pgSQL function produces a very large result set, performance might be poor: data will be written to disk to avoid memory exhaustion, but the function itself will not return until the entire result set has been generated. A future version of PL/pgSQL might allow users to define set-returning functions that do not have this limitation. Currently, the point at which data begins being written to disk is controlled by the [work_mem](../../server-administration/server-configuration/resource-consumption.md#guc-work-mem) configuration variable. Administrators who have sufficient memory to store larger result sets in memory should consider increasing this parameter.
+   <a id="plpgsql-statements-returning-procedure"></a>
 
-
-### Returning from a Procedure { #plpgsql-statements-returning-procedure }
+### Returning from a Procedure
 
 
  A procedure does not have a return value. A procedure can therefore end without a `RETURN` statement. If you wish to use a `RETURN` statement to exit the code early, write just `RETURN` with no expression.
 
 
  If the procedure has output parameters, the final values of the output parameter variables will be returned to the caller.
+  <a id="plpgsql-statements-calling-procedure"></a>
 
-
-### Calling a Procedure { #plpgsql-statements-calling-procedure }
+### Calling a Procedure
 
 
  A PL/pgSQL function, procedure, or `DO` block can call a procedure using `CALL`. Output parameters are handled differently from the way that `CALL` works in plain SQL. Each `OUT` or `INOUT` parameter of the procedure must correspond to a variable in the `CALL` statement, and whatever the procedure returns is assigned back to that variable after it returns. For example:
@@ -166,9 +169,9 @@ END;
 $$;
 ```
  The variable corresponding to an output parameter can be a simple variable or a field of a composite-type variable. Currently, it cannot be an element of an array.
+  <a id="plpgsql-conditionals"></a>
 
-
-### Conditionals { #plpgsql-conditionals }
+### Conditionals
 
 
  `IF` and `CASE` statements let you execute alternative commands based on certain conditions. PL/pgSQL has three forms of `IF`:
@@ -181,8 +184,9 @@ $$;
 - `CASE ... WHEN ... THEN ... ELSE ... END CASE`
 - `CASE WHEN ... THEN ... ELSE ... END CASE`
 
+ <a id="plpgsql-conditionals-if-then"></a>
 
-#### `IF-THEN` { #plpgsql-conditionals-if-then }
+#### `IF-THEN`
 
 
 ```
@@ -205,8 +209,9 @@ IF v_user_id <> 0 THEN
 END IF;
 ```
 
+  <a id="plpgsql-conditionals-if-then-else"></a>
 
-#### `IF-THEN-ELSE` { #plpgsql-conditionals-if-then-else }
+#### `IF-THEN-ELSE`
 
 
 ```
@@ -245,8 +250,9 @@ ELSE
 END IF;
 ```
 
+  <a id="plpgsql-conditionals-if-then-elsif"></a>
 
-#### `IF-THEN-ELSIF` { #plpgsql-conditionals-if-then-elsif }
+#### `IF-THEN-ELSIF`
 
 
 ```
@@ -304,9 +310,9 @@ END IF;
 
 
  However, this method requires writing a matching `END IF` for each `IF`, so it is much more cumbersome than using `ELSIF` when there are many alternatives.
+  <a id="plpgsql-conditionals-simple-case"></a>
 
-
-#### Simple `CASE` { #plpgsql-conditionals-simple-case }
+#### Simple `CASE`
 
 
 ```
@@ -338,8 +344,9 @@ CASE x
 END CASE;
 ```
 
+  <a id="plpgsql-conditionals-searched-case"></a>
 
-#### Searched `CASE` { #plpgsql-conditionals-searched-case }
+#### Searched `CASE`
 
 
 ```
@@ -373,15 +380,15 @@ END CASE;
 
 
  This form of `CASE` is entirely equivalent to `IF-THEN-ELSIF`, except for the rule that reaching an omitted `ELSE` clause results in an error rather than doing nothing.
+   <a id="plpgsql-control-structures-loops"></a>
 
-
-### Simple Loops { #plpgsql-control-structures-loops }
+### Simple Loops
 
 
  With the `LOOP`, `EXIT`, `CONTINUE`, `WHILE`, `FOR`, and `FOREACH` statements, you can arrange for your PL/pgSQL function to repeat a series of commands.
+ <a id="plpgsql-control-structures-loops-loop"></a>
 
-
-#### `LOOP` { #plpgsql-control-structures-loops-loop }
+#### `LOOP`
 
 
 ```
@@ -394,9 +401,9 @@ END LOOP [ LABEL ];
 
 
  `LOOP` defines an unconditional loop that is repeated indefinitely until terminated by an `EXIT` or `RETURN` statement. The optional *label* can be used by `EXIT` and `CONTINUE` statements within nested loops to specify which loop those statements refer to.
+  <a id="plpgsql-control-structures-loops-exit"></a>
 
-
-#### `EXIT` { #plpgsql-control-structures-loops-exit }
+#### `EXIT`
 
 
 ```
@@ -443,8 +450,9 @@ BEGIN
 END;
 ```
 
+  <a id="plpgsql-control-structures-loops-continue"></a>
 
-#### `CONTINUE` { #plpgsql-control-structures-loops-continue }
+#### `CONTINUE`
 
 
 ```
@@ -474,8 +482,9 @@ LOOP
 END LOOP;
 ```
 
+  <a id="plpgsql-control-structures-loops-while"></a>
 
-#### `WHILE` { #plpgsql-control-structures-loops-while }
+#### `WHILE`
 
 
 ```
@@ -503,8 +512,9 @@ WHILE NOT done LOOP
 END LOOP;
 ```
 
+  <a id="plpgsql-integer-for"></a>
 
-#### `FOR` (Integer Variant) { #plpgsql-integer-for }
+#### `FOR` (Integer Variant)
 
 
 ```
@@ -541,9 +551,9 @@ END LOOP;
 
 
  If a *label* is attached to the `FOR` loop then the integer loop variable can be referenced with a qualified name, using that *label*.
+   <a id="plpgsql-records-iterating"></a>
 
-
-### Looping through Query Results { #plpgsql-records-iterating }
+### Looping through Query Results
 
 
  Using a different type of `FOR` loop, you can iterate through the results of a query and manipulate that data accordingly. The syntax is:
@@ -611,9 +621,9 @@ END LOOP [ LABEL ];
 
 
  Another way to specify the query whose results should be iterated through is to declare it as a cursor. This is described in [Looping through a Cursor's Result](cursors.md#plpgsql-cursor-for-loop).
+  <a id="plpgsql-foreach-array"></a>
 
-
-### Looping through Arrays { #plpgsql-foreach-array }
+### Looping through Arrays
 
 
  The `FOREACH` loop is much like a `FOR` loop, but instead of iterating through the rows returned by an SQL query, it iterates through the elements of an array value. (In general, `FOREACH` is meant for looping through components of a composite-valued expression; variants for looping through composites besides arrays may be added in future.) The `FOREACH` statement to loop over an array is:
@@ -670,8 +680,9 @@ NOTICE:  row = {7,8,9}
 NOTICE:  row = {10,11,12}
 ```
 
+  <a id="plpgsql-error-trapping"></a>
 
-### Trapping Errors { #plpgsql-error-trapping }
+### Trapping Errors
 
 
  By default, any error occurring in a PL/pgSQL function aborts execution of the function and the surrounding transaction. You can trap errors and recover from them by using a `BEGIN` block with an `EXCEPTION` clause. The syntax is an extension of the normal syntax for a `BEGIN` block:
@@ -729,9 +740,8 @@ END;
 !!! tip
 
     A block containing an `EXCEPTION` clause is significantly more expensive to enter and exit than a block without one. Therefore, don't use `EXCEPTION` without need.
+ <a id="plpgsql-upsert-example"></a>
 
-
-<a id="plpgsql-upsert-example"></a>
 **Example: Exceptions with `UPDATE`/`INSERT`**
 
 
@@ -768,9 +778,9 @@ SELECT merge_db(1, 'david');
 SELECT merge_db(1, 'dennis');
 ```
  This coding assumes the `unique_violation` error is caused by the `INSERT`, and not by, say, an `INSERT` in a trigger function on the table. It might also misbehave if there is more than one unique index on the table, since it will retry the operation regardless of which index caused the error. More safety could be had by using the features discussed next to check that the trapped error was the one expected.
+  <a id="plpgsql-exception-diagnostics"></a>
 
-
-#### Obtaining Information about an Error { #plpgsql-exception-diagnostics }
+#### Obtaining Information about an Error
 
 
  Exception handlers frequently need to identify the specific error that occurred. There are two ways to get information about the current exception in PL/pgSQL: special variables and the `GET STACKED DIAGNOSTICS` command.
@@ -786,9 +796,8 @@ SELECT merge_db(1, 'dennis');
 GET STACKED DIAGNOSTICS VARIABLE { = | := } ITEM [ , ... ];
 ```
  Each *item* is a key word identifying a status value to be assigned to the specified *variable* (which should be of the right data type to receive it). The currently available status items are shown in [Error Diagnostics Items](#plpgsql-exception-diagnostics-values).
+ <a id="plpgsql-exception-diagnostics-values"></a>
 
-
-<a id="plpgsql-exception-diagnostics-values"></a>
 **Table: Error Diagnostics Items**
 
 | Name | Type | Description |
@@ -826,8 +835,9 @@ EXCEPTION WHEN OTHERS THEN
 END;
 ```
 
+   <a id="plpgsql-call-stack"></a>
 
-### Obtaining Execution Location Information { #plpgsql-call-stack }
+### Obtaining Execution Location Information
 
 
  The `GET DIAGNOSTICS` command, previously described in [Obtaining the Result Status](basic-statements.md#plpgsql-statements-diagnostics), retrieves information about current execution state (whereas the `GET STACKED DIAGNOSTICS` command discussed above reports information about the execution state as of a previous error). Its `PG_CONTEXT` status item is useful for identifying the current execution location. `PG_CONTEXT` returns a text string with line(s) of text describing the call stack. The first line refers to the current function and currently executing `GET DIAGNOSTICS` command. The second and any subsequent lines refer to calling functions further up the call stack. For example:

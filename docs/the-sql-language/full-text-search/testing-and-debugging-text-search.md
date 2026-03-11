@@ -1,10 +1,12 @@
-## Testing and Debugging Text Search { #textsearch-debugging }
+<a id="textsearch-debugging"></a>
+
+## Testing and Debugging Text Search
 
 
  The behavior of a custom text search configuration can easily become confusing. The functions described in this section are useful for testing text search objects. You can test a complete configuration, or test parsers and dictionaries separately.
+ <a id="textsearch-configuration-testing"></a>
 
-
-### Configuration Testing { #textsearch-configuration-testing }
+### Configuration Testing
 
 
  The function `ts_debug` allows easy testing of a text search configuration.
@@ -123,8 +125,9 @@ FROM ts_debug('public.english', 'The Brightest supernovaes');
  asciiword | supernovaes | english_stem   | {supernova}
 ```
 
+  <a id="textsearch-parser-testing"></a>
 
-### Parser Testing { #textsearch-parser-testing }
+### Parser Testing
 
 
  The following functions allow direct testing of a text search parser.
@@ -196,8 +199,9 @@ SELECT * FROM ts_token_type('default');
     23 | entity          | XML entity
 ```
 
+  <a id="textsearch-dictionary-testing"></a>
 
-### Dictionary Testing { #textsearch-dictionary-testing }
+### Dictionary Testing
 
 
  The `ts_lexize` function facilitates dictionary testing.

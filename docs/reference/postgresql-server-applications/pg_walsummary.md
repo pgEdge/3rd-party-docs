@@ -1,4 +1,6 @@
-# pg_walsummary { #app-pgwalsummary }
+<a id="app-pgwalsummary"></a>
+
+# pg_walsummary
 
 print contents of WAL summary files
 

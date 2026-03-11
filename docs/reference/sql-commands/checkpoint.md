@@ -1,4 +1,6 @@
-# CHECKPOINT { #sql-checkpoint }
+<a id="sql-checkpoint"></a>
+
+# CHECKPOINT
 
 force a write-ahead log checkpoint
 

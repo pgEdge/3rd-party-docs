@@ -1,4 +1,6 @@
-# DROP OPERATOR { #sql-dropoperator }
+<a id="sql-dropoperator"></a>
+
+# DROP OPERATOR
 
 remove an operator
 

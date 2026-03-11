@@ -1,4 +1,6 @@
-## `foreign_data_wrapper_options` { #infoschema-foreign-data-wrapper-options }
+<a id="infoschema-foreign-data-wrapper-options"></a>
+
+## `foreign_data_wrapper_options`
 
 
  The view `foreign_data_wrapper_options` contains all the options defined for foreign-data wrappers in the current database. Only those foreign-data wrappers are shown that the current user has access to (by way of being the owner or having some privilege).

@@ -1,4 +1,6 @@
-# COMMENT { #sql-comment }
+<a id="sql-comment"></a>
+
+# COMMENT
 
 define or change the comment of an object
 

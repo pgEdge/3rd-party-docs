@@ -1,4 +1,6 @@
-## `domains` { #infoschema-domains }
+<a id="infoschema-domains"></a>
+
+## `domains`
 
 
  The view `domains` contains all *domains* defined in the current database. Only those domains are shown that the current user has access to (by way of being the owner or having some privilege).

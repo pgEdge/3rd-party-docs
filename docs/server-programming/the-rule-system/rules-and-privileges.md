@@ -1,4 +1,6 @@
-## Rules and Privileges { #rules-privileges }
+<a id="rules-privileges"></a>
+
+## Rules and Privileges
 
 
  Due to rewriting of queries by the PostgreSQL rule system, other tables/views than those used in the original query get accessed. When update rules are used, this can include write access to tables.

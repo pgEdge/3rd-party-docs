@@ -1,4 +1,6 @@
-# DROP SEQUENCE { #sql-dropsequence }
+<a id="sql-dropsequence"></a>
+
+# DROP SEQUENCE
 
 remove a sequence
 

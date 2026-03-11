@@ -1,7 +1,9 @@
-## Style Guide { #docguide-style }
+<a id="docguide-style"></a>
 
+## Style Guide
+  <a id="docguide-style-ref-pages"></a>
 
-### Reference Pages { #docguide-style-ref-pages }
+### Reference Pages
 
 
  Reference pages should follow a standard layout. This allows users to find the desired information more quickly, and it also encourages writers to document all relevant aspects of a command. Consistency is not only desired among PostgreSQL reference pages, but also with reference pages provided by the operating system and other packages. Hence the following guidelines have been developed. They are for the most part consistent with similar guidelines established by various operating systems.

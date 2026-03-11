@@ -1,10 +1,12 @@
-## Message Flow { #protocol-flow }
+<a id="protocol-flow"></a>
+
+## Message Flow
 
 
  This section describes the message flow and the semantics of each message type. (Details of the exact representation of each message appear in [Message Formats](message-formats.md#protocol-message-formats).) There are several different sub-protocols depending on the state of the connection: start-up, query, function call, `COPY`, and termination. There are also special provisions for asynchronous operations (including notification responses and command cancellation), which can occur at any time after the start-up phase.
+ <a id="protocol-flow-start-up"></a>
 
-
-### Start-up { #protocol-flow-start-up }
+### Start-up
 
 
  To begin a session, a frontend opens a connection to the server and sends a startup message. This message includes the names of the user and of the database the user wants to connect to; it also identifies the particular protocol version to be used. (Optionally, the startup message can include additional settings for run-time parameters.) The server then uses this information and the contents of its configuration files (such as `pg_hba.conf`) to determine whether the connection is provisionally acceptable, and what additional authentication is required (if any).
@@ -83,9 +85,9 @@ NoticeResponse
 
 
  The ReadyForQuery message is the same one that the backend will issue after each command cycle. Depending on the coding needs of the frontend, it is reasonable to consider ReadyForQuery as starting a command cycle, or to consider ReadyForQuery as ending the start-up phase and each subsequent command cycle.
+  <a id="protocol-flow-simple-query"></a>
 
-
-### Simple Query { #protocol-flow-simple-query }
+### Simple Query
 
 
  A simple query cycle is initiated by the frontend sending a Query message to the backend. The message includes an SQL command (or commands) expressed as a text string. The backend then sends one or more response messages depending on the contents of the query command string, and finally a ReadyForQuery response message. ReadyForQuery informs the frontend that it can safely send a new command. (It is not actually necessary for the frontend to wait for ReadyForQuery before issuing another command, but the frontend must then take responsibility for figuring out what happens if the earlier command fails and already-issued later commands succeed.)
@@ -140,9 +142,9 @@ NoticeResponse
 
 
  Recommended practice is to code frontends in a state-machine style that will accept any message type at any time that it could make sense, rather than wiring in assumptions about the exact sequence of messages.
+ <a id="protocol-flow-multi-statement"></a>
 
-
-#### Multiple Statements in a Simple Query { #protocol-flow-multi-statement }
+#### Multiple Statements in a Simple Query
 
 
  When a simple Query message contains more than one SQL statement (separated by semicolons), those statements are executed as a single transaction, unless explicit transaction control commands are included to force a different behavior. For example, if the message contains
@@ -206,9 +208,9 @@ SELCT 1/0;
 
 
  Lastly, note that all the statements within the Query message will observe the same value of `statement_timestamp()`, since that timestamp is updated only upon receipt of the Query message. This will result in them all observing the same value of `transaction_timestamp()` as well, except in cases where the query string ends a previously-started transaction and begins a new one.
+   <a id="protocol-flow-ext-query"></a>
 
-
-### Extended Query { #protocol-flow-ext-query }
+### Extended Query
 
 
  The extended query protocol breaks down the above-described simple query protocol into multiple steps. The results of preparatory steps can be re-used multiple times for improved efficiency. Furthermore, additional features are available, such as the possibility of supplying data values as separate parameters instead of having to insert them directly into a query string.
@@ -281,9 +283,9 @@ SELCT 1/0;
 !!! note
 
     The simple Query message is approximately equivalent to the series Parse, Bind, portal Describe, Execute, Close, Sync, using the unnamed prepared statement and portal objects and no parameters. One difference is that it will accept multiple SQL statements in the query string, automatically performing the bind/describe/execute sequence for each one in succession. Another difference is that it will not return ParseComplete, BindComplete, CloseComplete, or NoData messages.
+  <a id="protocol-flow-pipelining"></a>
 
-
-### Pipelining { #protocol-flow-pipelining }
+### Pipelining
 
 
  Use of the extended query protocol allows *pipelining*, which means sending a series of queries without waiting for earlier ones to complete. This reduces the number of network round trips needed to complete a given series of operations. However, the user must carefully consider the required behavior if one of the steps fails, since later queries will already be in flight to the server.
@@ -299,9 +301,9 @@ SELCT 1/0;
 
 
  When using this method, completion of the pipeline must be determined by counting ReadyForQuery messages and waiting for that to reach the number of Syncs sent. Counting command completion responses is unreliable, since some of the commands may be skipped and thus not produce a completion message.
+  <a id="protocol-flow-function-call"></a>
 
-
-### Function Call { #protocol-flow-function-call }
+### Function Call
 
 
  The Function Call sub-protocol allows the client to request a direct call of any function that exists in the database's `pg_proc` system catalog. The client must have execute permission for the function.
@@ -329,8 +331,9 @@ ReadyForQuery
 NoticeResponse
 :   A warning message has been issued in relation to the function call. Notices are in addition to other responses, i.e., the backend will continue processing the command.
 
+  <a id="protocol-copy"></a>
 
-### COPY Operations { #protocol-copy }
+### COPY Operations
 
 
  The `COPY` command allows high-speed bulk data transfer to or from the server. Copy-in and copy-out operations each switch the connection into a distinct sub-protocol, which lasts until the operation is completed.
@@ -358,9 +361,9 @@ NoticeResponse
 
 
  The CopyInResponse, CopyOutResponse and CopyBothResponse messages include fields that inform the frontend of the number of columns per row and the format codes being used for each column. (As of the present implementation, all columns in a given `COPY` operation will use the same format, but the message design does not assume this.)
+  <a id="protocol-async"></a>
 
-
-### Asynchronous Operations { #protocol-async }
+### Asynchronous Operations
 
 
  There are several cases in which the backend will send messages that are not specifically prompted by the frontend's command stream. Frontends must be prepared to deal with these messages at any time, even when not engaged in a query. At minimum, one should check for these cases before beginning to read a query response.
@@ -397,9 +400,9 @@ NoticeResponse
 !!! note
 
     At present, NotificationResponse can only be sent outside a transaction, and thus it will not occur in the middle of a command-response series, though it might occur just before ReadyForQuery. It is unwise to design frontend logic that assumes that, however. Good practice is to be able to accept NotificationResponse at any point in the protocol.
+  <a id="protocol-flow-canceling-requests"></a>
 
-
-### Canceling Requests in Progress { #protocol-flow-canceling-requests }
+### Canceling Requests in Progress
 
 
  During the processing of a query, the frontend might request cancellation of the query. The cancel request is not sent directly on the open connection to the backend for reasons of implementation efficiency: we don't want to have the backend constantly checking for new input from the frontend during query processing. Cancel requests should be relatively infrequent, so we make them slightly cumbersome in order to avoid a penalty in the normal case.
@@ -418,9 +421,9 @@ NoticeResponse
 
 
  Since the cancel request is sent across a new connection to the server and not across the regular frontend/backend communication link, it is possible for the cancel request to be issued by any process, not just the frontend whose query is to be canceled. This might provide additional flexibility when building multiple-process applications. It also introduces a security risk, in that unauthorized persons might try to cancel queries. The security risk is addressed by requiring a dynamically generated secret key to be supplied in cancel requests.
+  <a id="protocol-flow-termination"></a>
 
-
-### Termination { #protocol-flow-termination }
+### Termination
 
 
  The normal, graceful termination procedure is that the frontend sends a Terminate message and immediately closes the connection. On receipt of this message, the backend closes the connection and terminates.
@@ -433,9 +436,9 @@ NoticeResponse
 
 
  For either normal or abnormal termination, any open transaction is rolled back, not committed. One should note however that if a frontend disconnects while a non-`SELECT` query is being processed, the backend will probably finish the query before noticing the disconnection. If the query is outside any transaction block (`BEGIN` ... `COMMIT` sequence) then its results might be committed before the disconnection is recognized.
+  <a id="protocol-flow-ssl"></a>
 
-
-### SSL Session Encryption { #protocol-flow-ssl }
+### SSL Session Encryption
 
 
  If PostgreSQL was built with SSL support, frontend/backend communications can be encrypted using SSL. This provides communication security in environments where attackers might be able to capture the session traffic. For more information on encrypting PostgreSQL sessions with SSL, see [Secure TCP/IP Connections with SSL](../../server-administration/server-setup-and-operation/secure-tcp-ip-connections-with-ssl.md#ssl-tcp).
@@ -460,9 +463,9 @@ NoticeResponse
 
 
  While the protocol itself does not provide a way for the server to force SSL encryption, the administrator can configure the server to reject unencrypted sessions as a byproduct of authentication checking.
+  <a id="protocol-flow-gssapi"></a>
 
-
-### GSSAPI Session Encryption { #protocol-flow-gssapi }
+### GSSAPI Session Encryption
 
 
  If PostgreSQL was built with GSSAPI support, frontend/backend communications can be encrypted using GSSAPI. This provides communication security in environments where attackers might be able to capture the session traffic. For more information on encrypting PostgreSQL sessions with GSSAPI, see [Secure TCP/IP Connections with GSSAPI Encryption](../../server-administration/server-setup-and-operation/secure-tcp-ip-connections-with-gssapi-encryption.md#gssapi-enc).

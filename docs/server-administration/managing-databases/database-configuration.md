@@ -1,4 +1,6 @@
-## Database Configuration { #manage-ag-config }
+<a id="manage-ag-config"></a>
+
+## Database Configuration
 
 
  Recall from [Server Configuration](../server-configuration/index.md#runtime-config) that the PostgreSQL server provides a large number of run-time configuration variables. You can set database-specific default values for many of these settings.

@@ -1,4 +1,6 @@
-# UNLISTEN { #sql-unlisten }
+<a id="sql-unlisten"></a>
+
+# UNLISTEN
 
 stop listening for a notification
 

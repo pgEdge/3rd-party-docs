@@ -1,4 +1,6 @@
-# CREATE STATISTICS { #sql-createstatistics }
+<a id="sql-createstatistics"></a>
+
+# CREATE STATISTICS
 
 define extended statistics
 
@@ -16,9 +18,9 @@ CREATE STATISTICS [ [ IF NOT EXISTS ] STATISTICS_NAME ]
     ON { COLUMN_NAME | ( EXPRESSION ) }, { COLUMN_NAME | ( EXPRESSION ) } [, ...]
     FROM TABLE_NAME
 ```
+ <a id="sql-createstatistics-description"></a>
 
-
-## Description { #sql-createstatistics-description }
+## Description
 
 
  `CREATE STATISTICS` will create a new extended statistics object tracking data about the specified table, foreign table or materialized view. The statistics object will be created in the current database and will be owned by the user issuing the command.
@@ -62,9 +64,9 @@ CREATE STATISTICS [ [ IF NOT EXISTS ] STATISTICS_NAME ]
 
 
  Extended statistics are not currently used by the planner for selectivity estimations made for table joins. This limitation will likely be removed in a future version of PostgreSQL.
+ <a id="sql-createstatistics-examples"></a>
 
-
-## Examples { #sql-createstatistics-examples }
+## Examples
 
 
  Create table `t1` with two functionally dependent columns, i.e., knowledge of a value in the first column is sufficient for determining the value in the other column. Then functional dependency statistics are built on those columns:

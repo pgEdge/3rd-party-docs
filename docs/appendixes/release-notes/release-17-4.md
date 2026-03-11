@@ -1,4 +1,6 @@
-## Release 17.4 { #release-17-4 }
+<a id="release-17-4"></a>
+
+## Release 17.4
 
 
 **Release date:.**
@@ -8,18 +10,18 @@
 
 
  This release contains a few fixes from 17.3. For information about new features in major release 17, see [Release 17](release-17.md#release-17).
+ <a id="release-17-4-migration"></a>
 
-
-### Migration to Version 17.4 { #release-17-4-migration }
+### Migration to Version 17.4
 
 
  A dump/restore is not required for those running 17.X.
 
 
  However, if you are upgrading from a version earlier than 17.1, see [Release 17.1](release-17-1.md#release-17-1).
+  <a id="release-17-4-changes"></a>
 
-
-### Changes { #release-17-4-changes }
+### Changes
 
 
 -  Improve behavior of libpq's quoting functions (Andres Freund, Tom Lane) [&sect;](https://postgr.es/c/a92db3d02) [&sect;](https://postgr.es/c/3abe6e04c) [&sect;](https://postgr.es/c/3977bd298)

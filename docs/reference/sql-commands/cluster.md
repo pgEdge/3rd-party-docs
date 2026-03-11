@@ -1,4 +1,6 @@
-# CLUSTER { #sql-cluster }
+<a id="sql-cluster"></a>
+
+# CLUSTER
 
 cluster a table according to an index
 

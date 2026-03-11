@@ -1,10 +1,11 @@
-## Geometric Functions and Operators { #functions-geometry }
+<a id="functions-geometry"></a>
+
+## Geometric Functions and Operators
 
 
  The geometric types `point`, `box`, `lseg`, `line`, `path`, `polygon`, and `circle` have a large set of native support functions and operators, shown in [Geometric Operators](#functions-geometry-op-table), [Geometric Functions](#functions-geometry-func-table), and [Geometric Type Conversion Functions](#functions-geometry-conv-table).
+ <a id="functions-geometry-op-table"></a>
 
-
-<a id="functions-geometry-op-table"></a>
 **Table: Geometric Operators**
 
 <table>
@@ -33,7 +34,8 @@
 </tr>
 <tr>
 <td><em>geometric_type</em> <code>*</code> <code>point</code> <em>geometric_type</em></td>
-<td>Multiplies each point of the first argument by the second <code>point</code> (treating a point as being a complex number represented by real and imaginary parts, and performing standard complex multiplication). If one interprets the second <code>point</code> as a vector, this is equivalent to scaling the object's size and distance from the origin by the length of the vector, and rotating it counterclockwise around the origin by the vector's angle from the <em>x</em> axis. Available for <code>point</code>, <code>box</code>, (“Rotating” a box with these operators only moves its corner points: the box is still considered to have sides parallel to the axes. Hence the box's size is not preserved, as a true rotation would do.) <code>path</code>, <code>circle</code>.</td>
+<td>Multiplies each point of the first argument by the second <code>point</code> (treating a point as being a complex number represented by real and imaginary parts, and performing standard complex multiplication). If one interprets the second <code>point</code> as a vector, this is equivalent to scaling the object's size and distance from the origin by the length of the vector, and rotating it counterclockwise around the origin by the vector's angle from the <em>x</em> axis. Available for <code>point</code>, <code>box</code>,<a id="functions-geometry-rotation-fn"></a><br>
+ (“Rotating” a box with these operators only moves its corner points: the box is still considered to have sides parallel to the axes. Hence the box's size is not preserved, as a true rotation would do.) <code>path</code>, <code>circle</code>.</td>
 <td><code>path '((0,0),(1,0),(1,1))' * point '(3.0,0)'</code> <code>((0,0),(3,0),(3,3))</code><br><code>path '((0,0),(1,0),(1,1))' * point(cosd(45), sind(45))</code> <code>((0,0),​(0.7071067811865475,0.7071067811865475),​(0,1.414213562373095))</code></td>
 </tr>
 <tr>
@@ -193,9 +195,8 @@
 !!! note
 
     Before PostgreSQL 14, the point is strictly below/above comparison operators `point` `<<|` `point` and `point` `|>>` `point` were respectively called `<^` and `>^`. These names are still available, but are deprecated and will eventually be removed.
+ <a id="functions-geometry-func-table"></a>
 
-
-<a id="functions-geometry-func-table"></a>
 **Table: Geometric Functions**
 
 <table>
@@ -279,9 +280,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="functions-geometry-conv-table"></a>
 
-
-<a id="functions-geometry-conv-table"></a>
 **Table: Geometric Type Conversion Functions**
 
 <table>

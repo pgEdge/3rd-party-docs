@@ -1,4 +1,6 @@
-# ALTER TEXT SEARCH DICTIONARY { #sql-altertsdictionary }
+<a id="sql-altertsdictionary"></a>
+
+# ALTER TEXT SEARCH DICTIONARY
 
 change the definition of a text search dictionary
 

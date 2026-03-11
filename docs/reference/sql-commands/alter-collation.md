@@ -1,4 +1,6 @@
-# ALTER COLLATION { #sql-altercollation }
+<a id="sql-altercollation"></a>
+
+# ALTER COLLATION
 
 change the definition of a collation
 
@@ -41,9 +43,9 @@ ALTER COLLATION NAME SET SCHEMA NEW_SCHEMA
 
 `REFRESH VERSION`
 :   Update the collation's version. See [Notes](#sql-altercollation-notes) below.
+ <a id="sql-altercollation-notes"></a>
 
-
-## Notes { #sql-altercollation-notes }
+## Notes
 
 
  When a collation object is created, the provider-specific version of the collation is recorded in the system catalog. When the collation is used, the current version is checked against the recorded version, and a warning is issued when there is a mismatch, for example:

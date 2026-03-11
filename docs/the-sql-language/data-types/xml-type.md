@@ -1,4 +1,6 @@
-## XML Type { #datatype-xml }
+<a id="datatype-xml"></a>
+
+## XML Type
 
 
  The `xml` data type can be used to store XML data. Its advantage over storing XML data in a `text` field is that it checks the input values for well-formedness, and there are support functions to perform type-safe operations on it; see [XML Functions](../functions-and-operators/xml-functions.md#functions-xml). Use of this data type requires the installation to have been built with `configure --with-libxml`.
@@ -8,9 +10,9 @@
 
 
  Limits and compatibility notes for the `xml` data type can be found in [XML Limits and Conformance to SQL/XML](../../appendixes/sql-conformance/xml-limits-and-conformance-to-sql-xml.md#xml-limits-conformance).
+ <a id="datatype-xml-creating"></a>
 
-
-### Creating XML Values { #datatype-xml-creating }
+### Creating XML Values
 
 
  To produce a value of type `xml` from character data, use the function `xmlparse`:
@@ -64,9 +66,9 @@ SET XML OPTION { DOCUMENT | CONTENT };
 SET xmloption TO { DOCUMENT | CONTENT };
 ```
  The default is `CONTENT`, so all forms of XML data are allowed.
+  <a id="datatype-xml-encoding-handling"></a>
 
-
-### Encoding Handling { #datatype-xml-encoding-handling }
+### Encoding Handling
 
 
  Care must be taken when dealing with multiple character encodings on the client, server, and in the XML data passed through them. When using the text mode to pass queries to the server and query results to the client (which is the normal mode), PostgreSQL converts all character data passed between the client and the server and vice versa to the character encoding of the respective end; see [Character Set Support](../../server-administration/localization/character-set-support.md#multibyte). This includes string representations of XML values, such as in the above examples. This would ordinarily mean that encoding declarations contained in XML data can become invalid as the character data is converted to other encodings while traveling between client and server, because the embedded encoding declaration is not changed. To cope with this behavior, encoding declarations contained in character strings presented for input to the `xml` type are *ignored*, and content is assumed to be in the current server encoding. Consequently, for correct processing, character strings of XML data must be sent from the client in the current client encoding. It is the responsibility of the client to either convert documents to the current client encoding before sending them to the server, or to adjust the client encoding appropriately. On output, values of type `xml` will not have an encoding declaration, and clients should assume all data is in the current client encoding.
@@ -81,9 +83,9 @@ SET xmloption TO { DOCUMENT | CONTENT };
 !!! caution
 
     Some XML-related functions may not work at all on non-ASCII data when the server encoding is not UTF-8. This is known to be an issue for `xmltable()` and `xpath()` in particular.
+  <a id="datatype-xml-accessing-xml-values"></a>
 
-
-### Accessing XML Values { #datatype-xml-accessing-xml-values }
+### Accessing XML Values
 
 
  The `xml` data type is unusual in that it does not provide any comparison operators. This is because there is no well-defined and universally useful comparison algorithm for XML data. One consequence of this is that you cannot retrieve rows by comparing an `xml` column against a search value. XML values should therefore typically be accompanied by a separate key field such as an ID. An alternative solution for comparing XML values is to convert them to character strings first, but note that character string comparison has little to do with a useful XML comparison method.

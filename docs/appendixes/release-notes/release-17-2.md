@@ -1,4 +1,6 @@
-## Release 17.2 { #release-17-2 }
+<a id="release-17-2"></a>
+
+## Release 17.2
 
 
 **Release date:.**
@@ -8,18 +10,18 @@
 
 
  This release contains a few fixes from 17.1. For information about new features in major release 17, see [Release 17](release-17.md#release-17).
+ <a id="release-17-2-migration"></a>
 
-
-### Migration to Version 17.2 { #release-17-2-migration }
+### Migration to Version 17.2
 
 
  A dump/restore is not required for those running 17.X.
 
 
  However, if you are upgrading from a version earlier than 17.1, see [Release 17.1](release-17-1.md#release-17-1).
+  <a id="release-17-2-changes"></a>
 
-
-### Changes { #release-17-2-changes }
+### Changes
 
 
 -  Repair ABI break for extensions that work with struct `ResultRelInfo` (Tom Lane) [&sect;](https://postgr.es/c/6bfacd368)

@@ -1,13 +1,15 @@
-## pgrowlocks — show a table's row locking information { #pgrowlocks }
+<a id="pgrowlocks"></a>
+
+## pgrowlocks — show a table's row locking information
 
 
  The `pgrowlocks` module provides a function to show row locking information for a specified table.
 
 
  By default use is restricted to superusers, roles with privileges of the `pg_stat_scan_tables` role, and users with `SELECT` permissions on the table.
+ <a id="pgrowlocks-overview"></a>
 
-
-### Overview { #pgrowlocks-overview }
+### Overview
 
 
 ```
@@ -17,9 +19,8 @@ pgrowlocks(text) returns setof record
 
 
  The parameter is the name of a table. The result is a set of records, with one row for each locked row within the table. The output columns are shown in [`pgrowlocks` Output Columns](#pgrowlocks-columns).
+ <a id="pgrowlocks-columns"></a>
 
-
-<a id="pgrowlocks-columns"></a>
 **Table: `pgrowlocks` Output Columns**
 
 | Name | Type | Description |
@@ -47,9 +48,9 @@ SELECT * FROM accounts AS a, pgrowlocks('accounts') AS p
   WHERE p.locked_row = a.ctid;
 ```
  Be aware however that such a query will be very inefficient.
+  <a id="pgrowlocks-sample-output"></a>
 
-
-### Sample Output { #pgrowlocks-sample-output }
+### Sample Output
 
 
 ```
@@ -63,9 +64,9 @@ SELECT * FROM accounts AS a, pgrowlocks('accounts') AS p
  (0,4)      |    607 | f     | {607} | {"For Update"} | {3107}
 (4 rows)
 ```
+  <a id="pgrowlocks-author"></a>
 
-
-### Author { #pgrowlocks-author }
+### Author
 
 
  Tatsuo Ishii

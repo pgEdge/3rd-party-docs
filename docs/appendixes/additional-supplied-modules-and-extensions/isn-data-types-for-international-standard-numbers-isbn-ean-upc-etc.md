@@ -1,19 +1,20 @@
-## isn — data types for international standard numbers (ISBN, EAN, UPC, etc.) { #isn }
+<a id="isn"></a>
+
+## isn — data types for international standard numbers (ISBN, EAN, UPC, etc.)
 
 
  The `isn` module provides data types for the following international product numbering standards: EAN13, UPC, ISBN (books), ISMN (music), and ISSN (serials). Numbers are validated on input according to a hard-coded list of prefixes; this list of prefixes is also used to hyphenate numbers on output. Since new prefixes are assigned from time to time, the list of prefixes may be out of date. It is hoped that a future version of this module will obtain the prefix list from one or more tables that can be easily updated by users as needed; however, at present, the list can only be updated by modifying the source code and recompiling. Alternatively, prefix validation and hyphenation support may be dropped from a future version of this module.
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="isn-data-types"></a>
 
-
-### Data Types { #isn-data-types }
+### Data Types
 
 
  [`isn` Data Types](#isn-datatypes) shows the data types provided by the `isn` module.
+ <a id="isn-datatypes"></a>
 
-
-<a id="isn-datatypes"></a>
 **Table: `isn` Data Types**
 
 | Data Type | Description |
@@ -44,9 +45,9 @@
 
 
  The `ISBN`, `ISMN`, and `ISSN` types will display the short version of the number (ISxN 10) whenever it's possible, and will show ISxN 13 format for numbers that do not fit in the short version. The `EAN13`, `ISBN13`, `ISMN13` and `ISSN13` types will always display the long version of the ISxN (EAN13).
+  <a id="isn-casts"></a>
 
-
-### Casts { #isn-casts }
+### Casts
 
 
  The `isn` module provides the following pairs of type casts:
@@ -65,15 +66,14 @@
 
 
  When casting from `EAN13` to another type, there is a run-time check that the value is within the domain of the other type, and an error is thrown if not. The other casts are simply relabelings that will always succeed.
+  <a id="isn-funcs-ops"></a>
 
-
-### Functions and Operators { #isn-funcs-ops }
+### Functions and Operators
 
 
  The `isn` module provides the standard comparison operators, plus B-tree and hash indexing support for all these data types. In addition there are several specialized functions; shown in [`isn` Functions](#isn-functions). In this table, `isn` means any one of the module's data types.
+ <a id="isn-functions"></a>
 
-
-<a id="isn-functions"></a>
 **Table: `isn` Functions**
 
 <table>
@@ -121,9 +121,9 @@
 
 
  Another special feature is that during input, you can write `?` in place of the check digit, and the correct check digit will be inserted automatically.
+  <a id="isn-examples"></a>
 
-
-### Examples { #isn-examples }
+### Examples
 
 
 ```
@@ -166,9 +166,9 @@ SELECT * FROM test;
 
 SELECT isbn13(id) FROM test;
 ```
+  <a id="isn-bibliography"></a>
 
-
-### Bibliography { #isn-bibliography }
+### Bibliography
 
 
  The information to implement this module was collected from several sites, including:
@@ -185,9 +185,9 @@ SELECT isbn13(id) FROM test;
 - [https://en.wikipedia.org/wiki/International_Standard_Music_Number](https://en.wikipedia.org/wiki/International_Standard_Music_Number)
 - [https://www.ismn-international.org/ranges/tools](https://www.ismn-international.org/ranges/tools)
  Care was taken during the creation of the algorithms and they were meticulously verified against the suggested algorithms in the official ISBN, ISMN, ISSN User Manuals.
+  <a id="isn-author"></a>
 
-
-### Author { #isn-author }
+### Author
 
 
  Germ&aacute;n M&eacute;ndez Bravo (Kronuz), 2004–2006

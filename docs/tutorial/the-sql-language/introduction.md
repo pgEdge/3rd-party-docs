@@ -1,4 +1,6 @@
-## Introduction { #tutorial-sql-intro }
+<a id="tutorial-sql-intro"></a>
+
+## Introduction
 
 
  This chapter provides an overview of how to use SQL to perform simple operations. This tutorial is only intended to give you an introduction and is in no way a complete tutorial on SQL. Numerous books have been written on SQL, including [Understanding the New SQL](../../bibliography.md#melt93) and [A Guide to the SQL Standard](../../bibliography.md#date97). You should be aware that some PostgreSQL language features are extensions to the standard.

@@ -1,4 +1,6 @@
-## TAP Tests { #regress-tap }
+<a id="regress-tap"></a>
+
+## TAP Tests
 
 
  Various tests, particularly the client program tests under `src/bin`, use the Perl TAP tools and are run using the Perl testing program `prove`. You can pass command-line options to `prove` by setting the `make` variable `PROVE_FLAGS`, for example:
@@ -25,9 +27,9 @@ make check PROVE_TESTS='t/001_test1.pl t/003_test3.pl'
 
 
  It's important to realize that the TAP tests will start test server(s) even when you say `make installcheck`; this is unlike the traditional non-TAP testing infrastructure, which expects to use an already-running test server in that case. Some PostgreSQL subdirectories contain both traditional-style and TAP-style tests, meaning that `make installcheck` will produce a mix of results from temporary servers and the already-running test server.
+ <a id="regress-tap-vars"></a>
 
-
-### Environment Variables { #regress-tap-vars }
+### Environment Variables
 
 
  Data directories are named according to the test filename, and will be retained if a test fails. If the environment variable `PG_TEST_NOCLEAN` is set, data directories will be retained regardless of test status. For example, retaining the data directory regardless of test results when running the pg_dump tests:

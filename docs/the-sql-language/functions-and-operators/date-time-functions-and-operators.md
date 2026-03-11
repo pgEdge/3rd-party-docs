@@ -1,4 +1,6 @@
-## Date/Time Functions and Operators { #functions-datetime }
+<a id="functions-datetime"></a>
+
+## Date/Time Functions and Operators
 
 
  [Date/Time Functions](#functions-datetime-table) shows the available functions for date/time value processing, with details appearing in the following subsections. [Date/Time Operators](#operators-datetime-table) illustrates the behaviors of the basic arithmetic operators (`+`, `*`, etc.). For formatting functions, refer to [Data Type Formatting Functions](data-type-formatting-functions.md#functions-formatting). You should be familiar with the background information on date/time data types from [Date/Time Types](../data-types/date-time-types.md#datatype-datetime).
@@ -8,9 +10,8 @@
 
 
  All the functions and operators described below that take `time` or `timestamp` inputs actually come in two variants: one that takes `time with time zone` or `timestamp with time zone`, and one that takes `time without time zone` or `timestamp without time zone`. For brevity, these variants are not shown separately. Also, the `+` and `*` operators come in commutative pairs (for example both `date` `+` `integer` and `integer` `+` `date`); we show only one of each such pair.
+ <a id="operators-datetime-table"></a>
 
-
-<a id="operators-datetime-table"></a>
 **Table: Date/Time Operators**
 
 <table>
@@ -109,9 +110,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="functions-datetime-table"></a>
 
-
-<a id="functions-datetime-table"></a>
 **Table: Date/Time Functions**
 
 <table>
@@ -229,12 +229,14 @@
 <td><code>isfinite(interval '4 hours')</code> <code>true</code></td>
 </tr>
 <tr>
-<td><code>justify_days</code> ( <code>interval</code> ) <code>interval</code></td>
+<td><a id="function-justify-days"></a>
+ `justify_days` ( `interval` ) `interval`</td>
 <td>Adjust interval, converting 30-day time periods to months</td>
 <td><code>justify_days(interval '1 year 65 days')</code> <code>1 year 2 mons 5 days</code></td>
 </tr>
 <tr>
-<td><code>justify_hours</code> ( <code>interval</code> ) <code>interval</code></td>
+<td><a id="function-justify-hours"></a>
+ `justify_hours` ( `interval` ) `interval`</td>
 <td>Adjust interval, converting 24-hour time periods to days</td>
 <td><code>justify_hours(interval '50 hours 10 minutes')</code> <code>2 days 02:10:00</code></td>
 </tr>
@@ -376,9 +378,9 @@ Result: 121 days 23:00:00
 SELECT age(timestamptz '2013-07-01 12:00:00', timestamptz '2013-03-01 12:00:00');
 Result: 4 mons
 ```
+ <a id="functions-datetime-extract"></a>
 
-
-### `EXTRACT`, `date_part` { #functions-datetime-extract }
+### `EXTRACT`, `date_part`
 
 
 ```
@@ -681,9 +683,9 @@ Result: 16
 SELECT date_part('hour', INTERVAL '4 hours 3 minutes');
 Result: 4
 ```
+  <a id="functions-datetime-trunc"></a>
 
-
-### `date_trunc` { #functions-datetime-trunc }
+### `date_trunc`
 
 
  The function `date_trunc` is conceptually similar to the `trunc` function for numbers.
@@ -735,8 +737,9 @@ SELECT date_trunc('hour', INTERVAL '3 days 02:47:33');
 Result: 3 days 02:00:00
 ```
 
+  <a id="functions-datetime-bin"></a>
 
-### `date_bin` { #functions-datetime-bin }
+### `date_bin`
 
 
  The function `date_bin` “bins” the input timestamp into the specified interval (the *stride*) aligned with a specified origin.
@@ -764,15 +767,14 @@ Result: 2020-02-11 15:32:30
 
 
  The `stride` interval must be greater than zero and cannot contain units of month or larger.
+  <a id="functions-datetime-zoneconvert"></a>
 
-
-### `AT TIME ZONE` and `AT LOCAL` { #functions-datetime-zoneconvert }
+### `AT TIME ZONE` and `AT LOCAL`
 
 
  The `AT TIME ZONE` operator converts time stamp *without* time zone to/from time stamp *with* time zone, and `time with time zone` values to different time zones. [`AT TIME ZONE` and `AT LOCAL` Variants](#functions-datetime-zoneconvert-table) shows its variants.
+ <a id="functions-datetime-zoneconvert-table"></a>
 
-
-<a id="functions-datetime-zoneconvert-table"></a>
 **Table: `AT TIME ZONE` and `AT LOCAL` Variants**
 
 <table>
@@ -861,9 +863,9 @@ Result: 17:38:40
 
  The function <code>`timezone`(</code><em>time</em><code>)</code> is equivalent to the SQL-conforming construct <em>time</em><code>
     AT LOCAL</code>.
+  <a id="functions-datetime-current"></a>
 
-
-### Current Date/Time { #functions-datetime-current }
+### Current Date/Time
 
 
  PostgreSQL provides a number of functions that return values related to the current date and time. These SQL-standard functions all return values based on the start time of the current transaction:
@@ -941,9 +943,9 @@ SELECT TIMESTAMP 'now';  -- but see tip below
 !!! tip
 
     Do not use the third form when specifying a value to be evaluated later, for example in a `DEFAULT` clause for a table column. The system will convert `now` to a `timestamp` as soon as the constant is parsed, so that when the default value is needed, the time of the table creation would be used! The first two forms will not be evaluated until the default value is used, because they are function calls. Thus they will give the desired behavior of defaulting to the time of row insertion. (See also [Special Values](../data-types/date-time-types.md#datatype-datetime-special-values).)
+  <a id="functions-datetime-delay"></a>
 
-
-### Delaying Execution { #functions-datetime-delay }
+### Delaying Execution
 
 
  The following functions are available to delay execution of the server process:

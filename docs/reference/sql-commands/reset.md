@@ -1,4 +1,6 @@
-# RESET { #sql-reset }
+<a id="sql-reset"></a>
+
+# RESET
 
 restore the value of a run-time parameter to the default value
 

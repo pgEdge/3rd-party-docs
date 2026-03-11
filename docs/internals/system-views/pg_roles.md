@@ -1,4 +1,6 @@
-## `pg_roles` { #view-pg-roles }
+<a id="view-pg-roles"></a>
+
+## `pg_roles`
 
 
  The view `pg_roles` provides access to information about database roles. This is simply a publicly readable view of [`pg_authid`](../system-catalogs/pg_authid.md#catalog-pg-authid) that blanks out the password field.

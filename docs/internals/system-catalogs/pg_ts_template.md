@@ -1,4 +1,6 @@
-## `pg_ts_template` { #catalog-pg-ts-template }
+<a id="catalog-pg-ts-template"></a>
+
+## `pg_ts_template`
 
 
  The `pg_ts_template` catalog contains entries defining text search templates. A template is the implementation skeleton for a class of text search dictionaries. Since a template must be implemented by C-language-level functions, creation of new templates is restricted to database superusers.

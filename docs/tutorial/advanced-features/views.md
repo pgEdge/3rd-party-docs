@@ -1,4 +1,6 @@
-## Views { #tutorial-views }
+<a id="tutorial-views"></a>
+
+## Views
 
 
  Refer back to the queries in [Joins Between Tables](../the-sql-language/joins-between-tables.md#tutorial-join). Suppose the combined listing of weather records and city location is of particular interest to your application, but you do not want to type the query each time you need it. You can create a *view* over the query, which gives a name to the query that you can refer to like an ordinary table:

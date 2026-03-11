@@ -1,4 +1,6 @@
-# ALTER AGGREGATE { #sql-alteraggregate }
+<a id="sql-alteraggregate"></a>
+
+# ALTER AGGREGATE
 
 change the definition of an aggregate function
 

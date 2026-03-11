@@ -1,4 +1,6 @@
-## Global Values in PL/Perl { #plperl-global }
+<a id="plperl-global"></a>
+
+## Global Values in PL/Perl
 
 
  You can use the global hash `%_SHARED` to store data, including code references, between function calls for the lifetime of the current session.

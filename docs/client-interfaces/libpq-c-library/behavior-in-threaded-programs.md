@@ -1,4 +1,6 @@
-## Behavior in Threaded Programs { #libpq-threading }
+<a id="libpq-threading"></a>
+
+## Behavior in Threaded Programs
 
 
  As of version 17, libpq is always reentrant and thread-safe. However, one restriction is that no two threads attempt to manipulate the same `PGconn` object at the same time. In particular, you cannot issue concurrent commands from different threads through the same connection object. (If you need to run concurrent commands, use multiple connections.)

@@ -1,4 +1,6 @@
-## `pg_sequence` { #catalog-pg-sequence }
+<a id="catalog-pg-sequence"></a>
+
+## `pg_sequence`
 
 
  The catalog `pg_sequence` contains information about sequences. Some of the information about sequences, such as the name and the schema, is in [`pg_class`](pg_class.md#catalog-pg-class)

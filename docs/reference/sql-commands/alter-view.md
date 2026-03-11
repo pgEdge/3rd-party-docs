@@ -1,4 +1,6 @@
-# ALTER VIEW { #sql-alterview }
+<a id="sql-alterview"></a>
+
+# ALTER VIEW
 
 change the definition of a view
 

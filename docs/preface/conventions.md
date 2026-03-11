@@ -1,4 +1,6 @@
-## Conventions { #notation }
+<a id="notation"></a>
+
+## Conventions
 
 
  The following conventions are used in the synopsis of a command: brackets (`[` and `]`) indicate optional parts. Braces (`{` and `}`) and vertical lines (`|`) indicate that you must choose one alternative. Dots (`...`) mean that the preceding element can be repeated. All other symbols, including parentheses, should be taken literally.

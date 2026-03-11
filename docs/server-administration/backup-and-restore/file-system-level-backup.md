@@ -1,4 +1,6 @@
-## File System Level Backup { #backup-file }
+<a id="backup-file"></a>
+
+## File System Level Backup
 
 
  An alternative backup strategy is to directly copy the files that PostgreSQL uses to store the data in the database; [Creating a Database Cluster](../server-setup-and-operation/creating-a-database-cluster.md#creating-cluster) explains where these files are located. You can use whatever method you prefer for doing file system backups; for example:

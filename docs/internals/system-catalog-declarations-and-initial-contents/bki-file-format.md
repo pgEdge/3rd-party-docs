@@ -1,4 +1,6 @@
-## BKI File Format { #bki-format }
+<a id="bki-format"></a>
+
+## BKI File Format
 
 
  This section describes how the PostgreSQL backend interprets BKI files. This description will be easier to understand if the `postgres.bki` file is at hand as an example.

@@ -1,4 +1,6 @@
-# ALTER SCHEMA { #sql-alterschema }
+<a id="sql-alterschema"></a>
+
+# ALTER SCHEMA
 
 change the definition of a schema
 

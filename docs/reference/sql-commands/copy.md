@@ -1,4 +1,6 @@
-# COPY { #sql-copy }
+<a id="sql-copy"></a>
+
+# COPY
 
 copy data between a file and a table
 

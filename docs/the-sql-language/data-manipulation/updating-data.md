@@ -1,4 +1,6 @@
-## Updating Data { #dml-update }
+<a id="dml-update"></a>
+
+## Updating Data
 
 
  The modification of data that is already in the database is referred to as updating. You can update individual rows, all the rows in a table, or a subset of all rows. Each column can be updated separately; the other columns are not affected.

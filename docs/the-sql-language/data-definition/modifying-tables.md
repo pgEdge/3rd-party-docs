@@ -1,4 +1,6 @@
-## Modifying Tables { #ddl-alter }
+<a id="ddl-alter"></a>
+
+## Modifying Tables
 
 
  When you create a table and you realize that you made a mistake, or the requirements of the application change, you can drop the table and create it again. But this is not a convenient option if the table is already filled with data, or if the table is referenced by other database objects (for instance a foreign key constraint). Therefore PostgreSQL provides a family of commands to make modifications to existing tables. Note that this is conceptually distinct from altering the data contained in the table: here we are interested in altering the definition, or structure, of the table.
@@ -15,9 +17,9 @@
 - Rename columns
 - Rename tables
  All these actions are performed using the [sql-altertable](../../reference/sql-commands/alter-table.md#sql-altertable) command, whose reference page contains details beyond those given here.
+ <a id="ddl-alter-adding-a-column"></a>
 
-
-### Adding a Column { #ddl-alter-adding-a-column }
+### Adding a Column
 
 
  To add a column, use a command like:
@@ -44,9 +46,9 @@ ALTER TABLE products ADD COLUMN description text;
 ALTER TABLE products ADD COLUMN description text CHECK (description <> '');
 ```
  In fact all the options that can be applied to a column description in `CREATE TABLE` can be used here. Keep in mind however that the default value must satisfy the given constraints, or the `ADD` will fail. Alternatively, you can add constraints later (see below) after you've filled in the new column correctly.
+  <a id="ddl-alter-removing-a-column"></a>
 
-
-### Removing a Column { #ddl-alter-removing-a-column }
+### Removing a Column
 
 
  To remove a column, use a command like:
@@ -62,9 +64,9 @@ ALTER TABLE products DROP COLUMN description;
 ALTER TABLE products DROP COLUMN description CASCADE;
 ```
  See [Dependency Tracking](dependency-tracking.md#ddl-depend) for a description of the general mechanism behind this.
+  <a id="ddl-alter-adding-a-constraint"></a>
 
-
-### Adding a Constraint { #ddl-alter-adding-a-constraint }
+### Adding a Constraint
 
 
  To add a constraint, the table constraint syntax is used. For example:
@@ -84,9 +86,9 @@ ALTER TABLE products ALTER COLUMN product_no SET NOT NULL;
 
 
  The constraint will be checked immediately, so the table data must satisfy the constraint before it can be added.
+  <a id="ddl-alter-removing-a-constraint"></a>
 
-
-### Removing a Constraint { #ddl-alter-removing-a-constraint }
+### Removing a Constraint
 
 
  To remove a constraint you need to know its name. If you gave it a name then that's easy. Otherwise the system assigned a generated name, which you need to find out. The psql command <code>\d
@@ -108,9 +110,9 @@ ALTER TABLE products DROP CONSTRAINT some_name;
 ALTER TABLE products ALTER COLUMN product_no DROP NOT NULL;
 ```
  (Recall that not-null constraints do not have names.)
+  <a id="ddl-alter-column-default"></a>
 
-
-### Changing a Column's Default Value { #ddl-alter-column-default }
+### Changing a Column's Default Value
 
 
  To set a new default for a column, use a command like:
@@ -129,9 +131,9 @@ ALTER TABLE products ALTER COLUMN price SET DEFAULT 7.77;
 ALTER TABLE products ALTER COLUMN price DROP DEFAULT;
 ```
  This is effectively the same as setting the default to null. As a consequence, it is not an error to drop a default where one hadn't been defined, because the default is implicitly the null value.
+  <a id="ddl-alter-column-type"></a>
 
-
-### Changing a Column's Data Type { #ddl-alter-column-type }
+### Changing a Column's Data Type
 
 
  To convert a column to a different data type, use a command like:
@@ -144,9 +146,9 @@ ALTER TABLE products ALTER COLUMN price TYPE numeric(10,2);
 
 
  PostgreSQL will attempt to convert the column's default value (if any) to the new type, as well as any constraints that involve the column. But these conversions might fail, or might produce surprising results. It's often best to drop any constraints on the column before altering its type, and then add back suitably modified constraints afterwards.
+  <a id="ddl-alter-renaming-column"></a>
 
-
-### Renaming a Column { #ddl-alter-renaming-column }
+### Renaming a Column
 
 
  To rename a column:
@@ -156,8 +158,9 @@ ALTER TABLE products ALTER COLUMN price TYPE numeric(10,2);
 ALTER TABLE products RENAME COLUMN product_no TO product_number;
 ```
 
+  <a id="ddl-alter-renaming-table"></a>
 
-### Renaming a Table { #ddl-alter-renaming-table }
+### Renaming a Table
 
 
  To rename a table:

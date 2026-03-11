@@ -1,4 +1,6 @@
-## Release 17.1 { #release-17-1 }
+<a id="release-17-1"></a>
+
+## Release 17.1
 
 
 **Release date:.**
@@ -8,9 +10,9 @@
 
 
  This release contains a variety of fixes from 17.0. For information about new features in major release 17, see [Release 17](release-17.md#release-17).
+ <a id="release-17-1-migration"></a>
 
-
-### Migration to Version 17.1 { #release-17-1-migration }
+### Migration to Version 17.1
 
 
  A dump/restore is not required for those running 17.X.
@@ -20,9 +22,9 @@
 
 
  Also, in the uncommon case that a database's `LC_CTYPE` setting is `C` while its `LC_COLLATE` setting is some other locale, indexes on textual columns should be reindexed, as described in the sixth changelog entry below.
+  <a id="release-17-1-changes"></a>
 
-
-### Changes { #release-17-1-changes }
+### Changes
 
 
 -  Ensure cached plans are marked as dependent on the calling role when RLS applies to a non-top-level table reference (Nathan Bossart) [&sect;](https://postgr.es/c/edcda9bb4)

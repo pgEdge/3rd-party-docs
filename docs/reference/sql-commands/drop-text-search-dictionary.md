@@ -1,4 +1,6 @@
-# DROP TEXT SEARCH DICTIONARY { #sql-droptsdictionary }
+<a id="sql-droptsdictionary"></a>
+
+# DROP TEXT SEARCH DICTIONARY
 
 remove a text search dictionary
 

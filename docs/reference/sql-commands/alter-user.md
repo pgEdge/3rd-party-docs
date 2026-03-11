@@ -1,4 +1,6 @@
-# ALTER USER { #sql-alteruser }
+<a id="sql-alteruser"></a>
+
+# ALTER USER
 
 change a database role
 

@@ -1,4 +1,6 @@
-# ALTER LARGE OBJECT { #sql-alterlargeobject }
+<a id="sql-alterlargeobject"></a>
+
+# ALTER LARGE OBJECT
 
 change the definition of a large object
 

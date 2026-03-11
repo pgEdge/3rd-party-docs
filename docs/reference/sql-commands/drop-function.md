@@ -1,4 +1,6 @@
-# DROP FUNCTION { #sql-dropfunction }
+<a id="sql-dropfunction"></a>
+
+# DROP FUNCTION
 
 remove a function
 
@@ -41,9 +43,9 @@ DROP FUNCTION [ IF EXISTS ] NAME [ ( [ [ ARGMODE ] [ ARGNAME ] ARGTYPE [, ...] ]
 
 `RESTRICT`
 :   Refuse to drop the function if any objects depend on it. This is the default.
+ <a id="sql-dropfunction-examples"></a>
 
-
-## Examples { #sql-dropfunction-examples }
+## Examples
 
 
  This command removes the square root function:
@@ -75,9 +77,9 @@ DROP FUNCTION update_employee_salaries;
 DROP FUNCTION update_employee_salaries();
 ```
  which refers to a function with zero arguments, whereas the first variant can refer to a function with any number of arguments, including zero, as long as the name is unique.
+ <a id="sql-dropfunction-compatibility"></a>
 
-
-## Compatibility { #sql-dropfunction-compatibility }
+## Compatibility
 
 
  This command conforms to the SQL standard, with these PostgreSQL extensions:

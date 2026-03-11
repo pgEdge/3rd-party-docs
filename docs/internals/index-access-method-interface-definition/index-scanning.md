@@ -1,4 +1,6 @@
-## Index Scanning { #index-scanning }
+<a id="index-scanning"></a>
+
+## Index Scanning
 
 
  In an index scan, the index access method is responsible for regurgitating the TIDs of all the tuples it has been told about that match the *scan keys*. The access method is *not* involved in actually fetching those tuples from the index's parent table, nor in determining whether they pass the scan's visibility test or other conditions.

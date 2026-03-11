@@ -1,4 +1,6 @@
-## Custom WAL Resource Managers { #custom-rmgr }
+<a id="custom-rmgr"></a>
+
+## Custom WAL Resource Managers
 
 
  This section explains the interface between the core PostgreSQL system and custom WAL resource managers, which enable extensions to integrate directly with the [WAL](../../server-administration/reliability-and-the-write-ahead-log/index.md#wal).

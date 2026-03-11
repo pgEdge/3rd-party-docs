@@ -1,4 +1,6 @@
-# CREATE USER { #sql-createuser }
+<a id="sql-createuser"></a>
+
+# CREATE USER
 
 define a new database role
 

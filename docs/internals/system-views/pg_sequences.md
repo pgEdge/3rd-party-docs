@@ -1,4 +1,6 @@
-## `pg_sequences` { #view-pg-sequences }
+<a id="view-pg-sequences"></a>
+
+## `pg_sequences`
 
 
  The view `pg_sequences` provides access to useful information about each sequence in the database.

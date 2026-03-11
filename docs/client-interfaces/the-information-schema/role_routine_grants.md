@@ -1,4 +1,6 @@
-## `role_routine_grants` { #infoschema-role-routine-grants }
+<a id="infoschema-role-routine-grants"></a>
+
+## `role_routine_grants`
 
 
  The view `role_routine_grants` identifies all privileges granted on functions where the grantor or grantee is a currently enabled role. Further information can be found under `routine_privileges`. The only effective difference between this view and `routine_privileges` is that this view omits functions that have been made accessible to the current user by way of a grant to `PUBLIC`.

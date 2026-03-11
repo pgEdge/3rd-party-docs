@@ -1,4 +1,6 @@
-# PL/Python — Python Procedural Language { #plpython }
+<a id="plpython"></a>
+
+# PL/Python — Python Procedural Language
 
  The PL/Python procedural language allows PostgreSQL functions and procedures to be written in the [Python language](https://www.python.org).
 

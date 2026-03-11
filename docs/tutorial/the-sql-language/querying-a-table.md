@@ -1,4 +1,6 @@
-## Querying a Table { #tutorial-select }
+<a id="tutorial-select"></a>
+
+## Querying a Table
 
 
    To retrieve data from a table, the table is *queried*. An SQL `SELECT` statement is used to do this. The statement is divided into a select list (the part that lists the columns to be returned), a table list (the part that lists the tables from which to retrieve the data), and an optional qualification (the part that specifies any restrictions). For example, to retrieve all the rows of table `weather`, type:

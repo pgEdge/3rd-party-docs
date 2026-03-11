@@ -1,4 +1,6 @@
-## Inheritance { #ddl-inherit }
+<a id="ddl-inherit"></a>
+
+## Inheritance
 
 
  PostgreSQL implements table inheritance, which can be a useful tool for database designers. (SQL:1999 and later define a type inheritance feature, which differs in many respects from the features described here.)
@@ -150,9 +152,9 @@ VALUES ('Albany', NULL, NULL, 'NY');
 
 
  Foreign tables (see [Foreign Data](foreign-data.md#ddl-foreign-data)) can also be part of inheritance hierarchies, either as parent or child tables, just as regular tables can be. If a foreign table is part of an inheritance hierarchy then any operations not supported by the foreign table are not supported on the whole hierarchy either.
+ <a id="ddl-inherit-caveats"></a>
 
-
-### Caveats { #ddl-inherit-caveats }
+### Caveats
 
 
  Note that not all SQL commands are able to work on inheritance hierarchies. Commands that are used for data querying, data modification, or schema modification (e.g., `SELECT`, `UPDATE`, `DELETE`, most variants of `ALTER TABLE`, but not `INSERT` or `ALTER TABLE ... RENAME`) typically default to including child tables and support the `ONLY` notation to exclude them. Commands that do database maintenance and tuning (e.g., `REINDEX`, `VACUUM`) typically only work on individual, physical tables and do not support recursing over inheritance hierarchies. The respective behavior of each individual command is documented in its reference page ([SQL Commands](../../reference/sql-commands/index.md#sql-commands)).

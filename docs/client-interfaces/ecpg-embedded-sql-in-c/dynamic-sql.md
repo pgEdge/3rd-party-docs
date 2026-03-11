@@ -1,10 +1,12 @@
-## Dynamic SQL { #ecpg-dynamic }
+<a id="ecpg-dynamic"></a>
+
+## Dynamic SQL
 
 
  In many cases, the particular SQL statements that an application has to execute are known at the time the application is written. In some cases, however, the SQL statements are composed at run time or provided by an external source. In these cases you cannot embed the SQL statements directly into the C source code, but there is a facility that allows you to call arbitrary SQL statements that you provide in a string variable.
+ <a id="ecpg-dynamic-without-result"></a>
 
-
-### Executing Statements without a Result Set { #ecpg-dynamic-without-result }
+### Executing Statements without a Result Set
 
 
  The simplest way to execute an arbitrary SQL statement is to use the command `EXECUTE IMMEDIATE`. For example:
@@ -18,9 +20,9 @@ EXEC SQL END DECLARE SECTION;
 EXEC SQL EXECUTE IMMEDIATE :stmt;
 ```
  `EXECUTE IMMEDIATE` can be used for SQL statements that do not return a result set (e.g., DDL, `INSERT`, `UPDATE`, `DELETE`). You cannot execute statements that retrieve data (e.g., `SELECT`) this way. The next section describes how to do that.
+  <a id="ecpg-dynamic-input"></a>
 
-
-### Executing a Statement with Input Parameters { #ecpg-dynamic-input }
+### Executing a Statement with Input Parameters
 
 
  A more powerful way to execute arbitrary SQL statements is to prepare them once and execute the prepared statement as often as you like. It is also possible to prepare a generalized version of a statement and then execute specific versions of it by substituting parameters. When preparing the statement, write question marks where you want to substitute parameters later. For example:
@@ -44,8 +46,9 @@ EXEC SQL EXECUTE mystmt USING 42, 'foobar';
 EXEC SQL DEALLOCATE PREPARE NAME;
 ```
 
+  <a id="ecpg-dynamic-with-result"></a>
 
-### Executing a Statement with a Result Set { #ecpg-dynamic-with-result }
+### Executing a Statement with a Result Set
 
 
  To execute an SQL statement with a single result row, `EXECUTE` can be used. To save the result, add an `INTO` clause.

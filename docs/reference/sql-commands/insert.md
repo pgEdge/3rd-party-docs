@@ -1,4 +1,6 @@
-# INSERT { #sql-insert }
+<a id="sql-insert"></a>
+
+# INSERT
 
 create new rows in a table
 
@@ -113,9 +115,9 @@ and CONFLICT_ACTION is one of:
 
 *output_name*
 :   A name to use for a returned column.
+  <a id="sql-on-conflict"></a>
 
-
-### `ON CONFLICT` Clause { #sql-on-conflict }
+### `ON CONFLICT` Clause
 
 
  The optional `ON CONFLICT` clause specifies an alternative action to raising a unique violation or exclusion constraint violation error. For each individual row proposed for insertion, either the insertion proceeds, or, if an *arbiter* constraint or index specified by `conflict_target` is violated, the alternative `conflict_action` is taken. `ON CONFLICT DO NOTHING` simply avoids inserting a row as its alternative action. `ON CONFLICT DO UPDATE` updates the existing row that conflicts with the row proposed for insertion as its alternative action.

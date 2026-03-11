@@ -1,4 +1,6 @@
-# pg_test_timing { #pgtesttiming }
+<a id="pgtesttiming"></a>
+
+# pg_test_timing
 
 measure timing overhead
 

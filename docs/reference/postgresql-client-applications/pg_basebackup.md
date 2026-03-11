@@ -1,4 +1,6 @@
-# pg_basebackup { #app-pgbasebackup }
+<a id="app-pgbasebackup"></a>
+
+# pg_basebackup
 
 take a base backup of a PostgreSQL cluster
 

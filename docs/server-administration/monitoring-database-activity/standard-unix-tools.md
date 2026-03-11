@@ -1,4 +1,6 @@
-## Standard Unix Tools { #monitoring-ps }
+<a id="monitoring-ps"></a>
+
+## Standard Unix Tools
 
 
  On most Unix platforms, PostgreSQL modifies its command title as reported by `ps`, so that individual server processes can readily be identified. A sample display is

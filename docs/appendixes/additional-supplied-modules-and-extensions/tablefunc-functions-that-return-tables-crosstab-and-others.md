@@ -1,19 +1,20 @@
-## tablefunc — functions that return tables (`crosstab` and others) { #tablefunc }
+<a id="tablefunc"></a>
+
+## tablefunc — functions that return tables (`crosstab` and others)
 
 
  The `tablefunc` module includes various functions that return tables (that is, multiple rows). These functions are useful both in their own right and as examples of how to write C functions that return multiple rows.
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="tablefunc-functions-sect"></a>
 
-
-### Functions Provided { #tablefunc-functions-sect }
+### Functions Provided
 
 
  [`tablefunc` Functions](#tablefunc-functions) summarizes the functions provided by the `tablefunc` module.
+ <a id="tablefunc-functions"></a>
 
-
-<a id="tablefunc-functions"></a>
 **Table: `tablefunc` Functions**
 
 <table>
@@ -56,9 +57,9 @@
 </tr>
 </tbody>
 </table>
+ <a id="tablefunc-functions-normal-rand"></a>
 
-
-#### `normal_rand` { #tablefunc-functions-normal-rand }
+#### `normal_rand`
 
 
 ```
@@ -94,9 +95,9 @@ test=# SELECT * FROM normal_rand(1000, 5, 3);
      2.49639286969028
 (1000 rows)
 ```
+  <a id="tablefunc-functions-crosstab-text"></a>
 
-
-#### `crosstab(text)` { #tablefunc-functions-crosstab-text }
+#### `crosstab(text)`
 
 
 ```
@@ -213,9 +214,9 @@ AS ct(row_name text, category_1 text, category_2 text, category_3 text);
 !!! note
 
     See also the `[\crosstabview](../../reference/postgresql-client-applications/psql.md#app-psql-meta-commands-crosstabview)` command in psql, which provides functionality similar to `crosstab()`.
+  <a id="tablefunc-functions-crosstab-n-text"></a>
 
-
-#### <code>crosstab</code><em>N</em><code>(text)</code> { #tablefunc-functions-crosstab-n-text }
+#### <code>crosstab</code><em>N</em><code>(text)</code>
 
 
 ```
@@ -294,7 +295,9 @@ CREATE OR REPLACE FUNCTION crosstab_float8_5_cols(
 ```
 
 
-#### `crosstab(text, text)` { #tablefunc-functions-crosstab-text-2 }
+  <a id="tablefunc-functions-crosstab-text-2"></a>
+
+#### `crosstab(text, text)`
 
 
 ```
@@ -443,9 +446,9 @@ AS
 
 
  You can create predefined functions to avoid having to write out the result column names and types in each query. See the examples in the previous section. The underlying C function for this form of `crosstab` is named `crosstab_hash`.
+  <a id="tablefunc-functions-connectby"></a>
 
-
-#### `connectby` { #tablefunc-functions-connectby }
+#### `connectby`
 
 
 ```
@@ -460,9 +463,8 @@ connectby(text relname, text keyid_fld, text parent_keyid_fld
 
 
  [`connectby` Parameters](#tablefunc-connectby-parameters) explains the parameters.
+ <a id="tablefunc-connectby-parameters"></a>
 
-
-<a id="tablefunc-connectby-parameters"></a>
 **Table: `connectby` Parameters**
 
 | Parameter | Description |
@@ -576,8 +578,9 @@ SELECT * FROM connectby('connectby_tree', 'keyid', 'parent_keyid', 'pos', 'row2'
 (6 rows)
 ```
 
+   <a id="tablefunc-author"></a>
 
-### Author { #tablefunc-author }
+### Author
 
 
  Joe Conway

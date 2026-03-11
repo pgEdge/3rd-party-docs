@@ -1,4 +1,6 @@
-# PL/pgSQL — SQL Procedural Language { #plpgsql }
+<a id="plpgsql"></a>
+
+# PL/pgSQL — SQL Procedural Language
 
 - [Overview](overview.md#plpgsql-overview)
 - [Structure of PL/pgSQL](structure-of-pl-pgsql.md#plpgsql-structure)

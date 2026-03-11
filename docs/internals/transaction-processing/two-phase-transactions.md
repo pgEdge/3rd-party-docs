@@ -1,4 +1,6 @@
-## Two-Phase Transactions { #two-phase }
+<a id="two-phase"></a>
+
+## Two-Phase Transactions
 
 
  PostgreSQL supports a two-phase commit (2PC) protocol that allows multiple distributed systems to work together in a transactional manner. The commands are `PREPARE TRANSACTION`, `COMMIT PREPARED` and `ROLLBACK PREPARED`. Two-phase transactions are intended for use by external transaction management systems. PostgreSQL follows the features and model proposed by the X/Open XA standard, but does not implement some less often used aspects.

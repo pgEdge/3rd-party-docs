@@ -1,4 +1,6 @@
-# CREATE TEXT SEARCH PARSER { #sql-createtsparser }
+<a id="sql-createtsparser"></a>
+
+# CREATE TEXT SEARCH PARSER
 
 define a new text search parser
 

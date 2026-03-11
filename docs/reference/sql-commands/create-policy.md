@@ -1,4 +1,6 @@
-# CREATE POLICY { #sql-createpolicy }
+<a id="sql-createpolicy"></a>
+
+# CREATE POLICY
 
 define a new row-level security policy for a table
 
@@ -127,9 +129,8 @@ CREATE POLICY NAME ON TABLE_NAME
 
 
  [Policies Applied by Command Type](#sql-createpolicy-summary) summarizes how the different types of policy apply to specific commands. In the table, “check” means that the policy expression is checked and an error is thrown if it returns false or null, whereas “filter” means that the row is silently ignored if the policy expression returns false or null.
+ <a id="sql-createpolicy-summary"></a>
 
-
-<a id="sql-createpolicy-summary"></a>
 **Table: Policies Applied by Command Type**
 
 <table>
@@ -168,7 +169,8 @@ CREATE POLICY NAME ON TABLE_NAME
 </tr>
 <tr>
 <td><code>INSERT</code></td>
-<td>Check new row  (If read access is required to either the existing or new row (for example, a <code>WHERE</code> or <code>RETURNING</code> clause that refers to columns from the relation).)</td>
+<td>Check new row <a id="rls-select-priv"></a><br>
+ (If read access is required to either the existing or new row (for example, a <code>WHERE</code> or <code>RETURNING</code> clause that refers to columns from the relation).)</td>
 <td>Check new row</td>
 <td>—</td>
 <td>—</td>
@@ -192,7 +194,8 @@ CREATE POLICY NAME ON TABLE_NAME
 </tr>
 <tr>
 <td><code>INSERT ... ON CONFLICT</code></td>
-<td>Check new row  (If an arbiter index or constraint is specified.) (Row proposed for insertion is checked regardless of whether or not a conflict occurs.)</td>
+<td>Check new row  (If an arbiter index or constraint is specified.)<a id="rls-on-conflict-priv"></a><br>
+ (Row proposed for insertion is checked regardless of whether or not a conflict occurs.)</td>
 <td>Check new row [^rls-on-conflict-priv]</td>
 <td>—</td>
 <td>—</td>
@@ -200,7 +203,8 @@ CREATE POLICY NAME ON TABLE_NAME
 </tr>
 <tr>
 <td><code>ON CONFLICT DO UPDATE</code></td>
-<td>Check existing & new rows  (New row of the auxiliary <code>UPDATE</code> command, which might be different from the new row of the original <code>INSERT</code> command.)</td>
+<td>Check existing & new rows <a id="rls-on-conflict-update-priv"></a><br>
+ (New row of the auxiliary <code>UPDATE</code> command, which might be different from the new row of the original <code>INSERT</code> command.)</td>
 <td>—</td>
 <td>Check existing row</td>
 <td>Check new row [^rls-on-conflict-update-priv]</td>

@@ -1,4 +1,6 @@
-## Data Consistency Checks at the Application Level { #applevel-consistency }
+<a id="applevel-consistency"></a>
+
+## Data Consistency Checks at the Application Level
 
 
  It is very difficult to enforce business rules regarding data integrity using Read Committed transactions because the view of the data is shifting with each statement, and even a single statement may not restrict itself to the statement's snapshot if a write conflict occurs.
@@ -8,9 +10,9 @@
 
 
  As mentioned in [Serializable Isolation Level](transaction-isolation.md#xact-serializable), Serializable transactions are just Repeatable Read transactions which add nonblocking monitoring for dangerous patterns of read/write conflicts. When a pattern is detected which could cause a cycle in the apparent order of execution, one of the transactions involved is rolled back to break the cycle.
+ <a id="serializable-consistency"></a>
 
-
-### Enforcing Consistency with Serializable Transactions { #serializable-consistency }
+### Enforcing Consistency with Serializable Transactions
 
 
  If the Serializable transaction isolation level is used for all writes and for all reads which need a consistent view of the data, no other effort is required to ensure consistency. Software from other environments which is written to use serializable transactions to ensure consistency should “just work” in this regard in PostgreSQL.
@@ -25,9 +27,9 @@
 !!! warning "Warning: Serializable Transactions and Data Replication"
 
     This level of integrity protection using Serializable transactions does not yet extend to hot standby mode ([Hot Standby](../../server-administration/high-availability-load-balancing-and-replication/hot-standby.md#hot-standby)) or logical replicas. Because of that, those using hot standby or logical replication may want to use Repeatable Read and explicit locking on the primary.
+  <a id="non-serializable-consistency"></a>
 
-
-### Enforcing Consistency with Explicit Blocking Locks { #non-serializable-consistency }
+### Enforcing Consistency with Explicit Blocking Locks
 
 
  When non-serializable writes are possible, to ensure the current validity of a row and protect it against concurrent updates one must use `SELECT FOR UPDATE`, `SELECT FOR SHARE`, or an appropriate `LOCK TABLE` statement. (`SELECT FOR UPDATE` and `SELECT FOR SHARE` lock just the returned rows against concurrent updates, while `LOCK TABLE` locks the whole table.) This should be taken into account when porting applications to PostgreSQL from other environments.

@@ -1,4 +1,6 @@
-## `domain_udt_usage` { #infoschema-domain-udt-usage }
+<a id="infoschema-domain-udt-usage"></a>
+
+## `domain_udt_usage`
 
 
  The view `domain_udt_usage` identifies all domains that are based on data types owned by a currently enabled role. Note that in PostgreSQL, built-in data types behave like user-defined types, so they are included here as well.

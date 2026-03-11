@@ -1,4 +1,6 @@
-# Preface { #preface }
+<a id="preface"></a>
+
+# Preface
 
  This book is the official documentation of PostgreSQL. It has been written by the PostgreSQL developers and other volunteers in parallel to the development of the PostgreSQL software. It describes all the functionality that the current version of PostgreSQL officially supports.
 

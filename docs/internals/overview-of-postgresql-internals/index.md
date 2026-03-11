@@ -1,4 +1,6 @@
-# Overview of PostgreSQL Internals { #overview }
+<a id="overview"></a>
+
+# Overview of PostgreSQL Internals
 
 !!! note "Author"
 

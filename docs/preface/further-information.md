@@ -1,4 +1,6 @@
-## Further Information { #resources }
+<a id="resources"></a>
+
+## Further Information
 
 
  Besides the documentation, that is, this book, there are other resources about PostgreSQL:

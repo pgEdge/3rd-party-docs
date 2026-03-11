@@ -1,13 +1,15 @@
-## pg_trgm — support for similarity of text using trigram matching { #pgtrgm }
+<a id="pgtrgm"></a>
+
+## pg_trgm — support for similarity of text using trigram matching
 
 
  The `pg_trgm` module provides functions and operators for determining the similarity of alphanumeric text based on trigram matching, as well as index operator classes that support fast searching for similar strings.
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="pgtrgm-concepts"></a>
 
-
-### Trigram (or Trigraph) Concepts { #pgtrgm-concepts }
+### Trigram (or Trigraph) Concepts
 
 
  A trigram is a group of three consecutive characters taken from a string. We can measure the similarity of two strings by counting the number of trigrams they share. This simple idea turns out to be very effective for measuring the similarity of words in many natural languages.
@@ -16,15 +18,14 @@
 !!! note
 
     `pg_trgm` ignores non-word characters (non-alphanumerics) when extracting trigrams from a string. Each word is considered to have two spaces prefixed and one space suffixed when determining the set of trigrams contained in the string. For example, the set of trigrams in the string “`cat`” is “` c`”, “` ca`”, “`cat`”, and “`at `”. The set of trigrams in the string “`foo|bar`” is “` f`”, “` fo`”, “`foo`”, “`oo `”, “` b`”, “` ba`”, “`bar`”, and “`ar `”.
+  <a id="pgtrgm-funcs-ops"></a>
 
-
-### Functions and Operators { #pgtrgm-funcs-ops }
+### Functions and Operators
 
 
  The functions provided by the `pg_trgm` module are shown in [`pg_trgm` Functions](#pgtrgm-func-table), the operators in [`pg_trgm` Operators](#pgtrgm-op-table).
+ <a id="pgtrgm-func-table"></a>
 
-
-<a id="pgtrgm-func-table"></a>
 **Table: `pg_trgm` Functions**
 
 <table>
@@ -98,9 +99,8 @@
 
 
  Thus, the `strict_word_similarity` function is useful for finding the similarity to whole words, while `word_similarity` is more suitable for finding the similarity for parts of words.
+ <a id="pgtrgm-op-table"></a>
 
-
-<a id="pgtrgm-op-table"></a>
 **Table: `pg_trgm` Operators**
 
 <table>
@@ -163,9 +163,9 @@
 </tr>
 </tbody>
 </table>
+  <a id="pgtrgm-guc"></a>
 
-
-### GUC Parameters { #pgtrgm-guc }
+### GUC Parameters
 
 
 <a id="guc-pgtrgm-similarity-threshold"></a>
@@ -180,9 +180,9 @@
 
 `pg_trgm.strict_word_similarity_threshold` (`real`)
 :   Sets the current strict word similarity threshold that is used by the `<<%` and `%>>` operators. The threshold must be between 0 and 1 (default is 0.5).
+  <a id="pgtrgm-index"></a>
 
-
-### Index Support { #pgtrgm-index }
+### Index Support
 
 
  The `pg_trgm` module provides GiST and GIN index operator classes that allow you to create an index over a text column for the purpose of very fast similarity searches. These index types support the above-described similarity operators, and additionally support trigram-based index searches for `LIKE`, `ILIKE`, `~`, `~*` and `=` queries. The similarity comparisons are case-insensitive in a default build of `pg_trgm`. Inequality operators are not supported. Note that those indexes may not be as efficient as regular B-tree indexes for equality operator.
@@ -300,9 +300,9 @@ SELECT * FROM test_trgm WHERE t ~ '(foo|bar)';
 
 
  The choice between GiST and GIN indexing depends on the relative performance characteristics of GiST and GIN, which are discussed elsewhere.
+  <a id="pgtrgm-text-search"></a>
 
-
-### Text Search Integration { #pgtrgm-text-search }
+### Text Search Integration
 
 
  Trigram matching is a very useful tool when used in conjunction with a full text index. In particular it can help to recognize misspelled input words that will not be matched directly by the full text search mechanism.
@@ -330,18 +330,18 @@ CREATE INDEX words_idx ON words USING GIN (word gin_trgm_ops);
 !!! note
 
     Since the `words` table has been generated as a separate, static table, it will need to be periodically regenerated so that it remains reasonably up-to-date with the document collection. Keeping it exactly current is usually unnecessary.
+  <a id="pgtrgm-references"></a>
 
-
-### References { #pgtrgm-references }
+### References
 
 
  GiST Development Site [http://www.sai.msu.su/~megera/postgres/gist/](http://www.sai.msu.su/~megera/postgres/gist/)
 
 
  Tsearch2 Development Site [http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/](http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/)
+  <a id="pgtrgm-authors"></a>
 
-
-### Authors { #pgtrgm-authors }
+### Authors
 
 
  Oleg Bartunov [oleg@sai.msu.su](mailto:oleg@sai.msu.su), Moscow, Moscow University, Russia

@@ -1,4 +1,6 @@
-# CREATE RULE { #sql-createrule }
+<a id="sql-createrule"></a>
+
+# CREATE RULE
 
 define a new rewrite rule
 

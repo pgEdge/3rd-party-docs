@@ -1,4 +1,6 @@
-## Default Values { #ddl-default }
+<a id="ddl-default"></a>
+
+## Default Values
 
 
  A column can be assigned a default value. When a new row is created and no values are specified for some of the columns, those columns will be filled with their respective default values. A data manipulation command can also request explicitly that a column be set to its default value, without having to know what that value is. (Details about data manipulation commands are in [Data Manipulation](../data-manipulation/index.md#dml).)

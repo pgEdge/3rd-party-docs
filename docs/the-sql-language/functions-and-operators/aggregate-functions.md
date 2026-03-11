@@ -1,4 +1,6 @@
-## Aggregate Functions { #functions-aggregate }
+<a id="functions-aggregate"></a>
+
+## Aggregate Functions
 
 
  *Aggregate functions* compute a single result from a set of input values. The built-in general-purpose aggregate functions are listed in [General-Purpose Aggregate Functions](#functions-aggregate-table) while statistical aggregates are in [Aggregate Functions for Statistics](#functions-aggregate-statistics-table). The built-in within-group ordered-set aggregate functions are listed in [Ordered-Set Aggregate Functions](#functions-orderedset-table) while the built-in within-group hypothetical-set ones are in [Hypothetical-Set Aggregate Functions](#functions-hypothetical-table). Grouping operations, which are closely related to aggregate functions, are listed in [Grouping Operations](#functions-grouping-table). The special syntax considerations for aggregate functions are explained in [Aggregate Expressions](../sql-syntax/value-expressions.md#syntax-aggregates). Consult [Aggregate Functions](../../tutorial/the-sql-language/aggregate-functions.md#tutorial-agg) for additional introductory information.
@@ -8,9 +10,8 @@
 
 
  While all aggregates below accept an optional `ORDER BY` clause (as outlined in [Aggregate Expressions](../sql-syntax/value-expressions.md#syntax-aggregates)), the clause has only been added to aggregates whose output is affected by ordering.
+ <a id="functions-aggregate-table"></a>
 
-
-<a id="functions-aggregate-table"></a>
 **Table: General-Purpose Aggregate Functions**
 
 <table>
@@ -222,9 +223,8 @@ SELECT xmlagg(x) FROM (SELECT x FROM test ORDER BY y DESC) AS tab;
 
 
  [Aggregate Functions for Statistics](#functions-aggregate-statistics-table) shows aggregate functions typically used in statistical analysis. (These are separated out merely to avoid cluttering the listing of more-commonly-used aggregates.) Functions shown as accepting *numeric_type* are available for all the types `smallint`, `integer`, `bigint`, `numeric`, `real`, and `double precision`. Where the description mentions `N`, it means the number of input rows for which all the input expressions are non-null. In all cases, null is returned if the computation is meaningless, for example when `N` is zero.
+   <a id="functions-aggregate-statistics-table"></a>
 
-
-<a id="functions-aggregate-statistics-table"></a>
 **Table: Aggregate Functions for Statistics**
 
 <table>
@@ -348,9 +348,8 @@ SELECT xmlagg(x) FROM (SELECT x FROM test ORDER BY y DESC) AS tab;
 
 
  [Ordered-Set Aggregate Functions](#functions-orderedset-table) shows some aggregate functions that use the *ordered-set aggregate* syntax. These functions are sometimes referred to as “inverse distribution” functions. Their aggregated input is introduced by `ORDER BY`, and they may also take a *direct argument* that is not aggregated, but is computed only once. All these functions ignore null values in their aggregated input. For those that take a `fraction` parameter, the fraction value must be between 0 and 1; an error is thrown if not. However, a null `fraction` value simply produces a null result.
+   <a id="functions-orderedset-table"></a>
 
-
-<a id="functions-orderedset-table"></a>
 **Table: Ordered-Set Aggregate Functions**
 
 <table>
@@ -396,9 +395,8 @@ SELECT xmlagg(x) FROM (SELECT x FROM test ORDER BY y DESC) AS tab;
 
 
  Each of the “hypothetical-set” aggregates listed in [Hypothetical-Set Aggregate Functions](#functions-hypothetical-table) is associated with a window function of the same name defined in [Window Functions](window-functions.md#functions-window). In each case, the aggregate's result is the value that the associated window function would have returned for the “hypothetical” row constructed from *args*, if such a row had been added to the sorted group of rows represented by the *sorted_args*. For each of these functions, the list of direct arguments given in *args* must match the number and types of the aggregated arguments given in *sorted_args*. Unlike most built-in aggregates, these aggregates are not strict, that is they do not drop input rows containing nulls. Null values sort according to the rule specified in the `ORDER BY` clause.
+ <a id="functions-hypothetical-table"></a>
 
-
-<a id="functions-hypothetical-table"></a>
 **Table: Hypothetical-Set Aggregate Functions**
 
 <table>
@@ -435,9 +433,8 @@ SELECT xmlagg(x) FROM (SELECT x FROM test ORDER BY y DESC) AS tab;
 </tr>
 </tbody>
 </table>
+ <a id="functions-grouping-table"></a>
 
-
-<a id="functions-grouping-table"></a>
 **Table: Grouping Operations**
 
 <table>

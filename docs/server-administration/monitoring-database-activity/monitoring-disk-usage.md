@@ -1,10 +1,12 @@
-## Monitoring Disk Usage { #diskusage }
+<a id="diskusage"></a>
+
+## Monitoring Disk Usage
 
 
  This section discusses how to monitor the disk usage of a PostgreSQL database system.
+ <a id="disk-usage"></a>
 
-
-### Determining Disk Usage { #disk-usage }
+### Determining Disk Usage
 
 
  Each table has a primary heap disk file where most of the data is stored. If the table has any columns with potentially-wide values, there also might be a TOAST file associated with the table, which is used to store values too wide to fit comfortably in the main table (see [TOAST](../../internals/database-physical-storage/toast.md#storage-toast)). There will be one valid index on the TOAST table, if present. There also might be indexes associated with the base table. Each table and index is stored in a separate disk file — possibly more than one file, if the file would exceed one gigabyte. Naming conventions for these files are described in [Database File Layout](../../internals/database-physical-storage/database-file-layout.md#storage-file-layout).
@@ -80,8 +82,9 @@ ORDER BY relpages DESC;
  customer             |     3144
 ```
 
+  <a id="disk-full"></a>
 
-### Disk Full Failure { #disk-full }
+### Disk Full Failure
 
 
  The most important disk monitoring task of a database administrator is to make sure the disk doesn't become full. A filled data disk will not result in data corruption, but it might prevent useful activity from occurring. If the disk holding the WAL files grows full, database server panic and consequent shutdown might occur.

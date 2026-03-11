@@ -1,4 +1,6 @@
-# ALTER SERVER { #sql-alterserver }
+<a id="sql-alterserver"></a>
+
+# ALTER SERVER
 
 change the definition of a foreign server
 

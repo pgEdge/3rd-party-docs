@@ -1,10 +1,12 @@
-## Database Access { #plpython-database }
+<a id="plpython-database"></a>
+
+## Database Access
 
 
  The PL/Python language module automatically imports a Python module called `plpy`. The functions and constants in this module are available to you in the Python code as <code>plpy.</code><em>foo</em>.
+ <a id="plpython-database-access-funcs"></a>
 
-
-### Database Access Functions { #plpython-database-access-funcs }
+### Database Access Functions
 
 
  The `plpy` module provides several functions to execute database commands:
@@ -147,9 +149,9 @@
     !!! tip
 
         Do not confuse objects created by `plpy.cursor` with DB-API cursors as defined by the [Python Database API specification](https://www.python.org/dev/peps/pep-0249/). They don't have anything in common except for the name.
+  <a id="plpython-trapping"></a>
 
-
-### Trapping Errors { #plpython-trapping }
+### Trapping Errors
 
 
  Functions accessing the database might encounter errors, which will cause them to abort and raise an exception. Both `plpy.execute` and `plpy.prepare` can raise an instance of a subclass of `plpy.SPIError`, which by default will terminate the function. This error can be handled just like any other Python exception, by using the `try/except` construct. For example:

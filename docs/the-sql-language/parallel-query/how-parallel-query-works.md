@@ -1,4 +1,6 @@
-## How Parallel Query Works { #how-parallel-query-works }
+<a id="how-parallel-query-works"></a>
+
+## How Parallel Query Works
 
 
  When the optimizer determines that parallel query is the fastest execution strategy for a particular query, it will create a query plan that includes a *Gather* or *Gather Merge* node. Here is a simple example:

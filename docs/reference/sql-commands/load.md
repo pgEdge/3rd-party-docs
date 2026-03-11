@@ -1,4 +1,6 @@
-# LOAD { #sql-load }
+<a id="sql-load"></a>
+
+# LOAD
 
 load a shared library file
 
@@ -9,9 +11,9 @@ load a shared library file
 
 LOAD 'FILENAME'
 ```
+ <a id="sql-load-description"></a>
 
-
-## Description { #sql-load-description }
+## Description
 
 
  This command loads a shared library file into the PostgreSQL server's address space. If the file has been loaded already, the command does nothing. Shared library files that contain C functions are automatically loaded whenever one of their functions is called. Therefore, an explicit `LOAD` is usually only needed to load a library that modifies the server's behavior through “hooks” rather than providing a set of functions.
@@ -21,9 +23,9 @@ LOAD 'FILENAME'
 
 
  Non-superusers can only apply `LOAD` to library files located in `$libdir/plugins/` — the specified *filename* must begin with exactly that string. (It is the database administrator's responsibility to ensure that only “safe” libraries are installed there.)
+ <a id="sql-load-compat"></a>
 
-
-## Compatibility { #sql-load-compat }
+## Compatibility
 
 
  `LOAD` is a PostgreSQL extension.

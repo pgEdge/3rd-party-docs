@@ -1,4 +1,6 @@
-# ALTER FOREIGN DATA WRAPPER { #sql-alterforeigndatawrapper }
+<a id="sql-alterforeigndatawrapper"></a>
+
+# ALTER FOREIGN DATA WRAPPER
 
 change the definition of a foreign-data wrapper
 

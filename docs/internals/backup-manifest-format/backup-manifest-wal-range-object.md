@@ -1,4 +1,6 @@
-## Backup Manifest WAL Range Object { #backup-manifest-wal-ranges }
+<a id="backup-manifest-wal-ranges"></a>
+
+## Backup Manifest WAL Range Object
 
 
  The object which describes a WAL range always has three keys:

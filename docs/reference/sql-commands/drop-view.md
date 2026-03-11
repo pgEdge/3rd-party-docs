@@ -1,4 +1,6 @@
-# DROP VIEW { #sql-dropview }
+<a id="sql-dropview"></a>
+
+# DROP VIEW
 
 remove a view
 

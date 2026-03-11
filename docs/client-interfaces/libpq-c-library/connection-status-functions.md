@@ -1,4 +1,6 @@
-## Connection Status Functions { #libpq-status }
+<a id="libpq-status"></a>
+
+## Connection Status Functions
 
 
  These functions can be used to interrogate the status of an existing database connection object.

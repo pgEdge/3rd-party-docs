@@ -1,4 +1,6 @@
-## `pg_user` { #view-pg-user }
+<a id="view-pg-user"></a>
+
+## `pg_user`
 
 
  The view `pg_user` provides access to information about database users. This is simply a publicly readable view of [`pg_shadow`](pg_shadow.md#view-pg-shadow) that blanks out the password field.

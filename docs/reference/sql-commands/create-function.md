@@ -1,4 +1,6 @@
-# CREATE FUNCTION { #sql-createfunction }
+<a id="sql-createfunction"></a>
+
+# CREATE FUNCTION
 
 define a new function
 
@@ -28,9 +30,9 @@ CREATE [ OR REPLACE ] FUNCTION
     | SQL_BODY
   } ...
 ```
+ <a id="sql-createfunction-description"></a>
 
-
-## Description { #sql-createfunction-description }
+## Description
 
 
  `CREATE FUNCTION` defines a new function. `CREATE OR REPLACE FUNCTION` will either create a new function, or replace an existing definition. To be able to define a function, the user must have the `USAGE` privilege on the language.
@@ -195,9 +197,9 @@ CREATE [ OR REPLACE ] FUNCTION
 
 
      This is similar to writing the text of the function body as a string constant (see *definition* above), but there are some differences: This form only works for `LANGUAGE SQL`, the string constant form works for all languages. This form is parsed at function definition time, the string constant form is parsed at execution time; therefore this form cannot support polymorphic argument types and other constructs that are not resolvable at function definition time. This form tracks dependencies between the function and objects used in the function body, so `DROP ... CASCADE` will work correctly, whereas the form using string literals may leave dangling functions. Finally, this form is more compatible with the SQL standard and other SQL implementations.
+ <a id="sql-createfunction-overloading"></a>
 
-
-## Overloading { #sql-createfunction-overloading }
+## Overloading
 
 
  PostgreSQL allows function *overloading*; that is, the same name can be used for several different functions so long as they have distinct input argument types. Whether or not you use it, this capability entails security precautions when calling functions in databases where some users mistrust other users; see [Functions](../../the-sql-language/type-conversion/functions.md#typeconv-func).
@@ -220,9 +222,9 @@ CREATE FUNCTION foo(int) ...
 CREATE FUNCTION foo(int, int default 42) ...
 ```
  A call `foo(10)` will fail due to the ambiguity about which function should be called.
+ <a id="sql-createfunction-notes"></a>
 
-
-## Notes { #sql-createfunction-notes }
+## Notes
 
 
  The full SQL type syntax is allowed for declaring a function's arguments and return value. However, parenthesized type modifiers (e.g., the precision field for type `numeric`) are discarded by `CREATE FUNCTION`. Thus for example `CREATE FUNCTION foo (varchar(10)) ...` is exactly the same as `CREATE FUNCTION foo (varchar) ...`.
@@ -232,9 +234,9 @@ CREATE FUNCTION foo(int, int default 42) ...
 
 
  If a function is declared `STRICT` with a `VARIADIC` argument, the strictness check tests that the variadic array *as a whole* is non-null. The function will still be called if the array has null elements.
+ <a id="sql-createfunction-examples"></a>
 
-
-## Examples { #sql-createfunction-examples }
+## Examples
 
 
  Add two integers using an SQL function:
@@ -304,9 +306,9 @@ CREATE FUNCTION dup(int) RETURNS TABLE(f1 int, f2 text)
 SELECT * FROM dup(42);
 ```
  However, a `TABLE` function is different from the preceding examples, because it actually returns a *set* of records, not just one record.
+ <a id="sql-createfunction-security"></a>
 
-
-## Writing `SECURITY DEFINER` Functions Safely { #sql-createfunction-security }
+## Writing `SECURITY DEFINER` Functions Safely
 
 
  Because a `SECURITY DEFINER` function is executed with the privileges of the user that owns it, care is needed to ensure that the function cannot be misused. For security, [search_path](../../server-administration/server-configuration/client-connection-defaults.md#guc-search-path) should be set to exclude any schemas writable by untrusted users. This prevents malicious users from creating objects (e.g., tables, functions, and operators) that mask objects intended to be used by the function. Particularly important in this regard is the temporary-table schema, which is searched first by default, and is normally writable by anyone. A secure arrangement can be obtained by forcing the temporary schema to be searched last. To do this, write `pg_temp` as the last entry in `search_path`. This function illustrates safe usage:
@@ -345,9 +347,9 @@ REVOKE ALL ON FUNCTION check_password(uname TEXT, pass TEXT) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION check_password(uname TEXT, pass TEXT) TO admins;
 COMMIT;
 ```
+ <a id="sql-createfunction-compat"></a>
 
-
-## Compatibility { #sql-createfunction-compat }
+## Compatibility
 
 
  A `CREATE FUNCTION` command is defined in the SQL standard. The PostgreSQL implementation can be used in a compatible way but has many extensions. Conversely, the SQL standard specifies a number of optional features that are not implemented in PostgreSQL.

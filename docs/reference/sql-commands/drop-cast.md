@@ -1,4 +1,6 @@
-# DROP CAST { #sql-dropcast }
+<a id="sql-dropcast"></a>
+
+# DROP CAST
 
 remove a cast
 
@@ -9,9 +11,9 @@ remove a cast
 
 DROP CAST [ IF EXISTS ] (SOURCE_TYPE AS TARGET_TYPE) [ CASCADE | RESTRICT ]
 ```
+ <a id="sql-dropcast-description"></a>
 
-
-## Description { #sql-dropcast-description }
+## Description
 
 
  `DROP CAST` removes a previously defined cast.
@@ -34,9 +36,9 @@ DROP CAST [ IF EXISTS ] (SOURCE_TYPE AS TARGET_TYPE) [ CASCADE | RESTRICT ]
 
 `CASCADE`, `RESTRICT`
 :   These key words do not have any effect, since there are no dependencies on casts.
+ <a id="sql-dropcast-examples"></a>
 
-
-## Examples { #sql-dropcast-examples }
+## Examples
 
 
  To drop the cast from type `text` to type `int`:
@@ -45,9 +47,9 @@ DROP CAST [ IF EXISTS ] (SOURCE_TYPE AS TARGET_TYPE) [ CASCADE | RESTRICT ]
 
 DROP CAST (text AS int);
 ```
+ <a id="sql-dropcast-compat"></a>
 
-
-## Compatibility { #sql-dropcast-compat }
+## Compatibility
 
 
  The `DROP CAST` command conforms to the SQL standard.

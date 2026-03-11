@@ -1,4 +1,6 @@
-# DROP TRIGGER { #sql-droptrigger }
+<a id="sql-droptrigger"></a>
+
+# DROP TRIGGER
 
 remove a trigger
 
@@ -34,9 +36,9 @@ DROP TRIGGER [ IF EXISTS ] NAME ON TABLE_NAME [ CASCADE | RESTRICT ]
 
 `RESTRICT`
 :   Refuse to drop the trigger if any objects depend on it. This is the default.
+ <a id="sql-droptrigger-examples"></a>
 
-
-## Examples { #sql-droptrigger-examples }
+## Examples
 
 
  Destroy the trigger `if_dist_exists` on the table `films`:
@@ -45,9 +47,9 @@ DROP TRIGGER [ IF EXISTS ] NAME ON TABLE_NAME [ CASCADE | RESTRICT ]
 
 DROP TRIGGER if_dist_exists ON films;
 ```
+ <a id="sql-droptrigger-compatibility"></a>
 
-
-## Compatibility { #sql-droptrigger-compatibility }
+## Compatibility
 
 
  The `DROP TRIGGER` statement in PostgreSQL is incompatible with the SQL standard. In the SQL standard, trigger names are not local to tables, so the command is simply <code>DROP TRIGGER

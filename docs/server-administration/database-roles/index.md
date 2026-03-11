@@ -1,4 +1,6 @@
-# Database Roles { #user-manag }
+<a id="user-manag"></a>
+
+# Database Roles
 
  PostgreSQL manages database access permissions using the concept of *roles*. A role can be thought of as either a database user, or a group of database users, depending on how the role is set up. Roles can own database objects (for example, tables and functions) and can assign privileges on those objects to other roles to control who has access to which objects. Furthermore, it is possible to grant *membership* in a role to another role, thus allowing the member role to use privileges assigned to another role.
 

@@ -1,4 +1,6 @@
-## Object Identifier Types { #datatype-oid }
+<a id="datatype-oid"></a>
+
+## Object Identifier Types
 
 
  Object identifiers (OIDs) are used internally by PostgreSQL as primary keys for various system tables. Type `oid` represents an object identifier. There are also several alias types for `oid`, each named <code>reg</code><em>something</em>. [Object Identifier Types](#datatype-oid-table) shows an overview.
@@ -24,9 +26,8 @@ SELECT * FROM pg_attribute
   WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'mytable');
 ```
  While that doesn't look all that bad by itself, it's still oversimplified. A far more complicated sub-select would be needed to select the right OID if there are multiple tables named `mytable` in different schemas. The `regclass` input converter handles the table lookup according to the schema path setting, and so it does the “right thing” automatically. Similarly, casting a table's OID to `regclass` is handy for symbolic display of a numeric OID.
+ <a id="datatype-oid-table"></a>
 
-
-<a id="datatype-oid-table"></a>
 **Table: Object Identifier Types**
 
 | Name | References | Description | Value Example |

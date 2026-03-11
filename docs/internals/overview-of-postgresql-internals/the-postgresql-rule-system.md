@@ -1,4 +1,6 @@
-## The PostgreSQL Rule System { #rule-system }
+<a id="rule-system"></a>
+
+## The PostgreSQL Rule System
 
 
  PostgreSQL supports a powerful *rule system* for the specification of *views* and ambiguous *view updates*. Originally the PostgreSQL rule system consisted of two implementations:

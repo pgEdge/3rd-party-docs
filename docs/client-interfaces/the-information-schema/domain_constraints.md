@@ -1,4 +1,6 @@
-## `domain_constraints` { #infoschema-domain-constraints }
+<a id="infoschema-domain-constraints"></a>
+
+## `domain_constraints`
 
 
  The view `domain_constraints` contains all constraints belonging to domains defined in the current database. Only those domains are shown that the current user has access to (by way of being the owner or having some privilege).

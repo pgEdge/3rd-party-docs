@@ -1,4 +1,6 @@
-## Bug Reporting Guidelines { #bug-reporting }
+<a id="bug-reporting"></a>
+
+## Bug Reporting Guidelines
 
 
  When you find a bug in PostgreSQL we want to hear about it. Your bug reports play an important part in making PostgreSQL more reliable because even the utmost care cannot guarantee that every part of PostgreSQL will work on every platform under every circumstance.
@@ -8,9 +10,9 @@
 
 
  We cannot promise to fix every bug right away. If the bug is obvious, critical, or affects a lot of users, chances are good that someone will look into it. It could also happen that we tell you to update to a newer version to see if the bug happens there. Or we might decide that the bug cannot be fixed before some major rewrite we might be planning is done. Or perhaps it is simply too hard and there are more important things on the agenda. If you need help immediately, consider obtaining a commercial support contract.
+ <a id="bug-reporting-identifying-bugs"></a>
 
-
-### Identifying Bugs { #bug-reporting-identifying-bugs }
+### Identifying Bugs
 
 
  Before you report a bug, please read and re-read the documentation to verify that you can really do whatever it is you are trying. If it is not clear from the documentation whether you can do something or not, please report that too; it is a bug in the documentation. If it turns out that a program does something different from what the documentation says, that is a bug. That might include, but is not limited to, the following circumstances:
@@ -27,9 +29,9 @@
 
 
  Before you continue, check on the TODO list and in the FAQ to see if your bug is already known. If you cannot decode the information on the TODO list, report your problem. The least we can do is make the TODO list clearer.
+  <a id="bug-reporting-what-to-report"></a>
 
-
-### What to Report { #bug-reporting-what-to-report }
+### What to Report
 
 
  The most important thing to remember about bug reporting is to state all the facts and only facts. Do not speculate what you think went wrong, what “it seemed to do”, or which part of the program has a fault. If you are not familiar with the implementation you would probably guess wrong and not help us a bit. And even if you are, educated explanations are a great supplement to but no substitute for facts. If we are going to fix the bug we still have to see it happen for ourselves first. Reporting the bare facts is relatively straightforward (you can probably copy and paste them from the screen) but all too often important details are left out because someone thought it does not matter or the report would be understood anyway.
@@ -67,9 +69,9 @@
 
 
  When writing a bug report, please avoid confusing terminology. The software package in total is called “PostgreSQL”, sometimes “Postgres” for short. If you are specifically talking about the backend process, mention that, do not just say “PostgreSQL crashes”. A crash of a single backend process is quite different from crash of the parent “postgres” process; please don't say “the server crashed” when you mean a single backend process went down, nor vice versa. Also, client programs such as the interactive frontend “psql” are completely separate from the backend. Please try to be specific about whether the problem is on the client or server side.
+  <a id="bug-reporting-where-to-report-bugs"></a>
 
-
-### Where to Report Bugs { #bug-reporting-where-to-report-bugs }
+### Where to Report Bugs
 
 
  In general, send bug reports to the bug report mailing list at [pgsql-bugs@lists.postgresql.org](mailto:pgsql-bugs@lists.postgresql.org). You are requested to use a descriptive subject for your email message, perhaps parts of the error message.

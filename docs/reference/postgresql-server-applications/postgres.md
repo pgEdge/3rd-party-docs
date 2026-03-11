@@ -1,4 +1,6 @@
-# postgres { #app-postgres }
+<a id="app-postgres"></a>
+
+# postgres
 
 PostgreSQL database server
 
@@ -23,9 +25,9 @@ postgres [OPTION...]
 
 
  The `postgres` command can also be called in single-user mode. The primary use for this mode is during bootstrapping by [app-initdb](initdb.md#app-initdb). Sometimes it is used for debugging or disaster recovery; note that running a single-user server is not truly suitable for debugging the server, since no realistic interprocess communication and locking will happen. When invoked in single-user mode from the shell, the user can enter queries and the results will be printed to the screen, but in a form that is more useful for developers than end users. In the single-user mode, the session user will be set to the user with ID 1, and implicit superuser powers are granted to this user. This user does not actually have to exist, so the single-user mode can be used to manually recover from certain kinds of accidental damage to the system catalogs.
+ <a id="app-postgres-options"></a>
 
-
-## Options { #app-postgres-options }
+## Options
 
 
  `postgres` accepts the following command-line arguments. For a detailed discussion of the options consult [Server Configuration](../../server-administration/server-configuration/index.md#runtime-config). You can save typing most of these options by setting up a configuration file. Some (safe) options can also be set from the connecting client in an application-dependent way to apply only for that session. For example, if the environment variable `PGOPTIONS` is set, then libpq-based clients will pass that string to the server, which will interpret it as `postgres` command-line options.
@@ -213,15 +215,15 @@ $ ps -ef | grep postgres
 
 
  The `postgres` server uses `SIGQUIT` to tell subordinate server processes to terminate without normal cleanup. This signal *should not* be used by users. It is also unwise to send `SIGKILL` to a server process — the main `postgres` process will interpret this as a crash and will force all the sibling processes to quit as part of its standard crash-recovery procedure.
+ <a id="app-postgres-bugs"></a>
 
-
-## Bugs { #app-postgres-bugs }
+## Bugs
 
 
  The `--` options will not work on `FreeBSD` or `OpenBSD`. Use `-c` instead. This is a bug in the affected operating systems; a future release of PostgreSQL will provide a workaround if this is not fixed.
+ <a id="app-postgres-single-user"></a>
 
-
-## Single-User Mode { #app-postgres-single-user }
+## Single-User Mode
 
 
  To start a single-user mode server, use a command like
@@ -246,9 +248,9 @@ postgres --single -D /usr/local/pgsql/data OTHER-OPTIONS my_database
 
 
  Note that the single-user mode server does not provide sophisticated line-editing features (no command history, for example). Single-user mode also does not do any background processing, such as automatic checkpoints or replication.
+ <a id="app-postgres-examples"></a>
 
-
-## Examples { #app-postgres-examples }
+## Examples
 
 
  To start `postgres` in the background using default values, type:

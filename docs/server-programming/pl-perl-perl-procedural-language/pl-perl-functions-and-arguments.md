@@ -1,4 +1,6 @@
-## PL/Perl Functions and Arguments { #plperl-funcs }
+<a id="plperl-funcs"></a>
+
+## PL/Perl Functions and Arguments
 
 
  To create a function in the PL/Perl language, use the standard [sql-createfunction](../../reference/sql-commands/create-function.md#sql-createfunction) syntax:

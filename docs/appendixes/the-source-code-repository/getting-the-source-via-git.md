@@ -1,4 +1,6 @@
-## Getting the Source via Git { #git }
+<a id="git"></a>
+
+## Getting the Source via Git
 
 
  With Git you will make a copy of the entire code repository on your local machine, so you will have access to all history and branches offline. This is the fastest and most flexible way to develop or test patches.

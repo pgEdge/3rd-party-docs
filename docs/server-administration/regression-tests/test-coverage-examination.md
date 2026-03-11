@@ -1,10 +1,12 @@
-## Test Coverage Examination { #regress-coverage }
+<a id="regress-coverage"></a>
+
+## Test Coverage Examination
 
 
  The PostgreSQL source code can be compiled with coverage testing instrumentation, so that it becomes possible to examine which parts of the code are covered by the regression tests or any other test suite that is run with the code. This is currently supported when compiling with GCC, and it requires the `gcov` and `lcov` packages.
+ <a id="regress-coverage-configure"></a>
 
-
-### Coverage with Autoconf and Make { #regress-coverage-configure }
+### Coverage with Autoconf and Make
 
 
  A typical workflow looks like this:
@@ -40,9 +42,9 @@ make coverage-clean
 
 
  Use `make distclean` to clean up when done.
+  <a id="regress-coverage-meson"></a>
 
-
-### Coverage with Meson { #regress-coverage-meson }
+### Coverage with Meson
 
 
  A typical workflow looks like this:

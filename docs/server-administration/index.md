@@ -1,4 +1,6 @@
-# Server Administration { #admin }
+<a id="admin"></a>
+
+# Server Administration
 
 
  This part covers topics that are of interest to a PostgreSQL administrator. This includes installation, configuration of the server, management of users and databases, and maintenance tasks. Anyone running PostgreSQL server, even for personal use, but especially in production, should be familiar with these topics.

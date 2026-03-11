@@ -1,10 +1,12 @@
-## Running the Tests { #regress-run }
+<a id="regress-run"></a>
+
+## Running the Tests
 
 
  The regression tests can be run against an already installed and running server, or using a temporary installation within the build tree. Furthermore, there is a “parallel” and a “sequential” mode for running the tests. The sequential method runs each test script alone, while the parallel method starts up multiple server processes to run groups of tests in parallel. Parallel testing adds confidence that interprocess communication and locking are working correctly. Some tests may run sequentially even in the “parallel” mode in case this is required by the test.
+ <a id="regress-run-temp-inst"></a>
 
-
-### Running the Tests Against a Temporary Installation { #regress-run-temp-inst }
+### Running the Tests Against a Temporary Installation
 
 
  To run the parallel regression tests after building but before installation, type:
@@ -36,9 +38,9 @@ make check
 make MAX_CONNECTIONS=10 check
 ```
  runs no more than ten tests concurrently.
+  <a id="regress-run-existing-inst"></a>
 
-
-### Running the Tests Against an Existing Installation { #regress-run-existing-inst }
+### Running the Tests Against an Existing Installation
 
 
  To run the tests after installation (see [Installation from Source Code](../installation-from-source-code/index.md#installation)), initialize a data directory and start the server as explained in [Server Setup and Operation](../server-setup-and-operation/index.md#runtime), then type:
@@ -57,9 +59,9 @@ make installcheck-parallel
 
 
  The tests will also transiently create some cluster-wide objects, such as roles, tablespaces, and subscriptions. These objects will have names beginning with `regress_`. Beware of using `installcheck` mode with an installation that has any actual global objects named that way.
+  <a id="regress-additional"></a>
 
-
-### Additional Test Suites { #regress-additional }
+### Additional Test Suites
 
 
  The `make check` and `make installcheck` commands run only the “core” regression tests, which test built-in functionality of the PostgreSQL server. The source distribution contains many additional test suites, most of them having to do with add-on functionality such as optional procedural languages.
@@ -138,9 +140,9 @@ make check-world PG_TEST_EXTRA='kerberos ldap ssl load_balance libpq_encryption'
 
 
  In addition, there are tests in `src/test/modules` which will be run by `make check-world` but not by `make installcheck-world`. This is because they install non-production extensions or have other side-effects that are considered undesirable for a production installation. You can use `make install` and `make installcheck` in one of those subdirectories if you wish, but it's not recommended to do so with a non-test server.
+  <a id="regress-run-locale"></a>
 
-
-### Locale and Encoding { #regress-run-locale }
+### Locale and Encoding
 
 
  By default, tests using a temporary installation use the locale defined in the current environment and the corresponding database encoding as determined by `initdb`. It can be useful to test different locales by setting the appropriate environment variables, for example:
@@ -166,9 +168,9 @@ make check LANG=C ENCODING=EUC_JP
 
 
  The database encoding can be set for tests against either a temporary or an existing installation, though in the latter case it must be compatible with the installation's locale.
+  <a id="regress-run-custom-settings"></a>
 
-
-### Custom Server Settings { #regress-run-custom-settings }
+### Custom Server Settings
 
 
  There are several ways to use custom server settings when running a test suite. This can be useful to enable additional logging, adjust resource limits, or enable extra run-time checks such as [debug_discard_caches](../server-configuration/developer-options.md#guc-debug-discard-caches). But note that not all tests can be expected to pass cleanly with arbitrary settings.
@@ -200,8 +202,9 @@ echo 'work_mem = 50MB' >> test_postgresql.conf
 make check EXTRA_REGRESS_OPTS="--temp-config=test_postgresql.conf"
 ```
 
+  <a id="regress-run-extra-tests"></a>
 
-### Extra Tests { #regress-run-extra-tests }
+### Extra Tests
 
 
  The core regression test suite contains a few test files that are not run by default, because they might be platform-dependent or take a very long time to run. You can run these or other extra test files by setting the variable `EXTRA_TESTS`. For example, to run the `numeric_big` test:

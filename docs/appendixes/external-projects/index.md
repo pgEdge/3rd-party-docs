@@ -1,4 +1,6 @@
-# External Projects { #external-projects }
+<a id="external-projects"></a>
+
+# External Projects
 
  PostgreSQL is a complex software project, and managing the project is difficult. We have found that many enhancements to PostgreSQL can be more efficiently developed separately from the core project.
 

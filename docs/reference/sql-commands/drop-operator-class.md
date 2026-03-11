@@ -1,4 +1,6 @@
-# DROP OPERATOR CLASS { #sql-dropopclass }
+<a id="sql-dropopclass"></a>
+
+# DROP OPERATOR CLASS
 
 remove an operator class
 

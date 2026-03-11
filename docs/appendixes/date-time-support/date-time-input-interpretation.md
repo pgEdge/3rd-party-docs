@@ -1,4 +1,6 @@
-## Date/Time Input Interpretation { #datetime-input-rules }
+<a id="datetime-input-rules"></a>
+
+## Date/Time Input Interpretation
 
 
  Date/time input strings are decoded using the following procedure.

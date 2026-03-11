@@ -1,4 +1,6 @@
-## `pg_statistic_ext` { #catalog-pg-statistic-ext }
+<a id="catalog-pg-statistic-ext"></a>
+
+## `pg_statistic_ext`
 
 
  The catalog `pg_statistic_ext` holds definitions of extended planner statistics. Each row in this catalog corresponds to a *statistics object* created with [`CREATE STATISTICS`](../../reference/sql-commands/create-statistics.md#sql-createstatistics).

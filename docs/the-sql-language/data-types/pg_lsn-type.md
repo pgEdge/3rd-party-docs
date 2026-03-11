@@ -1,4 +1,6 @@
-## `pg_lsn` Type { #datatype-pg-lsn }
+<a id="datatype-pg-lsn"></a>
+
+## `pg_lsn` Type
 
 
  The `pg_lsn` data type can be used to store LSN (Log Sequence Number) data which is a pointer to a location in the WAL. This type is a representation of `XLogRecPtr` and an internal system type of PostgreSQL.

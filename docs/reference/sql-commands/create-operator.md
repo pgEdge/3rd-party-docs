@@ -1,4 +1,6 @@
-# CREATE OPERATOR { #sql-createoperator }
+<a id="sql-createoperator"></a>
+
+# CREATE OPERATOR
 
 define a new operator
 

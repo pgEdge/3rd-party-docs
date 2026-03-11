@@ -1,10 +1,11 @@
-## Array Functions and Operators { #functions-array }
+<a id="functions-array"></a>
+
+## Array Functions and Operators
 
 
  [Array Operators](#array-operators-table) shows the specialized operators available for array types. In addition to those, the usual comparison operators shown in [Comparison Operators](comparison-functions-and-operators.md#functions-comparison-op-table) are available for arrays. The comparison operators compare the array contents element-by-element, using the default B-tree comparison function for the element data type, and sort based on the first difference. In multidimensional arrays the elements are visited in row-major order (last subscript varies most rapidly). If the contents of two arrays are equal but the dimensionality is different, the first difference in the dimensionality information determines the sort order.
+ <a id="array-operators-table"></a>
 
-
-<a id="array-operators-table"></a>
 **Table: Array Operators**
 
 <table>
@@ -54,9 +55,8 @@
 
 
  [Array Functions](#array-functions-table) shows the functions available for use with array types. See [Arrays](../data-types/arrays.md#arrays) for more information and examples of the use of these functions.
+ <a id="array-functions-table"></a>
 
-
-<a id="array-functions-table"></a>
 **Table: Array Functions**
 
 <table>
@@ -139,7 +139,8 @@
 <td><code>array_shuffle(ARRAY[[1,2],[3,4],[5,6]])</code> <code>{{5,6},{1,2},{3,4}}</code></td>
 </tr>
 <tr>
-<td><code>array_to_string</code> ( <code>array</code> <code>anyarray</code>, <code>delimiter</code> <code>text</code> [, <code>null_string</code> <code>text</code> ] ) <code>text</code></td>
+<td><a id="function-array-to-string"></a>
+ `array_to_string` ( `array` `anyarray`, `delimiter` `text` [, `null_string` `text` ] ) `text`</td>
 <td>Converts each array element to its text representation, and concatenates those separated by the <code>delimiter</code> string. If <code>null_string</code> is given and is not <code>NULL</code>, then <code>NULL</code> array entries are represented by that string; otherwise, they are omitted. See also <a href="string-functions-and-operators.md#function-string-to-array"><code>string_to_array</code></a>.</td>
 <td><code>array_to_string(ARRAY[1, 2, 3, NULL, 5], ',', '<em>')</code> <code>1,2,3,</em>,5</code></td>
 </tr>

@@ -1,4 +1,6 @@
-# DROP USER MAPPING { #sql-dropusermapping }
+<a id="sql-dropusermapping"></a>
+
+# DROP USER MAPPING
 
 remove a user mapping for a foreign server
 

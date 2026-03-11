@@ -1,4 +1,6 @@
-# createuser { #app-createuser }
+<a id="app-createuser"></a>
+
+# createuser
 
 define a new PostgreSQL user account
 

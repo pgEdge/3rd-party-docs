@@ -1,10 +1,12 @@
-## pg_prewarm — preload relation data into buffer caches { #pgprewarm }
+<a id="pgprewarm"></a>
+
+## pg_prewarm — preload relation data into buffer caches
 
 
  The `pg_prewarm` module provides a convenient way to load relation data into either the operating system buffer cache or the PostgreSQL buffer cache. Prewarming can be performed manually using the `pg_prewarm` function, or can be performed automatically by including `pg_prewarm` in [shared_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-shared-preload-libraries). In the latter case, the system will run a background worker which periodically records the contents of shared buffers in a file called `autoprewarm.blocks` and will, using 2 background workers, reload those same blocks after a restart.
+ <a id="pgprewarm-funcs"></a>
 
-
-### Functions { #pgprewarm-funcs }
+### Functions
 
 
 ```
@@ -40,9 +42,9 @@ autoprewarm_dump_now() RETURNS int8
 
 
  Update `autoprewarm.blocks` immediately. This may be useful if the autoprewarm worker is not running but you anticipate running it after the next restart. The return value is the number of records written to `autoprewarm.blocks`.
+  <a id="pgprewarm-config-params"></a>
 
-
-### Configuration Parameters { #pgprewarm-config-params }
+### Configuration Parameters
 
 
 `pg_prewarm.autoprewarm` (`boolean`)
@@ -64,9 +66,9 @@ shared_preload_libraries = 'pg_prewarm'
 pg_prewarm.autoprewarm = true
 pg_prewarm.autoprewarm_interval = 300s
 ```
+  <a id="pgprewarm-author"></a>
 
-
-### Author { #pgprewarm-author }
+### Author
 
 
  Robert Haas [rhaas@postgresql.org](mailto:rhaas@postgresql.org)

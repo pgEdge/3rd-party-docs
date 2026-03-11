@@ -1,4 +1,6 @@
-## `pg_cursors` { #view-pg-cursors }
+<a id="view-pg-cursors"></a>
+
+## `pg_cursors`
 
 
  The `pg_cursors` view lists the cursors that are currently available. Cursors can be defined in several ways:

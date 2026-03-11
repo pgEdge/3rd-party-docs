@@ -1,4 +1,6 @@
-## Installation { #tutorial-install }
+<a id="tutorial-install"></a>
+
+## Installation
 
 
  Before you can use PostgreSQL you need to install it, of course. It is possible that PostgreSQL is already installed at your site, either because it was included in your operating system distribution or because the system administrator already installed it. If that is the case, you should obtain information from the operating system documentation or your system administrator about how to access PostgreSQL.

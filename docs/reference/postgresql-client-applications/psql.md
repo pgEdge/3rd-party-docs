@@ -1,4 +1,6 @@
-# psql { #app-psql }
+<a id="app-psql"></a>
+
+# psql
 
 PostgreSQL interactive terminal
 
@@ -15,9 +17,9 @@ psql [OPTION...] [DBNAME
 
 
  psql is a terminal-based front-end to PostgreSQL. It enables you to type in queries interactively, issue them to PostgreSQL, and see the query results. Alternatively, input can be from a file or from command line arguments. In addition, psql provides a number of meta-commands and various shell-like features to facilitate writing scripts and automating a wide variety of tasks.
+ <a id="r1-app-psql-3"></a>
 
-
-## Options { #r1-app-psql-3 }
+## Options
 
 
 <a id="app-psql-option-echo-all"></a>
@@ -222,9 +224,9 @@ psql [OPTION...] [DBNAME
 
 
 ## Usage
+  <a id="r2-app-psql-connecting"></a>
 
-
-### Connecting to a Database { #r2-app-psql-connecting }
+### Connecting to a Database
 
 
  psql is a regular PostgreSQL client application. In order to connect to a database you need to know the name of your target database, the host name and port number of the server, and what database user name you want to connect as. psql can be told about those parameters via command line options, namely `-d`, `-h`, `-p`, and `-U` respectively. If an argument is found that does not belong to any option it will be interpreted as the database name (or the database user name, if the database name is already given). Not all of these options are required; there are useful defaults. If you omit the host name, psql will connect via a Unix-domain socket to a server on the local host, or via TCP/IP to `localhost` on Windows. The default port number is determined at compile time. Since the database server uses the same default, you will not have to specify the port in most cases. The default database user name is your operating-system user name. Once the database user name is determined, it is used as the default database name. Note that you cannot just connect to any database under any database user name. Your database administrator should have informed you about your access rights.
@@ -247,9 +249,9 @@ $ psql postgresql://dbmaster:5433/mydb?sslmode=require
 
 
  If both standard input and standard output are a terminal, then psql sets the client encoding to “auto”, which will detect the appropriate client encoding from the locale settings (`LC_CTYPE` environment variable on Unix systems). If this doesn't work out as expected, the client encoding can be overridden using the environment variable `PGCLIENTENCODING`.
+  <a id="r2-app-psql-4"></a>
 
-
-### Entering SQL Commands { #r2-app-psql-4 }
+### Entering SQL Commands
 
 
  In normal operation, psql provides a prompt with the name of the database to which psql is currently connected, followed by the string `=>`. For example:
@@ -274,9 +276,9 @@ testdb=>
 
 
  While C-style block comments are passed to the server for processing and removal, SQL-standard comments are removed by psql.
+  <a id="app-psql-meta-commands"></a>
 
-
-### Meta-Commands { #app-psql-meta-commands }
+### Meta-Commands
 
 
  Anything you enter in psql that begins with an unquoted backslash is a psql meta-command that is processed by psql itself. These commands make psql more useful for administration or scripting. Meta-commands are often called slash or backslash commands.
@@ -1283,8 +1285,9 @@ testdb=>
     ```
      results in sending the three SQL commands to the server in a single request, when the non-backslashed semicolon is reached. The server executes such a request as a single transaction, unless there are explicit `BEGIN`/`COMMIT` commands included in the string to divide it into multiple transactions. (See [Multiple Statements in a Simple Query](../../internals/frontend-backend-protocol/message-flow.md#protocol-flow-multi-statement) for more details about how the server handles multi-query strings.)
 
+ <a id="app-psql-patterns"></a>
 
-#### Patterns { #app-psql-patterns }
+#### Patterns
 
 
  The various `\d` commands accept a *pattern* parameter to specify the object name(s) to be displayed. In the simplest case, a pattern is just the exact name of the object. The characters within a pattern are normally folded to lower case, just as in SQL names; for example, `\dt FOO` will display the table named `foo`. As in SQL names, placing double quotes around a pattern stops folding to lower case. Should you need to include an actual double quote character in a pattern, write it as a pair of double quotes within a double-quote sequence; again this is in accord with the rules for SQL quoted identifiers. For example, `\dt "FOO""BAR"` will display the table named `FOO"BAR` (not `foo"bar`). Unlike the normal rules for SQL names, you can put double quotes around just part of a pattern, for instance `\dt FOO"FOO"BAR` will display the table named `fooFOObar`.
@@ -1306,9 +1309,9 @@ testdb=>
 
 
 ### Advanced Features
+  <a id="app-psql-variables"></a>
 
-
-#### Variables { #app-psql-variables }
+#### Variables
 
 
  psql provides variable substitution features similar to common Unix command shells. Variables are simply name/value pairs, where the value can be any string of any length. The name must consist of letters (including non-Latin letters), digits, and underscores.
@@ -1524,9 +1527,9 @@ bar
 
 `VERSION`, `VERSION_NAME`, `VERSION_NUM`
 :   These variables are set at program start-up to reflect psql's version, respectively as a verbose string, a short string (e.g., `9.6.2`, `10.1`, or `11beta1`), and a number (e.g., `90602` or `100001`). They can be changed or unset.
+  <a id="app-psql-interpolation"></a>
 
-
-#### SQL Interpolation { #app-psql-interpolation }
+#### SQL Interpolation
 
 
  A key feature of psql variables is that you can substitute (“interpolate”) them into regular SQL statements, as well as the arguments of meta-commands. Furthermore, psql provides facilities for ensuring that variable values used as SQL literals and identifiers are properly quoted. The syntax for interpolating a value without any quoting is to prepend the variable name with a colon (`:`). For example,
@@ -1568,9 +1571,9 @@ testdb=> INSERT INTO my_table VALUES (:'content');
 
 
  The colon syntax for variables is standard SQL for embedded query languages, such as ECPG. The colon syntaxes for array slices and type casts are PostgreSQL extensions, which can sometimes conflict with the standard usage. The colon-quote syntax for escaping a variable's value as an SQL literal or identifier is a psql extension.
+  <a id="app-psql-prompting"></a>
 
-
-#### Prompting { #app-psql-prompting }
+#### Prompting
 
 
  The prompts psql issues can be customized to your preference. The three variables `PROMPT1`, `PROMPT2`, and `PROMPT3` contain strings and special escape sequences that describe the appearance of the prompt. Prompt 1 is the normal prompt that is issued when psql requests a new command. Prompt 2 is issued when more input is expected during command entry, for example because the command was not terminated with a semicolon or a quote was not closed. Prompt 3 is issued when you are running an SQL `COPY FROM STDIN` command and you need to type in a row value on the terminal.
@@ -1654,9 +1657,9 @@ testdb=> INSERT INTO my_table VALUES (:'content');
 !!! note
 
     This feature was shamelessly plagiarized from tcsh.
+  <a id="app-psql-readline"></a>
 
-
-#### Command-Line Editing { #app-psql-readline }
+#### Command-Line Editing
 
 
  psql uses the Readline or libedit library, if available, for convenient line editing and retrieval. The command history is automatically saved when psql exits and is reloaded when psql starts up. Type up-arrow or control-P to retrieve previous lines.
@@ -1677,9 +1680,9 @@ $endif
 
 
  The `-n` (`--no-readline`) command line option can also be useful to disable use of Readline for a single run of psql. This prevents tab completion, use or recording of command line history, and editing of multi-line commands. It is particularly useful when you need to copy-and-paste text that contains `TAB` characters.
+   <a id="app-psql-environment"></a>
 
-
-## Environment { #app-psql-environment }
+## Environment
 
 
 <a id="app-psql-environment-columns"></a>
@@ -1782,9 +1785,9 @@ $endif
 
 -  Set the code page by entering `cmd.exe /c chcp 1252`. (1252 is a code page that is appropriate for German; replace it with your value.) If you are using Cygwin, you can put this command in `/etc/profile`.
 -  Set the console font to `Lucida Console`, because the raster font does not work with the ANSI code page.
+ <a id="app-psql-examples"></a>
 
-
-## Examples { #app-psql-examples }
+## Examples
 
 
  The first example shows how to spread a command over several lines of input. Notice the changing prompt:

@@ -1,4 +1,6 @@
-## fuzzystrmatch — determine string similarities and distance { #fuzzystrmatch }
+<a id="fuzzystrmatch"></a>
+
+## fuzzystrmatch — determine string similarities and distance
 
 
  The `fuzzystrmatch` module provides several functions to determine similarities and distance between strings.
@@ -10,9 +12,9 @@
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="fuzzystrmatch-soundex"></a>
 
-
-### Soundex { #fuzzystrmatch-soundex }
+### Soundex
 
 
  The Soundex system is a method of matching similar-sounding names by converting them to the same code. It was initially used by the United States Census in 1880, 1900, and 1910. Note that Soundex is not very useful for non-English names.
@@ -53,9 +55,9 @@ SELECT * FROM s WHERE soundex(nm) = soundex('john');
 
 SELECT * FROM s WHERE difference(s.nm, 'john') > 2;
 ```
+  <a id="fuzzystrmatch-daitch-mokotoff"></a>
 
-
-### Daitch-Mokotoff Soundex { #fuzzystrmatch-daitch-mokotoff }
+### Daitch-Mokotoff Soundex
 
 
  Like the original Soundex system, Daitch-Mokotoff Soundex matches similar-sounding names by converting them to the same code. However, Daitch-Mokotoff Soundex is significantly more useful for non-English names than the original system. Major improvements over the original system include:
@@ -166,9 +168,9 @@ SELECT * FROM s WHERE soundex_tsvector(nm) @@ soundex_tsquery('Jameson John');
 
 
  If it is desired to avoid recalculation of soundex codes during index rechecks, an index on a separate column can be used instead of an index on an expression. A stored generated column can be used for this; see [Generated Columns](../../the-sql-language/data-definition/generated-columns.md#ddl-generated-columns).
+  <a id="fuzzystrmatch-levenshtein"></a>
 
-
-### Levenshtein { #fuzzystrmatch-levenshtein }
+### Levenshtein
 
 
  This function calculates the Levenshtein distance between two strings:
@@ -218,9 +220,9 @@ test=# SELECT levenshtein_less_equal('extensive', 'exhaustive', 4);
                       4
 (1 row)
 ```
+  <a id="fuzzystrmatch-metaphone"></a>
 
-
-### Metaphone { #fuzzystrmatch-metaphone }
+### Metaphone
 
 
  Metaphone, like Soundex, is based on the idea of constructing a representative code for an input string. Two strings are then deemed similar if they have the same codes.
@@ -249,9 +251,9 @@ test=# SELECT metaphone('GUMBO', 4);
  KM
 (1 row)
 ```
+  <a id="fuzzystrmatch-double-metaphone"></a>
 
-
-### Double Metaphone { #fuzzystrmatch-double-metaphone }
+### Double Metaphone
 
 
  The Double Metaphone system computes two “sounds like” strings for a given input string — a “primary” and an “alternate”. In most cases they are the same, but for non-English names especially they can be a bit different, depending on pronunciation. These functions compute the primary and alternate codes:

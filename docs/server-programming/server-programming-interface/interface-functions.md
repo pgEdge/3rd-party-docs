@@ -1,7 +1,9 @@
-## Interface Functions { #spi-interface }
+<a id="spi-interface"></a>
 
+## Interface Functions
+  <a id="spi-spi-connect"></a>
 
-# SPI_connect { #spi-spi-connect }
+# SPI_connect
 
 connect a C function to the SPI manager
 
@@ -43,9 +45,9 @@ int SPI_connect_ext(int options)
 
 `SPI_ERROR_CONNECT`
 :   on error
+   <a id="spi-spi-finish"></a>
 
-
-# SPI_finish { #spi-spi-finish }
+# SPI_finish
 
 disconnect a C function from the SPI manager
 
@@ -72,9 +74,9 @@ int SPI_finish(void)
 
 `SPI_ERROR_UNCONNECTED`
 :   if called from an unconnected C function
+   <a id="spi-spi-execute"></a>
 
-
-# SPI_execute { #spi-spi-execute }
+# SPI_execute
 
 execute a command
 
@@ -233,9 +235,9 @@ typedef struct SPITupleTable
 
 
  All SPI query-execution functions set both `SPI_processed` and `SPI_tuptable` (just the pointer, not the contents of the structure). Save these two global variables into local C function variables if you need to access the result table of `SPI_execute` or another query-execution function across later calls.
+   <a id="spi-spi-exec"></a>
 
-
-# SPI_exec { #spi-spi-exec }
+# SPI_exec
 
 execute a read/write command
 
@@ -268,9 +270,9 @@ int SPI_exec(const char * command, long count)
 
 
  See `SPI_execute`.
+   <a id="spi-spi-execute-extended"></a>
 
-
-# SPI_execute_extended { #spi-spi-execute-extended }
+# SPI_execute_extended
 
 execute a command with out-of-line parameters
 
@@ -338,9 +340,9 @@ int SPI_execute_extended(const char *command,
 
 
  When `options->dest` is NULL, `SPI_processed` and `SPI_tuptable` are set as in `SPI_execute`. When `options->dest` is not NULL, `SPI_processed` is set to zero and `SPI_tuptable` is set to NULL. If a tuple count is required, the caller's `DestReceiver` object must calculate it.
+   <a id="spi-spi-execute-with-args"></a>
 
-
-# SPI_execute_with_args { #spi-spi-execute-with-args }
+# SPI_execute_with_args
 
 execute a command with out-of-line parameters
 
@@ -403,9 +405,9 @@ int SPI_execute_with_args(const char *command,
 
 
  `SPI_processed` and `SPI_tuptable` are set as in `SPI_execute` if successful.
+   <a id="spi-spi-prepare"></a>
 
-
-# SPI_prepare { #spi-spi-prepare }
+# SPI_prepare
 
 prepare a statement, without executing it yet
 
@@ -468,9 +470,9 @@ SPIPlanPtr SPI_prepare(const char * command, int nargs, Oid * argtypes)
 
 
  The name `SPIPlanPtr` is somewhat historical, since the data structure no longer necessarily contains an execution plan.
+   <a id="spi-spi-prepare-cursor"></a>
 
-
-# SPI_prepare_cursor { #spi-spi-prepare-cursor }
+# SPI_prepare_cursor
 
 prepare a statement, without executing it yet
 
@@ -519,9 +521,9 @@ SPIPlanPtr SPI_prepare_cursor(const char * command, int nargs,
 
 
  Useful bits to set in `cursorOptions` include `CURSOR_OPT_SCROLL`, `CURSOR_OPT_NO_SCROLL`, `CURSOR_OPT_FAST_PLAN`, `CURSOR_OPT_GENERIC_PLAN`, and `CURSOR_OPT_CUSTOM_PLAN`. Note in particular that `CURSOR_OPT_HOLD` is ignored.
+   <a id="spi-spi-prepare-extended"></a>
 
-
-# SPI_prepare_extended { #spi-spi-prepare-extended }
+# SPI_prepare_extended
 
 prepare a statement, without executing it yet
 
@@ -571,9 +573,9 @@ SPIPlanPtr SPI_prepare_extended(const char * command,
 
 
  `SPI_prepare_extended` has the same return conventions as `SPI_prepare`.
+   <a id="spi-spi-prepare-params"></a>
 
-
-# SPI_prepare_params { #spi-spi-prepare-params }
+# SPI_prepare_params
 
 prepare a statement, without executing it yet
 
@@ -618,9 +620,9 @@ SPIPlanPtr SPI_prepare_params(const char * command,
 
 
  `SPI_prepare_params` has the same return conventions as `SPI_prepare`.
+   <a id="spi-spi-getargcount"></a>
 
-
-# SPI_getargcount { #spi-spi-getargcount }
+# SPI_getargcount
 
 return the number of arguments needed by a statement prepared by `SPI_prepare`
 
@@ -650,9 +652,9 @@ int SPI_getargcount(SPIPlanPtr plan)
 
 
  The count of expected arguments for the `plan`. If the `plan` is `NULL` or invalid, `SPI_result` is set to `SPI_ERROR_ARGUMENT` and -1 is returned.
+   <a id="spi-spi-getargtypeid"></a>
 
-
-# SPI_getargtypeid { #spi-spi-getargtypeid }
+# SPI_getargtypeid
 
 return the data type OID for an argument of a statement prepared by `SPI_prepare`
 
@@ -685,9 +687,9 @@ Oid SPI_getargtypeid(SPIPlanPtr plan, int argIndex)
 
 
  The type OID of the argument at the given index. If the `plan` is `NULL` or invalid, or `argIndex` is less than 0 or not less than the number of arguments declared for the `plan`, `SPI_result` is set to `SPI_ERROR_ARGUMENT` and `InvalidOid` is returned.
+   <a id="spi-spi-is-cursor-plan"></a>
 
-
-# SPI_is_cursor_plan { #spi-spi-is-cursor-plan }
+# SPI_is_cursor_plan
 
 return `true` if a statement prepared by `SPI_prepare` can be used with `SPI_cursor_open`
 
@@ -717,9 +719,9 @@ bool SPI_is_cursor_plan(SPIPlanPtr plan)
 
 
  `true` or `false` to indicate if the `plan` can produce a cursor or not, with `SPI_result` set to zero. If it is not possible to determine the answer (for example, if the `plan` is `NULL` or invalid, or if called when not connected to SPI), then `SPI_result` is set to a suitable error code and `false` is returned.
+   <a id="spi-spi-execute-plan"></a>
 
-
-# SPI_execute_plan { #spi-spi-execute-plan }
+# SPI_execute_plan
 
 execute a statement prepared by `SPI_prepare`
 
@@ -774,9 +776,9 @@ int SPI_execute_plan(SPIPlanPtr plan, Datum * values, const char * nulls,
 
 
  `SPI_processed` and `SPI_tuptable` are set as in `SPI_execute` if successful.
+   <a id="spi-spi-execute-plan-extended"></a>
 
-
-# SPI_execute_plan_extended { #spi-spi-execute-plan-extended }
+# SPI_execute_plan_extended
 
 execute a statement prepared by `SPI_prepare`
 
@@ -844,9 +846,9 @@ int SPI_execute_plan_extended(SPIPlanPtr plan,
 
 
  When `options->dest` is NULL, `SPI_processed` and `SPI_tuptable` are set as in `SPI_execute_plan`. When `options->dest` is not NULL, `SPI_processed` is set to zero and `SPI_tuptable` is set to NULL. If a tuple count is required, the caller's `DestReceiver` object must calculate it.
+   <a id="spi-spi-execute-plan-with-paramlist"></a>
 
-
-# SPI_execute_plan_with_paramlist { #spi-spi-execute-plan-with-paramlist }
+# SPI_execute_plan_with_paramlist
 
 execute a statement prepared by `SPI_prepare`
 
@@ -894,9 +896,9 @@ int SPI_execute_plan_with_paramlist(SPIPlanPtr plan,
 
 
  `SPI_processed` and `SPI_tuptable` are set as in `SPI_execute_plan` if successful.
+   <a id="spi-spi-execp"></a>
 
-
-# SPI_execp { #spi-spi-execp }
+# SPI_execp
 
 execute a statement in read/write mode
 
@@ -941,9 +943,9 @@ int SPI_execp(SPIPlanPtr plan, Datum * values, const char * nulls, long count)
 
 
  `SPI_processed` and `SPI_tuptable` are set as in `SPI_execute` if successful.
+   <a id="spi-spi-cursor-open"></a>
 
-
-# SPI_cursor_open { #spi-spi-cursor-open }
+# SPI_cursor_open
 
 set up a cursor using a statement created with `SPI_prepare`
 
@@ -996,9 +998,9 @@ Portal SPI_cursor_open(const char * name, SPIPlanPtr plan,
 
 
  Pointer to portal containing the cursor. Note there is no error return convention; any error will be reported via `elog`.
+   <a id="spi-spi-cursor-open-with-args"></a>
 
-
-# SPI_cursor_open_with_args { #spi-spi-cursor-open-with-args }
+# SPI_cursor_open_with_args
 
 set up a cursor using a query and parameters
 
@@ -1065,9 +1067,9 @@ Portal SPI_cursor_open_with_args(const char *name,
 
 
  Pointer to portal containing the cursor. Note there is no error return convention; any error will be reported via `elog`.
+   <a id="spi-spi-cursor-open-with-paramlist"></a>
 
-
-# SPI_cursor_open_with_paramlist { #spi-spi-cursor-open-with-paramlist }
+# SPI_cursor_open_with_paramlist
 
 set up a cursor using parameters
 
@@ -1112,9 +1114,9 @@ Portal SPI_cursor_open_with_paramlist(const char *name,
 
 
  Pointer to portal containing the cursor. Note there is no error return convention; any error will be reported via `elog`.
+   <a id="spi-spi-cursor-parse-open"></a>
 
-
-# SPI_cursor_parse_open { #spi-spi-cursor-parse-open }
+# SPI_cursor_parse_open
 
 set up a cursor using a query string and parameters
 
@@ -1174,9 +1176,9 @@ Portal SPI_cursor_parse_open(const char *name,
 
 
  Pointer to portal containing the cursor. Note there is no error return convention; any error will be reported via `elog`.
+   <a id="spi-spi-cursor-find"></a>
 
-
-# SPI_cursor_find { #spi-spi-cursor-find }
+# SPI_cursor_find
 
 find an existing cursor by name
 
@@ -1212,9 +1214,9 @@ Portal SPI_cursor_find(const char * name)
 
 
  Beware that this function can return a `Portal` object that does not have cursor-like properties; for example it might not return tuples. If you simply pass the `Portal` pointer to other SPI functions, they can defend themselves against such cases, but caution is appropriate when directly inspecting the `Portal`.
+   <a id="spi-spi-cursor-fetch"></a>
 
-
-# SPI_cursor_fetch { #spi-spi-cursor-fetch }
+# SPI_cursor_fetch
 
 fetch some rows from a cursor
 
@@ -1256,9 +1258,9 @@ void SPI_cursor_fetch(Portal portal, bool forward, long count)
 
 
  Fetching backward may fail if the cursor's plan was not created with the `CURSOR_OPT_SCROLL` option.
+   <a id="spi-spi-cursor-move"></a>
 
-
-# SPI_cursor_move { #spi-spi-cursor-move }
+# SPI_cursor_move
 
 move a cursor
 
@@ -1294,9 +1296,9 @@ void SPI_cursor_move(Portal portal, bool forward, long count)
 
 
  Moving backward may fail if the cursor's plan was not created with the `CURSOR_OPT_SCROLL` option.
+   <a id="spi-spi-scroll-cursor-fetch"></a>
 
-
-# SPI_scroll_cursor_fetch { #spi-spi-scroll-cursor-fetch }
+# SPI_scroll_cursor_fetch
 
 fetch some rows from a cursor
 
@@ -1342,9 +1344,9 @@ void SPI_scroll_cursor_fetch(Portal portal, FetchDirection direction,
 
 
  Direction values other than `FETCH_FORWARD` may fail if the cursor's plan was not created with the `CURSOR_OPT_SCROLL` option.
+   <a id="spi-spi-scroll-cursor-move"></a>
 
-
-# SPI_scroll_cursor_move { #spi-spi-scroll-cursor-move }
+# SPI_scroll_cursor_move
 
 move a cursor
 
@@ -1390,9 +1392,9 @@ void SPI_scroll_cursor_move(Portal portal, FetchDirection direction,
 
 
  Direction values other than `FETCH_FORWARD` may fail if the cursor's plan was not created with the `CURSOR_OPT_SCROLL` option.
+   <a id="spi-spi-cursor-close"></a>
 
-
-# SPI_cursor_close { #spi-spi-cursor-close }
+# SPI_cursor_close
 
 close a cursor
 
@@ -1419,9 +1421,9 @@ void SPI_cursor_close(Portal portal)
 
 `Portal `portal``
 :   portal containing the cursor
+   <a id="spi-spi-keepplan"></a>
 
-
-# SPI_keepplan { #spi-spi-keepplan }
+# SPI_keepplan
 
 save a prepared statement
 
@@ -1457,9 +1459,9 @@ int SPI_keepplan(SPIPlanPtr plan)
 
 
  The passed-in statement is relocated to permanent storage by means of pointer adjustment (no data copying is required). If you later wish to delete it, use `SPI_freeplan` on it.
+   <a id="spi-spi-saveplan"></a>
 
-
-# SPI_saveplan { #spi-spi-saveplan }
+# SPI_saveplan
 
 save a prepared statement
 
@@ -1504,9 +1506,9 @@ SPIPlanPtr SPI_saveplan(SPIPlanPtr plan)
 
 
  In most cases, `SPI_keepplan` is preferred to this function, since it accomplishes largely the same result without needing to physically copy the prepared statement's data structures.
+   <a id="spi-spi-register-relation"></a>
 
-
-# SPI_register_relation { #spi-spi-register-relation }
+# SPI_register_relation
 
 make an ephemeral named relation available by name in SPI queries
 
@@ -1552,8 +1554,9 @@ int SPI_register_relation(EphemeralNamedRelation enr)
 `SPI_ERROR_REL_DUPLICATE`
 :   if the name specified in the `name` field of `enr` is already registered for this connection
 
+   <a id="spi-spi-unregister-relation"></a>
 
-# SPI_unregister_relation { #spi-spi-unregister-relation }
+# SPI_unregister_relation
 
 remove an ephemeral named relation from the registry
 
@@ -1599,8 +1602,9 @@ int SPI_unregister_relation(const char * name)
 `SPI_ERROR_REL_NOT_FOUND`
 :   if `name` is not found in the registry for the current connection
 
+   <a id="spi-spi-register-trigger-data"></a>
 
-# SPI_register_trigger_data { #spi-spi-register-trigger-data }
+# SPI_register_trigger_data
 
 make ephemeral trigger data available in SPI queries
 

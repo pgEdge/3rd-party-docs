@@ -1,4 +1,6 @@
-## Lock Management { #runtime-config-locks }
+<a id="runtime-config-locks"></a>
+
+## Lock Management
 
 
 <a id="guc-deadlock-timeout"></a>

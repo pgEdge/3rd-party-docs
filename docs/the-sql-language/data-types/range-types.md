@@ -1,4 +1,6 @@
-## Range Types { #rangetypes }
+<a id="rangetypes"></a>
+
+## Range Types
 
 
  Range types are data types representing a range of values of some element type (called the range's *subtype*). For instance, ranges of `timestamp` might be used to represent the ranges of time that a meeting room is reserved. In this case the data type is `tsrange` (short for “timestamp range”), and `timestamp` is the subtype. The subtype must have a total order so that it is well-defined whether element values are within, before, or after a range of values.
@@ -8,9 +10,9 @@
 
 
  Every range type has a corresponding multirange type. A multirange is an ordered list of non-contiguous, non-empty, non-null ranges. Most range operators also work on multiranges, and they have a few functions of their own.
+ <a id="rangetypes-builtin"></a>
 
-
-### Built-in Range and Multirange Types { #rangetypes-builtin }
+### Built-in Range and Multirange Types
 
 
  PostgreSQL comes with the following built-in range types:
@@ -22,9 +24,9 @@
 -  `tstzrange` — Range of `timestamp with time zone`, `tstzmultirange` — corresponding Multirange
 -  `daterange` — Range of `date`, `datemultirange` — corresponding Multirange
  In addition, you can define your own range types; see [sql-createtype](../../reference/sql-commands/create-type.md#sql-createtype) for more information.
+  <a id="rangetypes-examples"></a>
 
-
-### Examples { #rangetypes-examples }
+### Examples
 
 
 ```sql
@@ -49,9 +51,9 @@ SELECT int4range(10, 20) * int4range(15, 25);
 SELECT isempty(numrange(1, 5));
 ```
  See [Range Operators](../functions-and-operators/range-multirange-functions-and-operators.md#range-operators-table) and [Range Functions](../functions-and-operators/range-multirange-functions-and-operators.md#range-functions-table) for complete lists of operators and functions on range types.
+  <a id="rangetypes-inclusivity"></a>
 
-
-### Inclusive and Exclusive Bounds { #rangetypes-inclusivity }
+### Inclusive and Exclusive Bounds
 
 
  Every non-empty range has two bounds, the lower bound and the upper bound. All points between these values are included in the range. An inclusive bound means that the boundary point itself is included in the range as well, while an exclusive bound means that the boundary point is not included in the range.
@@ -61,9 +63,9 @@ SELECT isempty(numrange(1, 5));
 
 
  The functions `lower_inc` and `upper_inc` test the inclusivity of the lower and upper bounds of a range value, respectively.
+  <a id="rangetypes-infinite"></a>
 
-
-### Infinite (Unbounded) Ranges { #rangetypes-infinite }
+### Infinite (Unbounded) Ranges
 
 
  The lower bound of a range can be omitted, meaning that all values less than the upper bound are included in the range, e.g., `(,3]`. Likewise, if the upper bound of the range is omitted, then all values greater than the lower bound are included in the range. If both lower and upper bounds are omitted, all values of the element type are considered to be in the range. Specifying a missing bound as inclusive is automatically converted to exclusive, e.g., `[,]` is converted to `(,)`. You can think of these missing values as +/-infinity, but they are special range type values and are considered to be beyond any range element type's +/-infinity values.
@@ -73,9 +75,9 @@ SELECT isempty(numrange(1, 5));
 
 
  The functions `lower_inf` and `upper_inf` test for infinite lower and upper bounds of a range, respectively.
+  <a id="rangetypes-io"></a>
 
-
-### Range Input/Output { #rangetypes-io }
+### Range Input/Output
 
 
  The input for a range value must follow one of the following patterns:
@@ -135,8 +137,9 @@ SELECT '{[3,7)}'::int4multirange;
 SELECT '{[3,7), [8,9)}'::int4multirange;
 ```
 
+  <a id="rangetypes-construct"></a>
 
-### Constructing Ranges and Multiranges { #rangetypes-construct }
+### Constructing Ranges and Multiranges
 
 
  Each range type has a constructor function with the same name as the range type. Using the constructor function is frequently more convenient than writing a range literal constant, since it avoids the need for extra quoting of the bound values. The constructor function accepts two or three arguments. The two-argument form constructs a range in standard form (lower bound inclusive, upper bound exclusive), while the three-argument form constructs a range with bounds of the form specified by the third argument. The third argument must be one of the strings “`()`”, “`(]`”, “`[)`”, or “`[]`”. For example:
@@ -168,8 +171,9 @@ SELECT nummultirange(numrange(1.0, 14.0));
 SELECT nummultirange(numrange(1.0, 14.0), numrange(20.0, 25.0));
 ```
 
+  <a id="rangetypes-discrete"></a>
 
-### Discrete Range Types { #rangetypes-discrete }
+### Discrete Range Types
 
 
  A discrete range is one whose element type has a well-defined “step”, such as `integer` or `date`. In these types two elements can be said to be adjacent, when there are no valid values between them. This contrasts with continuous ranges, where it's always (or almost always) possible to identify other element values between two given values. For example, a range over the `numeric` type is continuous, as is a range over `timestamp`. (Even though `timestamp` has limited precision, and so could theoretically be treated as discrete, it's better to consider it continuous since the step size is normally not of interest.)
@@ -182,9 +186,9 @@ SELECT nummultirange(numrange(1.0, 14.0), numrange(20.0, 25.0));
 
 
  The built-in range types `int4range`, `int8range`, and `daterange` all use a canonical form that includes the lower bound and excludes the upper bound; that is, `[)`. User-defined range types can use other conventions, however.
+  <a id="rangetypes-defining"></a>
 
-
-### Defining New Range Types { #rangetypes-defining }
+### Defining New Range Types
 
 
  Users can define their own range types. The most common reason to do this is to use ranges over subtypes not provided among the built-in range types. For example, to define a new range type of subtype `float8`:
@@ -231,9 +235,9 @@ SELECT '[11:10, 23:00]'::timerange;
 
 
  See [sql-createtype](../../reference/sql-commands/create-type.md#sql-createtype) for more information about creating range types.
+  <a id="rangetypes-indexing"></a>
 
-
-### Indexing { #rangetypes-indexing }
+### Indexing
 
 
  GiST and SP-GiST indexes can be created for table columns of range types. GiST indexes can be also created for table columns of multirange types. For instance, to create a GiST index:
@@ -246,9 +250,9 @@ CREATE INDEX reservation_idx ON reservation USING GIST (during);
 
 
  In addition, B-tree and hash indexes can be created for table columns of range types. For these index types, basically the only useful range operation is equality. There is a B-tree sort ordering defined for range values, with corresponding `<` and `>` operators, but the ordering is rather arbitrary and not usually useful in the real world. Range types' B-tree and hash support is primarily meant to allow sorting and hashing internally in queries, rather than creation of actual indexes.
+  <a id="rangetypes-constraint"></a>
 
-
-### Constraints on Ranges { #rangetypes-constraint }
+### Constraints on Ranges
 
 
  While `UNIQUE` is a natural constraint for scalar values, it is usually unsuitable for range types. Instead, an exclusion constraint is often more appropriate (see [CREATE TABLE ... CONSTRAINT ... EXCLUDE](../../reference/sql-commands/create-table.md#sql-createtable-exclude)). Exclusion constraints allow the specification of constraints such as “non-overlapping” on a range type. For example:

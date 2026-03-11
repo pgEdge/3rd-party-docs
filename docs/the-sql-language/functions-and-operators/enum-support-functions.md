@@ -1,4 +1,6 @@
-## Enum Support Functions { #functions-enum }
+<a id="functions-enum"></a>
+
+## Enum Support Functions
 
 
  For enum types (described in [Enumerated Types](../data-types/enumerated-types.md#datatype-enum)), there are several functions that allow cleaner programming without hard-coding particular values of an enum type. These are listed in [Enum Support Functions](#functions-enum-table). The examples assume an enum type created as:
@@ -8,8 +10,8 @@
 CREATE TYPE rainbow AS ENUM ('red', 'orange', 'yellow', 'green', 'blue', 'purple');
 ```
 
+ <a id="functions-enum-table"></a>
 
-<a id="functions-enum-table"></a>
 **Table: Enum Support Functions**
 
 <table>

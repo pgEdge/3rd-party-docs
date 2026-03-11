@@ -1,4 +1,6 @@
-## Supported Features { #features-sql-standard }
+<a id="features-sql-standard"></a>
+
+## Supported Features
 
 
 | Identifier | Core? | Description | Comment |

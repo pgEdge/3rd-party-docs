@@ -1,4 +1,6 @@
-## Accessing a Database { #tutorial-accessdb }
+<a id="tutorial-accessdb"></a>
+
+## Accessing a Database
 
 
  Once you have created a database, you can access it by:

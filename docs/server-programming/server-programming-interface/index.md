@@ -1,4 +1,6 @@
-# Server Programming Interface { #spi }
+<a id="spi"></a>
+
+# Server Programming Interface
 
  The *Server Programming Interface* (SPI) gives writers of user-defined C functions the ability to run SQL commands inside their functions or procedures. SPI is a set of interface functions to simplify access to the parser, planner, and executor. SPI also does some memory management.
 

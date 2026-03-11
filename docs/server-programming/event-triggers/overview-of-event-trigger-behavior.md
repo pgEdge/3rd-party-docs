@@ -1,4 +1,6 @@
-## Overview of Event Trigger Behavior { #event-trigger-definition }
+<a id="event-trigger-definition"></a>
+
+## Overview of Event Trigger Behavior
 
 
  An event trigger fires whenever the event with which it is associated occurs in the database in which it is defined. Currently, the only supported events are `login`, `ddl_command_start`, `ddl_command_end`, `table_rewrite` and `sql_drop`. Support for additional events may be added in future releases.

@@ -1,4 +1,6 @@
-## Views and the Rule System { #rules-views }
+<a id="rules-views"></a>
+
+## Views and the Rule System
 
 
  Views in PostgreSQL are implemented using the rule system. A view is basically an empty table (having no actual storage) with an `ON SELECT DO INSTEAD` rule. Conventionally, that rule is named `_RETURN`. So a view like
@@ -19,9 +21,9 @@ CREATE RULE "_RETURN" AS ON SELECT TO myview DO INSTEAD
 
 
  A view can also have other kinds of `DO INSTEAD` rules, allowing `INSERT`, `UPDATE`, or `DELETE` commands to be performed on the view despite its lack of underlying storage. This is discussed further below, in [Updating a View](#rules-views-update).
+ <a id="rules-select"></a>
 
-
-### How `SELECT` Rules Work { #rules-select }
+### How `SELECT` Rules Work
 
 
  Rules `ON SELECT` are applied to all queries as the last step, even if the command given is an `INSERT`, `UPDATE` or `DELETE`. And they have different semantics from rules on the other command types in that they modify the query tree in place instead of creating a new one. So `SELECT` rules are described first.
@@ -269,9 +271,9 @@ SELECT shoe_ready.shoename, shoe_ready.sh_avail,
 
 
  This might look inefficient, but the planner will collapse this into a single-level query tree by “pulling up” the subqueries, and then it will plan the joins just as if we'd written them out manually. So collapsing the query tree is an optimization that the rewrite system doesn't have to concern itself with.
+  <a id="rules-views-non-select"></a>
 
-
-### View Rules in Non-`SELECT` Statements { #rules-views-non-select }
+### View Rules in Non-`SELECT` Statements
 
 
  Two details of the query tree aren't touched in the description of view rules above. These are the command type and the result relation. In fact, the command type is not needed by view rules, but the result relation may affect the way in which the query rewriter works, because special care needs to be taken if the result relation is a view.
@@ -318,18 +320,18 @@ SELECT t1.a, t2.b, t1.ctid FROM t1, t2 WHERE t1.a = t2.a;
 
 
  Knowing all that, we can simply apply view rules in absolutely the same way to any command. There is no difference.
+  <a id="rules-views-power"></a>
 
-
-### The Power of Views in PostgreSQL { #rules-views-power }
+### The Power of Views in PostgreSQL
 
 
  The above demonstrates how the rule system incorporates view definitions into the original query tree. In the second example, a simple `SELECT` from one view created a final query tree that is a join of 4 tables (`unit` was used twice with different names).
 
 
  The benefit of implementing views with the rule system is that the planner has all the information about which tables have to be scanned plus the relationships between these tables plus the restrictive qualifications from the views plus the qualifications from the original query in one single query tree. And this is still the situation when the original query is already a join over views. The planner has to decide which is the best path to execute the query, and the more information the planner has, the better this decision can be. And the rule system as implemented in PostgreSQL ensures that this is all information available about the query up to that point.
+  <a id="rules-views-update"></a>
 
-
-### Updating a View { #rules-views-update }
+### Updating a View
 
 
  What happens if a view is named as the target relation for an `INSERT`, `UPDATE`, `DELETE`, or `MERGE`? Doing the substitutions described above would give a query tree in which the result relation points at a subquery range-table entry, which will not work. There are several ways in which PostgreSQL can support the appearance of updating a view, however. In order of user-experienced complexity those are: automatically substitute in the underlying table for the view, execute a user-defined trigger, or rewrite the query per a user-defined rule. These options are discussed below.

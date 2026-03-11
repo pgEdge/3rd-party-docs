@@ -1,4 +1,6 @@
-## Generic WAL Records { #generic-wal }
+<a id="generic-wal"></a>
+
+## Generic WAL Records
 
 
  Although all built-in WAL-logged modules have their own types of WAL records, there is also a generic WAL record type, which describes changes to pages in a generic way.

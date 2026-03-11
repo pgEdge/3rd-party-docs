@@ -1,10 +1,12 @@
-## dict_xsyn — example synonym full-text search dictionary { #dict-xsyn }
+<a id="dict-xsyn"></a>
+
+## dict_xsyn — example synonym full-text search dictionary
 
 
  `dict_xsyn` (Extended Synonym Dictionary) is an example of an add-on dictionary template for full-text search. This dictionary type replaces words with groups of their synonyms, and so makes it possible to search for a word using any of its synonyms.
+ <a id="dict-xsyn-config"></a>
 
-
-### Configuration { #dict-xsyn-config }
+### Configuration
 
 
  A `dict_xsyn` dictionary accepts the following options:
@@ -31,9 +33,9 @@ word syn1 syn2 syn3
 
 
  Look at `xsyn_sample.rules`, which is installed in `$SHAREDIR/tsearch_data/`, for an example.
+  <a id="dict-xsyn-usage"></a>
 
-
-### Usage { #dict-xsyn-usage }
+### Usage
 
 
  Installing the `dict_xsyn` extension creates a text search template `xsyn_template` and a dictionary `xsyn` based on it, with default parameters. You can alter the parameters, for example

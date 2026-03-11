@@ -1,4 +1,6 @@
-# DROP TRANSFORM { #sql-droptransform }
+<a id="sql-droptransform"></a>
+
+# DROP TRANSFORM
 
 remove a transform
 
@@ -9,9 +11,9 @@ remove a transform
 
 DROP TRANSFORM [ IF EXISTS ] FOR TYPE_NAME LANGUAGE LANG_NAME [ CASCADE | RESTRICT ]
 ```
+ <a id="sql-droptransform-description"></a>
 
-
-## Description { #sql-droptransform-description }
+## Description
 
 
  `DROP TRANSFORM` removes a previously defined transform.
@@ -37,9 +39,9 @@ DROP TRANSFORM [ IF EXISTS ] FOR TYPE_NAME LANGUAGE LANG_NAME [ CASCADE | RESTRI
 
 `RESTRICT`
 :   Refuse to drop the transform if any objects depend on it. This is the default.
+ <a id="sql-droptransform-examples"></a>
 
-
-## Examples { #sql-droptransform-examples }
+## Examples
 
 
  To drop the transform for type `hstore` and language `plpython3u`:
@@ -48,9 +50,9 @@ DROP TRANSFORM [ IF EXISTS ] FOR TYPE_NAME LANGUAGE LANG_NAME [ CASCADE | RESTRI
 
 DROP TRANSFORM FOR hstore LANGUAGE plpython3u;
 ```
+ <a id="sql-droptransform-compat"></a>
 
-
-## Compatibility { #sql-droptransform-compat }
+## Compatibility
 
 
  This form of `DROP TRANSFORM` is a PostgreSQL extension. See [sql-createtransform](create-transform.md#sql-createtransform) for details.

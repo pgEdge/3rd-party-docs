@@ -1,4 +1,6 @@
-## `column_domain_usage` { #infoschema-column-domain-usage }
+<a id="infoschema-column-domain-usage"></a>
+
+## `column_domain_usage`
 
 
  The view `column_domain_usage` identifies all columns (of a table or a view) that make use of some domain defined in the current database and owned by a currently enabled role.

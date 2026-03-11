@@ -1,4 +1,6 @@
-## Combining Queries (`UNION`, `INTERSECT`, `EXCEPT`) { #queries-union }
+<a id="queries-union"></a>
+
+## Combining Queries (`UNION`, `INTERSECT`, `EXCEPT`)
 
 
  The results of two queries can be combined using the set operations union, intersection, and difference. The syntax is

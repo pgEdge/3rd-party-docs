@@ -1,4 +1,6 @@
-## `column_udt_usage` { #infoschema-column-udt-usage }
+<a id="infoschema-column-udt-usage"></a>
+
+## `column_udt_usage`
 
 
  The view `column_udt_usage` identifies all columns that use data types owned by a currently enabled role. Note that in PostgreSQL, built-in data types behave like user-defined types, so they are included here as well. See also [`columns`](columns.md#infoschema-columns) for details.

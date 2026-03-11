@@ -1,4 +1,6 @@
-## `pg_collation` { #catalog-pg-collation }
+<a id="catalog-pg-collation"></a>
+
+## `pg_collation`
 
 
  The catalog `pg_collation` describes the available collations, which are essentially mappings from an SQL name to operating system locale categories. See [Collation Support](../../server-administration/localization/collation-support.md#collation) for more information.

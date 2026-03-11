@@ -1,4 +1,6 @@
-## auto_explain — log execution plans of slow queries { #auto-explain }
+<a id="auto-explain"></a>
+
+## auto_explain — log execution plans of slow queries
 
 
  The `auto_explain` module provides a means for logging execution plans of slow statements automatically, without having to run [sql-explain](../../reference/sql-commands/explain.md#sql-explain) by hand. This is especially helpful for tracking down un-optimized queries in large applications.
@@ -11,9 +13,9 @@
 LOAD 'auto_explain';
 ```
  (You must be superuser to do that.) More typical usage is to preload it into some or all sessions by including `auto_explain` in [session_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-session-preload-libraries) or [shared_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-shared-preload-libraries) in `postgresql.conf`. Then you can track unexpectedly slow queries no matter when they happen. Of course there is a price in overhead for that.
+ <a id="auto-explain-configuration-parameters"></a>
 
-
-### Configuration Parameters { #auto-explain-configuration-parameters }
+### Configuration Parameters
 
 
  There are several configuration parameters that control the behavior of `auto_explain`. Note that the default behavior is to do nothing, so you must set at least `auto_explain.log_min_duration` if you want any results.
@@ -88,9 +90,9 @@ session_preload_libraries = 'auto_explain'
 
 auto_explain.log_min_duration = '3s'
 ```
+  <a id="auto-explain-example"></a>
 
-
-### Example { #auto-explain-example }
+### Example
 
 
 ```
@@ -122,9 +124,9 @@ LOG:  duration: 3.651 ms  plan:
                 ->  Seq Scan on pg_index  (cost=0.00..3.02 rows=92 width=4) (actual time=0.008..3.187 rows=92 loops=1)
                       Filter: indisunique
 ```
+  <a id="auto-explain-author"></a>
 
-
-### Author { #auto-explain-author }
+### Author
 
 
  Takahiro Itagaki [itagaki.takahiro@oss.ntt.co.jp](mailto:itagaki.takahiro@oss.ntt.co.jp)

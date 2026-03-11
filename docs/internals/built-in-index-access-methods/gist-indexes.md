@@ -1,7 +1,9 @@
-## GiST Indexes { #gist }
+<a id="gist"></a>
 
+## GiST Indexes
+   <a id="gist-intro"></a>
 
-### Introduction { #gist-intro }
+### Introduction
 
 
  GiST stands for Generalized Search Tree. It is a balanced, tree-structured access method, that acts as a base template in which to implement arbitrary indexing schemes. B-trees, R-trees and many other indexing schemes can be implemented in GiST.
@@ -11,15 +13,14 @@
 
 
  Some of the information here is derived from the University of California at Berkeley's GiST Indexing Project [web site](http://gist.cs.berkeley.edu/) and Marcel Kornacker's thesis, [Access Methods for Next-Generation Database Systems](http://www.sai.msu.su/~megera/postgres/gist/papers/concurrency/access-methods-for-next-generation.pdf.gz). The GiST implementation in PostgreSQL is primarily maintained by Teodor Sigaev and Oleg Bartunov, and there is more information on their [web site](http://www.sai.msu.su/~megera/postgres/gist/).
+  <a id="gist-builtin-opclasses"></a>
 
-
-### Built-in Operator Classes { #gist-builtin-opclasses }
+### Built-in Operator Classes
 
 
  The core PostgreSQL distribution includes the GiST operator classes shown in [Built-in GiST Operator Classes](#gist-builtin-opclasses-table). (Some of the optional modules described in [Additional Supplied Modules and Extensions](../../appendixes/additional-supplied-modules-and-extensions/index.md#contrib) provide additional GiST operator classes.)
+ <a id="gist-builtin-opclasses-table"></a>
 
-
-<a id="gist-builtin-opclasses-table"></a>
 **Table: Built-in GiST Operator Classes**
 
 <table>
@@ -342,8 +343,9 @@
 CREATE INDEX ON my_table USING GIST (my_inet_column inet_ops);
 ```
 
+  <a id="gist-extensibility"></a>
 
-### Extensibility { #gist-extensibility }
+### Extensibility
 
 
  Traditionally, implementing a new index access method meant a lot of difficult work. It was necessary to understand the inner workings of the database, such as the lock manager and Write-Ahead Log. The GiST interface has a high level of abstraction, requiring the access method implementer only to implement the semantics of the data type being accessed. The GiST layer itself takes care of concurrency, logging and searching the tree structure.
@@ -990,12 +992,12 @@ CREATE INDEX ON my_table USING GIST (my_inet_column inet_ops);
 
 
  All the GiST support methods are normally called in short-lived memory contexts; that is, `CurrentMemoryContext` will get reset after each tuple is processed. It is therefore not very important to worry about pfree'ing everything you palloc. However, in some cases it's useful for a support method to cache data across repeated calls. To do that, allocate the longer-lived data in `fcinfo->flinfo->fn_mcxt`, and keep a pointer to it in `fcinfo->flinfo->fn_extra`. Such data will survive for the life of the index operation (e.g., a single GiST index scan, index build, or index tuple insertion). Be careful to pfree the previous value when replacing a `fn_extra` value, or the leak will accumulate for the duration of the operation.
+  <a id="gist-implementation"></a>
 
+### Implementation
+  <a id="gist-buffering-build"></a>
 
-### Implementation { #gist-implementation }
-
-
-#### GiST Index Build Methods { #gist-buffering-build }
+#### GiST Index Build Methods
 
 
  The simplest way to build a GiST index is just to insert all the entries, one by one. This tends to be slow for large indexes, because if the index tuples are scattered across the index and the index is large enough to not fit in cache, a lot of random I/O will be needed. PostgreSQL supports two alternative methods for initial build of a GiST index: *sorted* and *buffered* modes.
@@ -1011,9 +1013,9 @@ CREATE INDEX ON my_table USING GIST (my_inet_column inet_ops);
 
 
  If sorting is not possible, then by default a GiST index build switches to the buffering method when the index size reaches [effective_cache_size](../../server-administration/server-configuration/query-planning.md#guc-effective-cache-size). Buffering can be manually forced or prevented by the `buffering` parameter to the CREATE INDEX command. The default behavior is good for most cases, but turning buffering off might speed up the build somewhat if the input data is ordered.
+   <a id="gist-examples"></a>
 
-
-### Examples { #gist-examples }
+### Examples
 
 
  The PostgreSQL source distribution includes several examples of index methods implemented using GiST. The core system currently provides text search support (indexing for `tsvector` and `tsquery`) as well as R-Tree equivalent functionality for some of the built-in geometric data types (see `src/backend/access/gist/gistproc.c`). The following `contrib` modules also contain GiST operator classes:

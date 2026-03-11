@@ -1,4 +1,6 @@
-## Release 17.3 { #release-17-3 }
+<a id="release-17-3"></a>
+
+## Release 17.3
 
 
 **Release date:.**
@@ -8,18 +10,18 @@
 
 
  This release contains a variety of fixes from 17.2. For information about new features in major release 17, see [Release 17](release-17.md#release-17).
+ <a id="release-17-3-migration"></a>
 
-
-### Migration to Version 17.3 { #release-17-3-migration }
+### Migration to Version 17.3
 
 
  A dump/restore is not required for those running 17.X.
 
 
  However, if you are upgrading from a version earlier than 17.1, see [Release 17.1](release-17-1.md#release-17-1).
+  <a id="release-17-3-changes"></a>
 
-
-### Changes { #release-17-3-changes }
+### Changes
 
 
 -  Harden `PQescapeString` and allied functions against invalidly-encoded input strings (Andres Freund, Noah Misch) [&sect;](https://postgr.es/c/43a77239d) [&sect;](https://postgr.es/c/7d43ca6fe) [&sect;](https://postgr.es/c/61ad93cdd) [&sect;](https://postgr.es/c/02d4d87ac) [&sect;](https://postgr.es/c/05abb0f83) [&sect;](https://postgr.es/c/85c1fcc65)

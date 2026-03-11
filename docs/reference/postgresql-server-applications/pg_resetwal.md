@@ -1,4 +1,6 @@
-# pg_resetwal { #app-pgresetwal }
+<a id="app-pgresetwal"></a>
+
+# pg_resetwal
 
 reset the write-ahead log and other control information of a PostgreSQL database cluster
 
@@ -11,9 +13,9 @@ pg_resetwal [-f | --force] [-n | --dry-run] [OPTION...] {
      --pgdata
      | DATADIR}
 ```
+ <a id="r1-app-pgresetwal-1"></a>
 
-
-## Description { #r1-app-pgresetwal-1 }
+## Description
 
 
  `pg_resetwal` clears the write-ahead log (WAL) and optionally resets some other control information stored in the `pg_control` file. This function is sometimes needed if these files have become corrupted. It should be used only as a last resort, when the server will not start due to such corruption.

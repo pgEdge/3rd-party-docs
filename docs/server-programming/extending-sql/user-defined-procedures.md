@@ -1,4 +1,6 @@
-## User-Defined Procedures { #xproc }
+<a id="xproc"></a>
+
+## User-Defined Procedures
 
 
  A procedure is a database object similar to a function. The key differences are:

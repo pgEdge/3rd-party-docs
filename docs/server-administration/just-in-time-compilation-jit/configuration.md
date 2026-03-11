@@ -1,4 +1,6 @@
-## Configuration { #jit-configuration }
+<a id="jit-configuration"></a>
+
+## Configuration
 
 
  The configuration variable [jit](../server-configuration/query-planning.md#guc-jit) determines whether JIT compilation is enabled or disabled. If it is enabled, the configuration variables [jit_above_cost](../server-configuration/query-planning.md#guc-jit-above-cost), [jit_inline_above_cost](../server-configuration/query-planning.md#guc-jit-inline-above-cost), and [jit_optimize_above_cost](../server-configuration/query-planning.md#guc-jit-optimize-above-cost) determine whether JIT compilation is performed for a query, and how much effort is spent doing so.

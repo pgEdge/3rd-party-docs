@@ -1,4 +1,6 @@
-## `triggers` { #infoschema-triggers }
+<a id="infoschema-triggers"></a>
+
+## `triggers`
 
 
  The view `triggers` contains all triggers defined in the current database on tables and views that the current user owns or has some privilege other than `SELECT` on.

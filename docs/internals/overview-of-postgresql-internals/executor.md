@@ -1,4 +1,6 @@
-## Executor { #executor }
+<a id="executor"></a>
+
+## Executor
 
 
  The *executor* takes the plan created by the planner/optimizer and recursively processes it to extract the required set of rows. This is essentially a demand-pull pipeline mechanism. Each time a plan node is called, it must deliver one more row, or report that it is done delivering rows.

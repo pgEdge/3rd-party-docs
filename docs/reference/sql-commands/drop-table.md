@@ -1,4 +1,6 @@
-# DROP TABLE { #sql-droptable }
+<a id="sql-droptable"></a>
+
+# DROP TABLE
 
 remove a table
 

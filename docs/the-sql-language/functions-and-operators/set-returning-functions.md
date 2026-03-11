@@ -1,10 +1,11 @@
-## Set Returning Functions { #functions-srf }
+<a id="functions-srf"></a>
+
+## Set Returning Functions
 
 
  This section describes functions that possibly return more than one row. The most widely used functions in this class are series generating functions, as detailed in [Series Generating Functions](#functions-srf-series) and [Subscript Generating Functions](#functions-srf-subscripts). Other, more specialized set-returning functions are described elsewhere in this manual. See [Table Functions](../queries/table-expressions.md#queries-tablefunctions) for ways to combine multiple set-returning functions.
+ <a id="functions-srf-series"></a>
 
-
-<a id="functions-srf-series"></a>
 **Table: Series Generating Functions**
 
 <table>
@@ -106,8 +107,8 @@ SELECT * FROM generate_series('2001-10-22 00:00 -04:00'::timestamptz,
 (11 rows)
 ```
 
+ <a id="functions-srf-subscripts"></a>
 
-<a id="functions-srf-subscripts"></a>
 **Table: Subscript Generating Functions**
 
 <table>

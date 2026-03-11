@@ -1,4 +1,6 @@
-## Building libpq Programs { #libpq-build }
+<a id="libpq-build"></a>
+
+## Building libpq Programs
 
 
  To build (i.e., compile and link) a program using libpq you need to do all of the following things:

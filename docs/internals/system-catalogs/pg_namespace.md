@@ -1,4 +1,6 @@
-## `pg_namespace` { #catalog-pg-namespace }
+<a id="catalog-pg-namespace"></a>
+
+## `pg_namespace`
 
 
  The catalog `pg_namespace` stores namespaces. A namespace is the structure underlying SQL schemas: each namespace can have a separate collection of relations, types, etc. without name conflicts.

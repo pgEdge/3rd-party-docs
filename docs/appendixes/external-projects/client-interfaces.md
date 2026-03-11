@@ -1,4 +1,6 @@
-## Client Interfaces { #external-interfaces }
+<a id="external-interfaces"></a>
+
+## Client Interfaces
 
 
  There are only two client interfaces included in the base PostgreSQL distribution:

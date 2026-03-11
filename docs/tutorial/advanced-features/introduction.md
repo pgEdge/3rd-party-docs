@@ -1,4 +1,6 @@
-## Introduction { #tutorial-advanced-intro }
+<a id="tutorial-advanced-intro"></a>
+
+## Introduction
 
 
  In the previous chapter we have covered the basics of using SQL to store and access your data in PostgreSQL. We will now discuss some more advanced features of SQL that simplify management and prevent loss or corruption of your data. Finally, we will look at some PostgreSQL extensions.

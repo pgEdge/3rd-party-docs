@@ -1,4 +1,6 @@
-# CREATE AGGREGATE { #sql-createaggregate }
+<a id="sql-createaggregate"></a>
+
+# CREATE AGGREGATE
 
 define a new aggregate function
 
@@ -231,9 +233,9 @@ SELECT col FROM tab ORDER BY col USING sortop LIMIT 1;
 
 
  The parameters of `CREATE AGGREGATE` can be written in any order, not just the order illustrated above.
+ <a id="sql-createaggregate-notes"></a>
 
-
-## Notes { #sql-createaggregate-notes }
+## Notes
 
 
  In parameters that specify support function names, you can write a schema name if needed, for example `SFUNC = public.sum`. Do not write argument types there, however — the argument types of the support functions are determined from other parameters.

@@ -1,4 +1,6 @@
-## Database Access from PL/Tcl { #pltcl-dbaccess }
+<a id="pltcl-dbaccess"></a>
+
+## Database Access from PL/Tcl
 
 
  In this section, we follow the usual Tcl convention of using question marks, rather than brackets, to indicate an optional element in a syntax synopsis. The following commands are available to access the database from the body of a PL/Tcl function:

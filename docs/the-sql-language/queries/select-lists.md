@@ -1,10 +1,12 @@
-## Select Lists { #queries-select-lists }
+<a id="queries-select-lists"></a>
+
+## Select Lists
 
 
  As shown in the previous section, the table expression in the `SELECT` command constructs an intermediate virtual table by possibly combining tables, views, eliminating rows, grouping, etc. This table is finally passed on to processing by the *select list*. The select list determines which *columns* of the intermediate table are actually output.
+ <a id="queries-select-list-items"></a>
 
-
-### Select-List Items { #queries-select-list-items }
+### Select-List Items
 
 
  The simplest kind of select list is `*` which emits all columns that the table expression produces. Otherwise, a select list is a comma-separated list of value expressions (as defined in [Value Expressions](../sql-syntax/value-expressions.md#sql-expressions)). For instance, it could be a list of column names:
@@ -32,9 +34,9 @@ SELECT tbl1.*, tbl2.a FROM ...
 
 
  If an arbitrary value expression is used in the select list, it conceptually adds a new virtual column to the returned table. The value expression is evaluated once for each result row, with the row's values substituted for any column references. But the expressions in the select list do not have to reference any columns in the table expression of the `FROM` clause; they can be constant arithmetic expressions, for instance.
+  <a id="queries-column-labels"></a>
 
-
-### Column Labels { #queries-column-labels }
+### Column Labels
 
 
  The entries in the select list can be assigned names for subsequent processing, such as for use in an `ORDER BY` clause or for display by the client application. For example:
@@ -67,9 +69,9 @@ SELECT a "from", b + c AS sum FROM ...
 !!! note
 
     The naming of output columns here is different from that done in the `FROM` clause (see [Table and Column Aliases](table-expressions.md#queries-table-aliases)). It is possible to rename the same column twice, but the name assigned in the select list is the one that will be passed on.
+  <a id="queries-distinct"></a>
 
-
-### `DISTINCT` { #queries-distinct }
+### `DISTINCT`
 
 
  After the select list has been processed, the result table can optionally be subject to the elimination of duplicate rows. The `DISTINCT` key word is written directly after `SELECT` to specify this:

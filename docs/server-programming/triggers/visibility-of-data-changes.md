@@ -1,4 +1,6 @@
-## Visibility of Data Changes { #trigger-datachanges }
+<a id="trigger-datachanges"></a>
+
+## Visibility of Data Changes
 
 
  If you execute SQL commands in your trigger function, and these commands access the table that the trigger is for, then you need to be aware of the data visibility rules, because they determine whether these SQL commands will see the data change that the trigger is fired for. Briefly:

@@ -1,10 +1,11 @@
-## Example Program { #lo-examplesect }
+<a id="lo-examplesect"></a>
+
+## Example Program
 
 
  [Large Objects with libpq Example Program](#lo-example) is a sample program which shows how the large object interface in libpq can be used. Parts of the program are commented out but are left in the source for the reader's benefit. This program can also be found in `src/test/examples/testlo.c` in the source distribution.
+ <a id="lo-example"></a>
 
-
-<a id="lo-example"></a>
 **Example: Large Objects with libpq Example Program**
 
 

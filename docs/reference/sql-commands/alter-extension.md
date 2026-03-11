@@ -1,4 +1,6 @@
-# ALTER EXTENSION { #sql-alterextension }
+<a id="sql-alterextension"></a>
+
+# ALTER EXTENSION
 
 change the definition of an extension
 
@@ -147,7 +149,7 @@ ALTER EXTENSION hstore ADD FUNCTION populate_record(anyelement, hstore);
 
 
  `ALTER EXTENSION` is a PostgreSQL extension.
+ <a id="sql-alterextension-see-also"></a>
 
-
-## See Also { #sql-alterextension-see-also }
+## See Also
   [sql-createextension](create-extension.md#sql-createextension), [sql-dropextension](drop-extension.md#sql-dropextension)

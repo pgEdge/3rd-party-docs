@@ -1,7 +1,9 @@
-## Error Reporting and Logging { #runtime-config-logging }
+<a id="runtime-config-logging"></a>
 
+## Error Reporting and Logging
+   <a id="runtime-config-logging-where"></a>
 
-### Where to Log { #runtime-config-logging-where }
+### Where to Log
 
 
 <a id="guc-log-destination"></a>
@@ -130,9 +132,9 @@
 
 `event_source` (`string`)
 :   When logging to event log is enabled, this parameter determines the program name used to identify PostgreSQL messages in the log. The default is `PostgreSQL`. This parameter can only be set at server start.
+  <a id="runtime-config-logging-when"></a>
 
-
-### When to Log { #runtime-config-logging-when }
+### When to Log
 
 
 <a id="guc-log-min-messages"></a>
@@ -191,9 +193,8 @@
 
 
  [Message Severity Levels](#runtime-config-severity-levels) explains the message severity levels used by PostgreSQL. If logging output is sent to `syslog` or Windows' `eventlog`, the severity levels are translated as shown in the table.
+ <a id="runtime-config-severity-levels"></a>
 
-
-<a id="runtime-config-severity-levels"></a>
 **Table: Message Severity Levels**
 
 | Severity | Usage | `syslog` | `eventlog` |
@@ -206,9 +207,9 @@
 | `LOG` | Reports information of interest to administrators, e.g., checkpoint activity. | `INFO` | `INFORMATION` |
 | `FATAL` | Reports an error that caused the current session to abort. | `ERR` | `ERROR` |
 | `PANIC` | Reports an error that caused all database sessions to abort. | `CRIT` | `ERROR` |
+  <a id="runtime-config-logging-what"></a>
 
-
-### What to Log { #runtime-config-logging-what }
+### What to Log
 
 
 !!! note
@@ -391,9 +392,9 @@
 
 `log_timezone` (`string`)
 :   Sets the time zone used for timestamps written in the server log. Unlike [TimeZone](client-connection-defaults.md#guc-timezone), this value is cluster-wide, so that all sessions will report timestamps consistently. The built-in default is `GMT`, but that is typically overridden in `postgresql.conf`; initdb will install a setting there corresponding to its system environment. See [Time Zones](../../the-sql-language/data-types/date-time-types.md#datatype-timezones) for more information. This parameter can only be set in the `postgresql.conf` file or on the server command line.
+  <a id="runtime-config-logging-csvlog"></a>
 
-
-### Using CSV-Format Log Output { #runtime-config-logging-csvlog }
+### Using CSV-Format Log Output
 
 
  Including `csvlog` in the `log_destination` list provides a convenient way to import log files into a database table. This option emits log lines in comma-separated-values (CSV) format, with these columns: time stamp with milliseconds, user name, database name, process ID, client host:port number, session ID, per-session line number, command tag, session start time, virtual transaction ID, regular transaction ID, error severity, SQLSTATE code, error message, error message detail, hint, internal query that led to the error (if any), character count of the error position therein, error context, user query that led to the error (if any and enabled by `log_min_error_statement`), character count of the error position therein, location of the error in the PostgreSQL source code (if `log_error_verbosity` is set to `verbose`), application name, backend type, process ID of parallel group leader, and query id. Here is a sample table definition for storing CSV-format log output:
@@ -449,8 +450,9 @@ COPY postgres_log FROM '/full/path/to/logfile.csv' WITH csv;
 3.  Set `log_truncate_on_rotation` to `on` so that old log data isn't mixed with the new in the same file.
 4.  The table definition above includes a primary key specification. This is useful to protect against accidentally importing the same information twice. The `COPY` command commits all of the data it imports at one time, so any error will cause the entire import to fail. If you import a partial log file and later import the file again when it is complete, the primary key violation will cause the import to fail. Wait until the log is complete and closed before importing. This procedure will also protect against accidentally importing a partial line that hasn't been completely written, which would also cause `COPY` to fail.
 
+  <a id="runtime-config-logging-jsonlog"></a>
 
-### Using JSON-Format Log Output { #runtime-config-logging-jsonlog }
+### Using JSON-Format Log Output
 
 
  Including `jsonlog` in the `log_destination` list provides a convenient way to import log files into many different programs. This option emits log lines in JSON format.
@@ -460,9 +462,8 @@ COPY postgres_log FROM '/full/path/to/logfile.csv' WITH csv;
 
 
  Each log line is serialized as a JSON object with the set of keys and their associated values shown in [Keys and Values of JSON Log Entries](#runtime-config-logging-jsonlog-keys-values).
+ <a id="runtime-config-logging-jsonlog-keys-values"></a>
 
-
-<a id="runtime-config-logging-jsonlog-keys-values"></a>
 **Table: Keys and Values of JSON Log Entries**
 
 | Key name | Type | Description |
@@ -496,9 +497,9 @@ COPY postgres_log FROM '/full/path/to/logfile.csv' WITH csv;
 | `backend_type` | string | Type of backend |
 | `leader_pid` | number | Process ID of leader for active parallel workers |
 | `query_id` | number | Query ID |
+  <a id="runtime-config-logging-proc-title"></a>
 
-
-### Process Title { #runtime-config-logging-proc-title }
+### Process Title
 
 
  These settings control how process titles of server processes are modified. Process titles are typically viewed using programs like ps or, on Windows, Process Explorer. See [Standard Unix Tools](../monitoring-database-activity/standard-unix-tools.md#monitoring-ps) for details.

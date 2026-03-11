@@ -1,4 +1,6 @@
-## DocBook { #docguide-docbook }
+<a id="docguide-docbook"></a>
+
+## DocBook
 
 
  The documentation sources are written in *DocBook*, which is a markup language defined in XML. In what follows, the terms DocBook and XML are both used, but technically they are not interchangeable.

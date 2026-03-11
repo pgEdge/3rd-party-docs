@@ -1,4 +1,6 @@
-## Publication { #logical-replication-publication }
+<a id="logical-replication-publication"></a>
+
+## Publication
 
 
  A *publication* can be defined on any physical replication primary. The node where a publication is defined is referred to as *publisher*. A publication is a set of changes generated from a table or a group of tables, and might also be described as a change set or replication set. Each publication exists in only one database.

@@ -1,4 +1,6 @@
-# CREATE FOREIGN TABLE { #sql-createforeigntable }
+<a id="sql-createforeigntable"></a>
+
+# CREATE FOREIGN TABLE
 
 define a new foreign table
 
@@ -47,9 +49,9 @@ FROM ( { PARTITION_BOUND_EXPR | MINVALUE | MAXVALUE } [, ...] )
   TO ( { PARTITION_BOUND_EXPR | MINVALUE | MAXVALUE } [, ...] ) |
 WITH ( MODULUS NUMERIC_LITERAL, REMAINDER NUMERIC_LITERAL )
 ```
+ <a id="sql-createforeigntable-description"></a>
 
-
-## Description { #sql-createforeigntable-description }
+## Description
 
 
  `CREATE FOREIGN TABLE` creates a new foreign table in the current database. The table will be owned by the user issuing the command.
@@ -156,9 +158,9 @@ WITH ( MODULUS NUMERIC_LITERAL, REMAINDER NUMERIC_LITERAL )
 
 
  Similar considerations apply to generated columns. Stored generated columns are computed on insert or update on the local PostgreSQL server and handed to the foreign-data wrapper for writing out to the foreign data store, but it is not enforced that a query of the foreign table returns values for stored generated columns that are consistent with the generation expression. Again, this might result in incorrect query results.
+ <a id="sql-createforeigntable-examples"></a>
 
-
-## Examples { #sql-createforeigntable-examples }
+## Examples
 
 
  Create foreign table `films`, which will be accessed through the server `film_server`:
@@ -185,9 +187,9 @@ CREATE FOREIGN TABLE measurement_y2016m07
     PARTITION OF measurement FOR VALUES FROM ('2016-07-01') TO ('2016-08-01')
     SERVER server_07;
 ```
+ <a id="sql-createforeigntable-compatibility"></a>
 
-
-## Compatibility { #sql-createforeigntable-compatibility }
+## Compatibility
 
 
  The `CREATE FOREIGN TABLE` command largely conforms to the SQL standard; however, much as with [`CREATE TABLE`](create-table.md#sql-createtable), `NULL` constraints and zero-column foreign tables are permitted. The ability to specify column default values is also a PostgreSQL extension. Table inheritance, in the form defined by PostgreSQL, is nonstandard.

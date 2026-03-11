@@ -1,4 +1,6 @@
-## `pg_enum` { #catalog-pg-enum }
+<a id="catalog-pg-enum"></a>
+
+## `pg_enum`
 
 
  The `pg_enum` catalog contains entries showing the values and labels for each enum type. The internal representation of a given enum value is actually the OID of its associated row in `pg_enum`.

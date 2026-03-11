@@ -1,19 +1,20 @@
-## cube — a multi-dimensional cube data type { #cube }
+<a id="cube"></a>
+
+## cube — a multi-dimensional cube data type
 
 
  This module implements a data type `cube` for representing multidimensional cubes.
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="cube-syntax"></a>
 
-
-### Syntax { #cube-syntax }
+### Syntax
 
 
  [Cube External Representations](#cube-repr-table) shows the valid external representations for the `cube` type. *x*, *y*, etc. denote floating-point numbers.
+ <a id="cube-repr-table"></a>
 
-
-<a id="cube-repr-table"></a>
 **Table: Cube External Representations**
 
 | External Syntax | Meaning |
@@ -32,21 +33,20 @@
 
 
  White space is ignored on input, so <code>[(</code><em>x</em><code>),(</code><em>y</em><code>)]</code> is the same as <code>[ ( </code><em>x</em><code> ), ( </code><em>y</em><code> ) ]</code>.
+  <a id="cube-precision"></a>
 
-
-### Precision { #cube-precision }
+### Precision
 
 
  Values are stored internally as 64-bit floating point numbers. This means that numbers with more than about 16 significant digits will be truncated.
+  <a id="cube-usage"></a>
 
-
-### Usage { #cube-usage }
+### Usage
 
 
  [Cube Operators](#cube-operators-table) shows the specialized operators provided for type `cube`.
+ <a id="cube-operators-table"></a>
 
-
-<a id="cube-operators-table"></a>
 **Table: Cube Operators**
 
 <table>
@@ -130,9 +130,8 @@ SELECT c FROM test ORDER BY c ~> 3 DESC LIMIT 5;
 
 
  [Cube Functions](#cube-functions-table) shows the available functions.
+ <a id="cube-functions-table"></a>
 
-
-<a id="cube-functions-table"></a>
 **Table: Cube Functions**
 
 <table>
@@ -221,9 +220,9 @@ SELECT c FROM test ORDER BY c ~> 3 DESC LIMIT 5;
 </tr>
 </tbody>
 </table>
+  <a id="cube-defaults"></a>
 
-
-### Defaults { #cube-defaults }
+### Defaults
 
 
  This union:
@@ -273,18 +272,18 @@ cube_contains
 t
 (1 row)
 ```
+  <a id="cube-notes"></a>
 
-
-### Notes { #cube-notes }
+### Notes
 
 
  For examples of usage, see the regression test `sql/cube.sql`.
 
 
  To make it harder for people to break things, there is a limit of 100 on the number of dimensions of cubes. This is set in `cubedata.h` if you need something bigger.
+  <a id="cube-credits"></a>
 
-
-### Credits { #cube-credits }
+### Credits
 
 
  Original author: Gene Selkov, Jr. [selkovjr@mcs.anl.gov](mailto:selkovjr@mcs.anl.gov), Mathematics and Computer Science Division, Argonne National Laboratory.

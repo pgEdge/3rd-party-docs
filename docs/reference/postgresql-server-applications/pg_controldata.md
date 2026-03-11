@@ -1,4 +1,6 @@
-# pg_controldata { #app-pgcontroldata }
+<a id="app-pgcontroldata"></a>
+
+# pg_controldata
 
 display control information of a PostgreSQL database cluster
 
@@ -11,9 +13,9 @@ pg_controldata [OPTION] [
      --pgdata
      | DATADIR]
 ```
+ <a id="r1-app-pgcontroldata-1"></a>
 
-
-## Description { #r1-app-pgcontroldata-1 }
+## Description
 
 
  `pg_controldata` prints information initialized during `initdb`, such as the catalog version. It also shows information about write-ahead logging and checkpoint processing. This information is cluster-wide, and not specific to any one database.

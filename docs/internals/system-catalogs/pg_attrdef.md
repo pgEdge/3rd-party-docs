@@ -1,4 +1,6 @@
-## `pg_attrdef` { #catalog-pg-attrdef }
+<a id="catalog-pg-attrdef"></a>
+
+## `pg_attrdef`
 
 
  The catalog `pg_attrdef` stores column default values. The main information about columns is stored in [`pg_attribute`](pg_attribute.md#catalog-pg-attribute). Only columns for which a default value has been explicitly set will have an entry here.

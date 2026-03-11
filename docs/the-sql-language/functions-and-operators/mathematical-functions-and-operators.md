@@ -1,13 +1,14 @@
-## Mathematical Functions and Operators { #functions-math }
+<a id="functions-math"></a>
+
+## Mathematical Functions and Operators
 
 
  Mathematical operators are provided for many PostgreSQL types. For types without standard mathematical conventions (e.g., date/time types) we describe the actual behavior in subsequent sections.
 
 
  [Mathematical Operators](#functions-math-op-table) shows the mathematical operators that are available for the standard numeric types. Unless otherwise noted, operators shown as accepting *numeric_type* are available for all the types `smallint`, `integer`, `bigint`, `numeric`, `real`, and `double precision`. Operators shown as accepting *integral_type* are available for the types `smallint`, `integer`, and `bigint`. Except where noted, each form of an operator returns the same data type as its argument(s). Calls involving multiple argument data types, such as `integer` `+` `numeric`, are resolved by using the type appearing later in these lists.
+ <a id="functions-math-op-table"></a>
 
-
-<a id="functions-math-op-table"></a>
 **Table: Mathematical Operators**
 
 <table>
@@ -109,9 +110,8 @@
 
 
  [Mathematical Functions](#functions-math-func-table) shows the available mathematical functions. Many of these functions are provided in multiple forms with different argument types. Except where noted, any given form of a function returns the same data type as its argument(s); cross-type cases are resolved in the same way as explained above for operators. The functions working with `double precision` data are mostly implemented on top of the host system's C library; accuracy and behavior in boundary cases can therefore vary depending on the host system.
+ <a id="functions-math-func-table"></a>
 
-
-<a id="functions-math-func-table"></a>
 **Table: Mathematical Functions**
 
 <table>
@@ -169,7 +169,8 @@
 <td>Exponential (<code>e</code> raised to the given power)<br><code>exp(1.0)</code> <code>2.7182818284590452</code></td>
 </tr>
 <tr>
-<td><code>factorial</code> ( <code>bigint</code> ) <code>numeric</code></td>
+<td><a id="function-factorial"></a>
+ `factorial` ( `bigint` ) `numeric`</td>
 <td>Factorial</td>
 <td><code>factorial(5)</code> <code>120</code></td>
 </tr>
@@ -288,9 +289,8 @@
 
 
  [Random Functions](#functions-math-random-table) shows functions for generating random numbers.
+ <a id="functions-math-random-table"></a>
 
-
-<a id="functions-math-random-table"></a>
 **Table: Random Functions**
 
 <table>
@@ -330,9 +330,8 @@
 
 
  [Trigonometric Functions](#functions-math-trig-table) shows the available trigonometric functions. Each of these functions comes in two variants, one that measures angles in radians and one that measures angles in degrees.
+ <a id="functions-math-trig-table"></a>
 
-
-<a id="functions-math-trig-table"></a>
 **Table: Trigonometric Functions**
 
 <table>
@@ -434,9 +433,8 @@
 
 
  [Hyperbolic Functions](#functions-math-hyp-table) shows the available hyperbolic functions.
+ <a id="functions-math-hyp-table"></a>
 
-
-<a id="functions-math-hyp-table"></a>
 **Table: Hyperbolic Functions**
 
 <table>

@@ -1,4 +1,6 @@
-## Tips for Developing in PL/pgSQL { #plpgsql-development-tips }
+<a id="plpgsql-development-tips"></a>
+
+## Tips for Developing in PL/pgSQL
 
 
  One good way to develop in PL/pgSQL is to use the text editor of your choice to create your functions, and in another window, use psql to load and test those functions. If you are doing it this way, it is a good idea to write the function using `CREATE OR REPLACE FUNCTION`. That way you can just reload the file to update the function definition. For example:
@@ -21,9 +23,9 @@ $$ LANGUAGE plpgsql;
 
 
  Another good way to develop in PL/pgSQL is with a GUI database access tool that facilitates development in a procedural language. One example of such a tool is pgAdmin, although others exist. These tools often provide convenient features such as escaping single quotes and making it easier to recreate and debug functions.
+ <a id="plpgsql-quote-tips"></a>
 
-
-### Handling of Quotation Marks { #plpgsql-quote-tips }
+### Handling of Quotation Marks
 
 
  The code of a PL/pgSQL function is specified in `CREATE FUNCTION` as a string literal. If you write the string literal in the ordinary way with surrounding single quotes, then any single quotes inside the function body must be doubled; likewise any backslashes must be doubled (assuming escape string syntax is used). Doubling quotes is at best tedious, and in more complicated cases the code can become downright incomprehensible, because you can easily find yourself needing half a dozen or more adjacent quote marks. It's recommended that you instead write the function body as a “dollar-quoted” string literal (see [Dollar-Quoted String Constants](../../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-dollar-quoting)). In the dollar-quoting approach, you never double any quote marks, but instead take care to choose a different dollar-quoting delimiter for each level of nesting you need. For example, you might write the `CREATE FUNCTION` command as:
@@ -138,9 +140,9 @@ $PROC$ LANGUAGE plpgsql;
         || $$'; end if;$$;
     ```
      where we assume we only need to put single quote marks into `a_output`, because it will be re-quoted before use.
+  <a id="plpgsql-extra-checks"></a>
 
-
-### Additional Compile-Time and Run-Time Checks { #plpgsql-extra-checks }
+### Additional Compile-Time and Run-Time Checks
 
 
  To aid the user in finding instances of simple but common problems before they cause harm, PL/pgSQL provides additional *checks*. When enabled, depending on the configuration, they can be used to emit either a `WARNING` or an `ERROR` during the compilation of a function. A function which has received a `WARNING` can be executed without producing further messages, so you are advised to test in a separate development environment.

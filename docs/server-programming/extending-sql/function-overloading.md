@@ -1,4 +1,6 @@
-## Function Overloading { #xfunc-overload }
+<a id="xfunc-overload"></a>
+
+## Function Overloading
 
 
  More than one function can be defined with the same SQL name, so long as the arguments they take are different. In other words, function names can be *overloaded*. Whether or not you use it, this capability entails security precautions when calling functions in databases where some users mistrust other users; see [Functions](../../the-sql-language/type-conversion/functions.md#typeconv-func). When a query is executed, the server will determine which function to call from the data types and the number of the provided arguments. Overloading can also be used to simulate functions with a variable number of arguments, up to a finite maximum number.

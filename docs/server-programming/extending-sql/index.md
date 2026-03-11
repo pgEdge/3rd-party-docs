@@ -1,4 +1,6 @@
-# Extending SQL { #extend }
+<a id="extend"></a>
+
+# Extending SQL
 
  In the sections that follow, we will discuss how you can extend the PostgreSQL SQL query language by adding:
 

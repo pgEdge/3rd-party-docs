@@ -1,4 +1,6 @@
-# pg_amcheck { #app-pgamcheck }
+<a id="app-pgamcheck"></a>
+
+# pg_amcheck
 
 checks for corruption in one or more PostgreSQL databases
 

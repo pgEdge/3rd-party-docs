@@ -1,4 +1,6 @@
-## `pg_group` { #view-pg-group }
+<a id="view-pg-group"></a>
+
+## `pg_group`
 
 
  The view `pg_group` exists for backwards compatibility: it emulates a catalog that existed in PostgreSQL before version 8.1. It shows the names and members of all roles that are marked as not `rolcanlogin`, which is an approximation to the set of roles that are being used as groups.

@@ -1,4 +1,6 @@
-## Variant Comparison Files { #regress-variant }
+<a id="regress-variant"></a>
+
+## Variant Comparison Files
 
 
  Since some of the tests inherently produce environment-dependent results, we have provided ways to specify alternate “expected” result files. Each regression test can have several comparison files showing possible results on different platforms. There are two independent mechanisms for determining which comparison file is used for each test.

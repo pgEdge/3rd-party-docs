@@ -1,4 +1,6 @@
-# Acronyms { #acronyms }
+<a id="acronyms"></a>
+
+# Acronyms
 
 
  This is a list of acronyms commonly used in the PostgreSQL documentation and in discussions about PostgreSQL.

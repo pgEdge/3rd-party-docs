@@ -1,4 +1,6 @@
-# DROP OWNED { #sql-drop-owned }
+<a id="sql-drop-owned"></a>
+
+# DROP OWNED
 
 remove database objects owned by a database role
 

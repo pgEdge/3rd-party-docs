@@ -1,7 +1,9 @@
-## Version and Platform Compatibility { #runtime-config-compatible }
+<a id="runtime-config-compatible"></a>
 
+## Version and Platform Compatibility
+  <a id="runtime-config-compatible-version"></a>
 
-### Previous PostgreSQL Versions { #runtime-config-compatible-version }
+### Previous PostgreSQL Versions
 
 
 <a id="guc-array-nulls"></a>
@@ -44,9 +46,9 @@
 
 `synchronize_seqscans` (`boolean`)
 :   This allows sequential scans of large tables to synchronize with each other, so that concurrent scans read the same block at about the same time and hence share the I/O workload. When this is enabled, a scan might start in the middle of the table and then “wrap around” the end to cover all rows, so as to synchronize with the activity of scans already in progress. This can result in unpredictable changes in the row ordering returned by queries that have no `ORDER BY` clause. Setting this parameter to `off` ensures the pre-8.3 behavior in which a sequential scan always starts from the beginning of the table. The default is `on`.
+  <a id="runtime-config-compatible-clients"></a>
 
-
-### Platform and Client Compatibility { #runtime-config-compatible-clients }
+### Platform and Client Compatibility
 
 
 <a id="guc-transform-null-equals"></a>

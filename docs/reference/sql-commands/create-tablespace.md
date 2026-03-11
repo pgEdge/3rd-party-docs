@@ -1,4 +1,6 @@
-# CREATE TABLESPACE { #sql-createtablespace }
+<a id="sql-createtablespace"></a>
+
+# CREATE TABLESPACE
 
 define a new tablespace
 

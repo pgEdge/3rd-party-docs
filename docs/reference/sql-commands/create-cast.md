@@ -1,4 +1,6 @@
-# CREATE CAST { #sql-createcast }
+<a id="sql-createcast"></a>
+
+# CREATE CAST
 
 define a new cast
 
@@ -19,9 +21,9 @@ CREATE CAST (SOURCE_TYPE AS TARGET_TYPE)
     WITH INOUT
     [ AS ASSIGNMENT | AS IMPLICIT ]
 ```
+ <a id="sql-createcast-description"></a>
 
-
-## Description { #sql-createcast-description }
+## Description
 
 
  `CREATE CAST` defines a new cast. A cast specifies how to perform a conversion between two data types. For example,
@@ -118,9 +120,9 @@ SELECT CAST ( 2 AS numeric ) + 4.0;
 
 
  A cast to or from a domain type currently has no effect. Casting to or from a domain uses the casts associated with its underlying type.
+ <a id="sql-createcast-notes"></a>
 
-
-## Notes { #sql-createcast-notes }
+## Notes
 
 
  Use [`DROP CAST`](drop-cast.md#sql-dropcast) to remove user-defined casts.
@@ -143,9 +145,9 @@ SELECT CAST ( 2 AS numeric ) + 4.0;
 !!! note
 
     There is also an exception to the exception: I/O conversion casts from composite types to string types cannot be invoked using functional syntax, but must be written in explicit cast syntax (either `CAST` or `::` notation). This exception was added because after the introduction of automatically-provided I/O conversion casts, it was found too easy to accidentally invoke such a cast when a function or column reference was intended.
+ <a id="sql-createcast-examples"></a>
 
-
-## Examples { #sql-createcast-examples }
+## Examples
 
 
  To create an assignment cast from type `bigint` to type `int4` using the function `int4(bigint)`:
@@ -155,15 +157,15 @@ SELECT CAST ( 2 AS numeric ) + 4.0;
 CREATE CAST (bigint AS int4) WITH FUNCTION int4(bigint) AS ASSIGNMENT;
 ```
  (This cast is already predefined in the system.)
+ <a id="sql-createcast-compat"></a>
 
-
-## Compatibility { #sql-createcast-compat }
+## Compatibility
 
 
  The `CREATE CAST` command conforms to the SQL standard, except that SQL does not make provisions for binary-coercible types or extra arguments to implementation functions. `AS IMPLICIT` is a PostgreSQL extension, too.
+ <a id="sql-createcast-seealso"></a>
 
-
-## See Also { #sql-createcast-seealso }
+## See Also
 
 
  [sql-createfunction](create-function.md#sql-createfunction), [sql-createtype](create-type.md#sql-createtype), [sql-dropcast](drop-cast.md#sql-dropcast)

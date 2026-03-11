@@ -1,4 +1,6 @@
-## Indexes on Expressions { #indexes-expressional }
+<a id="indexes-expressional"></a>
+
+## Indexes on Expressions
 
 
  An index column need not be just a column of the underlying table, but can be a function or scalar expression computed from one or more columns of the table. This feature is useful to obtain fast access to tables based on the results of computations.

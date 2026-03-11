@@ -1,4 +1,6 @@
-# CREATE CONVERSION { #sql-createconversion }
+<a id="sql-createconversion"></a>
+
+# CREATE CONVERSION
 
 define a new encoding conversion
 
@@ -10,9 +12,9 @@ define a new encoding conversion
 CREATE [ DEFAULT ] CONVERSION NAME
     FOR SOURCE_ENCODING TO DEST_ENCODING FROM FUNCTION_NAME
 ```
+ <a id="sql-createconversion-description"></a>
 
-
-## Description { #sql-createconversion-description }
+## Description
 
 
  `CREATE CONVERSION` defines a new conversion between two character set encodings.
@@ -57,9 +59,9 @@ CREATE [ DEFAULT ] CONVERSION NAME
     ) RETURNS integer;
     ```
      The return value is the number of source bytes that were successfully converted. If the last argument is false, the function must throw an error on invalid input, and the return value is always equal to the source string length.
+ <a id="sql-createconversion-notes"></a>
 
-
-## Notes { #sql-createconversion-notes }
+## Notes
 
 
  Neither the source nor the destination encoding can be `SQL_ASCII`, as the server's behavior for cases involving the `SQL_ASCII` “encoding” is hard-wired.
@@ -69,9 +71,9 @@ CREATE [ DEFAULT ] CONVERSION NAME
 
 
  The privileges required to create a conversion might be changed in a future release.
+ <a id="sql-createconversion-examples"></a>
 
-
-## Examples { #sql-createconversion-examples }
+## Examples
 
 
  To create a conversion from encoding `UTF8` to `LATIN1` using `myfunc`:
@@ -80,13 +82,13 @@ CREATE [ DEFAULT ] CONVERSION NAME
 
 CREATE CONVERSION myconv FOR 'UTF8' TO 'LATIN1' FROM myfunc;
 ```
+ <a id="sql-createconversion-compat"></a>
 
-
-## Compatibility { #sql-createconversion-compat }
+## Compatibility
 
 
  `CREATE CONVERSION` is a PostgreSQL extension. There is no `CREATE CONVERSION` statement in the SQL standard, but a `CREATE TRANSLATION` statement that is very similar in purpose and syntax.
+ <a id="sql-createconversion-seealso"></a>
 
-
-## See Also { #sql-createconversion-seealso }
+## See Also
   [sql-alterconversion](alter-conversion.md#sql-alterconversion), [sql-createfunction](create-function.md#sql-createfunction), [sql-dropconversion](drop-conversion.md#sql-dropconversion)

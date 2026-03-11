@@ -1,4 +1,6 @@
-# PostgreSQL 17.9 Documentation { #postgres }
+<a id="postgres"></a>
+
+# PostgreSQL 17.9 Documentation
 
 *The PostgreSQL Global Development Group*
 

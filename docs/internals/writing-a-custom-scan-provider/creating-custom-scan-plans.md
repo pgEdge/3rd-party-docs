@@ -1,4 +1,6 @@
-## Creating Custom Scan Plans { #custom-scan-plan }
+<a id="custom-scan-plan"></a>
+
+## Creating Custom Scan Plans
 
 
  A custom scan is represented in a finished plan tree using the following structure:
@@ -26,9 +28,9 @@ typedef struct CustomScan
 
 
  Plan trees must be able to be duplicated using `copyObject`, so all the data stored within the “custom” fields must consist of nodes that that function can handle. Furthermore, custom scan providers cannot substitute a larger structure that embeds a `CustomScan` for the structure itself, as would be possible for a `CustomPath` or `CustomScanState`.
+ <a id="custom-scan-plan-callbacks"></a>
 
-
-### Custom Scan Plan Callbacks { #custom-scan-plan-callbacks }
+### Custom Scan Plan Callbacks
 
 
 ```

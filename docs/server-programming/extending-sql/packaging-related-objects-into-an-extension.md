@@ -1,4 +1,6 @@
-## Packaging Related Objects into an Extension { #extend-extensions }
+<a id="extend-extensions"></a>
+
+## Packaging Related Objects into an Extension
 
 
  A useful extension to PostgreSQL typically includes multiple SQL objects; for example, a new data type will require new functions, new operators, and probably new index operator classes. It is helpful to collect all these objects into a single package to simplify database management. PostgreSQL calls such a package an *extension*. To define an extension, you need at least a *script file* that contains the SQL commands to create the extension's objects, and a *control file* that specifies a few basic properties of the extension itself. If the extension includes C code, there will typically also be a shared library file into which the C code has been built. Once you have these files, a simple [`CREATE EXTENSION`](../../reference/sql-commands/create-extension.md#sql-createextension) command loads the objects into your database.
@@ -23,9 +25,9 @@
 
 
  If an extension's script creates any temporary objects (such as temp tables), those objects are treated as extension members for the remainder of the current session, but are automatically dropped at session end, as any temporary object would be. This is an exception to the rule that extension member objects cannot be dropped without dropping the whole extension.
+ <a id="extend-extensions-files"></a>
 
-
-### Extension Files { #extend-extensions-files }
+### Extension Files
 
 
  The `CREATE EXTENSION` command relies on a control file for each extension, which must be named the same as the extension with a suffix of `.control`, and must be placed in the installation's `SHAREDIR/extension` directory. There must also be at least one SQL script file, which follows the naming pattern <em>extension</em><code>--</code><em>version</em><code>.sql</code> (for example, `foo--1.0.sql` for version `1.0` of extension `foo`). By default, the script file(s) are also placed in the `SHAREDIR/extension` directory; but the control file can specify a different directory for the script file(s).
@@ -96,9 +98,9 @@
 
 
  While the script files can contain any characters allowed by the specified encoding, control files should contain only plain ASCII, because there is no way for PostgreSQL to know what encoding a control file is in. In practice this is only an issue if you want to use non-ASCII characters in the extension's comment. Recommended practice in that case is to not use the control file `comment` parameter, but instead use `COMMENT ON EXTENSION` within a script file to set the comment.
+  <a id="extend-extensions-relocation"></a>
 
-
-### Extension Relocatability { #extend-extensions-relocation }
+### Extension Relocatability
 
 
  Users often wish to load the objects contained in an extension into a different schema than the extension's author had in mind. There are three supported levels of relocatability:
@@ -131,9 +133,9 @@ SET LOCAL search_path TO @extschema@, pg_temp;
 
 
  If an extension references objects belonging to another extension, it is recommended to schema-qualify those references. To do that, write <code>@extschema:</code><em>name</em><code>@</code> in the extension's script file, where *name* is the name of the other extension (which must be listed in this extension's `requires` list). This string will be replaced by the name (double-quoted if necessary) of that extension's target schema. Although this notation avoids the need to make hard-wired assumptions about schema names in the extension's script file, its use may embed the other extension's schema name into the installed objects of this extension. (Typically, that happens when <code>@extschema:</code><em>name</em><code>@</code> is used inside a string literal, such as a function body or a `search_path` setting. In other cases, the object reference is reduced to an OID during parsing and does not require subsequent lookups.) If the other extension's schema name is so embedded, you should prevent the other extension from being relocated after yours is installed, by adding the name of the other extension to this one's `no_relocate` list.
+  <a id="extend-extensions-config-tables"></a>
 
-
-### Extension Configuration Tables { #extend-extensions-config-tables }
+### Extension Configuration Tables
 
 
  Some extensions include configuration tables, which contain data that might be added or changed by the user after installation of the extension. Ordinarily, if a table is part of an extension, neither the table's definition nor its content will be dumped by pg_dump. But that behavior is undesirable for a configuration table; any data changes made by the user need to be included in dumps, or the extension will behave differently after a dump and restore.
@@ -176,9 +178,9 @@ SELECT pg_catalog.pg_extension_config_dump('my_config', 'WHERE NOT standard_entr
 
 
  Sequences associated with `serial` or `bigserial` columns need to be directly marked to dump their state. Marking their parent relation is not enough for this purpose.
+  <a id="extend-extensions-updates"></a>
 
-
-### Extension Updates { #extend-extensions-updates }
+### Extension Updates
 
 
  One advantage of the extension mechanism is that it provides convenient ways to manage updates to the SQL commands that define an extension's objects. This is done by associating a version name or number with each released version of the extension's installation script. In addition, if you want users to be able to update their databases dynamically from one version to the next, you should provide *update scripts* that make the necessary changes to go from one version to the next. Update scripts have names following the pattern <em>extension</em><code>--</code><em>old_version</em><code>--</code><em>target_version</em><code>.sql</code> (for example, `foo--1.0--1.1.sql` contains the commands to modify version `1.0` of extension `foo` into version `1.1`).
@@ -206,18 +208,18 @@ SELECT pg_catalog.pg_extension_config_dump('my_config', 'WHERE NOT standard_entr
 SELECT * FROM pg_extension_update_paths('EXTENSION_NAME');
 ```
  This shows each pair of distinct known version names for the specified extension, together with the update path sequence that would be taken to get from the source version to the target version, or `NULL` if there is no available update path. The path is shown in textual form with `--` separators. You can use `regexp_split_to_array(path,'--')` if you prefer an array format.
+  <a id="extend-extensions-update-scripts"></a>
 
-
-### Installing Extensions Using Update Scripts { #extend-extensions-update-scripts }
+### Installing Extensions Using Update Scripts
 
 
  An extension that has been around for awhile will probably exist in several versions, for which the author will need to write update scripts. For example, if you have released a `foo` extension in versions `1.0`, `1.1`, and `1.2`, there should be update scripts `foo--1.0--1.1.sql` and `foo--1.1--1.2.sql`. Before PostgreSQL 10, it was necessary to also create new script files `foo--1.1.sql` and `foo--1.2.sql` that directly build the newer extension versions, or else the newer versions could not be installed directly, only by installing `1.0` and then updating. That was tedious and duplicative, but now it's unnecessary, because `CREATE EXTENSION` can follow update chains automatically. For example, if only the script files `foo--1.0.sql`, `foo--1.0--1.1.sql`, and `foo--1.1--1.2.sql` are available then a request to install version `1.2` is honored by running those three scripts in sequence. The processing is the same as if you'd first installed `1.0` and then updated to `1.2`. (As with `ALTER EXTENSION UPDATE`, if multiple pathways are available then the shortest is preferred.) Arranging an extension's script files in this style can reduce the amount of maintenance effort needed to produce small updates.
 
 
  If you use secondary (version-specific) control files with an extension maintained in this style, keep in mind that each version needs a control file even if it has no stand-alone installation script, as that control file will determine how the implicit update to that version is performed. For example, if `foo--1.0.control` specifies `requires = 'bar'` but `foo`'s other control files do not, the extension's dependency on `bar` will be dropped when updating from `1.0` to another version.
+  <a id="extend-extensions-security"></a>
 
-
-### Security Considerations for Extensions { #extend-extensions-security }
+### Security Considerations for Extensions
 
 
  Widely-distributed extensions should assume little about the database they occupy. Therefore, it's appropriate to write functions provided by an extension in a secure style that cannot be compromised by search-path-based attacks.
@@ -230,9 +232,9 @@ SELECT * FROM pg_extension_update_paths('EXTENSION_NAME');
 
 
  Advice about writing functions securely is provided in [Security Considerations for Extension Functions](#extend-extensions-security-funcs) below, and advice about writing installation scripts securely is provided in [Security Considerations for Extension Scripts](#extend-extensions-security-scripts).
+ <a id="extend-extensions-security-funcs"></a>
 
-
-#### Security Considerations for Extension Functions { #extend-extensions-security-funcs }
+#### Security Considerations for Extension Functions
 
 
  SQL-language and PL-language functions provided by extensions are at risk of search-path-based attacks when they are executed, since parsing of these functions occurs at execution time not creation time.
@@ -245,9 +247,9 @@ SELECT * FROM pg_extension_update_paths('EXTENSION_NAME');
 
 
  A general-purpose extension usually should not assume that it's been installed into a secure schema, which means that even schema-qualified references to its own objects are not entirely risk-free. For example, if the extension has defined a function `myschema.myfunc(bigint)` then a call such as `myschema.myfunc(42)` could be captured by a hostile function `myschema.myfunc(integer)`. Be careful that the data types of function and operator parameters exactly match the declared argument types, using explicit casts where necessary.
+  <a id="extend-extensions-security-scripts"></a>
 
-
-#### Security Considerations for Extension Scripts { #extend-extensions-security-scripts }
+#### Security Considerations for Extension Scripts
 
 
  An extension installation or update script should be written to guard against search-path-based attacks occurring when the script executes. If an object reference in the script can be made to resolve to some other object than the script author intended, then a compromise might occur immediately, or later when the mis-defined extension object is used.
@@ -260,9 +262,9 @@ SELECT * FROM pg_extension_update_paths('EXTENSION_NAME');
 
 
  Cross-extension references are extremely difficult to make fully secure, partially because of uncertainty about which schema the other extension is in. The hazards are reduced if both extensions are installed in the same schema, because then a hostile object cannot be placed ahead of the referenced extension in the installation-time `search_path`. However, no mechanism currently exists to require that. For now, best practice is to not mark an extension trusted if it depends on another one, unless that other one is always installed in `pg_catalog`.
+   <a id="extend-extensions-example"></a>
 
-
-### Extension Example { #extend-extensions-example }
+### Extension Example
 
 
  Here is a complete example of an SQL-only extension, a two-element composite type that can store any type of value in its slots, which are named “k” and “v”. Non-text values are automatically coerced to text for storage.

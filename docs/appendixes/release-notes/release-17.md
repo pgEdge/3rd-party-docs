@@ -1,13 +1,15 @@
-## Release 17 { #release-17 }
+<a id="release-17"></a>
+
+## Release 17
 
 
 **Release date:.**
 
 
 2024-09-26
+  <a id="release-17-highlights"></a>
 
-
-### Overview { #release-17-highlights }
+### Overview
 
 
  PostgreSQL 17 contains many new features and enhancements, including:
@@ -28,9 +30,9 @@
 
 
  The above items and other new features of PostgreSQL 17 are explained in more detail in the sections below.
+  <a id="release-17-migration"></a>
 
-
-### Migration to Version 17 { #release-17-migration }
+### Migration to Version 17
 
 
  A dump/restore using [app-pg-dumpall](../../reference/postgresql-client-applications/pg_dumpall.md#app-pg-dumpall) or use of [pgupgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade) or logical replication is required for those wishing to migrate data from any previous release. See [Upgrading a PostgreSQL Cluster](../../server-administration/server-setup-and-operation/upgrading-a-postgresql-cluster.md#upgrading) for general information on migrating to new major releases.
@@ -78,18 +80,18 @@
 -  Rename SLRU columns in system view [`pg_stat_slru`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-slru-view) (Alvaro Herrera) [&sect;](https://postgr.es/c/bcdfa5f2e)
 
    The column names accepted by [`pg_stat_reset_slru()`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-stats-funcs-table) are also changed.
+  <a id="release-17-changes"></a>
 
-
-### Changes { #release-17-changes }
+### Changes
 
 
  Below you will find a detailed account of the changes between PostgreSQL 17 and the previous major release.
+ <a id="release-17-server"></a>
 
+#### Server
+  <a id="release-17-optimizer"></a>
 
-#### Server { #release-17-server }
-
-
-##### Optimizer { #release-17-optimizer }
+##### Optimizer
 
 
 -  Allow the optimizer to improve CTE plans by considering the statistics and sort order of columns referenced in earlier row output clauses (Jian Guo, Richard Guo, Tom Lane) [&sect;](https://postgr.es/c/f7816aec2) [&sect;](https://postgr.es/c/a65724dfa)
@@ -110,16 +112,16 @@
 
    This is particularly useful for `ORDER BY` clauses where the first column has a GiST and SP-GiST index, and other columns do not.
 -  Add columns to [`pg_stats`](../../internals/system-views/pg_stats.md#view-pg-stats) to report range-type histogram information (Egor Rogov, Soumyadeep Chakraborty) [&sect;](https://postgr.es/c/bc3c8db8a)
+  <a id="release-17-indexes"></a>
 
-
-##### Indexes { #release-17-indexes }
+##### Indexes
 
 
 -  Allow [btree](../../internals/built-in-index-access-methods/b-tree-indexes.md#btree) indexes to more efficiently find a set of values, such as those supplied by `IN` clauses using constants (Peter Geoghegan, Matthias van de Meent) [&sect;](https://postgr.es/c/5bf748b86)
 -  Allow [BRIN](../../internals/built-in-index-access-methods/brin-indexes.md#brin) indexes to be created using parallel workers (Tomas Vondra, Matthias van de Meent) [&sect;](https://postgr.es/c/b43757171)
+  <a id="release-17-performance"></a>
 
-
-##### General Performance { #release-17-performance }
+##### General Performance
 
 
 -  Allow vacuum to more efficiently remove and freeze tuples (Melanie Plageman, Heikki Linnakangas) [&sect;](https://postgr.es/c/6dbb49026)
@@ -134,9 +136,9 @@
 -  Improve performance of heavily-contended WAL writes (Bharath Rupireddy) [&sect;](https://postgr.es/c/71e4cc6b8)
 -  Improve performance when transferring large blocks of data to a client (Melih Mutlu) [&sect;](https://postgr.es/c/c4ab7da60)
 -  Allow the grouping of file system reads with the new system variable [io_combine_limit](../../server-administration/server-configuration/resource-consumption.md#guc-io-combine-limit) (Thomas Munro, Andres Freund, Melanie Plageman, Nazir Bilal Yavuz) [&sect;](https://postgr.es/c/210622c60) [&sect;](https://postgr.es/c/b7b0f3f27) [&sect;](https://postgr.es/c/041b96802)
+  <a id="release-17-monitoring"></a>
 
-
-##### Monitoring { #release-17-monitoring }
+##### Monitoring
 
 
 -  Create system view [`pg_stat_checkpointer`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-checkpointer-view) (Bharath Rupireddy, Anton A. Melnikov, Alexander Korotkov) [&sect;](https://postgr.es/c/96f052613) [&sect;](https://postgr.es/c/12915a58e) [&sect;](https://postgr.es/c/e820db5b5)
@@ -157,18 +159,18 @@
 -  Allow vacuum to report the progress of index processing (Sami Imseih) [&sect;](https://postgr.es/c/46ebdfe16)
 
    This appears in system view [`pg_stat_progress_vacuum`](../../server-administration/monitoring-database-activity/progress-reporting.md#pg-stat-progress-vacuum-view) columns `indexes_total` and `indexes_processed`.
+  <a id="release-17-privileges"></a>
 
-
-##### Privileges { #release-17-privileges }
+##### Privileges
 
 
 -  Allow granting the right to perform maintenance operations (Nathan Bossart) [&sect;](https://postgr.es/c/ecb0fd337)
 
    The permission can be granted on a per-table basis using the [`MAINTAIN`](../../the-sql-language/data-definition/privileges.md#ddl-priv-maintain) privilege and on a per-role basis via the [`pg_maintain`](../../server-administration/database-roles/predefined-roles.md#predefined-roles) predefined role. Permitted operations are `VACUUM`, `ANALYZE`, `REINDEX`, `REFRESH MATERIALIZED VIEW`, `CLUSTER`, and `LOCK TABLE`.
 -  Allow roles with [`pg_monitor`](../../server-administration/database-roles/predefined-roles.md#predefined-roles) membership to execute [`pg_current_logfile()`](../../the-sql-language/functions-and-operators/system-information-functions-and-operators.md#functions-info-session-table) (Pavlo Golub, Nathan Bossart) [&sect;](https://postgr.es/c/8d8afd48d)
+  <a id="release-17-server-config"></a>
 
-
-##### Server Configuration { #release-17-server-config }
+##### Server Configuration
 
 
 -  Add system variable [allow_alter_system](../../server-administration/server-configuration/version-and-platform-compatibility.md#guc-allow-alter-system) to disallow [`ALTER SYSTEM`](../../reference/sql-commands/alter-system.md#sql-altersystem) (Jelte Fennema-Nio, Gabriele Bartolini) [&sect;](https://postgr.es/c/d3ae2a24f)
@@ -188,9 +190,9 @@
 -  Allow the [SLRU](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-slru-view) cache sizes to be configured (Andrey Borodin, Dilip Kumar, Alvaro Herrera) [&sect;](https://postgr.es/c/53c2a97a9)
 
    The new server variables are [commit_timestamp_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-commit-timestamp-buffers), [multixact_member_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-multixact-member-buffers), [multixact_offset_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-multixact-offset-buffers), [notify_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-notify-buffers), [serializable_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-serializable-buffers), [subtransaction_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-subtransaction-buffers), and [transaction_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-transaction-buffers). [commit_timestamp_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-commit-timestamp-buffers), [transaction_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-transaction-buffers), and [subtransaction_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-subtransaction-buffers) scale up automatically with [shared_buffers](../../server-administration/server-configuration/resource-consumption.md#guc-shared-buffers).
+  <a id="release-17-replication"></a>
 
-
-##### Streaming Replication and Recovery { #release-17-replication }
+##### Streaming Replication and Recovery
 
 
 -  Add support for incremental file system backup (Robert Haas, Jakub Wartak, Tomas Vondra) [&sect;](https://postgr.es/c/dc2123400) [&sect;](https://postgr.es/c/f8ce4ed78)
@@ -207,9 +209,9 @@
 -  Add column [`pg_replication_slots`.`inactive_since`](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots) to report slot inactivity duration (Bharath Rupireddy) [&sect;](https://postgr.es/c/a11f330b5) [&sect;](https://postgr.es/c/6d49c8d4b) [&sect;](https://postgr.es/c/6f132ed69)
 -  Add function [`pg_sync_replication_slots()`](../../the-sql-language/functions-and-operators/system-administration-functions.md#functions-replication-table) to synchronize logical replication slots (Hou Zhijie, Shveta Malik, Ajin Cherian, Peter Eisentraut) [&sect;](https://postgr.es/c/ddd5f4f54) [&sect;](https://postgr.es/c/7a424ece4)
 -  Add the `failover` property to the [replication protocol](../../internals/frontend-backend-protocol/streaming-replication-protocol.md#protocol-replication) (Hou Zhijie, Shveta Malik) [&sect;](https://postgr.es/c/732924043)
+  <a id="release-17-logical"></a>
 
-
-##### [Logical Replication] { #release-17-logical }
+##### [Logical Replication]
 
 
 -  Add application [pg_createsubscriber](../../reference/postgresql-server-applications/pg_createsubscriber.md#app-pgcreatesubscriber) to create a logical replica from a physical standby server (Euler Taveira) [&sect;](https://postgr.es/c/d44032d01)
@@ -235,9 +237,9 @@
 
    The new server variable is [synchronized_standby_slots](../../server-administration/server-configuration/replication.md#guc-synchronized-standby-slots).
 -  Add worker type column to [`pg_stat_subscription`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-subscription) (Peter Smith) [&sect;](https://postgr.es/c/13aeaf079)
+   <a id="release-17-utility"></a>
 
-
-#### Utility Commands { #release-17-utility }
+#### Utility Commands
 
 
 -  Add new [`COPY`](../../reference/sql-commands/copy.md#sql-copy) option `ON_ERROR ignore` to discard error rows (Damir Belyalov, Atsushi Torikoshi, Alex Shulgin, Jian He, Yugo Nagata) [&sect;](https://postgr.es/c/9e2d87011) [&sect;](https://postgr.es/c/b725b7eec) [&sect;](https://postgr.es/c/40bbc8cf0) [&sect;](https://postgr.es/c/a6d0fa5ef)
@@ -263,9 +265,9 @@
 -  Add support for [event triggers](../../reference/sql-commands/create-event-trigger.md#sql-createeventtrigger) that fire at connection time (Konstantin Knizhnik, Mikhail Gribkov) [&sect;](https://postgr.es/c/e83d1b0c4)
 -  Add event trigger support for [`REINDEX`](../../reference/sql-commands/reindex.md#sql-reindex) (Garrett Thornburg, Jian He) [&sect;](https://postgr.es/c/f21848de2)
 -  Allow parenthesized syntax for [`CLUSTER`](../../reference/sql-commands/cluster.md#sql-cluster) options if a table name is not specified (Nathan Bossart) [&sect;](https://postgr.es/c/cdaedfc96)
+ <a id="release-17-explain"></a>
 
-
-##### [`EXPLAIN`] { #release-17-explain }
+##### [`EXPLAIN`]
 
 
 -  Allow `EXPLAIN` to report optimizer memory usage (Ashutosh Bapat) [&sect;](https://postgr.es/c/5de890e36)
@@ -275,18 +277,18 @@
 -  Add local I/O block read/write timing statistics to `EXPLAIN`'s `BUFFERS` output (Nazir Bilal Yavuz) [&sect;](https://postgr.es/c/295c36c0c)
 -  Improve `EXPLAIN`'s display of SubPlan nodes and output parameters (Tom Lane, Dean Rasheed) [&sect;](https://postgr.es/c/fd0398fcb)
 -  Add JIT `deform_counter` details to `EXPLAIN` (Dmitry Dolgov) [&sect;](https://postgr.es/c/5a3423ad8)
+   <a id="release-17-datatypes"></a>
 
-
-#### Data Types { #release-17-datatypes }
+#### Data Types
 
 
 -  Allow the `interval` data type to support `+/-infinity` values (Joseph Koshakow, Jian He, Ashutosh Bapat) [&sect;](https://postgr.es/c/519fc1bd9)
 -  Allow the use of an [`ENUM`](../../the-sql-language/data-types/enumerated-types.md#datatype-enum) added via [`ALTER TYPE`](../../reference/sql-commands/alter-type.md#sql-altertype) if the type was created in the same transaction (Tom Lane) [&sect;](https://postgr.es/c/af1d39584)
 
    This was previously disallowed.
+  <a id="release-17-merge"></a>
 
-
-#### [MERGE] { #release-17-merge }
+#### [MERGE]
 
 
 -  Allow `MERGE` to modify updatable views (Dean Rasheed) [&sect;](https://postgr.es/c/5f2e179bd)
@@ -296,9 +298,9 @@
 -  Allow `MERGE` to use the `RETURNING` clause (Dean Rasheed) [&sect;](https://postgr.es/c/c649fa24a)
 
    The new `RETURNING` function `merge_action()` reports on the DML that generated the row.
+  <a id="release-17-functions"></a>
 
-
-#### Functions { #release-17-functions }
+#### Functions
 
 
 -  Add function [`JSON_TABLE()`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-sqljson-table) to convert `JSON` data to a table representation (Nikita Glukhov, Teodor Sigaev, Oleg Bartunov, Alexander Korotkov, Andrew Dunstan, Amit Langote, Jian He) [&sect;](https://postgr.es/c/de3600452) [&sect;](https://postgr.es/c/bb766cde6)
@@ -331,16 +333,16 @@
 -  Add function [`pg_column_toast_chunk_id()`](../../the-sql-language/functions-and-operators/system-administration-functions.md#functions-admin-dbsize) to return a value's [TOAST](../../internals/database-physical-storage/toast.md#storage-toast) identifier (Yugo Nagata) [&sect;](https://postgr.es/c/d1162cfda)
 
    This returns `NULL` if the value is not stored in TOAST.
+  <a id="release-17-plpgsql"></a>
 
-
-#### [PL/pgSQL] { #release-17-plpgsql }
+#### [PL/pgSQL]
 
 
 -  Allow plpgsql [`%TYPE`](../../server-programming/pl-pgsql-sql-procedural-language/declarations.md#plpgsql-declaration-type) and `%ROWTYPE` specifications to represent arrays of non-array types (Quan Zongliang, Pavel Stehule) [&sect;](https://postgr.es/c/5e8674dc8)
 -  Allow plpgsql `%TYPE` specification to reference composite column (Tom Lane) [&sect;](https://postgr.es/c/43b46aae1)
+  <a id="release-17-libpq"></a>
 
-
-#### [libpq] { #release-17-libpq }
+#### [libpq]
 
 
 -  Add libpq function to change role passwords (Joe Conway) [&sect;](https://postgr.es/c/a7be2a6c2)
@@ -360,9 +362,9 @@
 -  Allow TLS connections without requiring a network round-trip negotiation (Greg Stark, Heikki Linnakangas, Peter Eisentraut, Michael Paquier, Daniel Gustafsson) [&sect;](https://postgr.es/c/d39a49c1e) [&sect;](https://postgr.es/c/91044ae4b) [&sect;](https://postgr.es/c/44e27f0a6) [&sect;](https://postgr.es/c/d80f2ce29) [&sect;](https://postgr.es/c/03a0e0d4b) [&sect;](https://postgr.es/c/17a834a04) [&sect;](https://postgr.es/c/407e0b023) [&sect;](https://postgr.es/c/fb5718f35)
 
    This is enabled with the client-side option [`sslnegotiation=direct`](../../client-interfaces/libpq-c-library/database-connection-control-functions.md#libpq-connect-sslnegotiation), requires ALPN, and only works on PostgreSQL 17 and later servers.
+  <a id="release-17-psql"></a>
 
-
-#### [app-psql] { #release-17-psql }
+#### [app-psql]
 
 
 -  Improve psql display of default and empty privileges (Erik Wienhold, Laurenz Albe) [&sect;](https://postgr.es/c/d1379ebf4)
@@ -377,9 +379,9 @@
 -  Allow psql connection attempts to be canceled with control-C (Tristan Partin) [&sect;](https://postgr.es/c/cafe10565)
 -  Allow psql to honor `FETCH_COUNT` for non-`SELECT` queries (Daniel V&eacute;rit&eacute;) [&sect;](https://postgr.es/c/90f517821)
 -  Improve psql tab completion (Dagfinn Ilmari Manns&aring;ker, Gilles Darold, Christoph Heiss, Steve Chavez, Vignesh C, Pavel Borisov, Jian He) [&sect;](https://postgr.es/c/c951e9042) [&sect;](https://postgr.es/c/d16eb83ab) [&sect;](https://postgr.es/c/cd3424748) [&sect;](https://postgr.es/c/816f10564) [&sect;](https://postgr.es/c/927332b95) [&sect;](https://postgr.es/c/f1bb9284f) [&sect;](https://postgr.es/c/304b6b1a6) [&sect;](https://postgr.es/c/2800fbb2b)
+  <a id="release-17-server-apps"></a>
 
-
-#### Server Applications { #release-17-server-apps }
+#### Server Applications
 
 
 -  Add application [pg_walsummary](../../reference/postgresql-server-applications/pg_walsummary.md#app-pgwalsummary) to dump WAL summary files (Robert Haas) [&sect;](https://postgr.es/c/ee1bfd168)
@@ -417,9 +419,9 @@
 -  Allow [reindexdb](../../reference/postgresql-client-applications/reindexdb.md#app-reindexdb), [vacuumdb](../../reference/postgresql-client-applications/vacuumdb.md#app-vacuumdb), and [clusterdb](../../reference/postgresql-client-applications/clusterdb.md#app-clusterdb) to process objects in all databases matching a pattern (Nathan Bossart) [&sect;](https://postgr.es/c/24c928ad9) [&sect;](https://postgr.es/c/648928c79) [&sect;](https://postgr.es/c/1b49d56d3)
 
    The new option `--all` controls this behavior.
+  <a id="release-17-source-code"></a>
 
-
-#### Source Code { #release-17-source-code }
+#### Source Code
 
 
 -  Remove support for OpenSSL 1.0.1 (Michael Paquier) [&sect;](https://postgr.es/c/8e278b657)
@@ -451,9 +453,9 @@
    This allows shared libraries which are not initialized at startup to coordinate dynamic shared memory access.
 -  Fix `emit_log_hook` to use the same time value as other log records for the same query (Kambam Vinay, Michael Paquier) [&sect;](https://postgr.es/c/2a217c371)
 -  Improve documentation for using `jsonpath` for predicate checks (David Wheeler) [&sect;](https://postgr.es/c/7014c9a4b)
+  <a id="release-17-modules"></a>
 
-
-#### Additional Modules { #release-17-modules }
+#### Additional Modules
 
 
 -  Allow joins with non-join qualifications to be pushed down to foreign servers and custom scans (Richard Guo, Etsuro Fujita) [&sect;](https://postgr.es/c/9e9931d2b)
@@ -483,9 +485,9 @@
 -  Add [pg_buffercache](../additional-supplied-modules-and-extensions/pg_buffercache-inspect-postgresql-buffer-cache-state.md#pgbuffercache) function `pg_buffercache_evict()` to allow shared buffer eviction (Palak Chaturvedi, Thomas Munro) [&sect;](https://postgr.es/c/13453eedd)
 
    This is useful for testing.
+ <a id="release-17-pgstatstatements"></a>
 
-
-##### [pg_stat_statements] { #release-17-pgstatstatements }
+##### [pg_stat_statements]
 
 
 -  Replace [`CALL`](../../reference/sql-commands/call.md#sql-call) parameters in pg_stat_statements with placeholders (Sami Imseih) [&sect;](https://postgr.es/c/11c34b342)
@@ -506,9 +508,9 @@
 
    This argument defaults to `false`.
 -  Add `pg_stat_statements` columns `stats_since` and `minmax_stats_since` to track entry creation time and last min/max reset time (Andrei Zubkov) [&sect;](https://postgr.es/c/dc9f8a798)
+    <a id="release-17-acknowledgements"></a>
 
-
-### Acknowledgments { #release-17-acknowledgements }
+### Acknowledgments
 
 
  The following individuals (in alphabetical order) have contributed to this release as patch authors, committers, reviewers, testers, or reporters of issues.

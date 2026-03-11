@@ -1,4 +1,6 @@
-# DROP AGGREGATE { #sql-dropaggregate }
+<a id="sql-dropaggregate"></a>
+
+# DROP AGGREGATE
 
 remove an aggregate function
 

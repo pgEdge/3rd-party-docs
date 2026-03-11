@@ -1,4 +1,6 @@
-## Basic API Structure for Indexes { #index-api }
+<a id="index-api"></a>
+
+## Basic API Structure for Indexes
 
 
  Each index access method is described by a row in the [`pg_am`](../system-catalogs/pg_am.md#catalog-pg-am) system catalog. The `pg_am` entry specifies a name and a *handler function* for the index access method. These entries can be created and deleted using the [sql-create-access-method](../../reference/sql-commands/create-access-method.md#sql-create-access-method) and [sql-drop-access-method](../../reference/sql-commands/drop-access-method.md#sql-drop-access-method) SQL commands.

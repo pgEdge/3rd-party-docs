@@ -1,4 +1,6 @@
-# DROP TEXT SEARCH PARSER { #sql-droptsparser }
+<a id="sql-droptsparser"></a>
+
+# DROP TEXT SEARCH PARSER
 
 remove a text search parser
 

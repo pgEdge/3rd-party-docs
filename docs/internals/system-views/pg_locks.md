@@ -1,4 +1,6 @@
-## `pg_locks` { #view-pg-locks }
+<a id="view-pg-locks"></a>
+
+## `pg_locks`
 
 
  The view `pg_locks` provides access to information about the locks held by active processes within the database server. See [Concurrency Control](../../the-sql-language/concurrency-control/index.md#mvcc) for more discussion of locking.

@@ -1,4 +1,6 @@
-## Row Estimation Examples { #row-estimation-examples }
+<a id="row-estimation-examples"></a>
+
+## Row Estimation Examples
 
 
  The examples shown below use tables in the PostgreSQL regression test database. Note also that since `ANALYZE` uses random sampling while producing statistics, the results will change slightly after any new `ANALYZE`.

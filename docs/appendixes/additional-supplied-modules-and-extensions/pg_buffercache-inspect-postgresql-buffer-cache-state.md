@@ -1,4 +1,6 @@
-## pg_buffercache — inspect PostgreSQL buffer cache state { #pgbuffercache }
+<a id="pgbuffercache"></a>
+
+## pg_buffercache — inspect PostgreSQL buffer cache state
 
 
  The `pg_buffercache` module provides a means for examining what's happening in the shared buffer cache in real time. It also offers a low-level way to evict data from it, for testing purposes.
@@ -20,15 +22,14 @@
 
 
  The `pg_buffercache_evict()` function allows a block to be evicted from the buffer pool given a buffer identifier. Use of this function is restricted to superusers only.
+ <a id="pgbuffercache-pg-buffercache"></a>
 
-
-### The `pg_buffercache` View { #pgbuffercache-pg-buffercache }
+### The `pg_buffercache` View
 
 
  The definitions of the columns exposed by the view are shown in [`pg_buffercache` Columns](#pgbuffercache-columns).
+ <a id="pgbuffercache-columns"></a>
 
-
-<a id="pgbuffercache-columns"></a>
 **Table: `pg_buffercache` Columns**
 
 <table>
@@ -86,15 +87,14 @@
 
 
  Since buffer manager locks are not taken to copy the buffer state data that the view will display, accessing `pg_buffercache` view has less impact on normal buffer activity but it doesn't provide a consistent set of results across all buffers. However, we ensure that the information of each buffer is self-consistent.
+  <a id="pgbuffercache-summary"></a>
 
-
-### The `pg_buffercache_summary()` Function { #pgbuffercache-summary }
+### The `pg_buffercache_summary()` Function
 
 
  The definitions of the columns exposed by the function are shown in [`pg_buffercache_summary()` Output Columns](#pgbuffercache-summary-columns).
+ <a id="pgbuffercache-summary-columns"></a>
 
-
-<a id="pgbuffercache-summary-columns"></a>
 **Table: `pg_buffercache_summary()` Output Columns**
 
 <table>
@@ -133,15 +133,14 @@
 
 
  Like the `pg_buffercache` view, `pg_buffercache_summary()` does not acquire buffer manager locks. Therefore concurrent activity can lead to minor inaccuracies in the result.
+  <a id="pgbuffercache-usage-counts"></a>
 
-
-### The `pg_buffercache_usage_counts()` Function { #pgbuffercache-usage-counts }
+### The `pg_buffercache_usage_counts()` Function
 
 
  The definitions of the columns exposed by the function are shown in [`pg_buffercache_usage_counts()` Output Columns](#pgbuffercache_usage_counts-columns).
+ <a id="pgbuffercache_usage_counts-columns"></a>
 
-
-<a id="pgbuffercache_usage_counts-columns"></a>
 **Table: `pg_buffercache_usage_counts()` Output Columns**
 
 <table>
@@ -176,15 +175,15 @@
 
 
  Like the `pg_buffercache` view, `pg_buffercache_usage_counts()` does not acquire buffer manager locks. Therefore concurrent activity can lead to minor inaccuracies in the result.
+  <a id="pgbuffercache-pg-buffercache-evict"></a>
 
-
-### The `pg_buffercache_evict()` Function { #pgbuffercache-pg-buffercache-evict }
+### The `pg_buffercache_evict()` Function
 
 
  The `pg_buffercache_evict()` function takes a buffer identifier, as shown in the `bufferid` column of the `pg_buffercache` view. It returns true on success, and false if the buffer wasn't valid, if it couldn't be evicted because it was pinned, or if it became dirty again after an attempt to write it out. The result is immediately out of date upon return, as the buffer might become valid again at any time due to concurrent activity. The function is intended for developer testing only.
+  <a id="pgbuffercache-sample-output"></a>
 
-
-### Sample Output { #pgbuffercache-sample-output }
+### Sample Output
 
 
 ```
@@ -232,9 +231,9 @@ regression=# SELECT * FROM pg_buffercache_usage_counts();
            5 |     164 |   106 |      0
 (6 rows)
 ```
+  <a id="pgbuffercache-authors"></a>
 
-
-### Authors { #pgbuffercache-authors }
+### Authors
 
 
  Mark Kirkwood [markir@paradise.net.nz](mailto:markir@paradise.net.nz)

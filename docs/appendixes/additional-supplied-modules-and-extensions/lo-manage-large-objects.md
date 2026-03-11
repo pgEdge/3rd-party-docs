@@ -1,13 +1,15 @@
-## lo — manage large objects { #lo }
+<a id="lo"></a>
+
+## lo — manage large objects
 
 
  The `lo` module provides support for managing Large Objects (also called LOs or BLOBs). This includes a data type `lo` and a trigger `lo_manage`.
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="lo-rationale"></a>
 
-
-### Rationale { #lo-rationale }
+### Rationale
 
 
  One of the problems with the JDBC driver (and this affects the ODBC driver also), is that the specification assumes that references to BLOBs (Binary Large OBjects) are stored within a table, and if that entry is changed, the associated BLOB is deleted from the database.
@@ -23,9 +25,9 @@
 
 
  The module also provides a data type `lo`, which is really just a *domain* over the `oid` type. This is useful for differentiating database columns that hold large object references from those that are OIDs of other things. You don't have to use the `lo` type to use the trigger, but it may be convenient to use it to keep track of which columns in your database represent large objects that you are managing with the trigger. It is also rumored that the ODBC driver gets confused if you don't use `lo` for BLOB columns.
+  <a id="lo-how-to-use"></a>
 
-
-### How to Use It { #lo-how-to-use }
+### How to Use It
 
 
  Here's a simple example of usage:
@@ -41,9 +43,9 @@ CREATE TRIGGER t_raster BEFORE UPDATE OR DELETE ON image
 
 
  For each column that will contain unique references to large objects, create a `BEFORE UPDATE OR DELETE` trigger, and give the column name as the sole trigger argument. You can also restrict the trigger to only execute on updates to the column by using `BEFORE UPDATE OF` *column_name*. If you need multiple `lo` columns in the same table, create a separate trigger for each one, remembering to give a different name to each trigger on the same table.
+  <a id="lo-limitations"></a>
 
-
-### Limitations { #lo-limitations }
+### Limitations
 
 
 -  Dropping a table will still orphan any objects it contains, as the trigger is not executed. You can avoid this by preceding the `DROP TABLE` with <code>DELETE FROM </code><em>table</em>.
@@ -52,9 +54,9 @@ CREATE TRIGGER t_raster BEFORE UPDATE OR DELETE ON image
 
    If you already have, or suspect you have, orphaned large objects, see the [vacuumlo](../additional-supplied-programs/client-applications.md#vacuumlo) module to help you clean them up. It's a good idea to run vacuumlo occasionally as a back-stop to the `lo_manage` trigger.
 -  Some frontends may create their own tables, and will not create the associated trigger(s). Also, users may not remember (or know) to create the triggers.
+  <a id="lo-author"></a>
 
-
-### Author { #lo-author }
+### Author
 
 
  Peter Mount [peter@retep.org.uk](mailto:peter@retep.org.uk)

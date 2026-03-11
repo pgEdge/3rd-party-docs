@@ -1,4 +1,6 @@
-# ecpg { #app-ecpg }
+<a id="app-ecpg"></a>
+
+# ecpg
 
 embedded SQL C preprocessor
 
@@ -8,9 +10,9 @@ embedded SQL C preprocessor
 ```
 ecpg [OPTION...]FILE...
 ```
+ <a id="app-ecpg-description"></a>
 
-
-## Description { #app-ecpg-description }
+## Description
 
 
  `ecpg` is the embedded SQL preprocessor for C programs. It converts C programs with embedded SQL statements to normal C code by replacing the SQL invocations with special function calls. The output files can then be processed with any C compiler tool chain.

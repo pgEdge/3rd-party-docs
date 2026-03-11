@@ -1,4 +1,6 @@
-## Release 17.5 { #release-17-5 }
+<a id="release-17-5"></a>
+
+## Release 17.5
 
 
 **Release date:.**
@@ -8,9 +10,9 @@
 
 
  This release contains a variety of fixes from 17.4. For information about new features in major release 17, see [Release 17](release-17.md#release-17).
+ <a id="release-17-5-migration"></a>
 
-
-### Migration to Version 17.5 { #release-17-5-migration }
+### Migration to Version 17.5
 
 
  A dump/restore is not required for those running 17.X.
@@ -23,9 +25,9 @@
 
 
  Also, if you are upgrading from a version earlier than 17.1, see [Release 17.1](release-17-1.md#release-17-1).
+  <a id="release-17-5-changes"></a>
 
-
-### Changes { #release-17-5-changes }
+### Changes
 
 
 -  Avoid one-byte buffer overread when examining invalidly-encoded strings that are claimed to be in GB18030 encoding (Noah Misch, Andres Freund) [&sect;](https://postgr.es/c/ec5f89e8a) [&sect;](https://postgr.es/c/617d34908)

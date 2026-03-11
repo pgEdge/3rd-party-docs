@@ -1,4 +1,6 @@
-# ABORT { #sql-abort }
+<a id="sql-abort"></a>
+
+# ABORT
 
 abort the current transaction
 

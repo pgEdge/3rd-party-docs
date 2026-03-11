@@ -1,10 +1,12 @@
-## A Brief History of PostgreSQL { #history }
+<a id="history"></a>
+
+## A Brief History of PostgreSQL
 
 
  The object-relational database management system now known as PostgreSQL is derived from the POSTGRES package written at the University of California at Berkeley. With decades of development behind it, PostgreSQL is now the most advanced open-source database available anywhere.
+ <a id="history-berkeley"></a>
 
-
-### The Berkeley POSTGRES Project { #history-berkeley }
+### The Berkeley POSTGRES Project
 
 
  The POSTGRES project, led by Professor Michael Stonebraker, was sponsored by the Defense Advanced Research Projects Agency (DARPA), the Army Research Office (ARO), the National Science Foundation (NSF), and ESL, Inc. The implementation of POSTGRES began in 1986. The initial concepts for the system were presented in [ston86](../bibliography.md#ston86), and the definition of the initial data model appeared in [rowe87](../bibliography.md#rowe87). The design of the rule system at that time was described in [ston87a](../bibliography.md#ston87a). The rationale and architecture of the storage manager were detailed in [ston87b](../bibliography.md#ston87b).
@@ -17,9 +19,9 @@
 
 
  The size of the external user community nearly doubled during 1993. It became increasingly obvious that maintenance of the prototype code and support was taking up large amounts of time that should have been devoted to database research. In an effort to reduce this support burden, the Berkeley POSTGRES project officially ended with Version 4.2.
+  <a id="history-postgres95"></a>
 
-
-### Postgres95 { #history-postgres95 }
+### Postgres95
 
 
  In 1994, Andrew Yu and Jolly Chen added an SQL language interpreter to POSTGRES. Under a new name, Postgres95 was subsequently released to the web to find its own way in the world as an open-source descendant of the original POSTGRES Berkeley code.
@@ -35,8 +37,9 @@
 -  A short tutorial introducing regular SQL features as well as those of Postgres95 was distributed with the source code.
 -  GNU make (instead of BSD make) was used for the build. Also, Postgres95 could be compiled with an unpatched GCC (data alignment of doubles was fixed).
 
+  <a id="history-postgresql"></a>
 
-### PostgreSQL { #history-postgresql }
+### PostgreSQL
 
 
  By 1996, it became clear that the name “Postgres95” would not stand the test of time. We chose a new name, PostgreSQL, to reflect the relationship between the original POSTGRES and the more recent versions with SQL capability. At the same time, we set the version numbering to start at 6.0, putting the numbers back into the sequence originally begun by the Berkeley POSTGRES project.

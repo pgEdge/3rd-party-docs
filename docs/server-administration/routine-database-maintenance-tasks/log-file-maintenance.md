@@ -1,4 +1,6 @@
-## Log File Maintenance { #logfile-maintenance }
+<a id="logfile-maintenance"></a>
+
+## Log File Maintenance
 
 
  It is a good idea to save the database server's log output somewhere, rather than just discarding it via `/dev/null`. The log output is invaluable when diagnosing problems.

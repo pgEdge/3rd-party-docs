@@ -1,7 +1,9 @@
-## Building and Installation with Autoconf and Make { #install-make }
+<a id="install-make"></a>
 
+## Building and Installation with Autoconf and Make
+  <a id="install-short-make"></a>
 
-### Short Version { #install-short-make }
+### Short Version
 
 
 ```
@@ -20,11 +22,12 @@ su - postgres
 /usr/local/pgsql/bin/psql test
 ```
  The long version is the rest of this section.
+  <a id="install-procedure-make"></a>
+
+### Installation Procedure
 
 
-### Installation Procedure { #install-procedure-make }
-
-
+<a id="configure"></a>
 1.
 
     The first step of the installation procedure is to configure the source tree for your system and choose the options you would like. This is done by running the `configure` script. For a default installation simply enter:
@@ -51,6 +54,7 @@ make
     You can customize the build and installation process by supplying one or more command line options to `configure`. Typically you would customize the install location, or the set of optional features that are built. `configure` has a large number of options, which are described in [`configure` Options](#configure-options).
 
     Also, `configure` responds to certain environment variables, as described in [`configure` Environment Variables](#configure-envvars). These provide additional ways to customize the configuration.
+<a id="build"></a>
 2.
 
     To start the build, type either of:
@@ -95,6 +99,7 @@ build-postgresql:
 make check
 ```
     (This won't work as root; do it as an unprivileged user.) See [Regression Tests](../regression-tests/index.md#regress) for detailed information about interpreting the test results. You can repeat this test at any later time by issuing the same command.
+<a id="install"></a>
 4.
 
 !!! note
@@ -165,15 +170,15 @@ make -C doc install
 
 
  If you perform a build and then discover that your `configure` options were wrong, or if you change anything that `configure` investigates (for example, software upgrades), then it's a good idea to do `make distclean` before reconfiguring and rebuilding. Without this, your changes in configuration choices might not propagate everywhere they need to.
+  <a id="configure-options"></a>
 
-
-### `configure` Options { #configure-options }
+### `configure` Options
 
 
  `configure`'s command line options are explained below. This list is not exhaustive (use `./configure --help` to get one that is). The options not covered here are meant for advanced use-cases such as cross-compilation, and are documented in the standard Autoconf documentation.
+ <a id="configure-options-locations"></a>
 
-
-#### Installation Locations { #configure-options-locations }
+#### Installation Locations
 
 
  These options control where `make install` will put the files. The `--prefix` option is sufficient for most cases. If you have special needs, you can customize the installation subdirectories with the other options described in this section. Beware however that changing the relative locations of the different subdirectories may render the installation non-relocatable, meaning you won't be able to move it after installation. (The `man` and `doc` locations are not affected by this restriction.) For relocatable installs, you might want to use the `--disable-rpath` option described later.
@@ -232,9 +237,9 @@ make -C doc install
 !!! note
 
     Care has been taken to make it possible to install PostgreSQL into shared installation locations (such as `/usr/local/include`) without interfering with the namespace of the rest of the system. First, the string “`/postgresql`” is automatically appended to `datadir`, `sysconfdir`, and `docdir`, unless the fully expanded directory name already contains the string “`postgres`” or “`pgsql`”. For example, if you choose `/usr/local` as prefix, the documentation will be installed in `/usr/local/doc/postgresql`, but if the prefix is `/opt/postgres`, then it will be in `/opt/postgres/doc`. The public C header files of the client interfaces are installed into `includedir` and are namespace-clean. The internal header files and the server header files are installed into private directories under `includedir`. See the documentation of each interface for information about how to access its header files. Finally, a private subdirectory will also be created, if appropriate, under `libdir` for dynamically loadable modules.
+  <a id="configure-options-features"></a>
 
-
-#### PostgreSQL Features { #configure-options-features }
+#### PostgreSQL Features
 
 
  The options described in this section enable building of various PostgreSQL features that are not built by default. Most of these are non-default only because they require additional software, as described in [Requirements](requirements.md#install-requirements).
@@ -301,7 +306,8 @@ make -C doc install
 <a id="configure-option-with-ldap"></a>
 
 `--with-ldap`
-:   Build with LDAP support for authentication and connection parameter lookup (see [LDAP Lookup of Connection Parameters](../../client-interfaces/libpq-c-library/ldap-lookup-of-connection-parameters.md#libpq-ldap) and [LDAP Authentication](../client-authentication/ldap-authentication.md#auth-ldap) for more information). On Unix, this requires the OpenLDAP package to be installed. On Windows, the default WinLDAP library is used. `configure` will check for the required header files and libraries to make sure that your OpenLDAP installation is sufficient before proceeding.
+:   Build with LDAP support for authentication and connection parameter lookup (see <a id="install-ldap-links"></a>
+    [LDAP Lookup of Connection Parameters](../../client-interfaces/libpq-c-library/ldap-lookup-of-connection-parameters.md#libpq-ldap) and [LDAP Authentication](../client-authentication/ldap-authentication.md#auth-ldap) for more information). On Unix, this requires the OpenLDAP package to be installed. On Windows, the default WinLDAP library is used. `configure` will check for the required header files and libraries to make sure that your OpenLDAP installation is sufficient before proceeding.
 <a id="configure-option-with-pam"></a>
 
 `--with-pam`
@@ -349,9 +355,9 @@ make -C doc install
 
 `--with-selinux`
 :   Build with SElinux support, enabling the [sepgsql](../../appendixes/additional-supplied-modules-and-extensions/sepgsql-selinux-label-based-mandatory-access-control-mac-security-module.md#sepgsql) extension.
+  <a id="configure-options-anti-features"></a>
 
-
-#### Anti-Features { #configure-options-anti-features }
+#### Anti-Features
 
 
  The options described in this section allow disabling certain PostgreSQL features that are built by default, but which might need to be turned off if the required software or system features are not available. Using these options is not recommended unless really necessary.
@@ -381,9 +387,9 @@ make -C doc install
 
 `--disable-atomics`
 :   Disable use of CPU atomic operations. This option does nothing on platforms that lack such operations. On platforms that do have them, this will result in poor performance. This option is only useful for debugging or making performance comparisons.
+  <a id="configure-options-build-process"></a>
 
-
-#### Build Process Details { #configure-options-build-process }
+#### Build Process Details
 
 
 <a id="configure-option-with-includes"></a>
@@ -415,9 +421,9 @@ make -C doc install
 
 `--disable-rpath`
 :   Do not mark PostgreSQL's executables to indicate that they should search for shared libraries in the installation's library directory (see `--libdir`). On most platforms, this marking uses an absolute path to the library directory, so that it will be unhelpful if you relocate the installation later. However, you will then need to provide some other way for the executables to find the shared libraries. Typically this requires configuring the operating system's dynamic linker to search the library directory; see [Shared Libraries](post-installation-setup.md#install-post-shlibs) for more detail.
+  <a id="configure-options-misc"></a>
 
-
-#### Miscellaneous { #configure-options-misc }
+#### Miscellaneous
 
 
  It's fairly common, particularly for test builds, to adjust the default port number with `--with-pgport`. The other options in this section are recommended only for advanced users.
@@ -443,9 +449,9 @@ make -C doc install
 
 <code>--with-wal-blocksize=</code><em>BLOCKSIZE</em>
 :   Set the *WAL block size*, in kilobytes. This is the unit of storage and I/O within the WAL log. The default, 8 kilobytes, is suitable for most situations; but other values may be useful in special cases. The value must be a power of 2 between 1 and 64 (kilobytes). Note that changing this value breaks on-disk database compatibility, meaning you cannot use `pg_upgrade` to upgrade to a build with a different WAL block size.
+  <a id="configure-options-devel"></a>
 
-
-#### Developer Options { #configure-options-devel }
+#### Developer Options
 
 
  Most of the options in this section are only of interest for developing or debugging PostgreSQL. They are not recommended for production builds, except for `--enable-debug`, which can be useful to enable detailed bug reports in the unlucky event that you encounter a bug. On platforms supporting DTrace, `--enable-dtrace` may also be reasonable to use in production.
@@ -507,9 +513,9 @@ make -C doc install
 
 `--with-segsize-blocks=SEGSIZE_BLOCKS`
 :   Specify the relation segment size in blocks. If both `--with-segsize` and this option are specified, this option wins. This option is only for developers, to test segment related code.
+   <a id="configure-envvars"></a>
 
-
-### `configure` Environment Variables { #configure-envvars }
+### `configure` Environment Variables
 
 
  In addition to the ordinary command-line options described above, `configure` responds to a number of environment variables. You can specify environment variables on the `configure` command line, for example:

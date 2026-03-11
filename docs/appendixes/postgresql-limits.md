@@ -1,10 +1,11 @@
-# PostgreSQL Limits { #limits }
+<a id="limits"></a>
+
+# PostgreSQL Limits
 
 
  [PostgreSQL Limitations](#limits-table) describes various hard limits of PostgreSQL. However, practical limits, such as performance limitations or available disk space may apply before absolute hard limits are reached.
+ <a id="limits-table"></a>
 
-
-<a id="limits-table"></a>
 **Table: PostgreSQL Limitations**
 
 | Item | Upper Limit | Comment |

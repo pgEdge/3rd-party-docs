@@ -1,4 +1,6 @@
-## `routine_privileges` { #infoschema-routine-privileges }
+<a id="infoschema-routine-privileges"></a>
+
+## `routine_privileges`
 
 
  The view `routine_privileges` identifies all privileges granted on functions to a currently enabled role or by a currently enabled role. There is one row for each combination of function, grantor, and grantee.

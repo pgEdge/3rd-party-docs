@@ -1,4 +1,6 @@
-# DROP USER { #sql-dropuser }
+<a id="sql-dropuser"></a>
+
+# DROP USER
 
 remove a database role
 

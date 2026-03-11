@@ -1,4 +1,6 @@
-# DROP DOMAIN { #sql-dropdomain }
+<a id="sql-dropdomain"></a>
+
+# DROP DOMAIN
 
 remove a domain
 
@@ -31,9 +33,9 @@ DROP DOMAIN [ IF EXISTS ] NAME [, ...] [ CASCADE | RESTRICT ]
 
 `RESTRICT`
 :   Refuse to drop the domain if any objects depend on it. This is the default.
+ <a id="sql-dropdomain-examples"></a>
 
-
-## Examples { #sql-dropdomain-examples }
+## Examples
 
 
  To remove the domain `box`:
@@ -42,13 +44,13 @@ DROP DOMAIN [ IF EXISTS ] NAME [, ...] [ CASCADE | RESTRICT ]
 
 DROP DOMAIN box;
 ```
+ <a id="sql-dropdomain-compatibility"></a>
 
-
-## Compatibility { #sql-dropdomain-compatibility }
+## Compatibility
 
 
  This command conforms to the SQL standard, except for the `IF EXISTS` option, which is a PostgreSQL extension.
+ <a id="sql-dropdomain-see-also"></a>
 
-
-## See Also { #sql-dropdomain-see-also }
+## See Also
   [sql-createdomain](create-domain.md#sql-createdomain), [sql-alterdomain](alter-domain.md#sql-alterdomain)

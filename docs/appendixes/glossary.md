@@ -1,4 +1,6 @@
-# Glossary { #glossary }
+<a id="glossary"></a>
+
+# Glossary
 
 
  This is a list of terms and their meaning in the context of PostgreSQL and relational database systems in general.

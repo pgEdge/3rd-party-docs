@@ -1,4 +1,6 @@
-## Database Roles { #database-roles }
+<a id="database-roles"></a>
+
+## Database Roles
 
 
  Database roles are conceptually completely separate from operating system users. In practice it might be convenient to maintain a correspondence, but this is not required. Database roles are global across a database cluster installation (and not per individual database). To create a role use the [`CREATE ROLE`](../../reference/sql-commands/create-role.md#sql-createrole) SQL command:

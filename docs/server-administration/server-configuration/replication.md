@@ -1,4 +1,6 @@
-## Replication { #runtime-config-replication }
+<a id="runtime-config-replication"></a>
+
+## Replication
 
 
  These settings control the behavior of the built-in *streaming replication* feature (see [Streaming Replication](../high-availability-load-balancing-and-replication/log-shipping-standby-servers.md#streaming-replication)), and the built-in *logical replication* feature (see [Logical Replication](../logical-replication/index.md#logical-replication)).
@@ -8,9 +10,9 @@
 
 
  For *logical replication*, *publishers* (servers that do [`CREATE PUBLICATION`](../../reference/sql-commands/create-publication.md#sql-createpublication)) replicate data to *subscribers* (servers that do [`CREATE SUBSCRIPTION`](../../reference/sql-commands/create-subscription.md#sql-createsubscription)). Servers can also be publishers and subscribers at the same time. Note, the following sections refer to publishers as "senders". For more details about logical replication configuration settings refer to [Configuration Settings](../logical-replication/configuration-settings.md#logical-replication-config).
+ <a id="runtime-config-replication-sender"></a>
 
-
-### Sending Servers { #runtime-config-replication-sender }
+### Sending Servers
 
 
  These parameters can be set on any server that is to send replication data to one or more standby servers. The primary is always a sending server, so these parameters must always be set on the primary. The role and meaning of these parameters does not change after a standby becomes the primary.
@@ -52,9 +54,9 @@
 
 `track_commit_timestamp` (`boolean`)
 :   Record commit time of transactions. This parameter can only be set at server start. The default value is `off`.
+  <a id="runtime-config-replication-primary"></a>
 
-
-### Primary Server { #runtime-config-replication-primary }
+### Primary Server
 
 
  These parameters can be set on the primary server that is to send replication data to one or more standby servers. Note that in addition to these parameters, [wal_level](write-ahead-log.md#guc-wal-level) must be set appropriately on the primary server, and optionally WAL archiving can be enabled as well (see [Archiving](write-ahead-log.md#runtime-config-wal-archiving)). The values of these parameters on standby servers are irrelevant, although you may wish to set them there in preparation for the possibility of a standby becoming the primary.
@@ -114,9 +116,9 @@
 
 
      The standbys corresponding to the physical replication slots in `synchronized_standby_slots` must configure `sync_replication_slots = true` so they can receive logical failover slot changes from the primary.
+  <a id="runtime-config-replication-standby"></a>
 
-
-### Standby Servers { #runtime-config-replication-standby }
+### Standby Servers
 
 
  These settings control the behavior of a [standby server](../high-availability-load-balancing-and-replication/log-shipping-standby-servers.md#standby-server-operation) that is to receive replication data. Their values on the primary server are irrelevant.
@@ -219,9 +221,9 @@
 
 
      It is disabled by default. This parameter can only be set in the `postgresql.conf` file or on the server command line.
+  <a id="runtime-config-replication-subscriber"></a>
 
-
-### Subscribers { #runtime-config-replication-subscriber }
+### Subscribers
 
 
  These settings control the behavior of a logical replication subscriber. Their values on the publisher are irrelevant. See [Configuration Settings](../logical-replication/configuration-settings.md#logical-replication-config) for more details.

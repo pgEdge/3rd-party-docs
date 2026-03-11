@@ -1,10 +1,12 @@
-## pageinspect — low-level inspection of database pages { #pageinspect }
+<a id="pageinspect"></a>
+
+## pageinspect — low-level inspection of database pages
 
 
  The `pageinspect` module provides functions that allow you to inspect the contents of database pages at a low level, which is useful for debugging purposes. All of these functions may be used only by superusers.
+ <a id="pageinspect-general-funcs"></a>
 
-
-### General Functions { #pageinspect-general-funcs }
+### General Functions
 
 
 `get_raw_page(relname text, fork text, blkno bigint) returns bytea`
@@ -60,9 +62,9 @@
 
 
      See `src/backend/storage/freespace/README` for more information on the structure of an FSM page.
+  <a id="pageinspect-heap-funcs"></a>
 
-
-### Heap Functions { #pageinspect-heap-funcs }
+### Heap Functions
 
 
 `heap_page_items(page bytea) returns setof record`
@@ -120,9 +122,9 @@
 
 
      See `src/include/access/htup_details.h` for explanations of the flag names returned.
+  <a id="pageinspect-b-tree-funcs"></a>
 
-
-### B-Tree Functions { #pageinspect-b-tree-funcs }
+### B-Tree Functions
 
 
 `bt_metap(relname text) returns record`
@@ -258,9 +260,9 @@
     (13 rows)
     ```
      All the other details are the same as explained in the previous item.
+  <a id="pageinspect-brin-funcs"></a>
 
-
-### BRIN Functions { #pageinspect-brin-funcs }
+### BRIN Functions
 
 
 `brin_page_type(page bytea) returns text`
@@ -318,9 +320,9 @@
             139 |      8 |      2 | f        | f        | f           | f     | {177 .. 264}
     ```
      The returned columns correspond to the fields in the `BrinMemTuple` and `BrinValues` structs. See `src/include/access/brin_tuple.h` for details.
+  <a id="pageinspect-gin-funcs"></a>
 
-
-### GIN Functions { #pageinspect-gin-funcs }
+### GIN Functions
 
 
 `gin_metapage_info(page bytea) returns record`
@@ -372,9 +374,9 @@
      (173,44)  |    197 | {"(173,44)","(173,45)","(173,46)","(173,47)","(173,48)"}
     (7 rows)
     ```
+  <a id="pageinspect-gist-funcs"></a>
 
-
-### GiST Functions { #pageinspect-gist-funcs }
+### GiST Functions
 
 
 `gist_page_opaque_info(page bytea) returns record`
@@ -423,9 +425,9 @@
               7 | (7,65535) |      40 | f    | \x00000700ffff28000000000000408f4000000000​00408f400000000000288f400000000000288f40
     (7 rows)
     ```
+  <a id="pageinspect-hash-funcs"></a>
 
-
-### Hash Functions { #pageinspect-hash-funcs }
+### Hash Functions
 
 
 `hash_page_type(page bytea) returns text`

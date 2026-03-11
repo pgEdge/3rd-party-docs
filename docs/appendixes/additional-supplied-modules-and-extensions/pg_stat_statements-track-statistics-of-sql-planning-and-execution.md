@@ -1,4 +1,6 @@
-## pg_stat_statements — track statistics of SQL planning and execution { #pgstatstatements }
+<a id="pgstatstatements"></a>
+
+## pg_stat_statements — track statistics of SQL planning and execution
 
 
  The `pg_stat_statements` module provides a means for tracking planning and execution statistics of all SQL statements executed by a server.
@@ -8,15 +10,14 @@
 
 
  When `pg_stat_statements` is active, it tracks statistics across all databases of the server. To access and manipulate these statistics, the module provides views `pg_stat_statements` and `pg_stat_statements_info`, and the utility functions `pg_stat_statements_reset` and `pg_stat_statements`. These are not available globally but can be enabled for a specific database with `CREATE EXTENSION pg_stat_statements`.
+ <a id="pgstatstatements-pg-stat-statements"></a>
 
-
-### The `pg_stat_statements` View { #pgstatstatements-pg-stat-statements }
+### The `pg_stat_statements` View
 
 
  The statistics gathered by the module are made available via a view named `pg_stat_statements`. This view contains one row for each distinct combination of database ID, user ID, query ID and whether it's a top-level statement or not (up to the maximum number of distinct statements that the module can track). The columns of the view are shown in [`pg_stat_statements` Columns](#pgstatstatements-columns).
+ <a id="pgstatstatements-columns"></a>
 
-
-<a id="pgstatstatements-columns"></a>
 **Table: `pg_stat_statements` Columns**
 
 <table>
@@ -266,15 +267,14 @@
 
 
  `plans` and `calls` aren't always expected to match because planning and execution statistics are updated at their respective end phase, and only for successful operations. For example, if a statement is successfully planned but fails during the execution phase, only its planning statistics will be updated. If planning is skipped because a cached plan is used, only its execution statistics will be updated.
+  <a id="pgstatstatements-pg-stat-statements-info"></a>
 
-
-### The `pg_stat_statements_info` View { #pgstatstatements-pg-stat-statements-info }
+### The `pg_stat_statements_info` View
 
 
  The statistics of the `pg_stat_statements` module itself are tracked and made available via a view named `pg_stat_statements_info`. This view contains only a single row. The columns of the view are shown in [`pg_stat_statements_info` Columns](#pgstatstatementsinfo-columns).
+ <a id="pgstatstatementsinfo-columns"></a>
 
-
-<a id="pgstatstatementsinfo-columns"></a>
 **Table: `pg_stat_statements_info` Columns**
 
 <table>
@@ -295,9 +295,9 @@
 </tr>
 </tbody>
 </table>
+  <a id="pgstatstatements-funcs"></a>
 
-
-### Functions { #pgstatstatements-funcs }
+### Functions
 
 
 `pg_stat_statements_reset(userid Oid, dbid Oid, queryid bigint, minmax_only boolean) returns timestamp with time zone`
@@ -305,9 +305,9 @@
 
 `pg_stat_statements(showtext boolean) returns setof record`
 :   The `pg_stat_statements` view is defined in terms of a function also named `pg_stat_statements`. It is possible for clients to call the `pg_stat_statements` function directly, and by specifying `showtext := false` have query text be omitted (that is, the `OUT` argument that corresponds to the view's `query` column will return nulls). This feature is intended to support external tools that might wish to avoid the overhead of repeatedly retrieving query texts of indeterminate length. Such tools can instead cache the first query text observed for each entry themselves, since that is all `pg_stat_statements` itself does, and then retrieve query texts only as needed. Since the server stores query texts in a file, this approach may reduce physical I/O for repeated examination of the `pg_stat_statements` data.
+  <a id="pgstatstatements-config-params"></a>
 
-
-### Configuration Parameters { #pgstatstatements-config-params }
+### Configuration Parameters
 
 
 `pg_stat_statements.max` (`integer`)
@@ -341,8 +341,9 @@ pg_stat_statements.max = 10000
 pg_stat_statements.track = all
 ```
 
+  <a id="pgstatstatements-sample-output"></a>
 
-### Sample Output { #pgstatstatements-sample-output }
+### Sample Output
 
 
 ```
@@ -445,9 +446,9 @@ total_exec_time | 0
 rows            | 0
 hit_percent     |
 ```
+  <a id="pgstatstatements-authors"></a>
 
-
-### Authors { #pgstatstatements-authors }
+### Authors
 
 
  Takahiro Itagaki [itagaki.takahiro@oss.ntt.co.jp](mailto:itagaki.takahiro@oss.ntt.co.jp). Query normalization added by Peter Geoghegan [peter@2ndquadrant.com](mailto:peter@2ndquadrant.com).

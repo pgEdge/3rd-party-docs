@@ -1,4 +1,6 @@
-# Logical Replication { #logical-replication }
+<a id="logical-replication"></a>
+
+# Logical Replication
 
  Logical replication is a method of replicating data objects and their changes, based upon their replication identity (usually a primary key). We use the term logical in contrast to physical replication, which uses exact block addresses and byte-by-byte replication. PostgreSQL supports both mechanisms concurrently, see [High Availability, Load Balancing, and Replication](../high-availability-load-balancing-and-replication/index.md#high-availability). Logical replication allows fine-grained control over both data replication and security.
 

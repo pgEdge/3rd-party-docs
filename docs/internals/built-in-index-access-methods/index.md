@@ -1,4 +1,6 @@
-# Built-in Index Access Methods { #indextypes }
+<a id="indextypes"></a>
+
+# Built-in Index Access Methods
 
 - [B-Tree Indexes](b-tree-indexes.md#btree)
 - [GiST Indexes](gist-indexes.md#gist)

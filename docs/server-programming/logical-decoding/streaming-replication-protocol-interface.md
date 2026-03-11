@@ -1,4 +1,6 @@
-## Streaming Replication Protocol Interface { #logicaldecoding-walsender }
+<a id="logicaldecoding-walsender"></a>
+
+## Streaming Replication Protocol Interface
 
 
  The commands

@@ -1,4 +1,6 @@
-# DROP DATABASE { #sql-dropdatabase }
+<a id="sql-dropdatabase"></a>
+
+# DROP DATABASE
 
 remove a database
 

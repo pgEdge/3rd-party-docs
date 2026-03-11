@@ -1,4 +1,6 @@
-## Release 17.6 { #release-17-6 }
+<a id="release-17-6"></a>
+
+## Release 17.6
 
 
 **Release date:.**
@@ -8,9 +10,9 @@
 
 
  This release contains a variety of fixes from 17.5. For information about new features in major release 17, see [Release 17](release-17.md#release-17).
+ <a id="release-17-6-migration"></a>
 
-
-### Migration to Version 17.6 { #release-17-6-migration }
+### Migration to Version 17.6
 
 
  A dump/restore is not required for those running 17.X.
@@ -20,9 +22,9 @@
 
 
  Also, if you are upgrading from a version earlier than 17.5, see [Release 17.5](release-17-5.md#release-17-5).
+  <a id="release-17-6-changes"></a>
 
-
-### Changes { #release-17-6-changes }
+### Changes
 
 
 -  Tighten security checks in planner estimation functions (Dean Rasheed) [&sect;](https://postgr.es/c/a85eddab2)

@@ -1,4 +1,6 @@
-## `pg_largeobject` { #catalog-pg-largeobject }
+<a id="catalog-pg-largeobject"></a>
+
+## `pg_largeobject`
 
 
  The catalog `pg_largeobject` holds the data making up “large objects”. A large object is identified by an OID assigned when it is created. Each large object is broken into segments or “pages” small enough to be conveniently stored as rows in `pg_largeobject`. The amount of data per page is defined to be `LOBLKSIZE` (which is currently `BLCKSZ/4`, or typically 2 kB).

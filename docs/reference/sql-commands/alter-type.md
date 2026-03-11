@@ -1,4 +1,6 @@
-# ALTER TYPE { #sql-altertype }
+<a id="sql-altertype"></a>
+
+# ALTER TYPE
 
 change the definition of a type
 
@@ -198,7 +200,7 @@ ALTER TYPE mytype SET (
 
 
  The variants to add and drop attributes are part of the SQL standard; the other variants are PostgreSQL extensions.
+ <a id="sql-altertype-see-also"></a>
 
-
-## See Also { #sql-altertype-see-also }
+## See Also
   [sql-createtype](create-type.md#sql-createtype), [sql-droptype](drop-type.md#sql-droptype)

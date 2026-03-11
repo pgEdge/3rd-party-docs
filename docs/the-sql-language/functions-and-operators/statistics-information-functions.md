@@ -1,10 +1,12 @@
-## Statistics Information Functions { #functions-statistics }
+<a id="functions-statistics"></a>
+
+## Statistics Information Functions
 
 
  PostgreSQL provides a function to inspect complex statistics defined using the `CREATE STATISTICS` command.
+ <a id="functions-statistics-mcv"></a>
 
-
-### Inspecting MCV Lists { #functions-statistics-mcv }
+### Inspecting MCV Lists
 
 
 ```

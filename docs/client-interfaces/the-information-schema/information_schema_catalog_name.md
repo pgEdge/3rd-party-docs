@@ -1,4 +1,6 @@
-## `information_schema_catalog_name` { #infoschema-information-schema-catalog-name }
+<a id="infoschema-information-schema-catalog-name"></a>
+
+## `information_schema_catalog_name`
 
 
  `information_schema_catalog_name` is a table that always contains one row and one column containing the name of the current database (current catalog, in SQL terminology).

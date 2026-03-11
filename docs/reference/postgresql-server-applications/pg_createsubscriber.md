@@ -1,4 +1,6 @@
-# pg_createsubscriber { #app-pgcreatesubscriber }
+<a id="app-pgcreatesubscriber"></a>
+
+# pg_createsubscriber
 
 convert a physical replica into a new logical replica
 

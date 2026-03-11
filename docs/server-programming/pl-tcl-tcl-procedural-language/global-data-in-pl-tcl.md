@@ -1,4 +1,6 @@
-## Global Data in PL/Tcl { #pltcl-global }
+<a id="pltcl-global"></a>
+
+## Global Data in PL/Tcl
 
 
  Sometimes it is useful to have some global data that is held between two calls to a function or is shared between different functions. This is easily done in PL/Tcl, but there are some restrictions that must be understood.

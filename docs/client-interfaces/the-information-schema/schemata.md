@@ -1,4 +1,6 @@
-## `schemata` { #infoschema-schemata }
+<a id="infoschema-schemata"></a>
+
+## `schemata`
 
 
  The view `schemata` contains all schemas in the current database that the current user has access to (by way of being the owner or having some privilege).

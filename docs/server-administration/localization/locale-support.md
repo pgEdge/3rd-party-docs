@@ -1,10 +1,12 @@
-## Locale Support { #locale }
+<a id="locale"></a>
+
+## Locale Support
 
 
  *Locale* support refers to an application respecting cultural preferences regarding alphabets, sorting, number formatting, etc. PostgreSQL uses the standard ISO C and POSIX locale facilities provided by the server operating system. For additional information refer to the documentation of your system.
+ <a id="locale-overview"></a>
 
-
-### Overview { #locale-overview }
+### Overview
 
 
  Locale support is automatically initialized when a database cluster is created using `initdb`. `initdb` will initialize the database cluster with the locale setting of its execution environment by default, so if your system is already set to use the locale that you want in your database cluster then there is nothing else you need to do. If you want to use a different locale (or you are not sure which locale your system is set to), you can instruct `initdb` exactly which locale to use by specifying the `--locale` option. For example:
@@ -55,9 +57,9 @@ initdb --locale=sv_SE
 
 
  To enable messages to be translated to the user's preferred language, NLS must have been selected at build time (`configure --enable-nls`). All other locale support is built in automatically.
+  <a id="locale-behavior"></a>
 
-
-### Behavior { #locale-behavior }
+### Behavior
 
 
  The locale settings influence the following SQL features:
@@ -73,9 +75,9 @@ initdb --locale=sv_SE
 
 
  As a workaround to allow PostgreSQL to use indexes with `LIKE` clauses under a non-C locale, several custom operator classes exist. These allow the creation of an index that performs a strict character-by-character comparison, ignoring locale comparison rules. Refer to [Operator Classes and Operator Families](../../the-sql-language/indexes/operator-classes-and-operator-families.md#indexes-opclass) for more information. Another approach is to create indexes using the `C` collation, as discussed in [Collation Support](collation-support.md#collation).
+  <a id="locale-selecting-locales"></a>
 
-
-### Selecting Locales { #locale-selecting-locales }
+### Selecting Locales
 
 
  Locales can be selected in different scopes depending on requirements. The above overview showed how locales are specified using `initdb` to set the defaults for the entire cluster. The following list shows where locales can be selected. Each item provides the defaults for the subsequent items, and each lower item allows overriding the defaults on a finer granularity.
@@ -86,9 +88,9 @@ initdb --locale=sv_SE
 3.  A locale can be selected separately for each database. The SQL command `CREATE DATABASE` and its command-line equivalent `createdb` have options for that. Use this for example if a database cluster houses databases for multiple tenants with different requirements.
 4.  Locale settings can be made for individual table columns. This uses an SQL object called *collation* and is explained in [Collation Support](collation-support.md#collation). Use this for example to sort data in different languages or customize the sort order of a particular table.
 5.  Finally, locales can be selected for an individual query. Again, this uses SQL collation objects. This could be used to change the sort order based on run-time choices or for ad-hoc experimentation.
+  <a id="locale-providers"></a>
 
-
-### Locale Providers { #locale-providers }
+### Locale Providers
 
 
  A locale provider specifies which library defines the locale behavior for collations and character classifications.
@@ -136,12 +138,12 @@ initdb --locale-provider=icu --icu-locale=en
     !!! note
 
         The same locale name may have different behavior on different platforms when using the libc provider.
+  <a id="icu-locales"></a>
 
+### ICU Locales
+  <a id="icu-locale-names"></a>
 
-### ICU Locales { #icu-locales }
-
-
-#### ICU Locale Names { #icu-locale-names }
+#### ICU Locale Names
 
 
  The ICU format for the locale name is a [Language Tag](#icu-language-tag).
@@ -152,8 +154,9 @@ CREATE COLLATION mycollation1 (provider = icu, locale = 'ja-JP');
 CREATE COLLATION mycollation2 (provider = icu, locale = 'fr');
 ```
 
+  <a id="icu-canonicalization"></a>
 
-#### Locale Canonicalization and Validation { #icu-canonicalization }
+#### Locale Canonicalization and Validation
 
 
  When defining a new ICU collation object or database with ICU as the provider, the given locale name is transformed ("canonicalized") into a language tag if not already in that form. For instance,
@@ -184,9 +187,9 @@ HINT:  To disable ICU locale validation, set parameter icu_validation_level to D
 CREATE COLLATION
 ```
  [icu_validation_level](../server-configuration/client-connection-defaults.md#guc-icu-validation-level) controls how the message is reported. Unless set to `ERROR`, the collation will still be created, but the behavior may not be what the user intended.
+  <a id="icu-language-tag"></a>
 
-
-#### Language Tag { #icu-language-tag }
+#### Language Tag
 
 
  A language tag, defined in BCP 47, is a standardized identifier used to identify languages, regions, and other information about a locale.
@@ -221,9 +224,9 @@ SELECT 'N-45' < 'N-123' COLLATE mycollation5 as result;
 
 
  See [ICU Custom Collations](collation-support.md#icu-custom-collations) for details and additional examples of using language tags with custom collation information for the locale.
+   <a id="locale-problems"></a>
 
-
-### Problems { #locale-problems }
+### Problems
 
 
  If locale support doesn't work according to the explanation above, check that the locale support in your operating system is correctly configured. To check what locales are installed on your system, you can use the command `locale -a` if your operating system provides it.

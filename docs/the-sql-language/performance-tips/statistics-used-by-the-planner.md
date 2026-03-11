@@ -1,7 +1,9 @@
-## Statistics Used by the Planner { #planner-stats }
+<a id="planner-stats"></a>
 
+## Statistics Used by the Planner
+   <a id="planner-stats-single-column"></a>
 
-### Single-Column Statistics { #planner-stats-single-column }
+### Single-Column Statistics
 
 
  As we saw in the previous section, the query planner needs to estimate the number of rows retrieved by a query in order to make good choices of query plans. This section provides a quick look at the statistics that the system uses for these estimates.
@@ -77,9 +79,9 @@ WHERE tablename = 'road';
 
 
  Further details about the planner's use of statistics can be found in [How the Planner Uses Statistics](../../internals/how-the-planner-uses-statistics/index.md#planner-stats-details).
+  <a id="planner-stats-extended"></a>
 
-
-### Extended Statistics { #planner-stats-extended }
+### Extended Statistics
 
 
  It is common to see slow queries running bad execution plans because multiple columns used in the query clauses are correlated. The planner normally assumes that multiple conditions are independent of each other, an assumption that does not hold when column values are correlated. Regular statistics, because of their per-individual-column nature, cannot capture any knowledge about cross-column correlation. However, PostgreSQL has the ability to compute *multivariate statistics*, which can capture such information.
@@ -95,9 +97,9 @@ WHERE tablename = 'road';
 
 
  The following subsections describe the kinds of extended statistics that are currently supported.
+ <a id="planner-stats-extended-functional-deps"></a>
 
-
-#### Functional Dependencies { #planner-stats-extended-functional-deps }
+#### Functional Dependencies
 
 
  The simplest kind of extended statistics tracks *functional dependencies*, a concept used in definitions of database normal forms. We say that column `b` is functionally dependent on column `a` if knowledge of the value of `a` is sufficient to determine the value of `b`, that is there are no two rows having the same value of `a` but different values of `b`. In a fully normalized database, functional dependencies should exist only on primary keys and superkeys. However, in practice many data sets are not fully normalized for various reasons; intentional denormalization for performance reasons is a common example. Even in a fully normalized database, there may be partial correlation between some columns, which can be expressed as partial functional dependency.
@@ -129,9 +131,9 @@ SELECT stxname, stxkeys, stxddependencies
 
 
  When computing the selectivity for a query involving functionally dependent columns, the planner adjusts the per-condition selectivity estimates using the dependency coefficients so as not to produce an underestimate.
+ <a id="planner-stats-extended-functional-deps-limits"></a>
 
-
-##### Limitations of Functional Dependencies { #planner-stats-extended-functional-deps-limits }
+##### Limitations of Functional Dependencies
 
 
  Functional dependencies are currently only applied when considering simple equality conditions that compare columns to constant values, and `IN` clauses with constant values. They are not used to improve estimates for equality conditions comparing two columns or comparing a column to an expression, nor for range clauses, `LIKE` or any other type of condition.
@@ -153,9 +155,9 @@ SELECT * FROM zipcodes WHERE city = 'San Francisco' AND zip = '90210';
 
 
  In many practical situations, this assumption is usually satisfied; for example, there might be a GUI in the application that only allows selecting compatible city and ZIP code values to use in a query. But if that's not the case, functional dependencies may not be a viable option.
+   <a id="planner-stats-extended-n-distinct-counts"></a>
 
-
-#### Multivariate N-Distinct Counts { #planner-stats-extended-n-distinct-counts }
+#### Multivariate N-Distinct Counts
 
 
  Single-column statistics store the number of distinct values in each column. Estimates of the number of distinct values when combining more than one column (for example, for `GROUP BY a, b`) are frequently wrong when the planner only has single-column statistical data, causing it to select bad plans.
@@ -184,9 +186,9 @@ nd | {"1, 2": 33178, "1, 5": 33178, "2, 5": 27435, "1, 2, 5": 33178}
 
 
  It's advisable to create `ndistinct` statistics objects only on combinations of columns that are actually used for grouping, and for which misestimation of the number of groups is resulting in bad plans. Otherwise, the `ANALYZE` cycles are just wasted.
+  <a id="planner-stats-extended-mcv-lists"></a>
 
-
-#### Multivariate MCV Lists { #planner-stats-extended-mcv-lists }
+#### Multivariate MCV Lists
 
 
  Another type of statistic stored for each column are most-common value lists. This allows very accurate estimates for individual columns, but may result in significant misestimates for queries with conditions on multiple columns.

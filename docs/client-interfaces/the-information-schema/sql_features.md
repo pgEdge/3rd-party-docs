@@ -1,4 +1,6 @@
-## `sql_features` { #infoschema-sql-features }
+<a id="infoschema-sql-features"></a>
+
+## `sql_features`
 
 
  The table `sql_features` contains information about which formal features defined in the SQL standard are supported by PostgreSQL. This is the same information that is presented in [SQL Conformance](../../appendixes/sql-conformance/index.md#features). There you can also find some additional background information.

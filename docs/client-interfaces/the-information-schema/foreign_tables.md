@@ -1,4 +1,6 @@
-## `foreign_tables` { #infoschema-foreign-tables }
+<a id="infoschema-foreign-tables"></a>
+
+## `foreign_tables`
 
 
  The view `foreign_tables` contains all foreign tables defined in the current database. Only those foreign tables are shown that the current user has access to (by way of being the owner or having some privilege).

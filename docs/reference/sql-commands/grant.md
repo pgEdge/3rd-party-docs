@@ -1,4 +1,6 @@
-# GRANT { #sql-grant }
+<a id="sql-grant"></a>
+
+# GRANT
 
 define access privileges
 
@@ -95,15 +97,15 @@ where ROLE_SPECIFICATION can be:
   | CURRENT_USER
   | SESSION_USER
 ```
+ <a id="sql-grant-description"></a>
 
-
-## Description { #sql-grant-description }
+## Description
 
 
  The `GRANT` command has two basic variants: one that grants privileges on a database object (table, column, view, foreign table, sequence, database, foreign-data wrapper, foreign server, function, procedure, procedural language, large object, configuration parameter, schema, tablespace, or type), and one that grants membership in a role. These variants are similar in many ways, but they are different enough to be described separately.
+ <a id="sql-grant-description-objects"></a>
 
-
-### GRANT on Database Objects { #sql-grant-description-objects }
+### GRANT on Database Objects
 
 
  This variant of the `GRANT` command gives specific privileges on a database object to one or more roles. These privileges are added to those already granted, if any.
@@ -140,9 +142,9 @@ where ROLE_SPECIFICATION can be:
 
 
  There is also an option to grant privileges on all objects of the same type within one or more schemas. This functionality is currently supported only for tables, sequences, functions, and procedures. `ALL TABLES` also affects views and foreign tables, just like the specific-object `GRANT` command. `ALL FUNCTIONS` also affects aggregate and window functions, but not procedures, again just like the specific-object `GRANT` command. Use `ALL ROUTINES` to include procedures.
+  <a id="sql-grant-description-roles"></a>
 
-
-### GRANT on Roles { #sql-grant-description-roles }
+### GRANT on Roles
 
 
  This variant of the `GRANT` command grants membership in a role to one or more other roles, and the modification of membership options `SET`, `INHERIT`, and `ADMIN`; see [Role Membership](../../server-administration/database-roles/role-membership.md#role-membership) for details. Membership in a role is significant because it potentially allows access to the privileges granted to a role to each of its members, and potentially also the ability to make changes to the role itself. However, the actual permissions conferred depend on the options associated with the grant. To modify that options of an existing membership, simply specify the membership with updated option values.
@@ -167,9 +169,9 @@ where ROLE_SPECIFICATION can be:
 
 
  Unlike the case with privileges, membership in a role cannot be granted to `PUBLIC`. Note also that this form of the command does not allow the noise word `GROUP` in *role_specification*.
+  <a id="sql-grant-notes"></a>
 
-
-## Notes { #sql-grant-notes }
+## Notes
 
 
  The [`REVOKE`](revoke.md#sql-revoke) command is used to revoke access privileges.
@@ -200,9 +202,9 @@ where ROLE_SPECIFICATION can be:
 
 
  See [Privileges](../../the-sql-language/data-definition/privileges.md#ddl-priv) for more information about specific privilege types, as well as how to inspect objects' privileges.
+ <a id="sql-grant-examples"></a>
 
-
-## Examples { #sql-grant-examples }
+## Examples
 
 
  Grant insert privilege to all users on table `films`:
@@ -228,9 +230,9 @@ GRANT ALL PRIVILEGES ON kinds TO manuel;
 
 GRANT admins TO joe;
 ```
+ <a id="sql-grant-compatibility"></a>
 
-
-## Compatibility { #sql-grant-compatibility }
+## Compatibility
 
 
  According to the SQL standard, the `PRIVILEGES` key word in `ALL PRIVILEGES` is required. The SQL standard does not support setting the privileges on more than one object per command.

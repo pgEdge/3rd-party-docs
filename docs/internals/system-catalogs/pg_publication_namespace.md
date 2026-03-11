@@ -1,4 +1,6 @@
-## `pg_publication_namespace` { #catalog-pg-publication-namespace }
+<a id="catalog-pg-publication-namespace"></a>
+
+## `pg_publication_namespace`
 
 
  The catalog `pg_publication_namespace` contains the mapping between schemas and publications in the database. This is a many-to-many mapping.

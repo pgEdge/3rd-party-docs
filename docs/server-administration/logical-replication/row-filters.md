@@ -1,25 +1,27 @@
-## Row Filters { #logical-replication-row-filter }
+<a id="logical-replication-row-filter"></a>
+
+## Row Filters
 
 
  By default, all data from all published tables will be replicated to the appropriate subscribers. The replicated data can be reduced by using a *row filter*. A user might choose to use row filters for behavioral, security or performance reasons. If a published table sets a row filter, a row is replicated only if its data satisfies the row filter expression. This allows a set of tables to be partially replicated. The row filter is defined per table. Use a `WHERE` clause after the table name for each published table that requires data to be filtered out. The `WHERE` clause must be enclosed by parentheses. See [sql-createpublication](../../reference/sql-commands/create-publication.md#sql-createpublication) for details.
+ <a id="logical-replication-row-filter-rules"></a>
 
-
-### Row Filter Rules { #logical-replication-row-filter-rules }
+### Row Filter Rules
 
 
  Row filters are applied *before* publishing the changes. If the row filter evaluates to `false` or `NULL` then the row is not replicated. The `WHERE` clause expression is evaluated with the same role used for the replication connection (i.e. the role specified in the [`CONNECTION`](../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-connection) clause of the [sql-createsubscription](../../reference/sql-commands/create-subscription.md#sql-createsubscription)). Row filters have no effect for `TRUNCATE` command.
+  <a id="logical-replication-row-filter-restrictions"></a>
 
-
-### Expression Restrictions { #logical-replication-row-filter-restrictions }
+### Expression Restrictions
 
 
  The `WHERE` clause allows only simple expressions. It cannot contain user-defined functions, operators, types, and collations, system column references or non-immutable built-in functions.
 
 
  If a publication publishes `UPDATE` or `DELETE` operations, the row filter `WHERE` clause must contain only columns that are covered by the replica identity (see [REPLICA IDENTITY](../../reference/sql-commands/alter-table.md#sql-altertable-replica-identity)). If a publication publishes only `INSERT` operations, the row filter `WHERE` clause can use any column.
+  <a id="logical-replication-row-filter-transformations"></a>
 
-
-### UPDATE Transformations { #logical-replication-row-filter-transformations }
+### UPDATE Transformations
 
 
  Whenever an `UPDATE` is processed, the row filter expression is evaluated for both the old and new row (i.e. using the data before and after the update). If both evaluations are `true`, it replicates the `UPDATE` change. If both evaluations are `false`, it doesn't replicate the change. If only one of the old/new rows matches the row filter expression, the `UPDATE` is transformed to `INSERT` or `DELETE`, to avoid any data inconsistency. The row on the subscriber should reflect what is defined by the row filter expression on the publisher.
@@ -32,9 +34,8 @@
 
 
  [`UPDATE` Transformation Summary](#logical-replication-row-filter-transformations-summary) summarizes the applied transformations.
+ <a id="logical-replication-row-filter-transformations-summary"></a>
 
-
-<a id="logical-replication-row-filter-transformations-summary"></a>
 **Table: `UPDATE` Transformation Summary**
 
 | Old row | New row | Transformation |
@@ -43,15 +44,15 @@
 | no match | match | `INSERT` |
 | match | no match | `DELETE` |
 | match | match | `UPDATE` |
+  <a id="logical-replication-row-filter-partitioned-table"></a>
 
-
-### Partitioned Tables { #logical-replication-row-filter-partitioned-table }
+### Partitioned Tables
 
 
  If the publication contains a partitioned table, the publication parameter [`publish_via_partition_root`](../../reference/sql-commands/create-publication.md#sql-createpublication-params-with-publish-via-partition-root) determines which row filter is used. If `publish_via_partition_root` is `true`, the *root partitioned table's* row filter is used. Otherwise, if `publish_via_partition_root` is `false` (default), each *partition's* row filter is used.
+  <a id="logical-replication-row-filter-initial-data-sync"></a>
 
-
-### Initial Data Synchronization { #logical-replication-row-filter-initial-data-sync }
+### Initial Data Synchronization
 
 
  If the subscription requires copying pre-existing table data and a publication contains `WHERE` clauses, only data that satisfies the row filter expressions is copied to the subscriber.
@@ -68,9 +69,9 @@
 !!! note
 
     If the subscriber is in a release prior to 15, copy pre-existing data doesn't use row filters even if they are defined in the publication. This is because old releases can only copy the entire table data.
+  <a id="logical-replication-row-filter-combining"></a>
 
-
-### Combining Multiple Row Filters { #logical-replication-row-filter-combining }
+### Combining Multiple Row Filters
 
 
  If the subscription has several publications in which the same table has been published with different row filters (for the same [`publish`](../../reference/sql-commands/create-publication.md#sql-createpublication-params-with-publish) operation), those expressions get ORed together, so that rows satisfying *any* of the expressions will be replicated. This means all the other row filters for the same table become redundant if:
@@ -78,9 +79,9 @@
 -  One of the publications has no row filter.
 -  One of the publications was created using [`FOR ALL TABLES`](../../reference/sql-commands/create-publication.md#sql-createpublication-params-for-all-tables). This clause does not allow row filters.
 -  One of the publications was created using [`FOR TABLES IN SCHEMA`](../../reference/sql-commands/create-publication.md#sql-createpublication-params-for-tables-in-schema) and the table belongs to the referred schema. This clause does not allow row filters.
+  <a id="logical-replication-row-filter-examples"></a>
 
-
-### Examples { #logical-replication-row-filter-examples }
+### Examples
 
 
  Create some tables to be used in the following examples.

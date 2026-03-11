@@ -1,13 +1,15 @@
-## Event Trigger Functions { #functions-event-triggers }
+<a id="functions-event-triggers"></a>
+
+## Event Trigger Functions
 
 
  PostgreSQL provides these helper functions to retrieve information from event triggers.
 
 
  For more information about event triggers, see [Event Triggers](../../server-programming/event-triggers/index.md#event-triggers).
+ <a id="pg-event-trigger-ddl-command-end-functions"></a>
 
-
-### Capturing Changes at Command End { #pg-event-trigger-ddl-command-end-functions }
+### Capturing Changes at Command End
 
 
 ```
@@ -30,8 +32,9 @@ pg_event_trigger_ddl_commands () setof record
 | `in_extension` | `boolean` | True if the command is part of an extension script |
 | `command` | `pg_ddl_command` | A complete representation of the command, in internal format. This cannot be output directly, but it can be passed to other functions to obtain different pieces of information about the command. |
 
+  <a id="pg-event-trigger-sql-drop-functions"></a>
 
-### Processing Objects Dropped by a DDL Command { #pg-event-trigger-sql-drop-functions }
+### Processing Objects Dropped by a DDL Command
 
 
 ```
@@ -83,14 +86,14 @@ CREATE EVENT TRIGGER test_event_trigger_for_drops
    EXECUTE FUNCTION test_event_trigger_for_drops();
 ```
 
+  <a id="pg-event-trigger-table-rewrite-functions"></a>
 
-### Handling a Table Rewrite Event { #pg-event-trigger-table-rewrite-functions }
+### Handling a Table Rewrite Event
 
 
  The functions shown in [Table Rewrite Information Functions](#functions-event-trigger-table-rewrite) provide information about a table for which a `table_rewrite` event has just been called. If called in any other context, an error is raised.
+ <a id="functions-event-trigger-table-rewrite"></a>
 
-
-<a id="functions-event-trigger-table-rewrite"></a>
 **Table: Table Rewrite Information Functions**
 
 <table>

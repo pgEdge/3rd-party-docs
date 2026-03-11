@@ -1,4 +1,6 @@
-## `table_privileges` { #infoschema-table-privileges }
+<a id="infoschema-table-privileges"></a>
+
+## `table_privileges`
 
 
  The view `table_privileges` identifies all privileges granted on tables or views to a currently enabled role or by a currently enabled role. There is one row for each combination of table, grantor, and grantee.

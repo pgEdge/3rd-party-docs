@@ -1,4 +1,6 @@
-## Pattern Matching { #functions-matching }
+<a id="functions-matching"></a>
+
+## Pattern Matching
 
 
  There are three separate approaches to pattern matching provided by PostgreSQL: the traditional SQL `LIKE` operator, the more recent `SIMILAR TO` operator (added in SQL:1999), and POSIX-style regular expressions. Aside from the basic “does this string match this pattern?” operators, functions are available to extract or replace matching substrings and to split a string at matching locations.
@@ -21,9 +23,9 @@
 
 
  The pattern matching operators of all three kinds do not support nondeterministic collations. If required, apply a different collation to the expression to work around this limitation.
+ <a id="functions-like"></a>
 
-
-### `LIKE` { #functions-like }
+### `LIKE`
 
 
 ```
@@ -78,9 +80,9 @@ STRING NOT LIKE PATTERN [ESCAPE ESCAPE-CHARACTER]
 
 
  Also see the starts-with operator `^@` and the corresponding `starts_with()` function, which are useful in cases where simply matching the beginning of a string is needed.
+  <a id="functions-similarto-regexp"></a>
 
-
-### `SIMILAR TO` Regular Expressions { #functions-similarto-regexp }
+### `SIMILAR TO` Regular Expressions
 
 
 ```
@@ -167,14 +169,14 @@ substring('foobar' similar '%#"o_b#"%' escape '#')   oob
 substring('foobar' similar '#"o_b#"%' escape '#')    NULL
 ```
 
+  <a id="functions-posix-regexp"></a>
 
-### POSIX Regular Expressions { #functions-posix-regexp }
+### POSIX Regular Expressions
 
 
  [Regular Expression Match Operators](#functions-posix-table) lists the available operators for pattern matching using POSIX regular expressions.
+ <a id="functions-posix-table"></a>
 
-
-<a id="functions-posix-table"></a>
 **Table: Regular Expression Match Operators**
 
 <table>
@@ -439,8 +441,9 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
                                    FGH
 ```
 
+  <a id="posix-syntax-details"></a>
 
-#### Regular Expression Details { #posix-syntax-details }
+#### Regular Expression Details
 
 
  PostgreSQL's regular expressions are implemented using a software package written by Henry Spencer. Much of the description of regular expressions below is copied verbatim from his manual.
@@ -464,9 +467,8 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 
 
  A *constraint* matches an empty string, but matches only when specific conditions are met. A constraint can be used where an atom could be used, except it cannot be followed by a quantifier. The simple constraints are shown in [Regular Expression Constraints](#posix-constraints-table); some more constraints are described later.
+ <a id="posix-atoms-table"></a>
 
-
-<a id="posix-atoms-table"></a>
 **Table: Regular Expression Atoms**
 
 | Atom | Description |
@@ -487,9 +489,8 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 !!! note
 
     If you have [standard_conforming_strings](../../server-administration/server-configuration/version-and-platform-compatibility.md#guc-standard-conforming-strings) turned off, any backslashes you write in literal string constants will need to be doubled. See [String Constants](../sql-syntax/lexical-structure.md#sql-syntax-strings) for more information.
+ <a id="posix-quantifiers-table"></a>
 
-
-<a id="posix-quantifiers-table"></a>
 **Table: Regular Expression Quantifiers**
 
 | Quantifier | Matches |
@@ -517,9 +518,8 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 !!! note
 
     A quantifier cannot immediately follow another quantifier, e.g., `**` is invalid. A quantifier cannot begin an expression or subexpression or follow `^` or `|`.
+ <a id="posix-constraints-table"></a>
 
-
-<a id="posix-constraints-table"></a>
 **Table: Regular Expression Constraints**
 
 | Constraint | Description |
@@ -533,9 +533,9 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 
 
  Lookahead and lookbehind constraints cannot contain *back references* (see [Regular Expression Escapes](#posix-escape-sequences)), and all parentheses within them are considered non-capturing.
+  <a id="posix-bracket-expressions"></a>
 
-
-#### Bracket Expressions { #posix-bracket-expressions }
+#### Bracket Expressions
 
 
  A *bracket expression* is a list of characters enclosed in `[]`. It normally matches any single character from the list (but see below). If the list begins with `^`, it matches any single character *not* from the rest of the list. If two characters in the list are separated by `-`, this is shorthand for the full range of characters between those two (inclusive) in the collating sequence, e.g., `[0-9]` in ASCII matches any decimal digit. It is illegal for two ranges to share an endpoint, e.g., `a-c-e`. Ranges are very collating-sequence-dependent, so portable programs should avoid relying on them.
@@ -559,9 +559,9 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 
 
  There are two special cases of bracket expressions: the bracket expressions `[[:<:]]` and `[[:>:]]` are constraints, matching empty strings at the beginning and end of a word respectively. A word is defined as a sequence of word characters that is neither preceded nor followed by word characters. A word character is any character belonging to the `word` character class, that is, any letter, digit, or underscore. This is an extension, compatible with but not specified by POSIX 1003.2, and should be used with caution in software intended to be portable to other systems. The constraint escapes described below are usually preferable; they are no more standard, but are easier to type.
+  <a id="posix-escape-sequences"></a>
 
-
-#### Regular Expression Escapes { #posix-escape-sequences }
+#### Regular Expression Escapes
 
 
  *Escapes* are special sequences beginning with `\` followed by an alphanumeric character. Escapes come in several varieties: character entry, class shorthands, constraint escapes, and back references. A `\` followed by an alphanumeric character but not constituting a valid escape is illegal in AREs. In EREs, there are no escapes: outside a bracket expression, a `\` followed by an alphanumeric character merely stands for that character as an ordinary character, and inside a bracket expression, `\` is an ordinary character. (The latter is the one actual incompatibility between EREs and AREs.)
@@ -577,9 +577,8 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 
 
  A *back reference* (`\`*n*) matches the same string matched by the previous parenthesized subexpression specified by the number *n* (see [Regular Expression Back References](#posix-constraint-backref-table)). For example, `([bc])\1` matches `bb` or `cc` but not `bc` or `cb`. The subexpression must entirely precede the back reference in the RE. Subexpressions are numbered in the order of their leading parentheses. Non-capturing parentheses do not define subexpressions. The back reference considers only the string characters matched by the referenced subexpression, not any constraints contained in it. For example, `(^\d)\1` will match `22`.
+ <a id="posix-character-entry-escapes-table"></a>
 
-
-<a id="posix-character-entry-escapes-table"></a>
 **Table: Regular Expression Character-Entry Escapes**
 
 | Escape | Description |
@@ -609,9 +608,8 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 
 
  The character-entry escapes are always taken as ordinary characters. For example, `\135` is `]` in ASCII, but `\135` does not terminate a bracket expression.
+ <a id="posix-class-shorthand-escapes-table"></a>
 
-
-<a id="posix-class-shorthand-escapes-table"></a>
 **Table: Regular Expression Class-Shorthand Escapes**
 
 | Escape | Description |
@@ -625,9 +623,8 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 
 
  The class-shorthand escapes also work within bracket expressions, although the definitions shown above are not quite syntactically valid in that context. For example, `[a-c\d]` is equivalent to `[a-c[:digit:]]`.
+ <a id="posix-constraint-escapes-table"></a>
 
-
-<a id="posix-constraint-escapes-table"></a>
 **Table: Regular Expression Constraint Escapes**
 
 | Escape | Description |
@@ -641,9 +638,8 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 
 
  A word is defined as in the specification of `[[:<:]]` and `[[:>:]]` above. Constraint escapes are illegal within bracket expressions.
+ <a id="posix-constraint-backref-table"></a>
 
-
-<a id="posix-constraint-backref-table"></a>
 **Table: Regular Expression Back References**
 
 | Escape | Description |
@@ -655,9 +651,9 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 !!! note
 
     There is an inherent ambiguity between octal character-entry escapes and back references, which is resolved by the following heuristics, as hinted at above. A leading zero always indicates an octal escape. A single non-zero digit, not followed by another digit, is always taken as a back reference. A multi-digit sequence not starting with a zero is taken as a back reference if it comes after a suitable subexpression (i.e., the number is in the legal range for a back reference), and otherwise is taken as octal.
+  <a id="posix-metasyntax"></a>
 
-
-#### Regular Expression Metasyntax { #posix-metasyntax }
+#### Regular Expression Metasyntax
 
 
  In addition to the main syntax described above, there are some special forms and miscellaneous syntactic facilities available.
@@ -667,9 +663,8 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 
 
  An ARE can begin with *embedded options*: a sequence `(?`*xyz*`)` (where *xyz* is one or more alphabetic characters) specifies options affecting the rest of the RE. These options override any previously determined options — in particular, they can override the case-sensitivity behavior implied by a regex operator, or the *flags* parameter to a regex function. The available option letters are shown in [ARE Embedded-Option Letters](#posix-embedded-options-table). Note that these same option letters are used in the *flags* parameters of regex functions.
+ <a id="posix-embedded-options-table"></a>
 
-
-<a id="posix-embedded-options-table"></a>
 **Table: ARE Embedded-Option Letters**
 
 | Option | Description |
@@ -703,9 +698,9 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
 
 
  *None* of these metasyntax extensions is available if an initial `***=` director has specified that the user's input be treated as a literal string rather than as an RE.
+  <a id="posix-matching-rules"></a>
 
-
-#### Regular Expression Matching Rules { #posix-matching-rules }
+#### Regular Expression Matching Rules
 
 
  In the event that an RE could match more than one substring of a given string, the RE matches the one starting earliest in the string. If the RE could match more than one substring starting at that point, either the longest possible match or the shortest possible match will be taken, depending on whether the RE is *greedy* or *non-greedy*.
@@ -777,9 +772,9 @@ Result: {abc,01234,xyz}
 
 
  If inverse partial newline-sensitive matching is specified, this affects `^` and `$` as with newline-sensitive matching, but not `.` and bracket expressions. This isn't very useful but is provided for symmetry.
+  <a id="posix-limits-compatibility"></a>
 
-
-#### Limits and Compatibility { #posix-limits-compatibility }
+#### Limits and Compatibility
 
 
  No particular limit is imposed on the length of REs in this implementation. However, programs intended to be highly portable should not employ REs longer than 256 bytes, as a POSIX-compliant implementation can refuse to accept such REs.
@@ -789,15 +784,15 @@ Result: {abc,01234,xyz}
 
 
  Many of the ARE extensions are borrowed from Perl, but some have been changed to clean them up, and a few Perl extensions are not present. Incompatibilities of note include `\b`, `\B`, the lack of special treatment for a trailing newline, the addition of complemented bracket expressions to the things affected by newline-sensitive matching, the restrictions on parentheses and back references in lookahead/lookbehind constraints, and the longest/shortest-match (rather than first-match) matching semantics.
+  <a id="posix-basic-regexes"></a>
 
-
-#### Basic Regular Expressions { #posix-basic-regexes }
+#### Basic Regular Expressions
 
 
  BREs differ from EREs in several respects. In BREs, `|`, `+`, and `?` are ordinary characters and there is no equivalent for their functionality. The delimiters for bounds are `\{` and `\}`, with `{` and `}` by themselves ordinary characters. The parentheses for nested subexpressions are `\(` and `\)`, with `(` and `)` by themselves ordinary characters. `^` is an ordinary character except at the beginning of the RE or the beginning of a parenthesized subexpression, `$` is an ordinary character except at the end of the RE or the end of a parenthesized subexpression, and `*` is an ordinary character if it appears at the beginning of the RE or the beginning of a parenthesized subexpression (after a possible leading `^`). Finally, single-digit back references are available, and `\<` and `\>` are synonyms for `[[:<:]]` and `[[:>:]]` respectively; no other escapes are available in BREs.
+   <a id="posix-vs-xquery"></a>
 
-
-#### Differences from SQL Standard and XQuery { #posix-vs-xquery }
+#### Differences from SQL Standard and XQuery
 
 
  Since SQL:2008, the SQL standard includes regular expression operators and functions that performs pattern matching according to the XQuery regular expression standard:
@@ -808,9 +803,8 @@ Result: {abc,01234,xyz}
 - `SUBSTRING_REGEX`
 - `TRANSLATE_REGEX`
  PostgreSQL does not currently implement these operators and functions. You can get approximately equivalent functionality in each case as shown in [Regular Expression Functions Equivalencies](#functions-regexp-sql-table). (Various optional clauses on both sides have been omitted in this table.)
+ <a id="functions-regexp-sql-table"></a>
 
-
-<a id="functions-regexp-sql-table"></a>
 **Table: Regular Expression Functions Equivalencies**
 
 | SQL standard | PostgreSQL |

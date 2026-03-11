@@ -1,4 +1,6 @@
-## Trust Authentication { #auth-trust }
+<a id="auth-trust"></a>
+
+## Trust Authentication
 
 
  When `trust` authentication is specified, PostgreSQL assumes that anyone who can connect to the server is authorized to access the database with whatever database user name they specify (even superuser names). Of course, restrictions made in the `database` and `user` columns still apply. This method should only be used when there is adequate operating-system-level protection on connections to the server.

@@ -1,4 +1,6 @@
-# ALTER TABLE { #sql-altertable }
+<a id="sql-altertable"></a>
+
+# ALTER TABLE
 
 change the definition of a table
 
@@ -531,9 +533,9 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 
 *partition_bound_spec*
 :   The partition bound specification for a new partition. Refer to [sql-createtable](create-table.md#sql-createtable) for more details on the syntax of the same.
+ <a id="sql-altertable-notes"></a>
 
-
-## Notes { #sql-altertable-notes }
+## Notes
 
 
  The key word `COLUMN` is noise and can be omitted.

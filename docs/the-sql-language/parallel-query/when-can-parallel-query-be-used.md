@@ -1,4 +1,6 @@
-## When Can Parallel Query Be Used? { #when-can-parallel-query-be-used }
+<a id="when-can-parallel-query-be-used"></a>
+
+## When Can Parallel Query Be Used?
 
 
  There are several settings that can cause the query planner not to generate a parallel query plan under any circumstances. In order for any parallel query plans whatsoever to be generated, the following settings must be configured as indicated.

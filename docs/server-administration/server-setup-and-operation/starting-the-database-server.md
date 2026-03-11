@@ -1,4 +1,6 @@
-## Starting the Database Server { #server-start }
+<a id="server-start"></a>
+
+## Starting the Database Server
 
 
  Before anyone can access the database, you must start the database server. The database server program is called `postgres`.
@@ -105,9 +107,9 @@ su - postgres -c "/usr/local/pgsql/bin/pg_ctl start -l logfile -D /usr/local/pgs
 
 
  While the server is running, its PID is stored in the file `postmaster.pid` in the data directory. This is used to prevent multiple server instances from running in the same data directory and can also be used for shutting down the server.
+ <a id="server-start-failures"></a>
 
-
-### Server Start-up Failures { #server-start-failures }
+### Server Start-up Failures
 
 
  There are several common reasons the server might fail to start. Check the server's log file, or start it by hand (without redirecting standard output or standard error) and see what error messages appear. Below we explain some of the most common error messages in more detail.
@@ -151,9 +153,9 @@ DETAIL:  Failed system call was semget(5440126, 17, 03600).
 
 
  Details about configuring `System V` IPC facilities are given in [Shared Memory and Semaphores](managing-kernel-resources.md#sysvipc).
+  <a id="client-connection-problems"></a>
 
-
-### Client Connection Problems { #client-connection-problems }
+### Client Connection Problems
 
 
  Although the error conditions possible on the client side are quite varied and application-dependent, a few of them might be directly related to how the server was started. Conditions other than those shown below should be documented with the respective client application.

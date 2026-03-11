@@ -1,4 +1,6 @@
-## Handling of Invalid or Ambiguous Timestamps { #datetime-invalid-input }
+<a id="datetime-invalid-input"></a>
+
+## Handling of Invalid or Ambiguous Timestamps
 
 
  Ordinarily, if a date/time string is syntactically valid but contains out-of-range field values, an error will be thrown. For example, input specifying the 31st of February will be rejected.

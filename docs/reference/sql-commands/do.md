@@ -1,4 +1,6 @@
-# DO { #sql-do }
+<a id="sql-do"></a>
+
+# DO
 
 execute an anonymous code block
 
@@ -43,9 +45,9 @@ DO [ LANGUAGE LANG_NAME ] CODE
 
 
  If `DO` is executed in a transaction block, then the procedure code cannot execute transaction control statements. Transaction control statements are only allowed if `DO` is executed in its own transaction.
+ <a id="sql-do-examples"></a>
 
-
-## Examples { #sql-do-examples }
+## Examples
 
 
  Grant all privileges on all views in schema `public` to role `webuser`:

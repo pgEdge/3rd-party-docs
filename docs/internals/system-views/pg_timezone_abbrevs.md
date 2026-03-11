@@ -1,4 +1,6 @@
-## `pg_timezone_abbrevs` { #view-pg-timezone-abbrevs }
+<a id="view-pg-timezone-abbrevs"></a>
+
+## `pg_timezone_abbrevs`
 
 
  The view `pg_timezone_abbrevs` provides a list of time zone abbreviations that are currently recognized by the datetime input routines. The contents of this view change when the [timezone_abbreviations](../../server-administration/server-configuration/client-connection-defaults.md#guc-timezone-abbreviations) run-time parameter is modified.

@@ -1,22 +1,23 @@
-## xml2 — XPath querying and XSLT functionality { #xml2 }
+<a id="xml2"></a>
+
+## xml2 — XPath querying and XSLT functionality
 
 
  The `xml2` module provides XPath querying and XSLT functionality.
+ <a id="xml2-deprecation"></a>
 
-
-### Deprecation Notice { #xml2-deprecation }
+### Deprecation Notice
 
 
  From PostgreSQL 8.3 on, there is XML-related functionality based on the SQL/XML standard in the core server. That functionality covers XML syntax checking and XPath queries, which is what this module does, and more, but the API is not at all compatible. It is planned that this module will be removed in a future version of PostgreSQL in favor of the newer standard API, so you are encouraged to try converting your applications. If you find that some of the functionality of this module is not available in an adequate form with the newer API, please explain your issue to [pgsql-hackers@lists.postgresql.org](mailto:pgsql-hackers@lists.postgresql.org) so that the deficiency can be addressed.
+  <a id="xml2-functions"></a>
 
-
-### Description of Functions { #xml2-functions }
+### Description of Functions
 
 
  [`xml2` Functions](#xml2-functions-table) shows the functions provided by this module. These functions provide straightforward XML parsing and XPath queries.
+ <a id="xml2-functions-table"></a>
 
-
-<a id="xml2-functions-table"></a>
 **Table: `xml2` Functions**
 
 <table>
@@ -78,9 +79,9 @@ Value 2....</code></pre></td>
 </tr>
 </tbody>
 </table>
+  <a id="xml2-xpath-table"></a>
 
-
-### `xpath_table` { #xml2-xpath-table }
+### `xpath_table`
 
 
 ```
@@ -90,9 +91,8 @@ xpath_table(text key, text document, text relation, text xpaths, text criteria) 
 
 
  `xpath_table` is a table function that evaluates a set of XPath queries on each of a set of documents and returns the results as a table. The primary key field from the original document table is returned as the first column of the result so that the result set can readily be used in joins. The parameters are described in [`xpath_table` Parameters](#xml2-xpath-table-parameters).
+ <a id="xml2-xpath-table-parameters"></a>
 
-
-<a id="xml2-xpath-table-parameters"></a>
 **Table: `xpath_table` Parameters**
 
 | Parameter | Description |
@@ -144,9 +144,9 @@ FROM xpath_table('article_id', 'article_xml', 'articles',
 WHERE t.author_id = p.person_id;
 ```
  as a more complicated example. Of course, you could wrap all of this in a view for convenience.
+ <a id="xml2-xpath-table-multivalued-results"></a>
 
-
-#### Multivalued Results { #xml2-xpath-table-multivalued-results }
+#### Multivalued Results
 
 
  The `xpath_table` function assumes that the results of each XPath query might be multivalued, so the number of rows returned by the function may not be the same as the number of input documents. The first row returned contains the first result from each query, the second row the second result from each query. If one of the queries has fewer values than the others, null values will be returned instead.
@@ -206,14 +206,15 @@ ORDER BY doc_num, line_num;
 (2 rows)
 ```
 
+   <a id="xml2-xslt"></a>
 
-### XSLT Functions { #xml2-xslt }
+### XSLT Functions
 
 
  The following functions are available if libxslt is installed:
+ <a id="xml2-xslt-xslt-process"></a>
 
-
-#### `xslt_process` { #xml2-xslt-xslt-process }
+#### `xslt_process`
 
 
 ```
@@ -226,9 +227,9 @@ xslt_process(text document, text stylesheet, text paramlist) returns text
 
 
  There is also a two-parameter version of `xslt_process` which does not pass any parameters to the transformation.
+   <a id="xml2-author"></a>
 
-
-### Author { #xml2-author }
+### Author
 
 
  John Gray [jgray@azuli.co.uk](mailto:jgray@azuli.co.uk)

@@ -1,4 +1,6 @@
-## Message Formats { #protocol-message-formats }
+<a id="protocol-message-formats"></a>
+
+## Message Formats
 
 
  This section describes the detailed format of each message. Each is marked to indicate that it can be sent by a frontend (F), a backend (B), or both (F & B). Notice that although each message includes a byte count at the beginning, the message format is defined so that the message end can be found without reference to the byte count. This aids validity checking. (The CopyData message is an exception, because it forms part of a data stream; the contents of any individual CopyData message cannot be interpretable on their own.)

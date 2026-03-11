@@ -1,4 +1,6 @@
-# CREATE TEXT SEARCH TEMPLATE { #sql-createtstemplate }
+<a id="sql-createtstemplate"></a>
+
+# CREATE TEXT SEARCH TEMPLATE
 
 define a new text search template
 

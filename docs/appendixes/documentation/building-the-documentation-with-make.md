@@ -1,10 +1,12 @@
-## Building the Documentation with Make { #docguide-build }
+<a id="docguide-build"></a>
+
+## Building the Documentation with Make
 
 
  Once you have everything set up, change to the directory `doc/src/sgml` and run one of the commands described in the following subsections to build the documentation. (Remember to use GNU make.)
+ <a id="docguide-build-html"></a>
 
-
-### HTML { #docguide-build-html }
+### HTML
 
 
  To build the HTML version of the documentation:
@@ -25,9 +27,9 @@ doc/src/sgml$ make STYLE=website html
 
 
  If the `STYLE=website` option is used, the generated HTML files include references to stylesheets hosted on [postgresql.org](https://www.postgresql.org/docs/current/) and require network access to view.
+  <a id="docguide-build-manpages"></a>
 
-
-### Manpages { #docguide-build-manpages }
+### Manpages
 
 
  We use the DocBook XSL stylesheets to convert DocBook `refentry` pages to *roff output suitable for man pages. To create the man pages, use the command:
@@ -37,8 +39,9 @@ doc/src/sgml$ make STYLE=website html
 doc/src/sgml$ make man
 ```
 
+  <a id="docguide-build-pdf"></a>
 
-### PDF { #docguide-build-pdf }
+### PDF
 
 
  To produce a PDF rendition of the documentation using FOP, you can use one of the following commands, depending on the preferred paper format:
@@ -82,9 +85,9 @@ LOGLEVEL=-Dorg.apache.commons.logging.simplelog.defaultlog=WARN
 
 
  Other XSL-FO processors can also be used manually, but the automated build process only supports FOP.
+  <a id="docguide-build-syntax-check"></a>
 
-
-### Syntax Check { #docguide-build-syntax-check }
+### Syntax Check
 
 
  Building the documentation can take very long. But there is a method to just check the correct syntax of the documentation files, which only takes a few seconds:

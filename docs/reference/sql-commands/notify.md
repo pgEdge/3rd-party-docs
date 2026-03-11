@@ -1,4 +1,6 @@
-# NOTIFY { #sql-notify }
+<a id="sql-notify"></a>
+
+# NOTIFY
 
 generate a notification
 

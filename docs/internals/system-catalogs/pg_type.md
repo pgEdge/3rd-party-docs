@@ -1,4 +1,6 @@
-## `pg_type` { #catalog-pg-type }
+<a id="catalog-pg-type"></a>
+
+## `pg_type`
 
 
  The catalog `pg_type` stores information about data types. Base types and enum types (scalar types) are created with [`CREATE TYPE`](../../reference/sql-commands/create-type.md#sql-createtype), and domains with [`CREATE DOMAIN`](../../reference/sql-commands/create-domain.md#sql-createdomain). A composite type is automatically created for each table in the database, to represent the row structure of the table. It is also possible to create composite types with `CREATE TYPE AS`.
@@ -161,9 +163,8 @@
 
 
  [`typcategory` Codes](#catalog-typcategory-table) lists the system-defined values of `typcategory`. Any future additions to this list will also be upper-case ASCII letters. All other ASCII characters are reserved for user-defined categories.
+ <a id="catalog-typcategory-table"></a>
 
-
-<a id="catalog-typcategory-table"></a>
 **Table: `typcategory` Codes**
 
 | Code | Category |

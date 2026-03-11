@@ -1,4 +1,6 @@
-## `pg_shmem_allocations` { #view-pg-shmem-allocations }
+<a id="view-pg-shmem-allocations"></a>
+
+## `pg_shmem_allocations`
 
 
  The `pg_shmem_allocations` view shows allocations made from the server's main shared memory segment. This includes both memory allocated by PostgreSQL itself and memory allocated by extensions using the mechanisms detailed in [Shared Memory](../../server-programming/extending-sql/c-language-functions.md#xfunc-shared-addin).

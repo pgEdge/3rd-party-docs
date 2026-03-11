@@ -1,4 +1,6 @@
-## intarray — manipulate arrays of integers { #intarray }
+<a id="intarray"></a>
+
+## intarray — manipulate arrays of integers
 
 
  The `intarray` module provides a number of useful functions and operators for manipulating null-free arrays of integers. There is also support for indexed searches using some of the operators.
@@ -11,15 +13,14 @@
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="intarray-funcs-ops"></a>
 
-
-### `intarray` Functions and Operators { #intarray-funcs-ops }
+### `intarray` Functions and Operators
 
 
  The functions provided by the `intarray` module are shown in [`intarray` Functions](#intarray-func-table), the operators in [`intarray` Operators](#intarray-op-table).
+ <a id="intarray-func-table"></a>
 
-
-<a id="intarray-func-table"></a>
 **Table: `intarray` Functions**
 
 <table>
@@ -78,9 +79,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="intarray-op-table"></a>
 
-
-<a id="intarray-op-table"></a>
 **Table: `intarray` Operators**
 
 <table>
@@ -169,9 +169,9 @@
 
 
  The `@@` and `~~` operators test whether an array satisfies a *query*, which is expressed as a value of a specialized data type `query_int`. A *query* consists of integer values that are checked against the elements of the array, possibly combined using the operators `&` (AND), `|` (OR), and `!` (NOT). Parentheses can be used as needed. For example, the query `1&(2|3)` matches arrays that contain 1 and also contain either 2 or 3.
+  <a id="intarray-index"></a>
 
-
-### Index Support { #intarray-index }
+### Index Support
 
 
  `intarray` provides index support for the `&&`, `@>`, and `@@` operators, as well as regular array equality.
@@ -190,9 +190,9 @@
 
 
  The choice between GiST and GIN indexing depends on the relative performance characteristics of GiST and GIN, which are discussed elsewhere.
+  <a id="intarray-example"></a>
 
-
-### Example { #intarray-example }
+### Example
 
 
 ```
@@ -212,9 +212,9 @@ SELECT message.mid FROM message WHERE message.sections @> '{1,2}';
 -- the same, using QUERY operator
 SELECT message.mid FROM message WHERE message.sections @@ '1&2'::query_int;
 ```
+  <a id="intarray-benchmark"></a>
 
-
-### Benchmark { #intarray-benchmark }
+### Benchmark
 
 
  The source directory `contrib/intarray/bench` contains a benchmark test suite, which can be run against an installed PostgreSQL server. (It also requires `DBD::Pg` to be installed.) To run:
@@ -231,9 +231,9 @@ psql -c "CREATE EXTENSION intarray" TEST
 
 
  The `bench.pl` script has numerous options, which are displayed when it is run without any arguments.
+  <a id="intarray-Authors"></a>
 
-
-### Authors { #intarray-Authors }
+### Authors
 
 
  All work was done by Teodor Sigaev ([teodor@sigaev.ru](mailto:teodor@sigaev.ru)) and Oleg Bartunov ([oleg@sai.msu.su](mailto:oleg@sai.msu.su)). See [http://www.sai.msu.su/~megera/postgres/gist/](http://www.sai.msu.su/~megera/postgres/gist/) for additional information. Andrey Oktyabrski did a great work on adding new functions and operations.

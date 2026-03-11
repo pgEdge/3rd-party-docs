@@ -1,7 +1,9 @@
-## Query Planning { #runtime-config-query }
+<a id="runtime-config-query"></a>
 
+## Query Planning
+  <a id="runtime-config-query-enable"></a>
 
-### Planner Method Configuration { #runtime-config-query-enable }
+### Planner Method Configuration
 
 
  These configuration parameters provide a crude method of influencing the query plans chosen by the query optimizer. If the default plan chosen by the optimizer for a particular query is not optimal, a *temporary* solution is to use one of these configuration parameters to force the optimizer to choose a different plan. Better ways to improve the quality of the plans chosen by the optimizer include adjusting the planner cost constants (see [Planner Cost Constants](#runtime-config-query-constants)), running [`ANALYZE`](../../reference/sql-commands/analyze.md#sql-analyze) manually, increasing the value of the [default_statistics_target](#guc-default-statistics-target) configuration parameter, and increasing the amount of statistics collected for specific columns using `ALTER TABLE SET STATISTICS`.
@@ -95,9 +97,9 @@
 
 `enable_tidscan` (`boolean`)
 :   Enables or disables the query planner's use of TID scan plan types. The default is `on`.
+  <a id="runtime-config-query-constants"></a>
 
-
-### Planner Cost Constants { #runtime-config-query-constants }
+### Planner Cost Constants
 
 
  The *cost* variables described in this section are measured on an arbitrary scale. Only their relative values matter, hence scaling them all up or down by the same factor will result in no change in the planner's choices. By default, these cost variables are based on the cost of sequential page fetches; that is, `seq_page_cost` is conventionally set to `1.0` and the other cost variables are set with reference to that. But you can use a different scale if you prefer, such as actual execution times in milliseconds on a particular machine.
@@ -174,9 +176,9 @@
 
 `jit_optimize_above_cost` (`floating point`)
 :   Sets the query cost above which JIT compilation applies expensive optimizations. Such optimization adds planning time, but can improve execution speed. It is not meaningful to set this to less than `jit_above_cost`, and it is unlikely to be beneficial to set it to more than `jit_inline_above_cost`. Setting this to `-1` disables expensive optimizations. The default is `500000`.
+  <a id="runtime-config-query-geqo"></a>
 
-
-### Genetic Query Optimizer { #runtime-config-query-geqo }
+### Genetic Query Optimizer
 
 
  The genetic query optimizer (GEQO) is an algorithm that does query planning using heuristic searching. This reduces planning time for complex queries (those joining many relations), at the cost of producing plans that are sometimes inferior to those found by the normal exhaustive-search algorithm. For more information see [Genetic Query Optimizer](../../internals/genetic-query-optimizer/index.md#geqo).
@@ -213,9 +215,9 @@
 
 `geqo_seed` (`floating point`)
 :   Controls the initial value of the random number generator used by GEQO to select random paths through the join order search space. The value can range from zero (the default) to one. Varying the value changes the set of join paths explored, and may result in a better or worse best path being found.
+  <a id="runtime-config-query-other"></a>
 
-
-### Other Planner Options { #runtime-config-query-other }
+### Other Planner Options
 
 
 <a id="guc-default-statistics-target"></a>

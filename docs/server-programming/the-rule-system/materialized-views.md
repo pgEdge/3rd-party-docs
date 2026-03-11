@@ -1,4 +1,6 @@
-## Materialized Views { #rules-materializedviews }
+<a id="rules-materializedviews"></a>
+
+## Materialized Views
 
 
  Materialized views in PostgreSQL use the rule system like views do, but persist the results in a table-like form. The main differences between:

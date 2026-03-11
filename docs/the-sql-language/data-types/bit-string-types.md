@@ -1,4 +1,6 @@
-## Bit String Types { #datatype-bit }
+<a id="datatype-bit"></a>
+
+## Bit String Types
 
 
  Bit strings are strings of 1's and 0's. They can be used to store or visualize bit masks. There are two SQL bit types: <code>bit(</code><em>n</em><code>)</code> and <code>bit

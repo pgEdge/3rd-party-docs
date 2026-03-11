@@ -1,4 +1,6 @@
-## Conflicts { #logical-replication-conflicts }
+<a id="logical-replication-conflicts"></a>
+
+## Conflicts
 
 
  Logical replication behaves similarly to normal DML operations in that the data will be updated even if it was changed locally on the subscriber node. If incoming data violates any constraints the replication will stop. This is referred to as a *conflict*. When replicating `UPDATE` or `DELETE` operations, missing data will not produce a conflict and such operations will simply be skipped.

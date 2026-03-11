@@ -1,4 +1,6 @@
-# SET SESSION AUTHORIZATION { #sql-set-session-authorization }
+<a id="sql-set-session-authorization"></a>
+
+# SET SESSION AUTHORIZATION
 
 set the session user identifier and the current user identifier of the current session
 

@@ -1,4 +1,6 @@
-# pg_config { #app-pgconfig }
+<a id="app-pgconfig"></a>
+
+# pg_config
 
 retrieve information about the installed version of PostgreSQL
 

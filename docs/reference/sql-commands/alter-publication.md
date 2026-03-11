@@ -1,4 +1,6 @@
-# ALTER PUBLICATION { #sql-alterpublication }
+<a id="sql-alterpublication"></a>
+
+# ALTER PUBLICATION
 
 change the definition of a publication
 

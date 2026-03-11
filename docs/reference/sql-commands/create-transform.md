@@ -1,4 +1,6 @@
-# CREATE TRANSFORM { #sql-createtransform }
+<a id="sql-createtransform"></a>
+
+# CREATE TRANSFORM
 
 define a new transform
 
@@ -12,9 +14,9 @@ CREATE [ OR REPLACE ] TRANSFORM FOR TYPE_NAME LANGUAGE LANG_NAME (
     TO SQL WITH FUNCTION TO_SQL_FUNCTION_NAME [ (ARGUMENT_TYPE [, ...]) ]
 );
 ```
+ <a id="sql-createtransform-description"></a>
 
-
-## Description { #sql-createtransform-description }
+## Description
 
 
  `CREATE TRANSFORM` defines a new transform. `CREATE OR REPLACE TRANSFORM` will either create a new transform, or replace an existing definition.
@@ -47,15 +49,15 @@ CREATE [ OR REPLACE ] TRANSFORM FOR TYPE_NAME LANGUAGE LANG_NAME (
 
 <em>to_sql_function_name</em><code>[(</code><em>argument_type</em><code> [, ...])]</code>
 :   The name of the function for converting the type from the language to the SQL environment. It must take one argument of type `internal` and return the type that is the type for the transform. The actual argument value will be something specific to the language implementation. If no argument list is specified, the function name must be unique in its schema.
+ <a id="sql-createtransform-notes"></a>
 
-
-## Notes { #sql-createtransform-notes }
+## Notes
 
 
  Use [`DROP TRANSFORM`](drop-transform.md#sql-droptransform) to remove transforms.
+ <a id="sql-createtransform-examples"></a>
 
-
-## Examples { #sql-createtransform-examples }
+## Examples
 
 
  To create a transform for type `hstore` and language `plpython3u`, first set up the type and the language:
@@ -91,15 +93,15 @@ CREATE TRANSFORM FOR hstore LANGUAGE plpython3u (
 
 
  The `contrib` section contains a number of extensions that provide transforms, which can serve as real-world examples.
+ <a id="sql-createtransform-compat"></a>
 
-
-## Compatibility { #sql-createtransform-compat }
+## Compatibility
 
 
  This form of `CREATE TRANSFORM` is a PostgreSQL extension. There is a `CREATE TRANSFORM` command in the SQL standard, but it is for adapting data types to client languages. That usage is not supported by PostgreSQL.
+ <a id="sql-createtransform-seealso"></a>
 
-
-## See Also { #sql-createtransform-seealso }
+## See Also
 
 
  [sql-createfunction](create-function.md#sql-createfunction), [sql-createlanguage](create-language.md#sql-createlanguage), [sql-createtype](create-type.md#sql-createtype), [sql-droptransform](drop-transform.md#sql-droptransform)

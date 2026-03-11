@@ -1,4 +1,6 @@
-# DROP ROLE { #sql-droprole }
+<a id="sql-droprole"></a>
+
+# DROP ROLE
 
 remove a database role
 

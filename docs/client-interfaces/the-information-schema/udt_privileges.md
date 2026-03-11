@@ -1,4 +1,6 @@
-## `udt_privileges` { #infoschema-udt-privileges }
+<a id="infoschema-udt-privileges"></a>
+
+## `udt_privileges`
 
 
  The view `udt_privileges` identifies `USAGE` privileges granted on user-defined types to a currently enabled role or by a currently enabled role. There is one row for each combination of type, grantor, and grantee. This view shows only composite types (see under [`user_defined_types`](user_defined_types.md#infoschema-user-defined-types) for why); see [`usage_privileges`](usage_privileges.md#infoschema-usage-privileges) for domain privileges.

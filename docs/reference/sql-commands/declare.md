@@ -1,4 +1,6 @@
-# DECLARE { #sql-declare }
+<a id="sql-declare"></a>
+
+# DECLARE
 
 define a cursor
 
@@ -49,9 +51,9 @@ DECLARE NAME [ BINARY ] [ ASENSITIVE | INSENSITIVE ] [ [ NO ] SCROLL ]
 
 
  The key words `ASENSITIVE`, `BINARY`, `INSENSITIVE`, and `SCROLL` can appear in any order.
+ <a id="sql-declare-notes"></a>
 
-
-## Notes { #sql-declare-notes }
+## Notes
 
 
  Normal cursors return data in text format, the same as a `SELECT` would produce. The `BINARY` option specifies that the cursor should return data in binary format. This reduces conversion effort for both the server and client, at the cost of more programmer effort to deal with platform-dependent binary data formats. As an example, if a query returns a value of one from an integer column, you would get a string of `1` with a default cursor, whereas with a binary cursor you would get a 4-byte field containing the internal representation of the value (in big-endian byte order).

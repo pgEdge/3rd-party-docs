@@ -1,4 +1,6 @@
-## `pg_foreign_data_wrapper` { #catalog-pg-foreign-data-wrapper }
+<a id="catalog-pg-foreign-data-wrapper"></a>
+
+## `pg_foreign_data_wrapper`
 
 
  The catalog `pg_foreign_data_wrapper` stores foreign-data wrapper definitions. A foreign-data wrapper is the mechanism by which external data, residing on foreign servers, is accessed.

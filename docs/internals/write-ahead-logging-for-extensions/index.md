@@ -1,4 +1,6 @@
-# Write Ahead Logging for Extensions { #wal-for-extensions }
+<a id="wal-for-extensions"></a>
+
+# Write Ahead Logging for Extensions
 
  Certain extensions, principally extensions that implement custom access methods, may need to perform write-ahead logging in order to ensure crash-safety. PostgreSQL provides two ways for extensions to achieve this goal.
 

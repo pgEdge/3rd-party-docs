@@ -1,4 +1,6 @@
-# ALTER INDEX { #sql-alterindex }
+<a id="sql-alterindex"></a>
+
+# ALTER INDEX
 
 change the definition of an index
 

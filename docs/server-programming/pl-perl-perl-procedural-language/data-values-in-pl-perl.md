@@ -1,4 +1,6 @@
-## Data Values in PL/Perl { #plperl-data }
+<a id="plperl-data"></a>
+
+## Data Values in PL/Perl
 
 
  The argument values supplied to a PL/Perl function's code are simply the input arguments converted to text form (just as if they had been displayed by a `SELECT` statement). Conversely, the `return` and `return_next` commands will accept any string that is acceptable input format for the function's declared return type.

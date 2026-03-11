@@ -1,4 +1,6 @@
-## UUID Functions { #functions-uuid }
+<a id="functions-uuid"></a>
+
+## UUID Functions
 
 
  PostgreSQL includes one function to generate a UUID:

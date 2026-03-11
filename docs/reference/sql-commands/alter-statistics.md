@@ -1,4 +1,6 @@
-# ALTER STATISTICS { #sql-alterstatistics }
+<a id="sql-alterstatistics"></a>
+
+# ALTER STATISTICS
 
 change the definition of an extended statistics object
 

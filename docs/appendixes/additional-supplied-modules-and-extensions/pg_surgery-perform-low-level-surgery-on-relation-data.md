@@ -1,10 +1,12 @@
-## pg_surgery — perform low-level surgery on relation data { #pgsurgery }
+<a id="pgsurgery"></a>
+
+## pg_surgery — perform low-level surgery on relation data
 
 
  The `pg_surgery` module provides various functions to perform surgery on a damaged relation. These functions are unsafe by design and using them may corrupt (or further corrupt) your database. For example, these functions can easily be used to make a table inconsistent with its own indexes, to cause `UNIQUE` or `FOREIGN KEY` constraint violations, or even to make tuples visible which, when read, will cause a database server crash. They should be used with great caution and only as a last resort.
+ <a id="pgsurgery-funcs"></a>
 
-
-### Functions { #pgsurgery-funcs }
+### Functions
 
 
 `heap_force_kill(regclass, tid[]) returns void`
@@ -53,9 +55,9 @@
      (0,3)
     (1 row)
     ```
+  <a id="pgsurgery-authors"></a>
 
-
-### Authors { #pgsurgery-authors }
+### Authors
 
 
  Ashutosh Sharma [ashu.coek88@gmail.com](mailto:ashu.coek88@gmail.com)

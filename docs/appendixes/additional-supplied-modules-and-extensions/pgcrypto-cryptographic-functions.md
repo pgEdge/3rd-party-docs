@@ -1,4 +1,6 @@
-## pgcrypto — cryptographic functions { #pgcrypto }
+<a id="pgcrypto"></a>
+
+## pgcrypto — cryptographic functions
 
 
  The `pgcrypto` module provides cryptographic functions for PostgreSQL.
@@ -8,12 +10,12 @@
 
 
  `pgcrypto` requires OpenSSL and won't be installed if OpenSSL support was not selected when PostgreSQL was built.
+ <a id="pgcrypto-general-hashing-funcs"></a>
 
+### General Hashing Functions
+  <a id="pgcrypto-general-hashing-funcs-digest"></a>
 
-### General Hashing Functions { #pgcrypto-general-hashing-funcs }
-
-
-#### `digest()` { #pgcrypto-general-hashing-funcs-digest }
+#### `digest()`
 
 
 ```
@@ -35,8 +37,9 @@ CREATE OR REPLACE FUNCTION sha1(bytea) returns text AS $$
 $$ LANGUAGE SQL STRICT IMMUTABLE;
 ```
 
+  <a id="pgcrypto-general-hashing-funcs-hmac"></a>
 
-#### `hmac()` { #pgcrypto-general-hashing-funcs-hmac }
+#### `hmac()`
 
 
 ```
@@ -53,9 +56,9 @@ hmac(data bytea, key bytea, type text) returns bytea
 
 
  If the key is larger than the hash block size it will first be hashed and the result will be used as key.
+   <a id="pgcrypto-password-hashing-funcs"></a>
 
-
-### Password Hashing Functions { #pgcrypto-password-hashing-funcs }
+### Password Hashing Functions
 
 
  The functions `crypt()` and `gen_salt()` are specifically designed for hashing passwords. `crypt()` does the hashing and `gen_salt()` prepares algorithm parameters for it.
@@ -71,9 +74,8 @@ hmac(data bytea, key bytea, type text) returns bytea
 
 
  [Supported Algorithms for `crypt()`](#pgcrypto-crypt-algorithms) lists the algorithms supported by the `crypt()` function.
+ <a id="pgcrypto-crypt-algorithms"></a>
 
-
-<a id="pgcrypto-crypt-algorithms"></a>
 **Table: Supported Algorithms for `crypt()`**
 
 | Algorithm | Max Password Length | Adaptive? | Salt Bits | Output Length | Description |
@@ -82,9 +84,9 @@ hmac(data bytea, key bytea, type text) returns bytea
 | `md5` | unlimited | no | 48 | 34 | MD5-based crypt |
 | `xdes` | 8 | yes | 24 | 20 | Extended DES |
 | `des` | 8 | no | 12 | 13 | Original UNIX crypt |
+ <a id="pgcrypto-password-hashing-funcs-crypt"></a>
 
-
-#### `crypt()` { #pgcrypto-password-hashing-funcs-crypt }
+#### `crypt()`
 
 
 ```
@@ -111,9 +113,9 @@ UPDATE ... SET pswhash = crypt('new password', gen_salt('md5'));
 SELECT (pswhash = crypt('entered password', pswhash)) AS pswmatch FROM ... ;
 ```
  This returns `true` if the entered password is correct.
+  <a id="pgcrypto-password-hashing-funcs-gen-salt"></a>
 
-
-#### `gen_salt()` { #pgcrypto-password-hashing-funcs-gen-salt }
+#### `gen_salt()`
 
 
 ```
@@ -129,9 +131,8 @@ gen_salt(type text [, iter_count integer ]) returns text
 
 
  The `iter_count` parameter lets the user specify the iteration count, for algorithms that have one. The higher the count, the more time it takes to hash the password and therefore the more time to break it. Although with too high a count the time to calculate a hash may be several years — which is somewhat impractical. If the `iter_count` parameter is omitted, the default iteration count is used. Allowed values for `iter_count` depend on the algorithm and are shown in [Iteration Counts for `crypt()`](#pgcrypto-icfc-table).
+ <a id="pgcrypto-icfc-table"></a>
 
-
-<a id="pgcrypto-icfc-table"></a>
 **Table: Iteration Counts for `crypt()`**
 
 | Algorithm | Default | Min | Max |
@@ -147,9 +148,8 @@ gen_salt(type text [, iter_count integer ]) returns text
 
 
  [Hash Algorithm Speeds](#pgcrypto-hash-speed-table) gives an overview of the relative slowness of different hashing algorithms. The table shows how much time it would take to try all combinations of characters in an 8-character password, assuming that the password contains either only lower case letters, or upper- and lower-case letters and numbers. In the `crypt-bf` entries, the number after a slash is the `iter_count` parameter of `gen_salt`.
+ <a id="pgcrypto-hash-speed-table"></a>
 
-
-<a id="pgcrypto-hash-speed-table"></a>
 **Table: Hash Algorithm Speeds**
 
 | Algorithm | Hashes/sec | For `[a-z]` | For `[A-Za-z0-9]` | Duration relative to `md5 hash` |
@@ -175,9 +175,9 @@ gen_salt(type text [, iter_count integer ]) returns text
 
 
  Note that “try all combinations” is not a realistic exercise. Usually password cracking is done with the help of dictionaries, which contain both regular words and various mutations of them. So, even somewhat word-like passwords could be cracked much faster than the above numbers suggest, while a 6-character non-word-like password may escape cracking. Or not.
+   <a id="pgcrypto-pgp-enc-funcs"></a>
 
-
-### PGP Encryption Functions { #pgcrypto-pgp-enc-funcs }
+### PGP Encryption Functions
 
 
  The functions here implement the encryption part of the OpenPGP ([RFC 4880](https://datatracker.ietf.org/doc/html/rfc4880)) standard. Supported are both symmetric-key and public-key encryption.
@@ -212,9 +212,9 @@ gen_salt(type text [, iter_count integer ]) returns text
 2.  The data is prefixed with a block of random bytes. This is equivalent to using a random IV.
 3.  A SHA1 hash of the random prefix and data is appended.
 4.  All this is encrypted with the session key and placed in the data packet.
+ <a id="pgcrypto-pgp-enc-funcs-pgp-sym-encrypt"></a>
 
-
-#### `pgp_sym_encrypt()` { #pgcrypto-pgp-enc-funcs-pgp-sym-encrypt }
+#### `pgp_sym_encrypt()`
 
 
 ```
@@ -225,9 +225,9 @@ pgp_sym_encrypt_bytea(data bytea, psw text [, options text ]) returns bytea
 
 
  Encrypt `data` with a symmetric PGP key `psw`. The `options` parameter can contain option settings, as described below.
+  <a id="pgcrypto-pgp-enc-funcs-pgp-sym-decrypt"></a>
 
-
-#### `pgp_sym_decrypt()` { #pgcrypto-pgp-enc-funcs-pgp-sym-decrypt }
+#### `pgp_sym_decrypt()`
 
 
 ```
@@ -244,9 +244,9 @@ pgp_sym_decrypt_bytea(msg bytea, psw text [, options text ]) returns bytea
 
 
  The `options` parameter can contain option settings, as described below.
+  <a id="pgcrypto-pgp-enc-funcs-pgp-pub-encrypt"></a>
 
-
-#### `pgp_pub_encrypt()` { #pgcrypto-pgp-enc-funcs-pgp-pub-encrypt }
+#### `pgp_pub_encrypt()`
 
 
 ```
@@ -260,9 +260,9 @@ pgp_pub_encrypt_bytea(data bytea, key bytea [, options text ]) returns bytea
 
 
  The `options` parameter can contain option settings, as described below.
+  <a id="pgcrypto-pgp-enc-funcs-pgp-pub-decrypt"></a>
 
-
-#### `pgp_pub_decrypt()` { #pgcrypto-pgp-enc-funcs-pgp-pub-decrypt }
+#### `pgp_pub_decrypt()`
 
 
 ```
@@ -279,9 +279,9 @@ pgp_pub_decrypt_bytea(msg bytea, key bytea [, psw text [, options text ]]) retur
 
 
  The `options` parameter can contain option settings, as described below.
+  <a id="pgcrypto-pgp-enc-funcs-pgp-key-id"></a>
 
-
-#### `pgp_key_id()` { #pgcrypto-pgp-enc-funcs-pgp-key-id }
+#### `pgp_key_id()`
 
 
 ```
@@ -305,9 +305,9 @@ pgp_key_id(bytea) returns text
 
 
  Note that different keys may have the same ID. This is rare but a normal event. The client application should then try to decrypt with each one, to see which fits — like handling `ANYKEY`.
+  <a id="pgcrypto-pgp-enc-funcs-armor"></a>
 
-
-#### `armor()`, `dearmor()` { #pgcrypto-pgp-enc-funcs-armor }
+#### `armor()`, `dearmor()`
 
 
 ```
@@ -321,9 +321,9 @@ dearmor(data text) returns bytea
 
 
  If the `keys` and `values` arrays are specified, an *armor header* is added to the armored format for each key/value pair. Both arrays must be single-dimensional, and they must be of the same length. The keys and values cannot contain any non-ASCII characters.
+  <a id="pgcrypto-pgp-enc-funcs-pgp-armor-headers"></a>
 
-
-#### `pgp_armor_headers` { #pgcrypto-pgp-enc-funcs-pgp-armor-headers }
+#### `pgp_armor_headers`
 
 
 ```
@@ -333,9 +333,9 @@ pgp_armor_headers(data text, key out text, value out text) returns setof record
 
 
  `pgp_armor_headers()` extracts the armor headers from `data`. The return value is a set of rows with two columns, key and value. If the keys or values contain any non-ASCII characters, they are treated as UTF-8.
+  <a id="pgcrypto-pgp-enc-funcs-opts"></a>
 
-
-#### Options for PGP Functions { #pgcrypto-pgp-enc-funcs-opts }
+#### Options for PGP Functions
 
 
  Options are named to be similar to GnuPG. An option's value should be given after an equal sign; separate options from each other with commas. For example:
@@ -350,9 +350,9 @@ pgp_sym_encrypt(data, psw, 'compress-algo=1, cipher-algo=aes256')
 
 
  The most interesting options are probably `compress-algo` and `unicode-mode`. The rest should have reasonable defaults.
+ <a id="pgcrypto-pgp-enc-funcs-opts-cipher-algo"></a>
 
-
-##### cipher-algo { #pgcrypto-pgp-enc-funcs-opts-cipher-algo }
+##### cipher-algo
 
 
  Which cipher algorithm to use.
@@ -364,9 +364,9 @@ Values: bf, aes128, aes192, aes256, 3des, cast5
 Default: aes128
 Applies to: pgp_sym_encrypt, pgp_pub_encrypt
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-compress-algo"></a>
 
-
-##### compress-algo { #pgcrypto-pgp-enc-funcs-opts-compress-algo }
+##### compress-algo
 
 
  Which compression algorithm to use. Only available if PostgreSQL was built with zlib.
@@ -381,9 +381,9 @@ Values:
 Default: 0
 Applies to: pgp_sym_encrypt, pgp_pub_encrypt
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-compress-level"></a>
 
-
-##### compress-level { #pgcrypto-pgp-enc-funcs-opts-compress-level }
+##### compress-level
 
 
  How much to compress. Higher levels compress smaller but are slower. 0 disables compression.
@@ -395,9 +395,9 @@ Values: 0, 1-9
 Default: 6
 Applies to: pgp_sym_encrypt, pgp_pub_encrypt
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-convert-crlf"></a>
 
-
-##### convert-crlf { #pgcrypto-pgp-enc-funcs-opts-convert-crlf }
+##### convert-crlf
 
 
  Whether to convert `\n` into `\r\n` when encrypting and `\r\n` to `\n` when decrypting. RFC 4880 specifies that text data should be stored using `\r\n` line-feeds. Use this to get fully RFC-compliant behavior.
@@ -409,9 +409,9 @@ Values: 0, 1
 Default: 0
 Applies to: pgp_sym_encrypt, pgp_pub_encrypt, pgp_sym_decrypt, pgp_pub_decrypt
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-disable-mdc"></a>
 
-
-##### disable-mdc { #pgcrypto-pgp-enc-funcs-opts-disable-mdc }
+##### disable-mdc
 
 
  Do not protect data with SHA-1. The only good reason to use this option is to achieve compatibility with ancient PGP products, predating the addition of SHA-1 protected packets to RFC 4880. Recent gnupg.org and pgp.com software supports it fine.
@@ -423,9 +423,9 @@ Values: 0, 1
 Default: 0
 Applies to: pgp_sym_encrypt, pgp_pub_encrypt
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-sess-key"></a>
 
-
-##### sess-key { #pgcrypto-pgp-enc-funcs-opts-sess-key }
+##### sess-key
 
 
  Use separate session key. Public-key encryption always uses a separate session key; this option is for symmetric-key encryption, which by default uses the S2K key directly.
@@ -437,9 +437,9 @@ Values: 0, 1
 Default: 0
 Applies to: pgp_sym_encrypt
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-s2k-mode"></a>
 
-
-##### s2k-mode { #pgcrypto-pgp-enc-funcs-opts-s2k-mode }
+##### s2k-mode
 
 
  Which S2K algorithm to use.
@@ -454,9 +454,9 @@ Values:
 Default: 3
 Applies to: pgp_sym_encrypt
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-s2k-count"></a>
 
-
-##### s2k-count { #pgcrypto-pgp-enc-funcs-opts-s2k-count }
+##### s2k-count
 
 
  The number of iterations of the S2K algorithm to use. It must be a value between 1024 and 65011712, inclusive.
@@ -467,9 +467,9 @@ Applies to: pgp_sym_encrypt
 Default: A random value between 65536 and 253952
 Applies to: pgp_sym_encrypt, only with s2k-mode=3
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-s2k-digest-algo"></a>
 
-
-##### s2k-digest-algo { #pgcrypto-pgp-enc-funcs-opts-s2k-digest-algo }
+##### s2k-digest-algo
 
 
  Which digest algorithm to use in S2K calculation.
@@ -481,9 +481,9 @@ Values: md5, sha1
 Default: sha1
 Applies to: pgp_sym_encrypt
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-s2k-cipher-algo"></a>
 
-
-##### s2k-cipher-algo { #pgcrypto-pgp-enc-funcs-opts-s2k-cipher-algo }
+##### s2k-cipher-algo
 
 
  Which cipher to use for encrypting separate session key.
@@ -495,9 +495,9 @@ Values: bf, aes, aes128, aes192, aes256
 Default: use cipher-algo
 Applies to: pgp_sym_encrypt
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-unicode-mode"></a>
 
-
-##### unicode-mode { #pgcrypto-pgp-enc-funcs-opts-unicode-mode }
+##### unicode-mode
 
 
  Whether to convert textual data from database internal encoding to UTF-8 and back. If your database already is UTF-8, no conversion will be done, but the message will be tagged as UTF-8. Without this option it will not be.
@@ -509,9 +509,9 @@ Values: 0, 1
 Default: 0
 Applies to: pgp_sym_encrypt, pgp_pub_encrypt
 </pre>
+   <a id="pgcrypto-pgp-enc-funcs-gnupg"></a>
 
-
-#### Generating PGP Keys with GnuPG { #pgcrypto-pgp-enc-funcs-gnupg }
+#### Generating PGP Keys with GnuPG
 
 
  To generate a new key:
@@ -556,17 +556,17 @@ gpg -a --export-secret-keys KEYID > secret.key
 
 
  For more details see `man gpg`, [The GNU Privacy Handbook](https://www.gnupg.org/gph/en/manual.html) and other documentation on [https://www.gnupg.org/](https://www.gnupg.org/).
+  <a id="pgcrypto-pgp-enc-funcs-limitations"></a>
 
-
-#### Limitations of PGP Code { #pgcrypto-pgp-enc-funcs-limitations }
+#### Limitations of PGP Code
 
 
 -  No support for signing. That also means that it is not checked whether the encryption subkey belongs to the master key.
 -  No support for encryption key as master key. As such practice is generally discouraged, this should not be a problem.
 -  No support for several subkeys. This may seem like a problem, as this is common practice. On the other hand, you should not use your regular GPG/PGP keys with `pgcrypto`, but create new ones, as the usage scenario is rather different.
+   <a id="pgcrypto-raw-enc-funcs"></a>
 
-
-### Raw Encryption Functions { #pgcrypto-raw-enc-funcs }
+### Raw Encryption Functions
 
 
  These functions only run a cipher over data; they don't have any advanced features of PGP encryption. Therefore they have some major problems:
@@ -621,9 +621,9 @@ encrypt(data, 'fooz', 'bf-cbc/pad:pkcs')
 
 
  In `encrypt_iv` and `decrypt_iv`, the `iv` parameter is the initial value for the CBC mode; it is ignored for ECB. It is clipped or padded with zeroes if not exactly block size. It defaults to all zeroes in the functions without this parameter.
+  <a id="pgcrypto-random-data-funcs"></a>
 
-
-### Random-Data Functions { #pgcrypto-random-data-funcs }
+### Random-Data Functions
 
 
 ```
@@ -642,12 +642,12 @@ gen_random_uuid() returns uuid
 
 
  Returns a version 4 (random) UUID. (Obsolete, this function internally calls the [core function](../../the-sql-language/functions-and-operators/uuid-functions.md#functions-uuid) of the same name.)
+  <a id="pgcrypto-notes"></a>
 
+### Notes
+  <a id="pgcrypto-notes-config"></a>
 
-### Notes { #pgcrypto-notes }
-
-
-#### Configuration { #pgcrypto-notes-config }
+#### Configuration
 
 
  `pgcrypto` configures itself according to the findings of the main PostgreSQL `configure` script. The options that affect it are `--with-zlib` and `--with-ssl=openssl`.
@@ -660,15 +660,15 @@ gen_random_uuid() returns uuid
 
 
  When compiled against OpenSSL 3.0.0 and later versions, the legacy provider must be activated in the `openssl.cnf` configuration file in order to use older ciphers like DES or Blowfish.
+  <a id="pgcrypto-notes-null-handling"></a>
 
-
-#### NULL Handling { #pgcrypto-notes-null-handling }
+#### NULL Handling
 
 
  As is standard in SQL, all functions return NULL, if any of the arguments are NULL. This may create security risks on careless usage.
+  <a id="pgcrypto-notes-sec-limits"></a>
 
-
-#### Security Limitations { #pgcrypto-notes-sec-limits }
+#### Security Limitations
 
 
  All `pgcrypto` functions run inside the database server. That means that all the data and passwords move between `pgcrypto` and client applications in clear text. Thus you must:
@@ -682,9 +682,9 @@ gen_random_uuid() returns uuid
 
 
  The implementation does not resist [side-channel attacks](https://en.wikipedia.org/wiki/Side-channel_attack). For example, the time required for a `pgcrypto` decryption function to complete varies among ciphertexts of a given size.
+   <a id="pgcrypto-author"></a>
 
-
-### Author { #pgcrypto-author }
+### Author
 
 
  Marko Kreen [markokr@gmail.com](mailto:markokr@gmail.com)

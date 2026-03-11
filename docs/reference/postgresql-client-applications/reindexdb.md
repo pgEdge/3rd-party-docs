@@ -1,4 +1,6 @@
-# reindexdb { #app-reindexdb }
+<a id="app-reindexdb"></a>
+
+# reindexdb
 
 reindex a PostgreSQL database
 

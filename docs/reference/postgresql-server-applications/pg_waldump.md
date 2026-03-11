@@ -1,4 +1,6 @@
-# pg_waldump { #pgwaldump }
+<a id="pgwaldump"></a>
+
+# pg_waldump
 
 display a human-readable rendering of the write-ahead log of a PostgreSQL database cluster
 
@@ -8,9 +10,9 @@ display a human-readable rendering of the write-ahead log of a PostgreSQL databa
 ```
 pg_waldump [option...] [startseg [endseg]]
 ```
+ <a id="r1-app-pgwaldump-1"></a>
 
-
-## Description { #r1-app-pgwaldump-1 }
+## Description
 
 
  `pg_waldump` displays the write-ahead log (WAL) and is mainly useful for debugging or educational purposes.

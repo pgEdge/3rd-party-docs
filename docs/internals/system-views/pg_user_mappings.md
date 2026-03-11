@@ -1,4 +1,6 @@
-## `pg_user_mappings` { #view-pg-user-mappings }
+<a id="view-pg-user-mappings"></a>
+
+## `pg_user_mappings`
 
 
  The view `pg_user_mappings` provides access to information about user mappings. This is essentially a publicly readable view of [`pg_user_mapping`](../system-catalogs/pg_user_mapping.md#catalog-pg-user-mapping) that leaves out the options field if the user has no rights to use it.

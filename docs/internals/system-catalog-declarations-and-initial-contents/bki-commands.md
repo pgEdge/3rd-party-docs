@@ -1,4 +1,6 @@
-## BKI Commands { #bki-commands }
+<a id="bki-commands"></a>
+
+## BKI Commands
 
 
 `create` *tablename* *tableoid* [`bootstrap`] [`shared_relation`] [`rowtype_oid` *oid*] (*name1* = *type1* [`FORCE NOT NULL` | `FORCE NULL` ] [, *name2* = *type2* [`FORCE NOT NULL` | `FORCE NULL` ], ...])

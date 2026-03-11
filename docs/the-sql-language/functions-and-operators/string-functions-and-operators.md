@@ -1,4 +1,6 @@
-## String Functions and Operators { #functions-string }
+<a id="functions-string"></a>
+
+## String Functions and Operators
 
 
  This section describes functions and operators for examining and manipulating string values. Strings in this context include values of the types `character`, `character varying`, and `text`. Except where noted, these functions and operators are declared to accept and return type `text`. They will interchangeably accept `character varying` arguments. Values of type `character` will be converted to `text` before the function or operator is applied, resulting in stripping any trailing spaces in the `character` value.
@@ -10,9 +12,8 @@
 !!! note
 
     The string concatenation operator (`||`) will accept non-string input, so long as at least one input is of string type, as shown in [SQL String Functions and Operators](#functions-string-sql). For other cases, inserting an explicit coercion to `text` can be used to have non-string input accepted.
+ <a id="functions-string-sql"></a>
 
-
-<a id="functions-string-sql"></a>
 **Table: SQL String Functions and Operators**
 
 <table>
@@ -144,9 +145,8 @@
 
 
  Additional string manipulation functions and operators are available and are listed in [Other String Functions and Operators](#functions-string-other). (Some of these are used internally to implement the SQL-standard string functions listed in [SQL String Functions and Operators](#functions-string-sql).) There are also pattern-matching operators, which are described in [Pattern Matching](pattern-matching.md#functions-matching), and operators for full-text search, which are described in [Full Text Search](../full-text-search/index.md#textsearch).
+ <a id="functions-string-other"></a>
 
-
-<a id="functions-string-other"></a>
 **Table: Other String Functions and Operators**
 
 <table>
@@ -330,7 +330,8 @@
 <td><code>starts_with('alphabet', 'alph')</code> <code>t</code></td>
 </tr>
 <tr>
-<td><code>string_to_array</code> ( <code>string</code> <code>text</code>, <code>delimiter</code> <code>text</code> [, <code>null_string</code> <code>text</code> ] ) <code>text[]</code></td>
+<td><a id="function-string-to-array"></a>
+ `string_to_array` ( `string` `text`, `delimiter` `text` [, `null_string` `text` ] ) `text[]`</td>
 <td>Splits the <code>string</code> at occurrences of <code>delimiter</code> and forms the resulting fields into a <code>text</code> array. If <code>delimiter</code> is <code>NULL</code>, each character in the <code>string</code> will become a separate element in the array. If <code>delimiter</code> is an empty string, then the <code>string</code> is treated as a single field. If <code>null_string</code> is supplied and is not <code>NULL</code>, fields matching that string are replaced by <code>NULL</code>. See also <a href="array-functions-and-operators.md#function-array-to-string"><code>array_to_string</code></a>.</td>
 <td><code>string_to_array('xx~~yy~~zz', '~~', 'yy')</code> <code>{xx,NULL,zz}</code></td>
 </tr>
@@ -391,9 +392,9 @@
 
 
  See also the aggregate function `string_agg` in [Aggregate Functions](aggregate-functions.md#functions-aggregate), and the functions for converting between strings and the `bytea` type in [Text/Binary String Conversion Functions](binary-string-functions-and-operators.md#functions-binarystring-conversions).
+ <a id="functions-string-format"></a>
 
-
-### `format` { #functions-string-format }
+### `format`
 
 
  The function `format` produces output formatted according to a format string, in a style similar to the C function `sprintf`.

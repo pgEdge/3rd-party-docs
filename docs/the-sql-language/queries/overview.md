@@ -1,4 +1,6 @@
-## Overview { #queries-overview }
+<a id="queries-overview"></a>
+
+## Overview
 
 
  The process of retrieving or the command to retrieve data from a database is called a *query*. In SQL the [`SELECT`](../../reference/sql-commands/select.md#sql-select) command is used to specify queries. The general syntax of the `SELECT` command is

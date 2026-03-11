@@ -1,4 +1,6 @@
-## `pg_seclabels` { #view-pg-seclabels }
+<a id="view-pg-seclabels"></a>
+
+## `pg_seclabels`
 
 
  The view `pg_seclabels` provides information about security labels. It as an easier-to-query version of the [`pg_seclabel`](../system-catalogs/pg_seclabel.md#catalog-pg-seclabel) catalog.

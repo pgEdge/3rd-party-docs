@@ -1,4 +1,6 @@
-# ALTER USER MAPPING { #sql-alterusermapping }
+<a id="sql-alterusermapping"></a>
+
+# ALTER USER MAPPING
 
 change the definition of a user mapping
 

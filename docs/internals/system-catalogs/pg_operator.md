@@ -1,4 +1,6 @@
-## `pg_operator` { #catalog-pg-operator }
+<a id="catalog-pg-operator"></a>
+
+## `pg_operator`
 
 
  The catalog `pg_operator` stores information about operators. See [sql-createoperator](../../reference/sql-commands/create-operator.md#sql-createoperator) and [User-Defined Operators](../../server-programming/extending-sql/user-defined-operators.md#xoper) for more information.

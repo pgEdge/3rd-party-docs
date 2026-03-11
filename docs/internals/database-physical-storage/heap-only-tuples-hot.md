@@ -1,4 +1,6 @@
-## Heap-Only Tuples (HOT) { #storage-hot }
+<a id="storage-hot"></a>
+
+## Heap-Only Tuples (HOT)
 
 
  To allow for high concurrency, PostgreSQL uses [multiversion concurrency control](../../the-sql-language/concurrency-control/introduction.md#mvcc-intro) (MVCC) to store rows. However, MVCC has some downsides for update queries. Specifically, updates require new versions of rows to be added to tables. This can also require new index entries for each updated row, and removal of old versions of rows and their index entries can be expensive.

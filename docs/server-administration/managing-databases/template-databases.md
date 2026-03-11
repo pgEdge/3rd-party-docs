@@ -1,4 +1,6 @@
-## Template Databases { #manage-ag-templatedbs }
+<a id="manage-ag-templatedbs"></a>
+
+## Template Databases
 
 
  `CREATE DATABASE` actually works by copying an existing database. By default, it copies the standard system database named `template1`. Thus that database is the “template” from which new databases are made. If you add objects to `template1`, these objects will be copied into subsequently created user databases. This behavior allows site-local modifications to the standard set of objects in databases. For example, if you install the procedural language PL/Perl in `template1`, it will automatically be available in user databases without any extra action being taken when those databases are created.

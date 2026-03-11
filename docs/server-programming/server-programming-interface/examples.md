@@ -1,4 +1,6 @@
-## Examples { #spi-examples }
+<a id="spi-examples"></a>
+
+## Examples
 
 
  This section contains a very simple example of SPI usage. The C function `execq` takes an SQL command as its first argument and a row count as its second, executes the command using `SPI_exec` and returns the number of rows that were processed by the command. You can find more complex examples for SPI in the source tree in `src/test/regress/regress.c` and in the [spi](../../appendixes/additional-supplied-modules-and-extensions/spi-server-programming-interface-features-examples.md#contrib-spi) module.

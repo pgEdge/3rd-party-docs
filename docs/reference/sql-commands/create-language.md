@@ -1,4 +1,6 @@
-# CREATE LANGUAGE { #sql-createlanguage }
+<a id="sql-createlanguage"></a>
+
+# CREATE LANGUAGE
 
 define a new procedural language
 
@@ -11,9 +13,9 @@ CREATE [ OR REPLACE ] [ TRUSTED ] [ PROCEDURAL ] LANGUAGE NAME
     HANDLER CALL_HANDLER [ INLINE INLINE_HANDLER ] [ VALIDATOR VALFUNCTION ]
 CREATE [ OR REPLACE ] [ TRUSTED ] [ PROCEDURAL ] LANGUAGE NAME
 ```
+ <a id="sql-createlanguage-description"></a>
 
-
-## Description { #sql-createlanguage-description }
+## Description
 
 
  `CREATE LANGUAGE` registers a new procedural language with a PostgreSQL database. Subsequently, functions and procedures can be defined in this new language.
@@ -29,9 +31,9 @@ CREATE [ OR REPLACE ] [ TRUSTED ] [ PROCEDURAL ] LANGUAGE NAME
 
 
  The form of `CREATE LANGUAGE` that does not supply any handler function is obsolete. For backwards compatibility with old dump files, it is interpreted as `CREATE EXTENSION`. That will work if the language has been packaged into an extension of the same name, which is the conventional way to set up procedural languages.
+ <a id="sql-createlanguage-parameters"></a>
 
-
-## Parameters { #sql-createlanguage-parameters }
+## Parameters
 
 
 `TRUSTED`
@@ -54,9 +56,9 @@ CREATE [ OR REPLACE ] [ TRUSTED ] [ PROCEDURAL ] LANGUAGE NAME
 
 
      A validator function would typically inspect the function body for syntactical correctness, but it can also look at other properties of the function, for example if the language cannot handle certain argument types. To signal an error, the validator function should use the `ereport()` function. The return value of the function is ignored.
+ <a id="sql-createlanguage-notes"></a>
 
-
-## Notes { #sql-createlanguage-notes }
+## Notes
 
 
  Use [`DROP LANGUAGE`](drop-language.md#sql-droplanguage) to drop procedural languages.
@@ -69,9 +71,9 @@ CREATE [ OR REPLACE ] [ TRUSTED ] [ PROCEDURAL ] LANGUAGE NAME
 
 
  Procedural languages are local to individual databases. However, a language can be installed into the `template1` database, which will cause it to be available automatically in all subsequently-created databases.
+ <a id="sql-createlanguage-examples"></a>
 
-
-## Examples { #sql-createlanguage-examples }
+## Examples
 
 
  A minimal sequence for creating a new procedural language is:
@@ -90,9 +92,9 @@ CREATE LANGUAGE plsample
 
 CREATE EXTENSION plsample;
 ```
+ <a id="sql-createlanguage-compat"></a>
 
-
-## Compatibility { #sql-createlanguage-compat }
+## Compatibility
 
 
  `CREATE LANGUAGE` is a PostgreSQL extension.

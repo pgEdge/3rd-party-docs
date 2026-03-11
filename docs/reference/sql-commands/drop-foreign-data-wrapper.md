@@ -1,4 +1,6 @@
-# DROP FOREIGN DATA WRAPPER { #sql-dropforeigndatawrapper }
+<a id="sql-dropforeigndatawrapper"></a>
+
+# DROP FOREIGN DATA WRAPPER
 
 remove a foreign-data wrapper
 

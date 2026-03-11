@@ -1,4 +1,6 @@
-# initdb { #app-initdb }
+<a id="app-initdb"></a>
+
+# initdb
 
 create a new PostgreSQL database cluster
 
@@ -11,9 +13,9 @@ initdb [OPTION...] {
      -D
      |  DIRECTORY}
 ```
+ <a id="r1-app-initdb-1"></a>
 
-
-## Description { #r1-app-initdb-1 }
+## Description
 
 
  `initdb` creates a new PostgreSQL *database cluster*.

@@ -1,10 +1,12 @@
-## Subquery Expressions { #functions-subquery }
+<a id="functions-subquery"></a>
+
+## Subquery Expressions
 
 
  This section describes the SQL-compliant subquery expressions available in PostgreSQL. All of the expression forms documented in this section return Boolean (true/false) results.
+ <a id="functions-subquery-exists"></a>
 
-
-### `EXISTS` { #functions-subquery-exists }
+### `EXISTS`
 
 
 ```
@@ -34,8 +36,9 @@ FROM tab1
 WHERE EXISTS (SELECT 1 FROM tab2 WHERE col2 = tab1.col2);
 ```
 
+  <a id="functions-subquery-in"></a>
 
-### `IN` { #functions-subquery-in }
+### `IN`
 
 
 ```
@@ -63,9 +66,9 @@ ROW_CONSTRUCTOR IN (SUBQUERY)
 
 
  As usual, null values in the rows are combined per the normal rules of SQL Boolean expressions. Two rows are considered equal if all their corresponding members are non-null and equal; the rows are unequal if any corresponding members are non-null and unequal; otherwise the result of that row comparison is unknown (null). If all the per-row results are either unequal or null, with at least one null, then the result of `IN` is null.
+  <a id="functions-subquery-notin"></a>
 
-
-### `NOT IN` { #functions-subquery-notin }
+### `NOT IN`
 
 
 ```
@@ -93,9 +96,9 @@ ROW_CONSTRUCTOR NOT IN (SUBQUERY)
 
 
  As usual, null values in the rows are combined per the normal rules of SQL Boolean expressions. Two rows are considered equal if all their corresponding members are non-null and equal; the rows are unequal if any corresponding members are non-null and unequal; otherwise the result of that row comparison is unknown (null). If all the per-row results are either unequal or null, with at least one null, then the result of `NOT IN` is null.
+  <a id="functions-subquery-any-some"></a>
 
-
-### `ANY`/`SOME` { #functions-subquery-any-some }
+### `ANY`/`SOME`
 
 
 ```
@@ -128,9 +131,9 @@ ROW_CONSTRUCTOR OPERATOR SOME (SUBQUERY)
 
 
  See [Row Constructor Comparison](row-and-array-comparisons.md#row-wise-comparison) for details about the meaning of a row constructor comparison.
+  <a id="functions-subquery-all"></a>
 
-
-### `ALL` { #functions-subquery-all }
+### `ALL`
 
 
 ```
@@ -158,9 +161,9 @@ ROW_CONSTRUCTOR OPERATOR ALL (SUBQUERY)
 
 
  See [Row Constructor Comparison](row-and-array-comparisons.md#row-wise-comparison) for details about the meaning of a row constructor comparison.
+  <a id="functions-subquery-single-row-comp"></a>
 
-
-### Single-Row Comparison { #functions-subquery-single-row-comp }
+### Single-Row Comparison
 
 
 ```

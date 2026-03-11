@@ -1,4 +1,6 @@
-# COMMIT PREPARED { #sql-commit-prepared }
+<a id="sql-commit-prepared"></a>
+
+# COMMIT PREPARED
 
 commit a transaction that was earlier prepared for two-phase commit
 
@@ -34,9 +36,9 @@ COMMIT PREPARED TRANSACTION_ID
 
 
  All currently available prepared transactions are listed in the [`pg_prepared_xacts`](../../internals/system-views/pg_prepared_xacts.md#view-pg-prepared-xacts) system view.
+ <a id="sql-commit-prepared-examples"></a>
 
-
-## Examples { #sql-commit-prepared-examples }
+## Examples
 
 
  Commit the transaction identified by the transaction identifier `foobar`:

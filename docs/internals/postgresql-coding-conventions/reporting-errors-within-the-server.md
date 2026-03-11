@@ -1,4 +1,6 @@
-## Reporting Errors Within the Server { #error-message-reporting }
+<a id="error-message-reporting"></a>
+
+## Reporting Errors Within the Server
 
 
  Error, warning, and log messages generated within the server code should be created using `ereport`, or its older cousin `elog`. The use of this function is complex enough to require some explanation.

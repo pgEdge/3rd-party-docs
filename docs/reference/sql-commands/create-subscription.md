@@ -1,4 +1,6 @@
-# CREATE SUBSCRIPTION { #sql-createsubscription }
+<a id="sql-createsubscription"></a>
+
+# CREATE SUBSCRIPTION
 
 define a new subscription
 
@@ -163,9 +165,9 @@ CREATE SUBSCRIPTION SUBSCRIPTION_NAME
 
 
  When specifying a parameter of type `boolean`, the `=` *value* part can be omitted, which is equivalent to specifying `TRUE`.
+ <a id="sql-createsubscription-notes"></a>
 
-
-## Notes { #sql-createsubscription-notes }
+## Notes
 
 
  See [Security](../../server-administration/logical-replication/security.md#logical-replication-security) for details on how to configure access control between the subscription and the publication instance.

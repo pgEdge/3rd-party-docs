@@ -1,4 +1,6 @@
-# DROP OPERATOR FAMILY { #sql-dropopfamily }
+<a id="sql-dropopfamily"></a>
+
+# DROP OPERATOR FAMILY
 
 remove an operator family
 

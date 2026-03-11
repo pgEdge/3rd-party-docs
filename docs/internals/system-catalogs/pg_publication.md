@@ -1,4 +1,6 @@
-## `pg_publication` { #catalog-pg-publication }
+<a id="catalog-pg-publication"></a>
+
+## `pg_publication`
 
 
  The catalog `pg_publication` contains all publications created in the database. For more on publications see [Publication](../../server-administration/logical-replication/publication.md#logical-replication-publication).

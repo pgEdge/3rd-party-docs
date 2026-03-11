@@ -1,4 +1,6 @@
-# DROP RULE { #sql-droprule }
+<a id="sql-droprule"></a>
+
+# DROP RULE
 
 remove a rewrite rule
 

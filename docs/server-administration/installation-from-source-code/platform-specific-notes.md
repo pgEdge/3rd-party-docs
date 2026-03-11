@@ -1,13 +1,15 @@
-## Platform-Specific Notes { #installation-platform-notes }
+<a id="installation-platform-notes"></a>
+
+## Platform-Specific Notes
 
 
  This section documents additional platform-specific issues regarding the installation and setup of PostgreSQL. Be sure to read the installation instructions, and in particular [Requirements](requirements.md#install-requirements) as well. Also, check [Regression Tests](../regression-tests/index.md#regress) regarding the interpretation of regression test results.
 
 
  Platforms that are not covered here have no known platform-specific installation issues.
+ <a id="installation-notes-cygwin"></a>
 
-
-### Cygwin { #installation-notes-cygwin }
+### Cygwin
 
 
  PostgreSQL can be built using Cygwin, a Linux-like environment for Windows, but that method is inferior to the native Windows build and running a server under Cygwin is no longer recommended.
@@ -31,9 +33,9 @@ make MAX_CONNECTIONS=5 check
 
 
  It is possible to install `cygserver` and the PostgreSQL server as Windows NT services. For information on how to do this, please refer to the `README` document included with the PostgreSQL binary package on Cygwin. It is installed in the directory `/usr/share/doc/Cygwin`.
+  <a id="installation-notes-macos"></a>
 
-
-### macOS { #installation-notes-macos }
+### macOS
 
 
  To build PostgreSQL from source on macOS, you will need to install Apple's command line developer tools, which can be done by issuing
@@ -79,9 +81,9 @@ xcrun --show-sdk-path
 
 
  macOS's “System Integrity Protection” (SIP) feature breaks `make check`, because it prevents passing the needed setting of `DYLD_LIBRARY_PATH` down to the executables being tested. You can work around that by doing `make install` before `make check`. Most PostgreSQL developers just turn off SIP, though.
+  <a id="installation-notes-mingw"></a>
 
-
-### MinGW { #installation-notes-mingw }
+### MinGW
 
 
  PostgreSQL for Windows can be built using MinGW, a Unix-like build environment for Microsoft operating systems. The MinGW build procedure uses the normal build system described in this chapter.
@@ -94,30 +96,30 @@ xcrun --show-sdk-path
 
 
  After you have everything installed, it is suggested that you run psql under `CMD.EXE`, as the MSYS console has buffering issues.
+ <a id="mingw-crash-dumps"></a>
 
-
-#### Collecting Crash Dumps { #mingw-crash-dumps }
+#### Collecting Crash Dumps
 
 
  If PostgreSQL on Windows crashes, it has the ability to generate minidumps that can be used to track down the cause for the crash, similar to core dumps on Unix. These dumps can be read using the Windows Debugger Tools or using Visual Studio. To enable the generation of dumps on Windows, create a subdirectory named `crashdumps` inside the cluster data directory. The dumps will then be written into this directory with a unique name based on the identifier of the crashing process and the current time of the crash.
+   <a id="installation-notes-solaris"></a>
 
-
-### Solaris { #installation-notes-solaris }
+### Solaris
 
 
  PostgreSQL is well-supported on Solaris. The more up to date your operating system, the fewer issues you will experience.
+ <a id="installation-notes-solaris-req-tools"></a>
 
-
-#### Required Tools { #installation-notes-solaris-req-tools }
+#### Required Tools
 
 
  You can build with either GCC or Sun's compiler suite. For better code optimization, Sun's compiler is strongly recommended on the SPARC architecture. If you are using Sun's compiler, be careful not to select `/usr/ucb/cc`; use `/opt/SUNWspro/bin/cc`.
 
 
  You can download Sun Studio from [https://www.oracle.com/technetwork/server-storage/solarisstudio/downloads/](https://www.oracle.com/technetwork/server-storage/solarisstudio/downloads/). Many GNU tools are integrated into Solaris 10, or they are present on the Solaris companion CD. If you need packages for older versions of Solaris, you can find these tools at [http://www.sunfreeware.com](http://www.sunfreeware.com). If you prefer sources, look at [https://www.gnu.org/prep/ftp](https://www.gnu.org/prep/ftp).
+  <a id="installation-notes-solaris-configure-complains"></a>
 
-
-#### configure Complains About a Failed Test Program { #installation-notes-solaris-configure-complains }
+#### configure Complains About a Failed Test Program
 
 
  If `configure` complains about a failed test program, this is probably a case of the run-time linker being unable to find some library, probably libz, libreadline or some other non-standard library such as libssl. To point it to the right location, set the `LDFLAGS` environment variable on the `configure` command line, e.g.,
@@ -127,18 +129,18 @@ xcrun --show-sdk-path
 configure ... LDFLAGS="-R /usr/sfw/lib:/opt/sfw/lib:/usr/local/lib"
 ```
  See the `ld`(1) man page for more information.
+  <a id="installation-notes-solaris-comp-opt-perf"></a>
 
-
-#### Compiling for Optimal Performance { #installation-notes-solaris-comp-opt-perf }
+#### Compiling for Optimal Performance
 
 
  On the SPARC architecture, Sun Studio is strongly recommended for compilation. Try using the `-xO5` optimization flag to generate significantly faster binaries. Do not use any flags that modify behavior of floating-point operations and `errno` processing (e.g., `-fast`).
 
 
  If you do not have a reason to use 64-bit binaries on SPARC, prefer the 32-bit version. The 64-bit operations are slower and 64-bit binaries are slower than the 32-bit variants. On the other hand, 32-bit code on the AMD64 CPU family is not native, so 32-bit code is significantly slower on that CPU family.
+  <a id="installation-notes-solaris-using-dtrace"></a>
 
-
-#### Using DTrace for Tracing PostgreSQL { #installation-notes-solaris-using-dtrace }
+#### Using DTrace for Tracing PostgreSQL
 
 
  Yes, using DTrace is possible. See [Dynamic Tracing](../monitoring-database-activity/dynamic-tracing.md#dynamic-trace) for further information.
@@ -157,9 +159,9 @@ collect2: ld returned 1 exit status
 make: *** [postgres] Error 1
 ```
  your DTrace installation is too old to handle probes in static functions. You need Solaris 10u4 or newer to use DTrace.
+   <a id="installation-notes-visual-studio"></a>
 
-
-### Visual Studio { #installation-notes-visual-studio }
+### Visual Studio
 
 
  It is recommended that most users download the binary distribution for Windows, available as a graphical installer package from the PostgreSQL website at [https://www.postgresql.org/download/](https://www.postgresql.org/download/). Building from source is only intended for people developing PostgreSQL or extensions.
@@ -181,9 +183,9 @@ make: *** [postgres] Error 1
 
 
  You must always include the Windows Headers and Libraries part of the SDK. If you install a Windows SDK including the Visual C++ Compilers, you don't need Visual Studio to build. Note that as of Version 8.0a the Windows SDK no longer ships with a complete command-line build environment.
+ <a id="windows-requirements"></a>
 
-
-#### Requirements { #windows-requirements }
+#### Requirements
 
 
  The following additional products are required to build PostgreSQL on Windows.
@@ -241,8 +243,9 @@ Python
 zlib
 :   Required for compression support in pg_dump and pg_restore. Binaries can be downloaded from [https://www.zlib.net](https://www.zlib.net).
 
+  <a id="install-windows-full-64-bit"></a>
 
-#### Special Considerations for 64-Bit Windows { #install-windows-full-64-bit }
+#### Special Considerations for 64-Bit Windows
 
 
  PostgreSQL will only build for the x64 architecture on 64-bit Windows.
@@ -252,9 +255,9 @@ zlib
 
 
  To use a server-side third party library such as Python or OpenSSL, this library *must* also be 64-bit. There is no support for loading a 32-bit library in a 64-bit server. Several of the third party libraries that PostgreSQL supports may only be available in 32-bit versions, in which case they cannot be used with 64-bit PostgreSQL.
+  <a id="windows-crash-dumps"></a>
 
-
-#### Collecting Crash Dumps { #windows-crash-dumps }
+#### Collecting Crash Dumps
 
 
  If PostgreSQL on Windows crashes, it has the ability to generate minidumps that can be used to track down the cause for the crash, similar to core dumps on Unix. These dumps can be read using the Windows Debugger Tools or using Visual Studio. To enable the generation of dumps on Windows, create a subdirectory named `crashdumps` inside the cluster data directory. The dumps will then be written into this directory with a unique name based on the identifier of the crashing process and the current time of the crash.

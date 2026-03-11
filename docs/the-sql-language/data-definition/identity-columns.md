@@ -1,4 +1,6 @@
-## Identity Columns { #ddl-identity-columns }
+<a id="ddl-identity-columns"></a>
+
+## Identity Columns
 
 
  An identity column is a special column that is generated automatically from an implicit sequence. It can be used to generate key values.

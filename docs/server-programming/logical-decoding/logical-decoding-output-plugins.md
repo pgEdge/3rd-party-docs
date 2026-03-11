@@ -1,10 +1,12 @@
-## Logical Decoding Output Plugins { #logicaldecoding-output-plugin }
+<a id="logicaldecoding-output-plugin"></a>
+
+## Logical Decoding Output Plugins
 
 
  An example output plugin can be found in the [`contrib/test_decoding`](../../appendixes/additional-supplied-modules-and-extensions/test_decoding-sql-based-test-example-module-for-wal-logical-decoding.md#test-decoding) subdirectory of the PostgreSQL source tree.
+ <a id="logicaldecoding-output-init"></a>
 
-
-### Initialization Function { #logicaldecoding-output-init }
+### Initialization Function
 
 
  An output plugin is loaded by dynamically loading a shared library with the output plugin's name as the library base name. The normal library search path is used to locate the library. To provide the required output plugin callbacks and to indicate that the library is actually an output plugin it needs to provide a function named `_PG_output_plugin_init`. This function is passed a struct that needs to be filled with the callback function pointers for individual actions.
@@ -45,9 +47,9 @@ typedef void (*LogicalOutputPluginInit) (struct OutputPluginCallbacks *cb);
 
 
  An output plugin may also define functions to support two-phase commits, which allows actions to be decoded on the `PREPARE TRANSACTION`. The `begin_prepare_cb`, `prepare_cb`, `commit_prepared_cb` and `rollback_prepared_cb` callbacks are required, while `filter_prepare_cb` is optional. The `stream_prepare_cb` is also required if the output plugin also supports the streaming of large in-progress transactions.
+  <a id="logicaldecoding-capabilities"></a>
 
-
-### Capabilities { #logicaldecoding-capabilities }
+### Capabilities
 
 
  To decode, format and output changes, output plugins can use most of the backend's normal infrastructure, including calling output functions. Read only access to relations is permitted as long as only relations are accessed that either have been created by `initdb` in the `pg_catalog` schema, or have been marked as user provided catalog tables using
@@ -58,15 +60,15 @@ ALTER TABLE user_catalog_table SET (user_catalog_table = true);
 CREATE TABLE another_catalog_table(data text) WITH (user_catalog_table = true);
 ```
  Note that access to user catalog tables or regular system catalog tables in the output plugins has to be done via the `systable_*` scan APIs only. Access via the `heap_*` scan APIs will error out. Additionally, any actions leading to transaction ID assignment are prohibited. That, among others, includes writing to tables, performing DDL changes, and calling `pg_current_xact_id()`.
+  <a id="logicaldecoding-output-mode"></a>
 
-
-### Output Modes { #logicaldecoding-output-mode }
+### Output Modes
 
 
  Output plugin callbacks can pass data to the consumer in nearly arbitrary formats. For some use cases, like viewing the changes via SQL, returning data in a data type that can contain arbitrary data (e.g., `bytea`) is cumbersome. If the output plugin only outputs textual data in the server's encoding, it can declare that by setting `OutputPluginOptions.output_type` to `OUTPUT_PLUGIN_TEXTUAL_OUTPUT` instead of `OUTPUT_PLUGIN_BINARY_OUTPUT` in the [startup callback](#logicaldecoding-output-plugin-startup). In that case, all the data has to be in the server's encoding so that a `text` datum can contain it. This is checked in assertion-enabled builds.
+  <a id="logicaldecoding-output-plugin-callbacks"></a>
 
-
-### Output Plugin Callbacks { #logicaldecoding-output-plugin-callbacks }
+### Output Plugin Callbacks
 
 
  An output plugin gets notified about changes that are happening via various callbacks it needs to provide.
@@ -78,9 +80,9 @@ CREATE TABLE another_catalog_table(data text) WITH (user_catalog_table = true);
 !!! note
 
     Only transactions that have already safely been flushed to disk will be decoded. That can lead to a `COMMIT` not immediately being decoded in a directly following `pg_logical_slot_get_changes()` when `synchronous_commit` is set to `off`.
+ <a id="logicaldecoding-output-plugin-startup"></a>
 
-
-#### Startup Callback { #logicaldecoding-output-plugin-startup }
+#### Startup Callback
 
 
  The optional `startup_cb` callback is called whenever a replication slot is created or asked to stream changes, independent of the number of changes that are ready to be put out.
@@ -105,9 +107,9 @@ typedef struct OutputPluginOptions
 
 
  The startup callback should validate the options present in `ctx->output_plugin_options`. If the output plugin needs to have a state, it can use `ctx->output_plugin_private` to store it.
+  <a id="logicaldecoding-output-plugin-shutdown"></a>
 
-
-#### Shutdown Callback { #logicaldecoding-output-plugin-shutdown }
+#### Shutdown Callback
 
 
  The optional `shutdown_cb` callback is called whenever a formerly active replication slot is not used anymore and can be used to deallocate resources private to the output plugin. The slot isn't necessarily being dropped, streaming is just being stopped.
@@ -117,8 +119,9 @@ typedef struct OutputPluginOptions
 typedef void (*LogicalDecodeShutdownCB) (struct LogicalDecodingContext *ctx);
 ```
 
+  <a id="logicaldecoding-output-plugin-begin"></a>
 
-#### Transaction Begin Callback { #logicaldecoding-output-plugin-begin }
+#### Transaction Begin Callback
 
 
  The required `begin_cb` callback is called whenever a start of a committed transaction has been decoded. Aborted transactions and their contents never get decoded.
@@ -129,9 +132,9 @@ typedef void (*LogicalDecodeBeginCB) (struct LogicalDecodingContext *ctx,
                                       ReorderBufferTXN *txn);
 ```
  The `txn` parameter contains meta information about the transaction, like the time stamp at which it has been committed and its XID.
+  <a id="logicaldecoding-output-plugin-commit"></a>
 
-
-#### Transaction End Callback { #logicaldecoding-output-plugin-commit }
+#### Transaction End Callback
 
 
  The required `commit_cb` callback is called whenever a transaction commit has been decoded. The `change_cb` callbacks for all modified rows will have been called before this, if there have been any modified rows.
@@ -143,8 +146,9 @@ typedef void (*LogicalDecodeCommitCB) (struct LogicalDecodingContext *ctx,
                                        XLogRecPtr commit_lsn);
 ```
 
+  <a id="logicaldecoding-output-plugin-change"></a>
 
-#### Change Callback { #logicaldecoding-output-plugin-change }
+#### Change Callback
 
 
  The required `change_cb` callback is called for every individual row modification inside a transaction, may it be an `INSERT`, `UPDATE`, or `DELETE`. Even if the original command modified several rows at once the callback will be called individually for each row. The `change_cb` callback may access system or user catalog tables to aid in the process of outputting the row modification details. In case of decoding a prepared (but yet uncommitted) transaction or decoding of an uncommitted transaction, this change callback might also error out due to simultaneous rollback of this very same transaction. In that case, the logical decoding of this aborted transaction is stopped gracefully.
@@ -162,9 +166,9 @@ typedef void (*LogicalDecodeChangeCB) (struct LogicalDecodingContext *ctx,
 !!! note
 
     Only changes in user defined tables that are not unlogged (see [UNLOGGED](../../reference/sql-commands/create-table.md#sql-createtable-unlogged)) and not temporary (see [TEMPORARY or TEMP](../../reference/sql-commands/create-table.md#sql-createtable-temporary)) can be extracted using logical decoding.
+  <a id="logicaldecoding-output-plugin-truncate"></a>
 
-
-#### Truncate Callback { #logicaldecoding-output-plugin-truncate }
+#### Truncate Callback
 
 
  The optional `truncate_cb` callback is called for a `TRUNCATE` command.
@@ -178,9 +182,9 @@ typedef void (*LogicalDecodeTruncateCB) (struct LogicalDecodingContext *ctx,
                                          ReorderBufferChange *change);
 ```
  The parameters are analogous to the `change_cb` callback. However, because `TRUNCATE` actions on tables connected by foreign keys need to be executed together, this callback receives an array of relations instead of just a single one. See the description of the [sql-truncate](../../reference/sql-commands/truncate.md#sql-truncate) statement for details.
+  <a id="logicaldecoding-output-plugin-filter-origin"></a>
 
-
-#### Origin Filter Callback { #logicaldecoding-output-plugin-filter-origin }
+#### Origin Filter Callback
 
 
  The optional `filter_by_origin_cb` callback is called to determine whether data that has been replayed from `origin_id` is of interest to the output plugin.
@@ -194,9 +198,9 @@ typedef bool (*LogicalDecodeFilterByOriginCB) (struct LogicalDecodingContext *ct
 
 
  This is useful when implementing cascading or multidirectional replication solutions. Filtering by the origin allows to prevent replicating the same changes back and forth in such setups. While transactions and changes also carry information about the origin, filtering via this callback is noticeably more efficient.
+  <a id="logicaldecoding-output-plugin-message"></a>
 
-
-#### Generic Message Callback { #logicaldecoding-output-plugin-message }
+#### Generic Message Callback
 
 
  The optional `message_cb` callback is called whenever a logical decoding message has been decoded.
@@ -215,9 +219,9 @@ typedef void (*LogicalDecodeMessageCB) (struct LogicalDecodingContext *ctx,
 
 
  Extra care should be taken to ensure that the prefix the output plugin considers interesting is unique. Using name of the extension or the output plugin itself is often a good choice.
+  <a id="logicaldecoding-output-plugin-filter-prepare"></a>
 
-
-#### Prepare Filter Callback { #logicaldecoding-output-plugin-filter-prepare }
+#### Prepare Filter Callback
 
 
  The optional `filter_prepare_cb` callback is called to determine whether data that is part of the current two-phase commit transaction should be considered for decoding at this prepare stage or later as a regular one-phase transaction at `COMMIT PREPARED` time. To signal that decoding should be skipped, return `true`; `false` otherwise. When the callback is not defined, `false` is assumed (i.e. no filtering, all transactions using two-phase commit are decoded in two phases as well).
@@ -232,9 +236,9 @@ typedef bool (*LogicalDecodeFilterPrepareCB) (struct LogicalDecodingContext *ctx
 
 
  The callback may be invoked multiple times per transaction to decode and must provide the same static answer for a given pair of `xid` and `gid` every time it is called.
+  <a id="logicaldecoding-output-plugin-begin-prepare"></a>
 
-
-#### Transaction Begin Prepare Callback { #logicaldecoding-output-plugin-begin-prepare }
+#### Transaction Begin Prepare Callback
 
 
  The required `begin_prepare_cb` callback is called whenever the start of a prepared transaction has been decoded. The `gid` field, which is part of the `txn` parameter, can be used in this callback to check if the plugin has already received this `PREPARE` in which case it can either error out or skip the remaining changes of the transaction.
@@ -245,8 +249,9 @@ typedef void (*LogicalDecodeBeginPrepareCB) (struct LogicalDecodingContext *ctx,
                                              ReorderBufferTXN *txn);
 ```
 
+  <a id="logicaldecoding-output-plugin-prepare"></a>
 
-#### Transaction Prepare Callback { #logicaldecoding-output-plugin-prepare }
+#### Transaction Prepare Callback
 
 
  The required `prepare_cb` callback is called whenever a transaction which is prepared for two-phase commit has been decoded. The `change_cb` callback for all modified rows will have been called before this, if there have been any modified rows. The `gid` field, which is part of the `txn` parameter, can be used in this callback.
@@ -258,8 +263,9 @@ typedef void (*LogicalDecodePrepareCB) (struct LogicalDecodingContext *ctx,
                                         XLogRecPtr prepare_lsn);
 ```
 
+  <a id="logicaldecoding-output-plugin-commit-prepared"></a>
 
-#### Transaction Commit Prepared Callback { #logicaldecoding-output-plugin-commit-prepared }
+#### Transaction Commit Prepared Callback
 
 
  The required `commit_prepared_cb` callback is called whenever a transaction `COMMIT PREPARED` has been decoded. The `gid` field, which is part of the `txn` parameter, can be used in this callback.
@@ -271,8 +277,9 @@ typedef void (*LogicalDecodeCommitPreparedCB) (struct LogicalDecodingContext *ct
                                                XLogRecPtr commit_lsn);
 ```
 
+  <a id="logicaldecoding-output-plugin-rollback-prepared"></a>
 
-#### Transaction Rollback Prepared Callback { #logicaldecoding-output-plugin-rollback-prepared }
+#### Transaction Rollback Prepared Callback
 
 
  The required `rollback_prepared_cb` callback is called whenever a transaction `ROLLBACK PREPARED` has been decoded. The `gid` field, which is part of the `txn` parameter, can be used in this callback. The parameters `prepare_end_lsn` and `prepare_time` can be used to check if the plugin has received this `PREPARE TRANSACTION` in which case it can apply the rollback, otherwise, it can skip the rollback operation. The `gid` alone is not sufficient because the downstream node can have a prepared transaction with same identifier.
@@ -285,8 +292,9 @@ typedef void (*LogicalDecodeRollbackPreparedCB) (struct LogicalDecodingContext *
                                                  TimestampTz prepare_time);
 ```
 
+  <a id="logicaldecoding-output-plugin-stream-start"></a>
 
-#### Stream Start Callback { #logicaldecoding-output-plugin-stream-start }
+#### Stream Start Callback
 
 
  The required `stream_start_cb` callback is called when opening a block of streamed changes from an in-progress transaction.
@@ -297,8 +305,9 @@ typedef void (*LogicalDecodeStreamStartCB) (struct LogicalDecodingContext *ctx,
                                             ReorderBufferTXN *txn);
 ```
 
+  <a id="logicaldecoding-output-plugin-stream-stop"></a>
 
-#### Stream Stop Callback { #logicaldecoding-output-plugin-stream-stop }
+#### Stream Stop Callback
 
 
  The required `stream_stop_cb` callback is called when closing a block of streamed changes from an in-progress transaction.
@@ -309,8 +318,9 @@ typedef void (*LogicalDecodeStreamStopCB) (struct LogicalDecodingContext *ctx,
                                            ReorderBufferTXN *txn);
 ```
 
+  <a id="logicaldecoding-output-plugin-stream-abort"></a>
 
-#### Stream Abort Callback { #logicaldecoding-output-plugin-stream-abort }
+#### Stream Abort Callback
 
 
  The required `stream_abort_cb` callback is called to abort a previously streamed transaction.
@@ -322,8 +332,9 @@ typedef void (*LogicalDecodeStreamAbortCB) (struct LogicalDecodingContext *ctx,
                                             XLogRecPtr abort_lsn);
 ```
 
+  <a id="logicaldecoding-output-plugin-stream-prepare"></a>
 
-#### Stream Prepare Callback { #logicaldecoding-output-plugin-stream-prepare }
+#### Stream Prepare Callback
 
 
  The `stream_prepare_cb` callback is called to prepare a previously streamed transaction as part of a two-phase commit. This callback is required when the output plugin supports both the streaming of large in-progress transactions and two-phase commits.
@@ -335,8 +346,9 @@ typedef void (*LogicalDecodeStreamPrepareCB) (struct LogicalDecodingContext *ctx
                                               XLogRecPtr prepare_lsn);
 ```
 
+  <a id="logicaldecoding-output-plugin-stream-commit"></a>
 
-#### Stream Commit Callback { #logicaldecoding-output-plugin-stream-commit }
+#### Stream Commit Callback
 
 
  The required `stream_commit_cb` callback is called to commit a previously streamed transaction.
@@ -348,8 +360,9 @@ typedef void (*LogicalDecodeStreamCommitCB) (struct LogicalDecodingContext *ctx,
                                              XLogRecPtr commit_lsn);
 ```
 
+  <a id="logicaldecoding-output-plugin-stream-change"></a>
 
-#### Stream Change Callback { #logicaldecoding-output-plugin-stream-change }
+#### Stream Change Callback
 
 
  The required `stream_change_cb` callback is called when sending a change in a block of streamed changes (demarcated by `stream_start_cb` and `stream_stop_cb` calls). The actual changes are not displayed as the transaction can abort at a later point in time and we don't decode changes for aborted transactions.
@@ -362,8 +375,9 @@ typedef void (*LogicalDecodeStreamChangeCB) (struct LogicalDecodingContext *ctx,
                                              ReorderBufferChange *change);
 ```
 
+  <a id="logicaldecoding-output-plugin-stream-message"></a>
 
-#### Stream Message Callback { #logicaldecoding-output-plugin-stream-message }
+#### Stream Message Callback
 
 
  The optional `stream_message_cb` callback is called when sending a generic message in a block of streamed changes (demarcated by `stream_start_cb` and `stream_stop_cb` calls). The message contents for transactional messages are not displayed as the transaction can abort at a later point in time and we don't decode changes for aborted transactions.
@@ -379,8 +393,9 @@ typedef void (*LogicalDecodeStreamMessageCB) (struct LogicalDecodingContext *ctx
                                               const char *message);
 ```
 
+  <a id="logicaldecoding-output-plugin-stream-truncate"></a>
 
-#### Stream Truncate Callback { #logicaldecoding-output-plugin-stream-truncate }
+#### Stream Truncate Callback
 
 
  The optional `stream_truncate_cb` callback is called for a `TRUNCATE` command in a block of streamed changes (demarcated by `stream_start_cb` and `stream_stop_cb` calls).
@@ -394,9 +409,9 @@ typedef void (*LogicalDecodeStreamTruncateCB) (struct LogicalDecodingContext *ct
                                                ReorderBufferChange *change);
 ```
  The parameters are analogous to the `stream_change_cb` callback. However, because `TRUNCATE` actions on tables connected by foreign keys need to be executed together, this callback receives an array of relations instead of just a single one. See the description of the [sql-truncate](../../reference/sql-commands/truncate.md#sql-truncate) statement for details.
+   <a id="logicaldecoding-output-plugin-output"></a>
 
-
-### Functions for Producing Output { #logicaldecoding-output-plugin-output }
+### Functions for Producing Output
 
 
  To actually produce output, output plugins can write data to the `StringInfo` output buffer in `ctx->out` when inside the `begin_cb`, `commit_cb`, or `change_cb` callbacks. Before writing to the output buffer, `OutputPluginPrepareWrite(ctx, last_write)` has to be called, and after finishing writing to the buffer, `OutputPluginWrite(ctx, last_write)` has to be called to perform the write. The `last_write` indicates whether a particular write was the callback's last write.

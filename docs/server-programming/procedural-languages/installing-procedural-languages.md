@@ -1,4 +1,6 @@
-## Installing Procedural Languages { #xplang-install }
+<a id="xplang-install"></a>
+
+## Installing Procedural Languages
 
 
  A procedural language must be “installed” into each database where it is to be used. But procedural languages installed in the database `template1` are automatically available in all subsequently created databases, since their entries in `template1` will be copied by `CREATE DATABASE`. So the database administrator can decide which languages are available in which databases and can make some languages available by default if desired.
@@ -9,7 +11,9 @@
 
 **Manual Procedural Language Installation**
 
+<a id="xplang-install-cr1"></a>
 1.  The shared object for the language handler must be compiled and installed into an appropriate library directory. This works in the same way as building and installing modules with regular user-defined C functions does; see [Compiling and Linking Dynamically-Loaded Functions](../extending-sql/c-language-functions.md#dfunc). Often, the language handler will depend on an external library that provides the actual programming language engine; if so, that must be installed as well.
+<a id="xplang-install-cr2"></a>
 2.  The handler must be declared with the command
 
 ```
@@ -20,6 +24,7 @@ CREATE FUNCTION HANDLER_FUNCTION_NAME()
     LANGUAGE C;
 ```
     The special return type of `language_handler` tells the database system that this function does not return one of the defined SQL data types and is not directly usable in SQL statements.
+<a id="xplang-install-cr3"></a>
 3.  Optionally, the language handler can provide an “inline” handler function that executes anonymous code blocks ([`DO`](../../reference/sql-commands/do.md#sql-do) commands) written in this language. If an inline handler function is provided by the language, declare it with a command like
 
 ```
@@ -30,6 +35,7 @@ CREATE FUNCTION INLINE_FUNCTION_NAME(internal)
     LANGUAGE C;
 ```
 
+<a id="xplang-install-cr4"></a>
 4.  Optionally, the language handler can provide a “validator” function that checks a function definition for correctness without actually executing it. The validator function is called by `CREATE FUNCTION` if it exists. If a validator function is provided by the language, declare it with a command like
 
 ```
@@ -40,6 +46,7 @@ CREATE FUNCTION VALIDATOR_FUNCTION_NAME(oid)
     LANGUAGE C STRICT;
 ```
 
+<a id="xplang-install-cr5"></a>
 5.  Finally, the PL must be declared with the command
 
 ```
@@ -53,9 +60,8 @@ CREATE [TRUSTED] LANGUAGE LANGUAGE_NAME
 
 
  [Manual Installation of PL/Perl](#xplang-install-example) shows how the manual installation procedure would work with the language PL/Perl.
+ <a id="xplang-install-example"></a>
 
-
-<a id="xplang-install-example"></a>
 **Example: Manual Installation of PL/Perl**
 
 

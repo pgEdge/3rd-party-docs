@@ -1,4 +1,6 @@
-# LOCK { #sql-lock }
+<a id="sql-lock"></a>
+
+# LOCK
 
 lock a table
 

@@ -1,4 +1,6 @@
-## PL/Python Functions { #plpython-funcs }
+<a id="plpython-funcs"></a>
+
+## PL/Python Functions
 
 
  Functions in PL/Python are declared via the standard [sql-createfunction](../../reference/sql-commands/create-function.md#sql-createfunction) syntax:

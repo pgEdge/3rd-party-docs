@@ -1,4 +1,6 @@
-## Environment Variables { #libpq-envars }
+<a id="libpq-envars"></a>
+
+## Environment Variables
 
 
  The following environment variables can be used to select default connection parameter values, which will be used by [PQconnectdb](database-connection-control-functions.md#libpq-PQconnectdb), [PQsetdbLogin](database-connection-control-functions.md#libpq-PQsetdbLogin) and [PQsetdb](database-connection-control-functions.md#libpq-PQsetdb) if no value is directly specified by the calling code. These are useful to avoid hard-coding database connection information into simple client applications, for example.

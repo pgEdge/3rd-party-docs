@@ -1,10 +1,12 @@
-## Table Partitioning { #ddl-partitioning }
+<a id="ddl-partitioning"></a>
+
+## Table Partitioning
 
 
  PostgreSQL supports basic table partitioning. This section describes why and how to implement partitioning as part of your database design.
+ <a id="ddl-partitioning-overview"></a>
 
-
-### Overview { #ddl-partitioning-overview }
+### Overview
 
 
  Partitioning refers to splitting what is logically one large table into smaller physical pieces. Partitioning can provide several benefits:
@@ -31,9 +33,9 @@ List Partitioning
 Hash Partitioning
 :   The table is partitioned by specifying a modulus and a remainder for each partition. Each partition will hold the rows for which the hash value of the partition key divided by the specified modulus will produce the specified remainder.
  If your application needs to use other forms of partitioning not listed above, alternative methods such as inheritance and `UNION ALL` views can be used instead. Such methods offer flexibility but do not have some of the performance benefits of built-in declarative partitioning.
+  <a id="ddl-partitioning-declarative"></a>
 
-
-### Declarative Partitioning { #ddl-partitioning-declarative }
+### Declarative Partitioning
 
 
  PostgreSQL allows you to declare that a table is divided into partitions. The table that is divided is referred to as a *partitioned table*. The declaration includes the *partitioning method* as described above, plus a list of columns or expressions to be used as the *partition key*.
@@ -49,9 +51,9 @@ Hash Partitioning
 
 
  Partitions can also be [foreign tables](foreign-data.md#ddl-foreign-data), although considerable care is needed because it is then the user's responsibility that the contents of the foreign table satisfy the partitioning rule. There are some other restrictions as well. See [sql-createforeigntable](../../reference/sql-commands/create-foreign-table.md#sql-createforeigntable) for more information.
+ <a id="ddl-partitioning-declarative-example"></a>
 
-
-#### Example { #ddl-partitioning-declarative-example }
+#### Example
 
 
  Suppose we are constructing a database for a large ice cream company. The company measures peak temperatures every day as well as ice cream sales in each region. Conceptually, we want a table like:
@@ -135,9 +137,9 @@ CREATE INDEX ON measurement (logdate);
 
 
  In the above example we would be creating a new partition each month, so it might be wise to write a script that generates the required DDL automatically.
+  <a id="ddl-partitioning-declarative-maintenance"></a>
 
-
-#### Partition Maintenance { #ddl-partitioning-declarative-maintenance }
+#### Partition Maintenance
 
 
  Normally the set of partitions established when initially defining the table is not intended to remain static. It is common to want to remove partitions holding old data and periodically add new partitions for new data. One of the most important advantages of partitioning is precisely that it allows this otherwise painful task to be executed nearly instantaneously by manipulating the partition structure, rather than physically moving large amounts of data around.
@@ -219,8 +221,9 @@ ALTER INDEX measurement_city_id_logdate_key
 ...
 ```
 
+  <a id="ddl-partitioning-declarative-limitations"></a>
 
-#### Limitations { #ddl-partitioning-declarative-limitations }
+#### Limitations
 
 
  The following limitations apply to partitioned tables:
@@ -241,8 +244,9 @@ ALTER INDEX measurement_city_id_logdate_key
 -  Using `ONLY` to add or drop a constraint on only the partitioned table is supported as long as there are no partitions. Once partitions exist, using `ONLY` will result in an error for any constraints other than `UNIQUE` and `PRIMARY KEY`. Instead, constraints on the partitions themselves can be added and (if they are not present in the parent table) dropped.
 -  As a partitioned table does not have any data itself, attempts to use `TRUNCATE` `ONLY` on a partitioned table will always return an error.
 
+   <a id="ddl-partitioning-using-inheritance"></a>
 
-### Partitioning Using Inheritance { #ddl-partitioning-using-inheritance }
+### Partitioning Using Inheritance
 
 
  While the built-in declarative partitioning is suitable for most common use cases, there are some circumstances where a more flexible approach may be useful. Partitioning can be implemented using table inheritance, which allows for several features not supported by declarative partitioning, such as:
@@ -251,8 +255,9 @@ ALTER INDEX measurement_city_id_logdate_key
 -  Table inheritance allows for multiple inheritance.
 -  Declarative partitioning only supports range, list and hash partitioning, whereas table inheritance allows data to be divided in a manner of the user's choosing. (Note, however, that if constraint exclusion is unable to prune child tables effectively, query performance might be poor.)
 
+ <a id="ddl-partitioning-inheritance-example"></a>
 
-#### Example { #ddl-partitioning-inheritance-example }
+#### Example
 
 
  This example builds a partitioning structure equivalent to the declarative partitioning example above. Use the following steps:
@@ -419,9 +424,9 @@ DO INSTEAD
 
 
  As we can see, a complex table hierarchy could require a substantial amount of DDL. In the above example we would be creating a new child table each month, so it might be wise to write a script that generates the required DDL automatically.
+  <a id="ddl-partitioning-inheritance-maintenance"></a>
 
-
-#### Maintenance for Inheritance Partitioning { #ddl-partitioning-inheritance-maintenance }
+#### Maintenance for Inheritance Partitioning
 
 
  To remove old data quickly, simply drop the child table that is no longer necessary:
@@ -461,8 +466,9 @@ ALTER TABLE measurement_y2008m02 ADD CONSTRAINT y2008m02
 ALTER TABLE measurement_y2008m02 INHERIT measurement;
 ```
 
+  <a id="ddl-partitioning-inheritance-caveats"></a>
 
-#### Caveats { #ddl-partitioning-inheritance-caveats }
+#### Caveats
 
 
  The following caveats apply to partitioning implemented using inheritance:
@@ -480,8 +486,9 @@ ANALYZE measurement;
 -  `INSERT` statements with `ON CONFLICT` clauses are unlikely to work as expected, as the `ON CONFLICT` action is only taken in case of unique violations on the specified target relation, not its child relations.
 -  Triggers or rules will be needed to route rows to the desired child table, unless the application is explicitly aware of the partitioning scheme. Triggers may be complicated to write, and will be much slower than the tuple routing performed internally by declarative partitioning.
 
+   <a id="ddl-partition-pruning"></a>
 
-### Partition Pruning { #ddl-partition-pruning }
+### Partition Pruning
 
 
  *Partition pruning* is a query optimization technique that improves performance for declaratively partitioned tables. As an example:
@@ -540,9 +547,9 @@ EXPLAIN SELECT count(*) FROM measurement WHERE logdate >= DATE '2008-01-01';
 
 
  Partition pruning can be disabled using the [enable_partition_pruning](../../server-administration/server-configuration/query-planning.md#guc-enable-partition-pruning) setting.
+  <a id="ddl-partitioning-constraint-exclusion"></a>
 
-
-### Partitioning and Constraint Exclusion { #ddl-partitioning-constraint-exclusion }
+### Partitioning and Constraint Exclusion
 
 
  *Constraint exclusion* is a query optimization technique similar to partition pruning. While it is primarily used for partitioning implemented using the legacy inheritance method, it can be used for other purposes, including with declarative partitioning.
@@ -564,8 +571,9 @@ EXPLAIN SELECT count(*) FROM measurement WHERE logdate >= DATE '2008-01-01';
 -  Keep the partitioning constraints simple, else the planner may not be able to prove that child tables might not need to be visited. Use simple equality conditions for list partitioning, or simple range tests for range partitioning, as illustrated in the preceding examples. A good rule of thumb is that partitioning constraints should contain only comparisons of the partitioning column(s) to constants using B-tree-indexable operators, because only B-tree-indexable column(s) are allowed in the partition key.
 -  All constraints on all children of the parent table are examined during constraint exclusion, so large numbers of children are likely to increase query planning time considerably. So the legacy inheritance based partitioning will work well with up to perhaps a hundred child tables; don't try to use many thousands of children.
 
+  <a id="ddl-partitioning-declarative-best-practices"></a>
 
-### Best Practices for Declarative Partitioning { #ddl-partitioning-declarative-best-practices }
+### Best Practices for Declarative Partitioning
 
 
  The choice of how to partition a table should be made carefully, as the performance of query planning and execution can be negatively affected by poor design.

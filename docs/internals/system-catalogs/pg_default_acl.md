@@ -1,4 +1,6 @@
-## `pg_default_acl` { #catalog-pg-default-acl }
+<a id="catalog-pg-default-acl"></a>
+
+## `pg_default_acl`
 
 
  The catalog `pg_default_acl` stores initial privileges to be assigned to newly created objects.

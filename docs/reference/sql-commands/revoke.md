@@ -1,4 +1,6 @@
-# REVOKE { #sql-revoke }
+<a id="sql-revoke"></a>
+
+# REVOKE
 
 remove access privileges
 
@@ -124,9 +126,9 @@ where ROLE_SPECIFICATION can be:
   | CURRENT_USER
   | SESSION_USER
 ```
+ <a id="sql-revoke-description"></a>
 
-
-## Description { #sql-revoke-description }
+## Description
 
 
  The `REVOKE` command revokes previously granted privileges from one or more roles. The key word `PUBLIC` refers to the implicitly defined group of all roles.
@@ -151,9 +153,9 @@ where ROLE_SPECIFICATION can be:
 
 
  Just as `ADMIN OPTION` can be removed from an existing role grant, it is also possible to revoke `INHERIT OPTION` or `SET OPTION`. This is equivalent to setting the value of the corresponding option to `FALSE`.
+ <a id="sql-revoke-notes"></a>
 
-
-## Notes { #sql-revoke-notes }
+## Notes
 
 
  A user can only revoke privileges that were granted directly by that user. If, for example, user A has granted a privilege with grant option to user B, and user B has in turn granted it to user C, then user A cannot revoke the privilege directly from C. Instead, user A could revoke the grant option from user B and use the `CASCADE` option so that the privilege is in turn revoked from user C. For another example, if both A and B have granted the same privilege to C, A can revoke their own grant but not B's grant, so C will still effectively have the privilege.
@@ -172,9 +174,9 @@ where ROLE_SPECIFICATION can be:
 
 
  See [Privileges](../../the-sql-language/data-definition/privileges.md#ddl-priv) for more information about specific privilege types, as well as how to inspect objects' privileges.
+ <a id="sql-revoke-examples"></a>
 
-
-## Examples { #sql-revoke-examples }
+## Examples
 
 
  Revoke insert privilege for the public on table `films`:
@@ -200,9 +202,9 @@ REVOKE ALL PRIVILEGES ON kinds FROM manuel;
 
 REVOKE admins FROM joe;
 ```
+ <a id="sql-revoke-compatibility"></a>
 
-
-## Compatibility { #sql-revoke-compatibility }
+## Compatibility
 
 
  The compatibility notes of the [`GRANT`](grant.md#sql-grant) command apply analogously to `REVOKE`. The keyword `RESTRICT` or `CASCADE` is required according to the standard, but PostgreSQL assumes `RESTRICT` by default.

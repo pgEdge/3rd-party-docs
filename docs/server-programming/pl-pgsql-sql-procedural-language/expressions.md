@@ -1,4 +1,6 @@
-## Expressions { #plpgsql-expressions }
+<a id="plpgsql-expressions"></a>
+
+## Expressions
 
 
  All expressions used in PL/pgSQL statements are processed using the server's main SQL executor. For example, when you write a PL/pgSQL statement like

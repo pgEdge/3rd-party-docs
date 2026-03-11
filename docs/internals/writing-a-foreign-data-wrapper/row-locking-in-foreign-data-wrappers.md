@@ -1,4 +1,6 @@
-## Row Locking in Foreign Data Wrappers { #fdw-row-locking }
+<a id="fdw-row-locking"></a>
+
+## Row Locking in Foreign Data Wrappers
 
 
  If an FDW's underlying storage mechanism has a concept of locking individual rows to prevent concurrent updates of those rows, it is usually worthwhile for the FDW to perform row-level locking with as close an approximation as practical to the semantics used in ordinary PostgreSQL tables. There are multiple considerations involved in this.

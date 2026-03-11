@@ -1,4 +1,6 @@
-## sepgsql — SELinux-, label-based mandatory access control (MAC) security module { #sepgsql }
+<a id="sepgsql"></a>
+
+## sepgsql — SELinux-, label-based mandatory access control (MAC) security module
 
 
  `sepgsql` is a loadable module that supports label-based mandatory access control (MAC) based on SELinux security policy.
@@ -7,9 +9,9 @@
 !!! warning
 
     The current implementation has significant limitations, and does not enforce mandatory access control for all actions. See [Limitations](#sepgsql-limitations).
+ <a id="sepgsql-overview"></a>
 
-
-### Overview { #sepgsql-overview }
+### Overview
 
 
  This module integrates with SELinux to provide an additional layer of security checking above and beyond what is normally provided by PostgreSQL. From the perspective of SELinux, this module allows PostgreSQL to function as a user-space object manager. Each table or function access initiated by a DML query will be checked against the system security policy. This check is in addition to the usual SQL permissions checking performed by PostgreSQL.
@@ -19,9 +21,9 @@
 
 
  The [`SECURITY LABEL`](../../reference/sql-commands/security-label.md#sql-security-label) statement allows assignment of a security label to a database object.
+  <a id="sepgsql-installation"></a>
 
-
-### Installation { #sepgsql-installation }
+### Installation
 
 
  `sepgsql` can only be used on Linux 2.6.28 or higher with SELinux enabled. It is not available on any other platform. You will also need libselinux 2.1.10 or higher and selinux-policy 3.9.13 or higher (although some distributions may backport the necessary rules into older policy versions).
@@ -82,9 +84,9 @@ $ for DBNAME in template0 template1 postgres; do
 
 
  If the installation process completes without error, you can now start the server normally.
+  <a id="sepgsql-regression"></a>
 
-
-### Regression Tests { #sepgsql-regression }
+### Regression Tests
 
 
  Due to the nature of SELinux, running the regression tests for `sepgsql` requires several extra configuration steps, some of which must be done as root. The regression tests will not be run by an ordinary `make check` or `make installcheck` command; you must set up the configuration and then invoke the test script manually. The tests must be run in the `contrib/sepgsql` directory of a configured PostgreSQL build tree. Although they require a build tree, the tests are designed to be executed against an installed server, that is they are comparable to `make installcheck` not `make check`.
@@ -158,9 +160,9 @@ $ sudo setsebool sepgsql_regression_test_mode off
 
 $ sudo semodule -r sepgsql-regtest
 ```
+  <a id="sepgsql-parameters"></a>
 
-
-### GUC Parameters { #sepgsql-parameters }
+### GUC Parameters
 
 
 <a id="guc-sepgsql-permissive"></a>
@@ -180,12 +182,12 @@ $ sudo semodule -r sepgsql-regtest
 
 
      This parameter forces all possible logging to be turned on, regardless of the system policy.
+  <a id="sepgsql-features"></a>
 
+### Features
+  <a id="sepgsql-features-controlled-obj-classes"></a>
 
-### Features { #sepgsql-features }
-
-
-#### Controlled Object Classes { #sepgsql-features-controlled-obj-classes }
+#### Controlled Object Classes
 
 
  The security model of SELinux describes all the access control rules as relationships between a subject entity (typically, a client of the database) and an object entity (such as a database object), each of which is identified by a security label. If access to an unlabeled object is attempted, the object is treated as if it were assigned the label `unlabeled_t`.
@@ -195,9 +197,9 @@ $ sudo semodule -r sepgsql-regtest
 
 
  A new database object basically inherits the security label of the parent object, except when the security policy has special rules known as type-transition rules, in which case a different label may be applied. For schemas, the parent object is the current database; for tables, sequences, views, and functions, it is the containing schema; for columns, it is the containing table.
+  <a id="sepgsql-features-dml-permissions"></a>
 
-
-#### DML Permissions { #sepgsql-features-dml-permissions }
+#### DML Permissions
 
 
  For tables, `db_table:select`, `db_table:insert`, `db_table:update` or `db_table:delete` are checked for all the referenced target tables depending on the kind of statement; in addition, `db_table:select` is also checked for all the tables that contain columns referenced in the `WHERE` or `RETURNING` clause, as a data source for `UPDATE`, and so on.
@@ -231,9 +233,9 @@ UPDATE t1 SET x = 2, y = func1(y) WHERE z = 100;
 
 
  The default database privilege system allows database superusers to modify system catalogs using DML commands, and reference or modify toast tables. These operations are prohibited when `sepgsql` is enabled.
+  <a id="sepgsql-features-ddl-permissions"></a>
 
-
-#### DDL Permissions { #sepgsql-features-ddl-permissions }
+#### DDL Permissions
 
 
  SELinux defines several permissions to control common operations for each object type; such as creation, alter, drop and relabel of security label. In addition, several object types have special permissions to control their characteristic operations; such as addition or deletion of name entries within a particular schema.
@@ -257,9 +259,9 @@ UPDATE t1 SET x = 2, y = func1(y) WHERE z = 100;
 -  Moving an object to a new schema additionally requires `remove_name` permission on the old schema and `add_name` permission on the new one.
 -  Setting the `LEAKPROOF` attribute on a function requires `install` permission.
 -  Using [`SECURITY LABEL`](../../reference/sql-commands/security-label.md#sql-security-label) on an object additionally requires `relabelfrom` permission for the object in conjunction with its old security label and `relabelto` permission for the object in conjunction with its new security label. (In cases where multiple label providers are installed and the user tries to set a security label, but it is not managed by SELinux, only `setattr` should be checked here. This is currently not done due to implementation restrictions.)
+  <a id="sepgsql-features-trusted-procedures"></a>
 
-
-#### Trusted Procedures { #sepgsql-features-trusted-procedures }
+#### Trusted Procedures
 
 
  Trusted procedures are similar to security definer functions or setuid commands. SELinux provides a feature to allow trusted code to run using a security label different from that of the client, generally for the purpose of providing highly controlled access to sensitive data (e.g., rows might be omitted, or the precision of stored values might be reduced). Whether or not a function acts as a trusted procedure is controlled by its security label and the operating system security policy. For example:
@@ -304,9 +306,9 @@ postgres=# SELECT cid, cname, show_credit(cid) FROM customer;
 
 
  In this case, a regular user cannot reference `customer.credit` directly, but a trusted procedure `show_credit` allows the user to print the credit card numbers of customers with some of the digits masked out.
+  <a id="sepgsql-features-dynamic-domain-transitions"></a>
 
-
-#### Dynamic Domain Transitions { #sepgsql-features-dynamic-domain-transitions }
+#### Dynamic Domain Transitions
 
 
  It is possible to use SELinux's dynamic domain transition feature to switch the security label of the client process, the client domain, to a new context, if that is allowed by the security policy. The client domain needs the `setcurrent` permission and also `dyntransition` from the old to the new domain.
@@ -338,21 +340,20 @@ ERROR:  SELinux: security policy violation
 
 
  A combination of dynamic domain transition and trusted procedure enables an interesting use case that fits the typical process life-cycle of connection pooling software. Even if your connection pooling software is not allowed to run most of SQL commands, you can allow it to switch the security label of the client using the `sepgsql_setcon()` function from within a trusted procedure; that should take some credential to authorize the request to switch the client label. After that, this session will have the privileges of the target user, rather than the connection pooler. The connection pooler can later revert the security label change by again using `sepgsql_setcon()` with `NULL` argument, again invoked from within a trusted procedure with appropriate permissions checks. The point here is that only the trusted procedure actually has permission to change the effective security label, and only does so when given proper credentials. Of course, for secure operation, the credential store (table, procedure definition, or whatever) must be protected from unauthorized access.
+  <a id="sepgsql-features-misc"></a>
 
-
-#### Miscellaneous { #sepgsql-features-misc }
+#### Miscellaneous
 
 
  We reject the [`LOAD`](../../reference/sql-commands/load.md#sql-load) command across the board, because any module loaded could easily circumvent security policy enforcement.
+   <a id="sepgsql-functions"></a>
 
-
-### Sepgsql Functions { #sepgsql-functions }
+### Sepgsql Functions
 
 
  [Sepgsql Functions](#sepgsql-functions-table) shows the available functions.
+ <a id="sepgsql-functions-table"></a>
 
-
-<a id="sepgsql-functions-table"></a>
 **Table: Sepgsql Functions**
 
 <table>
@@ -390,9 +391,9 @@ ERROR:  SELinux: security policy violation
 </tr>
 </tbody>
 </table>
+  <a id="sepgsql-limitations"></a>
 
-
-### Limitations { #sepgsql-limitations }
+### Limitations
 
 
 Data Definition Language (DDL) Permissions
@@ -406,9 +407,9 @@ Row-level access control
 
 Covert channels
 :   `sepgsql` does not try to hide the existence of a certain object, even if the user is not allowed to reference it. For example, we can infer the existence of an invisible object as a result of primary key conflicts, foreign key violations, and so on, even if we cannot obtain the contents of the object. The existence of a top secret table cannot be hidden; we only hope to conceal its contents.
+  <a id="sepgsql-resources"></a>
 
-
-### External Resources { #sepgsql-resources }
+### External Resources
 
 
 [SE-PostgreSQL Introduction](https://wiki.postgresql.org/wiki/SEPostgreSQL)
@@ -419,9 +420,9 @@ Covert channels
 
 [Fedora SELinux FAQ](https://fedoraproject.org/wiki/SELinux_FAQ)
 :   This document answers frequently asked questions about SELinux. It focuses primarily on Fedora, but is not limited to Fedora.
+  <a id="sepgsql-author"></a>
 
-
-### Author { #sepgsql-author }
+### Author
 
 
  KaiGai Kohei [kaigai@ak.jp.nec.com](mailto:kaigai@ak.jp.nec.com)

@@ -1,13 +1,14 @@
-## Trigger Functions { #functions-trigger }
+<a id="functions-trigger"></a>
+
+## Trigger Functions
 
 
  While many uses of triggers involve user-written trigger functions, PostgreSQL provides a few built-in trigger functions that can be used directly in user-defined triggers. These are summarized in [Built-In Trigger Functions](#builtin-triggers-table). (Additional built-in trigger functions exist, which implement foreign key constraints and deferred index constraints. Those are not documented here since users need not use them directly.)
 
 
  For more information about creating triggers, see [sql-createtrigger](../../reference/sql-commands/create-trigger.md#sql-createtrigger).
+ <a id="builtin-triggers-table"></a>
 
-
-<a id="builtin-triggers-table"></a>
 **Table: Built-In Trigger Functions**
 
 <table>

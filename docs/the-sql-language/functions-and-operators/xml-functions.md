@@ -1,19 +1,21 @@
-## XML Functions { #functions-xml }
+<a id="functions-xml"></a>
+
+## XML Functions
 
 
  The functions and function-like expressions described in this section operate on values of type `xml`. See [XML Type](../data-types/xml-type.md#datatype-xml) for information about the `xml` type. The function-like expressions `xmlparse` and `xmlserialize` for converting to and from type `xml` are documented there, not in this section.
 
 
  Use of most of these functions requires PostgreSQL to have been built with `configure --with-libxml`.
+ <a id="functions-producing-xml"></a>
 
-
-### Producing XML Content { #functions-producing-xml }
+### Producing XML Content
 
 
  A set of functions and function-like expressions is available for producing XML content from SQL data. As such, they are particularly suitable for formatting query results into XML documents for processing in client applications.
+ <a id="functions-producing-xml-xmltext"></a>
 
-
-#### `xmltext` { #functions-producing-xml-xmltext }
+#### `xmltext`
 
 
 ```
@@ -35,8 +37,9 @@ SELECT xmltext('< foo & bar >');
  < foo & bar >
 ```
 
+  <a id="functions-producing-xml-xmlcomment"></a>
 
-#### `xmlcomment` { #functions-producing-xml-xmlcomment }
+#### `xmlcomment`
 
 
 ```
@@ -59,8 +62,9 @@ SELECT xmlcomment('hello');
  <!--hello-->
 ```
 
+  <a id="functions-producing-xml-xmlconcat"></a>
 
-#### `xmlconcat` { #functions-producing-xml-xmlconcat }
+#### `xmlconcat`
 
 
 ```
@@ -98,8 +102,9 @@ SELECT xmlconcat('<?xml version="1.1"?><foo/>', '<?xml version="1.1" standalone=
  <?xml version="1.1"?><foo/><bar/>
 ```
 
+  <a id="functions-producing-xml-xmlelement"></a>
 
-#### `xmlelement` { #functions-producing-xml-xmlelement }
+#### `xmlelement`
 
 
 ```
@@ -177,9 +182,9 @@ SELECT xmlelement(name foo, xmlattributes('xyz' as bar),
  <foo bar="xyz"><abc/><!--test--><xyz/></foo>
 ```
  Content of other types will be formatted into valid XML character data. This means in particular that the characters <, >, and & will be converted to entities. Binary data (data type `bytea`) will be represented in base64 or hex encoding, depending on the setting of the configuration parameter [xmlbinary](../../server-administration/server-configuration/client-connection-defaults.md#guc-xmlbinary). The particular behavior for individual data types is expected to evolve in order to align the PostgreSQL mappings with those specified in SQL:2006 and later, as discussed in [Mappings between SQL and XML Data Types and Values](../../appendixes/sql-conformance/xml-limits-and-conformance-to-sql-xml.md#functions-xml-limits-casts).
+  <a id="functions-producing-xml-xmlforest"></a>
 
-
-#### `xmlforest` { #functions-producing-xml-xmlforest }
+#### `xmlforest`
 
 
 ```
@@ -219,9 +224,9 @@ WHERE table_schema = 'pg_catalog';
 
 
  Note that XML forests are not valid XML documents if they consist of more than one element, so it might be useful to wrap `xmlforest` expressions in `xmlelement`.
+  <a id="functions-producing-xml-xmlpi"></a>
 
-
-#### `xmlpi` { #functions-producing-xml-xmlpi }
+#### `xmlpi`
 
 
 ```
@@ -244,8 +249,9 @@ SELECT xmlpi(name php, 'echo "hello world";');
  <?php echo "hello world";?>
 ```
 
+  <a id="functions-producing-xml-xmlroot"></a>
 
-#### `xmlroot` { #functions-producing-xml-xmlroot }
+#### `xmlroot`
 
 
 ```
@@ -268,8 +274,9 @@ SELECT xmlroot(xmlparse(document '<?xml version="1.1"?><content>abc</content>'),
  <content>abc</content>
 ```
 
+  <a id="functions-xml-xmlagg"></a>
 
-#### `xmlagg` { #functions-xml-xmlagg }
+#### `xmlagg`
 
 
 ```
@@ -316,14 +323,15 @@ SELECT xmlagg(x) FROM (SELECT * FROM test ORDER BY y DESC) AS tab;
  <bar/><foo>abc</foo>
 ```
 
+   <a id="functions-xml-predicates"></a>
 
-### XML Predicates { #functions-xml-predicates }
+### XML Predicates
 
 
  The expressions described in this section check properties of `xml` values.
+ <a id="functions-producing-xml-is-document"></a>
 
-
-#### `IS DOCUMENT` { #functions-producing-xml-is-document }
+#### `IS DOCUMENT`
 
 
 ```
@@ -333,9 +341,9 @@ xml IS DOCUMENT boolean
 
 
  The expression `IS DOCUMENT` returns true if the argument XML value is a proper XML document, false if it is not (that is, it is a content fragment), or null if the argument is null. See [XML Type](../data-types/xml-type.md#datatype-xml) about the difference between documents and content fragments.
+  <a id="functions-producing-xml-is-not-document"></a>
 
-
-#### `IS NOT DOCUMENT` { #functions-producing-xml-is-not-document }
+#### `IS NOT DOCUMENT`
 
 
 ```
@@ -345,9 +353,9 @@ xml IS NOT DOCUMENT boolean
 
 
  The expression `IS NOT DOCUMENT` returns false if the argument XML value is a proper XML document, true if it is not (that is, it is a content fragment), or null if the argument is null.
+  <a id="xml-exists"></a>
 
-
-#### `XMLEXISTS` { #xml-exists }
+#### `XMLEXISTS`
 
 
 ```
@@ -376,9 +384,9 @@ SELECT xmlexists('//town[text() = ''Toronto'']' PASSING BY VALUE '<towns><town>T
 
 
  In the SQL standard, the `xmlexists` function evaluates an expression in the XML Query language, but PostgreSQL allows only an XPath 1.0 expression, as discussed in [Queries Are Restricted to XPath 1.0](../../appendixes/sql-conformance/xml-limits-and-conformance-to-sql-xml.md#functions-xml-limits-xpath1).
+  <a id="xml-is-well-formed"></a>
 
-
-#### `xml_is_well_formed` { #xml-is-well-formed }
+#### `xml_is_well_formed`
 
 
 ```
@@ -429,15 +437,15 @@ SELECT xml_is_well_formed_document('<pg:foo xmlns:pg="http://postgresql.org/stuf
 (1 row)
 ```
  The last example shows that the checks include whether namespaces are correctly matched.
+   <a id="functions-xml-processing"></a>
 
-
-### Processing XML { #functions-xml-processing }
+### Processing XML
 
 
  To process values of data type `xml`, PostgreSQL offers the functions `xpath` and `xpath_exists`, which evaluate XPath 1.0 expressions, and the `XMLTABLE` table function.
+ <a id="functions-xml-processing-xpath"></a>
 
-
-#### `xpath` { #functions-xml-processing-xpath }
+#### `xpath`
 
 
 ```
@@ -482,8 +490,9 @@ SELECT xpath('//mydefns:b/text()', '<a xmlns="http://example.com"><b>test</b></a
 (1 row)
 ```
 
+  <a id="functions-xml-processing-xpath-exists"></a>
 
-#### `xpath_exists` { #functions-xml-processing-xpath-exists }
+#### `xpath_exists`
 
 
 ```
@@ -508,8 +517,9 @@ SELECT xpath_exists('/my:a/text()', '<my:a xmlns:my="http://example.com">test</m
 (1 row)
 ```
 
+  <a id="functions-xml-processing-xmltable"></a>
 
-#### `xmltable` { #functions-xml-processing-xmltable }
+#### `xmltable`
 
 
 ```
@@ -666,8 +676,9 @@ SELECT xmltable.*
 (3 rows)
 ```
 
+   <a id="functions-xml-mapping"></a>
 
-### Mapping Tables to XML { #functions-xml-mapping }
+### Mapping Tables to XML
 
 
  The following functions map the contents of relational tables to XML values. They can be thought of as XML export functionality:
@@ -827,9 +838,8 @@ table2-mapping
 
 
  As an example of using the output produced by these functions, [XSLT Stylesheet for Converting SQL/XML Output to HTML](#xslt-xml-html) shows an XSLT stylesheet that converts the output of `table_to_xml_and_xmlschema` to an HTML document containing a tabular rendition of the table data. In a similar manner, the results from these functions can be converted into other XML-based formats.
+ <a id="xslt-xml-html"></a>
 
-
-<a id="xslt-xml-html"></a>
 **Example: XSLT Stylesheet for Converting SQL/XML Output to HTML**
 
 

@@ -1,4 +1,6 @@
-# pg_recvlogical { #app-pgrecvlogical }
+<a id="app-pgrecvlogical"></a>
+
+# pg_recvlogical
 
 control PostgreSQL logical decoding streams
 

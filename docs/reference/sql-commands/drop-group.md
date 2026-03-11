@@ -1,4 +1,6 @@
-# DROP GROUP { #sql-dropgroup }
+<a id="sql-dropgroup"></a>
+
+# DROP GROUP
 
 remove a database role
 

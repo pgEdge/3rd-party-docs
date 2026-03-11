@@ -1,4 +1,6 @@
-## Unique Indexes { #indexes-unique }
+<a id="indexes-unique"></a>
+
+## Unique Indexes
 
 
  Indexes can also be used to enforce uniqueness of a column's value, or the uniqueness of the combined values of more than one column.

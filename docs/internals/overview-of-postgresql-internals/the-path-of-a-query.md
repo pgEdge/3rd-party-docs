@@ -1,4 +1,6 @@
-## The Path of a Query { #query-path }
+<a id="query-path"></a>
+
+## The Path of a Query
 
 
  Here we give a short overview of the stages a query has to pass to obtain a result.

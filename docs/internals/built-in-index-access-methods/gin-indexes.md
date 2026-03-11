@@ -1,7 +1,9 @@
-## GIN Indexes { #gin }
+<a id="gin"></a>
 
+## GIN Indexes
+   <a id="gin-intro"></a>
 
-### Introduction { #gin-intro }
+### Introduction
 
 
  GIN stands for Generalized Inverted Index. GIN is designed for handling cases where the items to be indexed are composite values, and the queries to be handled by the index need to search for element values that appear within the composite items. For example, the items could be documents, and the queries could be searches for documents containing specific words.
@@ -20,15 +22,14 @@
 
 
  The GIN implementation in PostgreSQL is primarily maintained by Teodor Sigaev and Oleg Bartunov. There is more information about GIN on their [website](http://www.sai.msu.su/~megera/wiki/Gin).
+  <a id="gin-builtin-opclasses"></a>
 
-
-### Built-in Operator Classes { #gin-builtin-opclasses }
+### Built-in Operator Classes
 
 
  The core PostgreSQL distribution includes the GIN operator classes shown in [Built-in GIN Operator Classes](#gin-builtin-opclasses-table). (Some of the optional modules described in [Additional Supplied Modules and Extensions](../../appendixes/additional-supplied-modules-and-extensions/index.md#contrib) provide additional GIN operator classes.)
+ <a id="gin-builtin-opclasses-table"></a>
 
-
-<a id="gin-builtin-opclasses-table"></a>
 **Table: Built-in GIN Operator Classes**
 
 <table>
@@ -90,9 +91,9 @@
 
 
  Of the two operator classes for type `jsonb`, `jsonb_ops` is the default. `jsonb_path_ops` supports fewer operators but offers better performance for those operators. See [`jsonb` Indexing](../../the-sql-language/data-types/json-types.md#json-indexing) for details.
+  <a id="gin-extensibility"></a>
 
-
-### Extensibility { #gin-extensibility }
+### Extensibility
 
 
  The GIN interface has a high level of abstraction, requiring the access method implementer only to implement the semantics of the data type being accessed. The GIN layer itself takes care of concurrency, logging and searching the tree structure.
@@ -161,9 +162,9 @@
 
 
  The actual data types of the various `Datum` values mentioned above vary depending on the operator class. The item values passed to `extractValue` are always of the operator class's input type, and all key values must be of the class's `STORAGE` type. The type of the `query` argument passed to `extractQuery`, `consistent` and `triConsistent` is whatever is the right-hand input type of the class member operator identified by the strategy number. This need not be the same as the indexed type, so long as key values of the correct type can be extracted from it. However, it is recommended that the SQL declarations of these three support functions use the opclass's indexed data type for the `query` argument, even though the actual type might be something else depending on the operator.
+  <a id="gin-implementation"></a>
 
-
-### Implementation { #gin-implementation }
+### Implementation
 
 
  Internally, a GIN index contains a B-tree index constructed over keys, where each key is an element of one or more indexed items (a member of an array, for example) and where each tuple in a leaf page contains either a pointer to a B-tree of heap pointers (a “posting tree”), or a simple list of heap pointers (a “posting list”) when the list is small enough to fit into a single index tuple along with the key value. [GIN Internals](#gin-internals-figure) illustrates these components of a GIN index.
@@ -173,15 +174,15 @@
 
 
  Multicolumn GIN indexes are implemented by building a single B-tree over composite values (column number, key value). The key values for different columns can be of different types.
-
+ <a id="gin-internals-figure"></a>
 
 **GIN Internals**
 
 
 ![image](images/gin.svg)
+    <a id="gin-fast-update"></a>
 
-
-#### GIN Fast Update Technique { #gin-fast-update }
+#### GIN Fast Update Technique
 
 
  Updating a GIN index tends to be slow because of the intrinsic nature of inverted indexes: inserting or updating one heap row can cause many inserts into the index (one for each key extracted from the indexed item). GIN is capable of postponing much of this work by inserting new tuples into a temporary, unsorted list of pending entries. When the table is vacuumed or autoanalyzed, or when `gin_clean_pending_list` function is called, or if the pending list becomes larger than [gin_pending_list_limit](../../server-administration/server-configuration/client-connection-defaults.md#guc-gin-pending-list-limit), the entries are moved to the main GIN data structure using the same bulk insert techniques used during initial index creation. This greatly improves GIN index update speed, even counting the additional vacuum overhead. Moreover the overhead work can be done by a background process instead of in foreground query processing.
@@ -191,15 +192,15 @@
 
 
  If consistent response time is more important than update speed, use of pending entries can be disabled by turning off the `fastupdate` storage parameter for a GIN index. See [sql-createindex](../../reference/sql-commands/create-index.md#sql-createindex) for details.
+  <a id="gin-partial-match"></a>
 
-
-#### Partial Match Algorithm { #gin-partial-match }
+#### Partial Match Algorithm
 
 
  GIN can support “partial match” queries, in which the query does not determine an exact match for one or more keys, but the possible matches fall within a reasonably narrow range of key values (within the key sorting order determined by the `compare` support method). The `extractQuery` method, instead of returning a key value to be matched exactly, returns a key value that is the lower bound of the range to be searched, and sets the `pmatch` flag true. The key range is then scanned using the `comparePartial` method. `comparePartial` must return zero for a matching index key, less than zero for a non-match that is still within the range to be searched, or greater than zero if the index key is past the range that could match.
+   <a id="gin-tips"></a>
 
-
-### GIN Tips and Tricks { #gin-tips }
+### GIN Tips and Tricks
 
 
 Create vs. insert
@@ -228,15 +229,15 @@ Create vs. insert
 
 
      From experience, values in the thousands (e.g., 5000 — 20000) work well.
+  <a id="gin-limit"></a>
 
-
-### Limitations { #gin-limit }
+### Limitations
 
 
  GIN assumes that indexable operators are strict. This means that `extractValue` will not be called at all on a null item value (instead, a placeholder index entry is created automatically), and `extractQuery` will not be called on a null query value either (instead, the query is presumed to be unsatisfiable). Note however that null key values contained within a non-null composite item or query value are supported.
+  <a id="gin-examples"></a>
 
-
-### Examples { #gin-examples }
+### Examples
 
 
  The core PostgreSQL distribution includes the GIN operator classes previously shown in [Built-in GIN Operator Classes](#gin-builtin-opclasses-table). The following `contrib` modules also contain GIN operator classes:

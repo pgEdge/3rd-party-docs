@@ -1,4 +1,6 @@
-# Advanced Features { #tutorial-advanced }
+<a id="tutorial-advanced"></a>
+
+# Advanced Features
 
 - [Introduction](introduction.md#tutorial-advanced-intro)
 - [Views](views.md#tutorial-views)

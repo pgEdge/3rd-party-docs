@@ -1,4 +1,6 @@
-## Processing Embedded SQL Programs { #ecpg-process }
+<a id="ecpg-process"></a>
+
+## Processing Embedded SQL Programs
 
 
  Now that you have an idea how to form embedded SQL C programs, you probably want to know how to compile them. Before compiling you run the file through the embedded SQL C preprocessor, which converts the SQL statements you used to special function calls. After compiling, you must link with a special library that contains the needed functions. These functions fetch information from the arguments, perform the SQL command using the libpq interface, and put the result in the arguments specified for output.

@@ -1,4 +1,6 @@
-## btree_gist — GiST operator classes with B-tree behavior { #btree-gist }
+<a id="btree-gist"></a>
+
+## btree_gist — GiST operator classes with B-tree behavior
 
 
  `btree_gist` provides GiST index operator classes that implement B-tree equivalent behavior for the data types `int2`, `int4`, `int8`, `float4`, `float8`, `numeric`, `timestamp with time zone`, `timestamp without time zone`, `time with time zone`, `time without time zone`, `date`, `interval`, `oid`, `money`, `char`, `varchar`, `text`, `bytea`, `bit`, `varbit`, `macaddr`, `macaddr8`, `inet`, `cidr`, `uuid`, `bool` and all `enum` types.
@@ -14,9 +16,9 @@
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="btree-gist-example-usage"></a>
 
-
-### Example Usage { #btree-gist-example-usage }
+### Example Usage
 
 
  Simple example using `btree_gist` instead of `btree`:
@@ -55,9 +57,9 @@ DETAIL:  Key (cage, animal)=(123, lion) conflicts with existing key (cage, anima
 => INSERT INTO zoo VALUES(124, 'lion');
 INSERT 0 1
 ```
+  <a id="btree-gist-authors"></a>
 
-
-### Authors { #btree-gist-authors }
+### Authors
 
 
  Teodor Sigaev ([teodor@stack.net](mailto:teodor@stack.net)), Oleg Bartunov ([oleg@sai.msu.su](mailto:oleg@sai.msu.su)), Janko Richter ([jankorichter@yahoo.de](mailto:jankorichter@yahoo.de)), and Paul Jungwirth ([pj@illuminatedcomputing.com](mailto:pj@illuminatedcomputing.com)). See [http://www.sai.msu.su/~megera/postgres/gist/](http://www.sai.msu.su/~megera/postgres/gist/) for additional information.

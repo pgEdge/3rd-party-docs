@@ -1,7 +1,9 @@
-## Built-in Functions { #plperl-builtins }
+<a id="plperl-builtins"></a>
 
+## Built-in Functions
+  <a id="plperl-database"></a>
 
-### Database Access from PL/Perl { #plperl-database }
+### Database Access from PL/Perl
 
 
  Access to the database itself from your Perl function can be done via the following functions:
@@ -220,9 +222,9 @@
 
     CALL transaction_test1();
     ```
+  <a id="plperl-utility-functions"></a>
 
-
-### Utility Functions in PL/Perl { #plperl-utility-functions }
+### Utility Functions in PL/Perl
 
 
 <code><code>elog(</code><em>level</em><code>, </code><em>msg</em><code>)</code></code>

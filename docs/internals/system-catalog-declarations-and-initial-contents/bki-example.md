@@ -1,4 +1,6 @@
-## BKI Example { #bki-example }
+<a id="bki-example"></a>
+
+## BKI Example
 
 
  The following sequence of commands will create the table `test_table` with OID 420, having three columns `oid`, `cola` and `colb` of type `oid`, `int4` and `text`, respectively, and insert two rows into the table:

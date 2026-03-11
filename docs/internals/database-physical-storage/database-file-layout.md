@@ -1,4 +1,6 @@
-## Database File Layout { #storage-file-layout }
+<a id="storage-file-layout"></a>
+
+## Database File Layout
 
 
  This section describes the storage format at the level of files and directories.
@@ -8,9 +10,8 @@
 
 
  The `PGDATA` directory contains several subdirectories and control files, as shown in [Contents of `PGDATA`](#pgdata-contents-table). In addition to these required items, the cluster configuration files `postgresql.conf`, `pg_hba.conf`, and `pg_ident.conf` are traditionally stored in `PGDATA`, although it is possible to place them elsewhere.
+ <a id="pgdata-contents-table"></a>
 
-
-<a id="pgdata-contents-table"></a>
 **Table: Contents of `PGDATA`**
 
 | Item | Description |

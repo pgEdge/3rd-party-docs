@@ -1,4 +1,6 @@
-## Registering Event Log on `Windows` { #event-log-registration }
+<a id="event-log-registration"></a>
+
+## Registering Event Log on `Windows`
 
 
  To register a `Windows` event log library with the operating system, issue this command:

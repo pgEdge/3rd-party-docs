@@ -1,4 +1,6 @@
-# ALTER DEFAULT PRIVILEGES { #sql-alterdefaultprivileges }
+<a id="sql-alterdefaultprivileges"></a>
+
+# ALTER DEFAULT PRIVILEGES
 
 define default access privileges
 
@@ -70,9 +72,9 @@ REVOKE [ GRANT OPTION FOR ]
     FROM { [ GROUP ] ROLE_NAME | PUBLIC } [, ...]
     [ CASCADE | RESTRICT ]
 ```
+ <a id="sql-alterdefaultprivileges-description"></a>
 
-
-## Description { #sql-alterdefaultprivileges-description }
+## Description
 
 
  `ALTER DEFAULT PRIVILEGES` allows you to set the privileges that will be applied to objects created in the future. (It does not affect privileges assigned to already-existing objects.) Privileges can be set globally (i.e., for all objects created in the current database), or just for objects created in specified schemas.
@@ -101,18 +103,18 @@ REVOKE [ GRANT OPTION FOR ]
 
 *role_name*
 :   The name of an existing role to grant or revoke privileges for. This parameter, and all the other parameters in *abbreviated_grant_or_revoke*, act as described under [sql-grant](grant.md#sql-grant) or [sql-revoke](revoke.md#sql-revoke), except that one is setting permissions for a whole class of objects rather than specific named objects.
+  <a id="sql-alterdefaultprivileges-notes"></a>
 
-
-## Notes { #sql-alterdefaultprivileges-notes }
+## Notes
 
 
  Use [app-psql](../postgresql-client-applications/psql.md#app-psql)'s `\ddp` command to obtain information about existing assignments of default privileges. The meaning of the privilege display is the same as explained for `\dp` in [Privileges](../../the-sql-language/data-definition/privileges.md#ddl-priv).
 
 
  If you wish to drop a role for which the default privileges have been altered, it is necessary to reverse the changes in its default privileges or use `DROP OWNED BY` to get rid of the default privileges entry for the role.
+ <a id="sql-alterdefaultprivileges-examples"></a>
 
-
-## Examples { #sql-alterdefaultprivileges-examples }
+## Examples
 
 
  Grant SELECT privilege to everyone for all tables (and views) you subsequently create in schema `myschema`, and allow role `webuser` to INSERT into them too:

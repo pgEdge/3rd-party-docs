@@ -1,4 +1,6 @@
-## System Columns { #ddl-system-columns }
+<a id="ddl-system-columns"></a>
+
+## System Columns
 
 
  Every table has several *system columns* that are implicitly defined by the system. Therefore, these names cannot be used as names of user-defined columns. (Note that these restrictions are separate from whether the name is a key word or not; quoting a name will not allow you to escape these restrictions.) You do not really need to be concerned about these columns; just know they exist.

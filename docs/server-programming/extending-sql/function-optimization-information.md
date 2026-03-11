@@ -1,4 +1,6 @@
-## Function Optimization Information { #xfunc-optimization }
+<a id="xfunc-optimization"></a>
+
+## Function Optimization Information
 
 
  By default, a function is just a “black box” that the database system knows very little about the behavior of. However, that means that queries using the function may be executed much less efficiently than they could be. It is possible to supply additional knowledge that helps the planner optimize function calls.

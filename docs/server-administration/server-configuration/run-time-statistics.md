@@ -1,7 +1,9 @@
-## Run-time Statistics { #runtime-config-statistics }
+<a id="runtime-config-statistics"></a>
 
+## Run-time Statistics
+  <a id="runtime-config-cumulative-statistics"></a>
 
-### Cumulative Query and Index Statistics { #runtime-config-cumulative-statistics }
+### Cumulative Query and Index Statistics
 
 
  These parameters control the server-wide cumulative statistics system. When enabled, the data that is collected can be accessed via the `pg_stat` and `pg_statio` family of system views. Refer to [Monitoring Database Activity](../monitoring-database-activity/index.md#monitoring) for more information.
@@ -45,9 +47,9 @@
     !!! note
 
         `none` is most suitable for monitoring systems. If values are only accessed once, it is the most efficient. `cache` ensures repeat accesses yield the same values, which is important for queries involving e.g. self-joins. `snapshot` can be useful when interactively inspecting statistics, but has higher overhead, particularly if many database objects exist.
+  <a id="runtime-config-statistics-monitor"></a>
 
-
-### Statistics Monitoring { #runtime-config-statistics-monitor }
+### Statistics Monitoring
 
 
 <a id="guc-compute-query-id"></a>

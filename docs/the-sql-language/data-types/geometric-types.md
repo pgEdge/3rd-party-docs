@@ -1,10 +1,11 @@
-## Geometric Types { #datatype-geometric }
+<a id="datatype-geometric"></a>
+
+## Geometric Types
 
 
  Geometric data types represent two-dimensional spatial objects. [Geometric Types](#datatype-geo-table) shows the geometric types available in PostgreSQL.
+ <a id="datatype-geo-table"></a>
 
-
-<a id="datatype-geo-table"></a>
 **Table: Geometric Types**
 
 | Name | Storage Size | Description | Representation |
@@ -23,9 +24,9 @@
 
 
  A rich set of functions and operators is available to perform various geometric operations such as scaling, translation, rotation, and determining intersections. They are explained in [Geometric Functions and Operators](../functions-and-operators/geometric-functions-and-operators.md#functions-geometry).
+ <a id="datatype-geometric-points"></a>
 
-
-### Points { #datatype-geometric-points }
+### Points
 
 
  Points are the fundamental two-dimensional building block for geometric types. Values of type `point` are specified using either of the following syntaxes:
@@ -39,9 +40,9 @@
 
 
  Points are output using the first syntax.
+  <a id="datatype-line"></a>
 
-
-### Lines { #datatype-line }
+### Lines
 
 
  Lines are represented by the linear equation *A*x + *B*y + *C* = 0, where *A* and *B* are not both zero. Values of type `line` are input and output in the following form:
@@ -60,9 +61,9 @@
     X1 , Y1   ,   X2 , Y2
 ```
  where <code>(</code><em>x1</em><code>,</code><em>y1</em><code>)</code> and <code>(</code><em>x2</em><code>,</code><em>y2</em><code>)</code> are two different points on the line.
+  <a id="datatype-lseg"></a>
 
-
-### Line Segments { #datatype-lseg }
+### Line Segments
 
 
  Line segments are represented by pairs of points that are the endpoints of the segment. Values of type `lseg` are specified using any of the following syntaxes:
@@ -78,9 +79,9 @@
 
 
  Line segments are output using the first syntax.
+  <a id="datatype-geometric-boxes"></a>
 
-
-### Boxes { #datatype-geometric-boxes }
+### Boxes
 
 
  Boxes are represented by pairs of points that are opposite corners of the box. Values of type `box` are specified using any of the following syntaxes:
@@ -98,9 +99,9 @@
 
 
  Any two opposite corners can be supplied on input, but the values will be reordered as needed to store the upper right and lower left corners, in that order.
+  <a id="datatype-geometric-paths"></a>
 
-
-### Paths { #datatype-geometric-paths }
+### Paths
 
 
  Paths are represented by lists of connected points. Paths can be *open*, where the first and last points in the list are considered not connected, or *closed*, where the first and last points are considered connected.
@@ -120,9 +121,9 @@
 
 
  Paths are output using the first or second syntax, as appropriate.
+  <a id="datatype-polygon"></a>
 
-
-### Polygons { #datatype-polygon }
+### Polygons
 
 
  Polygons are represented by lists of points (the vertices of the polygon). Polygons are very similar to closed paths; the essential semantic difference is that a polygon is considered to include the area within it, while a path is not.
@@ -144,9 +145,9 @@
 
 
  Polygons are output using the first syntax.
+  <a id="datatype-circle"></a>
 
-
-### Circles { #datatype-circle }
+### Circles
 
 
  Circles are represented by a center point and radius. Values of type `circle` are specified using any of the following syntaxes:

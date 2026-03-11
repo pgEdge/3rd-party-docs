@@ -1,4 +1,6 @@
-## `view_routine_usage` { #infoschema-view-routine-usage }
+<a id="infoschema-view-routine-usage"></a>
+
+## `view_routine_usage`
 
 
  The view `view_routine_usage` identifies all routines (functions and procedures) that are used in the query expression of a view (the `SELECT` statement that defines the view). A routine is only included if that routine is owned by a currently enabled role.

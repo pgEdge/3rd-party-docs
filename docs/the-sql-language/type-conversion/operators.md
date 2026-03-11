@@ -1,4 +1,6 @@
-## Operators { #typeconv-oper }
+<a id="typeconv-oper"></a>
+
+## Operators
 
 
  The specific operator that is referenced by an operator expression is determined using the following procedure. Note that this procedure is indirectly affected by the precedence of the operators involved, since that will determine which sub-expressions are taken to be the inputs of which operators. See [Operator Precedence](../sql-syntax/lexical-structure.md#sql-precedence) for more information.
@@ -6,13 +8,19 @@
 
 **Operator Type Resolution**
 
+<a id="op-resol-select"></a>
 1.  Select the operators to be considered from the `pg_operator` system catalog. If a non-schema-qualified operator name was used (the usual case), the operators considered are those with the matching name and argument count that are visible in the current search path (see [The Schema Search Path](../data-definition/schemas.md#ddl-schemas-path)). If a qualified operator name was given, only operators in the specified schema are considered.
 
 1.  If the search path finds multiple operators with identical argument types, only the one appearing earliest in the path is considered. Operators with different argument types are considered on an equal footing regardless of search path position.
-2.  Check for an operator accepting exactly the input argument types. If one exists (there can be only one exact match in the set of operators considered), use it. Lack of an exact match creates a security hazard when calling, via qualified name  (The hazard does not arise with a non-schema-qualified name, because a search path containing schemas that permit untrusted users to create objects is not a [secure schema usage pattern](../data-definition/schemas.md#ddl-schemas-patterns).) (not typical), any operator found in a schema that permits untrusted users to create objects. In such situations, cast arguments to force an exact match.
+<a id="op-resol-exact-match"></a>
+2.  Check for an operator accepting exactly the input argument types. If one exists (there can be only one exact match in the set of operators considered), use it. Lack of an exact match creates a security hazard when calling, via qualified name <a id="op-qualified-security"></a>
+ (The hazard does not arise with a non-schema-qualified name, because a search path containing schemas that permit untrusted users to create objects is not a [secure schema usage pattern](../data-definition/schemas.md#ddl-schemas-patterns).) (not typical), any operator found in a schema that permits untrusted users to create objects. In such situations, cast arguments to force an exact match.
 
+<a id="op-resol-exact-unknown"></a>
 1.  If one argument of a binary operator invocation is of the `unknown` type, then assume it is the same type as the other argument for this check. Invocations involving two `unknown` inputs, or a prefix operator with an `unknown` input, will never find a match at this step.
+<a id="op-resol-exact-domain"></a>
 2.  If one argument of a binary operator invocation is of the `unknown` type and the other is of a domain type, next check to see if there is an operator accepting exactly the domain's base type on both sides; if so, use it.
+<a id="op-resol-best-match"></a>
 3.  Look for the best match.
 
 1.  Discard candidate operators for which the input types do not match and cannot be converted (using an implicit conversion) to match. `unknown` literals are assumed to be convertible to anything for this purpose. If only one candidate remains, use it; else continue to the next step.
@@ -20,6 +28,7 @@
 3.  Run through all candidates and keep those with the most exact matches on input types. Keep all candidates if none have exact matches. If only one candidate remains, use it; else continue to the next step.
 4.  Run through all candidates and keep those that accept preferred types (of the input data type's type category) at the most positions where type conversion will be required. Keep all candidates if none accept preferred types. If only one candidate remains, use it; else continue to the next step.
 5.  If any input arguments are `unknown`, check the type categories accepted at those argument positions by the remaining candidates. At each position, select the `string` category if any candidate accepts that category. (This bias towards string is appropriate since an unknown-type literal looks like a string.) Otherwise, if all the remaining candidates accept the same type category, select that category; otherwise fail because the correct choice cannot be deduced without more clues. Now discard candidates that do not accept the selected type category. Furthermore, if any candidate accepts a preferred type in that category, discard candidates that accept non-preferred types for that argument. Keep all candidates if none survive these tests. If only one candidate remains, use it; else continue to the next step.
+<a id="op-resol-last-unknown"></a>
 6.  If there are both `unknown` and known-type arguments, and all the known-type arguments have the same type, assume that the `unknown` arguments are also of that type, and check which candidates can accept that type at the `unknown`-argument positions. If exactly one candidate passes this test, use it. Otherwise, fail.
 
 

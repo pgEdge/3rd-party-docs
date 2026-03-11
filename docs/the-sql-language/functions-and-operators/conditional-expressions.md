@@ -1,4 +1,6 @@
-## Conditional Expressions { #functions-conditional }
+<a id="functions-conditional"></a>
+
+## Conditional Expressions
 
 
  This section describes the SQL-compliant conditional expressions available in PostgreSQL.
@@ -12,9 +14,9 @@
 !!! note
 
     Although `COALESCE`, `GREATEST`, and `LEAST` are syntactically similar to functions, they are not ordinary functions, and thus cannot be used with explicit `VARIADIC` array arguments.
+ <a id="functions-case"></a>
 
-
-### `CASE` { #functions-case }
+### `CASE`
 
 
  The SQL `CASE` expression is a generic conditional expression, similar to if/else statements in other programming languages:
@@ -103,9 +105,9 @@ SELECT ... WHERE CASE WHEN x <> 0 THEN y/x > 1.5 ELSE false END;
 !!! note
 
     As described in [Expression Evaluation Rules](../sql-syntax/value-expressions.md#syntax-express-eval), there are various situations in which subexpressions of an expression are evaluated at different times, so that the principle that “`CASE` evaluates only necessary subexpressions” is not ironclad. For example a constant `1/0` subexpression will usually result in a division-by-zero failure at planning time, even if it's within a `CASE` arm that would never be entered at run time.
+  <a id="functions-coalesce-nvl-ifnull"></a>
 
-
-### `COALESCE` { #functions-coalesce-nvl-ifnull }
+### `COALESCE`
 
 
 ```
@@ -127,9 +129,9 @@ SELECT COALESCE(description, short_description, '(none)') ...
 
 
  Like a `CASE` expression, `COALESCE` only evaluates the arguments that are needed to determine the result; that is, arguments to the right of the first non-null argument are not evaluated. This SQL-standard function provides capabilities similar to `NVL` and `IFNULL`, which are used in some other database systems.
+  <a id="functions-nullif"></a>
 
-
-### `NULLIF` { #functions-nullif }
+### `NULLIF`
 
 
 ```
@@ -152,9 +154,9 @@ SELECT NULLIF(value, '(none)') ...
 
 
  The result has the same type as the first argument — but there is a subtlety. What is actually returned is the first argument of the implied `=` operator, and in some cases that will have been promoted to match the second argument's type. For example, `NULLIF(1, 2.2)` yields `numeric`, because there is no `integer` `=` `numeric` operator, only `numeric` `=` `numeric`.
+  <a id="functions-greatest-least"></a>
 
-
-### `GREATEST` and `LEAST` { #functions-greatest-least }
+### `GREATEST` and `LEAST`
 
 
 ```

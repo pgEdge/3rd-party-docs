@@ -1,4 +1,6 @@
-# ALTER TRIGGER { #sql-altertrigger }
+<a id="sql-altertrigger"></a>
+
+# ALTER TRIGGER
 
 change the definition of a trigger
 

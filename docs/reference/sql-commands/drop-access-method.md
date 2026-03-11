@@ -1,4 +1,6 @@
-# DROP ACCESS METHOD { #sql-drop-access-method }
+<a id="sql-drop-access-method"></a>
+
+# DROP ACCESS METHOD
 
 remove an access method
 

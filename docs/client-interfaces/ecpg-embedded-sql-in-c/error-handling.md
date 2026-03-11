@@ -1,4 +1,6 @@
-## Error Handling { #ecpg-errors }
+<a id="ecpg-errors"></a>
+
+## Error Handling
 
 
  This section describes how you can handle exceptional conditions and warnings in an embedded SQL program. There are two nonexclusive facilities for this.
@@ -10,8 +12,9 @@
 
    Detailed information about the error or warning can be obtained from the `sqlca` variable.
 
+ <a id="ecpg-whenever"></a>
 
-### Setting Callbacks { #ecpg-whenever }
+### Setting Callbacks
 
 
  One simple method to catch errors and warnings is to set a specific action to be executed whenever a particular condition occurs. In general:
@@ -120,8 +123,9 @@ static void set_error_handler(void)
 }
 ```
 
+  <a id="ecpg-sqlca"></a>
 
-### sqlca { #ecpg-sqlca }
+### sqlca
 
 
  For more powerful error handling, the embedded SQL interface provides a global variable with the name `sqlca` (SQL communication area) that has the following structure:
@@ -204,8 +208,9 @@ sqlstate: 42P01
 ===============
 ```
 
+  <a id="ecpg-sqlstate-sqlcode"></a>
 
-### `SQLSTATE` vs. `SQLCODE` { #ecpg-sqlstate-sqlcode }
+### `SQLSTATE` vs. `SQLCODE`
 
 
  The fields `sqlca.sqlstate` and `sqlca.sqlcode` are two different schemes that provide error codes. Both are derived from the SQL standard, but `SQLCODE` has been marked deprecated in the SQL-92 edition of the standard and has been dropped in later editions. Therefore, new applications are strongly encouraged to use `SQLSTATE`.

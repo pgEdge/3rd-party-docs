@@ -1,4 +1,6 @@
-# SET CONSTRAINTS { #sql-set-constraints }
+<a id="sql-set-constraints"></a>
+
+# SET CONSTRAINTS
 
 set constraint check timing for the current transaction
 

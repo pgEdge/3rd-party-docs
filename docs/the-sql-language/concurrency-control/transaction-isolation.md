@@ -1,4 +1,6 @@
-## Transaction Isolation { #transaction-iso }
+<a id="transaction-iso"></a>
+
+## Transaction Isolation
 
 
  The SQL standard defines four levels of transaction isolation. The most strict is Serializable, which is defined by the standard in a paragraph which says that any concurrent execution of a set of Serializable transactions is guaranteed to produce the same effect as running them one at a time in some order. The other three levels are defined in terms of phenomena, resulting from interaction between concurrent transactions, which must not occur at each level. The standard notes that due to the definition of Serializable, none of these phenomena are possible at that level. (This is hardly surprising -- if the effect of the transactions must be consistent with having been run one at a time, how could you see any phenomena caused by interactions?)
@@ -20,9 +22,8 @@ serialization anomaly
 
 
   The SQL standard and PostgreSQL-implemented transaction isolation levels are described in [Transaction Isolation Levels](#mvcc-isolevel-table).
+ <a id="mvcc-isolevel-table"></a>
 
-
-<a id="mvcc-isolevel-table"></a>
 **Table: Transaction Isolation Levels**
 
 | Isolation Level | Dirty Read | Nonrepeatable Read | Phantom Read | Serialization Anomaly |
@@ -45,9 +46,9 @@ serialization anomaly
 !!! important
 
     Some PostgreSQL data types and functions have special rules regarding transactional behavior. In particular, changes made to a sequence (and therefore the counter of a column declared using `serial`) are immediately visible to all other transactions and are not rolled back if the transaction that made the changes aborts. See [Sequence Manipulation Functions](../functions-and-operators/sequence-manipulation-functions.md#functions-sequence) and [Serial Types](../data-types/numeric-types.md#datatype-serial).
+ <a id="xact-read-committed"></a>
 
-
-### Read Committed Isolation Level { #xact-read-committed }
+### Read Committed Isolation Level
 
 
  *Read Committed* is the default isolation level in PostgreSQL. When a transaction uses this isolation level, a `SELECT` query (without a `FOR UPDATE/SHARE` clause) sees only data committed before the query began; it never sees either uncommitted data or changes committed by concurrent transactions during the query's execution. In effect, a `SELECT` query sees a snapshot of the database as of the instant the query begins to run. However, `SELECT` does see the effects of previous updates executed within its own transaction, even though they are not yet committed. Also note that two successive `SELECT` commands can see different data, even though they are within a single transaction, if other transactions commit changes after the first `SELECT` starts and before the second `SELECT` starts.
@@ -93,9 +94,9 @@ COMMIT;
 
 
  The partial transaction isolation provided by Read Committed mode is adequate for many applications, and this mode is fast and simple to use; however, it is not sufficient for all cases. Applications that do complex queries and updates might require a more rigorously consistent view of the database than Read Committed mode provides.
+  <a id="xact-repeatable-read"></a>
 
-
-### Repeatable Read Isolation Level { #xact-repeatable-read }
+### Repeatable Read Isolation Level
 
 
  The *Repeatable Read* isolation level only sees data committed before the transaction began; it never sees either uncommitted data or changes committed by concurrent transactions during the transaction's execution. (However, each query does see the effects of previous updates executed within its own transaction, even though they are not yet committed.) This is a stronger guarantee than is required by the SQL standard for this isolation level, and prevents all of the phenomena described in [Transaction Isolation Levels](#mvcc-isolevel-table) except for serialization anomalies. As mentioned above, this is specifically allowed by the standard, which only describes the *minimum* protections each isolation level must provide.
@@ -131,9 +132,9 @@ ERROR:  could not serialize access due to concurrent update
 !!! note
 
     Prior to PostgreSQL version 9.1, a request for the Serializable transaction isolation level provided exactly the same behavior described here. To retain the legacy Serializable behavior, Repeatable Read should now be requested.
+  <a id="xact-serializable"></a>
 
-
-### Serializable Isolation Level { #xact-serializable }
+### Serializable Isolation Level
 
 
  The *Serializable* isolation level provides the strictest transaction isolation. This level emulates serial transaction execution for all committed transactions; as if transactions had been executed one after another, serially, rather than concurrently. However, like the Repeatable Read level, applications using this level must be prepared to retry transactions due to serialization failures. In fact, this isolation level works exactly the same as Repeatable Read except that it also monitors for conditions which could make execution of a concurrent set of serializable transactions behave in a manner inconsistent with all possible serial (one at a time) executions of those transactions. This monitoring does not introduce any blocking beyond that present in repeatable read, but there is some overhead to the monitoring, and detection of the conditions which could cause a *serialization anomaly* will trigger a *serialization failure*.

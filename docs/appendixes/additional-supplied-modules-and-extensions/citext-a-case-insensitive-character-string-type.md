@@ -1,4 +1,6 @@
-## citext — a case-insensitive character string type { #citext }
+<a id="citext"></a>
+
+## citext — a case-insensitive character string type
 
 
  The `citext` module provides a case-insensitive character string type, `citext`. Essentially, it internally calls `lower` when comparing values. Otherwise, it behaves almost exactly like `text`.
@@ -10,9 +12,9 @@
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="citext-rationale"></a>
 
-
-### Rationale { #citext-rationale }
+### Rationale
 
 
  The standard approach to doing case-insensitive matches in PostgreSQL has been to use the `lower` function when comparing values, for example
@@ -32,9 +34,9 @@ SELECT * FROM tab WHERE lower(col) = LOWER(?);
 
 
  The `citext` data type allows you to eliminate calls to `lower` in SQL queries, and allows a primary key to be case-insensitive. `citext` is locale-aware, just like `text`, which means that the matching of upper case and lower case characters is dependent on the rules of the database's `LC_CTYPE` setting. Again, this behavior is identical to the use of `lower` in queries. But because it's done transparently by the data type, you don't have to remember to do anything special in your queries.
+  <a id="citext-how-to-use-it"></a>
 
-
-### How to Use It { #citext-how-to-use-it }
+### How to Use It
 
 
  Here's a simple example of usage:
@@ -55,9 +57,9 @@ INSERT INTO users VALUES ( 'Bj&oslash;rn',  sha256(random()::text::bytea) );
 SELECT * FROM users WHERE nick = 'Larry';
 ```
  The `SELECT` statement will return one tuple, even though the `nick` column was set to `larry` and the query was for `Larry`.
+  <a id="citext-string-comparison-behavior"></a>
 
-
-### String Comparison Behavior { #citext-string-comparison-behavior }
+### String Comparison Behavior
 
 
  `citext` performs comparisons by converting each string to lower case (as though `lower` were called) and then comparing the results normally. Thus, for example, two strings are considered equal if `lower` would produce identical results for them.
@@ -81,9 +83,9 @@ SELECT * FROM users WHERE nick = 'Larry';
 
 
  For the regexp functions, if you want to match case-sensitively, you can specify the “c” flag to force a case-sensitive match. Otherwise, you must cast to `text` before using one of these functions if you want case-sensitive behavior.
+  <a id="citext-limitations"></a>
 
-
-### Limitations { #citext-limitations }
+### Limitations
 
 
 -  `citext`'s case-folding behavior depends on the `LC_CTYPE` setting of your database. How it compares values is therefore determined when the database is created. It is not truly case-insensitive in the terms defined by the Unicode standard. Effectively, what this means is that, as long as you're happy with your collation, you should be happy with `citext`'s comparisons. But if you have data in different languages stored in your database, users of one language may find their query results are not as expected if the collation is for another language.
@@ -92,9 +94,9 @@ SELECT * FROM users WHERE nick = 'Larry';
 -  `citext` doesn't help much if you need data to compare case-sensitively in some contexts and case-insensitively in other contexts. The standard answer is to use the `text` type and manually use the `lower` function when you need to compare case-insensitively; this works all right if case-insensitive comparison is needed only infrequently. If you need case-insensitive behavior most of the time and case-sensitive infrequently, consider storing the data as `citext` and explicitly casting the column to `text` when you want case-sensitive comparison. In either situation, you will need two indexes if you want both types of searches to be fast.
 -  The schema containing the `citext` operators must be in the current `search_path` (typically `public`); if it is not, the normal case-sensitive `text` operators will be invoked instead.
 -  The approach of lower-casing strings for comparison does not handle some Unicode special cases correctly, for example when one upper-case letter has two lower-case letter equivalents. Unicode distinguishes between *case mapping* and *case folding* for this reason. Use nondeterministic collations instead of `citext` to handle that correctly.
+  <a id="citext-author"></a>
 
-
-### Author { #citext-author }
+### Author
 
 
  David E. Wheeler [david@kineticode.com](mailto:david@kineticode.com)

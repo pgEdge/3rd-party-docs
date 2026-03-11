@@ -1,4 +1,6 @@
-## Rules on `INSERT`, `UPDATE`, and `DELETE` { #rules-update }
+<a id="rules-update"></a>
+
+## Rules on `INSERT`, `UPDATE`, and `DELETE`
 
 
  Rules that are defined on `INSERT`, `UPDATE`, and `DELETE` are significantly different from the view rules described in the previous sections. First, their `CREATE RULE` command allows more:
@@ -17,9 +19,9 @@
 
 
      Also, there are some cases that are not supported by these types of rules at all, notably including `WITH` clauses in the original query and multiple-assignment sub-`SELECT`s in the `SET` list of `UPDATE` queries. This is because copying these constructs into a rule query would result in multiple evaluations of the sub-query, contrary to the express intent of the query's author.
+ <a id="rules-update-how"></a>
 
-
-### How Update Rules Work { #rules-update-how }
+### How Update Rules Work
 
 
  Keep the syntax:
@@ -62,9 +64,9 @@ Qualification given and `INSTEAD`
 
 
  After the system is done applying update rules, it applies view rules to the produced query tree(s). Views cannot insert new update actions so there is no need to apply update rules to the output of view rewriting.
+ <a id="rules-update-how-first"></a>
 
-
-#### A First Rule Step by Step { #rules-update-how-first }
+#### A First Rule Step by Step
 
 
  Say we want to trace changes to the `sl_avail` column in the `shoelace_data` relation. So we set up a log table and a rule that conditionally writes a log entry when an `UPDATE` is performed on `shoelace_data`.
@@ -260,9 +262,9 @@ SELECT shoelace_data.sl_name, 0,
 
 
  Here we can see why it is important that the original query tree is executed last. If the `UPDATE` had been executed first, all the rows would have already been set to zero, so the logging `INSERT` would not find any row where `0 <> shoelace_data.sl_avail`.
+   <a id="rules-update-views"></a>
 
-
-### Cooperation with Views { #rules-update-views }
+### Cooperation with Views
 
 
  A simple way to protect view relations from the mentioned possibility that someone can try to run `INSERT`, `UPDATE`, or `DELETE` on them is to let those query trees get thrown away. So we could create the rules:

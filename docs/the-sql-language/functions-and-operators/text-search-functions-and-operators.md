@@ -1,10 +1,11 @@
-## Text Search Functions and Operators { #functions-textsearch }
+<a id="functions-textsearch"></a>
+
+## Text Search Functions and Operators
 
 
  [Text Search Operators](#textsearch-operators-table), [Text Search Functions](#textsearch-functions-table) and [Text Search Debugging Functions](#textsearch-functions-debug-table) summarize the functions and operators that are provided for full text searching. See [Full Text Search](../full-text-search/index.md#textsearch) for a detailed explanation of PostgreSQL's text search facility.
+ <a id="textsearch-operators-table"></a>
 
-
-<a id="textsearch-operators-table"></a>
 **Table: Text Search Operators**
 
 <table>
@@ -66,9 +67,8 @@
 
 
  In addition to these specialized operators, the usual comparison operators shown in [Comparison Operators](comparison-functions-and-operators.md#functions-comparison-op-table) are available for types `tsvector` and `tsquery`. These are not very useful for text searching but allow, for example, unique indexes to be built on columns of these types.
+ <a id="textsearch-functions-table"></a>
 
-
-<a id="textsearch-functions-table"></a>
 **Table: Text Search Functions**
 
 <table>
@@ -236,9 +236,8 @@
 
 
  The functions in [Text Search Debugging Functions](#textsearch-functions-debug-table) are listed separately because they are not usually used in everyday text searching operations. They are primarily helpful for development and debugging of new text search configurations.
+ <a id="textsearch-functions-debug-table"></a>
 
-
-<a id="textsearch-functions-debug-table"></a>
 **Table: Text Search Debugging Functions**
 
 <table>

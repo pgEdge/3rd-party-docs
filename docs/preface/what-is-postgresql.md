@@ -1,4 +1,6 @@
-## What Is PostgreSQL? { #intro-whatis }
+<a id="intro-whatis"></a>
+
+## What Is PostgreSQL?
 
 
  PostgreSQL is an object-relational database management system (ORDBMS) based on [POSTGRES, Version 4.2](https://dsf.berkeley.edu/postgres.html), developed at the University of California at Berkeley Computer Science Department. POSTGRES pioneered many concepts that only became available in some commercial database systems much later.

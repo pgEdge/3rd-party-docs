@@ -1,10 +1,11 @@
-## Numeric Types { #datatype-numeric }
+<a id="datatype-numeric"></a>
+
+## Numeric Types
 
 
  Numeric types consist of two-, four-, and eight-byte integers, four- and eight-byte floating-point numbers, and selectable-precision decimals. [Numeric Types](#datatype-numeric-table) lists the available types.
+ <a id="datatype-numeric-table"></a>
 
-
-<a id="datatype-numeric-table"></a>
 **Table: Numeric Types**
 
 | Name | Storage Size | Description | Range |
@@ -22,9 +23,9 @@
 
 
  The syntax of constants for the numeric types is described in [Constants](../sql-syntax/lexical-structure.md#sql-syntax-constants). The numeric types have a full set of corresponding arithmetic operators and functions. Refer to [Functions and Operators](../functions-and-operators/index.md#functions) for more information. The following sections describe the types in detail.
+ <a id="datatype-int"></a>
 
-
-### Integer Types { #datatype-int }
+### Integer Types
 
 
  The types `smallint`, `integer`, and `bigint` store whole numbers, that is, numbers without fractional components, of various ranges. Attempts to store values outside of the allowed range will result in an error.
@@ -34,9 +35,9 @@
 
 
  SQL only specifies the integer types `integer` (or `int`), `smallint`, and `bigint`. The type names `int2`, `int4`, and `int8` are extensions, which are also used by some other SQL database systems.
+  <a id="datatype-numeric-decimal"></a>
 
-
-### Arbitrary Precision Numbers { #datatype-numeric-decimal }
+### Arbitrary Precision Numbers
 
 
  The type `numeric` can store numbers with a very large number of digits. It is especially recommended for storing monetary amounts and other quantities where exactness is required. Calculations with `numeric` values yield exact results where possible, e.g., addition, subtraction, multiplication. However, calculations on `numeric` values are very slow compared to the integer types, or to the floating-point types described in the next section.
@@ -149,8 +150,9 @@ FROM generate_series(-3.5, 3.5, 1) as x;
 (8 rows)
 ```
 
+  <a id="datatype-float"></a>
 
-### Floating-Point Types { #datatype-float }
+### Floating-Point Types
 
 
  The data types `real` and `double precision` are inexact, variable-precision numeric types. On all currently supported platforms, these types are implementations of IEEE Standard 754 for Binary Floating-Point Arithmetic (single and double precision, respectively), to the extent that the underlying processor, operating system, and compiler support it.
@@ -202,9 +204,9 @@ NaN
 
 
  PostgreSQL also supports the SQL-standard notations `float` and <code>float(</code><em>p</em><code>)</code> for specifying inexact numeric types. Here, *p* specifies the minimum acceptable precision in *binary* digits. PostgreSQL accepts `float(1)` to `float(24)` as selecting the `real` type, while `float(25)` to `float(53)` select `double precision`. Values of *p* outside the allowed range draw an error. `float` with no precision specified is taken to mean `double precision`.
+  <a id="datatype-serial"></a>
 
-
-### Serial Types { #datatype-serial }
+### Serial Types
 
 
 !!! note
