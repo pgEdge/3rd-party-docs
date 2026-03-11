@@ -1,0 +1,62 @@
+## Sequence Manipulation Functions { #functions-sequence }
+
+
+ This section describes functions for operating on *sequence objects*, also called sequence generators or just sequences. Sequence objects are special single-row tables created with [sql-createsequence](../../reference/sql-commands/create-sequence.md#sql-createsequence). Sequence objects are commonly used to generate unique identifiers for rows of a table. The sequence functions, listed in [Sequence Functions](#functions-sequence-table), provide simple, multiuser-safe methods for obtaining successive sequence values from sequence objects.
+
+
+<a id="functions-sequence-table"></a>
+**Table: Sequence Functions**
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nextval</code> ( <code>regclass</code> ) <code>bigint</code></td>
+<td>Advances the sequence object to its next value and returns that value. This is done atomically: even if multiple sessions execute <code>nextval</code> concurrently, each will safely receive a distinct sequence value. If the sequence object has been created with default parameters, successive <code>nextval</code> calls will return successive values beginning with 1. Other behaviors can be obtained by using appropriate parameters in the <a href="../../reference/sql-commands/create-sequence.md#sql-createsequence">sql-createsequence</a> command.</td>
+<td>This function requires <code>USAGE</code> or <code>UPDATE</code> privilege on the sequence.</td>
+</tr>
+<tr>
+<td><code>setval</code> ( <code>regclass</code>, <code>bigint</code> [, <code>boolean</code> ] ) <code>bigint</code></td>
+<td><p>Sets the sequence object's current value, and optionally its <code>is_called</code> flag. The two-parameter form sets the sequence's <code>last_value</code> field to the specified value and sets its <code>is_called</code> field to <code>true</code>, meaning that the next <code>nextval</code> will advance the sequence before returning a value. The value that will be reported by <code>currval</code> is also set to the specified value. In the three-parameter form, <code>is_called</code> can be set to either <code>true</code> or <code>false</code>. <code>true</code> has the same effect as the two-parameter form. If it is set to <code>false</code>, the next <code>nextval</code> will return exactly the specified value, and sequence advancement commences with the following <code>nextval</code>. Furthermore, the value reported by <code>currval</code> is not changed in this case. For example,</p>
+<pre><code class="language-sql">
+SELECT setval('myseq', 42);           Next nextval will return 43
+SELECT setval('myseq', 42, true);     Same as above
+SELECT setval('myseq', 42, false);    Next nextval will return 42</code></pre></td>
+<td>This function requires <code>UPDATE</code> privilege on the sequence.</td>
+</tr>
+<tr>
+<td><code>currval</code> ( <code>regclass</code> ) <code>bigint</code></td>
+<td>Returns the value most recently obtained by <code>nextval</code> for this sequence in the current session. (An error is reported if <code>nextval</code> has never been called for this sequence in this session.) Because this is returning a session-local value, it gives a predictable answer whether or not other sessions have executed <code>nextval</code> since the current session did.</td>
+<td>This function requires <code>USAGE</code> or <code>SELECT</code> privilege on the sequence.</td>
+</tr>
+<tr>
+<td><code>lastval</code> () <code>bigint</code></td>
+<td>Returns the value most recently returned by <code>nextval</code> in the current session. This function is identical to <code>currval</code>, except that instead of taking the sequence name as an argument it refers to whichever sequence <code>nextval</code> was most recently applied to in the current session. It is an error to call <code>lastval</code> if <code>nextval</code> has not yet been called in the current session.</td>
+<td>This function requires <code>USAGE</code> or <code>SELECT</code> privilege on the last used sequence.</td>
+</tr>
+<tr>
+<td><code>pg_get_sequence_data</code> ( <code>regclass</code> ) <code>record</code> ( <code>last_value</code> <code>bigint</code>, <code>is_called</code> <code>bool</code>, <code>page_lsn</code> <code>pg_lsn</code> )</td>
+<td>Returns information about the sequence. <code>last_value</code> is the last sequence value written to disk. If caching is used, this value can be greater than the last value handed out from the sequence. <code>is_called</code> indicates whether the sequence has been used. <code>page_lsn</code> is the LSN corresponding to the most recent WAL record that modified this sequence relation.</td>
+<td>This function is primarily intended for internal use by pg_dump and by logical replication to synchronize sequences. It requires <code>USAGE</code> or <code>SELECT</code> privilege on the sequence.</td>
+</tr>
+</tbody>
+</table>
+
+
+!!! caution
+
+    To avoid blocking concurrent transactions that obtain numbers from the same sequence, the value obtained by `nextval` is not reclaimed for re-use if the calling transaction later aborts. This means that transaction aborts or database crashes can result in gaps in the sequence of assigned values. That can happen without a transaction abort, too. For example an `INSERT` with an `ON CONFLICT` clause will compute the to-be-inserted tuple, including doing any required `nextval` calls, before detecting any conflict that would cause it to follow the `ON CONFLICT` rule instead. Thus, PostgreSQL sequence objects *cannot be used to obtain “gapless” sequences*.
+
+
+     Likewise, sequence state changes made by `setval` are immediately visible to other transactions, and are not undone if the calling transaction rolls back.
+
+
+     If the database cluster crashes before committing a transaction containing a `nextval` or `setval` call, the sequence state change might not have made its way to persistent storage, so that it is uncertain whether the sequence will have its original or updated state after the cluster restarts. This is harmless for usage of the sequence within the database, since other effects of uncommitted transactions will not be visible either. However, if you wish to use a sequence value for persistent outside-the-database purposes, make sure that the `nextval` call has been committed before doing so.
+
+
+ The sequence to be operated on by a sequence function is specified by a `regclass` argument, which is simply the OID of the sequence in the `pg_class` system catalog. You do not have to look up the OID by hand, however, since the `regclass` data type's input converter will do the work for you. See [Object Identifier Types](../data-types/object-identifier-types.md#datatype-oid) for details.

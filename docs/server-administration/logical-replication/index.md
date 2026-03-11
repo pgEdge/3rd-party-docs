@@ -1,0 +1,36 @@
+# Logical Replication { #logical-replication }
+
+ Logical replication is a method of replicating data objects and their changes, based upon their replication identity (usually a primary key). We use the term logical replication in contrast to physical replication, which uses exact block addresses and byte-by-byte replication. PostgreSQL supports both mechanisms concurrently, see [High Availability, Load Balancing, and Replication](../high-availability-load-balancing-and-replication/index.md#high-availability). Logical replication allows fine-grained control over both data replication and security.
+
+ Logical replication uses a *publish* and *subscribe* model with one or more *subscribers* subscribing to one or more *publications* on a *publisher* node. Subscribers pull data from the publications they subscribe to and may subsequently re-publish data to allow cascading replication or more complex configurations.
+
+ When logical replication of a table typically starts, PostgreSQL takes a snapshot of the table's data on the publisher database and copies it to the subscriber. Once complete, changes on the publisher since the initial copy are sent continually to the subscriber. The subscriber applies the data in the same order as the publisher so that transactional consistency is guaranteed for publications within a single subscription. This method of data replication is sometimes referred to as transactional replication.
+
+ The typical use-cases for logical replication are:
+
+-  Sending incremental changes in a single database or a subset of a database to subscribers as they occur
+-  Sending a subset of the database to multiple databases (i.e., broadcast)
+-  Consolidating multiple databases into a single one (e.g., for analytics).
+-  Replicating between different major versions of PostgreSQL
+-  Replicating between PostgreSQL instances on different platforms (for example Linux to Windows)
+-  Giving access to replicated data to different groups of users.
+-  Firing triggers for individual changes as they arrive on the subscriber.
+
+
+ The subscriber database behaves in the same way as any other PostgreSQL instance and can be used as a publisher for other databases by defining its own publications. When the subscriber is treated as read-only by application, there will be no conflicts from a single subscription. On the other hand, if there are other writes done either by an application or by other subscribers to the same set of tables, conflicts can arise.
+
+- [Publication](publication.md#logical-replication-publication)
+- [Subscription](subscription.md#logical-replication-subscription)
+- [Logical Replication Failover](logical-replication-failover.md#logical-replication-failover)
+- [Row Filters](row-filters.md#logical-replication-row-filter)
+- [Column Lists](column-lists.md#logical-replication-col-lists)
+- [Generated Column Replication](generated-column-replication.md#logical-replication-gencols)
+- [Replicating Sequences](replicating-sequences.md#logical-replication-sequences)
+- [Conflicts](conflicts.md#logical-replication-conflicts)
+- [Restrictions](restrictions.md#logical-replication-restrictions)
+- [Architecture](architecture.md#logical-replication-architecture)
+- [Monitoring](monitoring.md#logical-replication-monitoring)
+- [Security](security.md#logical-replication-security)
+- [Configuration Settings](configuration-settings.md#logical-replication-config)
+- [Upgrade](upgrade.md#logical-replication-upgrade)
+- [Quick Setup](quick-setup.md#logical-replication-quick-setup)

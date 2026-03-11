@@ -1,0 +1,95 @@
+# ALTER FOREIGN DATA WRAPPER { #sql-alterforeigndatawrapper }
+
+change the definition of a foreign-data wrapper
+
+## Synopsis
+
+
+```
+
+ALTER FOREIGN DATA WRAPPER NAME
+    [ HANDLER HANDLER_FUNCTION | NO HANDLER ]
+    [ VALIDATOR VALIDATOR_FUNCTION | NO VALIDATOR ]
+    [ CONNECTION CONNECTION_FUNCTION | NO CONNECTION ]
+    [ OPTIONS ( [ ADD | SET | DROP ] OPTION ['VALUE'] [, ... ]) ]
+ALTER FOREIGN DATA WRAPPER NAME OWNER TO { NEW_OWNER | CURRENT_ROLE | CURRENT_USER | SESSION_USER }
+ALTER FOREIGN DATA WRAPPER NAME RENAME TO NEW_NAME
+```
+
+
+## Description
+
+
+ `ALTER FOREIGN DATA WRAPPER` changes the definition of a foreign-data wrapper. The first form of the command changes the support functions or the generic options of the foreign-data wrapper (at least one clause is required). The second form changes the owner of the foreign-data wrapper.
+
+
+ Only superusers can alter foreign-data wrappers. Additionally, only superusers can own foreign-data wrappers.
+
+
+## Parameters
+
+
+*name*
+:   The name of an existing foreign-data wrapper.
+
+<code>HANDLER </code><em>handler_function</em>
+:   Specifies a new handler function for the foreign-data wrapper.
+
+`NO HANDLER`
+:   This is used to specify that the foreign-data wrapper should no longer have a handler function.
+
+
+     Note that foreign tables that use a foreign-data wrapper with no handler cannot be accessed.
+
+<code>VALIDATOR </code><em>validator_function</em>
+:   Specifies a new validator function for the foreign-data wrapper.
+
+
+     Note that it is possible that pre-existing options of the foreign-data wrapper, or of dependent servers, user mappings, or foreign tables, are invalid according to the new validator. PostgreSQL does not check for this. It is up to the user to make sure that these options are correct before using the modified foreign-data wrapper. However, any options specified in this `ALTER FOREIGN DATA WRAPPER` command will be checked using the new validator.
+
+`NO VALIDATOR`
+:   This is used to specify that the foreign-data wrapper should no longer have a validator function.
+
+<code>CONNECTION </code><em>connection_function</em>
+:   Specifies a new connection function for the foreign-data wrapper.
+
+`NO CONNECTION`
+:   This is used to specify that the foreign-data wrapper should no longer have a connection function.
+
+<code>OPTIONS ( [ ADD | SET | DROP ] </code><em>option</em><code> ['</code><em>value</em><code>'] [, ... ] )</code>
+:   Change options for the foreign-data wrapper. `ADD`, `SET`, and `DROP` specify the action to be performed. `ADD` is assumed if no operation is explicitly specified. Option names must be unique; names and values are also validated using the foreign data wrapper's validator function, if any.
+
+*new_owner*
+:   The user name of the new owner of the foreign-data wrapper.
+
+*new_name*
+:   The new name for the foreign-data wrapper.
+
+
+## Examples
+
+
+ Change a foreign-data wrapper `dbi`, add option `foo`, drop `bar`:
+
+```sql
+
+ALTER FOREIGN DATA WRAPPER dbi OPTIONS (ADD foo '1', DROP bar);
+```
+
+
+ Change the foreign-data wrapper `dbi` validator to `bob.myvalidator`:
+
+```sql
+
+ALTER FOREIGN DATA WRAPPER dbi VALIDATOR bob.myvalidator;
+```
+
+
+## Compatibility
+
+
+ `ALTER FOREIGN DATA WRAPPER` conforms to ISO/IEC 9075-9 (SQL/MED), except that the `HANDLER`, `VALIDATOR`, `OWNER TO`, and `RENAME` clauses are extensions.
+
+
+## See Also
+  [sql-createforeigndatawrapper](create-foreign-data-wrapper.md#sql-createforeigndatawrapper), [sql-dropforeigndatawrapper](drop-foreign-data-wrapper.md#sql-dropforeigndatawrapper)

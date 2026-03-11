@@ -1,0 +1,96 @@
+# CREATE FOREIGN DATA WRAPPER { #sql-createforeigndatawrapper }
+
+define a new foreign-data wrapper
+
+## Synopsis
+
+
+```
+
+CREATE FOREIGN DATA WRAPPER NAME
+    [ HANDLER HANDLER_FUNCTION | NO HANDLER ]
+    [ VALIDATOR VALIDATOR_FUNCTION | NO VALIDATOR ]
+    [ CONNECTION CONNECTION_FUNCTION | NO CONNECTION ]
+    [ OPTIONS ( OPTION 'VALUE' [, ... ] ) ]
+```
+
+
+## Description
+
+
+ `CREATE FOREIGN DATA WRAPPER` creates a new foreign-data wrapper. The user who defines a foreign-data wrapper becomes its owner.
+
+
+ The foreign-data wrapper name must be unique within the database.
+
+
+ Only superusers can create foreign-data wrappers.
+
+
+## Parameters
+
+
+*name*
+:   The name of the foreign-data wrapper to be created.
+
+<code>HANDLER </code><em>handler_function</em>
+:   *handler_function* is the name of a previously registered function that will be called to retrieve the execution functions for foreign tables. The handler function must take no arguments, and its return type must be `fdw_handler`.
+
+
+     It is possible to create a foreign-data wrapper with no handler function, but foreign tables using such a wrapper can only be declared, not accessed.
+
+<code>VALIDATOR </code><em>validator_function</em>
+:   *validator_function* is the name of a previously registered function that will be called to check the generic options given to the foreign-data wrapper, as well as options for foreign servers, user mappings and foreign tables using the foreign-data wrapper. If no validator function or `NO VALIDATOR` is specified, then options will not be checked at creation time. (Foreign-data wrappers will possibly ignore or reject invalid option specifications at run time, depending on the implementation.) The validator function must take two arguments: one of type `text[]`, which will contain the array of options as stored in the system catalogs, and one of type `oid`, which will be the OID of the system catalog containing the options. The return type is ignored; the function should report invalid options using the `ereport(ERROR)` function.
+
+<code>CONNECTION </code><em>connection_function</em>
+:   *connection_function* is the name of a previously registered function that will be called to generate the postgres connection string when a foreign server is used as part of [sql-createsubscription](create-subscription.md#sql-createsubscription). If no connection function or `NO CONNECTION` is specified, then servers using this foreign data wrapper cannot be used for `CREATE SUBSCRIPTION`. The connection function must take three arguments: one of type `oid` for the user, one of type `oid` for the server, and an unused third argument of type `internal` (which prevents calling the function in other contexts).
+
+<code>OPTIONS ( </code><em>option</em><code> '</code><em>value</em><code>' [, ... ] )</code>
+:   This clause specifies options for the new foreign-data wrapper. The allowed option names and values are specific to each foreign data wrapper and are validated using the foreign-data wrapper's validator function. Option names must be unique.
+
+
+## Notes
+
+
+ PostgreSQL's foreign-data functionality is still under active development. Optimization of queries is primitive (and mostly left to the wrapper, too). Thus, there is considerable room for future performance improvements.
+
+
+## Examples
+
+
+ Create a useless foreign-data wrapper `dummy`:
+
+```sql
+
+CREATE FOREIGN DATA WRAPPER dummy;
+```
+
+
+ Create a foreign-data wrapper `file` with handler function `file_fdw_handler`:
+
+```sql
+
+CREATE FOREIGN DATA WRAPPER file HANDLER file_fdw_handler;
+```
+
+
+ Create a foreign-data wrapper `mywrapper` with some options:
+
+```sql
+
+CREATE FOREIGN DATA WRAPPER mywrapper
+    OPTIONS (debug 'true');
+```
+
+
+## Compatibility
+
+
+ `CREATE FOREIGN DATA WRAPPER` conforms to ISO/IEC 9075-9 (SQL/MED), with the exception that the `HANDLER` and `VALIDATOR` clauses are extensions and the standard clauses `LIBRARY` and `LANGUAGE` are not implemented in PostgreSQL.
+
+
+ Note, however, that the SQL/MED functionality as a whole is not yet conforming.
+
+
+## See Also
+  [sql-alterforeigndatawrapper](alter-foreign-data-wrapper.md#sql-alterforeigndatawrapper), [sql-dropforeigndatawrapper](drop-foreign-data-wrapper.md#sql-dropforeigndatawrapper), [sql-createserver](create-server.md#sql-createserver), [sql-createusermapping](create-user-mapping.md#sql-createusermapping), [sql-createforeigntable](create-foreign-table.md#sql-createforeigntable)
