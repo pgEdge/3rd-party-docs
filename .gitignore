@@ -1,0 +1,6 @@
+/.claude/
+/.venv/
+/bin/
+/postgresql/
+/site/
+.DS_Store
