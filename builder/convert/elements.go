@@ -188,6 +188,21 @@ func init() {
 	registerHandler("glosssee", handleGlossSee)
 	registerHandler("glossseealso", handleGlossSeeAlso)
 
+	// Bibliography
+	registerHandler("bibliography", handleChapter)
+	registerHandler("bibliodiv", handleBibliodiv)
+	registerHandler("biblioentry", handleBiblioentry)
+	registerHandler("authorgroup", handleSkip) // handled by biblioentry
+	registerHandler("author", handleSkip)      // handled by biblioentry
+	registerHandler("firstname", handleSkip)   // handled by biblioentry
+	registerHandler("surname", handleSkip)     // handled by biblioentry
+	registerHandler("pubdate", handleSkip)     // handled by biblioentry
+	registerHandler("isbn", handleSkip)        // handled by biblioentry
+	registerHandler("subtitle", handleSkip)    // handled by biblioentry
+	registerHandler("edition", handleSkip)     // handled by biblioentry
+	registerHandler("bibliomisc", handleSkip)
+	registerHandler("publisher", handleSkip)
+
 	// Cross-references to external man pages
 	registerHandler("citerefentry", handleCiteRefEntry)
 	registerHandler("refentrytitle", handleCode)

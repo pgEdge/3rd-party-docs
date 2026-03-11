@@ -100,7 +100,7 @@ func (c *Converter) mapElement(node *sgml.Node, parentPath string) {
 		c.mapPart(node, parentPath)
 	case "reference":
 		c.mapReference(node, parentPath)
-	case "chapter", "appendix", "preface":
+	case "chapter", "appendix", "preface", "bibliography":
 		c.mapChapter(node, parentPath)
 	case "refentry":
 		c.mapRefentry(node, parentPath)
@@ -143,7 +143,7 @@ func (c *Converter) mapPart(node *sgml.Node, parentPath string) {
 	for _, child := range node.Children {
 		if child.Type == sgml.ElementNode {
 			switch child.Tag {
-			case "chapter", "appendix":
+			case "chapter", "appendix", "bibliography":
 				c.mapChapter(child, partPath)
 			case "reference":
 				c.mapReference(child, partPath)
@@ -452,7 +452,7 @@ func (c *Converter) convertNodeToFiles(node *sgml.Node) error {
 			if err := c.convertReference(child); err != nil {
 				return err
 			}
-		case "chapter", "appendix", "preface":
+		case "chapter", "appendix", "preface", "bibliography":
 			if err := c.convertChapter(child); err != nil {
 				return err
 			}
@@ -498,7 +498,7 @@ func (c *Converter) convertPart(node *sgml.Node) error {
 			continue
 		}
 		switch child.Tag {
-		case "chapter", "appendix":
+		case "chapter", "appendix", "bibliography":
 			if err := c.convertChapter(child); err != nil {
 				return err
 			}
