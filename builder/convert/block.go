@@ -64,7 +64,7 @@ func handleSection(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 // sectionLevel returns the Markdown heading level for a section tag.
 func sectionLevel(tag string) int {
 	switch tag {
-	case "chapter", "appendix", "preface":
+	case "chapter", "appendix", "preface", "bibliography":
 		return 1
 	case "sect1", "section", "simplesect":
 		return 2
@@ -741,4 +741,76 @@ func detectLanguage(node *sgml.Node) string {
 	}
 
 	return ""
+}
+
+// handleBibliodiv converts <bibliodiv> (a section within a bibliography).
+func handleBibliodiv(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
+	title := extractTitle(node)
+	if title != "" {
+		w.Heading(2, title, "")
+	}
+	return convertChildrenSkipTitle(ctx, node, w)
+}
+
+// handleBiblioentry converts <biblioentry> to a formatted reference.
+func handleBiblioentry(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
+	id := node.GetAttr("id")
+
+	w.BlankLine()
+	if id != "" {
+		w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", id))
+	}
+
+	title := extractTitle(node)
+	subtitle := ""
+	if st := node.FindChild("subtitle"); st != nil {
+		subtitle = st.TextContent()
+	}
+
+	// Collect authors
+	var authors []string
+	for _, ag := range node.FindDescendants("author") {
+		first := ""
+		last := ""
+		if fn := ag.FindChild("firstname"); fn != nil {
+			first = fn.TextContent()
+		}
+		if sn := ag.FindChild("surname"); sn != nil {
+			last = sn.TextContent()
+		}
+		if first != "" || last != "" {
+			authors = append(authors, strings.TrimSpace(first+" "+last))
+		}
+	}
+
+	pubdate := ""
+	if pd := node.FindChild("pubdate"); pd != nil {
+		pubdate = pd.TextContent()
+	}
+
+	isbn := ""
+	if ib := node.FindChild("isbn"); ib != nil {
+		isbn = ib.TextContent()
+	}
+
+	// Format: **Title**. *Subtitle*. Authors. Year. ISBN.
+	var parts []string
+	if title != "" {
+		parts = append(parts, "**"+title+"**")
+	}
+	if subtitle != "" {
+		parts = append(parts, "*"+subtitle+"*")
+	}
+	if len(authors) > 0 {
+		parts = append(parts, strings.Join(authors, ", "))
+	}
+	if pubdate != "" {
+		parts = append(parts, pubdate)
+	}
+	if isbn != "" {
+		parts = append(parts, "ISBN "+isbn)
+	}
+
+	w.WriteString(strings.Join(parts, ". ") + ".\n")
+	return nil
 }
