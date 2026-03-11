@@ -460,3 +460,132 @@ ninja install
 
 
  Individual build targets can be built using `ninja` *target*. When no target is specified, everything except documentation is built. Individual build products can be built using the path/filename as *target*.
+
+
+#### Code Targets { #targets-meson-code }
+
+
+<a id="meson-target-all"></a>
+
+`all`
+:   Build everything other than documentation
+<a id="meson-target-backend"></a>
+
+`backend`
+:   Build backend and related modules
+<a id="meson-target-bin"></a>
+
+`bin`
+:   Build frontend binaries
+<a id="meson-target-contrib"></a>
+
+`contrib`
+:   Build contrib modules
+<a id="meson-target-pl"></a>
+
+`pl`
+:   Build procedural languages
+
+
+#### Developer Targets { #targets-meson-developer }
+
+
+<a id="meson-target-reformat-dat-files"></a>
+
+`reformat-dat-files`
+:   Rewrite catalog data files into standard format
+<a id="meson-target-expand-dat-files"></a>
+
+`expand-dat-files`
+:   Expand all data files to include defaults
+<a id="meson-target-update-unicode"></a>
+
+`update-unicode`
+:   Update unicode data to new version
+
+
+#### Documentation Targets { #targets-meson-documentation }
+
+
+<a id="meson-target-html"></a>
+
+`html`
+:   Build documentation in multi-page HTML format
+<a id="meson-target-man"></a>
+
+`man`
+:   Build documentation in man page format
+<a id="meson-target-docs"></a>
+
+`docs`
+:   Build documentation in multi-page HTML and man page format
+<a id="meson-target-doc-src-sgml-postgres-A4.pdf"></a>
+
+`doc/src/sgml/postgres-A4.pdf`
+:   Build documentation in PDF format, with A4 pages
+<a id="meson-target-doc-src-sgml-postgres-US.pdf"></a>
+
+`doc/src/sgml/postgres-US.pdf`
+:   Build documentation in PDF format, with US letter pages
+<a id="meson-target-doc-src-sgml-postgres.html"></a>
+
+`doc/src/sgml/postgres.html`
+:   Build documentation in single-page HTML format
+<a id="meson-target-alldocs"></a>
+
+`alldocs`
+:   Build documentation in all supported formats
+
+
+#### Installation Targets { #targets-meson-installation }
+
+
+<a id="meson-target-install"></a>
+
+`install`
+:   Install postgres, excluding documentation
+<a id="meson-target-install-docs"></a>
+
+`install-docs`
+:   Install documentation in multi-page HTML and man page formats
+<a id="meson-target-install-html"></a>
+
+`install-html`
+:   Install documentation in multi-page HTML format
+<a id="meson-target-install-man"></a>
+
+`install-man`
+:   Install documentation in man page format
+<a id="meson-target-install-quiet"></a>
+
+`install-quiet`
+:   Like "install", but installed files are not displayed
+<a id="meson-target-install-world"></a>
+
+`install-world`
+:   Install postgres, including multi-page HTML and man page documentation
+<a id="meson-target-uninstall"></a>
+
+`uninstall`
+:   Remove installed files
+
+
+#### Other Targets { #targets-meson-other }
+
+
+<a id="meson-target-clean"></a>
+
+`clean`
+:   Remove all build products
+<a id="meson-target-test"></a>
+
+`test`
+:   Run all enabled tests (including contrib)
+<a id="meson-target-world"></a>
+
+`world`
+:   Build everything, including documentation
+<a id="meson-target-help"></a>
+
+`help`
+:   List important targets

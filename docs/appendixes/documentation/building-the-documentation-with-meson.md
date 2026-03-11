@@ -10,4 +10,4 @@
 
 build$ ninja html
 ```
- For a list of other documentation targets see [targets-meson-documentation](#targets-meson-documentation). The output appears in the subdirectory `build/doc/src/sgml`.
+ For a list of other documentation targets see [Documentation Targets](../../server-administration/installation-from-source-code/building-and-installation-with-meson.md#targets-meson-documentation). The output appears in the subdirectory `build/doc/src/sgml`.
