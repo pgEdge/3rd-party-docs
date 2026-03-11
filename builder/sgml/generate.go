@@ -30,9 +30,11 @@ func GenerateMissingFiles(srcDir, pgVersion string) (int, []string) {
 	var warnings []string
 	generated := 0
 
+	// Resolve srcDir to absolute so paths work when cmd.Dir is set
+	srcDir, _ = filepath.Abs(srcDir)
+
 	// Determine PG source root (3 levels up from doc/src/sgml)
 	pgRoot := filepath.Join(srcDir, "..", "..", "..")
-	pgRoot, _ = filepath.Abs(pgRoot)
 
 	// Handle version.sgml — always regenerate since the version
 	// changes between runs (e.g., switching PG branches).
