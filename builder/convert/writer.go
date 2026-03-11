@@ -137,15 +137,13 @@ func (w *MarkdownWriter) EndCodeBlock() {
 	w.lastBlank = false
 }
 
-// Heading writes a Markdown heading with optional ID.
-func (w *MarkdownWriter) Heading(level int, text, id string) {
+// Heading writes a Markdown heading. The id parameter is accepted
+// for backward compatibility but ignored — anchor IDs are emitted
+// globally by convertNode via <a id=""> tags.
+func (w *MarkdownWriter) Heading(level int, text, _ string) {
 	w.BlankLine()
 	prefix := strings.Repeat("#", level)
-	if id != "" {
-		w.WriteString(prefix + " " + text + " { #" + id + " }\n")
-	} else {
-		w.WriteString(prefix + " " + text + "\n")
-	}
+	w.WriteString(prefix + " " + text + "\n")
 	w.atLineStart = true
 	w.lastBlank = false
 }

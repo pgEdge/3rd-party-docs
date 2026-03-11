@@ -172,6 +172,10 @@ func handleVariableList(ctx *Context, node *sgml.Node, w *MarkdownWriter) error 
 		terms := child.FindChildren("term")
 		w.BlankLine()
 		for i, term := range terms {
+			// Emit anchor for term IDs (these don't go through convertNode)
+			if termID := term.GetAttr("id"); termID != "" {
+				w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", termID))
+			}
 			tw := NewMarkdownWriter()
 			tw.SetSuppressNewlines(true)
 			if err := convertChildren(ctx, term, tw); err != nil {
@@ -342,15 +346,10 @@ func handleBlockquote(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 
 // handleExample converts <example> with title.
 func handleExample(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
-	id := node.GetAttr("id")
 	title := extractTitle(node)
 
 	if title != "" {
 		w.BlankLine()
-		if id != "" {
-			w.WriteString(fmt.Sprintf(
-				"<a id=\"%s\"></a>\n", id))
-		}
 		w.WriteString("**Example: " + title + "**\n")
 	}
 
@@ -427,6 +426,10 @@ func handleProcedure(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 	num := 1
 	for _, child := range node.Children {
 		if child.Type == sgml.ElementNode && child.Tag == "step" {
+			// Emit anchor for step IDs (steps bypass convertNode)
+			if stepID := child.GetAttr("id"); stepID != "" {
+				w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", stepID))
+			}
 			w.EnsureNewline()
 			prefix := fmt.Sprintf("%d. ", num)
 			w.WriteString(prefix)
@@ -455,6 +458,9 @@ func handleSubsteps(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 	num := 1
 	for _, child := range node.Children {
 		if child.Type == sgml.ElementNode && child.Tag == "step" {
+			if stepID := child.GetAttr("id"); stepID != "" {
+				w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", stepID))
+			}
 			w.EnsureNewline()
 			prefix := fmt.Sprintf("%d. ", num)
 			w.WriteString(prefix)
@@ -480,11 +486,6 @@ func handleEmail(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 
 // handleGlossEntry converts <glossentry> to a definition term.
 func handleGlossEntry(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
-	id := node.GetAttr("id")
-	if id != "" {
-		w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", id))
-	}
-
 	// Render glossterm as bold
 	glossterm := node.FindChild("glossterm")
 	if glossterm != nil {
@@ -754,12 +755,7 @@ func handleBibliodiv(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 
 // handleBiblioentry converts <biblioentry> to a formatted reference.
 func handleBiblioentry(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
-	id := node.GetAttr("id")
-
 	w.BlankLine()
-	if id != "" {
-		w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", id))
-	}
 
 	title := extractTitle(node)
 	subtitle := ""

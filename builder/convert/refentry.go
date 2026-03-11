@@ -10,6 +10,7 @@
 package convert
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/pgEdge/postgresql-docs/builder/sgml"
@@ -72,6 +73,9 @@ func handleRefentry(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 		sectID := sect.GetAttr("id")
 		sectTitle := extractTitle(sect)
 
+		if sectID != "" {
+			w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", sectID))
+		}
 		w.Heading(2, sectTitle, sectID)
 
 		if err := convertChildrenSkipTitle(ctx, sect, w); err != nil {

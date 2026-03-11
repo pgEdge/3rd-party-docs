@@ -118,7 +118,7 @@ func TestConvertSection(t *testing.T) {
 	input := `<sect1 id="test-section"><title>Test Section</title>
 <para>Content here.</para></sect1>`
 	result := parseAndConvert(t, input)
-	if !strings.Contains(result, "## Test Section { #test-section }") {
+	if !strings.Contains(result, "## Test Section") || !strings.Contains(result, `<a id="test-section"></a>`) {
 		t.Errorf("expected heading in output:\n%s", result)
 	}
 	if !strings.Contains(result, "Content here.") {
@@ -130,7 +130,7 @@ func TestConvertChapter(t *testing.T) {
 	input := `<chapter id="tutorial"><title>Tutorial</title>
 <para>Welcome.</para></chapter>`
 	result := parseAndConvert(t, input)
-	if !strings.Contains(result, "# Tutorial { #tutorial }") {
+	if !strings.Contains(result, "# Tutorial") || !strings.Contains(result, `<a id="tutorial"></a>`) {
 		t.Errorf("expected chapter heading in output:\n%s", result)
 	}
 }
@@ -1533,7 +1533,7 @@ func TestWriterHeading(t *testing.T) {
 	w := NewMarkdownWriter()
 	w.Heading(3, "My Heading", "my-heading")
 	result := w.String()
-	if !strings.Contains(result, "### My Heading { #my-heading }") {
+	if !strings.Contains(result, "### My Heading\n") {
 		t.Errorf("expected heading:\n%q", result)
 	}
 }
@@ -2079,7 +2079,7 @@ func TestHandleSimplesect(t *testing.T) {
 	input := `<simplesect id="ss-1"><title>Simple Section</title>
 <para>Content.</para></simplesect>`
 	result := parseAndConvert(t, input)
-	if !strings.Contains(result, "## Simple Section { #ss-1 }") {
+	if !strings.Contains(result, "## Simple Section") || !strings.Contains(result, `<a id="ss-1"></a>`) {
 		t.Errorf("expected simplesect heading:\n%s", result)
 	}
 }
@@ -2088,7 +2088,7 @@ func TestHandleRefsect2(t *testing.T) {
 	input := `<refsect2 id="r2"><title>Sub Section</title>
 <para>Content.</para></refsect2>`
 	result := parseAndConvert(t, input)
-	if !strings.Contains(result, "### Sub Section { #r2 }") {
+	if !strings.Contains(result, "### Sub Section") || !strings.Contains(result, `<a id="r2"></a>`) {
 		t.Errorf("expected refsect2 heading at level 3:\n%s", result)
 	}
 }
@@ -2097,7 +2097,7 @@ func TestHandleRefsect3(t *testing.T) {
 	input := `<refsect3 id="r3"><title>Deep Section</title>
 <para>Content.</para></refsect3>`
 	result := parseAndConvert(t, input)
-	if !strings.Contains(result, "#### Deep Section { #r3 }") {
+	if !strings.Contains(result, "#### Deep Section") || !strings.Contains(result, `<a id="r3"></a>`) {
 		t.Errorf("expected refsect3 heading at level 4:\n%s", result)
 	}
 }

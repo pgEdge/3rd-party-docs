@@ -106,10 +106,7 @@ func handleUlink(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 }
 
 // handleAnchor converts <anchor id="..."> to an inline HTML anchor.
+// The anchor is emitted by convertNode, so this is a no-op.
 func handleAnchor(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
-	id := node.GetAttr("id")
-	if id != "" {
-		w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>", id))
-	}
 	return nil
 }

@@ -18,14 +18,9 @@ import (
 
 // handleTable converts <table> and <informaltable> to Markdown or HTML.
 func handleTable(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
-	id := node.GetAttr("id")
 	title := extractTitle(node)
 
 	w.BlankLine()
-
-	if id != "" {
-		w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", id))
-	}
 
 	if title != "" {
 		w.WriteString("**Table: " + title + "**\n")
@@ -99,7 +94,15 @@ func convertFuncTable(ctx *Context, tgroup *sgml.Node, w *MarkdownWriter) error 
 	if tbody != nil {
 		w.WriteString("<tbody>\n")
 		for _, row := range tbody.FindChildren("row") {
-			w.WriteString("<tr>\n")
+			// Check for entry IDs to add to the row
+			rowAttrs := ""
+			for _, entry := range row.FindChildren("entry") {
+				if entryID := entry.GetAttr("id"); entryID != "" {
+					rowAttrs = fmt.Sprintf(` id="%s"`, entryID)
+					break
+				}
+			}
+			w.WriteString(fmt.Sprintf("<tr%s>\n", rowAttrs))
 			for _, entry := range row.FindChildren("entry") {
 				renderFuncTableEntry(ctx, entry, w)
 			}
@@ -313,6 +316,11 @@ func renderHTMLRow(ctx *Context, row *sgml.Node, colNames map[string]int, w *Mar
 	w.WriteString("<tr>\n")
 	for _, entry := range row.FindChildren("entry") {
 		attrs := ""
+
+		// Emit anchor for entry IDs (e.g. func_table_entry references)
+		if entryID := entry.GetAttr("id"); entryID != "" {
+			attrs += fmt.Sprintf(` id="%s"`, entryID)
+		}
 
 		// Handle column spanning
 		namest := entry.GetAttr("namest")

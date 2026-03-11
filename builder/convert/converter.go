@@ -401,6 +401,9 @@ func (c *Converter) convertBook(book *sgml.Node) error {
 
 	c.ctx.CurrentFile = entry.File
 	w := NewMarkdownWriter()
+	if id != "" {
+		w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", id))
+	}
 	w.Heading(1, title, id)
 
 	// Convert bookinfo if present
@@ -477,6 +480,9 @@ func (c *Converter) convertPart(node *sgml.Node) error {
 
 	// Write part index page
 	w := NewMarkdownWriter()
+	if id != "" {
+		w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", id))
+	}
 	w.Heading(1, title, id)
 
 	// Convert partintro if present
@@ -529,6 +535,9 @@ func (c *Converter) convertReference(node *sgml.Node) error {
 
 	// Write reference index page
 	w := NewMarkdownWriter()
+	if id != "" {
+		w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", id))
+	}
 	w.Heading(1, title, id)
 
 	// Convert partintro if present
@@ -590,6 +599,9 @@ func (c *Converter) convertChapter(node *sgml.Node) error {
 	c.ctx.CurrentFile = entry.File
 	w := NewMarkdownWriter()
 	title := extractTitle(node)
+	if id != "" {
+		w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", id))
+	}
 	w.Heading(1, title, id)
 
 	// Write any content before the first sect1
@@ -746,6 +758,12 @@ func convertNode(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 		return nil // skip comments
 
 	case sgml.ElementNode:
+		// Emit an HTML anchor for any element that carries an id attribute.
+		// This provides universal cross-reference targets regardless of
+		// whether the element's handler uses the id itself.
+		if id := node.GetAttr("id"); id != "" {
+			w.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", id))
+		}
 		handler := getHandler(node.Tag)
 		if handler != nil {
 			return handler(ctx, node, w)
