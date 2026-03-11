@@ -1,4 +1,6 @@
-# Genetic Query Optimizer { #geqo }
+<a id="geqo"></a>
+
+# Genetic Query Optimizer
 
 
 !!! note "Author"

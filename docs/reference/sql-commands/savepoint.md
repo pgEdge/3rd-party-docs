@@ -1,4 +1,6 @@
-# SAVEPOINT { #sql-savepoint }
+<a id="sql-savepoint"></a>
+
+# SAVEPOINT
 
 define a new savepoint within the current transaction
 

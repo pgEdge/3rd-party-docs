@@ -1,4 +1,6 @@
-## Functions Associated with the `COPY` Command { #libpq-copy }
+<a id="libpq-copy"></a>
+
+## Functions Associated with the `COPY` Command
 
 
  The `COPY` command in PostgreSQL has options to read from or write to the network connection used by libpq. The functions described in this section allow applications to take advantage of this capability by supplying or consuming copied data.
@@ -28,8 +30,9 @@
 `PQfformat`
 :   Returns the format code (0 for text, 1 for binary) associated with each column of the copy operation. The per-column format codes will always be zero when the overall copy format is textual, but the binary format can support both text and binary columns. (However, as of the current implementation of `COPY`, only binary columns appear in a binary copy; so the per-column formats always match the overall format at present.)
 
+ <a id="libpq-copy-send"></a>
 
-### Functions for Sending `COPY` Data { #libpq-copy-send }
+### Functions for Sending `COPY` Data
 
 
  These functions are used to send data during `COPY FROM STDIN`. They will fail if called when the connection is not in `COPY_IN` state.
@@ -71,9 +74,9 @@
 
 
      After successfully calling [PQputCopyEnd](#libpq-PQputCopyEnd), call [PQgetResult](asynchronous-command-processing.md#libpq-PQgetResult) to obtain the final result status of the `COPY` command. One can wait for this result to be available in the usual way. Then return to normal operation.
+  <a id="libpq-copy-receive"></a>
 
-
-### Functions for Receiving `COPY` Data { #libpq-copy-receive }
+### Functions for Receiving `COPY` Data
 
 
  These functions are used to receive data during `COPY TO STDOUT`. They will fail if called when the connection is not in `COPY_OUT` state.
@@ -102,9 +105,9 @@
 
 
      After [PQgetCopyData](#libpq-PQgetCopyData) returns -1, call [PQgetResult](asynchronous-command-processing.md#libpq-PQgetResult) to obtain the final result status of the `COPY` command. One can wait for this result to be available in the usual way. Then return to normal operation.
+  <a id="libpq-copy-deprecated"></a>
 
-
-### Obsolete Functions for `COPY` { #libpq-copy-deprecated }
+### Obsolete Functions for `COPY`
 
 
  These functions represent older methods of handling `COPY`. Although they still work, they are deprecated due to poor error handling, inconvenient methods of detecting end-of-data, and lack of support for binary or nonblocking transfers.

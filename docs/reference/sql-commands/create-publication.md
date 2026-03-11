@@ -1,4 +1,6 @@
-# CREATE PUBLICATION { #sql-createpublication }
+<a id="sql-createpublication"></a>
+
+# CREATE PUBLICATION
 
 define a new publication
 

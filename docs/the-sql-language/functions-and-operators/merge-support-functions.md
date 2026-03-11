@@ -1,10 +1,11 @@
-## Merge Support Functions { #functions-merge-support }
+<a id="functions-merge-support"></a>
+
+## Merge Support Functions
 
 
  PostgreSQL includes one merge support function that may be used in the `RETURNING` list of a [sql-merge](../../reference/sql-commands/merge.md#sql-merge) command to identify the action taken for each row; see [Merge Support Functions](#functions-merge-support-table).
+ <a id="functions-merge-support-table"></a>
 
-
-<a id="functions-merge-support-table"></a>
 **Table: Merge Support Functions**
 
 <table>
@@ -15,7 +16,7 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr id="merge-action">
 <td><code>merge_action</code> ( ) <code>text</code></td>
 <td>Returns the merge action command executed for the current row. This will be <code>'INSERT'</code>, <code>'UPDATE'</code>, or <code>'DELETE'</code>.</td>
 <td></td>

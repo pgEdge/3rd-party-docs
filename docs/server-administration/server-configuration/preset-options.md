@@ -1,4 +1,6 @@
-## Preset Options { #runtime-config-preset }
+<a id="runtime-config-preset"></a>
+
+## Preset Options
 
 
  The following “parameters” are read-only. As such, they have been excluded from the sample `postgresql.conf` file. These options report various aspects of PostgreSQL behavior that might be of interest to certain applications, particularly administrative front-ends. Most of them are determined when PostgreSQL is compiled or when it is installed.

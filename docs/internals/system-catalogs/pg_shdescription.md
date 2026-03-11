@@ -1,4 +1,6 @@
-## `pg_shdescription` { #catalog-pg-shdescription }
+<a id="catalog-pg-shdescription"></a>
+
+## `pg_shdescription`
 
 
  The catalog `pg_shdescription` stores optional descriptions (comments) for shared database objects. Descriptions can be manipulated with the [`COMMENT`](../../reference/sql-commands/comment.md#sql-comment) command and viewed with psql's `\d` commands.

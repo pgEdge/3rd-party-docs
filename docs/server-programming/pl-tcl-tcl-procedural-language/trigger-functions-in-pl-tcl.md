@@ -1,4 +1,6 @@
-## Trigger Functions in PL/Tcl { #pltcl-trigger }
+<a id="pltcl-trigger"></a>
+
+## Trigger Functions in PL/Tcl
 
 
  Trigger functions can be written in PL/Tcl. PostgreSQL requires that a function that is to be called as a trigger must be declared as a function with no arguments and a return type of `trigger`.

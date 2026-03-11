@@ -1,4 +1,6 @@
-## Caveats { #mvcc-caveats }
+<a id="mvcc-caveats"></a>
+
+## Caveats
 
 
  Some DDL commands, currently only [`TRUNCATE`](../../reference/sql-commands/truncate.md#sql-truncate) and the table-rewriting forms of [`ALTER TABLE`](../../reference/sql-commands/alter-table.md#sql-altertable), are not MVCC-safe. This means that after the truncation or rewrite commits, the table will appear empty to concurrent transactions, if they are using a snapshot taken before the DDL command committed. This will only be an issue for a transaction that did not access the table in question before the DDL command started — any transaction that has done so would hold at least an `ACCESS SHARE` table lock, which would block the DDL command until that transaction completes. So these commands will not cause any apparent inconsistency in the table contents for successive queries on the target table, but they could cause visible inconsistency between the contents of the target table and other tables in the database.

@@ -1,10 +1,12 @@
-## Tables and Indexes { #textsearch-tables }
+<a id="textsearch-tables"></a>
+
+## Tables and Indexes
 
 
  The examples in the previous section illustrated full text matching using simple constant strings. This section shows how to search table data, optionally using indexes.
+ <a id="textsearch-tables-search"></a>
 
-
-### Searching a Table { #textsearch-tables-search }
+### Searching a Table
 
 
  It is possible to do a full text search without an index. A simple query to print the `title` of each row that contains the word `friend` in its `body` field is:
@@ -43,9 +45,9 @@ LIMIT 10;
 
 
  Although these queries will work without an index, most applications will find this approach too slow, except perhaps for occasional ad-hoc searches. Practical use of text searching usually requires creating an index.
+  <a id="textsearch-tables-index"></a>
 
-
-### Creating Indexes { #textsearch-tables-index }
+### Creating Indexes
 
 
  We can create a GIN index ([Preferred Index Types for Text Search](preferred-index-types-for-text-search.md#textsearch-indexes)) to speed up text searches:

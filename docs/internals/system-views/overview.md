@@ -1,10 +1,11 @@
-## Overview { #views-overview }
+<a id="views-overview"></a>
+
+## Overview
 
 
  [System Views](#view-table) lists the system views. More detailed documentation of each catalog follows below. Except where noted, all the views described here are read-only.
+ <a id="view-table"></a>
 
-
-<a id="view-table"></a>
 **Table: System Views**
 
 | View Name | Purpose |

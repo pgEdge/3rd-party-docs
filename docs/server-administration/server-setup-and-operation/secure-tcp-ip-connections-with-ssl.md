@@ -1,13 +1,15 @@
-## Secure TCP/IP Connections with SSL { #ssl-tcp }
+<a id="ssl-tcp"></a>
+
+## Secure TCP/IP Connections with SSL
 
 
  PostgreSQL has native support for using SSL connections to encrypt client/server communications for increased security. This requires that OpenSSL is installed on both client and server systems and that support in PostgreSQL is enabled at build time (see [Installation from Source Code](../installation-from-source-code/index.md#installation)).
 
 
  The terms SSL and TLS are often used interchangeably to mean a secure encrypted connection using a TLS protocol. SSL protocols are the precursors to TLS protocols, and the term SSL is still used for encrypted connections even though SSL protocols are no longer supported. SSL is used interchangeably with TLS in PostgreSQL.
+ <a id="ssl-setup"></a>
 
-
-### Basic Setup { #ssl-setup }
+### Basic Setup
 
 
  With SSL support compiled in, the PostgreSQL server can be started with support for encrypted connections using TLS protocols enabled by setting the parameter [ssl](../server-configuration/connections-and-authentication.md#guc-ssl) to `on` in `postgresql.conf`. The server will listen for both normal and SSL connections on the same TCP port, and will negotiate with any connecting client on whether to use SSL. By default, this is at the client's option; see [The `pg_hba.conf` File](../client-authentication/the-pg_hba-conf-file.md#auth-pg-hba-conf) about how to set up the server to require use of SSL for some or all connections.
@@ -29,9 +31,9 @@
 
 
  It is not necessary to add the root certificate to `server.crt`. Instead, clients must have the root certificate of the server's certificate chain.
+  <a id="ssl-openssl-config"></a>
 
-
-### OpenSSL Configuration { #ssl-openssl-config }
+### OpenSSL Configuration
 
 
  PostgreSQL reads the system-wide OpenSSL configuration file. By default, this file is named `openssl.cnf` and is located in the directory reported by `openssl version -d`. This default can be overridden by setting environment variable `OPENSSL_CONF` to the name of the desired configuration file.
@@ -43,9 +45,9 @@
 !!! note
 
     It is possible to have authentication without encryption overhead by using `NULL-SHA` or `NULL-MD5` ciphers. However, a man-in-the-middle could read and pass communications between client and server. Also, encryption overhead is minimal compared to the overhead of authentication. For these reasons NULL ciphers are not recommended.
+  <a id="ssl-client-certificates"></a>
 
-
-### Using Client Certificates { #ssl-client-certificates }
+### Using Client Certificates
 
 
  To require the client to supply a trusted certificate, place certificates of the root certificate authorities (CAs) you trust in a file in the data directory, set the parameter [ssl_ca_file](../server-configuration/connections-and-authentication.md#guc-ssl-ca-file) in `postgresql.conf` to the new file name, and add the authentication option `clientcert=verify-ca` or `clientcert=verify-full` to the appropriate `hostssl` line(s) in `pg_hba.conf`. A certificate will then be requested from the client during SSL connection startup. (See [SSL Support](../../client-interfaces/libpq-c-library/ssl-support.md#libpq-ssl) for a description of how to set up certificates on the client.)
@@ -67,15 +69,14 @@
 
 
  The second approach combines any authentication method for `hostssl` entries with the verification of client certificates by setting the `clientcert` authentication option to `verify-ca` or `verify-full`. The former option only enforces that the certificate is valid, while the latter also ensures that the `cn` (Common Name) in the certificate matches the user name or an applicable mapping.
+  <a id="ssl-server-files"></a>
 
-
-### SSL Server File Usage { #ssl-server-files }
+### SSL Server File Usage
 
 
  [SSL Server File Usage](#ssl-file-usage) summarizes the files that are relevant to the SSL setup on the server. (The shown file names are default names. The locally configured names could be different.)
+ <a id="ssl-file-usage"></a>
 
-
-<a id="ssl-file-usage"></a>
 **Table: SSL Server File Usage**
 
 | File | Contents | Effect |
@@ -90,9 +91,9 @@
 
 
  If an error in these files is detected at server start, the server will refuse to start. But if an error is detected during a configuration reload, the files are ignored and the old SSL configuration continues to be used. On `Windows` systems, if an error in these files is detected at backend start, that backend will be unable to establish an SSL connection. In all these cases, the error condition is reported in the server log.
+  <a id="ssl-certificate-creation"></a>
 
-
-### Creating Certificates { #ssl-certificate-creation }
+### Creating Certificates
 
 
  To create a simple self-signed certificate for the server, valid for 365 days, use the following OpenSSL command, replacing *dbhost.yourdomain.com* with the server's host name:

@@ -1,10 +1,12 @@
-## Additional Features { #textsearch-features }
+<a id="textsearch-features"></a>
+
+## Additional Features
 
 
  This section describes additional functions and operators that are useful in connection with text search.
+ <a id="textsearch-manipulate-tsvector"></a>
 
-
-### Manipulating Documents { #textsearch-manipulate-tsvector }
+### Manipulating Documents
 
 
  [Parsing Documents](controlling-text-search.md#textsearch-parsing-documents) showed how raw textual documents can be converted into `tsvector` values. PostgreSQL also provides functions and operators that can be used to manipulate documents that are already in `tsvector` form.
@@ -30,9 +32,9 @@
 
 
  A full list of `tsvector`-related functions is available in [Text Search Functions](../functions-and-operators/text-search-functions-and-operators.md#textsearch-functions-table).
+  <a id="textsearch-manipulate-tsquery"></a>
 
-
-### Manipulating Queries { #textsearch-manipulate-tsquery }
+### Manipulating Queries
 
 
  [Parsing Queries](controlling-text-search.md#textsearch-parsing-queries) showed how raw textual queries can be converted into `tsquery` values. PostgreSQL also provides functions and operators that can be used to manipulate queries that are already in `tsquery` form.
@@ -101,9 +103,9 @@
     -----------
      T
     ```
+ <a id="textsearch-query-rewriting"></a>
 
-
-#### Query Rewriting { #textsearch-query-rewriting }
+#### Query Rewriting
 
 
  The `ts_rewrite` family of functions search a given `tsquery` for occurrences of a target subquery, and replace each occurrence with a substitute subquery. In essence this operation is a `tsquery`-specific version of substring replacement. A target and substitute combination can be thought of as a *query rewrite rule*. A collection of such rewrite rules can be a powerful search aid. For example, you can expand the search using synonyms (e.g., `new york`, `big apple`, `nyc`, `gotham`) or narrow the search to direct the user to some hot topic. There is some overlap in functionality between this feature and thesaurus dictionaries ([Thesaurus Dictionary](dictionaries.md#textsearch-thesaurus)). However, you can modify a set of rewrite rules on-the-fly without reindexing, whereas updating a thesaurus requires reindexing to be effective.
@@ -176,8 +178,9 @@ SELECT ts_rewrite('a & b'::tsquery,
  'b' & 'c'
 ```
 
+   <a id="textsearch-update-triggers"></a>
 
-### Triggers for Automatic Updates { #textsearch-update-triggers }
+### Triggers for Automatic Updates
 
 
 !!! note
@@ -246,9 +249,9 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
 
 
  Keep in mind that it is important to specify the configuration name explicitly when creating `tsvector` values inside triggers, so that the column's contents will not be affected by changes to `default_text_search_config`. Failure to do this is likely to lead to problems such as search results changing after a dump and restore.
+  <a id="textsearch-statistics"></a>
 
-
-### Gathering Document Statistics { #textsearch-statistics }
+### Gathering Document Statistics
 
 
  The function `ts_stat` is useful for checking your configuration and for finding stop-word candidates.

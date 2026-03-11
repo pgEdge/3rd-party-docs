@@ -1,4 +1,6 @@
-# pg_receivewal { #app-pgreceivewal }
+<a id="app-pgreceivewal"></a>
+
+# pg_receivewal
 
 stream write-ahead logs from a PostgreSQL server
 

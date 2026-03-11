@@ -1,12 +1,14 @@
-## Safely Designing a Validator Module { #oauth-validator-design }
+<a id="oauth-validator-design"></a>
+
+## Safely Designing a Validator Module
 
 
 !!! warning
 
     Read and understand the entirety of this section before implementing a validator module. A malfunctioning validator is potentially worse than no authentication at all, both because of the false sense of security it provides, and because it may contribute to attacks against other pieces of an OAuth ecosystem.
+ <a id="oauth-validator-design-responsibilities"></a>
 
-
-### Validator Responsibilities { #oauth-validator-design-responsibilities }
+### Validator Responsibilities
 
 
  Although different modules may take very different approaches to token validation, implementations generally need to perform three separate actions:
@@ -44,9 +46,9 @@ Authenticate the End User
 
 
      Note that anonymous/pseudonymous login is possible as well, by enabling usermap delegation; see [Authorizing Users (Usermap Delegation)](#oauth-validator-design-usermap-delegation).
+  <a id="oauth-validator-design-guidelines"></a>
 
-
-### General Coding Guidelines { #oauth-validator-design-guidelines }
+### General Coding Guidelines
 
 
  Developers should keep the following in mind when implementing token validation:
@@ -69,9 +71,9 @@ Testing
 
 Documentation
 :   Validator implementations should document the contents and format of the authenticated ID that is reported to the server for each end user, since DBAs may need to use this information to construct pg_ident maps. (For instance, is it an email address? an organizational ID number? a UUID?) They should also document whether or not it is safe to use the module in `delegate_ident_mapping=1` mode, and what additional configuration is required in order to do so.
+  <a id="oauth-validator-design-usermap-delegation"></a>
 
-
-### Authorizing Users (Usermap Delegation) { #oauth-validator-design-usermap-delegation }
+### Authorizing Users (Usermap Delegation)
 
 
  The standard deliverable of a validation module is the user identifier, which the server will then compare to any configured [`pg_ident.conf` mappings](../../server-administration/client-authentication/user-name-maps.md#auth-username-maps) and determine whether the end user is authorized to connect. However, OAuth is itself an authorization framework, and tokens may carry information about user privileges. For example, a token may be associated with the organizational groups that a user belongs to, or list the roles that a user may assume, and duplicating that knowledge into local usermaps for every server may not be desirable.

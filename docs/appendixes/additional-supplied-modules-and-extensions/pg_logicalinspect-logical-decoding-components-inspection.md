@@ -1,13 +1,15 @@
-## pg_logicalinspect — logical decoding components inspection { #pglogicalinspect }
+<a id="pglogicalinspect"></a>
+
+## pg_logicalinspect — logical decoding components inspection
 
 
  The `pg_logicalinspect` module provides SQL functions that allow you to inspect the contents of logical decoding components. It allows the inspection of serialized logical snapshots of a running PostgreSQL database cluster, which is useful for debugging or educational purposes.
 
 
  By default, use of these functions is restricted to superusers and members of the `pg_read_server_files` role. Access may be granted by superusers to others using `GRANT`.
+ <a id="pglogicalinspect-funcs"></a>
 
-
-### Functions { #pglogicalinspect-funcs }
+### Functions
 
 
 <a id="pglogicalinspect-funcs-pg-get-logical-snapshot-meta"></a>
@@ -92,9 +94,9 @@
 
 
      If *filename* does not match a snapshot file, the function raises an error.
+  <a id="pglogicalinspect-author"></a>
 
-
-### Author { #pglogicalinspect-author }
+### Author
 
 
  Bertrand Drouvot [bertranddrouvot.pg@gmail.com](mailto:bertranddrouvot.pg@gmail.com)

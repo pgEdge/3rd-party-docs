@@ -1,4 +1,6 @@
-## Julian Dates { #datetime-julian-dates }
+<a id="datetime-julian-dates"></a>
+
+## Julian Dates
 
 
  The *Julian Date* system is a method for numbering days. It is unrelated to the Julian calendar, though it is confusingly named similarly to that calendar. The Julian Date system was invented by the French scholar Joseph Justus Scaliger (1540–1609) and probably takes its name from Scaliger's father, the Italian scholar Julius Caesar Scaliger (1484–1558).

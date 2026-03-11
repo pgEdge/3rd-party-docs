@@ -1,4 +1,6 @@
-## `role_table_grants` { #infoschema-role-table-grants }
+<a id="infoschema-role-table-grants"></a>
+
+## `role_table_grants`
 
 
  The view `role_table_grants` identifies all privileges granted on tables or views where the grantor or grantee is a currently enabled role. Further information can be found under `table_privileges`. The only effective difference between this view and `table_privileges` is that this view omits tables that have been made accessible to the current user by way of a grant to `PUBLIC`.

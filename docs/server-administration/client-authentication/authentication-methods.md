@@ -1,4 +1,6 @@
-## Authentication Methods { #auth-methods }
+<a id="auth-methods"></a>
+
+## Authentication Methods
 
 
  PostgreSQL provides various methods for authenticating users:

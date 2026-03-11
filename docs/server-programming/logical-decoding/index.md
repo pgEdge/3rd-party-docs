@@ -1,4 +1,6 @@
-# Logical Decoding { #logicaldecoding }
+<a id="logicaldecoding"></a>
+
+# Logical Decoding
 
  PostgreSQL provides infrastructure to stream the modifications performed via SQL to external consumers. This functionality can be used for a variety of purposes, including replication solutions and auditing.
 

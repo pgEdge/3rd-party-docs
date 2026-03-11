@@ -1,4 +1,6 @@
-## `foreign_data_wrappers` { #infoschema-foreign-data-wrappers }
+<a id="infoschema-foreign-data-wrappers"></a>
+
+## `foreign_data_wrappers`
 
 
  The view `foreign_data_wrappers` contains all foreign-data wrappers defined in the current database. Only those foreign-data wrappers are shown that the current user has access to (by way of being the owner or having some privilege).

@@ -1,10 +1,11 @@
-## Data Type Formatting Functions { #functions-formatting }
+<a id="functions-formatting"></a>
+
+## Data Type Formatting Functions
 
 
  The PostgreSQL formatting functions provide a powerful set of tools for converting various data types (date/time, integer, floating point, numeric) to formatted strings and for converting from formatted strings to specific data types. [Formatting Functions](#functions-formatting-table) lists them. These functions all follow a common calling convention: the first argument is the value to be formatted and the second argument is a template that defines the output or input format.
+ <a id="functions-formatting-table"></a>
 
-
-<a id="functions-formatting-table"></a>
 **Table: Formatting Functions**
 
 <table>
@@ -59,9 +60,8 @@
 
 
  [Template Patterns for Date/Time Formatting](#functions-formatting-datetime-table) shows the template patterns available for formatting date and time values.
+ <a id="functions-formatting-datetime-table"></a>
 
-
-<a id="functions-formatting-datetime-table"></a>
 **Table: Template Patterns for Date/Time Formatting**
 
 | Pattern | Description |
@@ -127,9 +127,8 @@
 
 
  Modifiers can be applied to any template pattern to alter its behavior. For example, `FMMonth` is the `Month` pattern with the `FM` modifier. [Template Pattern Modifiers for Date/Time Formatting](#functions-formatting-datetimemod-table) shows the modifier patterns for date/time formatting.
+ <a id="functions-formatting-datetimemod-table"></a>
 
-
-<a id="functions-formatting-datetimemod-table"></a>
 **Table: Template Pattern Modifiers for Date/Time Formatting**
 
 | Modifier | Description | Example |
@@ -182,9 +181,8 @@
 
 
  [Template Patterns for Numeric Formatting](#functions-formatting-numeric-table) shows the template patterns available for formatting numeric values.
+ <a id="functions-formatting-numeric-table"></a>
 
-
-<a id="functions-formatting-numeric-table"></a>
 **Table: Template Patterns for Numeric Formatting**
 
 | Pattern | Description |
@@ -223,9 +221,8 @@
 
 
  Certain modifiers can be applied to any template pattern to alter its behavior. For example, `FM99.99` is the `99.99` pattern with the `FM` modifier. [Template Pattern Modifiers for Numeric Formatting](#functions-formatting-numericmod-table) shows the modifier patterns for numeric formatting.
+ <a id="functions-formatting-numericmod-table"></a>
 
-
-<a id="functions-formatting-numericmod-table"></a>
 **Table: Template Pattern Modifiers for Numeric Formatting**
 
 | Modifier | Description | Example |
@@ -236,9 +233,8 @@
 
 
  [`to_char` Examples](#functions-formatting-examples-table) shows some examples of the use of the `to_char` function.
+ <a id="functions-formatting-examples-table"></a>
 
-
-<a id="functions-formatting-examples-table"></a>
 **Table: `to_char` Examples**
 
 | Expression | Result |

@@ -1,4 +1,6 @@
-## `foreign_servers` { #infoschema-foreign-servers }
+<a id="infoschema-foreign-servers"></a>
+
+## `foreign_servers`
 
 
  The view `foreign_servers` contains all foreign servers defined in the current database. Only those foreign servers are shown that the current user has access to (by way of being the owner or having some privilege).

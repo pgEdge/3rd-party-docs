@@ -1,4 +1,6 @@
-## Event Trigger Functions in PL/Tcl { #pltcl-event-trigger }
+<a id="pltcl-event-trigger"></a>
+
+## Event Trigger Functions in PL/Tcl
 
 
  Event trigger functions can be written in PL/Tcl. PostgreSQL requires that a function that is to be called as an event trigger must be declared as a function with no arguments and a return type of `event_trigger`.

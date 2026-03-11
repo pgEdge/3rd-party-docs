@@ -1,4 +1,6 @@
-# ALTER TEXT SEARCH TEMPLATE { #sql-altertstemplate }
+<a id="sql-altertstemplate"></a>
+
+# ALTER TEXT SEARCH TEMPLATE
 
 change the definition of a text search template
 

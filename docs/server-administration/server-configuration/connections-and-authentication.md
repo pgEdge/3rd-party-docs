@@ -1,7 +1,9 @@
-## Connections and Authentication { #runtime-config-connection }
+<a id="runtime-config-connection"></a>
 
+## Connections and Authentication
+  <a id="runtime-config-connection-settings"></a>
 
-### Connection Settings { #runtime-config-connection-settings }
+### Connection Settings
 
 
 <a id="guc-listen-addresses"></a>
@@ -86,9 +88,9 @@
 
 `bonjour_name` (`string`)
 :   Specifies the Bonjour service name. The computer name is used if this parameter is set to the empty string `''` (which is the default). This parameter is ignored if the server was not compiled with Bonjour support. This parameter can only be set at server start.
+  <a id="runtime-config-tcp-settings"></a>
 
-
-### TCP Settings { #runtime-config-tcp-settings }
+### TCP Settings
 
 
 <a id="guc-tcp-keepalives-idle"></a>
@@ -120,9 +122,9 @@
 
 
      For the kernel itself to detect lost TCP connections reliably and within a known timeframe in all scenarios including network failure, it may also be necessary to adjust the TCP keepalive settings of the operating system, or the [tcp_keepalives_idle](#guc-tcp-keepalives-idle), [tcp_keepalives_interval](#guc-tcp-keepalives-interval) and [tcp_keepalives_count](#guc-tcp-keepalives-count) settings of PostgreSQL.
+  <a id="runtime-config-connection-authentication"></a>
 
-
-### Authentication { #runtime-config-connection-authentication }
+### Authentication
 
 
 <a id="guc-authentication-timeout"></a>
@@ -168,9 +170,9 @@
 
 
      Validator modules must be implemented/obtained separately; PostgreSQL does not ship with any default implementations. For more information on implementing OAuth validators, see [OAuth Validator Modules](../../server-programming/oauth-validator-modules/index.md#oauth-validators).
+  <a id="runtime-config-connection-ssl"></a>
 
-
-### SSL { #runtime-config-connection-ssl }
+### SSL
 
 
  See [Secure TCP/IP Connections with SSL](../server-setup-and-operation/secure-tcp-ip-connections-with-ssl.md#ssl-tcp) for more information about setting up SSL. The configuration parameters for controlling transfer encryption using TLS protocols are named `ssl` for historic reasons, even though support for the SSL protocol has been deprecated. SSL is in this context used interchangeably with TLS.

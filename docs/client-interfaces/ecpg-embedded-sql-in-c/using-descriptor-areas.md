@@ -1,10 +1,12 @@
-## Using Descriptor Areas { #ecpg-descriptors }
+<a id="ecpg-descriptors"></a>
+
+## Using Descriptor Areas
 
 
  An SQL descriptor area is a more sophisticated method for processing the result of a `SELECT`, `FETCH` or a `DESCRIBE` statement. An SQL descriptor area groups the data of one row of data together with metadata items into one data structure. The metadata is particularly useful when executing dynamic SQL statements, where the nature of the result columns might not be known ahead of time. PostgreSQL provides two ways to use Descriptor Areas: the named SQL Descriptor Areas and the C-structure SQLDAs.
+ <a id="ecpg-named-descriptors"></a>
 
-
-### Named SQL Descriptor Areas { #ecpg-named-descriptors }
+### Named SQL Descriptor Areas
 
 
  A named SQL descriptor area consists of a header, which contains information concerning the entire descriptor, and one or more item descriptor areas, which basically each describe one column in the result row.
@@ -149,8 +151,9 @@ EXEC SQL FETCH 5 FROM mycursor INTO SQL DESCRIPTOR mydesc;
 EXEC SQL GET DESCRIPTOR mydesc VALUE 1 :id = DATA;
 ```
 
+  <a id="ecpg-sqlda-descriptors"></a>
 
-### SQLDA Descriptor Areas { #ecpg-sqlda-descriptors }
+### SQLDA Descriptor Areas
 
 
  An SQLDA Descriptor Area is a C language structure which can be also used to get the result set and the metadata of a query. One structure stores one record from the result set.
@@ -194,9 +197,9 @@ EXEC SQL DESCRIBE prepared_statement INTO mysqlda;
 8.
 
    Free the memory area allocated for the input SQLDA.
+ <a id="ecpg-sqlda-descriptors-sqlda"></a>
 
-
-#### SQLDA Data Structure { #ecpg-sqlda-descriptors-sqlda }
+#### SQLDA Data Structure
 
 
  SQLDA uses three data structure types: `sqlda_t`, `sqlvar_t`, and `struct sqlname`.
@@ -205,9 +208,9 @@ EXEC SQL DESCRIBE prepared_statement INTO mysqlda;
 !!! tip
 
     PostgreSQL's SQLDA has a similar data structure to the one in IBM DB2 Universal Database, so some technical information on DB2's SQLDA could help understanding PostgreSQL's one better.
+ <a id="ecpg-sqlda-sqlda"></a>
 
-
-##### sqlda_t Structure { #ecpg-sqlda-sqlda }
+##### sqlda_t Structure
 
 
  The structure type `sqlda_t` is the type of the actual SQLDA. It holds one record. And two or more `sqlda_t` structures can be connected in a linked list with the pointer in the `desc_next` field, thus representing an ordered collection of rows. So, when two or more rows are fetched, the application can read them by following the `desc_next` pointer in each `sqlda_t` node.
@@ -256,8 +259,9 @@ typedef struct sqlda_struct sqlda_t;
 `sqlvar`
 :   This is the array of the columns in the result set.
 
+  <a id="ecpg-sqlda-sqlvar"></a>
 
-##### sqlvar_t Structure { #ecpg-sqlda-sqlvar }
+##### sqlvar_t Structure
 
 
  The structure type `sqlvar_t` holds a column value and metadata such as type and length. The definition of the type is:
@@ -298,8 +302,9 @@ typedef struct sqlvar_struct sqlvar_t;
 `sqlname`
 :   The name of the field.
 
+  <a id="ecpg-sqlda-sqlname"></a>
 
-##### struct sqlname Structure { #ecpg-sqlda-sqlname }
+##### struct sqlname Structure
 
 
  A `struct sqlname` structure holds a column name. It is used as a member of the `sqlvar_t` structure. The definition of the structure is:
@@ -325,8 +330,9 @@ struct sqlname
 `data`
 :   Contains the actual field name.
 
+   <a id="ecpg-sqlda-output"></a>
 
-#### Retrieving a Result Set Using an SQLDA { #ecpg-sqlda-output }
+#### Retrieving a Result Set Using an SQLDA
 
 
 1.
@@ -419,8 +425,9 @@ switch (v.sqltype)
 }
 ```
 
+  <a id="ecpg-sqlda-input"></a>
 
-#### Passing Query Parameters Using an SQLDA { #ecpg-sqlda-input }
+#### Passing Query Parameters Using an SQLDA
 
 
 1.
@@ -498,8 +505,9 @@ EXEC SQL OPEN cur1 USING DESCRIPTOR sqlda2;
 free(sqlda2);
 ```
 
+  <a id="ecpg-sqlda-example"></a>
 
-#### A Sample Application Using SQLDA { #ecpg-sqlda-example }
+#### A Sample Application Using SQLDA
 
 
  Here is an example program, which describes how to fetch access statistics of the databases, specified by the input parameters, from the system catalogs.
@@ -650,9 +658,8 @@ main(void)
 
 
  The whole program is shown in [Example SQLDA Program](#ecpg-sqlda-example-example).
+ <a id="ecpg-sqlda-example-example"></a>
 
-
-<a id="ecpg-sqlda-example-example"></a>
 **Example: Example SQLDA Program**
 
 

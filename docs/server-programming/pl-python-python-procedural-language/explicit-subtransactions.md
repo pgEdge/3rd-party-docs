@@ -1,10 +1,12 @@
-## Explicit Subtransactions { #plpython-subtransaction }
+<a id="plpython-subtransaction"></a>
+
+## Explicit Subtransactions
 
 
  Recovering from errors caused by database access as described in [Trapping Errors](database-access.md#plpython-trapping) can lead to an undesirable situation where some operations succeed before one of them fails, and after recovering from that error the data is left in an inconsistent state. PL/Python offers a solution to this problem in the form of explicit subtransactions.
+ <a id="plpython-subtransaction-context-managers"></a>
 
-
-### Subtransaction Context Managers { #plpython-subtransaction-context-managers }
+### Subtransaction Context Managers
 
 
  Consider a function that implements a transfer between two accounts:

@@ -1,4 +1,6 @@
-## `pg_amop` { #catalog-pg-amop }
+<a id="catalog-pg-amop"></a>
+
+## `pg_amop`
 
 
  The catalog `pg_amop` stores information about operators associated with access method operator families. There is one row for each operator that is a member of an operator family. A family member can be either a *search* operator or an *ordering* operator. An operator can appear in more than one family, but cannot appear in more than one search position nor more than one ordering position within a family. (It is allowed, though unlikely, for an operator to be used for both search and ordering purposes.)

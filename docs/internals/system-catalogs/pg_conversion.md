@@ -1,4 +1,6 @@
-## `pg_conversion` { #catalog-pg-conversion }
+<a id="catalog-pg-conversion"></a>
+
+## `pg_conversion`
 
 
  The catalog `pg_conversion` describes encoding conversion functions. See [sql-createconversion](../../reference/sql-commands/create-conversion.md#sql-createconversion) for more information.

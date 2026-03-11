@@ -1,4 +1,6 @@
-## Value Expressions { #sql-expressions }
+<a id="sql-expressions"></a>
+
+## Value Expressions
 
 
  Value expressions are used in a variety of contexts, such as in the target list of the `SELECT` command, as new column values in `INSERT` or `UPDATE`, or in search conditions in a number of commands. The result of a value expression is sometimes called a *scalar*, to distinguish it from the result of a table expression (which is a table). Value expressions are therefore also called *scalar expressions* (or even simply *expressions*). The expression syntax allows the calculation of values from primitive parts using arithmetic, logical, set, and other operations.
@@ -27,9 +29,9 @@
 
 
  We have already discussed constants in [Constants](lexical-structure.md#sql-syntax-constants). The following sections discuss the remaining options.
+ <a id="sql-expressions-column-refs"></a>
 
-
-### Column References { #sql-expressions-column-refs }
+### Column References
 
 
  A column can be referenced in the form:
@@ -41,9 +43,9 @@ CORRELATION.COLUMNNAME
 
 
  *correlation* is the name of a table (possibly qualified with a schema name), or an alias for a table defined by means of a `FROM` clause. The correlation name and separating dot can be omitted if the column name is unique across all the tables being used in the current query. (See also [Queries](../queries/index.md#queries).)
+  <a id="sql-expressions-parameters-positional"></a>
 
-
-### Positional Parameters { #sql-expressions-parameters-positional }
+### Positional Parameters
 
 
  A positional parameter reference is used to indicate a value that is supplied externally to an SQL statement. Parameters are used in SQL function definitions and in prepared queries. Some client libraries also support specifying data values separately from the SQL command string, in which case parameters are used to refer to the out-of-line data values. The form of a parameter reference is:
@@ -63,9 +65,9 @@ CREATE FUNCTION dept(text) RETURNS dept
     LANGUAGE SQL;
 ```
  Here the `$1` references the value of the first function argument whenever the function is invoked.
+  <a id="sql-expressions-subscripts"></a>
 
-
-### Subscripts { #sql-expressions-subscripts }
+### Subscripts
 
 
  If an expression yields a value of an array type, then a specific element of the array value can be extracted by writing
@@ -93,9 +95,9 @@ $1[10:42]
 (arrayfunction(a,b))[42]
 ```
  The parentheses in the last example are required. See [Arrays](../data-types/arrays.md#arrays) for more about arrays.
+  <a id="field-selection"></a>
 
-
-### Field Selection { #field-selection }
+### Field Selection
 
 
  If an expression yields a value of a composite type (row type), then a specific field of the row can be extracted by writing
@@ -131,9 +133,9 @@ $1.somecolumn
 (compositecol).*
 ```
  This notation behaves differently depending on context; see [Using Composite Types in Queries](../data-types/composite-types.md#rowtypes-usage) for details.
+  <a id="sql-expressions-operator-calls"></a>
 
-
-### Operator Invocations { #sql-expressions-operator-calls }
+### Operator Invocations
 
 
  There are two possible syntaxes for an operator invocation:
@@ -147,9 +149,9 @@ $1.somecolumn
 OPERATOR(SCHEMA.OPERATORNAME)
 ```
  Which particular operators exist and whether they are unary or binary depends on what operators have been defined by the system or the user. [Functions and Operators](../functions-and-operators/index.md#functions) describes the built-in operators.
+  <a id="sql-expressions-function-calls"></a>
 
-
-### Function Calls { #sql-expressions-function-calls }
+### Function Calls
 
 
  The syntax for a function call is the name of a function (possibly qualified with a schema name), followed by its argument list enclosed in parentheses:
@@ -180,9 +182,9 @@ sqrt(2)
 !!! note
 
     A function that takes a single argument of composite type can optionally be called using field-selection syntax, and conversely field selection can be written in functional style. That is, the notations `col(table)` and `table.col` are interchangeable. This behavior is not SQL-standard but is provided in PostgreSQL because it allows use of functions to emulate “computed fields”. For more information see [Using Composite Types in Queries](../data-types/composite-types.md#rowtypes-usage).
+  <a id="syntax-aggregates"></a>
 
-
-### Aggregate Expressions { #syntax-aggregates }
+### Aggregate Expressions
 
 
  An *aggregate expression* represents the application of an aggregate function across the rows selected by a query. An aggregate function reduces multiple inputs to a single output value, such as the sum or average of the inputs. The syntax of an aggregate expression is one of the following:
@@ -293,9 +295,9 @@ FROM generate_series(1,10) AS s(i);
 
 
  When an aggregate expression appears in a subquery (see [Scalar Subqueries](#sql-syntax-scalar-subqueries) and [Subquery Expressions](../functions-and-operators/subquery-expressions.md#functions-subquery)), the aggregate is normally evaluated over the rows of the subquery. But an exception occurs if the aggregate's arguments (and *filter_clause* if any) contain only outer-level variables: the aggregate then belongs to the nearest such outer level, and is evaluated over the rows of that query. The aggregate expression as a whole is then an outer reference for the subquery it appears in, and acts as a constant over any one evaluation of that subquery. The restriction about appearing only in the result list or `HAVING` clause applies with respect to the query level that the aggregate belongs to.
+  <a id="syntax-window-functions"></a>
 
-
-### Window Function Calls { #syntax-window-functions }
+### Window Function Calls
 
 
  A *window function call* represents the application of an aggregate-like function over some portion of the rows selected by a query. Unlike non-window aggregate calls, this is not tied to grouping of the selected rows into a single output row — each row remains separate in the query output. However the window function has access to all the rows that would be part of the current row's group according to the grouping specification (`PARTITION BY` list) of the window function call. The syntax of a window function call is one of the following:
@@ -396,9 +398,9 @@ EXCLUDE NO OTHERS
 
 
  More information about window functions can be found in [Window Functions](../../tutorial/advanced-features/window-functions.md#tutorial-window), [Window Functions](../functions-and-operators/window-functions.md#functions-window), and [Window Function Processing](../queries/table-expressions.md#queries-window).
+  <a id="sql-syntax-type-casts"></a>
 
-
-### Type Casts { #sql-syntax-type-casts }
+### Type Casts
 
 
  A type cast specifies a conversion from one data type to another. PostgreSQL accepts two equivalent syntaxes for type casts:
@@ -429,9 +431,9 @@ TYPENAME ( EXPRESSION )
 !!! note
 
     The function-like syntax is in fact just a function call. When one of the two standard cast syntaxes is used to do a run-time conversion, it will internally invoke a registered function to perform the conversion. By convention, these conversion functions have the same name as their output type, and thus the “function-like syntax” is nothing more than a direct invocation of the underlying conversion function. Obviously, this is not something that a portable application should rely on. For further details see [sql-createcast](../../reference/sql-commands/create-cast.md#sql-createcast).
+  <a id="sql-syntax-collate-exprs"></a>
 
-
-### Collation Expressions { #sql-syntax-collate-exprs }
+### Collation Expressions
 
 
  The `COLLATE` clause overrides the collation of an expression. It is appended to the expression it applies to:
@@ -471,9 +473,9 @@ SELECT * FROM tbl WHERE a COLLATE "C" > 'foo';
 SELECT * FROM tbl WHERE (a > 'foo') COLLATE "C";
 ```
  because it attempts to apply a collation to the result of the `>` operator, which is of the non-collatable data type `boolean`.
+  <a id="sql-syntax-scalar-subqueries"></a>
 
-
-### Scalar Subqueries { #sql-syntax-scalar-subqueries }
+### Scalar Subqueries
 
 
  A scalar subquery is an ordinary `SELECT` query in parentheses that returns exactly one row with one column. (See [Queries](../queries/index.md#queries) for information about writing queries.) The `SELECT` query is executed and the single returned value is used in the surrounding value expression. It is an error to use a query that returns more than one row or more than one column as a scalar subquery. (But if, during a particular execution, the subquery returns no rows, there is no error; the scalar result is taken to be null.) The subquery can refer to variables from the surrounding query, which will act as constants during any one evaluation of the subquery. See also [Subquery Expressions](../functions-and-operators/subquery-expressions.md#functions-subquery) for other expressions involving subqueries.
@@ -487,8 +489,9 @@ SELECT name, (SELECT max(pop) FROM cities WHERE cities.state = states.name)
     FROM states;
 ```
 
+  <a id="sql-syntax-array-constructors"></a>
 
-### Array Constructors { #sql-syntax-array-constructors }
+### Array Constructors
 
 
  An array constructor is an expression that builds an array value using values for its member elements. A simple array constructor consists of the key word `ARRAY`, a left square bracket `[`, a list of expressions (separated by commas) for the array element values, and finally a right square bracket `]`. For example:
@@ -581,9 +584,9 @@ SELECT ARRAY(SELECT ARRAY[i, i*2] FROM generate_series(1,5) AS a(i));
 
 
  The subscripts of an array value built with `ARRAY` always begin with one. For more information about arrays, see [Arrays](../data-types/arrays.md#arrays).
+  <a id="sql-syntax-row-constructors"></a>
 
-
-### Row Constructors { #sql-syntax-row-constructors }
+### Row Constructors
 
 
  A row constructor is an expression that builds a row value (also called a composite value) using values for its member fields. A row constructor consists of the key word `ROW`, a left parenthesis, zero or more expressions (separated by commas) for the row field values, and finally a right parenthesis. For example:
@@ -647,9 +650,9 @@ SELECT getf1(CAST(ROW(11,'this is a test',2.5) AS myrowtype));
 
 
  Row constructors can be used to build composite values to be stored in a composite-type table column, or to be passed to a function that accepts a composite parameter. Also, it is possible to test rows using the standard comparison operators as described in [Comparison Functions and Operators](../functions-and-operators/comparison-functions-and-operators.md#functions-comparison), to compare one row against another as described in [Row and Array Comparisons](../functions-and-operators/row-and-array-comparisons.md#functions-comparisons), and to use them in connection with subqueries, as discussed in [Subquery Expressions](../functions-and-operators/subquery-expressions.md#functions-subquery).
+  <a id="syntax-express-eval"></a>
 
-
-### Expression Evaluation Rules { #syntax-express-eval }
+### Expression Evaluation Rules
 
 
  The order of evaluation of subexpressions is not defined. In particular, the inputs of an operator or function are not necessarily evaluated left-to-right or in any other fixed order.

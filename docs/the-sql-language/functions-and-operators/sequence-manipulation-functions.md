@@ -1,10 +1,11 @@
-## Sequence Manipulation Functions { #functions-sequence }
+<a id="functions-sequence"></a>
+
+## Sequence Manipulation Functions
 
 
  This section describes functions for operating on *sequence objects*, also called sequence generators or just sequences. Sequence objects are special single-row tables created with [sql-createsequence](../../reference/sql-commands/create-sequence.md#sql-createsequence). Sequence objects are commonly used to generate unique identifiers for rows of a table. The sequence functions, listed in [Sequence Functions](#functions-sequence-table), provide simple, multiuser-safe methods for obtaining successive sequence values from sequence objects.
+ <a id="functions-sequence-table"></a>
 
-
-<a id="functions-sequence-table"></a>
 **Table: Sequence Functions**
 
 <table>

@@ -1,4 +1,6 @@
-# System Views { #views }
+<a id="views"></a>
+
+# System Views
 
  In addition to the system catalogs, PostgreSQL provides a number of built-in views. Some system views provide convenient access to some commonly used queries on the system catalogs. Other views provide access to internal server state.
 

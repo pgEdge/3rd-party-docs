@@ -1,4 +1,6 @@
-# How the Planner Uses Statistics { #planner-stats-details }
+<a id="planner-stats-details"></a>
+
+# How the Planner Uses Statistics
 
  This chapter builds on the material covered in [Using `EXPLAIN`](../../the-sql-language/performance-tips/using-explain.md#using-explain) and [Statistics Used by the Planner](../../the-sql-language/performance-tips/statistics-used-by-the-planner.md#planner-stats) to show some additional details about how the planner uses the system statistics to estimate the number of rows each part of a query might return. This is a significant part of the planning process, providing much of the raw material for cost calculation.
 

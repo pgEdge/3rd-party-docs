@@ -1,4 +1,6 @@
-# VACUUM { #sql-vacuum }
+<a id="sql-vacuum"></a>
+
+# VACUUM
 
 garbage-collect and optionally analyze a database
 

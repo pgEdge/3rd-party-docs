@@ -1,4 +1,6 @@
-# TRUNCATE { #sql-truncate }
+<a id="sql-truncate"></a>
+
+# TRUNCATE
 
 empty a table or set of tables
 

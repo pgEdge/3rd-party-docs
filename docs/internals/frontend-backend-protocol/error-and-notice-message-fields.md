@@ -1,4 +1,6 @@
-## Error and Notice Message Fields { #protocol-error-fields }
+<a id="protocol-error-fields"></a>
+
+## Error and Notice Message Fields
 
 
  This section describes the fields that can appear in ErrorResponse and NoticeResponse messages. Each field type has a single-byte identification token. Note that any given field type should appear at most once per message.

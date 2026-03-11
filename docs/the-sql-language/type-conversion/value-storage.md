@@ -1,4 +1,6 @@
-## Value Storage { #typeconv-query }
+<a id="typeconv-query"></a>
+
+## Value Storage
 
 
  Values to be inserted into a table are converted to the destination column's data type according to the following steps.

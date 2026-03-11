@@ -1,4 +1,6 @@
-# vacuumdb { #app-vacuumdb }
+<a id="app-vacuumdb"></a>
+
+# vacuumdb
 
 garbage-collect and analyze a PostgreSQL database
 

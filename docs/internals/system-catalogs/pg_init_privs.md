@@ -1,4 +1,6 @@
-## `pg_init_privs` { #catalog-pg-init-privs }
+<a id="catalog-pg-init-privs"></a>
+
+## `pg_init_privs`
 
 
  The catalog `pg_init_privs` records information about the initial privileges of objects in the system. There is one entry for each object in the database which has a non-default (non-NULL) initial set of privileges.

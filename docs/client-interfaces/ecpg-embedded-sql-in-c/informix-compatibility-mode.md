@@ -1,4 +1,6 @@
-## Informix Compatibility Mode { #ecpg-informix-compat }
+<a id="ecpg-informix-compat"></a>
+
+## Informix Compatibility Mode
 
 
  `ecpg` can be run in a so-called *Informix compatibility mode*. If this mode is active, it tries to behave as if it were the Informix precompiler for Informix E/SQL. Generally spoken this will allow you to use the dollar sign instead of the `EXEC SQL` primitive to introduce embedded SQL commands:
@@ -28,9 +30,9 @@ $COMMIT;
 
 
  Informix compatibility mode is closely connected to the pgtypeslib library of ECPG. pgtypeslib maps SQL data types to data types within the C host program and most of the additional functions of the Informix compatibility mode allow you to operate on those C host program types. Note however that the extent of the compatibility is limited. It does not try to copy Informix behavior; it allows you to do more or less the same operations and gives you functions that have the same name and the same basic behavior but it is no drop-in replacement if you are using Informix at the moment. Moreover, some of the data types are different. For example, PostgreSQL's datetime and interval types do not know about ranges like for example `YEAR TO MINUTE` so you won't find support in ECPG for that either.
+ <a id="ecpg-informix-types"></a>
 
-
-### Additional Types { #ecpg-informix-types }
+### Additional Types
 
 
  The Informix-special "string" pseudo-type for storing right-trimmed character string data is now supported in Informix-mode without using `typedef`. In fact, in Informix-mode, ECPG refuses to process source files that contain `typedef sometype string;`
@@ -44,8 +46,9 @@ EXEC SQL END DECLARE SECTION;
 EXEC SQL FETCH MYCUR INTO :userid;
 ```
 
+  <a id="ecpg-informix-statements"></a>
 
-### Additional/Missing Embedded SQL Statements { #ecpg-informix-statements }
+### Additional/Missing Embedded SQL Statements
 
 
 <a id="ecpg-informix-statements-close-database"></a>
@@ -67,8 +70,9 @@ EXEC SQL FETCH MYCUR INTO :userid;
 `FREE statement_name`
 :   `FREE statement_name` is a synonym for `DEALLOCATE PREPARE statement_name`.
 
+  <a id="ecpg-informix-sqlda"></a>
 
-### Informix-compatible SQLDA Descriptor Areas { #ecpg-informix-sqlda }
+### Informix-compatible SQLDA Descriptor Areas
 
 
  Informix-compatible mode supports a different structure than the one described in [SQLDA Descriptor Areas](using-descriptor-areas.md#ecpg-sqlda-descriptors). See below:
@@ -242,9 +246,9 @@ EXEC SQL INCLUDE sqlda.h;
                   * sqlda and sqlda->sqlvar is in one allocated area */
 ```
  For more information, see the `sqlda.h` header and the `src/interfaces/ecpg/test/compat_informix/sqlda.pgc` regression test.
+  <a id="ecpg-informix-functions"></a>
 
-
-### Additional Functions { #ecpg-informix-functions }
+### Additional Functions
 
 
 <a id="ecpg-informix-functions-decadd"></a>
@@ -814,8 +818,9 @@ EXEC SQL INCLUDE sqlda.h;
     risnull(CINTTYPE, (char *) &i);
     ```
 
+  <a id="ecpg-informix-constants"></a>
 
-### Additional Constants { #ecpg-informix-constants }
+### Additional Constants
 
 
  Note that all constants here describe errors and all of them are defined to represent negative values. In the descriptions of the different constants you can also find the value that the constants represent in the current implementation. However you should not rely on this number. You can however rely on the fact all of them are defined to represent negative values.

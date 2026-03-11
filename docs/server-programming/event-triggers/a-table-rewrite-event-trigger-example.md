@@ -1,4 +1,6 @@
-## A Table Rewrite Event Trigger Example { #event-trigger-table-rewrite-example }
+<a id="event-trigger-table-rewrite-example"></a>
+
+## A Table Rewrite Event Trigger Example
 
 
  Thanks to the `table_rewrite` event, it is possible to implement a table rewriting policy only allowing the rewrite in maintenance windows.

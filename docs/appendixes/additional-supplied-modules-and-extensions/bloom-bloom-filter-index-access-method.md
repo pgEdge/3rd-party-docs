@@ -1,4 +1,6 @@
-## bloom — bloom filter index access method { #bloom }
+<a id="bloom"></a>
+
+## bloom — bloom filter index access method
 
 
  `bloom` provides an index access method based on [Bloom filters](https://en.wikipedia.org/wiki/Bloom_filter).
@@ -11,9 +13,9 @@
 
 
  This type of index is most useful when a table has many attributes and queries test arbitrary combinations of them. A traditional btree index is faster than a bloom index, but it can require many btree indexes to support all possible queries where one needs only a single bloom index. Note however that bloom indexes only support equality queries, whereas btree indexes can also perform inequality and range searches.
+ <a id="bloom-parameters"></a>
 
-
-### Parameters { #bloom-parameters }
+### Parameters
 
 
  A `bloom` index accepts the following parameters in its `WITH` clause:
@@ -25,9 +27,9 @@
 
 `col1 — col32`
 :   Number of bits generated for each index column. Each parameter's name refers to the number of the index column that it controls. The default is `2` bits and the maximum is `4095`. Parameters for index columns not actually used are ignored.
+  <a id="bloom-examples"></a>
 
-
-### Examples { #bloom-examples }
+### Examples
 
 
  This is an example of creating a bloom index:
@@ -169,9 +171,9 @@ CREATE INDEX
 (15 rows)
 ```
  Although this query runs much faster than with either of the single indexes, we pay a penalty in index size. Each of the single-column btree indexes occupies 88.5 MB, so the total space needed is 531 MB, over three times the space used by the bloom index.
+  <a id="bloom-operator-class-interface"></a>
 
-
-### Operator Class Interface { #bloom-operator-class-interface }
+### Operator Class Interface
 
 
  An operator class for bloom indexes requires only a hash function for the indexed data type and an equality operator for searching. This example shows the operator class definition for the `text` data type:
@@ -184,9 +186,9 @@ DEFAULT FOR TYPE text USING bloom AS
     OPERATOR    1   =(text, text),
     FUNCTION    1   hashtext(text);
 ```
+  <a id="bloom-limitations"></a>
 
-
-### Limitations { #bloom-limitations }
+### Limitations
 
 
 -  Only operator classes for `int4` and `text` are included with the module.
@@ -194,8 +196,9 @@ DEFAULT FOR TYPE text USING bloom AS
 -  `bloom` access method doesn't support `UNIQUE` indexes.
 -  `bloom` access method doesn't support searching for `NULL` values.
 
+  <a id="bloom-authors"></a>
 
-### Authors { #bloom-authors }
+### Authors
 
 
  Teodor Sigaev [teodor@postgrespro.ru](mailto:teodor@postgrespro.ru), Postgres Professional, Moscow, Russia

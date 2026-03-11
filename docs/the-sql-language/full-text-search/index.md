@@ -1,4 +1,6 @@
-# Full Text Search { #textsearch }
+<a id="textsearch"></a>
+
+# Full Text Search
 
 - [Introduction](introduction.md#textsearch-intro)
 - [Tables and Indexes](tables-and-indexes.md#textsearch-tables)

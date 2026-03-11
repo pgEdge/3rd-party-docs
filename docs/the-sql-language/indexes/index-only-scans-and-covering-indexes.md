@@ -1,4 +1,6 @@
-## Index-Only Scans and Covering Indexes { #indexes-index-only-scans }
+<a id="indexes-index-only-scans"></a>
+
+## Index-Only Scans and Covering Indexes
 
 
  All indexes in PostgreSQL are *secondary* indexes, meaning that each index is stored separately from the table's main data area (which is called the table's *heap* in PostgreSQL terminology). This means that in an ordinary index scan, each row retrieval requires fetching data from both the index and the heap. Furthermore, while the index entries that match a given indexable `WHERE` condition are usually close together in the index, the table rows they reference might be anywhere in the heap. The heap-access portion of an index scan thus involves a lot of random access into the heap, which can be slow, particularly on traditional rotating media. (As described in [Combining Multiple Indexes](combining-multiple-indexes.md#indexes-bitmap-scans), bitmap scans try to alleviate this cost by doing the heap accesses in sorted order, but that only goes so far.)

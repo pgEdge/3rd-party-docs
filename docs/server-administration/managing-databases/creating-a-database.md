@@ -1,4 +1,6 @@
-## Creating a Database { #manage-ag-createdb }
+<a id="manage-ag-createdb"></a>
+
+## Creating a Database
 
 
  In order to create a database, the PostgreSQL server must be up and running (see [Starting the Database Server](../server-setup-and-operation/starting-the-database-server.md#server-start)).

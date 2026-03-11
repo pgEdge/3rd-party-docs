@@ -1,10 +1,12 @@
-## Managing Database Connections { #ecpg-connect }
+<a id="ecpg-connect"></a>
+
+## Managing Database Connections
 
 
  This section describes how to open, close, and switch database connections.
+ <a id="ecpg-connecting"></a>
 
-
-### Connecting to the Database Server { #ecpg-connecting }
+### Connecting to the Database Server
 
 
  One connects to a database using the following statement:
@@ -89,9 +91,9 @@ EXEC SQL CONNECT TO :target USER :user USING :passwd;
 
 
  If untrusted users have access to a database that has not adopted a [secure schema usage pattern](../../the-sql-language/data-definition/schemas.md#ddl-schemas-patterns), begin each session by removing publicly-writable schemas from `search_path`. For example, add `options=-c search_path=` to <em>options</em>, or issue `EXEC SQL SELECT pg_catalog.set_config('search_path', '', false);` after connecting. This consideration is not specific to ECPG; it applies to every interface for executing arbitrary SQL commands.
+  <a id="ecpg-set-connection"></a>
 
-
-### Choosing a Connection { #ecpg-set-connection }
+### Choosing a Connection
 
 
  SQL statements in embedded SQL programs are by default executed on the current connection, that is, the most recently opened one. If an application needs to manage multiple connections, then there are three ways to handle this.
@@ -206,8 +208,9 @@ int main(){
 postgres
 ```
 
+  <a id="ecpg-disconnect"></a>
 
-### Closing a Connection { #ecpg-disconnect }
+### Closing a Connection
 
 
  To close a connection, use the following statement:

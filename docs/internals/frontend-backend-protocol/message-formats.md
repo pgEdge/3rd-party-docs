@@ -1,4 +1,6 @@
-## Message Formats { #protocol-message-formats }
+<a id="protocol-message-formats"></a>
+
+## Message Formats
 
 
  This section describes the detailed format of each message. Each is marked to indicate that it can be sent by a frontend (F), a backend (B), or both (F & B). Notice that although each message includes a byte count at the beginning, most messages are defined so that the message end can be found without reference to the byte count. This is for historical reasons, as the original, now-obsolete protocol version 2 did not have an explicit length field. It also aids validity checking though.

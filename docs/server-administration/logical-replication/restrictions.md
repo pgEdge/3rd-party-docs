@@ -1,4 +1,6 @@
-## Restrictions { #logical-replication-restrictions }
+<a id="logical-replication-restrictions"></a>
+
+## Restrictions
 
 
  Logical replication currently has the following restrictions or missing functionality. These might be addressed in future releases.

@@ -1,4 +1,6 @@
-## Controlling the Planner with Explicit `JOIN` Clauses { #explicit-joins }
+<a id="explicit-joins"></a>
+
+## Controlling the Planner with Explicit `JOIN` Clauses
 
 
  It is possible to control the query planner to some extent by using the explicit `JOIN` syntax. To see why this matters, we first need some background.

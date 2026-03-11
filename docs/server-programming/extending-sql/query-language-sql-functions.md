@@ -1,4 +1,6 @@
-## Query Language (SQL) Functions { #xfunc-sql }
+<a id="xfunc-sql"></a>
+
+## Query Language (SQL) Functions
 
 
  SQL functions execute an arbitrary list of SQL statements, returning the result of the last query in the list. In the simple (non-set) case, the first row of the last query's result will be returned. (Bear in mind that “the first row” of a multirow result is not well-defined unless you use `ORDER BY`.) If the last query happens to return no rows at all, the null value will be returned.
@@ -44,9 +46,9 @@ CALL clean_emp();
 
 
  The syntax of the `CREATE FUNCTION` command requires the function body to be written as a string constant. It is usually most convenient to use dollar quoting (see [Dollar-Quoted String Constants](../../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-dollar-quoting)) for the string constant. If you choose to use regular single-quoted string constant syntax, you must double single quote marks (`'`) and backslashes (`\`) (assuming escape string syntax) in the body of the function (see [String Constants](../../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-strings)).
+ <a id="xfunc-sql-function-arguments"></a>
 
-
-### Arguments for SQL Functions { #xfunc-sql-function-arguments }
+### Arguments for SQL Functions
 
 
  Arguments of an SQL function can be referenced in the function body using either names or numbers. Examples of both methods appear below.
@@ -78,9 +80,9 @@ INSERT INTO $1 VALUES (42);
 !!! note
 
     The ability to use names to reference SQL function arguments was added in PostgreSQL 9.2. Functions to be used in older servers must use the <code>$</code><em>n</em> notation.
+  <a id="xfunc-sql-base-functions"></a>
 
-
-### SQL Functions on Base Types { #xfunc-sql-base-functions }
+### SQL Functions on Base Types
 
 
  The simplest possible SQL function has no arguments and simply returns a base type, such as `integer`:
@@ -194,9 +196,9 @@ CREATE FUNCTION add_em(integer, integer) RETURNS float8 AS $$
 $$ LANGUAGE SQL;
 ```
  since the `integer` sum can be implicitly cast to `float8`. (See [Type Conversion](../../the-sql-language/type-conversion/index.md#typeconv) or [sql-createcast](../../reference/sql-commands/create-cast.md#sql-createcast) for more about casts.)
+  <a id="xfunc-sql-composite-functions"></a>
 
-
-### SQL Functions on Composite Types { #xfunc-sql-composite-functions }
+### SQL Functions on Composite Types
 
 
  When writing functions with arguments of composite types, we must not only specify which argument we want but also the desired attribute (field) of that argument. For example, suppose that `emp` is a table containing employee data, and therefore also the name of the composite type of each row of the table. Here is a function `double_salary` that computes what someone's salary would be if it were doubled:
@@ -357,8 +359,9 @@ SELECT getname(new_emp());
 (1 row)
 ```
 
+  <a id="xfunc-output-parameters"></a>
 
-### SQL Functions with Output Parameters { #xfunc-output-parameters }
+### SQL Functions with Output Parameters
 
 
  An alternative way of describing a function's results is to define it with *output parameters*, as in this example:
@@ -412,9 +415,9 @@ DROP FUNCTION sum_n_product (int, int);
 
 
  Parameters can be marked as `IN` (the default), `OUT`, `INOUT`, or `VARIADIC`. An `INOUT` parameter serves as both an input parameter (part of the calling argument list) and an output parameter (part of the result record type). `VARIADIC` parameters are input parameters, but are treated specially as described below.
+  <a id="xfunc-output-parameters-proc"></a>
 
-
-### SQL Procedures with Output Parameters { #xfunc-output-parameters-proc }
+### SQL Procedures with Output Parameters
 
 
  Output parameters are also supported in procedures, but they work a bit differently from functions. In `CALL` commands, output parameters must be included in the argument list. For example, the bank account debiting routine from earlier could be written like this:
@@ -438,9 +441,9 @@ CALL tp1(17, 100.0, NULL);
 
 
  When calling a procedure from PL/pgSQL, instead of writing `NULL` you must write a variable that will receive the procedure's output. See [Calling a Procedure](../pl-pgsql-sql-procedural-language/control-structures.md#plpgsql-statements-calling-procedure) for details.
+  <a id="xfunc-sql-variadic-functions"></a>
 
-
-### SQL Functions with Variable Numbers of Arguments { #xfunc-sql-variadic-functions }
+### SQL Functions with Variable Numbers of Arguments
 
 
  SQL functions can be declared to accept variable numbers of arguments, so long as all the “optional” arguments are of the same data type. The optional arguments will be passed to the function as an array. The function is declared by marking the last parameter as `VARIADIC`; this parameter must be declared as being of an array type. For example:
@@ -498,8 +501,9 @@ SELECT mleast(arr => 10);
 SELECT mleast(arr => ARRAY[10, -1, 5, 4.4]);
 ```
 
+  <a id="xfunc-sql-parameter-defaults"></a>
 
-### SQL Functions with Default Values for Arguments { #xfunc-sql-parameter-defaults }
+### SQL Functions with Default Values for Arguments
 
 
  Functions can be declared with default values for some or all input arguments. The default values are inserted whenever the function is called with insufficiently many actual arguments. Since arguments can only be omitted from the end of the actual argument list, all parameters after a parameter with a default value have to have default values as well. (Although the use of named argument notation could allow this restriction to be relaxed, it's still enforced so that positional argument notation works sensibly.) Whether or not you use it, this capability creates a need for precautions when calling functions in databases where some users mistrust other users; see [Functions](../../the-sql-language/type-conversion/functions.md#typeconv-func).
@@ -538,9 +542,9 @@ SELECT foo();  -- fails since there is no default for the first argument
 ERROR:  function foo() does not exist
 ```
  The `=` sign can also be used in place of the key word `DEFAULT`.
+  <a id="xfunc-sql-table-functions"></a>
 
-
-### SQL Functions as Table Sources { #xfunc-sql-table-functions }
+### SQL Functions as Table Sources
 
 
  All SQL functions can be used in the `FROM` clause of a query, but it is particularly useful for functions returning composite types. If the function is defined to return a base type, the table function produces a one-column table. If the function is defined to return a composite type, the table function produces a column for each attribute of the composite type.
@@ -570,9 +574,9 @@ SELECT *, upper(fooname) FROM getfoo(1) AS t1;
 
 
  Note that we only got one row out of the function. This is because we did not use `SETOF`. That is described in the next section.
+  <a id="xfunc-sql-functions-returning-set"></a>
 
-
-### SQL Functions Returning Sets { #xfunc-sql-functions-returning-set }
+### SQL Functions Returning Sets
 
 
  When an SQL function is declared as returning <code>SETOF
@@ -757,9 +761,9 @@ SELECT x, CASE WHEN x > 0 THEN generate_series(1, 5) ELSE 0 END FROM tab;
     SELECT x, case_generate_series(y > 0, 1, z, 5) FROM tab;
     ```
      This formulation will work the same in all versions of PostgreSQL.
+  <a id="xfunc-sql-functions-returning-table"></a>
 
-
-### SQL Functions Returning `TABLE` { #xfunc-sql-functions-returning-table }
+### SQL Functions Returning `TABLE`
 
 
  There is another way to declare a function as returning a set, which is to use the syntax <code>RETURNS TABLE(</code><em>columns</em><code>)</code>. This is equivalent to using one or more `OUT` parameters plus marking the function as returning `SETOF record` (or `SETOF` a single output parameter's type, as appropriate). This notation is specified in recent versions of the SQL standard, and thus may be more portable than using `SETOF`.
@@ -775,9 +779,9 @@ RETURNS TABLE(sum int, product int) AS $$
 $$ LANGUAGE SQL;
 ```
  It is not allowed to use explicit `OUT` or `INOUT` parameters with the `RETURNS TABLE` notation — you must put all the output columns in the `TABLE` list.
+  <a id="xfunc-sql-polymorphic-functions"></a>
 
-
-### Polymorphic SQL Functions { #xfunc-sql-polymorphic-functions }
+### Polymorphic SQL Functions
 
 
  SQL functions can be declared to accept and return the polymorphic types described in [Polymorphic Types](the-postgresql-type-system.md#extend-types-polymorphic). Here is a polymorphic function `make_array` that builds up an array from two arbitrary data type elements:
@@ -906,8 +910,9 @@ SELECT concat_values('|', 1, 4, 2);
 (1 row)
 ```
 
+  <a id="xfunc-sql-collations"></a>
 
-### SQL Functions with Collations { #xfunc-sql-collations }
+### SQL Functions with Collations
 
 
  When an SQL function has one or more parameters of collatable data types, a collation is identified for each function call depending on the collations assigned to the actual arguments, as described in [Collation Support](../../server-administration/localization/collation-support.md#collation). If a collation is successfully identified (i.e., there are no conflicts of implicit collations among the arguments) then all the collatable parameters are treated as having that collation implicitly. This will affect the behavior of collation-sensitive operations within the function. For example, using the `anyleast` function described above, the result of

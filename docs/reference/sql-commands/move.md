@@ -1,4 +1,6 @@
-# MOVE { #sql-move }
+<a id="sql-move"></a>
+
+# MOVE
 
 position a cursor
 

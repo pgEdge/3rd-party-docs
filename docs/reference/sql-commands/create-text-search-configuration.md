@@ -1,4 +1,6 @@
-# CREATE TEXT SEARCH CONFIGURATION { #sql-createtsconfig }
+<a id="sql-createtsconfig"></a>
+
+# CREATE TEXT SEARCH CONFIGURATION
 
 define a new text search configuration
 

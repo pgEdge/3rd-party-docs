@@ -1,4 +1,6 @@
-# Just-in-Time Compilation (JIT) { #jit }
+<a id="jit"></a>
+
+# Just-in-Time Compilation (JIT)
 
  This chapter explains what just-in-time compilation is, and how it can be configured in PostgreSQL.
 

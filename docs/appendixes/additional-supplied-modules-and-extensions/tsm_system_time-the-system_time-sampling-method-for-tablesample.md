@@ -1,4 +1,6 @@
-## tsm_system_time — the `SYSTEM_TIME` sampling method for `TABLESAMPLE` { #tsm-system-time }
+<a id="tsm-system-time"></a>
+
+## tsm_system_time — the `SYSTEM_TIME` sampling method for `TABLESAMPLE`
 
 
  The `tsm_system_time` module provides the table sampling method `SYSTEM_TIME`, which can be used in the `TABLESAMPLE` clause of a [`SELECT`](../../reference/sql-commands/select.md#sql-select) command.
@@ -14,9 +16,9 @@
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="tsm-system-time-examples"></a>
 
-
-### Examples { #tsm-system-time-examples }
+### Examples
 
 
  Here is an example of selecting a sample of a table with `SYSTEM_TIME`. First install the extension:

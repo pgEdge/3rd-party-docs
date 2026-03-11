@@ -1,4 +1,6 @@
-## Sampling Method Support Functions { #tablesample-support-functions }
+<a id="tablesample-support-functions"></a>
+
+## Sampling Method Support Functions
 
 
  The TSM handler function returns a palloc'd `TsmRoutine` struct containing pointers to the support functions described below. Most of the functions are required, but some are optional, and those pointers can be NULL.

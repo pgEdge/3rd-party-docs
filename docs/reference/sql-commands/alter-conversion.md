@@ -1,4 +1,6 @@
-# ALTER CONVERSION { #sql-alterconversion }
+<a id="sql-alterconversion"></a>
+
+# ALTER CONVERSION
 
 change the definition of a conversion
 

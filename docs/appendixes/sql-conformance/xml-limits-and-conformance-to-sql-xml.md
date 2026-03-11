@@ -1,4 +1,6 @@
-## XML Limits and Conformance to SQL/XML { #xml-limits-conformance }
+<a id="xml-limits-conformance"></a>
+
+## XML Limits and Conformance to SQL/XML
 
 
  Significant revisions to the XML-related specifications in ISO/IEC 9075-14 (SQL/XML) were introduced with SQL:2006. PostgreSQL's implementation of the XML data type and related functions largely follows the earlier 2003 edition, with some borrowing from later editions. In particular:
@@ -9,9 +11,9 @@
 
 
  This section presents some of the resulting differences you may encounter.
+ <a id="functions-xml-limits-xpath1"></a>
 
-
-### Queries Are Restricted to XPath 1.0 { #functions-xml-limits-xpath1 }
+### Queries Are Restricted to XPath 1.0
 
 
  The PostgreSQL-specific functions `xpath()` and `xpath_exists()` query XML documents using the XPath language. PostgreSQL also provides XPath-only variants of the standard functions `XMLEXISTS` and `XMLTABLE`, which officially use the XQuery language. For all of these functions, PostgreSQL relies on the libxml2 library, which provides only XPath 1.0.
@@ -21,9 +23,9 @@
 
 
  There are two categories of limitation to keep in mind: the restriction from XQuery to XPath for the functions specified in the SQL standard, and the restriction of XPath to version 1.0 for both the standard and the PostgreSQL-specific functions.
+ <a id="functions-xml-limits-xpath1-xquery-restriction"></a>
 
-
-#### Restriction of XQuery to XPath { #functions-xml-limits-xpath1-xquery-restriction }
+#### Restriction of XQuery to XPath
 
 
  Features of XQuery beyond those of XPath include:
@@ -34,9 +36,9 @@
 
 
  Recent XPath versions begin to offer capabilities overlapping with these (such as functional-style `for-each` and `sort`, anonymous functions, and `parse-xml` to create a node from a string), but such features were not available before XPath 3.0.
+  <a id="xml-xpath-1-specifics"></a>
 
-
-#### Restriction of XPath to 1.0 { #xml-xpath-1-specifics }
+#### Restriction of XPath to 1.0
 
 
  For developers familiar with XQuery and XPath 2.0 or later, XPath 1.0 presents a number of differences to contend with:
@@ -56,9 +58,9 @@
 
 
  The differences highlighted here are not all of them. In XQuery and the 2.0 and later versions of XPath, there is an XPath 1.0 compatibility mode, and the W3C lists of [function library changes](https://www.w3.org/TR/2010/REC-xpath-functions-20101214/#xpath1-compatibility) and [language changes](https://www.w3.org/TR/xpath20/#id-backwards-compatibility) applied in that mode offer a more complete (but still not exhaustive) account of the differences. The compatibility mode cannot make the later languages exactly equivalent to XPath 1.0.
+  <a id="functions-xml-limits-casts"></a>
 
-
-#### Mappings between SQL and XML Data Types and Values { #functions-xml-limits-casts }
+#### Mappings between SQL and XML Data Types and Values
 
 
  In SQL:2006 and later, both directions of conversion between standard SQL data types and the XML Schema types are specified precisely. However, the rules are expressed using the types and semantics of XQuery/XPath, and have no direct application to the different data model of XPath 1.0.
@@ -68,15 +70,15 @@
 
 
  Where interoperability with other systems is a concern, for some data types, it may be necessary to use data type formatting functions (such as those in [Data Type Formatting Functions](../../the-sql-language/functions-and-operators/data-type-formatting-functions.md#functions-formatting)) explicitly to produce the standard mappings.
+   <a id="functions-xml-limits-postgresql"></a>
 
-
-### Incidental Limits of the Implementation { #functions-xml-limits-postgresql }
+### Incidental Limits of the Implementation
 
 
  This section concerns limits that are not inherent in the libxml2 library, but apply to the current implementation in PostgreSQL.
+ <a id="functions-xml-limits-postgresql-by-value-only"></a>
 
-
-#### Only `BY VALUE` Passing Mechanism Is Supported { #functions-xml-limits-postgresql-by-value-only }
+#### Only `BY VALUE` Passing Mechanism Is Supported
 
 
  The SQL standard defines two *passing mechanisms* that apply when passing an XML argument from SQL to an XML function or receiving a result: `BY REF`, in which a particular XML value retains its node identity, and `BY VALUE`, in which the content of the XML is passed but node identity is not preserved. A mechanism can be specified before a list of parameters, as the default mechanism for all of them, or after any parameter, to override the default.
@@ -92,15 +94,15 @@ SELECT XMLQUERY('$a is $b' PASSING BY VALUE X AS a, X AS b NULL ON EMPTY);
 
 
  PostgreSQL will accept `BY VALUE` or `BY REF` in an `XMLEXISTS` or `XMLTABLE` construct, but it ignores them. The `xml` data type holds a character-string serialized representation, so there is no node identity to preserve, and passing is always effectively `BY VALUE`.
+  <a id="functions-xml-limits-postgresql-named-parameters"></a>
 
-
-#### Cannot Pass Named Parameters to Queries { #functions-xml-limits-postgresql-named-parameters }
+#### Cannot Pass Named Parameters to Queries
 
 
  The XPath-based functions support passing one parameter to serve as the XPath expression's context item, but do not support passing additional values to be available to the expression as named parameters.
+  <a id="functions-xml-limits-postgresql-no-xml-sequence"></a>
 
-
-#### No `XML(SEQUENCE)` Type { #functions-xml-limits-postgresql-no-xml-sequence }
+#### No `XML(SEQUENCE)` Type
 
 
  The PostgreSQL `xml` data type can only hold a value in `DOCUMENT` or `CONTENT` form. An XQuery/XPath expression context item must be a single XML node or atomic value, but XPath 1.0 further restricts it to be only an XML node, and has no node type allowing `CONTENT`. The upshot is that a well-formed `DOCUMENT` is the only form of XML value that PostgreSQL can supply as an XPath context item.

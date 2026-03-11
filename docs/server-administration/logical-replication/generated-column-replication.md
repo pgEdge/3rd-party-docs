@@ -1,4 +1,6 @@
-## Generated Column Replication { #logical-replication-gencols }
+<a id="logical-replication-gencols"></a>
+
+## Generated Column Replication
 
 
  Typically, a table at the subscriber will be defined the same as the publisher table, so if the publisher table has a [`GENERATED column`](../../the-sql-language/data-definition/generated-columns.md#ddl-generated-columns) then the subscriber table will have a matching generated column. In this case, it is always the subscriber table generated column value that is used.
@@ -55,9 +57,8 @@
 
 
  The following table summarizes behavior when there are generated columns involved in the logical replication. Results are shown for when publishing generated columns is not enabled, and for when it is enabled.
+ <a id="logical-replication-gencols-table-summary"></a>
 
-
-<a id="logical-replication-gencols-table-summary"></a>
 **Table: Replication Result Summary**
 
 | Publish generated columns? | Publisher table column | Subscriber table column | Result |

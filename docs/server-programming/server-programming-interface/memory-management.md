@@ -1,4 +1,6 @@
-## Memory Management { #spi-memory }
+<a id="spi-memory"></a>
+
+## Memory Management
 
 
   PostgreSQL allocates memory within *memory contexts*, which provide a convenient method of managing allocations made in many different places that need to live for differing amounts of time. Destroying a context releases all the memory that was allocated in it. Thus, it is not necessary to keep track of individual objects to avoid memory leaks; instead only a relatively small number of contexts have to be managed. `palloc` and related functions allocate memory from the “current” context.
@@ -11,9 +13,9 @@
 
 
  When `SPI_connect` is called, the private context of the C function, which is created by `SPI_connect`, is made the current context. All allocations made by `palloc`, `repalloc`, or SPI utility functions (except as described in this section) are made in this context. When a C function disconnects from the SPI manager (via `SPI_finish`) the current context is restored to the upper executor context, and all allocations made in the C function memory context are freed and cannot be used any more.
+  <a id="spi-spi-palloc"></a>
 
-
-# SPI_palloc { #spi-spi-palloc }
+# SPI_palloc
 
 allocate memory in the upper executor context
 
@@ -46,9 +48,9 @@ void * SPI_palloc(Size size)
 
 
  pointer to new storage space of the specified size
+   <a id="spi-realloc"></a>
 
-
-# SPI_repalloc { #spi-realloc }
+# SPI_repalloc
 
 reallocate memory in the upper executor context
 
@@ -84,9 +86,9 @@ void * SPI_repalloc(void * pointer, Size size)
 
 
  pointer to new storage space of specified size with the contents copied from the existing area
+   <a id="spi-spi-pfree"></a>
 
-
-# SPI_pfree { #spi-spi-pfree }
+# SPI_pfree
 
 free memory in the upper executor context
 
@@ -113,9 +115,9 @@ void SPI_pfree(void * pointer)
 
 `void * `pointer``
 :   pointer to existing storage to free
+   <a id="spi-spi-copytuple"></a>
 
-
-# SPI_copytuple { #spi-spi-copytuple }
+# SPI_copytuple
 
 make a copy of a row in the upper executor context
 
@@ -148,9 +150,9 @@ HeapTuple SPI_copytuple(HeapTuple row)
 
 
  the copied row, or `NULL` on error (see `SPI_result` for an error indication)
+   <a id="spi-spi-returntuple"></a>
 
-
-# SPI_returntuple { #spi-spi-returntuple }
+# SPI_returntuple
 
 prepare to return a tuple as a Datum
 
@@ -189,9 +191,9 @@ HeapTupleHeader SPI_returntuple(HeapTuple row, TupleDesc rowdesc)
 
 
  `HeapTupleHeader` pointing to copied row, or `NULL` on error (see `SPI_result` for an error indication)
+   <a id="spi-spi-modifytuple"></a>
 
-
-# SPI_modifytuple { #spi-spi-modifytuple }
+# SPI_modifytuple
 
 create a row by replacing selected fields of a given row
 
@@ -256,8 +258,9 @@ HeapTuple SPI_modifytuple(Relation rel, HeapTuple row, int ncols,
 `SPI_ERROR_UNCONNECTED`
 :   if SPI is not active
 
+   <a id="spi-spi-freetuple"></a>
 
-# SPI_freetuple { #spi-spi-freetuple }
+# SPI_freetuple
 
 free a row allocated in the upper executor context
 
@@ -284,9 +287,9 @@ void SPI_freetuple(HeapTuple row)
 
 `HeapTuple `row``
 :   row to free
+   <a id="spi-spi-freetupletable"></a>
 
-
-# SPI_freetuptable { #spi-spi-freetupletable }
+# SPI_freetuptable
 
 free a row set created by `SPI_execute` or a similar function
 
@@ -316,9 +319,9 @@ void SPI_freetuptable(SPITupleTable * tuptable)
 
 `SPITupleTable * `tuptable``
 :   pointer to row set to free, or NULL to do nothing
+   <a id="spi-spi-freeplan"></a>
 
-
-# SPI_freeplan { #spi-spi-freeplan }
+# SPI_freeplan
 
 free a previously saved prepared statement
 

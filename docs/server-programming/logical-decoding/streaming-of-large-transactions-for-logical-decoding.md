@@ -1,4 +1,6 @@
-## Streaming of Large Transactions for Logical Decoding { #logicaldecoding-streaming }
+<a id="logicaldecoding-streaming"></a>
+
+## Streaming of Large Transactions for Logical Decoding
 
 
  The basic output plugin callbacks (e.g., `begin_cb`, `change_cb`, `commit_cb` and `message_cb`) are only invoked when the transaction actually commits. The changes are still decoded from the transaction log, but are only passed to the output plugin at commit (and discarded if the transaction aborts).

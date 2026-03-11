@@ -1,4 +1,6 @@
-## Subscription { #logical-replication-subscription }
+<a id="logical-replication-subscription"></a>
+
+## Subscription
 
 
  A *subscription* is the downstream side of logical replication. The node where a subscription is defined is referred to as the *subscriber*. A subscription defines the connection to another database and set of publications (one or more) to which it wants to subscribe.
@@ -32,9 +34,9 @@
 
 
  Columns of a table are also matched by name. The order of columns in the subscriber table does not need to match that of the publisher. The data types of the columns do not need to match, as long as the text representation of the data can be converted to the target type. For example, you can replicate from a column of type `integer` to a column of type `bigint`. The target table can also have additional columns not provided by the published table. Any such columns will be filled with the default value as specified in the definition of the target table. However, logical replication in binary format is more restrictive. See the [`binary`](../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-with-binary) option of `CREATE SUBSCRIPTION` for details.
+ <a id="logical-replication-subscription-slot"></a>
 
-
-### Replication Slot Management { #logical-replication-subscription-slot }
+### Replication Slot Management
 
 
  As mentioned earlier, each (active) subscription receives changes from a replication slot on the remote (publishing) side.
@@ -50,8 +52,9 @@
 -  When dropping a subscription, the replication slot should be kept. This could be useful when the subscriber database is being moved to a different host and will be activated from there. In that case, disassociate the slot from the subscription using [`ALTER SUBSCRIPTION`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription) before attempting to drop the subscription.
 -  When dropping a subscription, the remote host is not reachable. In that case, disassociate the slot from the subscription using `ALTER SUBSCRIPTION` before attempting to drop the subscription. If the remote database instance no longer exists, no further action is then necessary. If, however, the remote database instance is just unreachable, the replication slot (and any still remaining table synchronization slots) should then be dropped manually; otherwise it/they would continue to reserve WAL and might eventually cause the disk to fill up. Such cases should be carefully investigated.
 
+  <a id="logical-replication-subscription-examples"></a>
 
-### Examples: Set Up Logical Replication { #logical-replication-subscription-examples }
+### Examples: Set Up Logical Replication
 
 
  Create some test tables on the publisher.
@@ -228,9 +231,9 @@
  6 | vi
 (4 rows)
 ```
+  <a id="logical-replication-subscription-examples-deferred-slot"></a>
 
-
-### Examples: Deferred Replication Slot Creation { #logical-replication-subscription-examples-deferred-slot }
+### Examples: Deferred Replication Slot Creation
 
 
  There are some cases (e.g. [Replication Slot Management](#logical-replication-subscription-slot)) where, if the remote replication slot was not created automatically, the user must create it manually before the subscription can be activated. The steps to create the slot and activate the subscription are shown in the following examples. These examples specify the standard logical decoding output plugin (`pgoutput`), which is what the built-in logical replication uses.

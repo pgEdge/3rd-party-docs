@@ -1,4 +1,6 @@
-# PostgreSQL 18.3 Documentation { #postgres }
+<a id="postgres"></a>
+
+# PostgreSQL 18.3 Documentation
 
 *The PostgreSQL Global Development Group*
 

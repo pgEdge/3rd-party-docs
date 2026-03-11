@@ -1,4 +1,6 @@
-# Installation from Binaries { #install-binaries }
+<a id="install-binaries"></a>
+
+# Installation from Binaries
 
 
  PostgreSQL is available in the form of binary packages for most common operating systems today. When available, this is the recommended way to install PostgreSQL for users of the system. Building from source (see [Installation from Source Code](installation-from-source-code/index.md#installation)) is only recommended for people developing PostgreSQL or extensions.

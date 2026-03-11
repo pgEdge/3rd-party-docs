@@ -1,4 +1,6 @@
-## WAL Internals { #wal-internals }
+<a id="wal-internals"></a>
+
+## WAL Internals
 
 
  WAL is automatically enabled; no action is required from the administrator except ensuring that the disk-space requirements for the WAL files are met, and that any necessary tuning is done (see [WAL Configuration](wal-configuration.md#wal-configuration)).

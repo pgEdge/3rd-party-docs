@@ -1,4 +1,6 @@
-# DROP CONVERSION { #sql-dropconversion }
+<a id="sql-dropconversion"></a>
+
+# DROP CONVERSION
 
 remove a conversion
 
@@ -9,9 +11,9 @@ remove a conversion
 
 DROP CONVERSION [ IF EXISTS ] NAME [ CASCADE | RESTRICT ]
 ```
+ <a id="sql-dropconversion-description"></a>
 
-
-## Description { #sql-dropconversion-description }
+## Description
 
 
  `DROP CONVERSION` removes a previously defined conversion. To be able to drop a conversion, you must own the conversion.
@@ -28,9 +30,9 @@ DROP CONVERSION [ IF EXISTS ] NAME [ CASCADE | RESTRICT ]
 
 `CASCADE`, `RESTRICT`
 :   These key words do not have any effect, since there are no dependencies on conversions.
+ <a id="sql-dropconversion-examples"></a>
 
-
-## Examples { #sql-dropconversion-examples }
+## Examples
 
 
  To drop the conversion named `myname`:
@@ -39,9 +41,9 @@ DROP CONVERSION [ IF EXISTS ] NAME [ CASCADE | RESTRICT ]
 
 DROP CONVERSION myname;
 ```
+ <a id="sql-dropconversion-compat"></a>
 
-
-## Compatibility { #sql-dropconversion-compat }
+## Compatibility
 
 
  There is no `DROP CONVERSION` statement in the SQL standard, but a `DROP TRANSLATION` statement that goes along with the `CREATE TRANSLATION` statement that is similar to the `CREATE CONVERSION` statement in PostgreSQL.

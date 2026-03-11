@@ -1,4 +1,6 @@
-## `pg_stats_ext_exprs` { #view-pg-stats-ext-exprs }
+<a id="view-pg-stats-ext-exprs"></a>
+
+## `pg_stats_ext_exprs`
 
 
  The view `pg_stats_ext_exprs` provides access to information about all expressions included in extended statistics objects, combining information stored in the [`pg_statistic_ext`](../system-catalogs/pg_statistic_ext.md#catalog-pg-statistic-ext) and [`pg_statistic_ext_data`](../system-catalogs/pg_statistic_ext_data.md#catalog-pg-statistic-ext-data) catalogs. This view allows access only to rows of [`pg_statistic_ext`](../system-catalogs/pg_statistic_ext.md#catalog-pg-statistic-ext) and [`pg_statistic_ext_data`](../system-catalogs/pg_statistic_ext_data.md#catalog-pg-statistic-ext-data) that correspond to tables the user owns, and therefore it is safe to allow public read access to this view.

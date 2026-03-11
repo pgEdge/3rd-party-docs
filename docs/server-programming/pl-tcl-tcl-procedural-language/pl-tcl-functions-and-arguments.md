@@ -1,4 +1,6 @@
-## PL/Tcl Functions and Arguments { #pltcl-functions }
+<a id="pltcl-functions"></a>
+
+## PL/Tcl Functions and Arguments
 
 
  To create a function in the PL/Tcl language, use the standard [sql-createfunction](../../reference/sql-commands/create-function.md#sql-createfunction) syntax:

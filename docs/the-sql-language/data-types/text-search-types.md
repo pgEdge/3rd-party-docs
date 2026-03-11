@@ -1,10 +1,12 @@
-## Text Search Types { #datatype-textsearch }
+<a id="datatype-textsearch"></a>
+
+## Text Search Types
 
 
  PostgreSQL provides two data types that are designed to support full text search, which is the activity of searching through a collection of natural-language *documents* to locate those that best match a *query*. The `tsvector` type represents a document in a form optimized for text search; the `tsquery` type similarly represents a text query. [Full Text Search](../full-text-search/index.md#textsearch) provides a detailed explanation of this facility, and [Text Search Functions and Operators](../functions-and-operators/text-search-functions-and-operators.md#functions-textsearch) summarizes the related functions and operators.
+ <a id="datatype-tsvector"></a>
 
-
-### `tsvector` { #datatype-tsvector }
+### `tsvector`
 
 
  A `tsvector` value is a sorted list of distinct *lexemes*, which are words that have been *normalized* to merge different variants of the same word (see [Full Text Search](../full-text-search/index.md#textsearch) for details). Sorting and duplicate-elimination are done automatically during input, as shown in this example:
@@ -77,9 +79,9 @@ SELECT to_tsvector('english', 'The Fat Rats');
  'fat':2 'rat':3
 ```
  Again, see [Full Text Search](../full-text-search/index.md#textsearch) for more detail.
+  <a id="datatype-tsquery"></a>
 
-
-### `tsquery` { #datatype-tsquery }
+### `tsquery`
 
 
  A `tsquery` value stores lexemes that are to be searched for, and can combine them using the Boolean operators `&` (AND), `|` (OR), and `!` (NOT), as well as the phrase search operator `<->` (FOLLOWED BY). There is also a variant <code><</code><em>N</em><code>></code> of the FOLLOWED BY operator, where *N* is an integer constant that specifies the distance between the two lexemes being searched for. `<->` is equivalent to `<1>`.

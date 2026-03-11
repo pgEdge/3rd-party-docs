@@ -1,4 +1,6 @@
-## `pg_prepared_xacts` { #view-pg-prepared-xacts }
+<a id="view-pg-prepared-xacts"></a>
+
+## `pg_prepared_xacts`
 
 
  The view `pg_prepared_xacts` displays information about transactions that are currently prepared for two-phase commit (see [sql-prepare-transaction](../../reference/sql-commands/prepare-transaction.md#sql-prepare-transaction) for details).

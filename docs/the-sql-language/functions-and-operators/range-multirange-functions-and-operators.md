@@ -1,13 +1,14 @@
-## Range/Multirange Functions and Operators { #functions-range }
+<a id="functions-range"></a>
+
+## Range/Multirange Functions and Operators
 
 
  See [Range Types](../data-types/range-types.md#rangetypes) for an overview of range types.
 
 
  [Range Operators](#range-operators-table) shows the specialized operators available for range types. [Multirange Operators](#multirange-operators-table) shows the specialized operators available for multirange types. In addition to those, the usual comparison operators shown in [Comparison Operators](comparison-functions-and-operators.md#functions-comparison-op-table) are available for range and multirange types. The comparison operators order first by the range lower bounds, and only if those are equal do they compare the upper bounds. The multirange operators compare each range until one is unequal. This does not usually result in a useful overall ordering, but the operators are provided to allow unique indexes to be constructed on ranges.
+ <a id="range-operators-table"></a>
 
-
-<a id="range-operators-table"></a>
 **Table: Range Operators**
 
 <table>
@@ -86,9 +87,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="multirange-operators-table"></a>
 
-
-<a id="multirange-operators-table"></a>
 **Table: Multirange Operators**
 
 <table>
@@ -259,9 +259,8 @@
 
 
  [Range Functions](#range-functions-table) shows the functions available for use with range types. [Multirange Functions](#multirange-functions-table) shows the functions available for use with multirange types.
+ <a id="range-functions-table"></a>
 
-
-<a id="range-functions-table"></a>
 **Table: Range Functions**
 
 <table>
@@ -315,9 +314,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="multirange-functions-table"></a>
 
-
-<a id="multirange-functions-table"></a>
 **Table: Multirange Functions**
 
 <table>

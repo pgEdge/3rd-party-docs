@@ -1,4 +1,6 @@
-## `pg_ts_dict` { #catalog-pg-ts-dict }
+<a id="catalog-pg-ts-dict"></a>
+
+## `pg_ts_dict`
 
 
  The `pg_ts_dict` catalog contains entries defining text search dictionaries. A dictionary depends on a text search template, which specifies all the implementation functions needed; the dictionary itself provides values for the user-settable parameters supported by the template. This division of labor allows dictionaries to be created by unprivileged users. The parameters are specified by a text string `dictinitoption`, whose format and meaning vary depending on the template.

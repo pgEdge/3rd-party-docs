@@ -1,4 +1,6 @@
-# DROP TEXT SEARCH TEMPLATE { #sql-droptstemplate }
+<a id="sql-droptstemplate"></a>
+
+# DROP TEXT SEARCH TEMPLATE
 
 remove a text search template
 

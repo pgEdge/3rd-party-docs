@@ -1,4 +1,6 @@
-# SET TRANSACTION { #sql-set-transaction }
+<a id="sql-set-transaction"></a>
+
+# SET TRANSACTION
 
 set the characteristics of the current transaction
 
@@ -89,9 +91,9 @@ SELECT pg_export_snapshot();
 BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 SET TRANSACTION SNAPSHOT '00000003-0000001B-1';
 ```
+ <a id="r1-sql-set-transaction-3"></a>
 
-
-## Compatibility { #r1-sql-set-transaction-3 }
+## Compatibility
 
 
  These commands are defined in the SQL standard, except for the `DEFERRABLE` transaction mode and the `SET TRANSACTION SNAPSHOT` form, which are PostgreSQL extensions.

@@ -1,4 +1,6 @@
-## Executing Custom Scans { #custom-scan-execution }
+<a id="custom-scan-execution"></a>
+
+## Executing Custom Scans
 
 
  When a `CustomScan` is executed, its execution state is represented by a `CustomScanState`, which is declared as follows:
@@ -15,9 +17,9 @@ typedef struct CustomScanState
 
 
  `ss` is initialized as for any other scan state, except that if the scan is for a join rather than a base relation, `ss.ss_currentRelation` is left NULL. `flags` is a bit mask with the same meaning as in `CustomPath` and `CustomScan`. `methods` must point to a (usually statically allocated) object implementing the required custom scan state methods, which are further detailed below. Typically, a `CustomScanState`, which need not support `copyObject`, will actually be a larger structure embedding the above as its first member.
+ <a id="custom-scan-execution-callbacks"></a>
 
-
-### Custom Scan Execution Callbacks { #custom-scan-execution-callbacks }
+### Custom Scan Execution Callbacks
 
 
 ```

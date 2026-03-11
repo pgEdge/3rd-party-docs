@@ -1,7 +1,9 @@
-## For the Programmer { #nls-programmer }
+<a id="nls-programmer"></a>
 
+## For the Programmer
+  <a id="nls-mechanics"></a>
 
-### Mechanics { #nls-mechanics }
+### Mechanics
 
 
  This section describes how to implement native language support in a program or library that is part of the PostgreSQL distribution. Currently, it only applies to C programs.
@@ -62,9 +64,9 @@ fprintf(stderr, gettext("panic level %d\n"), lvl);
 
 
  The build system will automatically take care of building and installing the message catalogs.
+  <a id="nls-guidelines"></a>
 
-
-### Message-Writing Guidelines { #nls-guidelines }
+### Message-Writing Guidelines
 
 
  Here are some guidelines for writing messages that are easily translatable.

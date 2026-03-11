@@ -1,4 +1,6 @@
-## A Complete Event Trigger Example { #event-trigger-example }
+<a id="event-trigger-example"></a>
+
+## A Complete Event Trigger Example
 
 
  Here is a very simple example of an event trigger function written in C. (Examples of triggers written in procedural languages can be found in the documentation of the procedural languages.)

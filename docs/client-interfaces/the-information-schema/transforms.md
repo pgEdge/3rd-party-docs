@@ -1,4 +1,6 @@
-## `transforms` { #infoschema-transforms }
+<a id="infoschema-transforms"></a>
+
+## `transforms`
 
 
  The view `transforms` contains information about the transforms defined in the current database. More precisely, it contains a row for each function contained in a transform (the “from SQL” or “to SQL” function).

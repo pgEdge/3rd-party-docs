@@ -1,4 +1,6 @@
-## Test Evaluation { #regress-evaluation }
+<a id="regress-evaluation"></a>
+
+## Test Evaluation
 
 
  Some properly installed and fully functional PostgreSQL installations can “fail” some of these regression tests due to platform-specific artifacts such as varying floating-point representation and message wording. The tests are currently evaluated using a simple `diff` comparison against the outputs generated on a reference system, so the results are sensitive to small system differences. When a test is reported as “failed”, always examine the differences between expected and actual results; you might find that the differences are not significant. Nonetheless, we still strive to maintain accurate reference files across all supported platforms, so it can be expected that all tests pass.
@@ -11,15 +13,15 @@
 
 
  If for some reason a particular platform generates a “failure” for a given test, but inspection of the output convinces you that the result is valid, you can add a new comparison file to silence the failure report in future test runs. See [Variant Comparison Files](variant-comparison-files.md#regress-variant) for details.
+ <a id="regress-evaluation-message-differences"></a>
 
-
-### Error Message Differences { #regress-evaluation-message-differences }
+### Error Message Differences
 
 
  Some of the regression tests involve intentional invalid input values. Error messages can come from either the PostgreSQL code or from the host platform system routines. In the latter case, the messages can vary between platforms, but should reflect similar information. These differences in messages will result in a “failed” regression test that can be validated by inspection.
+  <a id="regress-evaluation-locale-differences"></a>
 
-
-### Locale Differences { #regress-evaluation-locale-differences }
+### Locale Differences
 
 
  If you run the tests against a server that was initialized with a collation-order locale other than C, then there might be differences due to sort order and subsequent failures. The regression test suite is set up to handle this problem by providing alternate result files that together are known to handle a large number of locales.
@@ -41,15 +43,15 @@ make check NO_LOCALE=1
 
 
  In general, it is advisable to try to run the regression tests in the locale setup that is wanted for production use, as this will exercise the locale- and encoding-related code portions that will actually be used in production. Depending on the operating system environment, you might get failures, but then you will at least know what locale-specific behaviors to expect when running real applications.
+  <a id="regress-evaluation-date-time-differences"></a>
 
-
-### Date and Time Differences { #regress-evaluation-date-time-differences }
+### Date and Time Differences
 
 
  Most of the date and time results are dependent on the time zone environment. The reference files are generated for time zone `America/Los_Angeles`, and there will be apparent failures if the tests are not run with that time zone setting. The regression test driver sets environment variable `PGTZ` to `America/Los_Angeles`, which normally ensures proper results.
+  <a id="regress-evaluation-float-differences"></a>
 
-
-### Floating-Point Differences { #regress-evaluation-float-differences }
+### Floating-Point Differences
 
 
  Some of the tests involve computing 64-bit floating-point numbers (`double precision`) from table columns. Differences in results involving mathematical functions of `double precision` columns have been observed. The `float8` and `geometry` tests are particularly prone to small differences across platforms, or even with different compiler optimization settings. Human eyeball comparison is needed to determine the real significance of these differences which are usually 10 places to the right of the decimal point.
@@ -59,9 +61,9 @@ make check NO_LOCALE=1
 
 
  Some systems signal errors from `pow()` and `exp()` differently from the mechanism expected by the current PostgreSQL code.
+  <a id="regress-evaluation-ordering-differences"></a>
 
-
-### Row Ordering Differences { #regress-evaluation-ordering-differences }
+### Row Ordering Differences
 
 
  You might see differences in which the same rows are output in a different order than what appears in the expected file. In most cases this is not, strictly speaking, a bug. Most of the regression test scripts are not so pedantic as to use an `ORDER BY` for every single `SELECT`, and so their result row orderings are not well-defined according to the SQL specification. In practice, since we are looking at the same queries being executed on the same data by the same software, we usually get the same result ordering on all platforms, so the lack of `ORDER BY` is not a problem. Some queries do exhibit cross-platform ordering differences, however. When testing against an already-installed server, ordering differences can also be caused by non-C locale settings or non-default parameter settings, such as custom values of `work_mem` or the planner cost parameters.
@@ -71,18 +73,18 @@ make check NO_LOCALE=1
 
 
  You might wonder why we don't order all the regression test queries explicitly to get rid of this issue once and for all. The reason is that that would make the regression tests less useful, not more, since they'd tend to exercise query plan types that produce ordered results to the exclusion of those that don't.
+  <a id="regress-evaluation-stack-depth"></a>
 
-
-### Insufficient Stack Depth { #regress-evaluation-stack-depth }
+### Insufficient Stack Depth
 
 
  If the `errors` test results in a server crash at the `select infinite_recurse()` command, it means that the platform's limit on process stack size is smaller than the [max_stack_depth](../server-configuration/resource-consumption.md#guc-max-stack-depth) parameter indicates. This can be fixed by running the server under a higher stack size limit (4MB is recommended with the default value of `max_stack_depth`). If you are unable to do that, an alternative is to reduce the value of `max_stack_depth`.
 
 
  On platforms supporting `getrlimit()`, the server should automatically choose a safe value of `max_stack_depth`; so unless you've manually overridden this setting, a failure of this kind is a reportable bug.
+  <a id="regress-evaluation-random-test"></a>
 
-
-### The “random” Test { #regress-evaluation-random-test }
+### The “random” Test
 
 
  The `random` test script is intended to produce random results. In very rare cases, this causes that regression test to fail. Typing:
@@ -92,9 +94,9 @@ make check NO_LOCALE=1
 diff results/random.out expected/random.out
 ```
  should produce only one or a few lines of differences. You need not worry unless the random test fails repeatedly.
+  <a id="regress-evaluation-config-params"></a>
 
-
-### Configuration Parameters { #regress-evaluation-config-params }
+### Configuration Parameters
 
 
  When running the tests against an existing installation, some non-default parameter settings could cause the tests to fail. For example, changing parameters such as `enable_seqscan` or `enable_indexscan` could cause plan changes that would affect the results of tests that use `EXPLAIN`.

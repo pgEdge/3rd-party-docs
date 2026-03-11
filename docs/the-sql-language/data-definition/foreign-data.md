@@ -1,4 +1,6 @@
-## Foreign Data { #ddl-foreign-data }
+<a id="ddl-foreign-data"></a>
+
+## Foreign Data
 
 
  PostgreSQL implements portions of the SQL/MED specification, allowing you to access data that resides outside PostgreSQL using regular SQL queries. Such data is referred to as *foreign data*. (Note that this usage is not to be confused with foreign keys, which are a type of constraint within the database.)

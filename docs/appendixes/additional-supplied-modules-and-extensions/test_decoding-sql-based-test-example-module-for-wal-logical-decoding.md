@@ -1,4 +1,6 @@
-## test_decoding — SQL-based test/example module for WAL logical decoding { #test-decoding }
+<a id="test-decoding"></a>
+
+## test_decoding — SQL-based test/example module for WAL logical decoding
 
 
  `test_decoding` is an example of a logical decoding output plugin. It doesn't do anything especially useful, but can serve as a starting point for developing your own output plugin.

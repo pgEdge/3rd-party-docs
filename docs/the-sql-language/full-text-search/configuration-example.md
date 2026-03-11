@@ -1,4 +1,6 @@
-## Configuration Example { #textsearch-configuration }
+<a id="textsearch-configuration"></a>
+
+## Configuration Example
 
 
  A text search configuration specifies all options necessary to transform a document into a `tsvector`: the parser to use to break text into tokens, and the dictionaries to use to transform each token into a lexeme. Every call of `to_tsvector` or `to_tsquery` needs a text search configuration to perform its processing. The configuration parameter [default_text_search_config](../../server-administration/server-configuration/client-connection-defaults.md#guc-default-text-search-config) specifies the name of the default configuration, which is the one used by text search functions if an explicit configuration parameter is omitted. It can be set in `postgresql.conf`, or set for an individual session using the `SET` command.

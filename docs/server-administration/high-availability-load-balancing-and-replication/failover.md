@@ -1,4 +1,6 @@
-## Failover { #warm-standby-failover }
+<a id="warm-standby-failover"></a>
+
+## Failover
 
 
  If the primary server fails then the standby server should begin failover procedures.

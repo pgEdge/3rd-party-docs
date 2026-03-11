@@ -1,4 +1,6 @@
-# DROP PROCEDURE { #sql-dropprocedure }
+<a id="sql-dropprocedure"></a>
+
+# DROP PROCEDURE
 
 remove a procedure
 
@@ -41,9 +43,9 @@ DROP PROCEDURE [ IF EXISTS ] NAME [ ( [ [ ARGMODE ] [ ARGNAME ] ARGTYPE [, ...] 
 
 `RESTRICT`
 :   Refuse to drop the procedure if any objects depend on it. This is the default.
+ <a id="sql-dropprocedure-notes"></a>
 
-
-## Notes { #sql-dropprocedure-notes }
+## Notes
 
 
  If there is only one procedure of the given name, the argument list can be omitted. Omit the parentheses too in this case.
@@ -56,9 +58,9 @@ DROP PROCEDURE [ IF EXISTS ] NAME [ ( [ [ ARGMODE ] [ ARGNAME ] ARGTYPE [, ...] 
 
 
  The lookup rules just explained are also used by other commands that act on existing procedures, such as `ALTER PROCEDURE` and `COMMENT ON PROCEDURE`.
+ <a id="sql-dropprocedure-examples"></a>
 
-
-## Examples { #sql-dropprocedure-examples }
+## Examples
 
 
  If there is only one procedure `do_db_maintenance`, this command is sufficient to drop it:
@@ -91,9 +93,9 @@ DROP PROCEDURE do_db_maintenance(text, text);  -- potentially ambiguous
 
 CREATE PROCEDURE do_db_maintenance(IN target_schema text, IN options text) ...
 ```
+ <a id="sql-dropprocedure-compatibility"></a>
 
-
-## Compatibility { #sql-dropprocedure-compatibility }
+## Compatibility
 
 
  This command conforms to the SQL standard, with these PostgreSQL extensions:

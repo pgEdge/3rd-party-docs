@@ -1,4 +1,6 @@
-## Control Functions { #libpq-control }
+<a id="libpq-control"></a>
+
+## Control Functions
 
 
  These functions control miscellaneous details of libpq's behavior.

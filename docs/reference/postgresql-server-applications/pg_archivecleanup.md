@@ -1,4 +1,6 @@
-# pg_archivecleanup { #pgarchivecleanup }
+<a id="pgarchivecleanup"></a>
+
+# pg_archivecleanup
 
 clean up PostgreSQL WAL archive files
 

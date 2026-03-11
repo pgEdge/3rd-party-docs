@@ -1,4 +1,6 @@
-## `pg_statistic` { #catalog-pg-statistic }
+<a id="catalog-pg-statistic"></a>
+
+## `pg_statistic`
 
 
  The catalog `pg_statistic` stores statistical data about the contents of the database. Entries are created by [`ANALYZE`](../../reference/sql-commands/analyze.md#sql-analyze) and subsequently used by the query planner. Note that all the statistical data is inherently approximate, even assuming that it is up-to-date.

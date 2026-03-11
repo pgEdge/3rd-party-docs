@@ -1,4 +1,6 @@
-# IMPORT FOREIGN SCHEMA { #sql-importforeignschema }
+<a id="sql-importforeignschema"></a>
+
+# IMPORT FOREIGN SCHEMA
 
 import table definitions from a foreign server
 
@@ -13,9 +15,9 @@ IMPORT FOREIGN SCHEMA REMOTE_SCHEMA
     INTO LOCAL_SCHEMA
     [ OPTIONS ( OPTION 'VALUE' [, ... ] ) ]
 ```
+ <a id="sql-importforeignschema-description"></a>
 
-
-## Description { #sql-importforeignschema-description }
+## Description
 
 
  `IMPORT FOREIGN SCHEMA` creates foreign tables that represent tables existing on a foreign server. The new foreign tables will be owned by the user issuing the command and are created with the correct column definitions and options to match the remote tables.
@@ -47,9 +49,9 @@ IMPORT FOREIGN SCHEMA REMOTE_SCHEMA
 
 <code>OPTIONS ( </code><em>option</em><code> '</code><em>value</em><code>' [, ...] )</code>
 :   Options to be used during the import. The allowed option names and values are specific to each foreign data wrapper.
+ <a id="sql-importforeignschema-examples"></a>
 
-
-## Examples { #sql-importforeignschema-examples }
+## Examples
 
 
  Import table definitions from a remote schema `foreign_films` on server `film_server`, creating the foreign tables in local schema `films`:
@@ -68,9 +70,9 @@ IMPORT FOREIGN SCHEMA foreign_films
 IMPORT FOREIGN SCHEMA foreign_films LIMIT TO (actors, directors)
     FROM SERVER film_server INTO films;
 ```
+ <a id="sql-importforeignschema-compatibility"></a>
 
-
-## Compatibility { #sql-importforeignschema-compatibility }
+## Compatibility
 
 
  The `IMPORT FOREIGN SCHEMA` command conforms to the SQL standard, except that the `OPTIONS` clause is a PostgreSQL extension.

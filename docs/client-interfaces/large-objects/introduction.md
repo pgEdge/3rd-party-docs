@@ -1,4 +1,6 @@
-## Introduction { #lo-intro }
+<a id="lo-intro"></a>
+
+## Introduction
 
 
  All large objects are stored in a single system table named [`pg_largeobject`](../../internals/system-catalogs/pg_largeobject.md#catalog-pg-largeobject). Each large object also has an entry in the system table [`pg_largeobject_metadata`](../../internals/system-catalogs/pg_largeobject_metadata.md#catalog-pg-largeobject-metadata). Large objects can be created, modified, and deleted using a read/write API that is similar to standard operations on files.

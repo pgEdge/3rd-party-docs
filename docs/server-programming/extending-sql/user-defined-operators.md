@@ -1,4 +1,6 @@
-## User-Defined Operators { #xoper }
+<a id="xoper"></a>
+
+## User-Defined Operators
 
 
  Every operator is “syntactic sugar” for a call to an underlying function that does the real work; so you must first create the underlying function before you can create the operator. However, an operator is *not merely* syntactic sugar, because it carries additional information that helps the query planner optimize queries that use the operator. The next section will be devoted to explaining that additional information.

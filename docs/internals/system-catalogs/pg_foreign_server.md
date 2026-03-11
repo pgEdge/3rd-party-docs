@@ -1,4 +1,6 @@
-## `pg_foreign_server` { #catalog-pg-foreign-server }
+<a id="catalog-pg-foreign-server"></a>
+
+## `pg_foreign_server`
 
 
  The catalog `pg_foreign_server` stores foreign server definitions. A foreign server describes a source of external data, such as a remote server. Foreign servers are accessed via foreign-data wrappers.

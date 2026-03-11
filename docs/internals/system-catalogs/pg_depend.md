@@ -1,4 +1,6 @@
-## `pg_depend` { #catalog-pg-depend }
+<a id="catalog-pg-depend"></a>
+
+## `pg_depend`
 
 
  The catalog `pg_depend` records the dependency relationships between database objects. This information allows `DROP` commands to find which other objects must be dropped by `DROP CASCADE` or prevent dropping in the `DROP RESTRICT` case.

@@ -1,4 +1,6 @@
-## SQL Dump { #backup-dump }
+<a id="backup-dump"></a>
+
+## SQL Dump
 
 
  The idea behind this dump method is to generate a file with SQL commands that, when fed back to the server, will recreate the database in the same state as it was at the time of the dump. PostgreSQL provides the utility program [app-pgdump](../../reference/postgresql-client-applications/pg_dump.md#app-pgdump) for this purpose. The basic usage of this command is:
@@ -24,9 +26,9 @@ pg_dump DBNAME > DUMPFILE
 
 
  Dumps created by pg_dump are internally consistent, meaning, the dump represents a snapshot of the database at the time pg_dump began running. pg_dump does not block other operations on the database while it is working. (Exceptions are those operations that need to operate with an exclusive lock, such as most forms of `ALTER TABLE`.)
+ <a id="backup-dump-restore"></a>
 
-
-### Restoring the Dump { #backup-dump-restore }
+### Restoring the Dump
 
 
  Text files created by pg_dump are intended to be read by the psql program using its default settings. The general command form to restore a text dump is
@@ -67,9 +69,9 @@ pg_dump -h HOST1 DBNAME | psql -X -h HOST2 DBNAME
 
 
  After restoring a backup, it is wise to run [`ANALYZE`](../../reference/sql-commands/analyze.md#sql-analyze) on each database so the query optimizer has useful statistics; see [Updating Planner Statistics](../routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-statistics) and [The Autovacuum Daemon](../routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) for more information. For more advice on how to load large amounts of data into PostgreSQL efficiently, refer to [Populating a Database](../../the-sql-language/performance-tips/populating-a-database.md#populate).
+  <a id="backup-dump-all"></a>
 
-
-### Using pg_dumpall { #backup-dump-all }
+### Using pg_dumpall
 
 
  pg_dump dumps only a single database at a time, and it does not dump information about roles or tablespaces (because those are cluster-wide rather than per-database). To support convenient dumping of the entire contents of a database cluster, the [app-pg-dumpall](../../reference/postgresql-client-applications/pg_dumpall.md#app-pg-dumpall) program is provided. pg_dumpall backs up each database in a given cluster, and also preserves cluster-wide data such as role and tablespace definitions. The basic usage of this command is:
@@ -91,9 +93,9 @@ psql -X -f DUMPFILE postgres
 
 
  Cluster-wide data can be dumped alone using the pg_dumpall `--globals-only` option. This is necessary to fully backup the cluster if running the pg_dump command on individual databases.
+  <a id="backup-dump-large"></a>
 
-
-### Handling Large Databases { #backup-dump-large }
+### Handling Large Databases
 
 
  Some operating systems have maximum file size limits that cause problems when creating large pg_dump output files. Fortunately, pg_dump can write to the standard output, so you can use standard Unix tools to work around this potential problem. There are several possible methods:

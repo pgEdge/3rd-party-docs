@@ -1,10 +1,12 @@
-## Composite Types { #rowtypes }
+<a id="rowtypes"></a>
+
+## Composite Types
 
 
  A *composite type* represents the structure of a row or record; it is essentially just a list of field names and their data types. PostgreSQL allows composite types to be used in many of the same ways that simple types can be used. For example, a column of a table can be declared to be of a composite type.
+ <a id="rowtypes-declaring"></a>
 
-
-### Declaration of Composite Types { #rowtypes-declaring }
+### Declaration of Composite Types
 
 
  Here are two simple examples of defining composite types:
@@ -58,9 +60,9 @@ CREATE TABLE inventory_item (
 );
 ```
  then the same `inventory_item` composite type shown above would come into being as a byproduct, and could be used just as above. Note however an important restriction of the current implementation: since no constraints are associated with a composite type, the constraints shown in the table definition *do not apply* to values of the composite type outside the table. (To work around this, create a *domain* over the composite type, and apply the desired constraints as `CHECK` constraints of the domain.)
+  <a id="rowtypes-constructing"></a>
 
-
-### Constructing Composite Values { #rowtypes-constructing }
+### Constructing Composite Values
 
 
  To write a composite value as a literal constant, enclose the field values within parentheses and separate them by commas. You can put double quotes around any field value, and must do so if it contains commas or parentheses. (More details appear [below](#rowtypes-io-syntax).) Thus, the general format of a composite constant is the following:
@@ -108,9 +110,9 @@ ROW('', 42, NULL)
 ('', 42, NULL)
 ```
  The `ROW` expression syntax is discussed in more detail in [Row Constructors](../sql-syntax/value-expressions.md#sql-syntax-row-constructors).
+  <a id="rowtypes-accessing"></a>
 
-
-### Accessing Composite Types { #rowtypes-accessing }
+### Accessing Composite Types
 
 
  To access a field of a composite column, one writes a dot and the field name, much like selecting a field from a table name. In fact, it's so much like selecting from a table name that you often have to use parentheses to keep from confusing the parser. For example, you might try to select some subfields from our `on_hand` example table with something like:
@@ -144,9 +146,9 @@ SELECT (my_func(...)).field FROM ...
 
 
  The special field name `*` means “all fields”, as further explained in [Using Composite Types in Queries](#rowtypes-usage).
+  <a id="rowtypes-modifying"></a>
 
-
-### Modifying Composite Types { #rowtypes-modifying }
+### Modifying Composite Types
 
 
  Here are some examples of the proper syntax for inserting and updating composite columns. First, inserting or updating a whole column:
@@ -176,9 +178,9 @@ UPDATE mytab SET complex_col.r = (complex_col).r + 1 WHERE ...;
 INSERT INTO mytab (complex_col.r, complex_col.i) VALUES(1.1, 2.2);
 ```
  Had we not supplied values for all the subfields of the column, the remaining subfields would have been filled with null values.
+  <a id="rowtypes-usage"></a>
 
-
-### Using Composite Types in Queries { #rowtypes-usage }
+### Using Composite Types in Queries
 
 
  There are various special syntax rules and behaviors associated with composite types in queries. These rules provide useful shortcuts, but can be confusing if you don't know the logic behind them.
@@ -297,9 +299,9 @@ SELECT c.somefunc FROM inventory_item c;
 !!! tip
 
     Because of this behavior, it's unwise to give a function that takes a single composite-type argument the same name as any of the fields of that composite type. If there is ambiguity, the field-name interpretation will be chosen if field-name syntax is used, while the function will be chosen if function-call syntax is used. However, PostgreSQL versions before 11 always chose the field-name interpretation, unless the syntax of the call required it to be a function call. One way to force the function interpretation in older versions is to schema-qualify the function name, that is, write <em>schema</em><code>.</code><em>func</em><code>(</code><em>compositevalue</em><code>)</code>.
+  <a id="rowtypes-io-syntax"></a>
 
-
-### Composite Type Input and Output Syntax { #rowtypes-io-syntax }
+### Composite Type Input and Output Syntax
 
 
  The external text representation of a composite value consists of items that are interpreted according to the I/O conversion rules for the individual field types, plus decoration that indicates the composite structure. The decoration consists of parentheses (`(` and `)`) around the whole value, plus commas (`,`) between adjacent items. Whitespace outside the parentheses is ignored, but within the parentheses it is considered part of the field value, and might or might not be significant depending on the input conversion rules for the field data type. For example, in:

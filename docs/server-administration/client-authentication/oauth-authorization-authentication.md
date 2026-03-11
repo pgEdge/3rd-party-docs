@@ -1,4 +1,6 @@
-## OAuth Authorization/Authentication { #auth-oauth }
+<a id="auth-oauth"></a>
+
+## OAuth Authorization/Authentication
 
 
  OAuth 2.0 is an industry-standard framework, defined in [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749), to enable third-party applications to obtain limited access to a protected resource. OAuth client support has to be enabled when PostgreSQL is built, see [Installation from Source Code](../installation-from-source-code/index.md#installation) for more information.
@@ -24,6 +26,7 @@ Provider
 Authorization Server
 :   The system which receives requests from, and issues access tokens to, the client after the authenticated resource owner has given approval. PostgreSQL does not provide an authorization server; it is the responsibility of the OAuth provider.
 
+<a id="auth-oauth-issuer"></a>
 Issuer
 :   An identifier for an authorization server, printed as an `https://` URL, which provides a trusted "namespace" for OAuth clients and applications. The issuer identifier allows a single authorization server to talk to the clients of mutually untrusting entities, as long as they maintain separate issuers.
 
@@ -58,6 +61,7 @@ Issuer
 `map`
 :   Allows for mapping between OAuth identity provider and database user names. See [User Name Maps](user-name-maps.md#auth-username-maps) for details. If a map is not specified, the user name associated with the token (as determined by the OAuth validator) must exactly match the role name being requested. This parameter is optional.
 
+<a id="auth-oauth-delegate-ident-mapping"></a>
 `delegate_ident_mapping`
 :   An advanced option which is not intended for common use.
 

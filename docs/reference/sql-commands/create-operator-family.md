@@ -1,4 +1,6 @@
-# CREATE OPERATOR FAMILY { #sql-createopfamily }
+<a id="sql-createopfamily"></a>
+
+# CREATE OPERATOR FAMILY
 
 define a new operator family
 

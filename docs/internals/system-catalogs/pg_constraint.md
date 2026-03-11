@@ -1,4 +1,6 @@
-## `pg_constraint` { #catalog-pg-constraint }
+<a id="catalog-pg-constraint"></a>
+
+## `pg_constraint`
 
 
  The catalog `pg_constraint` stores check, not-null, primary key, unique, foreign key, and exclusion constraints on tables. (Column constraints are not treated specially. Every column constraint is equivalent to some table constraint.)

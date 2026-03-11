@@ -1,4 +1,6 @@
-# UPDATE { #sql-update }
+<a id="sql-update"></a>
+
+# UPDATE
 
 update rows of a table
 
@@ -231,6 +233,7 @@ COMMIT;
 UPDATE films SET kind = 'Dramatic' WHERE CURRENT OF c_films;
 ```
 
+ <a id="update-limit"></a>
 
  Updates affecting many rows can have negative effects on system performance, such as table bloat, increased replica lag, and increased lock contention. In such situations it can make sense to perform the operation in smaller batches, possibly with a `VACUUM` operation on the table between batches. While there is no `LIMIT` clause for `UPDATE`, it is possible to get a similar effect through the use of a [Common Table Expression](../../the-sql-language/queries/with-queries-common-table-expressions.md#queries-with) and a self-join. With the standard PostgreSQL table access method, a self-join on the system column [ctid](../../the-sql-language/data-definition/system-columns.md#ddl-system-columns-ctid) is very efficient:
 

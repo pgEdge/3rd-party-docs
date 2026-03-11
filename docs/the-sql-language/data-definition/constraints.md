@@ -1,13 +1,15 @@
-## Constraints { #ddl-constraints }
+<a id="ddl-constraints"></a>
+
+## Constraints
 
 
  Data types are a way to limit the kind of data that can be stored in a table. For many applications, however, the constraint they provide is too coarse. For example, a column containing a product price should probably only accept positive values. But there is no standard data type that accepts only positive numbers. Another issue is that you might want to constrain column data with respect to other columns or rows. For example, in a table containing product information, there should be only one row for each product number.
 
 
  To that end, SQL allows you to define constraints on columns and tables. Constraints give you as much control over the data in your tables as you wish. If a user attempts to store data in a column that would violate a constraint, an error is raised. This applies even if the value came from the default value definition.
+ <a id="ddl-constraints-check-constraints"></a>
 
-
-### Check Constraints { #ddl-constraints-check-constraints }
+### Check Constraints
 
 
  A check constraint is the most generic constraint type. It allows you to specify that the value in a certain column must satisfy a Boolean (truth-value) expression. For instance, to require positive product prices, you could use:
@@ -117,9 +119,9 @@ CREATE TABLE products (
 
 
      An example of a common way to break this assumption is to reference a user-defined function in a `CHECK` expression, and then change the behavior of that function. PostgreSQL does not disallow that, but it will not notice if there are rows in the table that now violate the `CHECK` constraint. That would cause a subsequent database dump and restore to fail. The recommended way to handle such a change is to drop the constraint (using `ALTER TABLE`), adjust the function definition, and re-add the constraint, thereby rechecking it against all table rows.
+  <a id="ddl-constraints-not-null"></a>
 
-
-### Not-Null Constraints { #ddl-constraints-not-null }
+### Not-Null Constraints
 
 
  A not-null constraint simply specifies that a column must not assume the null value. A syntax example:
@@ -195,9 +197,9 @@ CREATE TABLE products (
 !!! tip
 
     In most database designs the majority of columns should be marked not null.
+  <a id="ddl-constraints-unique-constraints"></a>
 
-
-### Unique Constraints { #ddl-constraints-unique-constraints }
+### Unique Constraints
 
 
  Unique constraints ensure that the data contained in a column, or a group of columns, is unique among all the rows in the table. The syntax is:
@@ -275,9 +277,9 @@ CREATE TABLE products (
 );
 ```
  The default behavior can be specified explicitly using `NULLS DISTINCT`. The default null treatment in unique constraints is implementation-defined according to the SQL standard, and other implementations have a different behavior. So be careful when developing applications that are intended to be portable.
+  <a id="ddl-constraints-primary-keys"></a>
 
-
-### Primary Keys { #ddl-constraints-primary-keys }
+### Primary Keys
 
 
  A primary key constraint indicates that a column, or group of columns, can be used as a unique identifier for rows in the table. This requires that the values be both unique and not null. So, the following two table definitions accept the same data:
@@ -322,9 +324,9 @@ CREATE TABLE example (
 
 
  Primary keys are useful both for documentation purposes and for client applications. For example, a GUI application that allows modifying row values probably needs to know the primary key of a table to be able to identify rows uniquely. There are also various ways in which the database system makes use of a primary key if one has been declared; for example, the primary key defines the default target column(s) for foreign keys referencing its table.
+  <a id="ddl-constraints-fk"></a>
 
-
-### Foreign Keys { #ddl-constraints-fk }
+### Foreign Keys
 
 
  A foreign key constraint specifies that the values in a column (or a group of columns) must match the values appearing in some row of another table. We say this maintains the *referential integrity* between two related tables.
@@ -508,9 +510,9 @@ CREATE TABLE posts (
 
 
  More information about updating and deleting data is in [Data Manipulation](../data-manipulation/index.md#dml). Also see the description of foreign key constraint syntax in the reference documentation for [sql-createtable](../../reference/sql-commands/create-table.md#sql-createtable).
+  <a id="ddl-constraints-exclusion"></a>
 
-
-### Exclusion Constraints { #ddl-constraints-exclusion }
+### Exclusion Constraints
 
 
  Exclusion constraints ensure that if any two rows are compared on the specified columns or expressions using the specified operators, at least one of these operator comparisons will return false or null. The syntax is:

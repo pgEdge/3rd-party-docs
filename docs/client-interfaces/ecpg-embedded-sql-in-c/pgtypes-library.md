@@ -1,4 +1,6 @@
-## pgtypes Library { #ecpg-pgtypes }
+<a id="ecpg-pgtypes"></a>
+
+## pgtypes Library
 
 
  The pgtypes library maps PostgreSQL database types to C equivalents that can be used in C programs. It also offers functions to do basic calculations with those types within C, i.e., without the help of the PostgreSQL server. See the following example:
@@ -20,14 +22,15 @@ printf("Started + duration: %s\n", out);
 PGTYPESchar_free(out);
 ```
 
+ <a id="ecpg-pgtypes-cstrings"></a>
 
-### Character Strings { #ecpg-pgtypes-cstrings }
+### Character Strings
 
 
  Some functions such as `PGTYPESnumeric_to_asc` return a pointer to a freshly allocated character string. These results should be freed with `PGTYPESchar_free` instead of `free`. (This is important only on Windows, where memory allocation and release sometimes need to be done by the same library.)
+  <a id="ecpg-pgtypes-numeric"></a>
 
-
-### The numeric Type { #ecpg-pgtypes-numeric }
+### The numeric Type
 
 
  The numeric type offers to do calculations with arbitrary precision. See [Numeric Types](../../the-sql-language/data-types/numeric-types.md#datatype-numeric) for the equivalent type in the PostgreSQL server. Because of the arbitrary precision this variable needs to be able to expand and shrink dynamically. That's why you can only create numeric variables on the heap, by means of the `PGTYPESnumeric_new` and `PGTYPESnumeric_free` functions. The decimal type, which is similar but limited in precision, can be created on the stack as well as on the heap.
@@ -218,8 +221,9 @@ PGTYPESchar_free(out);
     ```
      The function converts the decimal value from the variable that `src` points to into the numeric variable that `dst` points to. It returns 0 on success and -1 if an error occurs. Since the decimal type is implemented as a limited version of the numeric type, overflow cannot occur with this conversion.
 
+  <a id="ecpg-pgtypes-date"></a>
 
-### The date Type { #ecpg-pgtypes-date }
+### The date Type
 
 
  The date type in C enables your programs to deal with data of the SQL type date. See [Date/Time Types](../../the-sql-language/data-types/date-time-types.md#datatype-datetime) for the equivalent type in the PostgreSQL server.
@@ -253,9 +257,8 @@ PGTYPESchar_free(out);
 
 
      [Valid Input Formats for `PGTYPESdate_from_asc`](#ecpg-pgtypesdate-from-asc-table) shows the allowed input formats.
+     <a id="ecpg-pgtypesdate-from-asc-table"></a>
 
-
-    <a id="ecpg-pgtypesdate-from-asc-table"></a>
     **Table: Valid Input Formats for `PGTYPESdate_from_asc`**
 
     | Input | Result |
@@ -362,9 +365,8 @@ PGTYPESchar_free(out);
 
 
      [Valid Input Formats for `PGTYPESdate_fmt_asc`](#ecpg-pgtypesdate-fmt-asc-example-table) indicates a few possible formats. This will give you an idea of how to use this function. All output lines are based on the same date: November 23, 1959.
+     <a id="ecpg-pgtypesdate-fmt-asc-example-table"></a>
 
-
-    <a id="ecpg-pgtypesdate-fmt-asc-example-table"></a>
     **Table: Valid Input Formats for `PGTYPESdate_fmt_asc`**
 
     | Format | Result |
@@ -394,9 +396,8 @@ PGTYPESchar_free(out);
 
 
      [Valid Input Formats for `rdefmtdate`](#ecpg-rdefmtdate-example-table) indicates a few possible formats. This will give you an idea of how to use this function.
+     <a id="ecpg-rdefmtdate-example-table"></a>
 
-
-    <a id="ecpg-rdefmtdate-example-table"></a>
     **Table: Valid Input Formats for `rdefmtdate`**
 
     | Format | String | Result |
@@ -415,8 +416,9 @@ PGTYPESchar_free(out);
     | `mmm.dd.yyyy` | `oct 28 1975` | `1975-10-28` |
     | `mmddyy` | `Nov 14th, 1985` | `1985-11-14` |
 
+  <a id="ecpg-pgtypes-timestamp"></a>
 
-### The timestamp Type { #ecpg-pgtypes-timestamp }
+### The timestamp Type
 
 
  The timestamp type in C enables your programs to deal with data of the SQL type timestamp. See [Date/Time Types](../../the-sql-language/data-types/date-time-types.md#datatype-datetime) for the equivalent type in the PostgreSQL server.
@@ -443,9 +445,8 @@ PGTYPESchar_free(out);
 
 
      [Valid Input Formats for `PGTYPEStimestamp_from_asc`](#ecpg-pgtypestimestamp-from-asc-example-table) contains a few examples for input strings.
+     <a id="ecpg-pgtypestimestamp-from-asc-example-table"></a>
 
-
-    <a id="ecpg-pgtypestimestamp-from-asc-example-table"></a>
     **Table: Valid Input Formats for `PGTYPEStimestamp_from_asc`**
 
     | Input | Result |
@@ -596,8 +597,9 @@ PGTYPESchar_free(out);
 
      Upon success, the function returns 0 and a negative value if an error occurred.
 
+  <a id="ecpg-pgtypes-interval"></a>
 
-### The interval Type { #ecpg-pgtypes-interval }
+### The interval Type
 
 
  The interval type in C enables your programs to deal with data of the SQL type interval. See [Date/Time Types](../../the-sql-language/data-types/date-time-types.md#datatype-datetime) for the equivalent type in the PostgreSQL server.
@@ -654,8 +656,9 @@ PGTYPESchar_free(out);
     ```
      The function copies the interval variable that `intvlsrc` points to into the variable that `intvldest` points to. Note that you need to allocate the memory for the destination variable before.
 
+  <a id="ecpg-pgtypes-decimal"></a>
 
-### The decimal Type { #ecpg-pgtypes-decimal }
+### The decimal Type
 
 
  The decimal type is similar to the numeric type. However it is limited to a maximum precision of 30 significant digits. In contrast to the numeric type which can be created on the heap only, the decimal type can be created either on the stack or on the heap (by means of the functions `PGTYPESdecimal_new` and `PGTYPESdecimal_free`). There are a lot of other functions that deal with the decimal type in the Informix compatibility mode described in [Informix Compatibility Mode](informix-compatibility-mode.md#ecpg-informix-compat).
@@ -682,8 +685,9 @@ PGTYPESchar_free(out);
     void PGTYPESdecimal_free(decimal *var);
     ```
 
+  <a id="ecpg-pgtypes-errno"></a>
 
-### errno Values of pgtypeslib { #ecpg-pgtypes-errno }
+### errno Values of pgtypeslib
 
 
 <a id="ecpg-pgtypes-errno-pgtypes-num-bad-numeric"></a>
@@ -739,8 +743,9 @@ PGTYPESchar_free(out);
 `PGTYPES_TS_ERR_EINFTIME`
 :   An infinite timestamp value was encountered in a context that cannot handle it.
 
+  <a id="ecpg-pgtypes-constants"></a>
 
-### Special Constants of pgtypeslib { #ecpg-pgtypes-constants }
+### Special Constants of pgtypeslib
 
 
 <a id="pgtypesinvalidtimestamp"></a>

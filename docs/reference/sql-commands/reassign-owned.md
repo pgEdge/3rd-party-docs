@@ -1,4 +1,6 @@
-# REASSIGN OWNED { #sql-reassign-owned }
+<a id="sql-reassign-owned"></a>
+
+# REASSIGN OWNED
 
 change the ownership of database objects owned by a database role
 

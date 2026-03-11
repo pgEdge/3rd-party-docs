@@ -1,4 +1,6 @@
-## `administrable_role_​authorizations` { #infoschema-administrable-role-authorizations }
+<a id="infoschema-administrable-role-authorizations"></a>
+
+## `administrable_role_​authorizations`
 
 
  The view `administrable_role_authorizations` identifies all roles that the current user has the admin option for.

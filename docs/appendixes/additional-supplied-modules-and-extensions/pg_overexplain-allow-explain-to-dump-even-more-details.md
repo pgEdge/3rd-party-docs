@@ -1,4 +1,6 @@
-## pg_overexplain — allow EXPLAIN to dump even more details { #pgoverexplain }
+<a id="pgoverexplain"></a>
+
+## pg_overexplain — allow EXPLAIN to dump even more details
 
 
  The `pg_overexplain` module extends `EXPLAIN` with new options that provide additional output. It is mostly intended to assist with debugging of and development of the planner, rather than for general use. Since this module displays internal details of planner data structures, it may be necessary to refer to the source code to make sense of the output. Furthermore, the output is likely to change whenever (and as often as) those data structures change.
@@ -11,9 +13,9 @@
 LOAD 'pg_overexplain';
 ```
  You can also preload it into some or all sessions by including `pg_overexplain` in [session_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-session-preload-libraries) or [shared_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-shared-preload-libraries) in `postgresql.conf`.
+ <a id="pgoverexplain-debug"></a>
 
-
-### EXPLAIN (DEBUG) { #pgoverexplain-debug }
+### EXPLAIN (DEBUG)
 
 
  The `DEBUG` option displays miscellaneous information from the plan tree that is not normally shown because it is not expected to be of general interest. For each individual plan node, it will display the following fields. See `Plan` in `nodes/plannodes.h` for additional documentation of these fields.
@@ -34,9 +36,9 @@ LOAD 'pg_overexplain';
 -  `Relation OIDs`. OIDs of relations upon which this plan depends.
 -  `Executor Parameter Types`. Type OID for each executor parameter (e.g. when a nested loop is chosen and a parameter is used to pass a value down to an inner index scan). Does not include parameters supplied to a prepared statement by the user.
 -  `Parse Location`. Location within the query string supplied to the planner where this query's text can be found. May be `Unknown` in some contexts. Otherwise, may be `NNN to end` for some integer `NNN` or `NNN for MMM bytes` for some integers `NNN` and `MMM`.
+  <a id="pgoverexplain-range-table"></a>
 
-
-### EXPLAIN (RANGE_TABLE) { #pgoverexplain-range-table }
+### EXPLAIN (RANGE_TABLE)
 
 
  The `RANGE_TABLE` option displays information from the plan tree specifically concerning the query's range table. Range table entries correspond roughly to items appearing in the query's `FROM` clause, but with numerous exceptions. For example, subqueries that are proved unnecessary may be deleted from the range table entirely, while inheritance expansion adds range table entries for child tables that are not named directly in the query.
@@ -52,9 +54,9 @@ LOAD 'pg_overexplain';
 
 
  For more information about range table entries, see the definition of `RangeTblEntry` in `nodes/parsenodes.h`.
+  <a id="pgoverexplain-author"></a>
 
-
-### Author { #pgoverexplain-author }
+### Author
 
 
  Robert Haas [rhaas@postgresql.org](mailto:rhaas@postgresql.org)

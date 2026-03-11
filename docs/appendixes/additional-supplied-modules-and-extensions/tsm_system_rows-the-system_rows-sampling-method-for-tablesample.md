@@ -1,4 +1,6 @@
-## tsm_system_rows — the `SYSTEM_ROWS` sampling method for `TABLESAMPLE` { #tsm-system-rows }
+<a id="tsm-system-rows"></a>
+
+## tsm_system_rows — the `SYSTEM_ROWS` sampling method for `TABLESAMPLE`
 
 
  The `tsm_system_rows` module provides the table sampling method `SYSTEM_ROWS`, which can be used in the `TABLESAMPLE` clause of a [`SELECT`](../../reference/sql-commands/select.md#sql-select) command.
@@ -14,9 +16,9 @@
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="tsm-system-rows-examples"></a>
 
-
-### Examples { #tsm-system-rows-examples }
+### Examples
 
 
  Here is an example of selecting a sample of a table with `SYSTEM_ROWS`. First install the extension:

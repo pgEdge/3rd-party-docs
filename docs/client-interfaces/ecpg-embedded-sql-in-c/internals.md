@@ -1,4 +1,6 @@
-## Internals { #ecpg-develop }
+<a id="ecpg-develop"></a>
+
+## Internals
 
 
  This section explains how ECPG works internally. This information can occasionally be useful to help users understand how to use ECPG.

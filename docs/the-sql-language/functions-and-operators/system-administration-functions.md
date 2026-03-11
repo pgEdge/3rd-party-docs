@@ -1,16 +1,17 @@
-## System Administration Functions { #functions-admin }
+<a id="functions-admin"></a>
+
+## System Administration Functions
 
 
  The functions described in this section are used to control and monitor a PostgreSQL installation.
+ <a id="functions-admin-set"></a>
 
-
-### Configuration Settings Functions { #functions-admin-set }
+### Configuration Settings Functions
 
 
  [Configuration Settings Functions](#functions-admin-set-table) shows the functions available to query and alter run-time configuration parameters.
+ <a id="functions-admin-set-table"></a>
 
-
-<a id="functions-admin-set-table"></a>
 **Table: Configuration Settings Functions**
 
 <table>
@@ -34,18 +35,17 @@
 </tr>
 </tbody>
 </table>
+  <a id="functions-admin-signal"></a>
 
-
-### Server Signaling Functions { #functions-admin-signal }
+### Server Signaling Functions
 
 
  The functions shown in [Server Signaling Functions](#functions-admin-signal-table) send control signals to other server processes. Use of these functions is restricted to superusers by default but access may be granted to others using `GRANT`, with noted exceptions.
 
 
  Each of these functions returns `true` if the signal was successfully sent and `false` if sending the signal failed.
+ <a id="functions-admin-signal-table"></a>
 
-
-<a id="functions-admin-signal-table"></a>
 **Table: Server Signaling Functions**
 
 <table>
@@ -117,18 +117,17 @@ LOG:  level: 2; ErrorContext: 8192 total in 1 blocks; 7928 free (3 chunks); 264 
 LOG:  Grand total: 1651920 bytes in 201 blocks; 622360 free (88 chunks); 1029560 used
 ```
  If there are more than 100 child contexts under the same parent, the first 100 child contexts are logged, along with a summary of the remaining contexts. Note that frequent calls to this function could incur significant overhead, because it may generate a large number of log messages.
+  <a id="functions-admin-backup"></a>
 
-
-### Backup Control Functions { #functions-admin-backup }
+### Backup Control Functions
 
 
  The functions shown in [Backup Control Functions](#functions-admin-backup-table) assist in making on-line backups. These functions cannot be executed during recovery (except `pg_backup_start`, `pg_backup_stop`, and `pg_wal_lsn_diff`).
 
 
  For details about proper usage of these functions, see [Continuous Archiving and Point-in-Time Recovery (PITR)](../../server-administration/backup-and-restore/continuous-archiving-and-point-in-time-recovery-pitr.md#continuous-archiving).
+ <a id="functions-admin-backup-table"></a>
 
-
-<a id="functions-admin-backup-table"></a>
 **Table: Backup Control Functions**
 
 <table>
@@ -230,14 +229,14 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 (1 row)
 ```
 
+  <a id="functions-recovery-control"></a>
 
-### Recovery Control Functions { #functions-recovery-control }
+### Recovery Control Functions
 
 
  The functions shown in [Recovery Information Functions](#functions-recovery-info-table) provide information about the current status of a standby server. These functions may be executed both during recovery and in normal running.
+ <a id="functions-recovery-info-table"></a>
 
-
-<a id="functions-recovery-info-table"></a>
 **Table: Recovery Information Functions**
 
 <table>
@@ -278,9 +277,8 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 
 
  The functions shown in [Recovery Control Functions](#functions-recovery-control-table) control the progress of recovery. These functions may be executed only during recovery.
+ <a id="functions-recovery-control-table"></a>
 
-
-<a id="functions-recovery-control-table"></a>
 **Table: Recovery Control Functions**
 
 <table>
@@ -324,9 +322,9 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 
 
  If streaming replication is disabled, the paused state may continue indefinitely without a problem. If streaming replication is in progress then WAL records will continue to be received, which will eventually fill available disk space, depending upon the duration of the pause, the rate of WAL generation and available disk space.
+  <a id="functions-snapshot-synchronization"></a>
 
-
-### Snapshot Synchronization Functions { #functions-snapshot-synchronization }
+### Snapshot Synchronization Functions
 
 
  PostgreSQL allows database sessions to synchronize their snapshots. A *snapshot* determines which data is visible to the transaction that is using the snapshot. Synchronized snapshots are necessary when two or more sessions need to see identical content in the database. If two sessions just start their transactions independently, there is always a possibility that some third transaction commits between the executions of the two `START TRANSACTION` commands, so that one session sees the effects of that transaction and the other does not.
@@ -336,9 +334,8 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 
 
  Snapshots are exported with the `pg_export_snapshot` function, shown in [Snapshot Synchronization Functions](#functions-snapshot-synchronization-table), and imported with the [sql-set-transaction](../../reference/sql-commands/set-transaction.md#sql-set-transaction) command.
+ <a id="functions-snapshot-synchronization-table"></a>
 
-
-<a id="functions-snapshot-synchronization-table"></a>
 **Table: Snapshot Synchronization Functions**
 
 <table>
@@ -361,9 +358,9 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 </tr>
 </tbody>
 </table>
+  <a id="functions-replication"></a>
 
-
-### Replication Management Functions { #functions-replication }
+### Replication Management Functions
 
 
  The functions shown in [Replication Management Functions](#functions-replication-table) are for controlling and interacting with replication features. See [Streaming Replication](../../server-administration/high-availability-load-balancing-and-replication/log-shipping-standby-servers.md#streaming-replication), [Replication Slots](../../server-administration/high-availability-load-balancing-and-replication/log-shipping-standby-servers.md#streaming-replication-slots), and [Replication Progress Tracking](../../server-programming/replication-progress-tracking.md#replication-origins) for information about the underlying features. Use of functions for replication origin is only allowed to the superuser by default, but may be allowed to other users by using the `GRANT` command. Use of functions for replication slots is restricted to superusers and users having `REPLICATION` privilege.
@@ -373,9 +370,8 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 
 
  The functions described in [Backup Control Functions](#functions-admin-backup), [Recovery Control Functions](#functions-recovery-control), and [Snapshot Synchronization Functions](#functions-snapshot-synchronization) are also relevant for replication.
+ <a id="functions-replication-table"></a>
 
-
-<a id="functions-replication-table"></a>
 **Table: Replication Management Functions**
 
 <table>
@@ -396,7 +392,7 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <td>Drops the physical or logical replication slot named <code>slot_name</code>. Same as replication protocol command <code>DROP_REPLICATION_SLOT</code>.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-create-logical-replication-slot">
 <td><code>pg_create_logical_replication_slot</code> ( <code>slot_name</code> <code>name</code>, <code>plugin</code> <code>name</code> [, <code>temporary</code> <code>boolean</code>, <code>twophase</code> <code>boolean</code>, <code>failover</code> <code>boolean</code> ] ) <code>record</code> ( <code>slot_name</code> <code>name</code>, <code>lsn</code> <code>pg_lsn</code> )</td>
 <td>Creates a new logical (decoding) replication slot named <code>slot_name</code> using the output plugin <code>plugin</code>. The optional third parameter, <code>temporary</code>, when set to true, specifies that the slot should not be permanently stored to disk and is only meant for use by the current session. Temporary slots are also released upon any error. The optional fourth parameter, <code>twophase</code>, when set to true, specifies that the decoding of prepared transactions is enabled for this slot. The optional fifth parameter, <code>failover</code>, when set to true, specifies that this slot is enabled to be synced to the standbys so that logical replication can be resumed after failover. A call to this function has the same effect as the replication protocol command <code>CREATE_REPLICATION_SLOT ... LOGICAL</code>.</td>
 <td></td>
@@ -411,17 +407,17 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <td>Copies an existing logical replication slot named <code>src_slot_name</code> to a logical replication slot named <code>dst_slot_name</code>, optionally changing the output plugin and persistence. The copied logical slot starts from the same LSN as the source logical slot. Both <code>temporary</code> and <code>plugin</code> are optional; if they are omitted, the values of the source slot are used. The <code>failover</code> option of the source logical slot is not copied and is set to <code>false</code> by default. This is to avoid the risk of being unable to continue logical replication after failover to standby where the slot is being synchronized. Copy of an invalidated slot is not allowed.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-logical-slot-get-changes">
 <td><code>pg_logical_slot_get_changes</code> ( <code>slot_name</code> <code>name</code>, <code>upto_lsn</code> <code>pg_lsn</code>, <code>upto_nchanges</code> <code>integer</code>, <code>VARIADIC</code> <code>options</code> <code>text[]</code> ) <code>setof record</code> ( <code>lsn</code> <code>pg_lsn</code>, <code>xid</code> <code>xid</code>, <code>data</code> <code>text</code> )</td>
 <td>Returns changes in the slot <code>slot_name</code>, starting from the point from which changes have been consumed last. If <code>upto_lsn</code> and <code>upto_nchanges</code> are NULL, logical decoding will continue until end of WAL. If <code>upto_lsn</code> is non-NULL, decoding will include only those transactions which commit prior to the specified LSN. If <code>upto_nchanges</code> is non-NULL, decoding will stop when the number of rows produced by decoding exceeds the specified value. Note, however, that the actual number of rows returned may be larger, since this limit is only checked after adding the rows produced when decoding each new transaction commit. If the specified slot is a logical failover slot then the function will not return until all physical slots specified in <a href="../../server-administration/server-configuration/replication.md#guc-synchronized-standby-slots"><code>synchronized_standby_slots</code></a> have confirmed WAL receipt.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-logical-slot-peek-changes">
 <td><code>pg_logical_slot_peek_changes</code> ( <code>slot_name</code> <code>name</code>, <code>upto_lsn</code> <code>pg_lsn</code>, <code>upto_nchanges</code> <code>integer</code>, <code>VARIADIC</code> <code>options</code> <code>text[]</code> ) <code>setof record</code> ( <code>lsn</code> <code>pg_lsn</code>, <code>xid</code> <code>xid</code>, <code>data</code> <code>text</code> )</td>
 <td>Behaves just like the <code>pg_logical_slot_get_changes()</code> function, except that changes are not consumed; that is, they will be returned again on future calls.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-logical-slot-get-binary-changes">
 <td><code>pg_logical_slot_get_binary_changes</code> ( <code>slot_name</code> <code>name</code>, <code>upto_lsn</code> <code>pg_lsn</code>, <code>upto_nchanges</code> <code>integer</code>, <code>VARIADIC</code> <code>options</code> <code>text[]</code> ) <code>setof record</code> ( <code>lsn</code> <code>pg_lsn</code>, <code>xid</code> <code>xid</code>, <code>data</code> <code>bytea</code> )</td>
 <td>Behaves just like the <code>pg_logical_slot_get_changes()</code> function, except that changes are returned as <code>bytea</code>.</td>
 <td></td>
@@ -431,17 +427,17 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <td>Behaves just like the <code>pg_logical_slot_peek_changes()</code> function, except that changes are returned as <code>bytea</code>.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-replication-slot-advance">
 <td><code>pg_replication_slot_advance</code> ( <code>slot_name</code> <code>name</code>, <code>upto_lsn</code> <code>pg_lsn</code> ) <code>record</code> ( <code>slot_name</code> <code>name</code>, <code>end_lsn</code> <code>pg_lsn</code> )</td>
 <td>Advances the current confirmed position of a replication slot named <code>slot_name</code>. The slot will not be moved backwards, and it will not be moved beyond the current insert location. Returns the name of the slot and the actual position that it was advanced to. The updated slot position information is written out at the next checkpoint if any advancing is done. So in the event of a crash, the slot may return to an earlier position. If the specified slot is a logical failover slot then the function will not return until all physical slots specified in <a href="../../server-administration/server-configuration/replication.md#guc-synchronized-standby-slots"><code>synchronized_standby_slots</code></a> have confirmed WAL receipt.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-replication-origin-create">
 <td><code>pg_replication_origin_create</code> ( <code>node_name</code> <code>text</code> ) <code>oid</code></td>
 <td>Creates a replication origin with the given external name, and returns the internal ID assigned to it. The name must be no longer than 512 bytes.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-replication-origin-drop">
 <td><code>pg_replication_origin_drop</code> ( <code>node_name</code> <code>text</code> ) <code>void</code></td>
 <td>Deletes a previously-created replication origin, including any associated replay progress.</td>
 <td></td>
@@ -451,7 +447,7 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <td>Looks up a replication origin by name and returns the internal ID. If no such replication origin is found, <code>NULL</code> is returned.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-replication-origin-session-setup">
 <td><code>pg_replication_origin_session_setup</code> ( <code>node_name</code> <code>text</code> ) <code>void</code></td>
 <td>Marks the current session as replaying from the given origin, allowing replay progress to be tracked. Can only be used if no origin is currently selected. Use <code>pg_replication_origin_session_reset</code> to undo.</td>
 <td></td>
@@ -466,52 +462,51 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <td>Returns true if a replication origin has been selected in the current session.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-replication-origin-session-progress">
 <td><code>pg_replication_origin_session_progress</code> ( <code>flush</code> <code>boolean</code> ) <code>pg_lsn</code></td>
 <td>Returns the replay location for the replication origin selected in the current session. The parameter <code>flush</code> determines whether the corresponding local transaction will be guaranteed to have been flushed to disk or not.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-replication-origin-xact-setup">
 <td><code>pg_replication_origin_xact_setup</code> ( <code>origin_lsn</code> <code>pg_lsn</code>, <code>origin_timestamp</code> <code>timestamp with time zone</code> ) <code>void</code></td>
 <td>Marks the current transaction as replaying a transaction that has committed at the given LSN and timestamp. Can only be called when a replication origin has been selected using <code>pg_replication_origin_session_setup</code>.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-replication-origin-xact-reset">
 <td><code>pg_replication_origin_xact_reset</code> () <code>void</code></td>
 <td>Cancels the effects of <code>pg_replication_origin_xact_setup()</code>.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-replication-origin-advance">
 <td><code>pg_replication_origin_advance</code> ( <code>node_name</code> <code>text</code>, <code>lsn</code> <code>pg_lsn</code> ) <code>void</code></td>
 <td>Sets replication progress for the given node to the given location. This is primarily useful for setting up the initial location, or setting a new location after configuration changes and similar. Be aware that careless use of this function can lead to inconsistently replicated data.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-replication-origin-progress">
 <td><code>pg_replication_origin_progress</code> ( <code>node_name</code> <code>text</code>, <code>flush</code> <code>boolean</code> ) <code>pg_lsn</code></td>
 <td>Returns the replay location for the given replication origin. The parameter <code>flush</code> determines whether the corresponding local transaction will be guaranteed to have been flushed to disk or not.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-logical-emit-message">
 <td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>content</code> <code>text</code> [, <code>flush</code> <code>boolean</code> <code>DEFAULT</code> <code>false</code>] ) <code>pg_lsn</code></td>
 <td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>content</code> <code>bytea</code> [, <code>flush</code> <code>boolean</code> <code>DEFAULT</code> <code>false</code>] ) <code>pg_lsn</code></td>
 <td>Emits a logical decoding message. This can be used to pass generic messages to logical decoding plugins through WAL. The <code>transactional</code> parameter specifies if the message should be part of the current transaction, or if it should be written immediately and decoded as soon as the logical decoder reads the record. The <code>prefix</code> parameter is a textual prefix that can be used by logical decoding plugins to easily recognize messages that are interesting for them. The <code>content</code> parameter is the content of the message, given either in text or binary form. The <code>flush</code> parameter (default set to <code>false</code>) controls if the message is immediately flushed to WAL or not. <code>flush</code> has no effect with <code>transactional</code>, as the message's WAL record is flushed along with its transaction.</td>
 </tr>
-<tr>
+<tr id="pg-sync-replication-slots">
 <td><code>pg_sync_replication_slots</code> () <code>void</code></td>
 <td>Synchronize the logical failover replication slots from the primary server to the standby server. This function can only be executed on the standby server. Temporary synced slots, if any, cannot be used for logical decoding and must be dropped after promotion. See <a href="../../server-programming/logical-decoding/logical-decoding-concepts.md#logicaldecoding-replication-slots-synchronization">Replication Slot Synchronization</a> for details. Note that this function is primarily intended for testing and debugging purposes and should be used with caution. Additionally, this function cannot be executed if <a href="../../server-administration/server-configuration/replication.md#guc-sync-replication-slots"><code> sync_replication_slots</code></a> is enabled and the slotsync worker is already running to perform the synchronization of slots.</td>
 <td></td>
 </tr>
 </tbody>
 </table>
+  <a id="functions-admin-dbobject"></a>
 
-
-### Database Object Management Functions { #functions-admin-dbobject }
+### Database Object Management Functions
 
 
  The functions shown in [Database Object Size Functions](#functions-admin-dbsize) calculate the disk space usage of database objects, or assist in presentation or understanding of usage results. `bigint` results are measured in bytes. If an OID that does not represent an existing object is passed to one of these functions, `NULL` is returned.
+ <a id="functions-admin-dbsize"></a>
 
-
-<a id="functions-admin-dbsize"></a>
 **Table: Database Object Size Functions**
 
 <table>
@@ -589,9 +584,8 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 
 
  The functions shown in [Database Object Location Functions](#functions-admin-dblocation) assist in identifying the specific disk files associated with database objects.
+ <a id="functions-admin-dblocation"></a>
 
-
-<a id="functions-admin-dblocation"></a>
 **Table: Database Object Location Functions**
 
 <table>
@@ -622,9 +616,8 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 
 
  [Collation Management Functions](#functions-admin-collation) lists functions used to manage collations.
+ <a id="functions-admin-collation"></a>
 
-
-<a id="functions-admin-collation"></a>
 **Table: Collation Management Functions**
 
 <table>
@@ -660,8 +653,8 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 
     Changes made by these statistics manipulation functions are likely to be overwritten by [autovacuum](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) (or manual `VACUUM` or `ANALYZE`) and should be considered temporary.
 
+ <a id="functions-admin-statsmod"></a>
 
-<a id="functions-admin-statsmod"></a>
 **Table: Database Object Statistics Manipulation Functions**
 
 <table>
@@ -721,9 +714,8 @@ SELECT pg_restore_attribute_stats(
 
 
  [Partitioning Information Functions](#functions-info-partition) lists functions that provide information about the structure of partitioned tables.
+ <a id="functions-info-partition"></a>
 
-
-<a id="functions-info-partition"></a>
 **Table: Partitioning Information Functions**
 
 <table>
@@ -761,14 +753,14 @@ SELECT pg_size_pretty(sum(pg_relation_size(relid))) AS total_size
   FROM pg_partition_tree('measurement');
 ```
 
+  <a id="functions-admin-index"></a>
 
-### Index Maintenance Functions { #functions-admin-index }
+### Index Maintenance Functions
 
 
  [Index Maintenance Functions](#functions-admin-index-table) shows the functions available for index maintenance tasks. (Note that these maintenance tasks are normally done automatically by autovacuum; use of these functions is only required in special cases.) These functions cannot be executed during recovery. Use of these functions is restricted to superusers and the owner of the given index.
+ <a id="functions-admin-index-table"></a>
 
-
-<a id="functions-admin-index-table"></a>
 **Table: Index Maintenance Functions**
 
 <table>
@@ -801,9 +793,9 @@ SELECT pg_size_pretty(sum(pg_relation_size(relid))) AS total_size
 </tr>
 </tbody>
 </table>
+  <a id="functions-admin-genfile"></a>
 
-
-### Generic File Access Functions { #functions-admin-genfile }
+### Generic File Access Functions
 
 
  The functions shown in [Generic File Access Functions](#functions-admin-genfile-table) provide native access to files on the machine hosting the server. Only files within the database cluster directory and the `log_directory` can be accessed, unless the user is a superuser or is granted the role `pg_read_server_files`. Use a relative path for files in the cluster directory, and a path matching the `log_directory` configuration setting for log files.
@@ -816,9 +808,8 @@ SELECT pg_size_pretty(sum(pg_relation_size(relid))) AS total_size
 
 
  Some of these functions take an optional `missing_ok` parameter, which specifies the behavior when the file or directory does not exist. If `true`, the function returns `NULL` or an empty result set, as appropriate. If `false`, an error is raised. (Failure conditions other than “file not found” are reported as errors in any case.) The default is `false`.
+ <a id="functions-admin-genfile-table"></a>
 
-
-<a id="functions-admin-genfile-table"></a>
 **Table: Generic File Access Functions**
 
 <table>
@@ -893,18 +884,17 @@ SELECT convert_from(pg_read_binary_file('file_in_utf8.txt'), 'UTF8');</code></pr
 </tr>
 </tbody>
 </table>
+  <a id="functions-advisory-locks"></a>
 
-
-### Advisory Lock Functions { #functions-advisory-locks }
+### Advisory Lock Functions
 
 
  The functions shown in [Advisory Lock Functions](#functions-advisory-locks-table) manage advisory locks. For details about proper use of these functions, see [Advisory Locks](../concurrency-control/explicit-locking.md#advisory-locks).
 
 
  All these functions are intended to be used to lock application-defined resources, which can be identified either by a single 64-bit key value or two 32-bit key values (note that these two key spaces do not overlap). If another session already holds a conflicting lock on the same resource identifier, the functions will either wait until the resource becomes available, or return a `false` result, as appropriate for the function. Locks can be either shared or exclusive: a shared lock does not conflict with other shared locks on the same resource, only with exclusive locks. Locks can be taken at session level (so that they are held until released or the session ends) or at transaction level (so that they are held until the current transaction ends; there is no provision for manual release). Multiple session-level lock requests stack, so that if the same resource identifier is locked three times there must then be three unlock requests to release the resource in advance of session end.
+ <a id="functions-advisory-locks-table"></a>
 
-
-<a id="functions-advisory-locks-table"></a>
 **Table: Advisory Lock Functions**
 
 <table>

@@ -1,4 +1,6 @@
-## Indexes and Collations { #indexes-collations }
+<a id="indexes-collations"></a>
+
+## Indexes and Collations
 
 
  An index can support only one collation per index column. If multiple collations are of interest, multiple indexes may be needed.

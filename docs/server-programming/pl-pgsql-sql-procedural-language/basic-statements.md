@@ -1,10 +1,12 @@
-## Basic Statements { #plpgsql-statements }
+<a id="plpgsql-statements"></a>
+
+## Basic Statements
 
 
  In this section and the following ones, we describe all the statement types that are explicitly understood by PL/pgSQL. Anything not recognized as one of these statement types is presumed to be an SQL command and is sent to the main database engine to execute, as described in [Executing SQL Commands](#plpgsql-statements-general-sql).
+ <a id="plpgsql-statements-assignment"></a>
 
-
-### Assignment { #plpgsql-statements-assignment }
+### Assignment
 
 
  An assignment of a value to a PL/pgSQL variable is written as:
@@ -30,8 +32,9 @@ my_array[1:3] := array[1,2,3];
 complex_array[n].realpart = 12.3;
 ```
 
+  <a id="plpgsql-statements-general-sql"></a>
 
-### Executing SQL Commands { #plpgsql-statements-general-sql }
+### Executing SQL Commands
 
 
  In general, any SQL command that does not return rows can be executed within a PL/pgSQL function just by writing the command. For example, you could create and fill a table by writing
@@ -82,8 +85,9 @@ PERFORM QUERY;
 PERFORM create_mv('cs_session_page_requests_mv', my_query);
 ```
 
+  <a id="plpgsql-statements-sql-onerow"></a>
 
-### Executing a Command with a Single-Row Result { #plpgsql-statements-sql-onerow }
+### Executing a Command with a Single-Row Result
 
 
  The result of an SQL command yielding a single row (possibly of multiple columns) can be assigned to a record variable, row-type variable, or list of scalar variables. This is done by writing the base SQL command and adding an `INTO` clause. For example,
@@ -167,9 +171,9 @@ CONTEXT:  PL/pgSQL function get_userid(text) line 6 at SQL statement
 !!! note
 
     The `STRICT` option matches the behavior of Oracle PL/SQL's `SELECT INTO` and related statements.
+  <a id="plpgsql-statements-executing-dyn"></a>
 
-
-### Executing Dynamic Commands { #plpgsql-statements-executing-dyn }
+### Executing Dynamic Commands
 
 
  Oftentimes you will want to generate dynamic commands inside your PL/pgSQL functions, that is, commands that will involve different tables or different data types each time they are executed. PL/pgSQL's normal attempts to cache plans for commands (as discussed in [Plan Caching](pl-pgsql-under-the-hood.md#plpgsql-plan-caching)) will not work in such scenarios. To handle this sort of problem, the `EXECUTE` statement is provided:
@@ -237,9 +241,8 @@ EXECUTE format('SELECT count(*) FROM %I '
 !!! note
 
     The PL/pgSQL `EXECUTE` statement is not related to the [`EXECUTE`](../../reference/sql-commands/execute.md#sql-execute) SQL statement supported by the PostgreSQL server. The server's `EXECUTE` statement cannot be used directly within PL/pgSQL functions (and is not needed).
+ <a id="plpgsql-quote-literal-example"></a>
 
-
-<a id="plpgsql-quote-literal-example"></a>
 **Example: Quoting Values in Dynamic Queries**
 
 
@@ -330,9 +333,9 @@ EXECUTE format('UPDATE tbl SET %I = $1 WHERE key = $2', colname)
 
 
  A much larger example of a dynamic command and `EXECUTE` can be seen in [Porting a Function that Creates Another Function from PL/SQL to PL/pgSQL](porting-from-oracle-pl-sql.md#plpgsql-porting-ex2), which builds and executes a `CREATE FUNCTION` command to define a new function.
+  <a id="plpgsql-statements-diagnostics"></a>
 
-
-### Obtaining the Result Status { #plpgsql-statements-diagnostics }
+### Obtaining the Result Status
 
 
  There are several ways to determine the effect of a command. The first method is to use the `GET DIAGNOSTICS` command, which has the form:
@@ -348,8 +351,8 @@ GET [ CURRENT ] DIAGNOSTICS VARIABLE { = | := } ITEM [ , ... ];
 GET DIAGNOSTICS integer_var = ROW_COUNT;
 ```
 
+ <a id="plpgsql-current-diagnostics-values"></a>
 
-<a id="plpgsql-current-diagnostics-values"></a>
 **Table: Available Diagnostics Items**
 
 | Name | Type | Description |
@@ -372,9 +375,9 @@ GET DIAGNOSTICS integer_var = ROW_COUNT;
 
 
  `FOUND` is a local variable within each PL/pgSQL function; any changes to it affect only the current function.
+  <a id="plpgsql-statements-null"></a>
 
-
-### Doing Nothing At All { #plpgsql-statements-null }
+### Doing Nothing At All
 
 
  Sometimes a placeholder statement that does nothing is useful. For example, it can indicate that one arm of an if/then/else chain is deliberately empty. For this purpose, use the `NULL` statement:

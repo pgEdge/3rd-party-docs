@@ -1,4 +1,6 @@
-## Message Data Types { #protocol-message-types }
+<a id="protocol-message-types"></a>
+
+## Message Data Types
 
 
  This section describes the base data types used in messages.

@@ -1,4 +1,6 @@
-# dropdb { #app-dropdb }
+<a id="app-dropdb"></a>
+
+# dropdb
 
 remove a PostgreSQL database
 

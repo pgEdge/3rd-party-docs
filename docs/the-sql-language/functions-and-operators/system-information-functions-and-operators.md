@@ -1,19 +1,20 @@
-## System Information Functions and Operators { #functions-info }
+<a id="functions-info"></a>
+
+## System Information Functions and Operators
 
 
  The functions described in this section are used to obtain various information about a PostgreSQL installation.
+ <a id="functions-info-session"></a>
 
-
-### Session Information Functions { #functions-info-session }
+### Session Information Functions
 
 
  [Session Information Functions](#functions-info-session-table) shows several functions that extract session and system information.
 
 
  In addition to the functions listed in this section, there are a number of functions related to the statistics system that also provide system information. See [Statistics Functions](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-stats-functions) for more information.
+ <a id="functions-info-session-table"></a>
 
-
-<a id="functions-info-session-table"></a>
 **Table: Session Information Functions**
 
 <table>
@@ -169,9 +170,9 @@
 
 
  The `session_user` is normally the user who initiated the current database connection; but superusers can change this setting with [sql-set-session-authorization](../../reference/sql-commands/set-session-authorization.md#sql-set-session-authorization). The `current_user` is the user identifier that is applicable for permission checking. Normally it is equal to the session user, but it can be changed with [sql-set-role](../../reference/sql-commands/set-role.md#sql-set-role). It also changes during the execution of functions with the attribute `SECURITY DEFINER`. In Unix parlance, the session user is the “real user” and the current user is the “effective user”. `current_role` and `user` are synonyms for `current_user`. (The SQL standard draws a distinction between `current_role` and `current_user`, but PostgreSQL does not, since it unifies users and roles into a single kind of entity.)
+  <a id="functions-info-access"></a>
 
-
-### Access Privilege Inquiry Functions { #functions-info-access }
+### Access Privilege Inquiry Functions
 
 
  [Access Privilege Inquiry Functions](#functions-info-access-table) lists functions that allow querying object access privileges programmatically. (See [Privileges](../data-definition/privileges.md#ddl-priv) for more information about privileges.) In these functions, the user whose privileges are being inquired about can be specified by name or by OID (`pg_authid`.`oid`), or if the name is given as `public` then the privileges of the PUBLIC pseudo-role are checked. Also, the `user` argument can be omitted entirely, in which case the `current_user` is assumed. The object that is being inquired about can be specified either by name or by OID, too. When specifying by name, a schema name can be included if relevant. The access privilege of interest is specified by a text string, which must evaluate to one of the appropriate privilege keywords for the object's type (e.g., `SELECT`). Optionally, `WITH GRANT OPTION` can be added to a privilege type to test whether the privilege is held with grant option. Also, multiple privilege types can be listed separated by commas, in which case the result will be true if any of the listed privileges is held. (Case of the privilege string is not significant, and extra whitespace is allowed between but not within privilege names.) Some examples:
@@ -182,8 +183,8 @@ SELECT has_table_privilege('myschema.mytable', 'select');
 SELECT has_table_privilege('joe', 'mytable', 'INSERT, SELECT WITH GRANT OPTION');
 ```
 
+ <a id="functions-info-access-table"></a>
 
-<a id="functions-info-access-table"></a>
 **Table: Access Privilege Inquiry Functions**
 
 <table>
@@ -281,9 +282,8 @@ SELECT has_function_privilege('joeuser', 'myfunc(int, text)', 'execute');</code>
 
 
  [`aclitem` Operators](#functions-aclitem-op-table) shows the operators available for the `aclitem` type, which is the catalog representation of access privileges. See [Privileges](../data-definition/privileges.md#ddl-priv) for information about how to read access privilege values.
+ <a id="functions-aclitem-op-table"></a>
 
-
-<a id="functions-aclitem-op-table"></a>
 **Table: `aclitem` Operators**
 
 <table>
@@ -315,9 +315,8 @@ SELECT has_function_privilege('joeuser', 'myfunc(int, text)', 'execute');</code>
 
 
  [`aclitem` Functions](#functions-aclitem-fn-table) shows some additional functions to manage the `aclitem` type.
+ <a id="functions-aclitem-fn-table"></a>
 
-
-<a id="functions-aclitem-fn-table"></a>
 **Table: `aclitem` Functions**
 
 <table>
@@ -345,9 +344,9 @@ SELECT has_function_privilege('joeuser', 'myfunc(int, text)', 'execute');</code>
 </tr>
 </tbody>
 </table>
+  <a id="functions-info-schema"></a>
 
-
-### Schema Visibility Inquiry Functions { #functions-info-schema }
+### Schema Visibility Inquiry Functions
 
 
  [Schema Visibility Inquiry Functions](#functions-info-schema-table) shows functions that determine whether a certain object is *visible* in the current schema search path. For example, a table is said to be visible if its containing schema is in the search path and no table of the same name appears earlier in the search path. This is equivalent to the statement that the table can be referenced by name without explicit schema qualification. Thus, to list the names of all visible tables:
@@ -357,9 +356,8 @@ SELECT has_function_privilege('joeuser', 'myfunc(int, text)', 'execute');</code>
 SELECT relname FROM pg_class WHERE pg_table_is_visible(oid);
 ```
  For functions and operators, an object in the search path is said to be visible if there is no object of the same name *and argument data type(s)* earlier in the path. For operator classes and families, both the name and the associated index access method are considered.
+  <a id="functions-info-schema-table"></a>
 
-
-<a id="functions-info-schema-table"></a>
 **Table: Schema Visibility Inquiry Functions**
 
 <table>
@@ -446,15 +444,14 @@ SELECT relname FROM pg_class WHERE pg_table_is_visible(oid);
 SELECT pg_type_is_visible('myschema.widget'::regtype);
 ```
  Note that it would not make much sense to test a non-schema-qualified type name in this way — if the name can be recognized at all, it must be visible.
+  <a id="functions-info-catalog"></a>
 
-
-### System Catalog Information Functions { #functions-info-catalog }
+### System Catalog Information Functions
 
 
  [System Catalog Information Functions](#functions-info-catalog-table) lists functions that extract information from the system catalogs.
+ <a id="functions-info-catalog-table"></a>
 
-
-<a id="functions-info-catalog-table"></a>
 **Table: System Catalog Information Functions**
 
 <table>
@@ -465,7 +462,7 @@ SELECT pg_type_is_visible('myschema.widget'::regtype);
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr id="format-type">
 <td><code>format_type</code> ( <code>type</code> <code>oid</code>, <code>typemod</code> <code>integer</code> ) <code>text</code></td>
 <td>Returns the SQL name for a data type that is identified by its type OID and possibly a type modifier. Pass NULL for the type modifier if no specific modifier is known.</td>
 <td></td>
@@ -475,12 +472,12 @@ SELECT pg_type_is_visible('myschema.widget'::regtype);
 <td>Returns the OID of the base type of a domain identified by its type OID. If the argument is the OID of a non-domain type, returns the argument as-is. Returns NULL if the argument is not a valid type OID. If there's a chain of domain dependencies, it will recurse until finding the base type.</td>
 <td>Assuming <code>CREATE DOMAIN mytext AS text</code>:<br><code>pg_basetype('mytext'::regtype)</code> <code>text</code></td>
 </tr>
-<tr>
+<tr id="pg-char-to-encoding">
 <td><code>pg_char_to_encoding</code> ( <code>encoding</code> <code>name</code> ) <code>integer</code></td>
 <td>Converts the supplied encoding name into an integer representing the internal identifier used in some system catalog tables. Returns <code>-1</code> if an unknown encoding name is provided.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-encoding-to-char">
 <td><code>pg_encoding_to_char</code> ( <code>encoding</code> <code>integer</code> ) <code>name</code></td>
 <td>Converts the integer used as the internal identifier of an encoding in some system catalog tables into a human-readable string. Returns an empty string if an invalid encoding number is provided.</td>
 <td></td>
@@ -667,7 +664,7 @@ SELECT currval(pg_get_serial_sequence('sometable', 'id'));</code></pre></td>
 <td>Translates a textual role name to its OID. A similar result is obtained by casting the string to type <code>regrole</code> (see <a href="../data-types/object-identifier-types.md#datatype-oid">Object Identifier Types</a>); however, this function will return <code>NULL</code> rather than throwing an error if the name is not found.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="to-regtype">
 <td><code>to_regtype</code> ( <code>text</code> ) <code>regtype</code></td>
 <td>Parses a string of text, extracts a potential type name from it, and translates that name into a type OID. A syntax error in the string will result in an error; but if the string is a syntactically valid type name that happens not to be found in the catalogs, the result is <code>NULL</code>. A similar result is obtained by casting the string to type <code>regtype</code> (see <a href="../data-types/object-identifier-types.md#datatype-oid">Object Identifier Types</a>), except that that will throw error for name not found.</td>
 <td></td>
@@ -682,9 +679,8 @@ SELECT currval(pg_get_serial_sequence('sometable', 'id'));</code></pre></td>
 
 
  Most of the functions that reconstruct (decompile) database objects have an optional `pretty` flag, which if `true` causes the result to be “pretty-printed”. Pretty-printing suppresses unnecessary parentheses and adds whitespace for legibility. The pretty-printed format is more readable, but the default format is more likely to be interpreted the same way by future versions of PostgreSQL; so avoid using pretty-printed output for dump purposes. Passing `false` for the `pretty` parameter yields the same result as omitting the parameter.
+ <a id="functions-info-index-column-props"></a>
 
-
-<a id="functions-info-index-column-props"></a>
 **Table: Index Column Properties**
 
 | Name | Description |
@@ -698,9 +694,8 @@ SELECT currval(pg_get_serial_sequence('sometable', 'id'));</code></pre></td>
 | `returnable` | Can the column value be returned by an index-only scan? |
 | `search_array` | Does the column natively support `col = ANY(array)` searches? |
 | `search_nulls` | Does the column support `IS NULL` and `IS NOT NULL` searches? |
+ <a id="functions-info-index-props"></a>
 
-
-<a id="functions-info-index-props"></a>
 **Table: Index Properties**
 
 | Name | Description |
@@ -709,9 +704,8 @@ SELECT currval(pg_get_serial_sequence('sometable', 'id'));</code></pre></td>
 | `index_scan` | Does the index support plain (non-bitmap) scans? |
 | `bitmap_scan` | Does the index support bitmap scans? |
 | `backward_scan` | Can the scan direction be changed in mid-scan (to support `FETCH BACKWARD` on a cursor without needing materialization)? |
+ <a id="functions-info-indexam-props"></a>
 
-
-<a id="functions-info-indexam-props"></a>
 **Table: Index Access Method Properties**
 
 | Name | Description |
@@ -721,9 +715,8 @@ SELECT currval(pg_get_serial_sequence('sometable', 'id'));</code></pre></td>
 | `can_multi_col` | Does the access method support indexes with multiple columns? |
 | `can_exclude` | Does the access method support exclusion constraints? |
 | `can_include` | Does the access method support the `INCLUDE` clause of `CREATE INDEX`? |
+ <a id="functions-pg-settings-flags"></a>
 
-
-<a id="functions-pg-settings-flags"></a>
 **Table: GUC Flags**
 
 | Flag | Description |
@@ -734,15 +727,14 @@ SELECT currval(pg_get_serial_sequence('sometable', 'id'));</code></pre></td>
 | `NO_RESET_ALL` | Parameters with this flag are excluded from `RESET ALL` commands. |
 | `NOT_IN_SAMPLE` | Parameters with this flag are not included in `postgresql.conf` by default. |
 | `RUNTIME_COMPUTED` | Parameters with this flag are runtime-computed ones. |
+  <a id="functions-info-object"></a>
 
-
-### Object Information and Addressing Functions { #functions-info-object }
+### Object Information and Addressing Functions
 
 
  [Object Information and Addressing Functions](#functions-info-object-table) lists functions related to database object identification and addressing.
+ <a id="functions-info-object-table"></a>
 
-
-<a id="functions-info-object-table"></a>
 **Table: Object Information and Addressing Functions**
 
 <table>
@@ -805,14 +797,14 @@ identity | public.testtab
 acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 ```
 
+  <a id="functions-info-comment"></a>
 
-### Comment Information Functions { #functions-info-comment }
+### Comment Information Functions
 
 
  The functions shown in [Comment Information Functions](#functions-info-comment-table) extract comments previously stored with the [sql-comment](../../reference/sql-commands/comment.md#sql-comment) command. A null value is returned if no comment could be found for the specified parameters.
+ <a id="functions-info-comment-table"></a>
 
-
-<a id="functions-info-comment-table"></a>
 **Table: Comment Information Functions**
 
 <table>
@@ -845,15 +837,14 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 </tr>
 </tbody>
 </table>
+  <a id="functions-info-validity"></a>
 
-
-### Data Validity Checking Functions { #functions-info-validity }
+### Data Validity Checking Functions
 
 
  The functions shown in [Data Validity Checking Functions](#functions-info-validity-table) can be helpful for checking validity of proposed input data.
+ <a id="functions-info-validity-table"></a>
 
-
-<a id="functions-info-validity-table"></a>
 **Table: Data Validity Checking Functions**
 
 <table>
@@ -881,15 +872,14 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 </tr>
 </tbody>
 </table>
+  <a id="functions-info-snapshot"></a>
 
-
-### Transaction ID and Snapshot Information Functions { #functions-info-snapshot }
+### Transaction ID and Snapshot Information Functions
 
 
  The functions shown in [Transaction ID and Snapshot Information Functions](#functions-pg-snapshot) provide server transaction information in an exportable form. The main use of these functions is to determine which transactions were committed between two snapshots.
+ <a id="functions-pg-snapshot"></a>
 
-
-<a id="functions-pg-snapshot"></a>
 **Table: Transaction ID and Snapshot Information Functions**
 
 <table>
@@ -960,9 +950,8 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 
 
  The internal transaction ID type `xid` is 32 bits wide and wraps around every 4 billion transactions. However, the functions shown in [Transaction ID and Snapshot Information Functions](#functions-pg-snapshot), except `age`, `mxid_age`, and `pg_get_multixact_members`, use a 64-bit type `xid8` that does not wrap around during the life of an installation and can be converted to `xid` by casting if required; see [Transactions and Identifiers](../../internals/transaction-processing/transactions-and-identifiers.md#transaction-id) for details. The data type `pg_snapshot` stores information about transaction ID visibility at a particular moment in time. Its components are described in [Snapshot Components](#functions-pg-snapshot-parts). `pg_snapshot`'s textual representation is <em>xmin</em><code>:</code><em>xmax</em><code>:</code><em>xip_list</em>. For example `10:20:10,14,15` means `xmin=10, xmax=20, xip_list=10, 14, 15`.
+ <a id="functions-pg-snapshot-parts"></a>
 
-
-<a id="functions-pg-snapshot-parts"></a>
 **Table: Snapshot Components**
 
 | Name | Description |
@@ -973,9 +962,8 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 
 
  In releases of PostgreSQL before 13 there was no `xid8` type, so variants of these functions were provided that used `bigint` to represent a 64-bit XID, with a correspondingly distinct snapshot data type `txid_snapshot`. These older functions have `txid` in their names. They are still supported for backward compatibility, but may be removed from a future release. See [Deprecated Transaction ID and Snapshot Information Functions](#functions-txid-snapshot).
+ <a id="functions-txid-snapshot"></a>
 
-
-<a id="functions-txid-snapshot"></a>
 **Table: Deprecated Transaction ID and Snapshot Information Functions**
 
 <table>
@@ -1028,15 +1016,14 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 </tr>
 </tbody>
 </table>
+  <a id="functions-info-commit-timestamp"></a>
 
-
-### Committed Transaction Information Functions { #functions-info-commit-timestamp }
+### Committed Transaction Information Functions
 
 
  The functions shown in [Committed Transaction Information Functions](#functions-commit-timestamp) provide information about when past transactions were committed. They only provide useful data when the [track_commit_timestamp](../../server-administration/server-configuration/replication.md#guc-track-commit-timestamp) configuration option is enabled, and only for transactions that were committed after it was enabled. Commit timestamp information is routinely removed during vacuum.
+ <a id="functions-commit-timestamp"></a>
 
-
-<a id="functions-commit-timestamp"></a>
 **Table: Committed Transaction Information Functions**
 
 <table>
@@ -1064,15 +1051,14 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 </tr>
 </tbody>
 </table>
+  <a id="functions-info-controldata"></a>
 
-
-### Control Data Functions { #functions-info-controldata }
+### Control Data Functions
 
 
  The functions shown in [Control Data Functions](#functions-controldata) print information initialized during `initdb`, such as the catalog version. They also show information about write-ahead logging and checkpoint processing. This information is cluster-wide, not specific to any one database. These functions provide most of the same information, from the same source, as the [app-pgcontroldata](../../reference/postgresql-server-applications/pg_controldata.md#app-pgcontroldata) application.
+ <a id="functions-controldata"></a>
 
-
-<a id="functions-controldata"></a>
 **Table: Control Data Functions**
 
 <table>
@@ -1105,9 +1091,8 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 </tr>
 </tbody>
 </table>
+ <a id="functions-pg-control-checkpoint"></a>
 
-
-<a id="functions-pg-control-checkpoint"></a>
 **Table: `pg_control_checkpoint` Output Columns**
 
 | Column Name | Data Type |
@@ -1130,9 +1115,8 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 | `oldest_commit_ts_xid` | `xid` |
 | `newest_commit_ts_xid` | `xid` |
 | `checkpoint_time` | `timestamp with time zone` |
+ <a id="functions-pg-control-system"></a>
 
-
-<a id="functions-pg-control-system"></a>
 **Table: `pg_control_system` Output Columns**
 
 | Column Name | Data Type |
@@ -1141,9 +1125,8 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 | `catalog_version_no` | `integer` |
 | `system_identifier` | `bigint` |
 | `pg_control_last_modified` | `timestamp with time zone` |
+ <a id="functions-pg-control-init"></a>
 
-
-<a id="functions-pg-control-init"></a>
 **Table: `pg_control_init` Output Columns**
 
 | Column Name | Data Type |
@@ -1160,9 +1143,8 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 | `float8_pass_by_value` | `boolean` |
 | `data_page_checksum_version` | `integer` |
 | `default_char_signedness` | `boolean` |
+ <a id="functions-pg-control-recovery"></a>
 
-
-<a id="functions-pg-control-recovery"></a>
 **Table: `pg_control_recovery` Output Columns**
 
 | Column Name | Data Type |
@@ -1172,15 +1154,14 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 | `backup_start_lsn` | `pg_lsn` |
 | `backup_end_lsn` | `pg_lsn` |
 | `end_of_backup_record_required` | `boolean` |
+  <a id="functions-info-version"></a>
 
-
-### Version Information Functions { #functions-info-version }
+### Version Information Functions
 
 
  The functions shown in [Version Information Functions](#functions-version) print version information.
+ <a id="functions-version"></a>
 
-
-<a id="functions-version"></a>
 **Table: Version Information Functions**
 
 <table>
@@ -1208,15 +1189,14 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 </tr>
 </tbody>
 </table>
+  <a id="functions-info-wal-summary"></a>
 
-
-### WAL Summarization Information Functions { #functions-info-wal-summary }
+### WAL Summarization Information Functions
 
 
  The functions shown in [WAL Summarization Information Functions](#functions-wal-summary) print information about the status of WAL summarization. See [summarize_wal](../../server-administration/server-configuration/write-ahead-log.md#guc-summarize-wal).
+ <a id="functions-wal-summary"></a>
 
-
-<a id="functions-wal-summary"></a>
 **Table: WAL Summarization Information Functions**
 
 <table>

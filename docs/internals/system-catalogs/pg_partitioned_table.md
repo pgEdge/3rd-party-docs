@@ -1,4 +1,6 @@
-## `pg_partitioned_table` { #catalog-pg-partitioned-table }
+<a id="catalog-pg-partitioned-table"></a>
+
+## `pg_partitioned_table`
 
 
  The catalog `pg_partitioned_table` stores information about how tables are partitioned.

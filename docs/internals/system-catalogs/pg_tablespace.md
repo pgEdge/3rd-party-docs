@@ -1,4 +1,6 @@
-## `pg_tablespace` { #catalog-pg-tablespace }
+<a id="catalog-pg-tablespace"></a>
+
+## `pg_tablespace`
 
 
  The catalog `pg_tablespace` stores information about the available tablespaces. Tables can be placed in particular tablespaces to aid administration of disk layout.

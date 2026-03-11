@@ -1,4 +1,6 @@
-## `pg_publication_tables` { #view-pg-publication-tables }
+<a id="view-pg-publication-tables"></a>
+
+## `pg_publication_tables`
 
 
  The view `pg_publication_tables` provides information about the mapping between publications and information of tables they contain. Unlike the underlying catalog [`pg_publication_rel`](../system-catalogs/pg_publication_rel.md#catalog-pg-publication-rel), this view expands publications defined as [`FOR ALL TABLES`](../../reference/sql-commands/create-publication.md#sql-createpublication-params-for-all-tables) and [`FOR TABLES IN SCHEMA`](../../reference/sql-commands/create-publication.md#sql-createpublication-params-for-tables-in-schema), so for such publications there will be a row for each eligible table.

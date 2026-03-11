@@ -1,4 +1,6 @@
-## User-Defined Functions { #xfunc }
+<a id="xfunc"></a>
+
+## User-Defined Functions
 
 
  PostgreSQL provides four kinds of functions:

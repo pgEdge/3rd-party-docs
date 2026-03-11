@@ -1,4 +1,6 @@
-# DROP LANGUAGE { #sql-droplanguage }
+<a id="sql-droplanguage"></a>
+
+# DROP LANGUAGE
 
 remove a procedural language
 

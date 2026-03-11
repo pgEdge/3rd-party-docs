@@ -1,4 +1,6 @@
-## earthdistance — calculate great-circle distances { #earthdistance }
+<a id="earthdistance"></a>
+
+## earthdistance — calculate great-circle distances
 
 
  The `earthdistance` module provides two different approaches to calculating great circle distances on the surface of the Earth. The one described first depends on the `cube` module. The second one is based on the built-in `point` data type, using longitude and latitude for the coordinates.
@@ -13,9 +15,9 @@
 !!! caution
 
     It is strongly recommended that `earthdistance` and `cube` be installed in the same schema, and that that schema be one for which CREATE privilege has not been and will not be granted to any untrusted users. Otherwise there are installation-time security hazards if `earthdistance`'s schema contains objects defined by a hostile user. Furthermore, when using `earthdistance`'s functions after installation, the entire search path should contain only trusted schemas.
+ <a id="earthdistance-cube-based"></a>
 
-
-### Cube-Based Earth Distances { #earthdistance-cube-based }
+### Cube-Based Earth Distances
 
 
  Data is stored in cubes that are points (both corners are the same) using 3 coordinates representing the x, y, and z distance from the center of the Earth. A *domain* `earth` over type `cube` is provided, which includes constraint checks that the value meets these restrictions and is reasonably close to the actual surface of the Earth.
@@ -31,9 +33,8 @@
 
 
  The provided functions are shown in [Cube-Based Earthdistance Functions](#earthdistance-cube-functions).
+ <a id="earthdistance-cube-functions"></a>
 
-
-<a id="earthdistance-cube-functions"></a>
 **Table: Cube-Based Earthdistance Functions**
 
 <table>
@@ -86,18 +87,17 @@
 </tr>
 </tbody>
 </table>
+  <a id="earthdistance-point-based"></a>
 
-
-### Point-Based Earth Distances { #earthdistance-point-based }
+### Point-Based Earth Distances
 
 
  The second part of the module relies on representing Earth locations as values of type `point`, in which the first component is taken to represent longitude in degrees, and the second component is taken to represent latitude in degrees. Points are taken as (longitude, latitude) and not vice versa because longitude is closer to the intuitive idea of x-axis and latitude to y-axis.
 
 
  A single operator is provided, shown in [Point-Based Earthdistance Operators](#earthdistance-point-operators).
+ <a id="earthdistance-point-operators"></a>
 
-
-<a id="earthdistance-point-operators"></a>
 **Table: Point-Based Earthdistance Operators**
 
 <table>

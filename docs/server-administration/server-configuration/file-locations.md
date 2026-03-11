@@ -1,4 +1,6 @@
-## File Locations { #runtime-config-file-locations }
+<a id="runtime-config-file-locations"></a>
+
+## File Locations
 
 
  In addition to the `postgresql.conf` file already mentioned, PostgreSQL uses two other manually-edited configuration files, which control client authentication (their use is discussed in [Client Authentication](../client-authentication/index.md#client-authentication)). By default, all three configuration files are stored in the database cluster's data directory. The parameters described in this section allow the configuration files to be placed elsewhere. (Doing so can ease administration. In particular it is often easier to ensure that the configuration files are properly backed-up when they are kept separate.)

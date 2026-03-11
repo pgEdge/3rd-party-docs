@@ -1,4 +1,6 @@
-# Triggers { #triggers }
+<a id="triggers"></a>
+
+# Triggers
 
  This chapter provides general information about writing trigger functions. Trigger functions can be written in most of the available procedural languages, including PL/pgSQL ([PL/pgSQL — SQL Procedural Language](../pl-pgsql-sql-procedural-language/index.md#plpgsql)), PL/Tcl ([PL/Tcl — Tcl Procedural Language](../pl-tcl-tcl-procedural-language/index.md#pltcl)), PL/Perl ([PL/Perl — Perl Procedural Language](../pl-perl-perl-procedural-language/index.md#plperl)), and PL/Python ([PL/Python — Python Procedural Language](../pl-python-python-procedural-language/index.md#plpython)). After reading this chapter, you should consult the chapter for your favorite procedural language to find out the language-specific details of writing a trigger in it.
 

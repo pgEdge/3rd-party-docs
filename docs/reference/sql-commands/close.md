@@ -1,4 +1,6 @@
-# CLOSE { #sql-close }
+<a id="sql-close"></a>
+
+# CLOSE
 
 close a cursor
 

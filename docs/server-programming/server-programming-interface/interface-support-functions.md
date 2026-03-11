@@ -1,13 +1,15 @@
-## Interface Support Functions { #spi-interface-support }
+<a id="spi-interface-support"></a>
+
+## Interface Support Functions
 
 
  The functions described here provide an interface for extracting information from result sets returned by `SPI_execute` and other SPI functions.
 
 
  All functions described in this section can be used by both connected and unconnected C functions.
+  <a id="spi-spi-fname"></a>
 
-
-# SPI_fname { #spi-spi-fname }
+# SPI_fname
 
 determine the column name for the specified column number
 
@@ -40,9 +42,9 @@ char * SPI_fname(TupleDesc rowdesc, int colnumber)
 
 
  The column name; `NULL` if `colnumber` is out of range. `SPI_result` set to `SPI_ERROR_NOATTRIBUTE` on error.
+   <a id="spi-spi-fnumber"></a>
 
-
-# SPI_fnumber { #spi-spi-fnumber }
+# SPI_fnumber
 
 determine the column number for the specified column name
 
@@ -78,9 +80,9 @@ int SPI_fnumber(TupleDesc rowdesc, const char * colname)
 
 
  Column number (count starts at 1 for user-defined columns), or `SPI_ERROR_NOATTRIBUTE` if the named column was not found.
+   <a id="spi-spi-getvalue"></a>
 
-
-# SPI_getvalue { #spi-spi-getvalue }
+# SPI_getvalue
 
 return the string value of the specified column
 
@@ -119,9 +121,9 @@ char * SPI_getvalue(HeapTuple row, TupleDesc rowdesc, int colnumber)
 
 
  Column value, or `NULL` if the column is null, `colnumber` is out of range (`SPI_result` is set to `SPI_ERROR_NOATTRIBUTE`), or no output function is available (`SPI_result` is set to `SPI_ERROR_NOOUTFUNC`).
+   <a id="spi-spi-getbinval"></a>
 
-
-# SPI_getbinval { #spi-spi-getbinval }
+# SPI_getbinval
 
 return the binary value of the specified column
 
@@ -167,9 +169,9 @@ Datum SPI_getbinval(HeapTuple row, TupleDesc rowdesc, int colnumber,
 
 
  `SPI_result` is set to `SPI_ERROR_NOATTRIBUTE` on error.
+   <a id="spi-spi-gettype"></a>
 
-
-# SPI_gettype { #spi-spi-gettype }
+# SPI_gettype
 
 return the data type name of the specified column
 
@@ -202,9 +204,9 @@ char * SPI_gettype(TupleDesc rowdesc, int colnumber)
 
 
  The data type name of the specified column, or `NULL` on error. `SPI_result` is set to `SPI_ERROR_NOATTRIBUTE` on error.
+   <a id="spi-spi-gettypeid"></a>
 
-
-# SPI_gettypeid { #spi-spi-gettypeid }
+# SPI_gettypeid
 
 return the data type OID of the specified column
 
@@ -237,9 +239,9 @@ Oid SPI_gettypeid(TupleDesc rowdesc, int colnumber)
 
 
  The OID of the data type of the specified column or `InvalidOid` on error. On error, `SPI_result` is set to `SPI_ERROR_NOATTRIBUTE`.
+   <a id="spi-spi-getrelname"></a>
 
-
-# SPI_getrelname { #spi-spi-getrelname }
+# SPI_getrelname
 
 return the name of the specified relation
 
@@ -269,9 +271,9 @@ char * SPI_getrelname(Relation rel)
 
 
  The name of the specified relation.
+  <a id="spi-spi-getnspname"></a>
 
-
-# SPI_getnspname { #spi-spi-getnspname }
+# SPI_getnspname
 
 return the namespace of the specified relation
 
@@ -301,9 +303,9 @@ char * SPI_getnspname(Relation rel)
 
 
  The name of the specified relation's namespace.
+  <a id="spi-spi-result-code-string"></a>
 
-
-# SPI_result_code_string { #spi-spi-result-code-string }
+# SPI_result_code_string
 
 return error code as string
 

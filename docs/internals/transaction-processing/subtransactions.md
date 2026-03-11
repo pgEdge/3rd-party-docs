@@ -1,4 +1,6 @@
-## Subtransactions { #subxacts }
+<a id="subxacts"></a>
+
+## Subtransactions
 
 
  Subtransactions are started inside transactions, allowing large transactions to be broken into smaller units. Subtransactions can commit or abort without affecting their parent transactions, allowing parent transactions to continue. This allows errors to be handled more easily, which is a common application development pattern. The word subtransaction is often abbreviated as *subxact*.

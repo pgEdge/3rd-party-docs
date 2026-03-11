@@ -1,4 +1,6 @@
-## User-Defined Types { #xtypes }
+<a id="xtypes"></a>
+
+## User-Defined Types
 
 
  As described in [The PostgreSQL Type System](the-postgresql-type-system.md#extend-type-system), PostgreSQL can be extended to support new data types. This section describes how to define new base types, which are data types defined below the level of the SQL language. Creating a new base type requires implementing functions to operate on the type in a low-level language, usually C.
@@ -163,9 +165,9 @@ CREATE TYPE complex (
 
 
  For further details see the description of the [sql-createtype](../../reference/sql-commands/create-type.md#sql-createtype) command.
+ <a id="xtypes-toast"></a>
 
-
-### TOAST Considerations { #xtypes-toast }
+### TOAST Considerations
 
 
  If the values of your data type vary in size (in internal form), it's usually desirable to make the data type TOAST-able (see [TOAST](../../internals/database-physical-storage/toast.md#storage-toast)). You should do this even if the values are always too small to be compressed or stored externally, because TOAST can save space on small data too, by reducing header overhead.

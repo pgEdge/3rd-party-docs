@@ -1,4 +1,6 @@
-## Continuous Archiving and Point-in-Time Recovery (PITR) { #continuous-archiving }
+<a id="continuous-archiving"></a>
+
+## Continuous Archiving and Point-in-Time Recovery (PITR)
 
 
  At all times, PostgreSQL maintains a *write ahead log* (WAL) in the `pg_wal/` subdirectory of the cluster's data directory. The log records every change made to the database's data files. This log exists primarily for crash-safety purposes: if the system crashes, the database can be restored to consistency by “replaying” the log entries made since the last checkpoint. However, the existence of the log makes it possible to use a third strategy for backing up databases: we can combine a file-system-level backup with backup of the WAL files. If recovery is needed, we restore the file system backup and then replay from the backed-up WAL files to bring the system to a current state. This approach is more complex to administer than either of the previous approaches, but it has some significant benefits:
@@ -18,9 +20,9 @@
 
 
  To recover successfully using continuous archiving (also called “online backup” by many database vendors), you need a continuous sequence of archived WAL files that extends back at least as far as the start time of your backup. So to get started, you should set up and test your procedure for archiving WAL files *before* you take your first base backup. Accordingly, we first discuss the mechanics of archiving WAL files.
+ <a id="backup-archiving-wal"></a>
 
-
-### Setting Up WAL Archiving { #backup-archiving-wal }
+### Setting Up WAL Archiving
 
 
  In an abstract sense, a running PostgreSQL system produces an indefinitely long sequence of WAL records. The system physically divides this sequence into WAL *segment files*, which are normally 16MB apiece (although the segment size can be altered during initdb). The segment files are given numeric names that reflect their position in the abstract WAL sequence. When not using WAL archiving, the system normally creates just a few segment files and then “recycles” them by renaming no-longer-needed segment files to higher segment numbers. It's assumed that segment files whose contents precede the last checkpoint are no longer of interest and can be recycled.
@@ -88,9 +90,9 @@ test ! -f /mnt/server/archivedir/00000001000000A900000065 && cp pg_wal/000000010
 
 
  When `wal_level` is `minimal` some SQL commands are optimized to avoid WAL logging, as described in [Disable WAL Archival and Streaming Replication](../../the-sql-language/performance-tips/populating-a-database.md#populate-pitr). If archiving or streaming replication were turned on during execution of one of these statements, WAL would not contain enough information for archive recovery. (Crash recovery is unaffected.) For this reason, `wal_level` can only be changed at server start. However, `archive_command` and `archive_library` can be changed with a configuration file reload. If you are archiving via shell and wish to temporarily stop archiving, one way to do it is to set `archive_command` to the empty string (`''`). This will cause WAL files to accumulate in `pg_wal/` until a working `archive_command` is re-established.
+  <a id="backup-base-backup"></a>
 
-
-### Making a Base Backup { #backup-base-backup }
+### Making a Base Backup
 
 
  The easiest way to perform a base backup is to use the [app-pgbasebackup](../../reference/postgresql-client-applications/pg_basebackup.md#app-pgbasebackup) tool. It can create a base backup either as regular files or as a tar archive. If more flexibility than [app-pgbasebackup](../../reference/postgresql-client-applications/pg_basebackup.md#app-pgbasebackup) can provide is required, you can also make a base backup using the low level API (see [Making a Base Backup Using the Low Level API](#backup-lowlevel-base-backup)).
@@ -106,9 +108,9 @@ test ! -f /mnt/server/archivedir/00000001000000A900000065 && cp pg_wal/000000010
 
 
  Since you have to keep around all the archived WAL files back to your last base backup, the interval between base backups should usually be chosen based on how much storage you want to expend on archived WAL files. You should also consider how long you are prepared to spend recovering, if recovery should be necessary — the system will have to replay all those WAL segments, and that could take awhile if it has been a long time since the last base backup.
+  <a id="backup-incremental-backup"></a>
 
-
-### Making an Incremental Backup { #backup-incremental-backup }
+### Making an Incremental Backup
 
 
  You can use [app-pgbasebackup](../../reference/postgresql-client-applications/pg_basebackup.md#app-pgbasebackup) to take an incremental backup by specifying the `--incremental` option. You must supply, as an argument to `--incremental`, the backup manifest to an earlier backup from the same server. In the resulting backup, non-relation files will be included in their entirety, but some relation files may be replaced by smaller incremental files which contain only the blocks which have been changed since the earlier backup and enough metadata to reconstruct the current version of the file.
@@ -127,9 +129,9 @@ test ! -f /mnt/server/archivedir/00000001000000A900000065 && cp pg_wal/000000010
 
 
  An incremental backup is only possible if replay would begin from a later checkpoint than for the previous backup upon which it depends. If you take the incremental backup on the primary, this condition is always satisfied, because each backup triggers a new checkpoint. On a standby, replay begins from the most recent restartpoint. Therefore, an incremental backup of a standby server can fail if there has been very little activity since the previous backup, since no new restartpoint might have been created.
+  <a id="backup-lowlevel-base-backup"></a>
 
-
-### Making a Base Backup Using the Low Level API { #backup-lowlevel-base-backup }
+### Making a Base Backup Using the Low Level API
 
 
  Instead of taking a full or incremental base backup using [app-pgbasebackup](../../reference/postgresql-client-applications/pg_basebackup.md#app-pgbasebackup), you can take a base backup using the low-level API. This procedure contains a few more steps than the pg_basebackup method, but is relatively simple. It is very important that these steps are executed in sequence, and that the success of a step is verified before proceeding to the next step.
@@ -162,8 +164,9 @@ SELECT * FROM pg_backup_stop(wait_for_archive => true);
 
     If the backup process monitors and ensures that all WAL segment files required for the backup are successfully archived then the `wait_for_archive` parameter (which defaults to true) can be set to false to have `pg_backup_stop` return as soon as the stop backup record is written to the WAL. By default, `pg_backup_stop` will wait until all WAL has been archived, which can take some time. This option must be used with caution: if WAL archiving is not monitored correctly then the backup might not include all of the WAL files and will therefore be incomplete and not able to be restored.
 
+ <a id="backup-lowlevel-base-backup-data"></a>
 
-#### Backing Up the Data Directory { #backup-lowlevel-base-backup-data }
+#### Backing Up the Data Directory
 
 
  Some file system backup tools emit warnings or errors if the files they are trying to copy change while the copy proceeds. When taking a base backup of an active database, this situation is normal and not an error. However, you need to ensure that you can distinguish complaints of this sort from real errors. For example, some versions of rsync return a separate exit code for “vanished source files”, and you can write a driver script to accept this exit code as a non-error case. Also, some versions of GNU tar return an error code indistinguishable from a fatal error if a file was truncated while tar was copying it. Fortunately, GNU tar versions 1.16 and later exit with 1 if a file was changed during the backup, and 2 for other errors. With GNU tar version 1.23 and later, you can use the warning options `--warning=no-file-changed --warning=no-file-removed` to hide the related warning messages.
@@ -191,9 +194,9 @@ SELECT * FROM pg_backup_stop(wait_for_archive => true);
 
 
  It is also possible to make a backup while the server is stopped. In this case, you obviously cannot use `pg_backup_start` or `pg_backup_stop`, and you will therefore be left to your own devices to keep track of which backup is which and how far back the associated WAL files go. It is generally better to follow the continuous archiving procedure above.
+   <a id="backup-pitr-recovery"></a>
 
-
-### Recovering Using a Continuous Archive Backup { #backup-pitr-recovery }
+### Recovering Using a Continuous Archive Backup
 
 
  Okay, the worst has happened and you need to recover from your backup. Here is the procedure:
@@ -240,9 +243,9 @@ restore_command = 'cp /mnt/server/archivedir/%f %p'
 
 
  If recovery finds corrupted WAL data, recovery will halt at that point and the server will not start. In such a case the recovery process could be re-run from the beginning, specifying a “recovery target” before the point of corruption so that recovery can complete normally. If recovery fails for an external reason, such as a system crash or if the WAL archive has become inaccessible, then the recovery can simply be restarted and it will restart almost from where it failed. Recovery restart works much like checkpointing in normal operation: the server periodically forces all its state to disk, and then updates the `pg_control` file to indicate that the already-processed WAL data need not be scanned again.
+  <a id="backup-timelines"></a>
 
-
-### Timelines { #backup-timelines }
+### Timelines
 
 
  The ability to restore the database to a previous point in time creates some complexities that are akin to science-fiction stories about time travel and parallel universes. For example, in the original history of the database, suppose you dropped a critical table at 5:15PM on Tuesday evening, but didn't realize your mistake until Wednesday noon. Unfazed, you get out your backup, restore to the point-in-time 5:14PM Tuesday evening, and are up and running. In *this* history of the database universe, you never dropped the table. But suppose you later realize this wasn't such a great idea, and would like to return to sometime Wednesday morning in the original history. You won't be able to if, while your database was up-and-running, it overwrote some of the WAL segment files that led up to the time you now wish you could get back to. Thus, to avoid this, you need to distinguish the series of WAL records generated after you've done a point-in-time recovery from those that were generated in the original database history.
@@ -258,24 +261,24 @@ restore_command = 'cp /mnt/server/archivedir/%f %p'
 
 
  The default behavior of recovery is to recover to the latest timeline found in the archive. If you wish to recover to the timeline that was current when the base backup was taken or into a specific child timeline (that is, you want to return to some state that was itself generated after a recovery attempt), you need to specify `current` or the target timeline ID in [recovery_target_timeline](../server-configuration/write-ahead-log.md#guc-recovery-target-timeline). You cannot recover into timelines that branched off earlier than the base backup.
+  <a id="backup-tips"></a>
 
-
-### Tips and Examples { #backup-tips }
+### Tips and Examples
 
 
  Some tips for configuring continuous archiving are given here.
+ <a id="backup-standalone"></a>
 
-
-#### Standalone Hot Backups { #backup-standalone }
+#### Standalone Hot Backups
 
 
  It is possible to use PostgreSQL's backup facilities to produce standalone hot backups. These are backups that cannot be used for point-in-time recovery, yet are typically much faster to backup and restore than pg_dump dumps. (They are also much larger than pg_dump dumps, so in some cases the speed advantage might be negated.)
 
 
  As with base backups, the easiest way to produce a standalone hot backup is to use the [app-pgbasebackup](../../reference/postgresql-client-applications/pg_basebackup.md#app-pgbasebackup) tool. If you include the `-X` parameter when calling it, all the write-ahead log required to use the backup will be included in the backup automatically, and no special action is required to restore the backup.
+  <a id="compressed-archive-logs"></a>
 
-
-#### Compressed Archive Logs { #compressed-archive-logs }
+#### Compressed Archive Logs
 
 
  If archive storage size is a concern, you can use gzip to compress the archive files:
@@ -291,8 +294,9 @@ archive_command = 'gzip < %p > /mnt/server/archivedir/%f.gz'
 restore_command = 'gunzip < /mnt/server/archivedir/%f.gz > %p'
 ```
 
+  <a id="backup-scripts"></a>
 
-#### `archive_command` Scripts { #backup-scripts }
+#### `archive_command` Scripts
 
 
  Many people choose to use scripts to define their `archive_command`, so that their `postgresql.conf` entry looks very simple:
@@ -315,9 +319,9 @@ archive_command = 'local_backup_script.sh "%p" "%f"'
 !!! tip
 
     When using an `archive_command` script, it's desirable to enable [logging_collector](../server-configuration/error-reporting-and-logging.md#guc-logging-collector). Any messages written to `stderr` from the script will then appear in the database server log, allowing complex configurations to be diagnosed easily if they fail.
+   <a id="continuous-archiving-caveats"></a>
 
-
-### Caveats { #continuous-archiving-caveats }
+### Caveats
 
 
  At this writing, there are several limitations of the continuous archiving technique. These will probably be fixed in future releases:

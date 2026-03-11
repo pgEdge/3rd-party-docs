@@ -1,4 +1,6 @@
-# The Rule System { #rules }
+<a id="rules"></a>
+
+# The Rule System
 
  This chapter discusses the rule system in PostgreSQL. Production rule systems are conceptually simple, but there are many subtle points involved in actually using them.
 

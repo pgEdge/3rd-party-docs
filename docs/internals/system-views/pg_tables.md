@@ -1,4 +1,6 @@
-## `pg_tables` { #view-pg-tables }
+<a id="view-pg-tables"></a>
+
+## `pg_tables`
 
 
  The view `pg_tables` provides access to useful information about each table in the database.

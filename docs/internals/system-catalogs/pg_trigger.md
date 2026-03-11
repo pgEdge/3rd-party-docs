@@ -1,4 +1,6 @@
-## `pg_trigger` { #catalog-pg-trigger }
+<a id="catalog-pg-trigger"></a>
+
+## `pg_trigger`
 
 
  The catalog `pg_trigger` stores triggers on tables and views. See [sql-createtrigger](../../reference/sql-commands/create-trigger.md#sql-createtrigger) for more information.

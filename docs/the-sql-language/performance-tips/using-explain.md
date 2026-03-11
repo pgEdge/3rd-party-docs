@@ -1,4 +1,6 @@
-## Using `EXPLAIN` { #using-explain }
+<a id="using-explain"></a>
+
+## Using `EXPLAIN`
 
 
  PostgreSQL devises a *query plan* for each query it receives. Choosing the right plan to match the query structure and the properties of the data is absolutely critical for good performance, so the system includes a complex *planner* that tries to choose good plans. You can use the [`EXPLAIN`](../../reference/sql-commands/explain.md#sql-explain) command to see what query plan the planner creates for any query. Plan-reading is an art that requires some experience to master, but this section attempts to cover the basics.
@@ -8,9 +10,9 @@
 
 
  The examples use `EXPLAIN`'s default “text” output format, which is compact and convenient for humans to read. If you want to feed `EXPLAIN`'s output to a program for further analysis, you should use one of its machine-readable output formats (XML, JSON, or YAML) instead.
+ <a id="using-explain-basics"></a>
 
-
-### `EXPLAIN` Basics { #using-explain-basics }
+### `EXPLAIN` Basics
 
 
  The structure of a query plan is a tree of *plan nodes*. Nodes at the bottom level of the tree are scan nodes: they return raw rows from a table. There are different types of scan nodes for different table access methods: sequential scans, index scans, and bitmap index scans. There are also non-table row sources, such as `VALUES` clauses and set-returning functions in `FROM`, which have their own scan node types. If the query requires joining, aggregation, sorting, or other operations on the raw rows, then there will be additional nodes above the scan nodes to perform these operations. Again, there is usually more than one possible way to do these operations, so different node types can appear here too. The output of `EXPLAIN` has one line for each node in the plan tree, showing the basic node type plus the cost estimates that the planner made for the execution of that plan node. Additional lines might appear, indented from the node's summary line, to show additional properties of the node. The very first line (the summary line for the topmost node) has the estimated total execution cost for the plan; it is this number that the planner seeks to minimize.
@@ -391,9 +393,9 @@ FROM tenk1 t1 WHERE t1.ten = (SELECT (random() * 10)::integer);
            Output: ((random() * '10'::double precision))::integer
 ```
  An initplan is run only once per execution of the outer plan, and its results are saved for re-use in later rows of the outer plan. So in this example `random()` is evaluated only once and all the values of `t1.ten` are compared to the same randomly-chosen integer. That's quite different from what would happen without the sub-`SELECT` construct.
+  <a id="using-explain-analyze"></a>
 
-
-### `EXPLAIN ANALYZE` { #using-explain-analyze }
+### `EXPLAIN ANALYZE`
 
 
  It is possible to check the accuracy of the planner's estimates by using `EXPLAIN`'s `ANALYZE` option. With this option, `EXPLAIN` actually executes the query, and then displays the true row counts and true run time accumulated within each plan node, along with the same estimates that a plain `EXPLAIN` shows. For example, we might get a result like this:
@@ -662,9 +664,9 @@ EXPLAIN UPDATE gtest_parent SET f1 = CURRENT_DATE WHERE f2 = 101;
 
 
  The time shown for the top-level node does not include any time needed to convert the query's output data into displayable form or to send it to the client. While `EXPLAIN ANALYZE` will never send the data to the client, it can be told to convert the query's output data to displayable form and measure the time needed for that, by specifying the `SERIALIZE` option. That time will be shown separately, and it's also included in the total `Execution time`.
+  <a id="using-explain-caveats"></a>
 
-
-### Caveats { #using-explain-caveats }
+### Caveats
 
 
  There are two significant ways in which run times measured by `EXPLAIN ANALYZE` can deviate from normal execution of the same query. First, since no output rows are delivered to the client, network transmission costs are not included. I/O conversion costs are not included either unless `SERIALIZE` is specified. Second, the measurement overhead added by `EXPLAIN ANALYZE` can be significant, especially on machines with slow `gettimeofday()` operating-system calls. You can use the [pgtesttiming](../../reference/postgresql-server-applications/pg_test_timing.md#pgtesttiming) tool to measure the overhead of timing on your system.

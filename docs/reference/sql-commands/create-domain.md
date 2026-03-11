@@ -1,4 +1,6 @@
-# CREATE DOMAIN { #sql-createdomain }
+<a id="sql-createdomain"></a>
+
+# CREATE DOMAIN
 
 define a new domain
 
@@ -72,9 +74,9 @@ where DOMAIN_CONSTRAINT is:
 
 
      When a domain has multiple `CHECK` constraints, they will be tested in alphabetical order by name. (PostgreSQL versions before 9.5 did not honor any particular firing order for `CHECK` constraints.)
+ <a id="sql-createdomain-notes"></a>
 
-
-## Notes { #sql-createdomain-notes }
+## Notes
 
 
  Domain constraints, particularly `NOT NULL`, are checked when converting a value to the domain type. It is possible for a column that is nominally of the domain type to read as null despite there being such a constraint. For example, this can happen in an outer-join query, if the domain column is on the nullable side of the outer join. A more subtle example is
@@ -120,16 +122,16 @@ CREATE TABLE us_snail_addy (
   postal us_postal_code NOT NULL
 );
 ```
+ <a id="sql-createdomain-compatibility"></a>
 
-
-## Compatibility { #sql-createdomain-compatibility }
+## Compatibility
 
 
  The command `CREATE DOMAIN` conforms to the SQL standard.
 
 
  The syntax `NOT NULL` in this command is a PostgreSQL extension. (A standard-conforming way to write the same for non-composite data types would be `CHECK (VALUE IS NOT NULL)`. However, per [Notes](#sql-createdomain-notes), such constraints are best avoided in practice anyway.) The `NULL` “constraint” is a PostgreSQL extension (see also [Compatibility](create-table.md#sql-createtable-compatibility)).
+ <a id="sql-createdomain-see-also"></a>
 
-
-## See Also { #sql-createdomain-see-also }
+## See Also
   [sql-alterdomain](alter-domain.md#sql-alterdomain), [sql-dropdomain](drop-domain.md#sql-dropdomain)

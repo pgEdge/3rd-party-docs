@@ -1,4 +1,6 @@
-## Customized Options { #runtime-config-custom }
+<a id="runtime-config-custom"></a>
+
+## Customized Options
 
 
  This feature was designed to allow parameters not normally known to PostgreSQL to be added by add-on modules (such as procedural languages). This allows extension modules to be configured in the standard ways.

@@ -1,4 +1,6 @@
-## Overview { #plpgsql-overview }
+<a id="plpgsql-overview"></a>
+
+## Overview
 
 
  PL/pgSQL is a loadable procedural language for the PostgreSQL database system. The design goals of PL/pgSQL were to create a loadable procedural language that
@@ -15,9 +17,9 @@
 
 
  In PostgreSQL 9.0 and later, PL/pgSQL is installed by default. However it is still a loadable module, so especially security-conscious administrators could choose to remove it.
+ <a id="plpgsql-advantages"></a>
 
-
-### Advantages of Using PL/pgSQL { #plpgsql-advantages }
+### Advantages of Using PL/pgSQL
 
 
  SQL is the language PostgreSQL and most other relational databases use as query language. It's portable and easy to learn. But every SQL statement must be executed individually by the database server.
@@ -38,9 +40,9 @@
 
 
  Also, with PL/pgSQL you can use all the data types, operators and functions of SQL.
+  <a id="plpgsql-args-results"></a>
 
-
-### Supported Argument and Result Data Types { #plpgsql-args-results }
+### Supported Argument and Result Data Types
 
 
  Functions written in PL/pgSQL can accept as arguments any scalar or array data type supported by the server, and they can return a result of any of these types. They can also accept or return any composite type (row type) specified by name. It is also possible to declare a PL/pgSQL function as accepting `record`, which means that any composite type will do as input, or as returning `record`, which means that the result is a row type whose columns are determined by specification in the calling query, as discussed in [Table Functions](../../the-sql-language/queries/table-expressions.md#queries-tablefunctions).

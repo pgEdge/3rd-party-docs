@@ -1,4 +1,6 @@
-## Client Interfaces { #lo-interfaces }
+<a id="lo-interfaces"></a>
+
+## Client Interfaces
 
 
  This section describes the facilities that PostgreSQL's libpq client interface library provides for accessing large objects. The PostgreSQL large object interface is modeled after the Unix file-system interface, with analogues of `open`, `read`, `write`, `lseek`, etc.
@@ -14,9 +16,9 @@
 
 
  Client applications cannot use these functions while a libpq connection is in pipeline mode.
+ <a id="lo-create"></a>
 
-
-### Creating a Large Object { #lo-create }
+### Creating a Large Object
 
 
   The function
@@ -55,8 +57,9 @@ Oid lo_creat(PGconn *conn, int mode);
 inv_oid = lo_creat(conn, INV_READ|INV_WRITE);
 ```
 
+  <a id="lo-import"></a>
 
-### Importing a Large Object { #lo-import }
+### Importing a Large Object
 
 
   To import an operating system file as a large object, call
@@ -78,9 +81,9 @@ Oid lo_import_with_oid(PGconn *conn, const char *filename, Oid lobjId);
 
 
  `lo_import_with_oid` is new as of PostgreSQL 8.4 and uses `lo_create` internally which is new in 8.1; if this function is run against 8.0 or before, it will fail and return `InvalidOid`.
+  <a id="lo-export"></a>
 
-
-### Exporting a Large Object { #lo-export }
+### Exporting a Large Object
 
 
   To export a large object into an operating system file, call
@@ -90,9 +93,9 @@ Oid lo_import_with_oid(PGconn *conn, const char *filename, Oid lobjId);
 int lo_export(PGconn *conn, Oid lobjId, const char *filename);
 ```
  The `lobjId` argument specifies the OID of the large object to export and the `filename` argument specifies the operating system name of the file. Note that the file is written by the client interface library, not by the server. Returns 1 on success, -1 on failure.
+  <a id="lo-open"></a>
 
-
-### Opening an Existing Large Object { #lo-open }
+### Opening an Existing Large Object
 
 
   To open an existing large object for reading or writing, call
@@ -117,8 +120,9 @@ int lo_open(PGconn *conn, Oid lobjId, int mode);
 inv_fd = lo_open(conn, inv_oid, INV_READ|INV_WRITE);
 ```
 
+  <a id="lo-write"></a>
 
-### Writing Data to a Large Object { #lo-write }
+### Writing Data to a Large Object
 
 
   The function
@@ -131,9 +135,9 @@ int lo_write(PGconn *conn, int fd, const char *buf, size_t len);
 
 
  Although the `len` parameter is declared as `size_t`, this function will reject length values larger than `INT_MAX`. In practice, it's best to transfer data in chunks of at most a few megabytes anyway.
+  <a id="lo-read"></a>
 
-
-### Reading Data from a Large Object { #lo-read }
+### Reading Data from a Large Object
 
 
   The function
@@ -146,9 +150,9 @@ int lo_read(PGconn *conn, int fd, char *buf, size_t len);
 
 
  Although the `len` parameter is declared as `size_t`, this function will reject length values larger than `INT_MAX`. In practice, it's best to transfer data in chunks of at most a few megabytes anyway.
+  <a id="lo-seek"></a>
 
-
-### Seeking in a Large Object { #lo-seek }
+### Seeking in a Large Object
 
 
   To change the current read or write location associated with a large object descriptor, call
@@ -170,9 +174,9 @@ int64_t lo_lseek64(PGconn *conn, int fd, int64_t offset, int whence);
 
 
  `lo_lseek64` is new as of PostgreSQL 9.3. If this function is run against an older server version, it will fail and return -1.
+  <a id="lo-tell"></a>
 
-
-### Obtaining the Seek Position of a Large Object { #lo-tell }
+### Obtaining the Seek Position of a Large Object
 
 
   To obtain the current read or write location of a large object descriptor, call
@@ -194,9 +198,9 @@ int64_t lo_tell64(PGconn *conn, int fd);
 
 
  `lo_tell64` is new as of PostgreSQL 9.3. If this function is run against an older server version, it will fail and return -1.
+  <a id="lo-truncate"></a>
 
-
-### Truncating a Large Object { #lo-truncate }
+### Truncating a Large Object
 
 
   To truncate a large object to a given length, call
@@ -227,9 +231,9 @@ int lo_truncate64(PGconn *conn, int fd, int64_t len);
 
 
  `lo_truncate64` is new as of PostgreSQL 9.3; if this function is run against an older server version, it will fail and return -1.
+  <a id="lo-close"></a>
 
-
-### Closing a Large Object Descriptor { #lo-close }
+### Closing a Large Object Descriptor
 
 
   A large object descriptor can be closed by calling
@@ -242,9 +246,9 @@ int lo_close(PGconn *conn, int fd);
 
 
  Any large object descriptors that remain open at the end of a transaction will be closed automatically.
+  <a id="lo-unlink"></a>
 
-
-### Removing a Large Object { #lo-unlink }
+### Removing a Large Object
 
 
   To remove a large object from the database, call

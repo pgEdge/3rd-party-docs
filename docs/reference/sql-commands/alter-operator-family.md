@@ -1,4 +1,6 @@
-# ALTER OPERATOR FAMILY { #sql-alteropfamily }
+<a id="sql-alteropfamily"></a>
+
+# ALTER OPERATOR FAMILY
 
 change the definition of an operator family
 

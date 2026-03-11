@@ -1,4 +1,6 @@
-## Genetic Algorithms { #geqo-intro2 }
+<a id="geqo-intro2"></a>
+
+## Genetic Algorithms
 
 
  The genetic algorithm (GA) is a heuristic optimization method which operates through randomized search. The set of possible solutions for the optimization problem is considered as a *population* of *individuals*. The degree of adaptation of an individual to its environment is specified by its *fitness*.
@@ -8,7 +10,7 @@
 
 
  Through simulation of the evolutionary operations *recombination*, *mutation*, and *selection* new generations of search points are found that show a higher average fitness than their ancestors. [Structure of a Genetic Algorithm](#geqo-figure) illustrates these steps.
-
+ <a id="geqo-figure"></a>
 
 **Structure of a Genetic Algorithm**
 

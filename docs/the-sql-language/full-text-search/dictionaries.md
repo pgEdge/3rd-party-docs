@@ -1,4 +1,6 @@
-## Dictionaries { #textsearch-dictionaries }
+<a id="textsearch-dictionaries"></a>
+
+## Dictionaries
 
 
  Dictionaries are used to eliminate words that should not be considered in a search (*stop words*), and to *normalize* words so that different derived forms of the same word will match. A successfully normalized word is called a *lexeme*. Aside from improving search quality, normalization and removal of stop words reduce the size of the `tsvector` representation of a document, thereby improving performance. Normalization does not always have linguistic meaning and usually depends on application semantics.
@@ -41,9 +43,9 @@ ALTER TEXT SEARCH CONFIGURATION astro_en
 
 
  A filtering dictionary can be placed anywhere in the list, except at the end where it'd be useless. Filtering dictionaries are useful to partially normalize words to simplify the task of later dictionaries. For example, a filtering dictionary could be used to remove accents from accented letters, as is done by the [unaccent](../../appendixes/additional-supplied-modules-and-extensions/unaccent-a-text-search-dictionary-which-removes-diacritics.md#unaccent) module.
+ <a id="textsearch-stopwords"></a>
 
-
-### Stop Words { #textsearch-stopwords }
+### Stop Words
 
 
  Stop words are words that are very common, appear in almost every document, and have no discrimination value. Therefore, they can be ignored in the context of full text searching. For example, every English text contains words like `a` and `the`, so it is useless to store them in an index. However, stop words do affect the positions in `tsvector`, which in turn affect ranking:
@@ -72,9 +74,9 @@ SELECT ts_rank_cd (to_tsvector('english', 'list stop words'), to_tsquery('list &
 
 
  It is up to the specific dictionary how it treats stop words. For example, `ispell` dictionaries first normalize words and then look at the list of stop words, while `Snowball` stemmers first check the list of stop words. The reason for the different behavior is an attempt to decrease noise.
+  <a id="textsearch-simple-dictionary"></a>
 
-
-### Simple Dictionary { #textsearch-simple-dictionary }
+### Simple Dictionary
 
 
  The `simple` dictionary template operates by converting the input token to lower case and checking it against a file of stop words. If it is found in the file then an empty array is returned, causing the token to be discarded. If not, the lower-cased form of the word is returned as the normalized lexeme. Alternatively, the dictionary can be configured to report non-stop-words as unrecognized, allowing them to be passed on to the next dictionary in the list.
@@ -137,9 +139,9 @@ SELECT ts_lexize('public.simple_dict', 'The');
 !!! caution
 
     Normally, a database session will read a dictionary configuration file only once, when it is first used within the session. If you modify a configuration file and want to force existing sessions to pick up the new contents, issue an `ALTER TEXT SEARCH DICTIONARY` command on the dictionary. This can be a “dummy” update that doesn't actually change any parameter values.
+  <a id="textsearch-synonym-dictionary"></a>
 
-
-### Synonym Dictionary { #textsearch-synonym-dictionary }
+### Synonym Dictionary
 
 
  This dictionary template is used to create dictionaries that replace a word with a synonym. Phrases are not supported (use the thesaurus template ([Thesaurus Dictionary](#textsearch-thesaurus)) for that). A synonym dictionary can be used to overcome linguistic problems, for example, to prevent an English stemmer dictionary from reducing the word “Paris” to “pari”. It is enough to have a `Paris paris` line in the synonym dictionary and put it before the `english_stem` dictionary. For example:
@@ -221,8 +223,9 @@ mydb=# SELECT 'indexes are very useful'::tsvector @@ to_tsquery('tst', 'indices'
 (1 row)
 ```
 
+  <a id="textsearch-thesaurus"></a>
 
-### Thesaurus Dictionary { #textsearch-thesaurus }
+### Thesaurus Dictionary
 
 
  A thesaurus dictionary (sometimes abbreviated as TZ) is a collection of words that includes information about the relationships of words and phrases, i.e., broader terms (BT), narrower terms (NT), preferred terms, non-preferred terms, related terms, etc.
@@ -261,9 +264,9 @@ more sample word(s) : more indexed word(s)
 !!! caution
 
     Thesauruses are used during indexing so any change in the thesaurus dictionary's parameters *requires* reindexing. For most other dictionary types, small changes such as adding or removing stopwords does not force reindexing.
+ <a id="textsearch-thesaurus-config"></a>
 
-
-#### Thesaurus Configuration { #textsearch-thesaurus-config }
+#### Thesaurus Configuration
 
 
  To define a new thesaurus dictionary, use the `thesaurus` template. For example:
@@ -290,8 +293,9 @@ ALTER TEXT SEARCH CONFIGURATION russian
     WITH thesaurus_simple;
 ```
 
+  <a id="textsearch-thesaurus-examples"></a>
 
-#### Thesaurus Example { #textsearch-thesaurus-examples }
+#### Thesaurus Example
 
 
  Consider a simple astronomical thesaurus `thesaurus_astro`, which contains some astronomical word combinations:
@@ -353,8 +357,9 @@ SELECT plainto_tsquery('supernova star');
  'sn' & 'supernova' & 'star'
 ```
 
+   <a id="textsearch-ispell-dictionary"></a>
 
-### Ispell Dictionary { #textsearch-ispell-dictionary }
+### Ispell Dictionary
 
 
  The Ispell dictionary template supports *morphological dictionaries*, which can normalize many different linguistic forms of a word into the same lexeme. For example, an English Ispell dictionary can match all declensions and conjugations of the search term `bank`, e.g., `banking`, `banked`, `banks`, `banks'`, and `bank's`.
@@ -494,9 +499,9 @@ largehearted
 !!! note
 
     MySpell does not support compound words. Hunspell has sophisticated support for compound words. At present, PostgreSQL implements only the basic compound word operations of Hunspell.
+  <a id="textsearch-snowball-dictionary"></a>
 
-
-### Snowball Dictionary { #textsearch-snowball-dictionary }
+### Snowball Dictionary
 
 
  The Snowball dictionary template is based on a project by Martin Porter, inventor of the popular Porter's stemming algorithm for the English language. Snowball now provides stemming algorithms for many languages (see the [Snowball site](https://snowballstem.org/) for more information). Each algorithm understands how to reduce common variant forms of words to a base, or stem, spelling within its language. A Snowball dictionary requires a `language` parameter to identify which stemmer to use, and optionally can specify a `stopword` file name that gives a list of words to eliminate. (PostgreSQL's standard stopword lists are also provided by the Snowball project.) For example, there is a built-in definition equivalent to

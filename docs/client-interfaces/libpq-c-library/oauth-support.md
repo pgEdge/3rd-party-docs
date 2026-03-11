@@ -1,4 +1,6 @@
-## OAuth Support { #libpq-oauth }
+<a id="libpq-oauth"></a>
+
+## OAuth Support
 
 
  libpq implements support for the OAuth v2 Device Authorization client flow, documented in [RFC 8628](https://datatracker.ietf.org/doc/html/rfc8628), as an optional module. See the [installation documentation](../../server-administration/installation-from-source-code/building-and-installation-with-autoconf-and-make.md#configure-option-with-libcurl) for information on how to enable support for Device Authorization as a builtin flow.
@@ -26,9 +28,9 @@ Visit https://example.com/device and enter the code: ABCD-EFGH
 !!! note
 
     The builtin Device Authorization flow is not currently supported on Windows. Custom client flows may still be implemented.
+ <a id="libpq-oauth-authdata-hooks"></a>
 
-
-### Authdata Hooks { #libpq-oauth-authdata-hooks }
+### Authdata Hooks
 
 
  The behavior of the OAuth flow may be modified or replaced by a client using the following hook API:
@@ -66,8 +68,9 @@ Visit https://example.com/device and enter the code: ABCD-EFGH
     ```
      At initialization time (before the first call to `PQsetAuthDataHook`), this function will return `PQdefaultAuthDataHook`.
 
+ <a id="libpq-oauth-authdata-hooks-types"></a>
 
-#### Hook Types { #libpq-oauth-authdata-hooks-types }
+#### Hook Types
 
 
  The following `PGauthData` types and their corresponding *data* structures are defined:
@@ -144,8 +147,9 @@ Visit https://example.com/device and enter the code: ABCD-EFGH
 
      Implementations may wish to store additional data for bookkeeping across calls to the *async* and *cleanup* callbacks. The *user* pointer is provided for this purpose; libpq will not touch its contents and the application may use it at its convenience. (Remember to free any allocations during token cleanup.)
 
+   <a id="libpq-oauth-debugging"></a>
 
-### Debugging and Developer Settings { #libpq-oauth-debugging }
+### Debugging and Developer Settings
 
 
  A "dangerous debugging mode" may be enabled by setting the environment variable `PGOAUTHDEBUG=UNSAFE`. This functionality is provided for ease of local development and testing only. It does several things that you will not want a production system to do:

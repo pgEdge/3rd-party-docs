@@ -1,4 +1,6 @@
-## Concepts { #tutorial-concepts }
+<a id="tutorial-concepts"></a>
+
+## Concepts
 
 
       PostgreSQL is a *relational database management system* (RDBMS). That means it is a system for managing data stored in *relations*. Relation is essentially a mathematical term for *table*. The notion of storing data in tables is so commonplace today that it might seem inherently obvious, but there are a number of other ways of organizing databases. Files and directories on Unix-like operating systems form an example of a hierarchical database. A more modern development is the object-oriented database.

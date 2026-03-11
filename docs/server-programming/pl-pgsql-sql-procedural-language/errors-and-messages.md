@@ -1,7 +1,9 @@
-## Errors and Messages { #plpgsql-errors-and-messages }
+<a id="plpgsql-errors-and-messages"></a>
 
+## Errors and Messages
+  <a id="plpgsql-statements-raise"></a>
 
-### Reporting Errors and Messages { #plpgsql-statements-raise }
+### Reporting Errors and Messages
 
 
  Use the `RAISE` statement to report messages and raise errors.
@@ -40,7 +42,7 @@ RAISE WARNING SQLSTATE '22012';
 ```
 
 
- In any of these syntax variants, you can attach additional information to the error report by writing `USING` followed by *option* = *expression* items. Each *expression* can be any string-valued expression. The allowed *option* key words are:
+ In any of these syntax variants, you can attach additional information to the error report by writing `USING` followed by *option* = *expression* items. Each *expression* can be any string-valued expression. The allowed *option* key words are: <a id="raise-using-options"></a>
 
 <a id="raise-using-option-message"></a>
 
@@ -106,9 +108,9 @@ RAISE unique_violation USING MESSAGE = 'Duplicate user ID: ' || user_id;
 !!! note
 
     When specifying an error code by SQLSTATE code, you are not limited to the predefined error codes, but can select any error code consisting of five digits and/or upper-case ASCII letters, other than `00000`. It is recommended that you avoid throwing error codes that end in three zeroes, because these are category codes and can only be trapped by trapping the whole category.
+  <a id="plpgsql-statements-assert"></a>
 
-
-### Checking Assertions { #plpgsql-statements-assert }
+### Checking Assertions
 
 
  The `ASSERT` statement is a convenient shorthand for inserting debugging checks into PL/pgSQL functions.

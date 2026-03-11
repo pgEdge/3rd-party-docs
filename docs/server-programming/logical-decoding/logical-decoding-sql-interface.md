@@ -1,4 +1,6 @@
-## Logical Decoding SQL Interface { #logicaldecoding-sql }
+<a id="logicaldecoding-sql"></a>
+
+## Logical Decoding SQL Interface
 
 
  See [Replication Management Functions](../../the-sql-language/functions-and-operators/system-administration-functions.md#functions-replication) for detailed documentation on the SQL-level API for interacting with logical decoding.

@@ -1,13 +1,14 @@
-## Overview { #catalogs-overview }
+<a id="catalogs-overview"></a>
+
+## Overview
 
 
  [System Catalogs](#catalog-table) lists the system catalogs. More detailed documentation of each catalog follows below.
 
 
  Most system catalogs are copied from the template database during database creation and are thereafter database-specific. A few catalogs are physically shared across all databases in a cluster; these are noted in the descriptions of the individual catalogs.
+ <a id="catalog-table"></a>
 
-
-<a id="catalog-table"></a>
 **Table: System Catalogs**
 
 | Catalog Name | Purpose |

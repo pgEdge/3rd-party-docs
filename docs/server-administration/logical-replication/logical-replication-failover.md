@@ -1,4 +1,6 @@
-## Logical Replication Failover { #logical-replication-failover }
+<a id="logical-replication-failover"></a>
+
+## Logical Replication Failover
 
 
  To allow subscriber nodes to continue replicating data from the publisher node even when the publisher node goes down, there must be a physical standby corresponding to the publisher node. The logical slots on the primary server corresponding to the subscriptions can be synchronized to the standby server by specifying `failover = true` when creating subscriptions. See [Replication Slot Synchronization](../../server-programming/logical-decoding/logical-decoding-concepts.md#logicaldecoding-replication-slots-synchronization) for details. Enabling the [`failover`](../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-with-failover) parameter ensures a seamless transition of those subscriptions after the standby is promoted. They can continue subscribing to publications on the new primary server.

@@ -1,4 +1,6 @@
-## `pg_authid` { #catalog-pg-authid }
+<a id="catalog-pg-authid"></a>
+
+## `pg_authid`
 
 
  The catalog `pg_authid` contains information about database authorization identifiers (roles). A role subsumes the concepts of “users” and “groups”. A user is essentially just a role with the `rolcanlogin` flag set. Any role (with or without `rolcanlogin`) can have other roles as members; see [`pg_auth_members`](pg_auth_members.md#catalog-pg-auth-members).

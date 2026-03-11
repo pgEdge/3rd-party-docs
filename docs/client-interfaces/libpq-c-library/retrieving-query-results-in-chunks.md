@@ -1,4 +1,6 @@
-## Retrieving Query Results in Chunks { #libpq-single-row-mode }
+<a id="libpq-single-row-mode"></a>
+
+## Retrieving Query Results in Chunks
 
 
  Ordinarily, libpq collects an SQL command's entire result and returns it to the application as a single `PGresult`. This can be unworkable for commands that return a large number of rows. For such cases, applications can use [PQsendQuery](asynchronous-command-processing.md#libpq-PQsendQuery) and [PQgetResult](asynchronous-command-processing.md#libpq-PQgetResult) in *single-row mode* or *chunked mode*. In these modes, result row(s) are returned to the application as they are received from the server, one at a time for single-row mode or in groups for chunked mode.

@@ -1,4 +1,6 @@
-## Utility Functions { #plpython-util }
+<a id="plpython-util"></a>
+
+## Utility Functions
 
 
  The `plpy` module also provides the functions

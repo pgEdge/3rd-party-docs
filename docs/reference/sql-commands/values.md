@@ -1,4 +1,6 @@
-# VALUES { #sql-values }
+<a id="sql-values"></a>
+
+# VALUES
 
 compute a set of rows
 

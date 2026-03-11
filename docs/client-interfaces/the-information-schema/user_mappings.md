@@ -1,4 +1,6 @@
-## `user_mappings` { #infoschema-user-mappings }
+<a id="infoschema-user-mappings"></a>
+
+## `user_mappings`
 
 
  The view `user_mappings` contains all user mappings defined in the current database. Only those user mappings are shown where the current user has access to the corresponding foreign server (by way of being the owner or having some privilege).

@@ -1,4 +1,6 @@
-# ALTER RULE { #sql-alterrule }
+<a id="sql-alterrule"></a>
+
+# ALTER RULE
 
 change the definition of a rule
 

@@ -1,4 +1,6 @@
-## Index Uniqueness Checks { #index-unique-checks }
+<a id="index-unique-checks"></a>
+
+## Index Uniqueness Checks
 
 
  PostgreSQL enforces SQL uniqueness constraints using *unique indexes*, which are indexes that disallow multiple entries with identical keys. An access method that supports this feature sets `amcanunique` true. (At present, only b-tree supports it.) Columns listed in the `INCLUDE` clause are not considered when enforcing uniqueness.

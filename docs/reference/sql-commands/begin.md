@@ -1,4 +1,6 @@
-# BEGIN { #sql-begin }
+<a id="sql-begin"></a>
+
+# BEGIN
 
 start a transaction block
 

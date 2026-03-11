@@ -1,4 +1,6 @@
-# DROP MATERIALIZED VIEW { #sql-dropmaterializedview }
+<a id="sql-dropmaterializedview"></a>
+
+# DROP MATERIALIZED VIEW
 
 remove a materialized view
 

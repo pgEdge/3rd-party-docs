@@ -1,4 +1,6 @@
-## Two-phase Commit Support for Logical Decoding { #logicaldecoding-two-phase-commits }
+<a id="logicaldecoding-two-phase-commits"></a>
+
+## Two-phase Commit Support for Logical Decoding
 
 
  With the basic output plugin callbacks (eg., `begin_cb`, `change_cb`, `commit_cb` and `message_cb`) two-phase commit commands like `PREPARE TRANSACTION`, `COMMIT PREPARED` and `ROLLBACK PREPARED` are not decoded. While the `PREPARE TRANSACTION` is ignored, `COMMIT PREPARED` is decoded as a `COMMIT` and `ROLLBACK PREPARED` is decoded as a `ROLLBACK`.

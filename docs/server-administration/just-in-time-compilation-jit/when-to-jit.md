@@ -1,4 +1,6 @@
-## When to JIT? { #jit-decision }
+<a id="jit-decision"></a>
+
+## When to JIT?
 
 
  JIT compilation is beneficial primarily for long-running CPU-bound queries. Frequently these will be analytical queries. For short queries the added overhead of performing JIT compilation will often be higher than the time it can save.

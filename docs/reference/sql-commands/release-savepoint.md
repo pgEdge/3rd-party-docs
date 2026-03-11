@@ -1,4 +1,6 @@
-# RELEASE SAVEPOINT { #sql-release-savepoint }
+<a id="sql-release-savepoint"></a>
+
+# RELEASE SAVEPOINT
 
 release a previously defined savepoint
 

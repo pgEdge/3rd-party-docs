@@ -1,4 +1,6 @@
-# MERGE { #sql-merge }
+<a id="sql-merge"></a>
+
+# MERGE
 
 conditionally insert, update, or delete rows of a table
 

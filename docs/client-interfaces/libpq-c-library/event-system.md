@@ -1,13 +1,15 @@
-## Event System { #libpq-events }
+<a id="libpq-events"></a>
+
+## Event System
 
 
  libpq's event system is designed to notify registered event handlers about interesting libpq events, such as the creation or destruction of `PGconn` and `PGresult` objects. A principal use case is that this allows applications to associate their own data with a `PGconn` or `PGresult` and ensure that that data is freed at an appropriate time.
 
 
  Each registered event handler is associated with two pieces of data, known to libpq only as opaque `void *` pointers. There is a *pass-through* pointer that is provided by the application when the event handler is registered with a `PGconn`. The pass-through pointer never changes for the life of the `PGconn` and all `PGresult`s generated from it; so if used, it must point to long-lived data. In addition there is an *instance data* pointer, which starts out `NULL` in every `PGconn` and `PGresult`. This pointer can be manipulated using the [PQinstanceData](#libpq-PQinstanceData), [PQsetInstanceData](#libpq-PQsetInstanceData), [PQresultInstanceData](#libpq-PQresultInstanceData) and [PQresultSetInstanceData](#libpq-PQresultSetInstanceData) functions. Note that unlike the pass-through pointer, instance data of a `PGconn` is not automatically inherited by `PGresult`s created from it. libpq does not know what pass-through and instance data pointers point to (if anything) and will never attempt to free them — that is the responsibility of the event handler.
+ <a id="libpq-events-types"></a>
 
-
-### Event Types { #libpq-events-types }
+### Event Types
 
 
  The enum `PGEventId` names the types of events handled by the event system. All its values have names beginning with `PGEVT`. For each event type, there is a corresponding event info structure that carries the parameters passed to the event handlers. The event types are:
@@ -93,9 +95,9 @@
     } PGEventResultDestroy;
     ```
      When a `PGEVT_RESULTDESTROY` event is received, the `evtInfo` pointer should be cast to a `PGEventResultDestroy *`. This event is fired prior to [PQclear](command-execution-functions.md#libpq-PQclear) performing any other cleanup. The return value of the event procedure is ignored since there is no way of indicating a failure from [PQclear](command-execution-functions.md#libpq-PQclear). Also, an event procedure failure should not abort the process of cleaning up unwanted memory.
+  <a id="libpq-events-proc"></a>
 
-
-### Event Callback Procedure { #libpq-events-proc }
+### Event Callback Procedure
 
 
 <a id="libpq-PGEventProc"></a>
@@ -116,9 +118,9 @@
     !!! caution
 
         On Windows, functions can have two different addresses: one visible from outside a DLL and another visible from inside the DLL. One should be careful that only one of these addresses is used with libpq's event-procedure functions, else confusion will result. The simplest rule for writing code that will work is to ensure that event procedures are declared `static`. If the procedure's address must be available outside its own source file, expose a separate function to return the address.
+  <a id="libpq-events-funcs"></a>
 
-
-### Event Support Functions { #libpq-events-funcs }
+### Event Support Functions
 
 
 <a id="libpq-PQregisterEventProc"></a>
@@ -176,9 +178,9 @@
 
     void *PQresultInstanceData(const PGresult *res, PGEventProc proc);
     ```
+  <a id="libpq-events-example"></a>
 
-
-### Event Example { #libpq-events-example }
+### Event Example
 
 
  Here is a skeleton example of managing private data associated with libpq connections and results.

@@ -1,4 +1,6 @@
-## Architectural Fundamentals { #tutorial-arch }
+<a id="tutorial-arch"></a>
+
+## Architectural Fundamentals
 
 
  Before we proceed, you should understand the basic PostgreSQL system architecture. Understanding how the parts of PostgreSQL interact will make this chapter somewhat clearer.

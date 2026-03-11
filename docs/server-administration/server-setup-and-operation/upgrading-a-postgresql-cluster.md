@@ -1,4 +1,6 @@
-## Upgrading a PostgreSQL Cluster { #upgrading }
+<a id="upgrading"></a>
+
+## Upgrading a PostgreSQL Cluster
 
 
  This section discusses how to upgrade your database data from one PostgreSQL release to a newer one.
@@ -33,9 +35,9 @@ System Catalogs
 
 Server C-language API
 :   This involves changes in the backend function API, which is written in the C programming language. Such changes affect code that references backend functions deep inside the server.
+ <a id="upgrading-via-pgdumpall"></a>
 
-
-### Upgrading Data via pg_dumpall { #upgrading-via-pgdumpall }
+### Upgrading Data via pg_dumpall
 
 
  One upgrade method is to dump data from one major version of PostgreSQL and restore it in another — to do this, you must use a *logical* backup tool like pg_dumpall; file system level backup methods will not work. (There are checks in place that prevent you from using a data directory with an incompatible version of PostgreSQL, so no great harm can be done by trying to start the wrong server version on a data directory.)
@@ -110,15 +112,15 @@ mv /usr/local/pgsql /usr/local/pgsql.old
 pg_dumpall -p 5432 | psql -d postgres -p 5433
 ```
  to transfer your data.
+  <a id="upgrading-via-pg-upgrade"></a>
 
-
-### Upgrading Data via pg_upgrade { #upgrading-via-pg-upgrade }
+### Upgrading Data via pg_upgrade
 
 
  The [pgupgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade) module allows an installation to be migrated in-place from one major PostgreSQL version to another. Upgrades can be performed in minutes, particularly with `--link` mode. It requires steps similar to pg_dumpall above, e.g., starting/stopping the server, running initdb. The pg_upgrade [documentation](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade) outlines the necessary steps.
+  <a id="upgrading-via-replication"></a>
 
-
-### Upgrading Data via Replication { #upgrading-via-replication }
+### Upgrading Data via Replication
 
 
  It is also possible to use logical replication methods to create a standby server with the updated version of PostgreSQL. This is possible because logical replication supports replication between different major versions of PostgreSQL. The standby can be on the same computer or a different computer. Once it has synced up with the primary server (running the older version of PostgreSQL), you can switch primaries and make the standby the primary and shut down the older database instance. Such a switch-over results in only several seconds of downtime for an upgrade.

@@ -1,4 +1,6 @@
-## Further Reading { #geqo-biblio }
+<a id="geqo-biblio"></a>
+
+## Further Reading
 
 
  The following resources contain additional information about genetic algorithms:

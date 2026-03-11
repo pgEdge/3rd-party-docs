@@ -1,4 +1,6 @@
-## `pg_stats` { #view-pg-stats }
+<a id="view-pg-stats"></a>
+
+## `pg_stats`
 
 
  The view `pg_stats` provides access to the information stored in the [`pg_statistic`](../system-catalogs/pg_statistic.md#catalog-pg-statistic) catalog. This view allows access only to rows of [`pg_statistic`](../system-catalogs/pg_statistic.md#catalog-pg-statistic) that correspond to tables the user has permission to read, and therefore it is safe to allow public read access to this view.

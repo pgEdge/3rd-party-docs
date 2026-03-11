@@ -1,4 +1,6 @@
-## `pg_proc` { #catalog-pg-proc }
+<a id="catalog-pg-proc"></a>
+
+## `pg_proc`
 
 
  The catalog `pg_proc` stores information about functions, procedures, aggregate functions, and window functions (collectively also known as routines). See [sql-createfunction](../../reference/sql-commands/create-function.md#sql-createfunction), [sql-createprocedure](../../reference/sql-commands/create-procedure.md#sql-createprocedure), and [User-Defined Functions](../../server-programming/extending-sql/user-defined-functions.md#xfunc) for more information.

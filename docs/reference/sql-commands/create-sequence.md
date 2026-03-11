@@ -1,4 +1,6 @@
-# CREATE SEQUENCE { #sql-createsequence }
+<a id="sql-createsequence"></a>
+
+# CREATE SEQUENCE
 
 define a new sequence generator
 

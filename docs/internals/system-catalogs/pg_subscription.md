@@ -1,4 +1,6 @@
-## `pg_subscription` { #catalog-pg-subscription }
+<a id="catalog-pg-subscription"></a>
+
+## `pg_subscription`
 
 
  The catalog `pg_subscription` contains all existing logical replication subscriptions. For more information about logical replication see [Logical Replication](../../server-administration/logical-replication/index.md#logical-replication).

@@ -1,4 +1,6 @@
-## Developer Options { #runtime-config-developer }
+<a id="runtime-config-developer"></a>
+
+## Developer Options
 
 
  The following parameters are intended for developer testing, and should never be used on a production database. However, some of them can be used to assist with the recovery of severely damaged databases. As such, they have been excluded from the sample `postgresql.conf` file. Note that many of these parameters require special source compilation flags to work at all.

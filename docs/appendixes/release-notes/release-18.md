@@ -1,13 +1,15 @@
-## Release 18 { #release-18 }
+<a id="release-18"></a>
+
+## Release 18
 
 
 **Release date:.**
 
 
 2025-09-25
+  <a id="release-18-highlights"></a>
 
-
-### Overview { #release-18-highlights }
+### Overview
 
 
  PostgreSQL 18 contains many new features and enhancements, including:
@@ -24,9 +26,9 @@
 
 
  The above items and other new features of PostgreSQL 18 are explained in more detail in the sections below.
+  <a id="release-18-migration"></a>
 
-
-### Migration to Version 18 { #release-18-migration }
+### Migration to Version 18
 
 
  A dump/restore using [app-pg-dumpall](../../reference/postgresql-client-applications/pg_dumpall.md#app-pg-dumpall) or use of [pgupgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade) or logical replication is required for those wishing to migrate data from any previous release. See [Upgrading a PostgreSQL Cluster](../../server-administration/server-setup-and-operation/upgrading-a-postgresql-cluster.md#upgrading) for general information on migrating to new major releases.
@@ -68,18 +70,18 @@
 -  Change [full text search](../../the-sql-language/full-text-search/index.md#textsearch) to use the default collation provider of the cluster to read configuration files and dictionaries, rather than always using libc (Peter Eisentraut) [&sect;](https://postgr.es/c/fb1a18810f0)
 
    Clusters that default to non-libc collation providers (e.g., ICU, builtin) that behave differently than libc for characters processed by LC_CTYPE could observe changes in behavior of some full-text search functions, as well as the [pg_trgm](../additional-supplied-modules-and-extensions/pg_trgm-support-for-similarity-of-text-using-trigram-matching.md#pgtrgm) extension. When upgrading such clusters using [pgupgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade), it is recommended to reindex all indexes related to full-text search and pg_trgm after the upgrade.
+  <a id="release-18-changes"></a>
 
-
-### Changes { #release-18-changes }
+### Changes
 
 
  Below you will find a detailed account of the changes between PostgreSQL 18 and the previous major release.
+ <a id="release-18-server"></a>
 
+#### Server
+  <a id="release-18-optimizer"></a>
 
-#### Server { #release-18-server }
-
-
-##### Optimizer { #release-18-optimizer }
+##### Optimizer
 
 
 -  Automatically remove some unnecessary table self-joins (Andrey Lepikhov, Alexander Kuzmenkov, Alexander Korotkov, Alena Rybakina) [&sect;](https://postgr.es/c/fc069a3a6)
@@ -107,9 +109,9 @@
 -  Improve cost estimates of partition queries (Nikita Malakhov, Andrei Lepikhov) [&sect;](https://postgr.es/c/fae535da0)
 -  Improve [SQL-language function](../../server-programming/extending-sql/query-language-sql-functions.md#xfunc-sql) plan caching (Alexander Pyhalov, Tom Lane) [&sect;](https://postgr.es/c/0dca5d68d) [&sect;](https://postgr.es/c/09b07c295)
 -  Improve handling of disabled optimizer features (Robert Haas) [&sect;](https://postgr.es/c/e22253467)
+  <a id="release-18-indexes"></a>
 
-
-##### Indexes { #release-18-indexes }
+##### Indexes
 
 
 -  Allow skip scans of [btree](../../server-programming/extending-sql/query-language-sql-functions.md#xfunc-sql) indexes (Peter Geoghegan) [&sect;](https://postgr.es/c/92fe23d93) [&sect;](https://postgr.es/c/8a510275d)
@@ -120,9 +122,9 @@
    The index type must still support equality.
 -  Allow [`GIN`](../../internals/built-in-index-access-methods/gin-indexes.md#gin) indexes to be created in parallel (Tomas Vondra, Matthias van de Meent) [&sect;](https://postgr.es/c/8492feb98)
 -  Allow values to be sorted to speed range-type [GiST](../../internals/built-in-index-access-methods/gist-indexes.md#gist) and [btree](../../internals/built-in-index-access-methods/b-tree-indexes.md#btree) index builds (Bernd Helmle) [&sect;](https://postgr.es/c/e9e7b6604)
+  <a id="release-18-performance"></a>
 
-
-##### General Performance { #release-18-performance }
+##### General Performance
 
 
 -  Add an asynchronous I/O subsystem (Andres Freund, Thomas Munro, Nazir Bilal Yavuz, Melanie Plageman) [&sect;](https://postgr.es/c/02844012b) [&sect;](https://postgr.es/c/da7226993) [&sect;](https://postgr.es/c/55b454d0e) [&sect;](https://postgr.es/c/247ce06b8) [&sect;](https://postgr.es/c/10f664684) [&sect;](https://postgr.es/c/06fb5612c) [&sect;](https://postgr.es/c/c325a7633) [&sect;](https://postgr.es/c/50cb7505b) [&sect;](https://postgr.es/c/047cba7fa) [&sect;](https://postgr.es/c/12ce89fd0) [&sect;](https://postgr.es/c/2a5e709e7)
@@ -141,9 +143,9 @@
 -  Increase server variables [effective_io_concurrency](../../server-administration/server-configuration/resource-consumption.md#guc-effective-io-concurrency)'s and [maintenance_io_concurrency](../../server-administration/server-configuration/resource-consumption.md#guc-maintenance-io-concurrency)'s default values to 16 (Melanie Plageman) [&sect;](https://postgr.es/c/ff79b5b2a) [&sect;](https://postgr.es/c/cc6be07eb)
 
    This more accurately reflects modern hardware.
+  <a id="release-18-monitoring"></a>
 
-
-##### Monitoring { #release-18-monitoring }
+##### Monitoring
 
 
 -  Increase the logging granularity of server variable [log_connections](../../server-administration/server-configuration/error-reporting-and-logging.md#guc-log-connections) (Melanie Plageman) [&sect;](https://postgr.es/c/9219093ca)
@@ -196,9 +198,9 @@
    This is true even if the tables in different schemas have different column names.
 -  Add column [`pg_backend_memory_contexts`](../../internals/system-views/pg_backend_memory_contexts.md#view-pg-backend-memory-contexts).`type` to report the type of memory context (David Rowley) [&sect;](https://postgr.es/c/12227a1d5)
 -  Add column `pg_backend_memory_contexts`.`path` to show memory context parents (Melih Mutlu) [&sect;](https://postgr.es/c/32d3ed816)
+  <a id="release-18-privileges"></a>
 
-
-##### Privileges { #release-18-privileges }
+##### Privileges
 
 
 -  Add function [`pg_get_acl()`](../../the-sql-language/functions-and-operators/system-information-functions-and-operators.md#functions-info-object-table) to retrieve database access control details (Joel Jacobson) [&sect;](https://postgr.es/c/4564f1ceb) [&sect;](https://postgr.es/c/d898665bf)
@@ -207,9 +209,9 @@
 -  Add predefined role [`pg_signal_autovacuum_worker`](../../server-administration/database-roles/predefined-roles.md#predefined-roles) (Kirill Reshke) [&sect;](https://postgr.es/c/ccd38024b)
 
    This allows sending signals to autovacuum workers.
+  <a id="release-18-server-config"></a>
 
-
-##### Server Configuration { #release-18-server-config }
+##### Server Configuration
 
 
 -  Add support for the [OAuth authentication method](../../server-administration/client-authentication/oauth-authorization-authentication.md#auth-oauth) (Jacob Champion, Daniel Gustafsson, Thomas Munro) [&sect;](https://postgr.es/c/b3f0be788)
@@ -236,18 +238,18 @@
 
    This is useful for operating system configuration.
 -  Add server variable [extension_control_path](../../server-administration/server-configuration/client-connection-defaults.md#guc-extension-control-path) to specify the location of extension control files (Peter Eisentraut, Matheus Alcantara) [&sect;](https://postgr.es/c/4f7f7b037) [&sect;](https://postgr.es/c/81eaaa2c4)
+  <a id="release-18-replication"></a>
 
-
-##### Streaming Replication and Recovery { #release-18-replication }
+##### Streaming Replication and Recovery
 
 
 -  Allow inactive replication slots to be automatically invalidated using server variable [idle_replication_slot_timeout](../../server-administration/server-configuration/replication.md#guc-idle-replication-slot-timeout) (Nisha Moond, Bharath Rupireddy) [&sect;](https://postgr.es/c/ac0e33136)
 -  Add server variable [max_active_replication_origins](../../server-administration/server-configuration/replication.md#guc-max-active-replication-origins) to control the maximum active replication origins (Euler Taveira) [&sect;](https://postgr.es/c/04ff636cb)
 
    This was previously controlled by [max_replication_slots](../../server-administration/server-configuration/replication.md#guc-max-replication-slots), but this new setting allows a higher origin count in cases where fewer slots are required.
+  <a id="release-18-logical"></a>
 
-
-##### [Logical Replication] { #release-18-logical }
+##### [Logical Replication]
 
 
 -  Allow the values of [generated columns](../../reference/sql-commands/create-table.md#sql-createtable-parms-generated-stored) to be logically replicated (Shubham Khanna, Vignesh C, Zhijie Hou, Shlok Kyal, Peter Smith) [&sect;](https://postgr.es/c/745217a05) [&sect;](https://postgr.es/c/7054186c4) [&sect;](https://postgr.es/c/87ce27de6) [&sect;](https://postgr.es/c/6252b1eaf)
@@ -258,9 +260,9 @@
 -  Log [conflicts](../../server-administration/high-availability-load-balancing-and-replication/hot-standby.md#hot-standby-conflict) while applying logical replication changes (Zhijie Hou, Nisha Moond) [&sect;](https://postgr.es/c/9758174e2) [&sect;](https://postgr.es/c/edcb71258) [&sect;](https://postgr.es/c/640178c92) [&sect;](https://postgr.es/c/6c2b5edec) [&sect;](https://postgr.es/c/73eba5004)
 
    Also report in new columns of [`pg_stat_subscription_stats`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-subscription-stats).
+   <a id="release-18-utility"></a>
 
-
-#### Utility Commands { #release-18-utility }
+#### Utility Commands
 
 
 -  Allow [generated columns](../../reference/sql-commands/create-table.md#sql-createtable-parms-generated-stored) to be virtual, and make them the default (Peter Eisentraut, Jian He, Richard Guo, Dean Rasheed) [&sect;](https://postgr.es/c/83ea6c540) [&sect;](https://postgr.es/c/cdc168ad4) [&sect;](https://postgr.es/c/1e4351af3)
@@ -288,9 +290,9 @@
 -  Add server variable [file_copy_method](../../server-administration/server-configuration/resource-consumption.md#guc-file-copy-method) to control the file copying method (Nazir Bilal Yavuz) [&sect;](https://postgr.es/c/f78ca6f3e)
 
    This controls whether [`CREATE DATABASE ... STRATEGY=FILE_COPY`](../../reference/sql-commands/create-database.md#sql-createdatabase) and [`ALTER DATABASE ... SET TABLESPACE`](../../reference/sql-commands/alter-database.md#sql-alterdatabase) uses file copy or clone.
+ <a id="release-18-constraints"></a>
 
-
-##### [Constraints] { #release-18-constraints }
+##### [Constraints]
 
 
 -  Allow the specification of non-overlapping [`PRIMARY KEY`](../../reference/sql-commands/create-table.md#sql-createtable-parms-primary-key), [`UNIQUE`](../../reference/sql-commands/create-table.md#sql-createtable-parms-unique), and [foreign key](../../reference/sql-commands/create-table.md#sql-createtable-parms-references) constraints (Paul A. Jungwirth) [&sect;](https://postgr.es/c/fc0438b4e) [&sect;](https://postgr.es/c/89f908a6d)
@@ -313,9 +315,9 @@
 -  Allow [dropping](../../reference/sql-commands/alter-table.md#sql-altertable-desc-drop-constraint) of constraints `ONLY` on partitioned tables (Álvaro Herrera) [&sect;](https://postgr.es/c/4dea33ce7)
 
    This was previously erroneously prohibited.
+  <a id="release-18-copy"></a>
 
-
-##### [sql-copy] { #release-18-copy }
+##### [sql-copy]
 
 
 -  Add `REJECT_LIMIT` to control the number of invalid rows `COPY FROM` can ignore (Atsushi Torikoshi) [&sect;](https://postgr.es/c/4ac2a9bec)
@@ -328,9 +330,9 @@
 -  Disallow `COPY FREEZE` on foreign tables (Nathan Bossart) [&sect;](https://postgr.es/c/401a6956f)
 
    Previously, the `COPY` worked but the `FREEZE` was ignored, so disallow this command.
+  <a id="release-18-explain"></a>
 
-
-##### [sql-explain] { #release-18-explain }
+##### [sql-explain]
 
 
 -  Automatically include `BUFFERS` output in `EXPLAIN ANALYZE` (Guillaume Lelarge, David Rowley) [&sect;](https://postgr.es/c/c2a4078eb)
@@ -341,9 +343,9 @@
 -  Add details about window function arguments to `EXPLAIN` output (Tom Lane) [&sect;](https://postgr.es/c/8b1b34254)
 -  Add `Parallel Bitmap Heap Scan` worker cache statistics to `EXPLAIN ANALYZE` (David Geier, Heikki Linnakangas, Donghang Lin, Alena Rybakina, David Rowley) [&sect;](https://postgr.es/c/5a1e6df3b)
 -  Indicate disabled nodes in `EXPLAIN ANALYZE` output (Robert Haas, David Rowley, Laurenz Albe) [&sect;](https://postgr.es/c/c01743aa4) [&sect;](https://postgr.es/c/161320b4b) [&sect;](https://postgr.es/c/84b8fccbe)
+   <a id="release-18-datatypes"></a>
 
-
-#### Data Types { #release-18-datatypes }
+#### Data Types
 
 
 -  Improve [Unicode](../../server-administration/localization/collation-support.md#collation-managing-standard) full case mapping and conversion (Jeff Davis) [&sect;](https://postgr.es/c/4e7f62bc3) [&sect;](https://postgr.es/c/286a365b9)
@@ -364,9 +366,9 @@
 -  Improve the [`XML`](../../the-sql-language/data-types/xml-type.md#datatype-xml) error codes to more closely match the SQL standard (Tom Lane) [&sect;](https://postgr.es/c/cd838e200)
 
    These errors are reported via [`SQLSTATE`](../postgresql-error-codes.md#errcodes-appendix).
+  <a id="release-18-functions"></a>
 
-
-#### Functions { #release-18-functions }
+#### Functions
 
 
 -  Add function [`casefold()`](../../the-sql-language/functions-and-operators/string-functions-and-operators.md#functions-string-other) to allow for more sophisticated case-insensitive matching (Jeff Davis) [&sect;](https://postgr.es/c/bfc599206)
@@ -387,9 +389,9 @@
 
    We previously only accepted `:=`.
 -  Allow [`regexp_match[es]()`](../../the-sql-language/functions-and-operators/pattern-matching.md#functions-posix-regexp)/[`regexp_like()`](../../the-sql-language/functions-and-operators/pattern-matching.md#functions-posix-regexp)/[`regexp_replace()`](../../the-sql-language/functions-and-operators/pattern-matching.md#functions-posix-regexp)/[`regexp_count()`](../../the-sql-language/functions-and-operators/pattern-matching.md#functions-posix-regexp)/[`regexp_instr()`](../../the-sql-language/functions-and-operators/pattern-matching.md#functions-posix-regexp)/[`regexp_substr()`](../../the-sql-language/functions-and-operators/pattern-matching.md#functions-posix-regexp)/[`regexp_split_to_table()`](../../the-sql-language/functions-and-operators/pattern-matching.md#functions-posix-regexp)/[`regexp_split_to_array()`](../../the-sql-language/functions-and-operators/pattern-matching.md#functions-posix-regexp) to use named arguments (Jian He) [&sect;](https://postgr.es/c/580f8727c)
+  <a id="release-18-libpq"></a>
 
-
-#### [Libpq] { #release-18-libpq }
+#### [Libpq]
 
 
 -  Add function [`PQfullProtocolVersion()`](../../client-interfaces/libpq-c-library/connection-status-functions.md#libpq-PQfullProtocolVersion) to report the full, including minor, protocol version number (Jacob Champion, Jelte Fennema-Nio) [&sect;](https://postgr.es/c/cdb6b0fdb)
@@ -402,9 +404,9 @@
 -  Modify some libpq function signatures to use `int64_t` (Thomas Munro) [&sect;](https://postgr.es/c/3c86223c9)
 
    These previously used `pg_int64`, which is now deprecated.
+  <a id="release-18-psql"></a>
 
-
-#### [app-psql] { #release-18-psql }
+#### [app-psql]
 
 
 -  Allow psql to parse, bind, and close named prepared statements (Anthonin Bonnefoy, Michael Paquier) [&sect;](https://postgr.es/c/d55322b0d) [&sect;](https://postgr.es/c/fc39b286a)
@@ -425,9 +427,9 @@
 -  Add access method details for partitioned relations in [`\dP+`](../../reference/postgresql-client-applications/psql.md#app-psql-meta-command-dp-uc) (Justin Pryzby) [&sect;](https://postgr.es/c/978f38c77)
 -  Add `default_version` to the psql [`\dx`](../../reference/postgresql-client-applications/psql.md#app-psql-meta-command-dx-lc) extension output (Magnus Hagander) [&sect;](https://postgr.es/c/d696406a9)
 -  Add psql variable [WATCH_INTERVAL](../../reference/postgresql-client-applications/psql.md#app-psql-variables-watch-interval) to set the default [`\watch`](../../reference/postgresql-client-applications/psql.md#app-psql-meta-command-watch) wait time (Daniel Gustafsson) [&sect;](https://postgr.es/c/1a759c832)
+  <a id="release-18-server-apps"></a>
 
-
-#### Server Applications { #release-18-server-apps }
+#### Server Applications
 
 
 -  Change [app-initdb](../../reference/postgresql-server-applications/initdb.md#app-initdb) to default to enabling checksums (Greg Sabino Mullane) [&sect;](https://postgr.es/c/983a588e0) [&sect;](https://postgr.es/c/04bec894a)
@@ -445,9 +447,9 @@
 -  Allow [app-pgverifybackup](../../reference/postgresql-client-applications/pg_verifybackup.md#app-pgverifybackup) to verify tar-format backups (Amul Sul) [&sect;](https://postgr.es/c/8dfd31290)
 -  If [app-pgrewind](../../reference/postgresql-server-applications/pg_rewind.md#app-pgrewind)'s `--source-server` specifies a database name, use it in `--write-recovery-conf` output (Masahiko Sawada) [&sect;](https://postgr.es/c/4ecdd4110)
 -  Add [app-pgresetwal](../../reference/postgresql-server-applications/pg_resetwal.md#app-pgresetwal) option `--char-signedness` to change the default `char` signedness (Masahiko Sawada) [&sect;](https://postgr.es/c/30666d185)
+ <a id="release-18-pgdump"></a>
 
-
-##### [pg_dump]/[pg_dumpall]/[pg_restore] { #release-18-pgdump }
+##### [pg_dump]/[pg_dumpall]/[pg_restore]
 
 
 -  Add [app-pgdump](../../reference/postgresql-client-applications/pg_dump.md#app-pgdump) option `--statistics` (Jeff Davis) [&sect;](https://postgr.es/c/bde2fb797) [&sect;](https://postgr.es/c/a3e8dc143)
@@ -456,9 +458,9 @@
 -  Add option `--no-policies` to disable row level security policy processing in [app-pgdump](../../reference/postgresql-client-applications/pg_dump.md#app-pgdump), [app-pg-dumpall](../../reference/postgresql-client-applications/pg_dumpall.md#app-pg-dumpall), [app-pgrestore](../../reference/postgresql-client-applications/pg_restore.md#app-pgrestore) (Nikolay Samokhvalov) [&sect;](https://postgr.es/c/cd3c45125)
 
    This is useful for migrating to systems with different policies.
+  <a id="release-18-pgupgrade"></a>
 
-
-##### [pgupgrade] { #release-18-pgupgrade }
+##### [pgupgrade]
 
 
 -  Allow pg_upgrade to preserve optimizer statistics (Corey Huinker, Jeff Davis, Nathan Bossart) [&sect;](https://postgr.es/c/1fd1bd871) [&sect;](https://postgr.es/c/c9d502eb6) [&sect;](https://postgr.es/c/d5f1b6a75) [&sect;](https://postgr.es/c/1fd1bd871)
@@ -473,9 +475,9 @@
 -  Add pg_upgrade option `--set-char-signedness` to set the default `char` signedness of new cluster (Masahiko Sawada) [&sect;](https://postgr.es/c/a8238f87f) [&sect;](https://postgr.es/c/1aab68059)
 
    This is to handle cases where a pre-PostgreSQL 18 cluster's default CPU signedness does not match the new cluster.
+  <a id="release-18-logicalrep-app"></a>
 
-
-##### Logical Replication Applications { #release-18-logicalrep-app }
+##### Logical Replication Applications
 
 
 -  Add [app-pgcreatesubscriber](../../reference/postgresql-server-applications/pg_createsubscriber.md#app-pgcreatesubscriber) option `--all` to create logical replicas for all databases (Shubham Khanna) [&sect;](https://postgr.es/c/fb2ea12f4)
@@ -485,9 +487,9 @@
 
    Also add option `--enable-two-phase` as a synonym for `--two-phase`, and deprecate the latter.
 -  Allow pg_recvlogical `--drop-slot` to work without `--dbname` (Hayato Kuroda) [&sect;](https://postgr.es/c/c68100aa4)
+   <a id="release-18-source-code"></a>
 
-
-#### Source Code { #release-18-source-code }
+#### Source Code
 
 
 -  Separate the loading and running of [injection points](../../server-programming/extending-sql/c-language-functions.md#xfunc-addin-injection-points) (Michael Paquier, Heikki Linnakangas) [&sect;](https://postgr.es/c/4b211003e) [&sect;](https://postgr.es/c/a0a5869a8)
@@ -526,9 +528,9 @@
 
    Thirty-two-bit atomic operations are now required.
 -  Remove support for the HPPA/PA-RISC architecture (Tom Lane) [&sect;](https://postgr.es/c/edadeb071)
+  <a id="release-18-modules"></a>
 
-
-#### Additional Modules { #release-18-modules }
+#### Additional Modules
 
 
 -  Add extension [pg_logicalinspect](../additional-supplied-modules-and-extensions/pg_logicalinspect-logical-decoding-components-inspection.md#pglogicalinspect) to inspect logical snapshots (Bertrand Drouvot) [&sect;](https://postgr.es/c/7cdfeee32)
@@ -560,9 +562,9 @@
    The existing function [`pg_buffercache_evict()`](../additional-supplied-modules-and-extensions/pg_buffercache-inspect-postgresql-buffer-cache-state.md#pgbuffercache-pg-buffercache-evict) now returns the buffer flush status.
 -  Allow extensions to install custom [sql-explain](../../reference/sql-commands/explain.md#sql-explain) options (Robert Haas, Sami Imseih) [&sect;](https://postgr.es/c/c65bc2e1d) [&sect;](https://postgr.es/c/4fd02bf7c) [&sect;](https://postgr.es/c/50ba65e73)
 -  Allow extensions to use the server's cumulative statistics API (Michael Paquier) [&sect;](https://postgr.es/c/7949d9594) [&sect;](https://postgr.es/c/2eff9e678)
+ <a id="release-18-pgstatstatements"></a>
 
-
-##### [pgstatstatements] { #release-18-pgstatstatements }
+##### [pgstatstatements]
 
 
 -  Allow the queries of [sql-createtableas](../../reference/sql-commands/create-table-as.md#sql-createtableas) and [sql-declare](../../reference/sql-commands/declare.md#sql-declare) to be tracked by pg_stat_statements (Anthonin Bonnefoy) [&sect;](https://postgr.es/c/6b652e6ce)
@@ -575,9 +577,9 @@
 
    The new columns are `parallel_workers_to_launch` and `parallel_workers_launched`.
 -  Add `pg_stat_statements`.`wal_buffers_full` to report full WAL buffers (Bertrand Drouvot) [&sect;](https://postgr.es/c/ce5bcc4a9)
+  <a id="release-18-pgcrypto"></a>
 
-
-##### [pgcrypto] { #release-18-pgcrypto }
+##### [pgcrypto]
 
 
 -  Add pgcrypto algorithms [`sha256crypt`](../additional-supplied-modules-and-extensions/pgcrypto-cryptographic-functions.md#pgcrypto-crypt-algorithms) and [`sha512crypt`](../additional-supplied-modules-and-extensions/pgcrypto-cryptographic-functions.md#pgcrypto-crypt-algorithms) (Bernd Helmle) [&sect;](https://postgr.es/c/749a9e20c)
@@ -586,9 +588,9 @@
 -  Add pgcrypto server variable [`builtin_crypto_enabled`](../additional-supplied-modules-and-extensions/pgcrypto-cryptographic-functions.md#pgcrypto-configuration-parameters-builtin_crypto_enabled) to allow disabling builtin non-FIPS mode cryptographic functions (Daniel Gustafsson, Joe Conway) [&sect;](https://postgr.es/c/035f99cbe)
 
    This is useful for guaranteeing FIPS mode behavior.
+    <a id="release-18-acknowledgements"></a>
 
-
-### Acknowledgments { #release-18-acknowledgements }
+### Acknowledgments
 
 
  The following individuals (in alphabetical order) have contributed to this release as patch authors, committers, reviewers, testers, or reporters of issues.

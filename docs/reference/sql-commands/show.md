@@ -1,4 +1,6 @@
-# SHOW { #sql-show }
+<a id="sql-show"></a>
+
+# SHOW
 
 show the value of a run-time parameter
 

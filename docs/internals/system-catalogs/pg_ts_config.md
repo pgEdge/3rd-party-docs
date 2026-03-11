@@ -1,4 +1,6 @@
-## `pg_ts_config` { #catalog-pg-ts-config }
+<a id="catalog-pg-ts-config"></a>
+
+## `pg_ts_config`
 
 
  The `pg_ts_config` catalog contains entries representing text search configurations. A configuration specifies a particular text search parser and a list of dictionaries to use for each of the parser's output token types. The parser is shown in the `pg_ts_config` entry, but the token-to-dictionary mapping is defined by subsidiary entries in [`pg_ts_config_map`](pg_ts_config_map.md#catalog-pg-ts-config-map).

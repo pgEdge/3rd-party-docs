@@ -1,4 +1,6 @@
-## PAM Authentication { #auth-pam }
+<a id="auth-pam"></a>
+
+## PAM Authentication
 
 
  This authentication method operates similarly to `password` except that it uses PAM (Pluggable Authentication Modules) as the authentication mechanism. The default PAM service name is `postgresql`. PAM is used only to validate user name/password pairs and optionally the connected remote host name or IP address. Therefore the user must already exist in the database before PAM can be used for authentication. For more information about PAM, please read the [Linux-PAM Page](https://www.kernel.org/pub/linux/libs/pam/).

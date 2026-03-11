@@ -1,4 +1,6 @@
-# CREATE SERVER { #sql-createserver }
+<a id="sql-createserver"></a>
+
+# CREATE SERVER
 
 define a new foreign server
 

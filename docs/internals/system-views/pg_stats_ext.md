@@ -1,4 +1,6 @@
-## `pg_stats_ext` { #view-pg-stats-ext }
+<a id="view-pg-stats-ext"></a>
+
+## `pg_stats_ext`
 
 
  The view `pg_stats_ext` provides access to information about each extended statistics object in the database, combining information stored in the [`pg_statistic_ext`](../system-catalogs/pg_statistic_ext.md#catalog-pg-statistic-ext) and [`pg_statistic_ext_data`](../system-catalogs/pg_statistic_ext_data.md#catalog-pg-statistic-ext-data) catalogs. This view allows access only to rows of [`pg_statistic_ext`](../system-catalogs/pg_statistic_ext.md#catalog-pg-statistic-ext) and [`pg_statistic_ext_data`](../system-catalogs/pg_statistic_ext_data.md#catalog-pg-statistic-ext-data) that correspond to tables the user owns, and therefore it is safe to allow public read access to this view.

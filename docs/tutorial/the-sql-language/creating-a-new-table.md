@@ -1,4 +1,6 @@
-## Creating a New Table { #tutorial-table }
+<a id="tutorial-table"></a>
+
+## Creating a New Table
 
 
  You can create a new table by specifying the table name, along with all column names and their types:

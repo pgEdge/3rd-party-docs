@@ -1,4 +1,6 @@
-## `pg_largeobject_metadata` { #catalog-pg-largeobject-metadata }
+<a id="catalog-pg-largeobject-metadata"></a>
+
+## `pg_largeobject_metadata`
 
 
  The catalog `pg_largeobject_metadata` holds metadata associated with large objects. The actual large object data is stored in [`pg_largeobject`](pg_largeobject.md#catalog-pg-largeobject).

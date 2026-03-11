@@ -1,4 +1,6 @@
-## `collations` { #infoschema-collations }
+<a id="infoschema-collations"></a>
+
+## `collations`
 
 
  The view `collations` contains the collations available in the current database.

@@ -1,4 +1,6 @@
-# CREATE TABLE { #sql-createtable }
+<a id="sql-createtable"></a>
+
+# CREATE TABLE
 
 define a new table
 
@@ -96,9 +98,9 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 
 { NO ACTION | RESTRICT | CASCADE | SET NULL [ ( COLUMN_NAME [, ... ] ) ] | SET DEFAULT [ ( COLUMN_NAME [, ... ] ) ] }
 ```
+ <a id="sql-createtable-description"></a>
 
-
-## Description { #sql-createtable-description }
+## Description
 
 
  `CREATE TABLE` will create a new, initially empty table in the current database. The table will be owned by the user issuing the command.
@@ -557,9 +559,9 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 
 <code>USING INDEX TABLESPACE </code><em>tablespace_name</em>
 :   This clause allows selection of the tablespace in which the index associated with a `UNIQUE`, `PRIMARY KEY`, or `EXCLUDE` constraint will be created. If not specified, [default_tablespace](../../server-administration/server-configuration/client-connection-defaults.md#guc-default-tablespace) is consulted, or [temp_tablespaces](../../server-administration/server-configuration/client-connection-defaults.md#guc-temp-tablespaces) if the table is temporary.
+ <a id="sql-createtable-storage-parameters"></a>
 
-
-### Storage Parameters { #sql-createtable-storage-parameters }
+### Storage Parameters
 
 
  The `WITH` clause can specify *storage parameters* for tables, and for indexes associated with a `UNIQUE`, `PRIMARY KEY`, or `EXCLUDE` constraint. Storage parameters for indexes are documented in [sql-createindex](create-index.md#sql-createindex). The storage parameters currently available for tables are listed below. For many of these parameters, as shown, there is an additional parameter with the same name prefixed with `toast.`, which controls the behavior of the table's secondary TOAST table, if any (see [TOAST](../../internals/database-physical-storage/toast.md#storage-toast) for more information about TOAST). If a table parameter value is set and the equivalent `toast.` parameter is not, the TOAST table will use the table's parameter value. Specifying these parameters for partitioned tables is not supported, but you may specify them for individual leaf partitions.
@@ -661,9 +663,9 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 
 `user_catalog_table` (`boolean`)
 :   Declare the table as an additional catalog table for purposes of logical replication. See [Capabilities](../../server-programming/logical-decoding/logical-decoding-output-plugins.md#logicaldecoding-capabilities) for details. This parameter cannot be set for TOAST tables.
+  <a id="sql-createtable-notes"></a>
 
-
-## Notes { #sql-createtable-notes }
+## Notes
 
 
  PostgreSQL automatically creates an index for each unique constraint and primary key constraint to enforce uniqueness. Thus, it is not necessary to create an index explicitly for primary key columns. (See [sql-createindex](create-index.md#sql-createindex) for more information.)
@@ -673,9 +675,9 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 
 
  A table cannot have more than 1600 columns. (In practice, the effective limit is usually lower because of tuple-length constraints.)
+ <a id="sql-createtable-examples"></a>
 
-
-## Examples { #sql-createtable-examples }
+## Examples
 
 
  Create table `films` and table `distributors`:
@@ -1001,9 +1003,9 @@ CREATE TABLE orders_p4 PARTITION OF orders
 CREATE TABLE cities_partdef
     PARTITION OF cities DEFAULT;
 ```
+ <a id="sql-createtable-compatibility"></a>
 
-
-## Compatibility { #sql-createtable-compatibility }
+## Compatibility
 
 
  The `CREATE TABLE` command conforms to the SQL standard, with exceptions listed below.

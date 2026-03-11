@@ -1,4 +1,6 @@
-## JSON Types { #datatype-json }
+<a id="datatype-json"></a>
+
+## JSON Types
 
 
  JSON data types are for storing JSON (JavaScript Object Notation) data, as specified in [RFC 7159](https://datatracker.ietf.org/doc/html/rfc7159). Such data can also be stored as `text`, but the JSON data types have the advantage of enforcing that each stored value is valid according to the JSON rules. There are also assorted JSON-specific functions and operators available for data stored in these data types; see [JSON Functions and Operators](../functions-and-operators/json-functions-and-operators.md#functions-json).
@@ -31,9 +33,8 @@
 
 
  Conversely, as noted in the table there are some minor restrictions on the input format of JSON primitive types that do not apply to the corresponding PostgreSQL types.
+ <a id="json-type-mapping-table"></a>
 
-
-<a id="json-type-mapping-table"></a>
 **Table: JSON Primitive Types and Corresponding PostgreSQL Types**
 
 | JSON primitive type | PostgreSQL type | Notes |
@@ -42,9 +43,9 @@
 | `number` | `numeric` | `NaN` and `infinity` values are disallowed |
 | `boolean` | `boolean` | Only lowercase `true` and `false` spellings are accepted |
 | `null` | (none) | SQL `NULL` is a different concept |
+ <a id="json-keys-elements"></a>
 
-
-### JSON Input and Output Syntax { #json-keys-elements }
+### JSON Input and Output Syntax
 
 
  The input/output syntax for the JSON data types is as specified in RFC 7159.
@@ -100,18 +101,18 @@ SELECT '{"reading": 1.230e-5}'::json, '{"reading": 1.230e-5}'::jsonb;
 
 
  For the list of built-in functions and operators available for constructing and processing JSON values, see [JSON Functions and Operators](../functions-and-operators/json-functions-and-operators.md#functions-json).
+  <a id="json-doc-design"></a>
 
-
-### Designing JSON Documents { #json-doc-design }
+### Designing JSON Documents
 
 
  Representing data as JSON can be considerably more flexible than the traditional relational data model, which is compelling in environments where requirements are fluid. It is quite possible for both approaches to co-exist and complement each other within the same application. However, even for applications where maximal flexibility is desired, it is still recommended that JSON documents have a somewhat fixed structure. The structure is typically unenforced (though enforcing some business rules declaratively is possible), but having a predictable structure makes it easier to write queries that usefully summarize a set of “documents” (datums) in a table.
 
 
  JSON data is subject to the same concurrency-control considerations as any other data type when stored in a table. Although storing large documents is practicable, keep in mind that any update acquires a row-level lock on the whole row. Consider limiting JSON documents to a manageable size in order to decrease lock contention among updating transactions. Ideally, JSON documents should each represent an atomic datum that business rules dictate cannot reasonably be further subdivided into smaller datums that could be modified independently.
+  <a id="json-containment"></a>
 
-
-### `jsonb` Containment and Existence { #json-containment }
+### `jsonb` Containment and Existence
 
 
  Testing *containment* is an important capability of `jsonb`. There is no parallel set of facilities for the `json` type. Containment tests whether one `jsonb` document has contained within it another one. These examples return true except as noted:
@@ -214,9 +215,9 @@ SELECT '"foo"'::jsonb ? 'foo';
 
 
  The various containment and existence operators, along with all other JSON operators and functions are documented in [JSON Functions and Operators](../functions-and-operators/json-functions-and-operators.md#functions-json).
+  <a id="json-indexing"></a>
 
-
-### `jsonb` Indexing { #json-indexing }
+### `jsonb` Indexing
 
 
  GIN indexes can be used to efficiently search for keys or key/value pairs occurring within a large number of `jsonb` documents (datums). Two GIN “operator classes” are provided, offering different performance and flexibility trade-offs.
@@ -343,9 +344,9 @@ KEY-1, VALUE-1, KEY-2 ...
 ELEMENT-1, ELEMENT-2 ...
 ```
  Primitive JSON values are compared using the same comparison rules as for the underlying PostgreSQL data type. Strings are compared using the default database collation.
+  <a id="jsonb-subscripting"></a>
 
-
-### `jsonb` Subscripting { #jsonb-subscripting }
+### `jsonb` Subscripting
 
 
  The `jsonb` data type supports array-style subscripting expressions to extract and modify elements. Nested values can be indicated by chaining subscripting expressions, following the same rules as the `path` argument in the `jsonb_set` function. If a `jsonb` value is an array, numeric subscripts start at zero, and negative integers count backwards from the last element of the array. Slice expressions are not supported. The result of a subscripting expression is always of the jsonb data type.
@@ -411,8 +412,9 @@ UPDATE table_name SET jsonb_field['a'][0]['b'] = '1';
 UPDATE table_name SET jsonb_field[1]['a'] = '1';
 ```
 
+  <a id="datatype-json-transforms"></a>
 
-### Transforms { #datatype-json-transforms }
+### Transforms
 
 
  Additional extensions are available that implement transforms for the `jsonb` type for different procedural languages.
@@ -425,9 +427,9 @@ UPDATE table_name SET jsonb_field[1]['a'] = '1';
 
 
  Of these extensions, `jsonb_plperl` is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database. The rest require superuser privilege to install.
+  <a id="datatype-jsonpath"></a>
 
-
-### jsonpath Type { #datatype-jsonpath }
+### jsonpath Type
 
 
  The `jsonpath` type implements support for the SQL/JSON path language in PostgreSQL to efficiently query JSON data. It provides a binary representation of the parsed SQL/JSON path expression that specifies the items to be retrieved by the path engine from the JSON data for further processing with the SQL/JSON query functions.
@@ -457,9 +459,8 @@ UPDATE table_name SET jsonb_field[1]['a'] = '1';
 
 
  For details on using `jsonpath` expressions with SQL/JSON query functions, see [The SQL/JSON Path Language](../functions-and-operators/json-functions-and-operators.md#functions-sqljson-path).
+ <a id="type-jsonpath-variables"></a>
 
-
-<a id="type-jsonpath-variables"></a>
 **Table: `jsonpath` Variables**
 
 | Variable | Description |
@@ -467,9 +468,8 @@ UPDATE table_name SET jsonb_field[1]['a'] = '1';
 | `$` | A variable representing the JSON value being queried (the *context item*). |
 | `$varname` | A named variable. Its value can be set by the parameter `vars` of several JSON processing functions; see [JSON Processing Functions](../functions-and-operators/json-functions-and-operators.md#functions-json-processing-table) for details. |
 | `@` | A variable representing the result of path evaluation in filter expressions. |
+ <a id="type-jsonpath-accessors"></a>
 
-
-<a id="type-jsonpath-accessors"></a>
 **Table: `jsonpath` Accessors**
 
 <table>

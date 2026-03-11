@@ -1,4 +1,6 @@
-## Release 18.1 { #release-18-1 }
+<a id="release-18-1"></a>
+
+## Release 18.1
 
 
 **Release date:.**
@@ -8,15 +10,15 @@
 
 
  This release contains a variety of fixes from 18.0. For information about new features in major release 18, see [Release 18](release-18.md#release-18).
+ <a id="release-18-1-migration"></a>
 
-
-### Migration to Version 18.1 { #release-18-1-migration }
+### Migration to Version 18.1
 
 
  A dump/restore is not required for those running 18.X.
+  <a id="release-18-1-changes"></a>
 
-
-### Changes { #release-18-1-changes }
+### Changes
 
 
 -  Check for `CREATE` privileges on the schema in `CREATE STATISTICS` (Jelte Fennema-Nio) [&sect;](https://postgr.es/c/00eb646ea)

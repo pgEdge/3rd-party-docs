@@ -1,4 +1,6 @@
-## `pg_shmem_allocations_numa` { #view-pg-shmem-allocations-numa }
+<a id="view-pg-shmem-allocations-numa"></a>
+
+## `pg_shmem_allocations_numa`
 
 
  The `pg_shmem_allocations_numa` shows how shared memory allocations in the server's main shared memory segment are distributed across NUMA nodes. This includes both memory allocated by PostgreSQL itself and memory allocated by extensions using the mechanisms detailed in [Shared Memory](../../server-programming/extending-sql/c-language-functions.md#xfunc-shared-addin). This view will output multiple rows for each of the shared memory segments provided that they are spread across multiple NUMA nodes. This view should not be queried by monitoring systems as it is very slow and may end up allocating shared memory in case it was not used earlier. Current limitation for this view is that won't show anonymous shared memory allocations.

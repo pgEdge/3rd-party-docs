@@ -1,4 +1,6 @@
-# DROP COLLATION { #sql-dropcollation }
+<a id="sql-dropcollation"></a>
+
+# DROP COLLATION
 
 remove a collation
 
@@ -9,9 +11,9 @@ remove a collation
 
 DROP COLLATION [ IF EXISTS ] NAME [ CASCADE | RESTRICT ]
 ```
+ <a id="sql-dropcollation-description"></a>
 
-
-## Description { #sql-dropcollation-description }
+## Description
 
 
  `DROP COLLATION` removes a previously defined collation. To be able to drop a collation, you must own the collation.
@@ -31,9 +33,9 @@ DROP COLLATION [ IF EXISTS ] NAME [ CASCADE | RESTRICT ]
 
 `RESTRICT`
 :   Refuse to drop the collation if any objects depend on it. This is the default.
+ <a id="sql-dropcollation-examples"></a>
 
-
-## Examples { #sql-dropcollation-examples }
+## Examples
 
 
  To drop the collation named `german`:
@@ -42,9 +44,9 @@ DROP COLLATION [ IF EXISTS ] NAME [ CASCADE | RESTRICT ]
 
 DROP COLLATION german;
 ```
+ <a id="sql-dropcollation-compat"></a>
 
-
-## Compatibility { #sql-dropcollation-compat }
+## Compatibility
 
 
  The `DROP COLLATION` command conforms to the SQL standard, apart from the `IF EXISTS` option, which is a PostgreSQL extension.

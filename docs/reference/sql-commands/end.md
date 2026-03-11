@@ -1,4 +1,6 @@
-# END { #sql-end }
+<a id="sql-end"></a>
+
+# END
 
 commit the current transaction
 

@@ -1,4 +1,6 @@
-# Getting Started { #tutorial-start }
+<a id="tutorial-start"></a>
+
+# Getting Started
 
 - [Installation](installation.md#tutorial-install)
 - [Architectural Fundamentals](architectural-fundamentals.md#tutorial-arch)

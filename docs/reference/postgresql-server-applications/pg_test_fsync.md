@@ -1,4 +1,6 @@
-# pg_test_fsync { #pgtestfsync }
+<a id="pgtestfsync"></a>
+
+# pg_test_fsync
 
 determine fastest `wal_sync_method` for PostgreSQL
 

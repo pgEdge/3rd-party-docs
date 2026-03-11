@@ -1,4 +1,6 @@
-## Introduction { #indexes-intro }
+<a id="indexes-intro"></a>
+
+## Introduction
 
 
  Suppose we have a table similar to this:

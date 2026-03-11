@@ -1,4 +1,6 @@
-## `pg_replication_slots` { #view-pg-replication-slots }
+<a id="view-pg-replication-slots"></a>
+
+## `pg_replication_slots`
 
 
  The `pg_replication_slots` view provides a listing of all replication slots that currently exist on the database cluster, along with their current state.

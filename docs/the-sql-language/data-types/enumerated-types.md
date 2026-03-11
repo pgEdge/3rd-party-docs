@@ -1,10 +1,12 @@
-## Enumerated Types { #datatype-enum }
+<a id="datatype-enum"></a>
+
+## Enumerated Types
 
 
  Enumerated (enum) types are data types that comprise a static, ordered set of values. They are equivalent to the `enum` types supported in a number of programming languages. An example of an enum type might be the days of the week, or a set of status values for a piece of data.
+ <a id="datatype-enum-declaration"></a>
 
-
-### Declaration of Enumerated Types { #datatype-enum-declaration }
+### Declaration of Enumerated Types
 
 
  Enum types are created using the [sql-createtype](../../reference/sql-commands/create-type.md#sql-createtype) command, for example:
@@ -30,8 +32,9 @@ SELECT * FROM person WHERE current_mood = 'happy';
 (1 row)
 ```
 
+  <a id="datatype-enum-ordering"></a>
 
-### Ordering { #datatype-enum-ordering }
+### Ordering
 
 
  The ordering of the values in an enum type is the order in which the values were listed when the type was created. All standard comparison operators and related aggregate functions are supported for enums. For example:
@@ -63,8 +66,9 @@ WHERE current_mood = (SELECT MIN(current_mood) FROM person);
 (1 row)
 ```
 
+  <a id="datatype-enum-type-safety"></a>
 
-### Type Safety { #datatype-enum-type-safety }
+### Type Safety
 
 
  Each enumerated data type is separate and cannot be compared with other enumerated types. See this example:
@@ -99,8 +103,9 @@ SELECT person.name, holidays.num_weeks FROM person, holidays
 (1 row)
 ```
 
+  <a id="datatype-enum-implementation-details"></a>
 
-### Implementation Details { #datatype-enum-implementation-details }
+### Implementation Details
 
 
  Enum labels are case sensitive, so `'happy'` is not the same as `'HAPPY'`. White space in the labels is significant too.

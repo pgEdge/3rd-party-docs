@@ -1,4 +1,6 @@
-# DROP PUBLICATION { #sql-droppublication }
+<a id="sql-droppublication"></a>
+
+# DROP PUBLICATION
 
 remove a publication
 

@@ -1,4 +1,6 @@
-## dblink — connect to other PostgreSQL databases { #dblink }
+<a id="dblink"></a>
+
+## dblink — connect to other PostgreSQL databases
 
 
  `dblink` is a module that supports connections to other PostgreSQL databases from within a database session.
@@ -18,9 +20,9 @@
 
 
  See also [postgres_fdw](postgres_fdw-access-data-stored-in-external-postgresql-servers.md#postgres-fdw), which provides roughly the same functionality using a more modern and standards-compliant infrastructure.
+ <a id="contrib-dblink-connect"></a>
 
-
-# dblink_connect { #contrib-dblink-connect }
+# dblink_connect
 
 opens a persistent connection to a remote database
 
@@ -137,9 +139,9 @@ DROP USER MAPPING FOR regress_dblink_user SERVER fdtest;
 DROP USER regress_dblink_user;
 DROP SERVER fdtest;
 ```
+  <a id="contrib-dblink-connect-u"></a>
 
-
-# dblink_connect_u { #contrib-dblink-connect-u }
+# dblink_connect_u
 
 opens a persistent connection to a remote database, insecurely
 
@@ -163,9 +165,9 @@ dblink_connect_u(text connname, text connstr) returns text
 
 
  For further details see `dblink_connect()`.
+  <a id="contrib-dblink-disconnect"></a>
 
-
-# dblink_disconnect { #contrib-dblink-disconnect }
+# dblink_disconnect
 
 closes a persistent connection to a remote database
 
@@ -215,9 +217,9 @@ SELECT dblink_disconnect('myconn');
  OK
 (1 row)
 ```
+  <a id="contrib-dblink-function"></a>
 
-
-# dblink { #contrib-dblink-function }
+# dblink
 
 executes a query in a remote database
 
@@ -364,9 +366,9 @@ SELECT * FROM dblink('myconn', 'select proname, prosrc from pg_proc')
  byteaout   | byteaout
 (14 rows)
 ```
+  <a id="contrib-dblink-exec"></a>
 
-
-# dblink_exec { #contrib-dblink-exec }
+# dblink_exec
 
 executes a command in a remote database
 
@@ -450,9 +452,9 @@ DETAIL:  ERROR:  null value in column "relnamespace" violates not-null constrain
  ERROR
 (1 row)
 ```
+  <a id="contrib-dblink-open"></a>
 
-
-# dblink_open { #contrib-dblink-open }
+# dblink_open
 
 opens a cursor in a remote database
 
@@ -517,9 +519,9 @@ SELECT dblink_open('foo', 'select proname, prosrc from pg_proc');
  OK
 (1 row)
 ```
+  <a id="contrib-dblink-fetch"></a>
 
-
-# dblink_fetch { #contrib-dblink-fetch }
+# dblink_fetch
 
 returns rows from an open cursor in a remote database
 
@@ -616,9 +618,9 @@ SELECT * FROM dblink_fetch('foo', 5) AS (funcname name, source text);
 ----------+--------
 (0 rows)
 ```
+  <a id="contrib-dblink-close"></a>
 
-
-# dblink_close { #contrib-dblink-close }
+# dblink_close
 
 closes a cursor in a remote database
 
@@ -686,9 +688,9 @@ SELECT dblink_close('foo');
  OK
 (1 row)
 ```
+  <a id="contrib-dblink-get-connections"></a>
 
-
-# dblink_get_connections { #contrib-dblink-get-connections }
+# dblink_get_connections
 
 returns the names of all open named dblink connections
 
@@ -720,9 +722,9 @@ Returns a text array of connection names, or NULL if none.
 
 SELECT dblink_get_connections();
 ```
+  <a id="contrib-dblink-error-message"></a>
 
-
-# dblink_error_message { #contrib-dblink-error-message }
+# dblink_error_message
 
 gets last error message on the named connection
 
@@ -767,9 +769,9 @@ dblink_error_message(text connname) returns text
 
 SELECT dblink_error_message('dtest1');
 ```
+  <a id="contrib-dblink-send-query"></a>
 
-
-# dblink_send_query { #contrib-dblink-send-query }
+# dblink_send_query
 
 sends an async query to a remote database
 
@@ -814,9 +816,9 @@ dblink_send_query(text connname, text sql) returns int
 
 SELECT dblink_send_query('dtest1', 'SELECT * FROM foo WHERE f1 < 3');
 ```
+  <a id="contrib-dblink-is-busy"></a>
 
-
-# dblink_is_busy { #contrib-dblink-is-busy }
+# dblink_is_busy
 
 checks if connection is busy with an async query
 
@@ -855,9 +857,9 @@ dblink_is_busy(text connname) returns int
 
 SELECT dblink_is_busy('dtest1');
 ```
+  <a id="contrib-dblink-get-notify"></a>
 
-
-# dblink_get_notify { #contrib-dblink-get-notify }
+# dblink_get_notify
 
 retrieve async notifications on a connection
 
@@ -915,9 +917,9 @@ SELECT * FROM dblink_get_notify();
  virtual     |   1229 |
 (1 row)
 ```
+  <a id="contrib-dblink-get-result"></a>
 
-
-# dblink_get_result { #contrib-dblink-get-result }
+# dblink_get_result
 
 gets an async query result
 
@@ -1024,9 +1026,9 @@ contrib_regression=# SELECT * FROM dblink_get_result('dtest1') AS t1(f1 int, f2 
 ----+----+----
 (0 rows)
 ```
+  <a id="contrib-dblink-cancel-query"></a>
 
-
-# dblink_cancel_query { #contrib-dblink-cancel-query }
+# dblink_cancel_query
 
 cancels any active query on the named connection
 
@@ -1065,9 +1067,9 @@ dblink_cancel_query(text connname) returns text
 
 SELECT dblink_cancel_query('dtest1');
 ```
+  <a id="contrib-dblink-get-pkey"></a>
 
-
-# dblink_get_pkey { #contrib-dblink-get-pkey }
+# dblink_get_pkey
 
 returns the positions and field names of a relation's primary key fields
 
@@ -1126,9 +1128,9 @@ SELECT * FROM dblink_get_pkey('foobar');
         3 | f3
 (3 rows)
 ```
+  <a id="contrib-dblink-build-sql-insert"></a>
 
-
-# dblink_build_sql_insert { #contrib-dblink-build-sql-insert }
+# dblink_build_sql_insert
 
 builds an INSERT statement using a local tuple, replacing the primary key field values with alternative supplied values
 
@@ -1193,9 +1195,9 @@ SELECT dblink_build_sql_insert('foo', '1 2', 2, '{"1", "a"}', '{"1", "b''a"}');
  INSERT INTO foo(f1,f2,f3) VALUES('1','b''a','1')
 (1 row)
 ```
+  <a id="contrib-dblink-build-sql-delete"></a>
 
-
-# dblink_build_sql_delete { #contrib-dblink-build-sql-delete }
+# dblink_build_sql_delete
 
 builds a DELETE statement using supplied values for primary key field values
 
@@ -1256,9 +1258,9 @@ SELECT dblink_build_sql_delete('"MyFoo"', '1 2', 2, '{"1", "b"}');
  DELETE FROM "MyFoo" WHERE f1='1' AND f2='b'
 (1 row)
 ```
+  <a id="contrib-dblink-build-sql-update"></a>
 
-
-# dblink_build_sql_update { #contrib-dblink-build-sql-update }
+# dblink_build_sql_update
 
 builds an UPDATE statement using a local tuple, replacing the primary key field values with alternative supplied values
 

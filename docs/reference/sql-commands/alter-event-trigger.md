@@ -1,4 +1,6 @@
-# ALTER EVENT TRIGGER { #sql-altereventtrigger }
+<a id="sql-altereventtrigger"></a>
+
+# ALTER EVENT TRIGGER
 
 change the definition of an event trigger
 
@@ -37,9 +39,9 @@ ALTER EVENT TRIGGER NAME RENAME TO NEW_NAME
 
 `DISABLE`/`ENABLE [ REPLICA | ALWAYS ]`
 :   These forms configure the firing of event triggers. A disabled trigger is still known to the system, but is not executed when its triggering event occurs. See also [session_replication_role](../../server-administration/server-configuration/client-connection-defaults.md#guc-session-replication-role).
+ <a id="sql-alterventtrigger-compatibility"></a>
 
-
-## Compatibility { #sql-alterventtrigger-compatibility }
+## Compatibility
 
 
  There is no `ALTER EVENT TRIGGER` statement in the SQL standard.

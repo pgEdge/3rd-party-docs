@@ -1,4 +1,6 @@
-## Ident Authentication { #auth-ident }
+<a id="auth-ident"></a>
+
+## Ident Authentication
 
 
  The ident authentication method works by obtaining the client's operating system user name from an ident server and using it as the allowed database user name (with an optional user name mapping). This is only supported on TCP/IP connections.

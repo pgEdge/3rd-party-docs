@@ -1,4 +1,6 @@
-## Overview { #typeconv-overview }
+<a id="typeconv-overview"></a>
+
+## Overview
 
 
  SQL is a strongly typed language. That is, every data item has an associated data type which determines its behavior and allowed usage. PostgreSQL has an extensible type system that is more general and flexible than other SQL implementations. Hence, most type conversion behavior in PostgreSQL is governed by general rules rather than by ad hoc heuristics. This allows the use of mixed-type expressions even with user-defined types.

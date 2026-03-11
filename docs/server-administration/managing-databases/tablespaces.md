@@ -1,4 +1,6 @@
-## Tablespaces { #manage-ag-tablespaces }
+<a id="manage-ag-tablespaces"></a>
+
+## Tablespaces
 
 
  Tablespaces in PostgreSQL allow database administrators to define locations in the file system where the files representing database objects can be stored. Once created, a tablespace can be referred to by name when creating database objects.

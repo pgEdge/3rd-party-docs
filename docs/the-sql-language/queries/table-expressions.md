@@ -1,13 +1,15 @@
-## Table Expressions { #queries-table-expressions }
+<a id="queries-table-expressions"></a>
+
+## Table Expressions
 
 
  A *table expression* computes a table. The table expression contains a `FROM` clause that is optionally followed by `WHERE`, `GROUP BY`, and `HAVING` clauses. Trivial table expressions simply refer to a table on disk, a so-called base table, but more complex expressions can be used to modify or combine base tables in various ways.
 
 
  The optional `WHERE`, `GROUP BY`, and `HAVING` clauses in the table expression specify a pipeline of successive transformations performed on the table derived in the `FROM` clause. All these transformations produce a virtual table that provides the rows that are passed to the select list to compute the output rows of the query.
+ <a id="queries-from"></a>
 
-
-### The `FROM` Clause { #queries-from }
+### The `FROM` Clause
 
 
  The [`FROM`](../../reference/sql-commands/select.md#sql-from) clause derives a table from one or more other tables given in a comma-separated table reference list.
@@ -23,9 +25,9 @@ FROM TABLE_REFERENCE [, TABLE_REFERENCE [, ...]]
 
 
  Instead of writing `ONLY` before the table name, you can write `*` after the table name to explicitly specify that descendant tables are included. There is no real reason to use this syntax any more, because searching descendant tables is now always the default behavior. However, it is supported for compatibility with older releases.
+ <a id="queries-join"></a>
 
-
-#### Joined Tables { #queries-join }
+#### Joined Tables
 
 
  A joined table is a table derived from two other (real or derived) tables according to the rules of the particular join type. Inner, outer, and cross-joins are available. The general syntax of a joined table is
@@ -228,9 +230,9 @@ Qualified joins
 (1 row)
 ```
  This is because a restriction placed in the `ON` clause is processed *before* the join, while a restriction placed in the `WHERE` clause is processed *after* the join. That does not matter with inner joins, but it matters a lot with outer joins.
+  <a id="queries-table-aliases"></a>
 
-
-#### Table and Column Aliases { #queries-table-aliases }
+#### Table and Column Aliases
 
 
  A temporary name can be given to tables and complex table references to be used for references to the derived table in the rest of the query. This is called a *table alias*.
@@ -306,9 +308,9 @@ SELECT a.* FROM my_table AS a JOIN your_table AS b ON ...
 SELECT a.* FROM (my_table AS a JOIN your_table AS b ON ...) AS c
 ```
  is not valid; the table alias `a` is not visible outside the alias `c`.
+  <a id="queries-subqueries"></a>
 
-
-#### Subqueries { #queries-subqueries }
+#### Subqueries
 
 
  Subqueries specifying a derived table must be enclosed in parentheses. They may be assigned a table alias name, and optionally column alias names (as in [Table and Column Aliases](#queries-table-aliases)). For example:
@@ -333,9 +335,9 @@ FROM (VALUES ('anne', 'smith'), ('bob', 'jones'), ('joe', 'blow'))
 
 
  According to the SQL standard, a table alias name must be supplied for a subquery. PostgreSQL allows `AS` and the alias to be omitted, but writing one is good practice in SQL code that might be ported to another system.
+  <a id="queries-tablefunctions"></a>
 
-
-#### Table Functions { #queries-tablefunctions }
+#### Table Functions
 
 
  Table functions are functions that produce a set of rows, made up of either base data types (scalar types) or composite data types (table rows). They are used like a table, view, or subquery in the `FROM` clause of a query. Columns returned by table functions can be included in `SELECT`, `JOIN`, or `WHERE` clauses in the same manner as columns of a table, view, or subquery.
@@ -440,9 +442,9 @@ ORDER BY p;
      |     | 3
 ```
  It joins two functions into a single `FROM` target. `json_to_recordset()` is instructed to return two columns, the first `integer` and the second `text`. The result of `generate_series()` is used directly. The `ORDER BY` clause sorts the column values as integers.
+  <a id="queries-lateral"></a>
 
-
-#### `LATERAL` Subqueries { #queries-lateral }
+#### `LATERAL` Subqueries
 
 
  Subqueries appearing in `FROM` can be preceded by the key word `LATERAL`. This allows them to reference columns provided by preceding `FROM` items. (Without `LATERAL`, each subquery is evaluated independently and so cannot cross-reference any other `FROM` item.)
@@ -500,8 +502,9 @@ FROM manufacturers m LEFT JOIN LATERAL get_product_names(m.id) pname ON true
 WHERE pname IS NULL;
 ```
 
+   <a id="queries-where"></a>
 
-### The `WHERE` Clause { #queries-where }
+### The `WHERE` Clause
 
 
  The syntax of the [`WHERE`](../../reference/sql-commands/select.md#sql-where) clause is
@@ -556,9 +559,9 @@ SELECT ... FROM fdt WHERE c1 BETWEEN (SELECT c3 FROM t2 WHERE c2 = fdt.c1 + 10) 
 SELECT ... FROM fdt WHERE EXISTS (SELECT c1 FROM t2 WHERE c2 > fdt.c1)
 ```
  `fdt` is the table derived in the `FROM` clause. Rows that do not meet the search condition of the `WHERE` clause are eliminated from `fdt`. Notice the use of scalar subqueries as value expressions. Just like any other query, the subqueries can employ complex table expressions. Notice also how `fdt` is referenced in the subqueries. Qualifying `c1` as `fdt.c1` is only necessary if `c1` is also the name of a column in the derived input table of the subquery. But qualifying the column name adds clarity even when it is not needed. This example shows how the column naming scope of an outer query extends into its inner queries.
+  <a id="queries-group"></a>
 
-
-### The `GROUP BY` and `HAVING` Clauses { #queries-group }
+### The `GROUP BY` and `HAVING` Clauses
 
 
  After passing the `WHERE` filter, the derived input table might be subject to grouping, using the `GROUP BY` clause, and elimination of group rows using the `HAVING` clause.
@@ -679,9 +682,9 @@ SELECT product_id, p.name, (sum(s.units) * (p.price - p.cost)) AS profit
 
 
  If a query contains aggregate function calls, but no `GROUP BY` clause, grouping still occurs: the result is a single group row (or perhaps no rows at all, if the single row is then eliminated by `HAVING`). The same is true if it contains a `HAVING` clause, even without any aggregate function calls or `GROUP BY` clause.
+  <a id="queries-grouping-sets"></a>
 
-
-### `GROUPING SETS`, `CUBE`, and `ROLLUP` { #queries-grouping-sets }
+### `GROUPING SETS`, `CUBE`, and `ROLLUP`
 
 
  More complex grouping operations than those described above are possible using the concept of *grouping sets*. The data selected by the `FROM` and `WHERE` clauses is grouped separately by each specified grouping set, aggregates computed for each group just as for simple `GROUP BY` clauses, and then the results returned. For example:
@@ -869,9 +872,9 @@ GROUP BY GROUPING SETS (
 !!! note
 
     The construct `(a, b)` is normally recognized in expressions as a [row constructor](../sql-syntax/value-expressions.md#sql-syntax-row-constructors). Within the `GROUP BY` clause, this does not apply at the top levels of expressions, and `(a, b)` is parsed as a list of expressions as described above. If for some reason you *need* a row constructor in a grouping expression, use `ROW(a, b)`.
+  <a id="queries-window"></a>
 
-
-### Window Function Processing { #queries-window }
+### Window Function Processing
 
 
  If the query contains any window functions (see [Window Functions](../../tutorial/advanced-features/window-functions.md#tutorial-window), [Window Functions](../functions-and-operators/window-functions.md#functions-window) and [Window Function Calls](../sql-syntax/value-expressions.md#syntax-window-functions)), these functions are evaluated after any grouping, aggregation, and `HAVING` filtering is performed. That is, if the query uses any aggregates, `GROUP BY`, or `HAVING`, then the rows seen by the window functions are the group rows instead of the original table rows from `FROM`/`WHERE`.

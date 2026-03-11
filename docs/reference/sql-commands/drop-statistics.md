@@ -1,4 +1,6 @@
-# DROP STATISTICS { #sql-dropstatistics }
+<a id="sql-dropstatistics"></a>
+
+# DROP STATISTICS
 
 remove extended statistics
 

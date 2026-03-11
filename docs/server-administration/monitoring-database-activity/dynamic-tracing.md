@@ -1,4 +1,6 @@
-## Dynamic Tracing { #dynamic-trace }
+<a id="dynamic-trace"></a>
+
+## Dynamic Tracing
 
 
  PostgreSQL provides facilities to support dynamic tracing of the database server. This allows an external utility to be called at specific points in the code and thereby trace execution.
@@ -8,21 +10,20 @@
 
 
  Currently, the [DTrace](https://en.wikipedia.org/wiki/DTrace) utility is supported, which, at the time of this writing, is available on Solaris, macOS, FreeBSD, NetBSD, and Oracle Linux. The [SystemTap](https://sourceware.org/systemtap/) project for Linux provides a DTrace equivalent and can also be used. Supporting other dynamic tracing utilities is theoretically possible by changing the definitions for the macros in `src/include/utils/probes.h`.
+ <a id="compiling-for-trace"></a>
 
-
-### Compiling for Dynamic Tracing { #compiling-for-trace }
+### Compiling for Dynamic Tracing
 
 
  By default, probes are not available, so you will need to explicitly tell the configure script to make the probes available in PostgreSQL. To include DTrace support specify `--enable-dtrace` to configure. See [Developer Options](../installation-from-source-code/building-and-installation-with-autoconf-and-make.md#configure-options-devel) for further information.
+  <a id="trace-points"></a>
 
-
-### Built-in Probes { #trace-points }
+### Built-in Probes
 
 
  A number of standard probes are provided in the source code, as shown in [Built-in DTrace Probes](#dtrace-probe-point-table); [Defined Types Used in Probe Parameters](#typedefs-table) shows the types used in the probes. More probes can certainly be added to enhance PostgreSQL's observability.
+ <a id="dtrace-probe-point-table"></a>
 
-
-<a id="dtrace-probe-point-table"></a>
 **Table: Built-in DTrace Probes**
 
 | Name | Parameters | Description |
@@ -82,9 +83,8 @@
 | `lock-wait-start` | `(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, LOCKMODE)` | Probe that fires when a request for a heavyweight lock (lmgr lock) has begun to wait because the lock is not available. arg0 through arg3 are the tag fields identifying the object being locked. arg4 indicates the type of object being locked. arg5 indicates the lock type being requested. |
 | `lock-wait-done` | `(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, LOCKMODE)` | Probe that fires when a request for a heavyweight lock (lmgr lock) has finished waiting (i.e., has acquired the lock). The arguments are the same as for `lock-wait-start`. |
 | `deadlock-found` | `()` | Probe that fires when a deadlock is found by the deadlock detector. |
+ <a id="typedefs-table"></a>
 
-
-<a id="typedefs-table"></a>
 **Table: Defined Types Used in Probe Parameters**
 
 | Type | Definition |
@@ -96,9 +96,9 @@
 | `Oid` | `unsigned int` |
 | `ForkNumber` | `int` |
 | `bool` | `unsigned char` |
+  <a id="using-trace-points"></a>
 
-
-### Using Probes { #using-trace-points }
+### Using Probes
 
 
  The example below shows a DTrace script for analyzing transaction counts in the system, as an alternative to snapshotting `pg_stat_database` before and after a performance test:
@@ -145,9 +145,9 @@ Total time (ns)                        2312105013
 
 
  You should remember that DTrace scripts need to be carefully written and debugged, otherwise the trace information collected might be meaningless. In most cases where problems are found it is the instrumentation that is at fault, not the underlying system. When discussing information found using dynamic tracing, be sure to enclose the script used to allow that too to be checked and discussed.
+  <a id="defining-trace-points"></a>
 
-
-### Defining New Probes { #defining-trace-points }
+### Defining New Probes
 
 
  New probes can be defined within the code wherever the developer desires, though this will require a recompilation. Below are the steps for inserting new probes:

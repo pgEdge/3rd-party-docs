@@ -1,4 +1,6 @@
-## `pg_db_role_setting` { #catalog-pg-db-role-setting }
+<a id="catalog-pg-db-role-setting"></a>
+
+## `pg_db_role_setting`
 
 
  The catalog `pg_db_role_setting` records the default values that have been set for run-time configuration variables, for each role and database combination.

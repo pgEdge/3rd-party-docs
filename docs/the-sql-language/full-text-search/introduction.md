@@ -1,4 +1,6 @@
-## Introduction { #textsearch-intro }
+<a id="textsearch-intro"></a>
+
+## Introduction
 
 
  Full Text Searching (or just *text search*) provides the capability to identify natural-language *documents* that satisfy a *query*, and optionally to sort them by relevance to the query. The most common type of search is to find all documents containing given *query terms* and return them in order of their *similarity* to the query. Notions of `query` and `similarity` are very flexible and depend on the specific application. The simplest search considers `query` as a set of words and `similarity` as the frequency of query words in the document.
@@ -31,9 +33,9 @@
 
 
  A data type `tsvector` is provided for storing preprocessed documents, along with a type `tsquery` for representing processed queries ([Text Search Types](../data-types/text-search-types.md#datatype-textsearch)). There are many functions and operators available for these data types ([Text Search Functions and Operators](../functions-and-operators/text-search-functions-and-operators.md#functions-textsearch)), the most important of which is the match operator `@@`, which we introduce in [Basic Text Matching](#textsearch-matching). Full text searches can be accelerated using indexes ([Preferred Index Types for Text Search](preferred-index-types-for-text-search.md#textsearch-indexes)).
+ <a id="textsearch-document"></a>
 
-
-### What Is a Document? { #textsearch-document }
+### What Is a Document?
 
 
  A *document* is the unit of searching in a full text search system; for example, a magazine article or email message. The text search engine must be able to parse documents and store associations of lexemes (key words) with their parent document. Later, these associations are used to search for documents that contain query words.
@@ -62,9 +64,9 @@ WHERE m.mid = d.did AND m.mid = 12;
 
 
  For text search purposes, each document must be reduced to the preprocessed `tsvector` format. Searching and ranking are performed entirely on the `tsvector` representation of a document — the original text need only be retrieved when the document has been selected for display to a user. We therefore often speak of the `tsvector` as being the document, but of course it is only a compact representation of the full document.
+  <a id="textsearch-matching"></a>
 
-
-### Basic Text Matching { #textsearch-matching }
+### Basic Text Matching
 
 
  Full text searching in PostgreSQL is based on the match operator `@@`, which returns `true` if a `tsvector` (document) matches a `tsquery` (query). It doesn't matter which data type is written first:
@@ -158,9 +160,9 @@ SELECT phraseto_tsquery('the cats ate the rats');
 
 
  It's worth noticing that the AND/OR/NOT operators mean something subtly different when they are within the arguments of a FOLLOWED BY operator than when they are not, because within FOLLOWED BY the exact position of the match is significant. For example, normally `!x` matches only documents that do not contain `x` anywhere. But `!x <-> y` matches `y` if it is not immediately after an `x`; an occurrence of `x` elsewhere in the document does not prevent a match. Another example is that `x & y` normally only requires that `x` and `y` both appear somewhere in the document, but `(x & y) <-> z` requires `x` and `y` to match at the same place, immediately before a `z`. Thus this query behaves differently from `x <-> z & y <-> z`, which will match a document containing two separate sequences `x z` and `y z`. (This specific query is useless as written, since `x` and `y` could not match at the same place; but with more complex situations such as prefix-match patterns, a query of this form could be useful.)
+  <a id="textsearch-intro-configurations"></a>
 
-
-### Configurations { #textsearch-intro-configurations }
+### Configurations
 
 
  The above are all simple text search examples. As mentioned before, full text search functionality includes the ability to do many more things: skip indexing certain words (stop words), process synonyms, and use sophisticated parsing, e.g., parse based on more than just white space. This functionality is controlled by *text search configurations*. PostgreSQL comes with predefined configurations for many languages, and you can easily create your own configurations. (psql's `\dF` command shows all available configurations.)

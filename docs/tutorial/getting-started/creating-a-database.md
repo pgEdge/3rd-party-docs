@@ -1,4 +1,6 @@
-## Creating a Database { #tutorial-createdb }
+<a id="tutorial-createdb"></a>
+
+## Creating a Database
 
 
  The first test to see whether you can access the database server is to try to create a database. A running PostgreSQL server can manage many databases. Typically, a separate database is used for each project or for each user.

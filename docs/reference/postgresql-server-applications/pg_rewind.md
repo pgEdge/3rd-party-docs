@@ -1,4 +1,6 @@
-# pg_rewind { #app-pgrewind }
+<a id="app-pgrewind"></a>
+
+# pg_rewind
 
 synchronize a PostgreSQL data directory with another data directory that was forked from it
 

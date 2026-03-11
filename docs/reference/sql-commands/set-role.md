@@ -1,4 +1,6 @@
-# SET ROLE { #sql-set-role }
+<a id="sql-set-role"></a>
+
+# SET ROLE
 
 set the current user identifier of the current session
 

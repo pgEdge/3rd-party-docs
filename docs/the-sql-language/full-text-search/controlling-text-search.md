@@ -1,10 +1,12 @@
-## Controlling Text Search { #textsearch-controls }
+<a id="textsearch-controls"></a>
+
+## Controlling Text Search
 
 
  To implement full text searching there must be a function to create a `tsvector` from a document and a `tsquery` from a user query. Also, we need to return results in a useful order, so we need a function that compares documents with respect to their relevance to the query. It's also important to be able to display the results nicely. PostgreSQL provides support for all of these functions.
+ <a id="textsearch-parsing-documents"></a>
 
-
-### Parsing Documents { #textsearch-parsing-documents }
+### Parsing Documents
 
 
  PostgreSQL provides the function `to_tsvector` for converting a document to the `tsvector` data type.
@@ -47,9 +49,9 @@ UPDATE tt SET ti =
     setweight(to_tsvector(coalesce(body,'')), 'D');
 ```
  Here we have used `setweight` to label the source of each lexeme in the finished `tsvector`, and then merged the labeled `tsvector` values using the `tsvector` concatenation operator `||`. ([Manipulating Documents](additional-features.md#textsearch-manipulate-tsvector) gives details about these operations.)
+  <a id="textsearch-parsing-queries"></a>
 
-
-### Parsing Queries { #textsearch-parsing-queries }
+### Parsing Queries
 
 
  PostgreSQL provides the functions `to_tsquery`, `plainto_tsquery`, `phraseto_tsquery` and `websearch_to_tsquery` for converting a query to the `tsquery` data type. `to_tsquery` offers access to more features than either `plainto_tsquery` or `phraseto_tsquery`, but it is less forgiving about its input. `websearch_to_tsquery` is a simplified version of `to_tsquery` with an alternative syntax, similar to the one used by web search engines.
@@ -212,8 +214,9 @@ SELECT websearch_to_tsquery('english', '""" )( dummy \\ query <->');
 (1 row)
 ```
 
+  <a id="textsearch-ranking"></a>
 
-### Ranking Search Results { #textsearch-ranking }
+### Ranking Search Results
 
 
  Ranking attempts to measure how relevant documents are to a particular query, so that when there are many matches the most relevant ones can be shown first. PostgreSQL provides two predefined ranking functions, which take into account lexical, proximity, and structural information; that is, they consider how often the query terms appear in the document, how close together the terms are in the document, and how important is the part of the document where they occur. However, the concept of relevancy is vague and very application-specific. Different applications might require additional information for ranking, e.g., document modification time. The built-in ranking functions are only examples. You can write your own ranking functions and/or combine their results with additional factors to fit your specific needs.
@@ -308,9 +311,9 @@ LIMIT 10;
 
 
  Ranking can be expensive since it requires consulting the `tsvector` of each matching document, which can be I/O bound and therefore slow. Unfortunately, it is almost impossible to avoid since practical queries often result in large numbers of matches.
+  <a id="textsearch-headline"></a>
 
-
-### Highlighting Results { #textsearch-headline }
+### Highlighting Results
 
 
  To present search results it is ideal to show a part of each document and how it is related to the query. Usually, search engines show fragments of the document with marked search terms. PostgreSQL provides a function `ts_headline` that implements this functionality.

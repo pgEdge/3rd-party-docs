@@ -1,4 +1,6 @@
-## Operator Classes and Operator Families { #indexes-opclass }
+<a id="indexes-opclass"></a>
+
+## Operator Classes and Operator Families
 
 
  An index definition can specify an *operator class* for each column of an index.

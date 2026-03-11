@@ -1,4 +1,6 @@
-# ALTER TEXT SEARCH PARSER { #sql-altertsparser }
+<a id="sql-altertsparser"></a>
+
+# ALTER TEXT SEARCH PARSER
 
 change the definition of a text search parser
 

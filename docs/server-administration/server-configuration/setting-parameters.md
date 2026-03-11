@@ -1,7 +1,9 @@
-## Setting Parameters { #config-setting }
+<a id="config-setting"></a>
 
+## Setting Parameters
+  <a id="config-setting-names-values"></a>
 
-### Parameter Names and Values { #config-setting-names-values }
+### Parameter Names and Values
 
 
  All parameter names are case-insensitive. Every parameter takes a value of one of five types: boolean, string, integer, floating point, or enumerated (enum). The type determines the syntax for setting the parameter:
@@ -16,9 +18,9 @@
 -  Valid time units are `us` (microseconds), `ms` (milliseconds), `s` (seconds), `min` (minutes), `h` (hours), and `d` (days).
    If a fractional value is specified with a unit, it will be rounded to a multiple of the next smaller unit if there is one. For example, `30.1 GB` will be converted to `30822 MB` not `32319628902 B`. If the parameter is of integer type, a final rounding to integer occurs after any unit conversion.
 -  *Enumerated:* Enumerated-type parameters are written in the same way as string parameters, but are restricted to have one of a limited set of values. The values allowable for such a parameter can be found from `pg_settings`.`enumvals`. Enum parameter values are case-insensitive.
+  <a id="config-setting-configuration-file"></a>
 
-
-### Parameter Interaction via the Configuration File { #config-setting-configuration-file }
+### Parameter Interaction via the Configuration File
 
 
  The most fundamental way to set these parameters is to edit the file `postgresql.conf`, which is normally kept in the data directory. A default copy is installed when the database cluster directory is initialized. An example of what this file might look like is:
@@ -47,9 +49,9 @@ shared_buffers = 128MB
 
 
  The system view [`pg_file_settings`](../../internals/system-views/pg_file_settings.md#view-pg-file-settings) can be helpful for pre-testing changes to the configuration files, or for diagnosing problems if a `SIGHUP` signal did not have the desired effects.
+  <a id="config-setting-sql"></a>
 
-
-### Parameter Interaction via SQL { #config-setting-sql }
+### Parameter Interaction via SQL
 
 
  PostgreSQL provides three SQL commands to establish configuration defaults. The already-mentioned `ALTER SYSTEM` command provides an SQL-accessible means of changing global defaults; it is functionally equivalent to editing `postgresql.conf`. In addition, there are two commands that allow setting of defaults on a per-database or per-role basis:
@@ -86,8 +88,9 @@ SET configuration_parameter TO DEFAULT;
 UPDATE pg_settings SET setting = reset_val WHERE name = 'configuration_parameter';
 ```
 
+  <a id="config-setting-shell"></a>
 
-### Parameter Interaction via the Shell { #config-setting-shell }
+### Parameter Interaction via the Shell
 
 
  In addition to setting global defaults or attaching overrides at the database or role level, you can pass settings to PostgreSQL via shell facilities. Both the server and libpq client library accept parameter values via the shell.
@@ -109,9 +112,9 @@ env PGOPTIONS="-c geqo=off --statement-timeout=5min" psql
 
 
    Other clients and libraries might provide their own mechanisms, via the shell or otherwise, that allow the user to alter session settings without direct use of SQL commands.
+  <a id="config-includes"></a>
 
-
-### Managing Configuration File Contents { #config-includes }
+### Managing Configuration File Contents
 
 
  PostgreSQL provides several features for breaking down complex `postgresql.conf` files into sub-files. These features are especially useful when managing multiple servers with related, but not identical, configurations.

@@ -1,4 +1,6 @@
-# DROP INDEX { #sql-dropindex }
+<a id="sql-dropindex"></a>
+
+# DROP INDEX
 
 remove an index
 

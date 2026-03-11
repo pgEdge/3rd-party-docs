@@ -1,4 +1,6 @@
-## Authentication Problems { #client-authentication-problems }
+<a id="client-authentication-problems"></a>
+
+## Authentication Problems
 
 
  Authentication failures and related problems generally manifest themselves through error messages like the following:

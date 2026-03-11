@@ -1,4 +1,6 @@
-# clusterdb { #app-clusterdb }
+<a id="app-clusterdb"></a>
+
+# clusterdb
 
 cluster a PostgreSQL database
 

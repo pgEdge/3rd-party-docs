@@ -1,4 +1,6 @@
-# ALTER FOREIGN TABLE { #sql-alterforeigntable }
+<a id="sql-alterforeigntable"></a>
+
+# ALTER FOREIGN TABLE
 
 change the definition of a foreign table
 

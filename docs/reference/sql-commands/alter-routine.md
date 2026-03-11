@@ -1,4 +1,6 @@
-# ALTER ROUTINE { #sql-alterroutine }
+<a id="sql-alterroutine"></a>
+
+# ALTER ROUTINE
 
 change the definition of a routine
 

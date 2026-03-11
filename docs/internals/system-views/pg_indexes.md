@@ -1,4 +1,6 @@
-## `pg_indexes` { #view-pg-indexes }
+<a id="view-pg-indexes"></a>
+
+## `pg_indexes`
 
 
  The view `pg_indexes` provides access to useful information about each index in the database.

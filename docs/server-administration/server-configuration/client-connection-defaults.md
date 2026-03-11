@@ -1,7 +1,9 @@
-## Client Connection Defaults { #runtime-config-client }
+<a id="runtime-config-client"></a>
 
+## Client Connection Defaults
+  <a id="runtime-config-client-statement"></a>
 
-### Statement Behavior { #runtime-config-client-statement }
+### Statement Behavior
 
 
 <a id="guc-client-min-messages"></a>
@@ -237,9 +239,9 @@
 
 `restrict_nonsystem_relation_kind` (`string`)
 :   Set relation kinds for which access to non-system relations is prohibited. The value takes the form of a comma-separated list of relation kinds. Currently, the supported relation kinds are `view` and `foreign-table`.
+  <a id="runtime-config-client-format"></a>
 
-
-### Locale and Formatting { #runtime-config-client-format }
+### Locale and Formatting
 
 
 <a id="guc-datestyle"></a>
@@ -313,9 +315,9 @@
 
 `default_text_search_config` (`string`)
 :   Selects the text search configuration that is used by those variants of the text search functions that do not have an explicit argument specifying the configuration. See [Full Text Search](../../the-sql-language/full-text-search/index.md#textsearch) for further information. The built-in default is `pg_catalog.simple`, but initdb will initialize the configuration file with a setting that corresponds to the chosen `lc_ctype` locale, if a configuration matching that locale can be identified.
+  <a id="runtime-config-client-preload"></a>
 
-
-### Shared Library Preloading { #runtime-config-client-preload }
+### Shared Library Preloading
 
 
  Several settings are available for preloading shared libraries into the server, in order to load additional functionality or achieve performance benefits. For example, a setting of `'$libdir/mylib'` would cause `mylib.so` (or on some platforms, `mylib.sl`) to be preloaded from the installation's standard library directory. The differences between the settings are when they take effect and what privileges are required to change them.
@@ -375,9 +377,9 @@
 
 
      If set to a non-existent library, JIT will not be available, but no error will be raised. This allows JIT support to be installed separately from the main PostgreSQL package.
+  <a id="runtime-config-client-other"></a>
 
-
-### Other Defaults { #runtime-config-client-other }
+### Other Defaults
 
 
 <a id="guc-dynamic-library-path"></a>

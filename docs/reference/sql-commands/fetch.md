@@ -1,4 +1,6 @@
-# FETCH { #sql-fetch }
+<a id="sql-fetch"></a>
+
+# FETCH
 
 retrieve rows from a query using a cursor
 

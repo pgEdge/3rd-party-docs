@@ -1,4 +1,6 @@
-# REFRESH MATERIALIZED VIEW { #sql-refreshmaterializedview }
+<a id="sql-refreshmaterializedview"></a>
+
+# REFRESH MATERIALIZED VIEW
 
 replace the contents of a materialized view
 

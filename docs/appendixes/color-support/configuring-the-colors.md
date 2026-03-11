@@ -1,4 +1,6 @@
-## Configuring the Colors { #color-which }
+<a id="color-which"></a>
+
+## Configuring the Colors
 
 
  The actual colors to be used are configured using the environment variable `PG_COLORS` (note plural). The value is a colon-separated list of <em>key</em><code>=</code><em>value</em> pairs. The keys specify what the color is to be used for. The values are SGR (Select Graphic Rendition) specifications, which are interpreted by the terminal.

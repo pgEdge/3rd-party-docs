@@ -1,4 +1,6 @@
-## Role Attributes { #role-attributes }
+<a id="role-attributes"></a>
+
+## Role Attributes
 
 
  A database role can have a number of attributes that define its privileges and interact with the client authentication system.
@@ -21,6 +23,7 @@ database creation
 :   A role must be explicitly given permission to create databases (except for superusers, since those bypass all permission checks). To create such a role, use <code>CREATE ROLE
             </code><em>name</em><code> CREATEDB</code>.
 
+<a id="role-creation"></a>
 role creation
 :   A role must be explicitly given permission to create more roles (except for superusers, since those bypass all permission checks). To create such a role, use <code>CREATE ROLE
             </code><em>name</em><code> CREATEROLE</code>. A role with `CREATEROLE` privilege can alter and drop roles which have been granted to the `CREATEROLE` user with the `ADMIN` option. Such a grant occurs automatically when a `CREATEROLE` user that is not a superuser creates a new role, so that by default, a `CREATEROLE` user can alter and drop the roles which they have created. Altering a role includes most changes that can be made using `ALTER ROLE`, including, for example, changing passwords. It also includes modifications to a role that can be made using the `COMMENT` and `SECURITY LABEL` commands.

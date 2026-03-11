@@ -1,10 +1,12 @@
-## Preprocessor Directives { #ecpg-preproc }
+<a id="ecpg-preproc"></a>
+
+## Preprocessor Directives
 
 
  Several preprocessor directives are available that modify how the `ecpg` preprocessor parses and processes a file.
+ <a id="ecpg-include"></a>
 
-
-### Including Files { #ecpg-include }
+### Including Files
 
 
  To include an external file into your embedded SQL program, use:
@@ -51,9 +53,9 @@ EXEC SQL INCLUDE "FILENAME";
 !!! note
 
     The include file name is case-sensitive, even though the rest of the `EXEC SQL INCLUDE` command follows the normal SQL case-sensitivity rules.
+  <a id="ecpg-define"></a>
 
-
-### The define and undef Directives { #ecpg-define }
+### The define and undef Directives
 
 
  Similar to the directive `#define` that is known from C, embedded SQL has a similar concept:
@@ -96,9 +98,9 @@ EXEC SQL UPDATE Tbl SET col = MYNUMBER;
 
 
  If multiple input files are named on the `ecpg` preprocessor's command line, the effects of `EXEC SQL DEFINE` and `EXEC SQL UNDEF` do not carry across files: each file starts with only the symbols defined by `-D` switches on the command line.
+  <a id="ecpg-ifdef"></a>
 
-
-### ifdef, ifndef, elif, else, and endif Directives { #ecpg-ifdef }
+### ifdef, ifndef, elif, else, and endif Directives
 
 
  You can use the following directives to compile code sections conditionally:

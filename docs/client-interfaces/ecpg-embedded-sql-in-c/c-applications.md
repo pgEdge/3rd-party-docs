@@ -1,4 +1,6 @@
-## C++ Applications { #ecpg-cpp }
+<a id="ecpg-cpp"></a>
+
+## C++ Applications
 
 
  ECPG has some limited support for C++ applications. This section describes some caveats.
@@ -11,9 +13,9 @@
 
 
  A safe way to use the embedded SQL code in a C++ application is hiding the ECPG calls in a C module, which the C++ application code calls into to access the database, and linking that together with the rest of the C++ code. See [C++ Application Development with External C Module](#ecpg-cpp-and-c) about that.
+ <a id="ecpg-cpp-scope"></a>
 
-
-### Scope for Host Variables { #ecpg-cpp-scope }
+### Scope for Host Variables
 
 
  The `ecpg` preprocessor understands the scope of variables in C. In the C language, this is rather simple because the scopes of variables is based on their code blocks. In C++, however, the class member variables are referenced in a different code block from the declared position, so the `ecpg` preprocessor will not understand the scope of the class member variables.
@@ -78,8 +80,9 @@ void TestCpp::test()
 }
 ```
 
+  <a id="ecpg-cpp-and-c"></a>
 
-### C++ Application Development with External C Module { #ecpg-cpp-and-c }
+### C++ Application Development with External C Module
 
 
  If you understand these technical limitations of the `ecpg` preprocessor in C++, you might come to the conclusion that linking C objects and C++ objects at the link stage to enable C++ applications to use ECPG features could be better than writing some embedded SQL commands in C++ code directly. This section describes a way to separate some embedded SQL commands from C++ application code with a simple example. In this example, the application is implemented in C++, while C and ECPG is used to connect to the PostgreSQL server.

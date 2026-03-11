@@ -1,4 +1,6 @@
-## System Catalog Declaration Rules { #system-catalog-declarations }
+<a id="system-catalog-declarations"></a>
+
+## System Catalog Declaration Rules
 
 
  The key part of a catalog header file is a C structure definition describing the layout of each row of the catalog. This begins with a `CATALOG` macro, which so far as the C compiler is concerned is just shorthand for <code>typedef struct

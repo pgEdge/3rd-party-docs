@@ -1,4 +1,6 @@
-## Window Functions { #functions-window }
+<a id="functions-window"></a>
+
+## Window Functions
 
 
  *Window functions* provide the ability to perform calculations across sets of rows that are related to the current query row. See [Window Functions](../../tutorial/advanced-features/window-functions.md#tutorial-window) for an introduction to this feature, and [Window Function Calls](../sql-syntax/value-expressions.md#syntax-window-functions) for syntax details.
@@ -8,9 +10,8 @@
 
 
  In addition to these functions, any built-in or user-defined ordinary aggregate (i.e., not ordered-set or hypothetical-set aggregates) can be used as a window function; see [Aggregate Functions](aggregate-functions.md#functions-aggregate) for a list of the built-in aggregates. Aggregate functions act as window functions only when an `OVER` clause follows the call; otherwise they act as plain aggregates and return a single row for the entire set.
+ <a id="functions-window-table"></a>
 
-
-<a id="functions-window-table"></a>
 **Table: General-Purpose Window Functions**
 
 <table>

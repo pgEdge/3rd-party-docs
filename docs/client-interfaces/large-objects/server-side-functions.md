@@ -1,10 +1,11 @@
-## Server-Side Functions { #lo-funcs }
+<a id="lo-funcs"></a>
+
+## Server-Side Functions
 
 
  Server-side functions tailored for manipulating large objects from SQL are listed in [SQL-Oriented Large Object Functions](#lo-funcs-table).
+ <a id="lo-funcs-table"></a>
 
-
-<a id="lo-funcs-table"></a>
 **Table: SQL-Oriented Large Object Functions**
 
 <table>

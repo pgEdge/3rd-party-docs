@@ -1,4 +1,6 @@
-# OAuth Validator Modules { #oauth-validators }
+<a id="oauth-validators"></a>
+
+# OAuth Validator Modules
 
  PostgreSQL provides infrastructure for creating custom modules to perform server-side validation of OAuth bearer tokens. Because OAuth implementations vary so wildly, and bearer token validation is heavily dependent on the issuing party, the server cannot check the token itself; validator modules provide the integration layer between the server and the OAuth provider in use.
 

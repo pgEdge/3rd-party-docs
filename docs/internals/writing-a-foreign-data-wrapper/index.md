@@ -1,4 +1,6 @@
-# Writing a Foreign Data Wrapper { #fdwhandler }
+<a id="fdwhandler"></a>
+
+# Writing a Foreign Data Wrapper
 
  All operations on a foreign table are handled through its foreign data wrapper, which consists of a set of functions that the core server calls. The foreign data wrapper is responsible for fetching data from the remote data source and returning it to the PostgreSQL executor. If updating foreign tables is to be supported, the wrapper must handle that, too. This chapter outlines how to write a new foreign data wrapper.
 

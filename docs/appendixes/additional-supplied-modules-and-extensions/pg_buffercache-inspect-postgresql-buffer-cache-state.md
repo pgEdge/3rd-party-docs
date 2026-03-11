@@ -1,4 +1,6 @@
-## pg_buffercache — inspect PostgreSQL buffer cache state { #pgbuffercache }
+<a id="pgbuffercache"></a>
+
+## pg_buffercache — inspect PostgreSQL buffer cache state
 
 
  The `pg_buffercache` module provides a means for examining what's happening in the shared buffer cache in real time. It also offers a low-level way to evict data from it, for testing purposes.
@@ -29,15 +31,14 @@
 
 
  The `pg_buffercache_evict_all()` function allows all unpinned shared buffers to be evicted in the buffer pool. Use of this function is restricted to superusers only.
+ <a id="pgbuffercache-pg-buffercache"></a>
 
-
-### The `pg_buffercache` View { #pgbuffercache-pg-buffercache }
+### The `pg_buffercache` View
 
 
  The definitions of the columns exposed by the view are shown in [`pg_buffercache` Columns](#pgbuffercache-columns).
+ <a id="pgbuffercache-columns"></a>
 
-
-<a id="pgbuffercache-columns"></a>
 **Table: `pg_buffercache` Columns**
 
 <table>
@@ -95,15 +96,14 @@
 
 
  Since buffer manager locks are not taken to copy the buffer state data that the view will display, accessing `pg_buffercache` view has less impact on normal buffer activity but it doesn't provide a consistent set of results across all buffers. However, we ensure that the information of each buffer is self-consistent.
+  <a id="pgbuffercache-pg-buffercache-numa"></a>
 
-
-### The `pg_buffercache_numa` View { #pgbuffercache-pg-buffercache-numa }
+### The `pg_buffercache_numa` View
 
 
  The definitions of the columns exposed by the view are shown in [`pg_buffercache_numa` Columns](#pgbuffercache-numa-columns).
+ <a id="pgbuffercache-numa-columns"></a>
 
-
-<a id="pgbuffercache-numa-columns"></a>
 **Table: `pg_buffercache_numa` Columns**
 
 <table>
@@ -136,15 +136,14 @@
 !!! warning
 
     When determining the NUMA node, the view touches all memory pages for the shared memory segment. This will force allocation of the shared memory, if it wasn't allocated already, and the memory may get allocated in a single NUMA node (depending on system configuration).
+  <a id="pgbuffercache-summary"></a>
 
-
-### The `pg_buffercache_summary()` Function { #pgbuffercache-summary }
+### The `pg_buffercache_summary()` Function
 
 
  The definitions of the columns exposed by the function are shown in [`pg_buffercache_summary()` Output Columns](#pgbuffercache-summary-columns).
+ <a id="pgbuffercache-summary-columns"></a>
 
-
-<a id="pgbuffercache-summary-columns"></a>
 **Table: `pg_buffercache_summary()` Output Columns**
 
 <table>
@@ -183,15 +182,14 @@
 
 
  Like the `pg_buffercache` view, `pg_buffercache_summary()` does not acquire buffer manager locks. Therefore concurrent activity can lead to minor inaccuracies in the result.
+  <a id="pgbuffercache-usage-counts"></a>
 
-
-### The `pg_buffercache_usage_counts()` Function { #pgbuffercache-usage-counts }
+### The `pg_buffercache_usage_counts()` Function
 
 
  The definitions of the columns exposed by the function are shown in [`pg_buffercache_usage_counts()` Output Columns](#pgbuffercache_usage_counts-columns).
+ <a id="pgbuffercache_usage_counts-columns"></a>
 
-
-<a id="pgbuffercache_usage_counts-columns"></a>
 **Table: `pg_buffercache_usage_counts()` Output Columns**
 
 <table>
@@ -226,27 +224,27 @@
 
 
  Like the `pg_buffercache` view, `pg_buffercache_usage_counts()` does not acquire buffer manager locks. Therefore concurrent activity can lead to minor inaccuracies in the result.
+  <a id="pgbuffercache-pg-buffercache-evict"></a>
 
-
-### The `pg_buffercache_evict()` Function { #pgbuffercache-pg-buffercache-evict }
+### The `pg_buffercache_evict()` Function
 
 
  The `pg_buffercache_evict()` function takes a buffer identifier, as shown in the `bufferid` column of the `pg_buffercache` view. It returns information about whether the buffer was evicted and flushed. The buffer_evicted column is true on success, and false if the buffer wasn't valid, if it couldn't be evicted because it was pinned, or if it became dirty again after an attempt to write it out. The buffer_flushed column is true if the buffer was flushed. This does not necessarily mean that buffer was flushed by us, it might be flushed by someone else. The result is immediately out of date upon return, as the buffer might become valid again at any time due to concurrent activity. The function is intended for developer testing only.
+  <a id="pgbuffercache-pg-buffercache-evict-relation"></a>
 
-
-### The `pg_buffercache_evict_relation()` Function { #pgbuffercache-pg-buffercache-evict-relation }
+### The `pg_buffercache_evict_relation()` Function
 
 
  The `pg_buffercache_evict_relation()` function is very similar to the `pg_buffercache_evict()` function. The difference is that the `pg_buffercache_evict_relation()` takes a relation identifier instead of buffer identifier. It tries to evict all buffers for all forks in that relation. It returns the number of evicted buffers, flushed buffers and the number of buffers that could not be evicted. Flushed buffers haven't necessarily been flushed by us, they might have been flushed by someone else. The result is immediately out of date upon return, as buffers might immediately be read back in due to concurrent activity. The function is intended for developer testing only.
+  <a id="pgbuffercache-pg-buffercache-evict-all"></a>
 
-
-### The `pg_buffercache_evict_all()` Function { #pgbuffercache-pg-buffercache-evict-all }
+### The `pg_buffercache_evict_all()` Function
 
 
  The `pg_buffercache_evict_all()` function is very similar to the `pg_buffercache_evict()` function. The difference is, the `pg_buffercache_evict_all()` function does not take an argument; instead it tries to evict all buffers in the buffer pool. It returns the number of evicted buffers, flushed buffers and the number of buffers that could not be evicted. Flushed buffers haven't necessarily been flushed by us, they might have been flushed by someone else. The result is immediately out of date upon return, as buffers might immediately be read back in due to concurrent activity. The function is intended for developer testing only.
+  <a id="pgbuffercache-sample-output"></a>
 
-
-### Sample Output { #pgbuffercache-sample-output }
+### Sample Output
 
 
 ```
@@ -294,9 +292,9 @@ regression=# SELECT * FROM pg_buffercache_usage_counts();
            5 |     164 |   106 |      0
 (6 rows)
 ```
+  <a id="pgbuffercache-authors"></a>
 
-
-### Authors { #pgbuffercache-authors }
+### Authors
 
 
  Mark Kirkwood [markir@paradise.net.nz](mailto:markir@paradise.net.nz)

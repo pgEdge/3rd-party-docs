@@ -1,4 +1,6 @@
-## `user_mapping_options` { #infoschema-user-mapping-options }
+<a id="infoschema-user-mapping-options"></a>
+
+## `user_mapping_options`
 
 
  The view `user_mapping_options` contains all the options defined for user mappings in the current database. Only those user mappings are shown where the current user has access to the corresponding foreign server (by way of being the owner or having some privilege).

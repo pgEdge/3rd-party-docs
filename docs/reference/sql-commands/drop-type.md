@@ -1,4 +1,6 @@
-# DROP TYPE { #sql-droptype }
+<a id="sql-droptype"></a>
+
+# DROP TYPE
 
 remove a data type
 
@@ -31,9 +33,9 @@ DROP TYPE [ IF EXISTS ] NAME [, ...] [ CASCADE | RESTRICT ]
 
 `RESTRICT`
 :   Refuse to drop the type if any objects depend on it. This is the default.
+ <a id="sql-droptype-examples"></a>
 
-
-## Examples { #sql-droptype-examples }
+## Examples
 
 
  To remove the data type `box`:
@@ -42,13 +44,13 @@ DROP TYPE [ IF EXISTS ] NAME [, ...] [ CASCADE | RESTRICT ]
 
 DROP TYPE box;
 ```
+ <a id="sql-droptype-compatibility"></a>
 
-
-## Compatibility { #sql-droptype-compatibility }
+## Compatibility
 
 
  This command is similar to the corresponding command in the SQL standard, apart from the `IF EXISTS` option, which is a PostgreSQL extension. But note that much of the `CREATE TYPE` command and the data type extension mechanisms in PostgreSQL differ from the SQL standard.
+ <a id="sql-droptype-see-also"></a>
 
-
-## See Also { #sql-droptype-see-also }
+## See Also
   [sql-altertype](alter-type.md#sql-altertype), [sql-createtype](create-type.md#sql-createtype)

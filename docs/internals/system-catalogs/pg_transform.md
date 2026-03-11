@@ -1,4 +1,6 @@
-## `pg_transform` { #catalog-pg-transform }
+<a id="catalog-pg-transform"></a>
+
+## `pg_transform`
 
 
  The catalog `pg_transform` stores information about transforms, which are a mechanism to adapt data types to procedural languages. See [sql-createtransform](../../reference/sql-commands/create-transform.md#sql-createtransform) for more information.

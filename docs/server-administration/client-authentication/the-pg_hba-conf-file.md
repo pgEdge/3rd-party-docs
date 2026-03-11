@@ -1,4 +1,6 @@
-## The `pg_hba.conf` File { #auth-pg-hba-conf }
+<a id="auth-pg-hba-conf"></a>
+
+## The `pg_hba.conf` File
 
 
  Client authentication is controlled by a configuration file, which traditionally is named `pg_hba.conf` and is stored in the database cluster's data directory. (HBA stands for host-based authentication.) A default `pg_hba.conf` file is installed when the data directory is initialized by [app-initdb](../../reference/postgresql-server-applications/initdb.md#app-initdb). It is possible to place the authentication configuration file elsewhere, however; see the [hba_file](../server-configuration/file-locations.md#guc-hba-file) configuration parameter.
@@ -226,9 +228,8 @@ include_dir         DIRECTORY
 
 
  Some examples of `pg_hba.conf` entries are shown in [Example `pg_hba.conf` Entries](#example-pg-hba.conf). See the next section for details on the different authentication methods.
+ <a id="example-pg-hba.conf"></a>
 
-
-<a id="example-pg-hba.conf"></a>
 **Example: Example `pg_hba.conf` Entries**
 
 

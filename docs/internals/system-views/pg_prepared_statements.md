@@ -1,4 +1,6 @@
-## `pg_prepared_statements` { #view-pg-prepared-statements }
+<a id="view-pg-prepared-statements"></a>
+
+## `pg_prepared_statements`
 
 
  The `pg_prepared_statements` view displays all the prepared statements that are available in the current session. See [sql-prepare](../../reference/sql-commands/prepare.md#sql-prepare) for more information about prepared statements.

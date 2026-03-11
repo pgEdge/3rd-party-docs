@@ -1,4 +1,6 @@
-## btree_gin — GIN operator classes with B-tree behavior { #btree-gin }
+<a id="btree-gin"></a>
+
+## btree_gin — GIN operator classes with B-tree behavior
 
 
  `btree_gin` provides GIN operator classes that implement B-tree equivalent behavior for the data types `int2`, `int4`, `int8`, `float4`, `float8`, `timestamp with time zone`, `timestamp without time zone`, `time with time zone`, `time without time zone`, `date`, `interval`, `oid`, `money`, `"char"`, `varchar`, `text`, `bytea`, `bit`, `varbit`, `macaddr`, `macaddr8`, `inet`, `cidr`, `uuid`, `name`, `bool`, `bpchar`, and all `enum` types.
@@ -8,9 +10,9 @@
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="btree-gin-example-usage"></a>
 
-
-### Example Usage { #btree-gin-example-usage }
+### Example Usage
 
 
 ```sql
@@ -21,9 +23,9 @@ CREATE INDEX testidx ON test USING GIN (a);
 -- query
 SELECT * FROM test WHERE a < 10;
 ```
+  <a id="btree-gin-authors"></a>
 
-
-### Authors { #btree-gin-authors }
+### Authors
 
 
  Teodor Sigaev ([teodor@stack.net](mailto:teodor@stack.net)) and Oleg Bartunov ([oleg@sai.msu.su](mailto:oleg@sai.msu.su)). See [http://www.sai.msu.su/~megera/oddmuse/index.cgi/Gin](http://www.sai.msu.su/~megera/oddmuse/index.cgi/Gin) for additional information.

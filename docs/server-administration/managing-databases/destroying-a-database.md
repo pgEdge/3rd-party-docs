@@ -1,4 +1,6 @@
-## Destroying a Database { #manage-ag-dropdb }
+<a id="manage-ag-dropdb"></a>
+
+## Destroying a Database
 
 
  Databases are destroyed with the command [sql-dropdatabase](../../reference/sql-commands/drop-database.md#sql-dropdatabase):

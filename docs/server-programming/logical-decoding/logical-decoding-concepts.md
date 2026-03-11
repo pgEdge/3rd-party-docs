@@ -1,16 +1,18 @@
-## Logical Decoding Concepts { #logicaldecoding-explanation }
+<a id="logicaldecoding-explanation"></a>
 
+## Logical Decoding Concepts
+  <a id="logicaldecoding-explanation-log-dec"></a>
 
-### Logical Decoding { #logicaldecoding-explanation-log-dec }
+### Logical Decoding
 
 
  Logical decoding is the process of extracting all persistent changes to a database's tables into a coherent, easy to understand format which can be interpreted without detailed knowledge of the database's internal state.
 
 
  In PostgreSQL, logical decoding is implemented by decoding the contents of the [write-ahead log](../../server-administration/reliability-and-the-write-ahead-log/index.md#wal), which describe changes on a storage level, into an application-specific form such as a stream of tuples or SQL statements.
+  <a id="logicaldecoding-replication-slots"></a>
 
-
-### Replication Slots { #logicaldecoding-replication-slots }
+### Replication Slots
 
 
  In the context of logical replication, a slot represents a stream of changes that can be replayed to a client in the order they were made on the origin server. Each slot streams a sequence of changes from a single database.
@@ -42,9 +44,9 @@
 !!! caution
 
     Replication slots persist across crashes and know nothing about the state of their consumer(s). They will prevent removal of required resources even when there is no connection using them. This consumes storage because neither required WAL nor required rows from the system catalogs can be removed by `VACUUM` as long as they are required by a replication slot. In extreme cases this could cause the database to shut down to prevent transaction ID wraparound (see [Preventing Transaction ID Wraparound Failures](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-wraparound)). So if a slot is no longer required it should be dropped.
+  <a id="logicaldecoding-replication-slots-synchronization"></a>
 
-
-### Replication Slot Synchronization { #logicaldecoding-replication-slots-synchronization }
+### Replication Slot Synchronization
 
 
  The logical replication slots on the primary can be synchronized to the hot standby by using the `failover` parameter of [`pg_create_logical_replication_slot`](../../the-sql-language/functions-and-operators/system-administration-functions.md#pg-create-logical-replication-slot), or by using the [`failover`](../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-with-failover) option of `CREATE SUBSCRIPTION` during slot creation. Additionally, enabling [`sync_replication_slots`](../../server-administration/server-configuration/replication.md#guc-sync-replication-slots) on the standby is required. By enabling [`sync_replication_slots`](../../server-administration/server-configuration/replication.md#guc-sync-replication-slots) on the standby, the failover slots can be synchronized periodically in the slotsync worker. For the synchronization to work, it is mandatory to have a physical replication slot between the primary and the standby (i.e., [`primary_slot_name`](../../server-administration/server-configuration/replication.md#guc-primary-slot-name) should be configured on the standby), and [`hot_standby_feedback`](../../server-administration/server-configuration/replication.md#guc-hot-standby-feedback) must be enabled on the standby. It is also necessary to specify a valid `dbname` in the [`primary_conninfo`](../../server-administration/server-configuration/replication.md#guc-primary-conninfo). It's highly recommended that the said physical replication slot is named in [`synchronized_standby_slots`](../../server-administration/server-configuration/replication.md#guc-synchronized-standby-slots) list on the primary, to prevent the subscriber from consuming changes faster than the hot standby. Even when correctly configured, some latency is expected when sending changes to logical subscribers due to the waiting on slots named in [`synchronized_standby_slots`](../../server-administration/server-configuration/replication.md#guc-synchronized-standby-slots). When `synchronized_standby_slots` is utilized, the primary server will not completely shut down until the corresponding standbys, associated with the physical replication slots specified in `synchronized_standby_slots`, have confirmed receiving the WAL up to the latest flushed position on the primary server.
@@ -74,15 +76,15 @@ DETAIL:  Synchronization could lead to data loss, because the remote slot needs 
 !!! caution
 
     There is a chance that the old primary is up again during the promotion and if subscriptions are not disabled, the logical subscribers may continue to receive data from the old primary server even after promotion until the connection string is altered. This might result in data inconsistency issues, preventing the logical subscribers from being able to continue replication from the new primary server.
+  <a id="logicaldecoding-explanation-output-plugins"></a>
 
-
-### Output Plugins { #logicaldecoding-explanation-output-plugins }
+### Output Plugins
 
 
  Output plugins transform the data from the write-ahead log's internal representation into the format the consumer of a replication slot desires.
+  <a id="logicaldecoding-explanation-exported-snapshots"></a>
 
-
-### Exported Snapshots { #logicaldecoding-explanation-exported-snapshots }
+### Exported Snapshots
 
 
  When a new replication slot is created using the streaming replication interface (see [CREATE_REPLICATION_SLOT](../../internals/frontend-backend-protocol/streaming-replication-protocol.md#protocol-replication-create-replication-slot)), a snapshot is exported (see [Snapshot Synchronization Functions](../../the-sql-language/functions-and-operators/system-administration-functions.md#functions-snapshot-synchronization)), which will show exactly the state of the database after which all changes will be included in the change stream. This can be used to create a new replica by using [`SET TRANSACTION SNAPSHOT`](../../reference/sql-commands/set-transaction.md#sql-set-transaction) to read the state of the database at the moment the slot was created. This transaction can then be used to dump the database's state at that point in time, which afterwards can be updated using the slot's contents without losing any changes.

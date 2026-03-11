@@ -1,4 +1,6 @@
-## `routine_routine_usage` { #infoschema-routine-routine-usage }
+<a id="infoschema-routine-routine-usage"></a>
+
+## `routine_routine_usage`
 
 
  The view `routine_routine_usage` identifies all functions or procedures that are used by another (or the same) function or procedure, either in the SQL body or in parameter default expressions. (This only works for unquoted SQL bodies, not quoted bodies or functions in other languages.) An entry is included here only if the used function is owned by a currently enabled role. (There is no such restriction on the using function.)

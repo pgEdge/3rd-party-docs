@@ -1,4 +1,6 @@
-## `user_defined_types` { #infoschema-user-defined-types }
+<a id="infoschema-user-defined-types"></a>
+
+## `user_defined_types`
 
 
  The view `user_defined_types` currently contains all composite types defined in the current database. Only those types are shown that the current user has access to (by way of being the owner or having some privilege).

@@ -1,4 +1,6 @@
-# pg_combinebackup { #app-pgcombinebackup }
+<a id="app-pgcombinebackup"></a>
+
+# pg_combinebackup
 
 reconstruct a full backup from an incremental backup and dependent backups
 
@@ -91,8 +93,9 @@ pg_combinebackup [OPTION...] [BACKUP_DIRECTORY...]
 `-?`, `--help`
 :   Shows help about pg_combinebackup command line arguments, and exits.
 
+ <a id="app-pgcombinebackup-limitations"></a>
 
-## Limitations { #app-pgcombinebackup-limitations }
+## Limitations
 
 
  `pg_combinebackup` does not recompute page checksums when writing the output directory. Therefore, if any of the backups used for reconstruction were taken with checksums disabled, but the final backup was taken with checksums enabled, the resulting directory may contain pages with invalid checksums.

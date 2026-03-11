@@ -1,4 +1,6 @@
-## Inheritance { #tutorial-inheritance }
+<a id="tutorial-inheritance"></a>
+
+## Inheritance
 
 
  Inheritance is a concept from object-oriented databases. It opens up interesting new possibilities of database design.

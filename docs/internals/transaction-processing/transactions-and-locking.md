@@ -1,4 +1,6 @@
-## Transactions and Locking { #xact-locking }
+<a id="xact-locking"></a>
+
+## Transactions and Locking
 
 
  The transaction IDs of currently executing transactions are shown in [`pg_locks`](../system-views/pg_locks.md#view-pg-locks) in columns `virtualxid` and `transactionid`. Read-only transactions will have `virtualxid`s but NULL `transactionid`s, while both columns will be set in read-write transactions.

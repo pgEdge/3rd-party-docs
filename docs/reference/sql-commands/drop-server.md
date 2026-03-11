@@ -1,4 +1,6 @@
-# DROP SERVER { #sql-dropserver }
+<a id="sql-dropserver"></a>
+
+# DROP SERVER
 
 remove a foreign server descriptor
 

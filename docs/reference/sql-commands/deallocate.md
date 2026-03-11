@@ -1,4 +1,6 @@
-# DEALLOCATE { #sql-deallocate }
+<a id="sql-deallocate"></a>
+
+# DEALLOCATE
 
 deallocate a prepared statement
 

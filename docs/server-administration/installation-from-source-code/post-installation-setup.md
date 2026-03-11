@@ -1,7 +1,9 @@
-## Post-Installation Setup { #install-post }
+<a id="install-post"></a>
 
+## Post-Installation Setup
+  <a id="install-post-shlibs"></a>
 
-### Shared Libraries { #install-post-shlibs }
+### Shared Libraries
 
 
  On some systems with shared libraries you need to tell the system how to find the newly installed shared libraries. The systems on which this is *not* necessary include `FreeBSD`, `Linux`, `NetBSD`, `OpenBSD`, and `Solaris`.
@@ -52,9 +54,9 @@ libpq.so.2.1: cannot open shared object file: No such file or directory
 /sbin/ldconfig -m /usr/local/pgsql/lib
 ```
  instead. Other systems are not known to have an equivalent command.
+  <a id="install-post-env-vars"></a>
 
-
-### Environment Variables { #install-post-env-vars }
+### Environment Variables
 
 
  If you installed into `/usr/local/pgsql` or some other location that is not searched for programs by default, you should add `/usr/local/pgsql/bin` (or whatever you set ``--bindir`` to in [Configuration](building-and-installation-with-autoconf-and-make.md#configure)) into your `PATH`. Strictly speaking, this is not necessary, but it will make the use of PostgreSQL much more convenient.

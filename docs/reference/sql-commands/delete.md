@@ -1,4 +1,6 @@
-# DELETE { #sql-delete }
+<a id="sql-delete"></a>
+
+# DELETE
 
 delete rows of a table
 

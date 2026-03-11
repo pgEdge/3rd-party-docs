@@ -1,4 +1,6 @@
-# ALTER LANGUAGE { #sql-alterlanguage }
+<a id="sql-alterlanguage"></a>
+
+# ALTER LANGUAGE
 
 change the definition of a procedural language
 

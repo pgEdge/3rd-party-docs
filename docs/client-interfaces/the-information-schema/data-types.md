@@ -1,4 +1,6 @@
-## Data Types { #infoschema-datatypes }
+<a id="infoschema-datatypes"></a>
+
+## Data Types
 
 
  The columns of the information schema views use special data types that are defined in the information schema. These are defined as simple domains over ordinary built-in types. You should not use these types for work outside the information schema, but your applications must be prepared for them if they select from the information schema.

@@ -1,4 +1,6 @@
-## Schemas { #ddl-schemas }
+<a id="ddl-schemas"></a>
+
+## Schemas
 
 
  A PostgreSQL database cluster contains one or more named databases. Roles and a few other object types are shared across the entire cluster. A client connection to the server can only access data in a single database, the one specified in the connection request.
@@ -18,9 +20,9 @@
 -  To organize database objects into logical groups to make them more manageable.
 -  Third-party applications can be put into separate schemas so they do not collide with the names of other objects.
  Schemas are analogous to directories at the operating system level, except that schemas cannot be nested.
+ <a id="ddl-schemas-create"></a>
 
-
-### Creating a Schema { #ddl-schemas-create }
+### Creating a Schema
 
 
  To create a schema, use the [sql-createschema](../../reference/sql-commands/create-schema.md#sql-createschema) command. Give the schema a name of your choice. For example:
@@ -84,9 +86,9 @@ CREATE SCHEMA SCHEMA_NAME AUTHORIZATION USER_NAME;
 
 
  Schema names beginning with `pg_` are reserved for system purposes and cannot be created by users.
+  <a id="ddl-schemas-public"></a>
 
-
-### The Public Schema { #ddl-schemas-public }
+### The Public Schema
 
 
  In the previous sections we created tables without specifying any schema names. By default such tables (and other objects) are automatically put into a schema named “public”. Every new database contains such a schema. Thus, the following are equivalent:
@@ -102,8 +104,9 @@ CREATE TABLE products ( ... );
 CREATE TABLE public.products ( ... );
 ```
 
+  <a id="ddl-schemas-path"></a>
 
-### The Schema Search Path { #ddl-schemas-path }
+### The Schema Search Path
 
 
  Qualified names are tedious to write, and it's often best not to wire a particular schema name into applications anyway. Therefore tables are often referred to by *unqualified names*, which consist of just the table name. The system determines which table is meant by following a *search path*, which is a list of schemas to look in. The first matching table in the search path is taken to be the one wanted. If there is no match in the search path, an error is reported, even if matching table names exist in other schemas in the database.
@@ -175,9 +178,9 @@ OPERATOR(SCHEMA.OPERATOR)
 SELECT 3 OPERATOR(pg_catalog.+) 4;
 ```
  In practice one usually relies on the search path for operators, so as not to have to write anything so ugly as that.
+  <a id="ddl-schemas-priv"></a>
 
-
-### Schemas and Privileges { #ddl-schemas-priv }
+### Schemas and Privileges
 
 
  By default, users cannot access any objects in schemas they do not own. To allow that, the owner of the schema must grant the `USAGE` privilege on the schema. By default, everyone has that privilege on the schema `public`. To allow users to make use of the objects in a schema, additional privileges might need to be granted, as appropriate for the object.
@@ -190,18 +193,18 @@ SELECT 3 OPERATOR(pg_catalog.+) 4;
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
 ```
  (The first “public” is the schema, the second “public” means “every user”. In the first sense it is an identifier, in the second sense it is a key word, hence the different capitalization; recall the guidelines from [Identifiers and Key Words](../sql-syntax/lexical-structure.md#sql-syntax-identifiers).)
+  <a id="ddl-schemas-catalog"></a>
 
-
-### The System Catalog Schema { #ddl-schemas-catalog }
+### The System Catalog Schema
 
 
  In addition to `public` and user-created schemas, each database contains a `pg_catalog` schema, which contains the system tables and all the built-in data types, functions, and operators. `pg_catalog` is always effectively part of the search path. If it is not named explicitly in the path then it is implicitly searched *before* searching the path's schemas. This ensures that built-in names will always be findable. However, you can explicitly place `pg_catalog` at the end of your search path if you prefer to have user-defined names override built-in names.
 
 
  Since system table names begin with `pg_`, it is best to avoid such names to ensure that you won't suffer a conflict if some future version defines a system table named the same as your table. (With the default search path, an unqualified reference to your table name would then be resolved as the system table instead.) System tables will continue to follow the convention of having names beginning with `pg_`, so that they will not conflict with unqualified user-table names so long as users avoid the `pg_` prefix.
+  <a id="ddl-schemas-patterns"></a>
 
-
-### Usage Patterns { #ddl-schemas-patterns }
+### Usage Patterns
 
 
  Schemas can be used to organize your data in many ways. A *secure schema usage pattern* prevents untrusted users from changing the behavior of other users' queries. When a database does not use a secure schema usage pattern, users wishing to securely query that database would take protective action at the beginning of each session. Specifically, they would begin each session by setting `search_path` to the empty string or otherwise removing schemas that are writable by non-superusers from `search_path`. There are a few usage patterns easily supported by the default configuration:
@@ -214,9 +217,9 @@ REVOKE CREATE ON SCHEMA public FROM PUBLIC;
 
 
  For any pattern, to install shared applications (tables to be used by everyone, additional functions provided by third parties, etc.), put them into separate schemas. Remember to grant appropriate privileges to allow the other users to access them. Users can then refer to these additional objects by qualifying the names with a schema name, or they can put the additional schemas into their search path, as they choose.
+  <a id="ddl-schemas-portability"></a>
 
-
-### Portability { #ddl-schemas-portability }
+### Portability
 
 
  In the SQL standard, the notion of objects in the same schema being owned by different users does not exist. Moreover, some implementations do not allow you to create schemas that have a different name than their owner. In fact, the concepts of schema and user are nearly equivalent in a database system that implements only the basic schema support specified in the standard. Therefore, many users consider qualified names to really consist of <em>user_name</em><code>.</code><em>table_name</em>. This is how PostgreSQL will effectively behave if you create a per-user schema for every user.

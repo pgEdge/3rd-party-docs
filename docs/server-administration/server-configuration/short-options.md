@@ -1,10 +1,11 @@
-## Short Options { #runtime-config-short }
+<a id="runtime-config-short"></a>
+
+## Short Options
 
 
  For convenience there are also single letter command-line option switches available for some parameters. They are described in [Short Option Key](#runtime-config-short-table). Some of these options exist for historical reasons, and their presence as a single-letter option does not necessarily indicate an endorsement to use the option heavily.
+ <a id="runtime-config-short-table"></a>
 
-
-<a id="runtime-config-short-table"></a>
 **Table: Short Option Key**
 
 | Short Option | Equivalent |

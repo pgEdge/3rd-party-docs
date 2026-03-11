@@ -1,4 +1,6 @@
-## `pg_policies` { #view-pg-policies }
+<a id="view-pg-policies"></a>
+
+## `pg_policies`
 
 
  The view `pg_policies` provides access to useful information about each row-level security policy in the database.

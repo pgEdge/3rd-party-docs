@@ -1,4 +1,6 @@
-# CREATE EXTENSION { #sql-createextension }
+<a id="sql-createextension"></a>
+
+# CREATE EXTENSION
 
 install an extension
 

@@ -1,4 +1,6 @@
-## psql Support { #textsearch-psql }
+<a id="textsearch-psql"></a>
+
+## psql Support
 
 
  Information about text search configuration objects can be obtained in psql using a set of commands:

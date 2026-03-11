@@ -1,16 +1,17 @@
-## Progress Reporting { #progress-reporting }
+<a id="progress-reporting"></a>
+
+## Progress Reporting
 
 
  PostgreSQL has the ability to report the progress of certain commands during command execution. Currently, the only commands which support progress reporting are `ANALYZE`, `CLUSTER`, `CREATE INDEX`, `VACUUM`, `COPY`, and [BASE_BACKUP](../../internals/frontend-backend-protocol/streaming-replication-protocol.md#protocol-replication-base-backup) (i.e., replication command that [app-pgbasebackup](../../reference/postgresql-client-applications/pg_basebackup.md#app-pgbasebackup) issues to take a base backup). This may be expanded in the future.
+ <a id="analyze-progress-reporting"></a>
 
-
-### ANALYZE Progress Reporting { #analyze-progress-reporting }
+### ANALYZE Progress Reporting
 
 
  Whenever `ANALYZE` is running, the `pg_stat_progress_analyze` view will contain a row for each backend that is currently running that command. The tables below describe the information that will be reported and provide information about how to interpret it.
+ <a id="pg-stat-progress-analyze-view"></a>
 
-
-<a id="pg-stat-progress-analyze-view"></a>
 **Table: `pg_stat_progress_analyze` View**
 
 <table>
@@ -75,9 +76,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="analyze-phases"></a>
 
-
-<a id="analyze-phases"></a>
 **Table: ANALYZE Phases**
 
 | Phase | Description |
@@ -93,15 +93,14 @@
 !!! note
 
     Note that when `ANALYZE` is run on a partitioned table without the `ONLY` keyword, all of its partitions are also recursively analyzed. In that case, `ANALYZE` progress is reported first for the parent table, whereby its inheritance statistics are collected, followed by that for each partition.
+  <a id="cluster-progress-reporting"></a>
 
-
-### CLUSTER Progress Reporting { #cluster-progress-reporting }
+### CLUSTER Progress Reporting
 
 
  Whenever `CLUSTER` or `VACUUM FULL` is running, the `pg_stat_progress_cluster` view will contain a row for each backend that is currently running either command. The tables below describe the information that will be reported and provide information about how to interpret it.
+ <a id="pg-stat-progress-cluster-view"></a>
 
-
-<a id="pg-stat-progress-cluster-view"></a>
 **Table: `pg_stat_progress_cluster` View**
 
 <table>
@@ -162,9 +161,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="cluster-phases"></a>
 
-
-<a id="cluster-phases"></a>
 **Table: CLUSTER and VACUUM FULL Phases**
 
 | Phase | Description |
@@ -177,15 +175,14 @@
 | `swapping relation files` | The command is currently swapping newly-built files into place. |
 | `rebuilding index` | The command is currently rebuilding an index. |
 | `performing final cleanup` | The command is performing final cleanup. When this phase is completed, `CLUSTER` or `VACUUM FULL` will end. |
+  <a id="copy-progress-reporting"></a>
 
-
-### COPY Progress Reporting { #copy-progress-reporting }
+### COPY Progress Reporting
 
 
  Whenever `COPY` is running, the `pg_stat_progress_copy` view will contain one row for each backend that is currently running a `COPY` command. The table below describes the information that will be reported and provides information about how to interpret it.
+ <a id="pg-stat-progress-copy-view"></a>
 
-
-<a id="pg-stat-progress-copy-view"></a>
 **Table: `pg_stat_progress_copy` View**
 
 <table>
@@ -242,15 +239,14 @@
 </tr>
 </tbody>
 </table>
+  <a id="create-index-progress-reporting"></a>
 
-
-### CREATE INDEX Progress Reporting { #create-index-progress-reporting }
+### CREATE INDEX Progress Reporting
 
 
  Whenever `CREATE INDEX` or `REINDEX` is running, the `pg_stat_progress_create_index` view will contain one row for each backend that is currently creating indexes. The tables below describe the information that will be reported and provide information about how to interpret it.
+ <a id="pg-stat-progress-create-index-view"></a>
 
-
-<a id="pg-stat-progress-create-index-view"></a>
 **Table: `pg_stat_progress_create_index` View**
 
 <table>
@@ -327,9 +323,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="create-index-phases"></a>
 
-
-<a id="create-index-phases"></a>
 **Table: CREATE INDEX Phases**
 
 | Phase | Description |
@@ -344,15 +339,14 @@
 | `waiting for old snapshots` | `CREATE INDEX CONCURRENTLY` or `REINDEX CONCURRENTLY` is waiting for transactions that can potentially see the table to release their snapshots. This phase is skipped when not in concurrent mode. Columns `lockers_total`, `lockers_done` and `current_locker_pid` contain the progress information for this phase. |
 | `waiting for readers before marking dead` | `REINDEX CONCURRENTLY` is waiting for transactions with read locks on the table to finish, before marking the old index dead. This phase is skipped when not in concurrent mode. Columns `lockers_total`, `lockers_done` and `current_locker_pid` contain the progress information for this phase. |
 | `waiting for readers before dropping` | `REINDEX CONCURRENTLY` is waiting for transactions with read locks on the table to finish, before dropping the old index. This phase is skipped when not in concurrent mode. Columns `lockers_total`, `lockers_done` and `current_locker_pid` contain the progress information for this phase. |
+  <a id="vacuum-progress-reporting"></a>
 
-
-### VACUUM Progress Reporting { #vacuum-progress-reporting }
+### VACUUM Progress Reporting
 
 
  Whenever `VACUUM` is running, the `pg_stat_progress_vacuum` view will contain one row for each backend (including autovacuum worker processes) that is currently vacuuming. The tables below describe the information that will be reported and provide information about how to interpret it. Progress for `VACUUM FULL` commands is reported via `pg_stat_progress_cluster` because both `VACUUM FULL` and `CLUSTER` rewrite the table, while regular `VACUUM` only modifies it in place. See [CLUSTER Progress Reporting](#cluster-progress-reporting).
+ <a id="pg-stat-progress-vacuum-view"></a>
 
-
-<a id="pg-stat-progress-vacuum-view"></a>
 **Table: `pg_stat_progress_vacuum` View**
 
 <table>
@@ -425,9 +419,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="vacuum-phases"></a>
 
-
-<a id="vacuum-phases"></a>
 **Table: VACUUM Phases**
 
 | Phase | Description |
@@ -439,15 +432,14 @@
 | `cleaning up indexes` | `VACUUM` is currently cleaning up indexes. This occurs after the heap has been completely scanned and all vacuuming of the indexes and the heap has been completed. |
 | `truncating heap` | `VACUUM` is currently truncating the heap so as to return empty pages at the end of the relation to the operating system. This occurs after cleaning up indexes. |
 | `performing final cleanup` | `VACUUM` is performing final cleanup. During this phase, `VACUUM` will vacuum the free space map, update statistics in `pg_class`, and report statistics to the cumulative statistics system. When this phase is completed, `VACUUM` will end. |
+  <a id="basebackup-progress-reporting"></a>
 
-
-### Base Backup Progress Reporting { #basebackup-progress-reporting }
+### Base Backup Progress Reporting
 
 
  Whenever an application like pg_basebackup is taking a base backup, the `pg_stat_progress_basebackup` view will contain a row for each WAL sender process that is currently running the `BASE_BACKUP` replication command and streaming the backup. The tables below describe the information that will be reported and provide information about how to interpret it.
+ <a id="pg-stat-progress-basebackup-view"></a>
 
-
-<a id="pg-stat-progress-basebackup-view"></a>
 **Table: `pg_stat_progress_basebackup` View**
 
 <table>
@@ -484,9 +476,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="basebackup-phases"></a>
 
-
-<a id="basebackup-phases"></a>
 **Table: Base Backup Phases**
 
 | Phase | Description |

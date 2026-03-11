@@ -1,4 +1,6 @@
-## `routine_sequence_usage` { #infoschema-routine-sequence-usage }
+<a id="infoschema-routine-sequence-usage"></a>
+
+## `routine_sequence_usage`
 
 
  The view `routine_sequence_usage` identifies all sequences that are used by a function or procedure, either in the SQL body or in parameter default expressions. (This only works for unquoted SQL bodies, not quoted bodies or functions in other languages.) A sequence is only included if that sequence is owned by a currently enabled role.

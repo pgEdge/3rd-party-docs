@@ -1,10 +1,12 @@
-## `WITH` Queries (Common Table Expressions) { #queries-with }
+<a id="queries-with"></a>
+
+## `WITH` Queries (Common Table Expressions)
 
 
  `WITH` provides a way to write auxiliary statements for use in a larger query. These statements, which are often referred to as Common Table Expressions or CTEs, can be thought of as defining temporary tables that exist just for one query. Each auxiliary statement in a `WITH` clause can be a `SELECT`, `INSERT`, `UPDATE`, `DELETE`, or `MERGE`; and the `WITH` clause itself is attached to a primary statement that can also be a `SELECT`, `INSERT`, `UPDATE`, `DELETE`, or `MERGE`.
+ <a id="queries-with-select"></a>
 
-
-### `SELECT` in `WITH` { #queries-with-select }
+### `SELECT` in `WITH`
 
 
  The basic value of `SELECT` in `WITH` is to break down complicated queries into simpler parts. An example is:
@@ -29,9 +31,9 @@ WHERE region IN (SELECT region FROM top_regions)
 GROUP BY region, product;
 ```
  which displays per-product sales totals in only the top sales regions. The `WITH` clause defines two auxiliary statements named `regional_sales` and `top_regions`, where the output of `regional_sales` is used in `top_regions` and the output of `top_regions` is used in the primary `SELECT` query. This example could have been written without `WITH`, but we'd have needed two levels of nested sub-`SELECT`s. It's a bit easier to follow this way.
+  <a id="queries-with-recursive"></a>
 
-
-### Recursive Queries { #queries-with-recursive }
+### Recursive Queries
 
 
   The optional `RECURSIVE` modifier changes `WITH` from a mere syntactic convenience into a feature that accomplishes things not otherwise possible in standard SQL. Using `RECURSIVE`, a `WITH` query can refer to its own output. A very simple example is this query to sum the integers from 1 through 100:
@@ -81,8 +83,9 @@ FROM included_parts
 GROUP BY sub_part
 ```
 
+ <a id="queries-with-search"></a>
 
-#### Search Order { #queries-with-search }
+#### Search Order
 
 
  When computing a tree traversal using a recursive query, you might want to order the results in either depth-first or breadth-first order. This can be done by computing an ordering column alongside the other data columns and using that to sort the results at the end. Note that this does not actually control in which order the query evaluation visits the rows; that is as always in SQL implementation-dependent. This approach merely provides a convenient way to order the results afterwards.
@@ -186,9 +189,9 @@ WITH RECURSIVE search_tree(id, link, data) AS (
 SELECT * FROM search_tree ORDER BY ordercol;
 ```
  This syntax is internally expanded to something similar to the above hand-written forms. The `SEARCH` clause specifies whether depth- or breadth first search is wanted, the list of columns to track for sorting, and a column name that will contain the result data that can be used for sorting. That column will implicitly be added to the output rows of the CTE.
+  <a id="queries-with-cycle"></a>
 
-
-#### Cycle Detection { #queries-with-cycle }
+#### Cycle Detection
 
 
  When working with recursive queries it is important to be sure that the recursive part of the query will eventually return no tuples, or else the query will loop indefinitely. Sometimes, using `UNION` instead of `UNION ALL` can accomplish this by discarding rows that duplicate previous output rows. However, often a cycle does not involve output rows that are completely duplicate: it may be necessary to check just one or a few fields to see if the same point has been reached before. The standard method for handling such situations is to compute an array of the already-visited values. For example, consider again the following query that searches a table `graph` using a `link` field:
@@ -285,9 +288,9 @@ WITH RECURSIVE t(n) AS (
 SELECT n FROM t LIMIT 100;
 ```
  This works because PostgreSQL's implementation evaluates only as many rows of a `WITH` query as are actually fetched by the parent query. Using this trick in production is not recommended, because other systems might work differently. Also, it usually won't work if you make the outer query sort the recursive query's results or join them to some other table, because in such cases the outer query will usually try to fetch all of the `WITH` query's output anyway.
+   <a id="queries-with-cte-materialization"></a>
 
-
-### Common Table Expression Materialization { #queries-with-cte-materialization }
+### Common Table Expression Materialization
 
 
  A useful property of `WITH` queries is that they are normally evaluated only once per execution of the parent query, even if they are referred to more than once by the parent query or sibling `WITH` queries. Thus, expensive calculations that are needed in multiple places can be placed within a `WITH` query to avoid redundant work. Another possible application is to prevent unwanted multiple evaluations of functions with side-effects. However, the other side of this coin is that the optimizer is not able to push restrictions from the parent query down into a multiply-referenced `WITH` query, since that might affect all uses of the `WITH` query's output when it should affect only one. The multiply-referenced `WITH` query will be evaluated as written, without suppression of rows that the parent query might discard afterwards. (But, as mentioned above, evaluation might stop early if the reference(s) to the query demand only a limited number of rows.)
@@ -347,9 +350,9 @@ SELECT * FROM w AS w1 JOIN w AS w2 ON w1.f = w2.f;
 
 
  The examples above only show `WITH` being used with `SELECT`, but it can be attached in the same way to `INSERT`, `UPDATE`, `DELETE`, or `MERGE`. In each case it effectively provides temporary table(s) that can be referred to in the main command.
+  <a id="queries-with-modifying"></a>
 
-
-### Data-Modifying Statements in `WITH` { #queries-with-modifying }
+### Data-Modifying Statements in `WITH`
 
 
  You can use data-modifying statements (`INSERT`, `UPDATE`, `DELETE`, or `MERGE`) in `WITH`. This allows you to perform several different operations in the same query. An example is:

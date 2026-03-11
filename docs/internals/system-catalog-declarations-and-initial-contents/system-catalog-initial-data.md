@@ -1,10 +1,12 @@
-## System Catalog Initial Data { #system-catalog-initial-data }
+<a id="system-catalog-initial-data"></a>
+
+## System Catalog Initial Data
 
 
  Each catalog that has any manually-created initial data (some do not) has a corresponding `.dat` file that contains its initial data in an editable format.
+ <a id="system-catalog-initial-data-format"></a>
 
-
-### Data File Format { #system-catalog-initial-data-format }
+### Data File Format
 
 
  Each `.dat` file contains Perl data structure literals that are simply eval'd to produce an in-memory data structure consisting of an array of hash references, one per catalog row. A slightly modified excerpt from `pg_database.dat` will demonstrate the key features:
@@ -44,9 +46,9 @@
 -  `reformat_dat_file.pl` preserves blank lines and comment lines as-is.
    It's recommended to run `reformat_dat_file.pl` before submitting catalog data patches. For convenience, you can simply change to `src/include/catalog/` and run `make reformat-dat-files`.
 -  If you want to add a new method of making the data representation smaller, you must implement it in `reformat_dat_file.pl` and also teach `Catalog::ParseData()` how to expand the data back into the full representation.
+  <a id="system-catalog-oid-assignment"></a>
 
-
-### OID Assignment { #system-catalog-oid-assignment }
+### OID Assignment
 
 
  A catalog row appearing in the initial data can be given a manually-assigned OID by writing an <code>oid
@@ -76,9 +78,9 @@
 
 
  OIDs assigned during normal database operation are constrained to be 16384 or higher. This ensures that the range 10000—16383 is free for OIDs assigned automatically by `genbki.pl` or during initdb. These automatically-assigned OIDs are not considered stable, and may change from one installation to another.
+  <a id="system-catalog-oid-references"></a>
 
-
-### OID Reference Lookup { #system-catalog-oid-references }
+### OID Reference Lookup
 
 
  In principle, cross-references from one initial catalog row to another could be written just by writing the preassigned OID of the referenced row in the referencing field. However, that is against project policy, because it is error-prone, hard to read, and subject to breakage if a newly-assigned OID is renumbered. Therefore `genbki.pl` provides mechanisms to write symbolic references instead. The rules are as follows:
@@ -98,9 +100,9 @@
 
 
  It's desirable to mark OID reference columns with `BKI_LOOKUP` or `BKI_LOOKUP_OPT` even if the catalog has no initial data that requires lookup. This allows `genbki.pl` to record the foreign key relationships that exist in the system catalogs. That information is used in the regression tests to check for incorrect entries. See also the macros `DECLARE_FOREIGN_KEY`, `DECLARE_FOREIGN_KEY_OPT`, `DECLARE_ARRAY_FOREIGN_KEY`, and `DECLARE_ARRAY_FOREIGN_KEY_OPT`, which are used to declare foreign key relationships that are too complex for `BKI_LOOKUP` (typically, multi-column foreign keys).
+  <a id="system-catalog-auto-array-types"></a>
 
-
-### Automatic Creation of Array Types { #system-catalog-auto-array-types }
+### Automatic Creation of Array Types
 
 
  Most scalar data types should have a corresponding array type (that is, a standard varlena array type whose element type is the scalar type, and which is referenced by the `typarray` field of the scalar type's `pg_type` entry). `genbki.pl` is able to generate the `pg_type` entry for the array type automatically in most cases.
@@ -111,9 +113,9 @@
 
 
  The generated array type's name is the scalar type's name with an underscore prepended. The array entry's other fields are filled from <code>BKI_ARRAY_DEFAULT(</code><em>value</em><code>)</code> annotations in `pg_type.h`, or if there isn't one, copied from the scalar type. (There's also a special case for `typalign`.) Then the `typelem` and `typarray` fields of the two entries are set to cross-reference each other.
+  <a id="system-catalog-recipes"></a>
 
-
-### Recipes for Editing Data Files { #system-catalog-recipes }
+### Recipes for Editing Data Files
 
 
  Here are some suggestions about the easiest ways to perform common tasks when updating catalog data files.

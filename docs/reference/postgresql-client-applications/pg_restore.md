@@ -1,4 +1,6 @@
-# pg_restore { #app-pgrestore }
+<a id="app-pgrestore"></a>
+
+# pg_restore
 
 restore a PostgreSQL database from an archive file created by pg_dump
 
@@ -8,9 +10,9 @@ restore a PostgreSQL database from an archive file created by pg_dump
 ```
 pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
 ```
+ <a id="app-pgrestore-description"></a>
 
-
-## Description { #app-pgrestore-description }
+## Description
 
 
  pg_restore is a utility for restoring a PostgreSQL database from an archive created by [app-pgdump](pg_dump.md#app-pgdump) in one of the non-plain-text formats. It will issue the commands necessary to reconstruct the database to the state it was in at the time it was saved. The archive files also allow pg_restore to be selective about what is restored, or even to reorder the items prior to being restored. The archive files are designed to be portable across architectures.
@@ -25,9 +27,9 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
 !!! warning
 
     Restoring a dump causes the destination to execute arbitrary code of the source superusers' choice. Partial dumps and partial restores do not limit that. If the source superusers are not trusted, the dumped SQL statements must be inspected before restoring. Non-plain-text dumps can be inspected by using pg_restore's `--file` option. Note that the client running the dump and restore need not trust the source or destination superusers.
+ <a id="app-pgrestore-options"></a>
 
-
-## Options { #app-pgrestore-options }
+## Options
 
 
  pg_restore accepts the following command line arguments.
@@ -304,15 +306,15 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
 
 
  This utility, like most other PostgreSQL utilities, also uses the environment variables supported by libpq (see [Environment Variables](../../client-interfaces/libpq-c-library/environment-variables.md#libpq-envars)). However, it does not read `PGDATABASE` when a database name is not supplied.
+ <a id="app-pgrestore-diagnostics"></a>
 
-
-## Diagnostics { #app-pgrestore-diagnostics }
+## Diagnostics
 
 
  When a direct database connection is specified using the `-d` option, pg_restore internally executes SQL statements. If you have problems running pg_restore, make sure you are able to select information from the database using, for example, [app-psql](psql.md#app-psql). Also, any default connection settings and environment variables used by the libpq front-end library will apply.
+ <a id="app-pgrestore-notes"></a>
 
-
-## Notes { #app-pgrestore-notes }
+## Notes
 
 
  If your installation has any local additions to the `template1` database, be careful to load the output of pg_restore into a truly empty database; otherwise you are likely to get errors due to duplicate definitions of the added objects. To make an empty database without any local additions, copy from `template0` not `template1`, for example:
@@ -333,9 +335,9 @@ CREATE DATABASE foo WITH TEMPLATE template0;
 
 
  By default, `pg_restore` will restore optimizer statistics if included in the dump file. If not all statistics were restored, it may be useful to run `ANALYZE` on each restored table so the optimizer has useful statistics; see [Updating Planner Statistics](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-statistics) and [The Autovacuum Daemon](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) for more information.
+ <a id="app-pgrestore-examples"></a>
 
-
-## Examples { #app-pgrestore-examples }
+## Examples
 
 
  Assume we have dumped a database called `mydb` into a custom-format dump file:

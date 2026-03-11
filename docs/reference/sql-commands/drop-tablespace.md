@@ -1,4 +1,6 @@
-# DROP TABLESPACE { #sql-droptablespace }
+<a id="sql-droptablespace"></a>
+
+# DROP TABLESPACE
 
 remove a tablespace
 

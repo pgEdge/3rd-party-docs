@@ -1,4 +1,6 @@
-# ALTER ROLE { #sql-alterrole }
+<a id="sql-alterrole"></a>
+
+# ALTER ROLE
 
 change a database role
 
@@ -36,9 +38,9 @@ where ROLE_SPECIFICATION can be:
   | CURRENT_USER
   | SESSION_USER
 ```
+ <a id="sql-alterrole-desc"></a>
 
-
-## Description { #sql-alterrole-desc }
+## Description
 
 
  `ALTER ROLE` changes the attributes of a PostgreSQL role.
@@ -57,9 +59,9 @@ where ROLE_SPECIFICATION can be:
 
 
  Superusers can change anyone's session defaults. Roles having `CREATEROLE` privilege can change defaults for non-superuser roles for which they have been granted `ADMIN OPTION`. Ordinary roles can only set defaults for themselves. Certain configuration variables cannot be set this way, or can only be set if a superuser issues the command. Only superusers can change a setting for all roles in all databases.
+ <a id="sql-alterrole-params"></a>
 
-
-## Parameters { #sql-alterrole-params }
+## Parameters
 
 
 <a id="sql-alterrole-params-name"></a>
@@ -96,9 +98,9 @@ where ROLE_SPECIFICATION can be:
 
 
      See [sql-set](set.md#sql-set) and [Server Configuration](../../server-administration/server-configuration/index.md#runtime-config) for more information about allowed parameter names and values.
+ <a id="sql-alterrole-notes"></a>
 
-
-## Notes { #sql-alterrole-notes }
+## Notes
 
 
  Use [`CREATE ROLE`](create-role.md#sql-createrole) to add new roles, and [`DROP ROLE`](drop-role.md#sql-droprole) to remove a role.
@@ -111,9 +113,9 @@ where ROLE_SPECIFICATION can be:
 
 
  It is also possible to tie a session default to a specific database rather than to a role; see [sql-alterdatabase](alter-database.md#sql-alterdatabase). If there is a conflict, database-role-specific settings override role-specific ones, which in turn override database-specific ones.
+ <a id="sql-alterrole-examples"></a>
 
-
-## Examples { #sql-alterrole-examples }
+## Examples
 
 
  Change a role's password:
@@ -170,13 +172,13 @@ ALTER ROLE worker_bee SET maintenance_work_mem = 100000;
 
 ALTER ROLE fred IN DATABASE devel SET client_min_messages = DEBUG;
 ```
+ <a id="sql-alterrole-compat"></a>
 
-
-## Compatibility { #sql-alterrole-compat }
+## Compatibility
 
 
  The `ALTER ROLE` statement is a PostgreSQL extension.
+ <a id="sql-alterrole-see"></a>
 
-
-## See Also { #sql-alterrole-see }
+## See Also
   [sql-createrole](create-role.md#sql-createrole), [sql-droprole](drop-role.md#sql-droprole), [sql-alterdatabase](alter-database.md#sql-alterdatabase), [sql-set](set.md#sql-set)

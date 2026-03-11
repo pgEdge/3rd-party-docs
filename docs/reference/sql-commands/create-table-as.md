@@ -1,4 +1,6 @@
-# CREATE TABLE AS { #sql-createtableas }
+<a id="sql-createtableas"></a>
+
+# CREATE TABLE AS
 
 define a new table from the results of a query
 

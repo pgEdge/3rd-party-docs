@@ -1,4 +1,6 @@
-## `pg_settings` { #view-pg-settings }
+<a id="view-pg-settings"></a>
+
+## `pg_settings`
 
 
  The view `pg_settings` provides access to run-time parameters of the server. It is essentially an alternative interface to the [`SHOW`](../../reference/sql-commands/show.md#sql-show) and [`SET`](../../reference/sql-commands/set.md#sql-set) commands. It also provides access to some facts about each parameter that are not directly available from [`SHOW`](../../reference/sql-commands/show.md#sql-show), such as minimum and maximum values.

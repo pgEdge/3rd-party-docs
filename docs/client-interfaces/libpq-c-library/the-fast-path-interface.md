@@ -1,4 +1,6 @@
-## The Fast-Path Interface { #libpq-fastpath }
+<a id="libpq-fastpath"></a>
+
+## The Fast-Path Interface
 
 
  PostgreSQL provides a fast-path interface to send simple function calls to the server.
@@ -9,7 +11,8 @@
     This interface is somewhat obsolete, as one can achieve similar performance and greater functionality by setting up a prepared statement to define the function call. Then, executing the statement with binary transmission of parameters and results substitutes for a fast-path function call.
 
 
- The function `PQfn` requests execution of a server function via the fast-path interface:
+ The function <a id="libpq-PQfn"></a>
+`PQfn` requests execution of a server function via the fast-path interface:
 
 ```
 

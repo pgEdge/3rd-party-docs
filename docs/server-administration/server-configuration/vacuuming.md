@@ -1,10 +1,12 @@
-## Vacuuming { #runtime-config-vacuum }
+<a id="runtime-config-vacuum"></a>
+
+## Vacuuming
 
 
  These parameters control vacuuming behavior. For more information on the purpose and responsibilities of vacuum, see [Routine Vacuuming](../routine-database-maintenance-tasks/routine-vacuuming.md#routine-vacuuming).
+ <a id="runtime-config-autovacuum"></a>
 
-
-### Automatic Vacuuming { #runtime-config-autovacuum }
+### Automatic Vacuuming
 
 
  These settings control the behavior of the *autovacuum* feature. Refer to [The Autovacuum Daemon](../routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) for more information. Note that many of these settings can be overridden on a per-table basis; see [Storage Parameters](../../reference/sql-commands/create-table.md#sql-createtable-storage-parameters).
@@ -85,9 +87,9 @@
 
 `autovacuum_vacuum_cost_limit` (`integer`)
 :   Specifies the cost limit value that will be used in automatic `VACUUM` operations. If `-1` is specified (which is the default), the regular [vacuum_cost_limit](#guc-vacuum-cost-limit) value will be used. Note that the value is distributed proportionally among the running autovacuum workers, if there is more than one, so that the sum of the limits for each worker does not exceed the value of this variable. This parameter can only be set in the `postgresql.conf` file or on the server command line; but the setting can be overridden for individual tables by changing table storage parameters.
+  <a id="runtime-config-resource-vacuum-cost"></a>
 
-
-### Cost-based Vacuum Delay { #runtime-config-resource-vacuum-cost }
+### Cost-based Vacuum Delay
 
 
  During the execution of [sql-vacuum](../../reference/sql-commands/vacuum.md#sql-vacuum) and [sql-analyze](../../reference/sql-commands/analyze.md#sql-analyze) commands, the system maintains an internal counter that keeps track of the estimated cost of the various I/O operations that are performed. When the accumulated cost reaches a limit (specified by `vacuum_cost_limit`), the process performing the operation will sleep for a short period of time, as specified by `vacuum_cost_delay`. Then it will reset the counter and continue execution.
@@ -127,18 +129,18 @@
 !!! note
 
     There are certain operations that hold critical locks and should therefore complete as quickly as possible. Cost-based vacuum delays do not occur during such operations. Therefore it is possible that the cost accumulates far higher than the specified limit. To avoid uselessly long delays in such cases, the actual delay is calculated as `vacuum_cost_delay` * `accumulated_balance` / `vacuum_cost_limit` with a maximum of `vacuum_cost_delay` * 4.
+  <a id="runtime-config-vacuum-default"></a>
 
-
-### Default Behavior { #runtime-config-vacuum-default }
+### Default Behavior
 
 
 <a id="guc-vacuum-truncate"></a>
 
 `vacuum_truncate` (`boolean`)
 :   Enables or disables vacuum to try to truncate off any empty pages at the end of the table. The default value is `true`. If `true`, `VACUUM` and autovacuum do the truncation and the disk space for the truncated pages is returned to the operating system. Note that the truncation requires an `ACCESS EXCLUSIVE` lock on the table. The `TRUNCATE` parameter of [`VACUUM`](../../reference/sql-commands/vacuum.md#sql-vacuum), if specified, overrides the value of this parameter. The setting can also be overridden for individual tables by changing table storage parameters.
+  <a id="runtime-config-vacuum-freezing"></a>
 
-
-### Freezing { #runtime-config-vacuum-freezing }
+### Freezing
 
 
  To maintain correctness even after transaction IDs wrap around, PostgreSQL marks rows that are sufficiently old as *frozen*. These rows are visible to everyone; other transactions do not need to examine their inserting XID to determine visibility. `VACUUM` is responsible for marking rows as frozen. The following settings control `VACUUM`'s freezing behavior and should be tuned based on the XID consumption rate of the system and data access patterns of the dominant workloads. See [Preventing Transaction ID Wraparound Failures](../routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-wraparound) for more information on transaction ID wraparound and tuning these parameters.

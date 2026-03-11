@@ -1,4 +1,6 @@
-# DROP TEXT SEARCH CONFIGURATION { #sql-droptsconfig }
+<a id="sql-droptsconfig"></a>
+
+# DROP TEXT SEARCH CONFIGURATION
 
 remove a text search configuration
 

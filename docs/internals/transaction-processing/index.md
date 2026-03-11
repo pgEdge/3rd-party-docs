@@ -1,4 +1,6 @@
-# Transaction Processing { #transactions }
+<a id="transactions"></a>
+
+# Transaction Processing
 
  This chapter provides an overview of the internals of PostgreSQL's transaction management system. The word transaction is often abbreviated as *xact*.
 

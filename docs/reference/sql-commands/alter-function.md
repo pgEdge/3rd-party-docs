@@ -1,4 +1,6 @@
-# ALTER FUNCTION { #sql-alterfunction }
+<a id="sql-alterfunction"></a>
+
+# ALTER FUNCTION
 
 change the definition of a function
 

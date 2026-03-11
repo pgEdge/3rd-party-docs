@@ -1,10 +1,12 @@
-## PL/pgSQL under the Hood { #plpgsql-implementation }
+<a id="plpgsql-implementation"></a>
+
+## PL/pgSQL under the Hood
 
 
  This section discusses some implementation details that are frequently important for PL/pgSQL users to know.
+ <a id="plpgsql-var-subst"></a>
 
-
-### Variable Substitution { #plpgsql-var-subst }
+### Variable Substitution
 
 
  SQL statements and expressions within a PL/pgSQL function can refer to variables and parameters of the function. Behind the scenes, PL/pgSQL substitutes query parameters for such references. Query parameters will only be substituted in places where they are syntactically permissible. As an extreme case, consider this example of poor programming style:
@@ -96,9 +98,9 @@ $$ LANGUAGE plpgsql;
 
 
  Variable substitution currently works only in `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `MERGE` and commands containing one of these (such as `EXPLAIN` and `CREATE TABLE ... AS SELECT`), because the main SQL engine allows query parameters only in these commands. To use a non-constant name or value in other statement types (generically called utility statements), you must construct the utility statement as a string and `EXECUTE` it.
+  <a id="plpgsql-plan-caching"></a>
 
-
-### Plan Caching { #plpgsql-plan-caching }
+### Plan Caching
 
 
  The PL/pgSQL interpreter parses the function's source text and produces an internal binary instruction tree the first time the function is called (within each session). The instruction tree fully translates the PL/pgSQL statement structure, but individual SQL expressions and SQL commands used in the function are not translated immediately.

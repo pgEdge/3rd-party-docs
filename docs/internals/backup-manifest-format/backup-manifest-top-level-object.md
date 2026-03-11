@@ -1,4 +1,6 @@
-## Backup Manifest Top-level Object { #backup-manifest-toplevel }
+<a id="backup-manifest-toplevel"></a>
+
+## Backup Manifest Top-level Object
 
 
  The backup manifest JSON document contains the following keys.

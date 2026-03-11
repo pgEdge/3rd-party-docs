@@ -1,4 +1,6 @@
-# SET { #sql-set }
+<a id="sql-set"></a>
+
+# SET
 
 change a run-time parameter
 

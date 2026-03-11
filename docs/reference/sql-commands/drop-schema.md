@@ -1,4 +1,6 @@
-# DROP SCHEMA { #sql-dropschema }
+<a id="sql-dropschema"></a>
+
+# DROP SCHEMA
 
 remove a schema
 

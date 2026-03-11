@@ -1,4 +1,6 @@
-## Multicolumn Indexes { #indexes-multicolumn }
+<a id="indexes-multicolumn"></a>
+
+## Multicolumn Indexes
 
 
  An index can be defined on more than one column of a table. For example, if you have a table of this form:

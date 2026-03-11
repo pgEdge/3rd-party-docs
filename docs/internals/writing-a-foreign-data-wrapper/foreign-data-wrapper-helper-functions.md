@@ -1,4 +1,6 @@
-## Foreign Data Wrapper Helper Functions { #fdw-helpers }
+<a id="fdw-helpers"></a>
+
+## Foreign Data Wrapper Helper Functions
 
 
  Several helper functions are exported from the core server so that authors of foreign data wrappers can get easy access to attributes of FDW-related objects, such as FDW options. To use any of these functions, you need to include the header file `foreign/foreign.h` in your source file. That header also defines the struct types that are returned by these functions.

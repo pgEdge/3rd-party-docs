@@ -1,13 +1,15 @@
-## SSL Support { #libpq-ssl }
+<a id="libpq-ssl"></a>
+
+## SSL Support
 
 
  PostgreSQL has native support for using SSL connections to encrypt client/server communications using TLS protocols for increased security. See [Secure TCP/IP Connections with SSL](../../server-administration/server-setup-and-operation/secure-tcp-ip-connections-with-ssl.md#ssl-tcp) for details about the server-side SSL functionality.
 
 
  libpq reads the system-wide OpenSSL configuration file. By default, this file is named `openssl.cnf` and is located in the directory reported by `openssl version -d`. This default can be overridden by setting environment variable `OPENSSL_CONF` to the name of the desired configuration file.
+ <a id="libq-ssl-certificates"></a>
 
-
-### Client Verification of Server Certificates { #libq-ssl-certificates }
+### Client Verification of Server Certificates
 
 
  By default, PostgreSQL will not perform any verification of the server certificate. This means that it is possible to spoof the server identity (for example by modifying a DNS record or by taking over the server IP address) without the client knowing. In order to prevent spoofing, the client must be able to verify the server's identity via a chain of trust. A chain of trust is established by placing a root (self-signed) certificate authority (CA) certificate on one computer and a leaf certificate *signed* by the root certificate on another computer. It is also possible to use an “intermediate” certificate which is signed by the root certificate and signs leaf certificates.
@@ -39,9 +41,9 @@
 !!! note
 
     For backwards compatibility with earlier versions of PostgreSQL, if a root CA file exists, the behavior of `sslmode=require` will be the same as that of `verify-ca`, meaning the server certificate is validated against the CA. Relying on this behavior is discouraged, and applications that need certificate validation should always use `verify-ca` or `verify-full`.
+  <a id="libpq-ssl-clientcert"></a>
 
-
-### Client Certificates { #libpq-ssl-clientcert }
+### Client Certificates
 
 
  If the server attempts to verify the identity of the client by requesting the client's leaf certificate, libpq will send the certificate(s) stored in file `~/.postgresql/postgresql.crt` in the user's home directory. The certificates must chain to the root certificate trusted by the server. A matching private key file `~/.postgresql/postgresql.key` must also be present. On Microsoft Windows these files are named `%APPDATA%\postgresql\postgresql.crt` and `%APPDATA%\postgresql\postgresql.key`. The location of the certificate and key files can be overridden by the connection parameters `sslcert` and `sslkey`, or by the environment variables `PGSSLCERT` and `PGSSLKEY`.
@@ -60,9 +62,9 @@
 
 
  For instructions on creating certificates, see [Creating Certificates](../../server-administration/server-setup-and-operation/secure-tcp-ip-connections-with-ssl.md#ssl-certificate-creation).
+  <a id="libpq-ssl-protection"></a>
 
-
-### Protection Provided in Different Modes { #libpq-ssl-protection }
+### Protection Provided in Different Modes
 
 
  The different values for the `sslmode` parameter provide different levels of protection. SSL can provide protection against three types of attacks:
@@ -84,9 +86,8 @@ Impersonation
 
 
  All SSL options carry overhead in the form of encryption and key-exchange, so there is a trade-off that has to be made between performance and security. [SSL Mode Descriptions](#libpq-ssl-sslmode-statements) illustrates the risks the different `sslmode` values protect against, and what statement they make about security and overhead.
+ <a id="libpq-ssl-sslmode-statements"></a>
 
-
-<a id="libpq-ssl-sslmode-statements"></a>
 **Table: SSL Mode Descriptions**
 
 | `sslmode` | Eavesdropping protection | MITM protection | Statement |
@@ -103,15 +104,14 @@ Impersonation
 
 
  The default value for `sslmode` is `prefer`. As is shown in the table, this makes no sense from a security point of view, and it only promises performance overhead if possible. It is only provided as the default for backward compatibility, and is not recommended in secure deployments.
+  <a id="libpq-ssl-fileusage"></a>
 
-
-### SSL Client File Usage { #libpq-ssl-fileusage }
+### SSL Client File Usage
 
 
  [Libpq/Client SSL File Usage](#libpq-ssl-file-usage) summarizes the files that are relevant to the SSL setup on the client.
+ <a id="libpq-ssl-file-usage"></a>
 
-
-<a id="libpq-ssl-file-usage"></a>
 **Table: Libpq/Client SSL File Usage**
 
 | File | Contents | Effect |
@@ -120,9 +120,9 @@ Impersonation
 | `~/.postgresql/postgresql.key` | client private key | proves client certificate sent by owner; does not indicate certificate owner is trustworthy |
 | `~/.postgresql/root.crt` | trusted certificate authorities | checks that server certificate is signed by a trusted certificate authority |
 | `~/.postgresql/root.crl` | certificates revoked by certificate authorities | server certificate must not be on this list |
+  <a id="libpq-ssl-initialize"></a>
 
-
-### SSL Library Initialization { #libpq-ssl-initialize }
+### SSL Library Initialization
 
 
  Applications which need to be compatible with older versions of PostgreSQL, using OpenSSL version 1.0.2 or older, need to initialize the SSL library before using it. Applications which initialize `libssl` and/or `libcrypto` libraries should call [PQinitOpenSSL](#libpq-PQinitOpenSSL) to tell libpq that the `libssl` and/or `libcrypto` libraries have been initialized by your application, so that libpq will not also initialize those libraries. However, this is unnecessary when using OpenSSL version 1.1.0 or later, as duplicate initializations are no longer problematic.

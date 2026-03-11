@@ -1,4 +1,6 @@
-## tcn — a trigger function to notify listeners of changes to table content { #tcn }
+<a id="tcn"></a>
+
+## tcn — a trigger function to notify listeners of changes to table content
 
 
  The `tcn` module provides a trigger function that notifies listeners of changes to any table on which it is attached. It must be used as an `AFTER` trigger `FOR EACH ROW`.

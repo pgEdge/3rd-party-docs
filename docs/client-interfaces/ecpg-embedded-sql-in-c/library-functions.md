@@ -1,4 +1,6 @@
-## Library Functions { #ecpg-library }
+<a id="ecpg-library"></a>
+
+## Library Functions
 
 
  The `libecpg` library primarily contains “hidden” functions that are used to implement the functionality expressed by the embedded SQL commands. But there are some functions that can usefully be called directly. Note that this makes your code unportable.

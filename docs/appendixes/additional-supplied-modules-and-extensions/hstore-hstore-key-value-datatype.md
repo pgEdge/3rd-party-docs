@@ -1,13 +1,15 @@
-## hstore — hstore key/value datatype { #hstore }
+<a id="hstore"></a>
+
+## hstore — hstore key/value datatype
 
 
  This module implements the `hstore` data type for storing sets of key/value pairs within a single PostgreSQL value. This can be useful in various scenarios, such as rows with many attributes that are rarely examined, or semi-structured data. Keys and values are simply text strings.
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="hstore-external-rep"></a>
 
-
-### `hstore` External Representation { #hstore-external-rep }
+### `hstore` External Representation
 
 
  The text representation of an `hstore`, used for input and output, includes zero or more *key* `=>` *value* pairs separated by commas. Some examples:
@@ -47,15 +49,14 @@ key => NULL
 
 
  On output, double quotes always surround keys and values, even when it's not strictly necessary.
+  <a id="hstore-ops-funcs"></a>
 
-
-### `hstore` Operators and Functions { #hstore-ops-funcs }
+### `hstore` Operators and Functions
 
 
  The operators provided by the `hstore` module are shown in [`hstore` Operators](#hstore-op-table), the functions in [`hstore` Functions](#hstore-func-table).
+ <a id="hstore-op-table"></a>
 
-
-<a id="hstore-op-table"></a>
 **Table: `hstore` Operators**
 
 <table>
@@ -139,9 +140,8 @@ key => NULL
 </tr>
 </tbody>
 </table>
+ <a id="hstore-func-table"></a>
 
-
-<a id="hstore-func-table"></a>
 **Table: `hstore` Functions**
 
 <table>
@@ -298,9 +298,9 @@ SELECT h FROM mytable;
 (1 row)
 ```
  A subscripted fetch returns `NULL` if the subscript is `NULL` or that key does not exist in the `hstore`. (Thus, a subscripted fetch is not greatly different from the `->` operator.) A subscripted update fails if the subscript is `NULL`; otherwise, it replaces the value for that key, adding an entry to the `hstore` if the key does not already exist.
+  <a id="hstore-indexes"></a>
 
-
-### Indexes { #hstore-indexes }
+### Indexes
 
 
  `hstore` has GiST and GIN index support for the `@>`, `?`, `?&` and `?|` operators. For example:
@@ -334,9 +334,9 @@ CREATE INDEX hidx ON testhstore USING BTREE (h);
 
 CREATE INDEX hidx ON testhstore USING HASH (h);
 ```
+  <a id="hstore-examples"></a>
 
-
-### Examples { #hstore-examples }
+### Examples
 
 
  Add a key, or update an existing key with a new value:
@@ -411,8 +411,9 @@ SELECT (r).* FROM (SELECT t #= '"col3"=>"baz"' AS r FROM test t) s;
 (1 row)
 ```
 
+  <a id="hstore-statistics"></a>
 
-### Statistics { #hstore-statistics }
+### Statistics
 
 
  The `hstore` type, because of its intrinsic liberality, could contain a lot of different keys. Checking for valid keys is the task of the application. The following examples demonstrate several techniques for checking keys and obtaining statistics.
@@ -456,8 +457,9 @@ SELECT key, count(*) FROM
 ...................
 ```
 
+  <a id="hstore-compatibility"></a>
 
-### Compatibility { #hstore-compatibility }
+### Compatibility
 
 
  As of PostgreSQL 9.0, `hstore` uses a different internal representation than previous versions. This presents no obstacle for dump/restore upgrades since the text representation (used in the dump) is unchanged.
@@ -478,15 +480,15 @@ UPDATE tablename SET hstorecol = hstorecol || '';
 ALTER TABLE tablename ALTER hstorecol TYPE hstore USING hstorecol || '';
 ```
  The `ALTER TABLE` method requires an `ACCESS EXCLUSIVE` lock on the table, but does not result in bloating the table with old row versions.
+  <a id="hstore-transforms"></a>
 
-
-### Transforms { #hstore-transforms }
+### Transforms
 
 
  Additional extensions are available that implement transforms for the `hstore` type for the languages PL/Perl and PL/Python. The extensions for PL/Perl are called `hstore_plperl` and `hstore_plperlu`, for trusted and untrusted PL/Perl. If you install these transforms and specify them when creating a function, `hstore` values are mapped to Perl hashes. The extension for PL/Python is called `hstore_plpython3u`. If you use it, `hstore` values are mapped to Python dictionaries.
+  <a id="hstore-authors"></a>
 
-
-### Authors { #hstore-authors }
+### Authors
 
 
  Oleg Bartunov [oleg@sai.msu.su](mailto:oleg@sai.msu.su), Moscow, Moscow University, Russia

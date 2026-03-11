@@ -1,4 +1,6 @@
-# ALTER PROCEDURE { #sql-alterprocedure }
+<a id="sql-alterprocedure"></a>
+
+# ALTER PROCEDURE
 
 change the definition of a procedure
 

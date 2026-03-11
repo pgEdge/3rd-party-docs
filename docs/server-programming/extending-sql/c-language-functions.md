@@ -1,13 +1,15 @@
-## C-Language Functions { #xfunc-c }
+<a id="xfunc-c"></a>
+
+## C-Language Functions
 
 
  User-defined functions can be written in C (or a language that can be made compatible with C, such as C++). Such functions are compiled into dynamically loadable objects (also called shared libraries) and are loaded by the server on demand. The dynamic loading feature is what distinguishes “C language” functions from “internal” functions — the actual coding conventions are essentially the same for both. (Hence, the standard internal function library is a rich source of coding examples for user-defined C functions.)
 
 
  Currently only one calling convention is used for C functions (“version 1”). Support for that calling convention is indicated by writing a `PG_FUNCTION_INFO_V1()` macro call for the function, as illustrated below.
+ <a id="xfunc-c-dynload"></a>
 
-
-### Dynamic Loading { #xfunc-c-dynload }
+### Dynamic Loading
 
 
  The first time a user-defined function in a particular loadable object file is called in a session, the dynamic loader loads that object file into memory so that the function can be called. The `CREATE FUNCTION` for a user-defined C function must therefore specify two pieces of information for the function: the name of the loadable object file, and the C name (link symbol) of the specific function to call within that object file. If the C name is not explicitly specified then it is assumed to be the same as the SQL function name.
@@ -66,9 +68,9 @@ PG_MODULE_MAGIC_EXT(
 
 
  Optionally, a dynamically loaded file can contain an initialization function. If the file includes a function named `_PG_init`, that function will be called immediately after loading the file. The function receives no parameters and should return void. There is presently no way to unload a dynamically loaded file.
+  <a id="xfunc-c-basetype"></a>
 
-
-### Base Types in C-Language Functions { #xfunc-c-basetype }
+### Base Types in C-Language Functions
 
 
  To know how to write C-language functions, you need to know how PostgreSQL internally represents base data types and how they can be passed to and from functions. Internally, PostgreSQL regards a base type as a “blob of memory”. The user-defined functions that you define over a type in turn define the way that PostgreSQL can operate on it. That is, PostgreSQL will only store and retrieve the data from disk and use your user-defined functions to input, process, and output the data.
@@ -144,9 +146,8 @@ memcpy(destination->data, buffer, 40);
 
 
  [Equivalent C Types for Built-in SQL Types](#xfunc-c-type-table) shows the C types corresponding to many of the built-in SQL data types of PostgreSQL. The “Defined In” column gives the header file that needs to be included to get the type definition. (The actual definition might be in a different file that is included by the listed file. It is recommended that users stick to the defined interface.) Note that you should always include `postgres.h` first in any source file of server code, because it declares a number of things that you will need anyway, and because including other headers first can cause portability issues.
+ <a id="xfunc-c-type-table"></a>
 
-
-<a id="xfunc-c-type-table"></a>
 **Table: Equivalent C Types for Built-in SQL Types**
 
 | SQL Type | C Type | Defined In |
@@ -183,9 +184,9 @@ memcpy(destination->data, buffer, 40);
 
 
  Now that we've gone over all of the possible structures for base types, we can show some examples of real functions.
+  <a id="xfunc-c-v1-call-conv"></a>
 
-
-### Version 1 Calling Conventions { #xfunc-c-v1-call-conv }
+### Version 1 Calling Conventions
 
 
  The version-1 calling convention relies on macros to suppress most of the complexity of passing arguments and results. The C declaration of a version-1 function is always:
@@ -389,9 +390,9 @@ CREATE FUNCTION t_starts_with(text, text) RETURNS boolean
 
 
  Finally, the version-1 function call conventions make it possible to return set results ([Returning Sets](#xfunc-c-return-set)) and implement trigger functions ([Triggers](../triggers/index.md#triggers)) and procedural-language call handlers ([Writing a Procedural Language Handler](../../internals/writing-a-procedural-language-handler.md#plhandler)). For more details see `src/backend/utils/fmgr/README` in the source distribution.
+  <a id="xfunc-c-code"></a>
 
-
-### Writing Code { #xfunc-c-code }
+### Writing Code
 
 
  Before we turn to the more advanced topics, we should discuss some coding rules for PostgreSQL C-language functions. While it might be possible to load functions written in languages other than C into PostgreSQL, this is usually difficult (when it is possible at all) because other languages, such as C++, FORTRAN, or Pascal often do not follow the same calling convention as C. That is, other languages do not pass argument and return values between functions in the same way. For this reason, we will assume that your C-language functions are actually written in C.
@@ -407,8 +408,9 @@ CREATE FUNCTION t_starts_with(text, text) RETURNS boolean
 -  Most of the internal PostgreSQL types are declared in `postgres.h`, while the function manager interfaces (`PG_FUNCTION_ARGS`, etc.) are in `fmgr.h`, so you will need to include at least these two files. For portability reasons it's best to include `postgres.h` *first*, before any other system or user header files. Including `postgres.h` will also include `elog.h` and `palloc.h` for you.
 -  Symbol names defined within object files must not conflict with each other or with symbols defined in the PostgreSQL server executable. You will have to rename your functions or variables if you get error messages to this effect.
 
+   <a id="dfunc"></a>
 
-### Compiling and Linking Dynamically-Loaded Functions { #dfunc }
+### Compiling and Linking Dynamically-Loaded Functions
 
 
  Before you are able to use your PostgreSQL extension functions written in C, they must be compiled and linked in a special way to produce a file that can be dynamically loaded by the server. To be precise, a *shared library* needs to be created.
@@ -495,57 +497,57 @@ CREATE FUNCTION t_starts_with(text, text) RETURNS boolean
 
 
  Refer back to [Dynamic Loading](#xfunc-c-dynload) about where the server expects to find the shared library files.
+  <a id="xfunc-api-abi-stability-guidance"></a>
 
-
-### Server API and ABI Stability Guidance { #xfunc-api-abi-stability-guidance }
+### Server API and ABI Stability Guidance
 
 
  This section contains guidance to authors of extensions and other server plugins about API and ABI stability in the PostgreSQL server.
+ <a id="xfunc-guidance-general"></a>
 
-
-#### General { #xfunc-guidance-general }
+#### General
 
 
  The PostgreSQL server contains several well-demarcated APIs for server plugins, such as the function manager (fmgr, described in this chapter), SPI ([Server Programming Interface](../server-programming-interface/index.md#spi)), and various hooks specifically designed for extensions. These interfaces are carefully managed for long-term stability and compatibility. However, the entire set of global functions and variables in the server effectively constitutes the publicly usable API, and most of it was not designed with extensibility and long-term stability in mind.
 
 
  Therefore, while taking advantage of these interfaces is valid, the further one strays from the well-trodden path, the likelier it will be that one might encounter API or ABI compatibility issues at some point. Extension authors are encouraged to provide feedback about their requirements, so that over time, as new use patterns arise, certain interfaces can be considered more stabilized or new, better-designed interfaces can be added.
+  <a id="xfunc-guidance-api-compatibility"></a>
 
-
-#### API Compatibility { #xfunc-guidance-api-compatibility }
+#### API Compatibility
 
 
  The API, or application programming interface, is the interface used at compile time.
+ <a id="xfunc-guidance-api-major-versions"></a>
 
-
-##### Major Versions { #xfunc-guidance-api-major-versions }
+##### Major Versions
 
 
  There is *no* promise of API compatibility between PostgreSQL major versions. Extension code therefore might require source code changes to work with multiple major versions. These can usually be managed with preprocessor conditions such as `#if PG_VERSION_NUM >= 160000`. Sophisticated extensions that use interfaces beyond the well-demarcated ones usually require a few such changes for each major server version.
+  <a id="xfunc-guidance-api-mninor-versions"></a>
 
-
-##### Minor Versions { #xfunc-guidance-api-mninor-versions }
+##### Minor Versions
 
 
  PostgreSQL makes an effort to avoid server API breaks in minor releases. In general, extension code that compiles and works with a minor release should also compile and work with any other minor release of the same major version, past or future.
 
 
  When a change *is* required, it will be carefully managed, taking the requirements of extensions into account. Such changes will be communicated in the release notes ([Release Notes](../../appendixes/release-notes/index.md#release)).
+   <a id="xfunc-guidance-abi-compatibility"></a>
 
-
-#### ABI Compatibility { #xfunc-guidance-abi-compatibility }
+#### ABI Compatibility
 
 
  The ABI, or application binary interface, is the interface used at run time.
+ <a id="xfunc-guidance-abi-major-versions"></a>
 
-
-##### Major Versions { #xfunc-guidance-abi-major-versions }
+##### Major Versions
 
 
  Servers of different major versions have intentionally incompatible ABIs. Extensions that use server APIs must therefore be re-compiled for each major release. The inclusion of `PG_MODULE_MAGIC` (see [Dynamic Loading](#xfunc-c-dynload)) ensures that code compiled for one major version will be rejected by other major versions.
+  <a id="xfunc-guidance-abi-mninor-versions"></a>
 
-
-##### Minor Versions { #xfunc-guidance-abi-mninor-versions }
+##### Minor Versions
 
 
  PostgreSQL makes an effort to avoid server ABI breaks in minor releases. In general, an extension compiled against any minor release should work with any other minor release of the same major version, past or future.
@@ -561,9 +563,9 @@ CREATE FUNCTION t_starts_with(text, text) RETURNS boolean
 
 
  Also, in the absence of automated detection of such changes, this is not a guarantee, but historically such breaking changes have been extremely rare.
+    <a id="xfunc-c-composite-type-args"></a>
 
-
-### Composite-Type Arguments { #xfunc-c-composite-type-args }
+### Composite-Type Arguments
 
 
  Composite types do not have a fixed layout like C structures. Instances of a composite type can contain null fields. In addition, composite types that are part of an inheritance hierarchy can have different fields than other members of the same inheritance hierarchy. Therefore, PostgreSQL provides a function interface for accessing fields of composite types from C.
@@ -621,9 +623,9 @@ CREATE FUNCTION c_overpaid(emp, integer) RETURNS boolean
     LANGUAGE C STRICT;
 ```
  Notice we have used `STRICT` so that we did not have to check whether the input arguments were NULL.
+  <a id="xfunc-c-returning-rows"></a>
 
-
-### Returning Rows (Composite Types) { #xfunc-c-returning-rows }
+### Returning Rows (Composite Types)
 
 
  To return a row or composite-type value from a C-language function, you can use a special API that provides macros and functions to hide most of the complexity of building composite data types. To use this API, the source file must include:
@@ -716,9 +718,9 @@ HeapTupleGetDatum(HeapTuple tuple)
 
 
  An example appears in the next section.
+  <a id="xfunc-c-return-set"></a>
 
-
-### Returning Sets { #xfunc-c-return-set }
+### Returning Sets
 
 
  C-language functions have two options for returning sets (multiple rows). In one method, called *ValuePerCall* mode, a set-returning function is called repeatedly (passing the same arguments each time) and it returns one new row on each call, until it has no more rows to return and signals that by returning NULL. The set-returning function (SRF) must therefore save enough state across calls to remember what it was doing and return the correct next item on each call. In the other method, called *Materialize* mode, an SRF fills and returns a tuplestore object containing its entire result; then only one call occurs for the whole result, and no inter-call state is needed.
@@ -1004,9 +1006,9 @@ CREATE OR REPLACE FUNCTION retcomposite(IN integer, IN integer,
     LANGUAGE C IMMUTABLE STRICT;
 ```
  Notice that in this method the output type of the function is formally an anonymous `record` type.
+  <a id="xfunc-c-polymorphic"></a>
 
-
-### Polymorphic Arguments and Return Types { #xfunc-c-polymorphic }
+### Polymorphic Arguments and Return Types
 
 
  C-language functions can be declared to accept and return the polymorphic types described in [Polymorphic Types](the-postgresql-type-system.md#extend-types-polymorphic). When a function's arguments or return types are defined as polymorphic types, the function author cannot know in advance what data type it will be called with, or need to return. There are two routines provided in `fmgr.h` to allow a version-1 C function to discover the actual data types of its arguments and the type it is expected to return. The routines are called `get_fn_expr_rettype(FmgrInfo *flinfo)` and `get_fn_expr_argtype(FmgrInfo *flinfo, int argnum)`. They return the result or argument type OID, or `InvalidOid` if the information is not available. The structure `flinfo` is normally accessed as `fcinfo->flinfo`. The parameter `argnum` is zero based. `get_call_result_type` can also be used as an alternative to `get_fn_expr_rettype`. There is also `get_fn_expr_variadic`, which can be used to find out whether variadic arguments have been merged into an array. This is primarily useful for `VARIADIC "any"` functions, since such merging will always have occurred for variadic functions taking ordinary array types.
@@ -1071,12 +1073,12 @@ CREATE FUNCTION make_array(anyelement) RETURNS anyarray
 
 
  There is a variant of polymorphism that is only available to C-language functions: they can be declared to take parameters of type `"any"`. (Note that this type name must be double-quoted, since it's also an SQL reserved word.) This works like `anyelement` except that it does not constrain different `"any"` arguments to be the same type, nor do they help determine the function's result type. A C-language function can also declare its final parameter to be `VARIADIC "any"`. This will match one or more actual arguments of any type (not necessarily the same type). These arguments will *not* be gathered into an array as happens with normal variadic functions; they will just be passed to the function separately. The `PG_NARGS()` macro and the methods described above must be used to determine the number of actual arguments and their types when using this feature. Also, users of such a function might wish to use the `VARIADIC` keyword in their function call, with the expectation that the function would treat the array elements as separate arguments. The function itself must implement that behavior if wanted, after using `get_fn_expr_variadic` to detect that the actual argument was marked with `VARIADIC`.
+  <a id="xfunc-shared-addin"></a>
 
+### Shared Memory
+  <a id="xfunc-shared-addin-at-startup"></a>
 
-### Shared Memory { #xfunc-shared-addin }
-
-
-#### Requesting Shared Memory at Startup { #xfunc-shared-addin-at-startup }
+#### Requesting Shared Memory at Startup
 
 
  Add-ins can reserve shared memory on server startup. To do so, the add-in's shared library must be preloaded by specifying it in [shared_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-shared-preload-libraries). The shared library should also register a `shmem_request_hook` in its `_PG_init` function. This `shmem_request_hook` can reserve shared memory by calling:
@@ -1114,9 +1116,9 @@ LWLockRelease(AddinShmemInitLock);
 
 
  An example of a `shmem_request_hook` and `shmem_startup_hook` can be found in `contrib/pg_stat_statements/pg_stat_statements.c` in the PostgreSQL source tree.
+  <a id="xfunc-shared-addin-after-startup"></a>
 
-
-#### Requesting Shared Memory After Startup { #xfunc-shared-addin-after-startup }
+#### Requesting Shared Memory After Startup
 
 
  There is another, more flexible method of reserving shared memory that can be done after server startup and outside a `shmem_request_hook`. To do so, each backend that will use the shared memory should obtain a pointer to it by calling:
@@ -1134,12 +1136,12 @@ void *GetNamedDSMSegment(const char *name, size_t size,
 
 
  A complete usage example of `GetNamedDSMSegment` can be found in `src/test/modules/test_dsm_registry/test_dsm_registry.c` in the PostgreSQL source tree.
+   <a id="xfunc-addin-lwlocks"></a>
 
+### LWLocks
+  <a id="xfunc-addin-lwlocks-at-startup"></a>
 
-### LWLocks { #xfunc-addin-lwlocks }
-
-
-#### Requesting LWLocks at Startup { #xfunc-addin-lwlocks-at-startup }
+#### Requesting LWLocks at Startup
 
 
  Add-ins can reserve LWLocks on server startup. As with shared memory reserved at server startup, the add-in's shared library must be preloaded by specifying it in [shared_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-shared-preload-libraries), and the shared library should register a `shmem_request_hook` in its `_PG_init` function. This `shmem_request_hook` can reserve LWLocks by calling:
@@ -1155,8 +1157,9 @@ void RequestNamedLWLockTranche(const char *tranche_name, int num_lwlocks)
 LWLockPadded *GetNamedLWLockTranche(const char *tranche_name)
 ```
 
+  <a id="xfunc-addin-lwlocks-after-startup"></a>
 
-#### Requesting LWLocks After Startup { #xfunc-addin-lwlocks-after-startup }
+#### Requesting LWLocks After Startup
 
 
  There is another, more flexible method of obtaining LWLocks that can be done after server startup and outside a `shmem_request_hook`. To do so, first allocate a `tranche_id` by calling:
@@ -1183,9 +1186,9 @@ void LWLockRegisterTranche(int tranche_id, const char *tranche_name)
 
 
  A complete usage example of `LWLockNewTrancheId`, `LWLockInitialize`, and `LWLockRegisterTranche` can be found in `contrib/pg_prewarm/autoprewarm.c` in the PostgreSQL source tree.
+   <a id="xfunc-addin-wait-events"></a>
 
-
-### Custom Wait Events { #xfunc-addin-wait-events }
+### Custom Wait Events
 
 
  Add-ins can define custom wait events under the wait event type `Extension` by calling:
@@ -1209,8 +1212,9 @@ uint32 WaitEventExtensionNew(const char *wait_event_name)
 (1 row)
 ```
 
+  <a id="xfunc-addin-injection-points"></a>
 
-### Injection Points { #xfunc-addin-injection-points }
+### Injection Points
 
 
  An injection point with a given `name` is declared using macro:
@@ -1298,9 +1302,9 @@ extern bool InjectionPointDetach(const char *name);
 
 
  Enabling injections points requires `--enable-injection-points` with `configure` or `-Dinjection_points=true` with Meson.
+  <a id="xfunc-addin-custom-cumulative-statistics"></a>
 
-
-### Custom Cumulative Statistics { #xfunc-addin-custom-cumulative-statistics }
+### Custom Cumulative Statistics
 
 
  It is possible for add-ins written in C-language to use custom types of cumulative statistics registered in the [Cumulative Statistics System](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-stats-setup).
@@ -1339,9 +1343,9 @@ extern PgStat_Kind pgstat_register_kind(PgStat_Kind kind,
 
 
  An example describing how to register and use custom statistics can be found in `src/test/modules/injection_points`.
+  <a id="extend-cpp"></a>
 
-
-### Using C++ for Extensibility { #extend-cpp }
+### Using C++ for Extensibility
 
 
  Although the PostgreSQL backend is written in C, it is possible to write extensions in C++ if these guidelines are followed:

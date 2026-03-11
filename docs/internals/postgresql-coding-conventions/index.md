@@ -1,4 +1,6 @@
-# PostgreSQL Coding Conventions { #source }
+<a id="source"></a>
+
+# PostgreSQL Coding Conventions
 
 - [Formatting](formatting.md#source-format)
 - [Reporting Errors Within the Server](reporting-errors-within-the-server.md#error-message-reporting)

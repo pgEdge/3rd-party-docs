@@ -1,10 +1,12 @@
-## Command Execution Functions { #libpq-exec }
+<a id="libpq-exec"></a>
+
+## Command Execution Functions
 
 
  Once a connection to a database server has been successfully established, the functions described here are used to perform SQL queries and commands.
+ <a id="libpq-exec-main"></a>
 
-
-### Main Functions { #libpq-exec-main }
+### Main Functions
 
 
 <a id="libpq-PQexec"></a>
@@ -423,8 +425,9 @@
 
      You can keep a `PGresult` object around for as long as you need it; it does not go away when you issue a new command, nor even if you close the connection. To get rid of it, you must call [PQclear](#libpq-PQclear). Failure to do this will result in memory leaks in your application.
 
+  <a id="libpq-exec-select-info"></a>
 
-### Retrieving Query Result Information { #libpq-exec-select-info }
+### Retrieving Query Result Information
 
 
  These functions are used to extract information from a `PGresult` object that represents a successful query result (that is, one that has status `PGRES_TUPLES_OK`, `PGRES_SINGLE_TUPLE`, or `PGRES_TUPLES_CHUNK`). They can also be used to extract information from a successful Describe operation: a Describe's result has all the same column information that actual execution of the query would provide, but it has zero rows. For objects with other status values, these functions will act as though the result has zero rows and zero columns.
@@ -685,9 +688,9 @@
 
 
      This function was formerly used by psql to print query results, but this is no longer the case. Note that it assumes all the data is in text format.
+  <a id="libpq-exec-nonselect"></a>
 
-
-### Retrieving Other Result Information { #libpq-exec-nonselect }
+### Retrieving Other Result Information
 
 
  These functions are used to extract other information from `PGresult` objects.
@@ -735,9 +738,9 @@
 
     char *PQoidStatus(const PGresult *res);
     ```
+  <a id="libpq-exec-escape-string"></a>
 
-
-### Escaping Strings for Inclusion in SQL Commands { #libpq-exec-escape-string }
+### Escaping Strings for Inclusion in SQL Commands
 
 
 <a id="libpq-PQescapeLiteral"></a>

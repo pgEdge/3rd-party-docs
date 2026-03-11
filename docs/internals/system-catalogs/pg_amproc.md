@@ -1,4 +1,6 @@
-## `pg_amproc` { #catalog-pg-amproc }
+<a id="catalog-pg-amproc"></a>
+
+## `pg_amproc`
 
 
  The catalog `pg_amproc` stores information about support functions associated with access method operator families. There is one row for each support function belonging to an operator family.

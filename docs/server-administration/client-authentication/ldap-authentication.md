@@ -1,4 +1,6 @@
-## LDAP Authentication { #auth-ldap }
+<a id="auth-ldap"></a>
+
+## LDAP Authentication
 
 
  This authentication method operates similarly to `password` except that it uses LDAP as the password verification method. LDAP is used only to validate the user name/password pairs. Therefore the user must already exist in the database before LDAP can be used for authentication.

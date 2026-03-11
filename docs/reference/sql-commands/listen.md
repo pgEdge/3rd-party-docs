@@ -1,4 +1,6 @@
-# LISTEN { #sql-listen }
+<a id="sql-listen"></a>
+
+# LISTEN
 
 listen for a notification
 

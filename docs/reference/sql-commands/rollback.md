@@ -1,4 +1,6 @@
-# ROLLBACK { #sql-rollback }
+<a id="sql-rollback"></a>
+
+# ROLLBACK
 
 abort the current transaction
 

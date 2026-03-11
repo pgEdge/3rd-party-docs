@@ -1,10 +1,11 @@
-## Date/Time Types { #datatype-datetime }
+<a id="datatype-datetime"></a>
+
+## Date/Time Types
 
 
  PostgreSQL supports the full set of SQL date and time types, shown in [Date/Time Types](#datatype-datetime-table). The operations available on these data types are described in [Date/Time Functions and Operators](../functions-and-operators/date-time-functions-and-operators.md#functions-datetime). Dates are counted according to the Gregorian calendar, even in years before that calendar was introduced (see [History of Units](../../appendixes/date-time-support/history-of-units.md#datetime-units-history) for more information).
+ <a id="datatype-datetime-table"></a>
 
-
-<a id="datatype-datetime-table"></a>
 **Table: Date/Time Types**
 
 | Name | Storage Size | Description | Low Value | High Value | Resolution |
@@ -47,9 +48,9 @@ MINUTE TO SECOND
 
 
  The type `time with time zone` is defined by the SQL standard, but the definition exhibits properties which lead to questionable usefulness. In most cases, a combination of `date`, `time`, `timestamp without time zone`, and `timestamp with time zone` should provide a complete range of date/time functionality required by any application.
+ <a id="datatype-datetime-input"></a>
 
-
-### Date/Time Input { #datatype-datetime-input }
+### Date/Time Input
 
 
  Date and time input is accepted in almost any reasonable format, including ISO 8601, SQL-compatible, traditional POSTGRES, and others. For some formats, ordering of day, month, and year in date input is ambiguous and there is support for specifying the expected ordering of these fields. Set the [DateStyle](../../server-administration/server-configuration/client-connection-defaults.md#guc-datestyle) parameter to `MDY` to select month-day-year interpretation, `DMY` to select day-month-year interpretation, or `YMD` to select year-month-day interpretation.
@@ -65,15 +66,14 @@ MINUTE TO SECOND
 TYPE [ (P) ] 'VALUE'
 ```
  where *p* is an optional precision specification giving the number of fractional digits in the seconds field. Precision can be specified for `time`, `timestamp`, and `interval` types, and can range from 0 to 6. If no precision is specified in a constant specification, it defaults to the precision of the literal value (but not more than 6 digits).
+ <a id="datatype-datetime-input-dates"></a>
 
-
-#### Dates { #datatype-datetime-input-dates }
+#### Dates
 
 
  [Date Input](#datatype-datetime-date-table) shows some possible inputs for the `date` type.
+ <a id="datatype-datetime-date-table"></a>
 
-
-<a id="datatype-datetime-date-table"></a>
 **Table: Date Input**
 
 | Example | Description |
@@ -94,9 +94,9 @@ TYPE [ (P) ] 'VALUE'
 | 1999.008 | year and day of year |
 | J2451187 | Julian date |
 | January 8, 99 BC | year 99 BC |
+  <a id="datatype-datetime-input-times"></a>
 
-
-#### Times { #datatype-datetime-input-times }
+#### Times
 
 
  The time-of-day types are <code>time [
@@ -105,9 +105,8 @@ TYPE [ (P) ] 'VALUE'
 
 
  Valid input for these types consists of a time of day followed by an optional time zone. (See [Time Input](#datatype-datetime-time-table) and [Time Zone Input](#datatype-timezone-table).) If a time zone is specified in the input for `time without time zone`, it is silently ignored. You can also specify a date but it will be ignored, except when you use a time zone name that involves a daylight-savings rule, such as `America/New_York`. In this case specifying the date is required in order to determine whether standard or daylight-savings time applies. The appropriate time zone offset is recorded in the `time with time zone` value and is output as stored; it is not adjusted to the active time zone.
+ <a id="datatype-datetime-time-table"></a>
 
-
-<a id="datatype-datetime-time-table"></a>
 **Table: Time Input**
 
 | Example | Description |
@@ -126,9 +125,8 @@ TYPE [ (P) ] 'VALUE'
 | `040506+07:30:00` | UTC offset specified to seconds (not allowed in ISO 8601) |
 | `04:05:06 PST` | time zone specified by abbreviation |
 | `2003-04-12 04:05:06 America/New_York` | time zone specified by full name |
+ <a id="datatype-timezone-table"></a>
 
-
-<a id="datatype-timezone-table"></a>
 **Table: Time Zone Input**
 
 | Example | Description |
@@ -145,9 +143,9 @@ TYPE [ (P) ] 'VALUE'
 
 
  Refer to [Time Zones](#datatype-timezones) for more information on how to specify time zones.
+  <a id="datatype-datetime-input-time-stamps"></a>
 
-
-#### Time Stamps { #datatype-datetime-input-time-stamps }
+#### Time Stamps
 
 
  Valid input for the time stamp types consists of the concatenation of a date and a time, followed by an optional time zone, followed by an optional `AD` or `BC`. (Alternatively, `AD`/`BC` can appear before the time zone, but this is not the preferred ordering.) Thus:
@@ -201,15 +199,14 @@ TIMESTAMP WITH TIME ZONE '2004-10-19 10:23:54+02'
 
 
  Conversions between `timestamp without time zone` and `timestamp with time zone` normally assume that the `timestamp without time zone` value should be taken or given as `timezone` local time. A different time zone can be specified for the conversion using `AT TIME ZONE`.
+  <a id="datatype-datetime-special-values"></a>
 
-
-#### Special Values { #datatype-datetime-special-values }
+#### Special Values
 
 
  PostgreSQL supports several special date/time input values for convenience, as shown in [Special Date/Time Inputs](#datatype-datetime-special-table). The values `infinity` and `-infinity` are specially represented inside the system and will be displayed unchanged; but the others are simply notational shorthands that will be converted to ordinary date/time values when read. (In particular, `now` and related strings are converted to a specific time value as soon as they are read.) All of these values need to be enclosed in single quotes when used as constants in SQL commands.
+ <a id="datatype-datetime-special-table"></a>
 
-
-<a id="datatype-datetime-special-table"></a>
 **Table: Special Date/Time Inputs**
 
 | Input String | Valid Types | Description |
@@ -230,15 +227,14 @@ TIMESTAMP WITH TIME ZONE '2004-10-19 10:23:54+02'
 !!! caution
 
     While the input strings `now`, `today`, `tomorrow`, and `yesterday` are fine to use in interactive SQL commands, they can have surprising behavior when the command is saved to be executed later, for example in prepared statements, views, and function definitions. The string can be converted to a specific time value that continues to be used long after it becomes stale. Use one of the SQL functions instead in such contexts. For example, `CURRENT_DATE + 1` is safer than `'tomorrow'::date`.
+   <a id="datatype-datetime-output"></a>
 
-
-### Date/Time Output { #datatype-datetime-output }
+### Date/Time Output
 
 
  The output format of the date/time types can be set to one of the four styles ISO 8601, SQL (Ingres), traditional POSTGRES (Unix date format), or German. The default is the ISO format. (The SQL standard requires the use of the ISO 8601 format. The name of the “SQL” output format is a historical accident.) [Date/Time Output Styles](#datatype-datetime-output-table) shows examples of each output style. The output of the `date` and `time` types is generally only the date or time part in accordance with the given examples. However, the POSTGRES style outputs date-only values in ISO format.
+ <a id="datatype-datetime-output-table"></a>
 
-
-<a id="datatype-datetime-output-table"></a>
 **Table: Date/Time Output Styles**
 
 | Style Specification | Description | Example |
@@ -255,9 +251,8 @@ TIMESTAMP WITH TIME ZONE '2004-10-19 10:23:54+02'
 
 
  In the SQL and POSTGRES styles, day appears before month if DMY field ordering has been specified, otherwise month appears before day. (See [Date/Time Input](#datatype-datetime-input) for how this setting also affects interpretation of input values.) [Date Order Conventions](#datatype-datetime-output2-table) shows examples.
+ <a id="datatype-datetime-output2-table"></a>
 
-
-<a id="datatype-datetime-output2-table"></a>
 **Table: Date Order Conventions**
 
 | `datestyle` Setting | Input Ordering | Example Output |
@@ -274,9 +269,9 @@ TIMESTAMP WITH TIME ZONE '2004-10-19 10:23:54+02'
 
 
  The formatting function `to_char` (see [Data Type Formatting Functions](../functions-and-operators/data-type-formatting-functions.md#functions-formatting)) is also available as a more flexible way to format date/time output.
+  <a id="datatype-timezones"></a>
 
-
-### Time Zones { #datatype-timezones }
+### Time Zones
 
 
  Time zones, and time-zone conventions, are influenced by political decisions, not just earth geometry. Time zones around the world became somewhat standardized during the 1900s, but continue to be prone to arbitrary changes, particularly with respect to daylight-savings rules. PostgreSQL uses the widely-used IANA (Olson) time zone database for information about historical time zone rules. For times in the future, the assumption is that the latest known rules for a given time zone will continue to be observed indefinitely far into the future.
@@ -321,8 +316,9 @@ TIMESTAMP WITH TIME ZONE '2004-10-19 10:23:54+02'
 -  The SQL command `SET TIME ZONE` sets the time zone for the session. This is an alternative spelling of `SET TIMEZONE TO` with a more SQL-spec-compatible syntax.
 -  The `PGTZ` environment variable is used by libpq clients to send a `SET TIME ZONE` command to the server upon connection.
 
+  <a id="datatype-interval-input"></a>
 
-### Interval Input { #datatype-interval-input }
+### Interval Input
 
 
  `interval` values can be written using the following verbose syntax:
@@ -344,9 +340,8 @@ TIMESTAMP WITH TIME ZONE '2004-10-19 10:23:54+02'
 P QUANTITY UNIT [ QUANTITY UNIT ...] [ T [ QUANTITY UNIT ...]]
 ```
  The string must start with a `P`, and may include a `T` that introduces the time-of-day units. The available unit abbreviations are given in [ISO 8601 Interval Unit Abbreviations](#datatype-interval-iso8601-units). Units may be omitted, and may be specified in any order, but units smaller than a day must appear after `T`. In particular, the meaning of `M` depends on whether it is before or after `T`.
+ <a id="datatype-interval-iso8601-units"></a>
 
-
-<a id="datatype-interval-iso8601-units"></a>
 **Table: ISO 8601 Interval Unit Abbreviations**
 
 | Abbreviation | Meaning |
@@ -391,9 +386,8 @@ SELECT '2 years 15 months 100 weeks 99 hours 123456789 milliseconds'::interval;
 
 
  [Interval Input](#datatype-interval-input-examples) shows some examples of valid `interval` input.
+ <a id="datatype-interval-input-examples"></a>
 
-
-<a id="datatype-interval-input-examples"></a>
 **Table: Interval Input**
 
 | Example | Description |
@@ -403,9 +397,9 @@ SELECT '2 years 15 months 100 weeks 99 hours 123456789 milliseconds'::interval;
 | `1 year 2 months 3 days 4 hours 5 minutes 6 seconds` | Traditional Postgres format: 1 year 2 months 3 days 4 hours 5 minutes 6 seconds |
 | `P1Y2M3DT4H5M6S` | ISO 8601 “format with designators”: same meaning as above |
 | `P0001-02-03T04:05:06` | ISO 8601 “alternative format”: same meaning as above |
+  <a id="datatype-interval-output"></a>
 
-
-### Interval Output { #datatype-interval-output }
+### Interval Output
 
 
  As previously explained, PostgreSQL stores `interval` values as months, days, and microseconds. For output, the months field is converted to years and months by dividing by 12. The days field is shown as-is. The microseconds field is converted to hours, minutes, seconds, and fractional seconds. Thus months, minutes, and seconds will never be shown as exceeding the ranges 0–11, 0–59, and 0–59 respectively, while the displayed years, days, and hours fields can be quite large. (The [`justify_days`](../functions-and-operators/date-time-functions-and-operators.md#function-justify-days) and [`justify_hours`](../functions-and-operators/date-time-functions-and-operators.md#function-justify-hours) functions can be used if it is desirable to transpose large days or hours values into the next higher field.)
@@ -424,9 +418,8 @@ SELECT '2 years 15 months 100 weeks 99 hours 123456789 milliseconds'::interval;
 
 
  The output of the `iso_8601` style matches the “format with designators” described in section 4.4.3.2 of the ISO 8601 standard.
+ <a id="interval-style-output-table"></a>
 
-
-<a id="interval-style-output-table"></a>
 **Table: Interval Output Style Examples**
 
 | Style Specification | Year-Month Interval | Day-Time Interval | Mixed Interval |

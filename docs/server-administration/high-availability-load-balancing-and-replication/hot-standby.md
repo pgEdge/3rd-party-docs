@@ -1,13 +1,15 @@
-## Hot Standby { #hot-standby }
+<a id="hot-standby"></a>
+
+## Hot Standby
 
 
  Hot standby is the term used to describe the ability to connect to the server and run read-only queries while the server is in archive recovery or standby mode. This is useful both for replication purposes and for restoring a backup to a desired state with great precision. The term hot standby also refers to the ability of the server to move from recovery through to normal operation while users continue running queries and/or keep their connections open.
 
 
  Running queries in hot standby mode is similar to normal query operation, though there are several usage and administrative differences explained below.
+ <a id="hot-standby-users"></a>
 
-
-### User's Overview { #hot-standby-users }
+### User's Overview
 
 
  When the [hot_standby](../server-configuration/replication.md#guc-hot-standby) parameter is set to true on a standby server, it will begin accepting connections once the recovery has brought the system to a consistent state and be ready for hot standby. All such connections are strictly read-only; not even temporary tables may be written.
@@ -59,9 +61,9 @@
 
 
  Users can determine whether hot standby is currently active for their session by issuing `SHOW in_hot_standby`. (In server versions before 14, the `in_hot_standby` parameter did not exist; a workable substitute method for older servers is `SHOW transaction_read_only`.) In addition, a set of functions ([Recovery Information Functions](../../the-sql-language/functions-and-operators/system-administration-functions.md#functions-recovery-info-table)) allow users to access information about the standby server. These allow you to write programs that are aware of the current state of the database. These can be used to monitor the progress of recovery, or to allow you to write complex programs that restore the database to particular states.
+  <a id="hot-standby-conflict"></a>
 
-
-### Handling Query Conflicts { #hot-standby-conflict }
+### Handling Query Conflicts
 
 
  The primary and standby servers are in many ways loosely connected. Actions on the primary will have an effect on the standby. As a result, there is potential for negative interactions or conflicts between them. The easiest conflict to understand is performance: if a huge data load is taking place on the primary then this will generate a similar stream of WAL records on the standby, so standby queries may contend for system resources, such as I/O.
@@ -113,9 +115,9 @@
 
 
  Users can control whether a log message is produced when WAL replay is waiting longer than `deadlock_timeout` for conflicts. This is controlled by the [log_recovery_conflict_waits](../server-configuration/error-reporting-and-logging.md#guc-log-recovery-conflict-waits) parameter.
+  <a id="hot-standby-admin"></a>
 
-
-### Administrator's Overview { #hot-standby-admin }
+### Administrator's Overview
 
 
  If `hot_standby` is `on` in `postgresql.conf` (the default value) and there is a [`standby.signal`](log-shipping-standby-servers.md#file-standby-signal) file present, the server will run in hot standby mode. However, it may take some time for hot standby connections to be allowed, because the server will not accept connections until it has completed sufficient recovery to provide a consistent state against which queries can run. During this period, clients that attempt to connect will be refused with an error message. To confirm the server has come up, either loop trying to connect from the application, or look for these messages in the server logs:
@@ -221,9 +223,9 @@ HINT:  You can then restart the server after making the necessary configuration 
 
 
  The checkpointer process and the background writer process are active during recovery. The checkpointer process will perform restartpoints (similar to checkpoints on the primary) and the background writer process will perform normal block cleaning activities. This can include updates of the hint bit information stored on the standby server. The `CHECKPOINT` command is accepted during recovery, though it performs a restartpoint rather than a new checkpoint.
+  <a id="hot-standby-parameters"></a>
 
-
-### Hot Standby Parameter Reference { #hot-standby-parameters }
+### Hot Standby Parameter Reference
 
 
  Various parameters have been mentioned above in [Handling Query Conflicts](#hot-standby-conflict) and [Administrator's Overview](#hot-standby-admin).
@@ -233,9 +235,9 @@ HINT:  You can then restart the server after making the necessary configuration 
 
 
  On the standby, parameters [hot_standby](../server-configuration/replication.md#guc-hot-standby), [max_standby_archive_delay](../server-configuration/replication.md#guc-max-standby-archive-delay) and [max_standby_streaming_delay](../server-configuration/replication.md#guc-max-standby-streaming-delay) can be used.
+  <a id="hot-standby-caveats"></a>
 
-
-### Caveats { #hot-standby-caveats }
+### Caveats
 
 
  There are several limitations of hot standby. These can and probably will be fixed in future releases:

@@ -1,19 +1,21 @@
-## The PostgreSQL Type System { #extend-type-system }
+<a id="extend-type-system"></a>
+
+## The PostgreSQL Type System
 
 
  PostgreSQL data types can be divided into base types, container types, domains, and pseudo-types.
+ <a id="extend-type-system-base"></a>
 
-
-### Base Types { #extend-type-system-base }
+### Base Types
 
 
  Base types are those, like `integer`, that are implemented below the level of the SQL language (typically in a low-level language such as C). They generally correspond to what are often known as abstract data types. PostgreSQL can only operate on such types through functions provided by the user and only understands the behavior of such types to the extent that the user describes them. The built-in base types are described in [Data Types](../../the-sql-language/data-types/index.md#datatype).
 
 
  Enumerated (enum) types can be considered as a subcategory of base types. The main difference is that they can be created using just SQL commands, without any low-level programming. Refer to [Enumerated Types](../../the-sql-language/data-types/enumerated-types.md#datatype-enum) for more information.
+  <a id="extend-type-system-container"></a>
 
-
-### Container Types { #extend-type-system-container }
+### Container Types
 
 
  PostgreSQL has three kinds of “container” types, which are types that contain multiple values of other types. These are arrays, composites, and ranges.
@@ -26,27 +28,26 @@
 
 
  A range type can hold two values of the same type, which are the lower and upper bounds of the range. Range types are user-created, although a few built-in ones exist. Refer to [Range Types](../../the-sql-language/data-types/range-types.md#rangetypes) for more information.
+  <a id="extend-type-system-domains"></a>
 
-
-### Domains { #extend-type-system-domains }
+### Domains
 
 
  A domain is based on a particular underlying type and for many purposes is interchangeable with its underlying type. However, a domain can have constraints that restrict its valid values to a subset of what the underlying type would allow. Domains are created using the SQL command [sql-createdomain](../../reference/sql-commands/create-domain.md#sql-createdomain). Refer to [Domain Types](../../the-sql-language/data-types/domain-types.md#domains) for more information.
+  <a id="extend-type-system-pseudo"></a>
 
-
-### Pseudo-Types { #extend-type-system-pseudo }
+### Pseudo-Types
 
 
  There are a few “pseudo-types” for special purposes. Pseudo-types cannot appear as columns of tables or components of container types, but they can be used to declare the argument and result types of functions. This provides a mechanism within the type system to identify special classes of functions. [Pseudo-Types](../../the-sql-language/data-types/pseudo-types.md#datatype-pseudotypes-table) lists the existing pseudo-types.
+  <a id="extend-types-polymorphic"></a>
 
-
-### Polymorphic Types { #extend-types-polymorphic }
+### Polymorphic Types
 
 
  Some pseudo-types of special interest are the *polymorphic types*, which are used to declare *polymorphic functions*. This powerful feature allows a single function definition to operate on many different data types, with the specific data type(s) being determined by the data types actually passed to it in a particular call. The polymorphic types are shown in [Polymorphic Types](#extend-types-polymorphic-table). Some examples of their use appear in [Polymorphic SQL Functions](query-language-sql-functions.md#xfunc-sql-polymorphic-functions).
+ <a id="extend-types-polymorphic-table"></a>
 
-
-<a id="extend-types-polymorphic-table"></a>
 **Table: Polymorphic Types**
 
 | Name | Family | Description |

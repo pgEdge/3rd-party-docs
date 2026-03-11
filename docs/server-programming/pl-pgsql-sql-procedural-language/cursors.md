@@ -1,10 +1,12 @@
-## Cursors { #plpgsql-cursors }
+<a id="plpgsql-cursors"></a>
+
+## Cursors
 
 
  Rather than executing a whole query at once, it is possible to set up a *cursor* that encapsulates the query, and then read the query result a few rows at a time. One reason for doing this is to avoid memory overrun when the result contains a large number of rows. (However, PL/pgSQL users do not normally need to worry about that, since `FOR` loops automatically use a cursor internally to avoid memory problems.) A more interesting usage is to return a reference to a cursor that a function has created, allowing the caller to read the rows. This provides an efficient way to return large row sets from functions.
+ <a id="plpgsql-cursor-declarations"></a>
 
-
-### Declaring Cursor Variables { #plpgsql-cursor-declarations }
+### Declaring Cursor Variables
 
 
  All access to cursors in PL/pgSQL goes through cursor variables, which are always of the special data type `refcursor`. One way to create a cursor variable is just to declare it as a variable of type `refcursor`. Another way is to use the cursor declaration syntax, which in general is:
@@ -30,9 +32,9 @@ DECLARE
 
 
  The `SCROLL` option cannot be used when the cursor's query uses `FOR UPDATE/SHARE`. Also, it is best to use `NO SCROLL` with a query that involves volatile functions. The implementation of `SCROLL` assumes that re-reading the query's output will give consistent results, which a volatile function might not do.
+  <a id="plpgsql-cursor-opening"></a>
 
-
-### Opening Cursors { #plpgsql-cursor-opening }
+### Opening Cursors
 
 
  Before a cursor can be used to retrieve rows, it must be *opened*. (This is the equivalent action to the SQL command [`DECLARE CURSOR`](../../reference/sql-commands/declare.md#sql-declare).) PL/pgSQL has three forms of the `OPEN` statement, two of which use unbound cursor variables while the third uses a bound cursor variable.
@@ -44,9 +46,9 @@ DECLARE
 
 
  Opening a cursor involves creating a server-internal data structure called a *portal*, which holds the execution state for the cursor's query. A portal has a name, which must be unique within the session for the duration of the portal's existence. By default, PL/pgSQL will assign a unique name to each portal it creates. However, if you assign a non-null string value to a cursor variable, that string will be used as its portal name. This feature can be used as described in [Returning Cursors](#plpgsql-cursor-returning).
+ <a id="plpgsql-cursor-opening-open-for-query"></a>
 
-
-#### `OPEN FOR` *query* { #plpgsql-cursor-opening-open-for-query }
+#### `OPEN FOR` *query*
 
 
 ```
@@ -65,8 +67,9 @@ OPEN UNBOUND_CURSORVAR [ [ NO ] SCROLL ] FOR QUERY;
 OPEN curs1 FOR SELECT * FROM foo WHERE key = mykey;
 ```
 
+  <a id="plpgsql-cursor-opening-open-for-execute"></a>
 
-#### `OPEN FOR EXECUTE` { #plpgsql-cursor-opening-open-for-execute }
+#### `OPEN FOR EXECUTE`
 
 
 ```
@@ -86,9 +89,9 @@ OPEN UNBOUND_CURSORVAR [ [ NO ] SCROLL ] FOR EXECUTE QUERY_STRING
 OPEN curs1 FOR EXECUTE format('SELECT * FROM %I WHERE col1 = $1',tabname) USING keyvalue;
 ```
  In this example, the table name is inserted into the query via `format()`. The comparison value for `col1` is inserted via a `USING` parameter, so it needs no quoting.
+  <a id="plpgsql-open-bound-cursor"></a>
 
-
-#### Opening a Bound Cursor { #plpgsql-open-bound-cursor }
+#### Opening a Bound Cursor
 
 
 ```
@@ -129,8 +132,9 @@ BEGIN
     OPEN curs4;
 ```
 
+   <a id="plpgsql-cursor-using"></a>
 
-### Using Cursors { #plpgsql-cursor-using }
+### Using Cursors
 
 
  Once a cursor has been opened, it can be manipulated with the statements described here.
@@ -140,9 +144,9 @@ BEGIN
 
 
  All portals are implicitly closed at transaction end. Therefore a `refcursor` value is usable to reference an open cursor only until the end of the transaction.
+ <a id="plpgsql-cursor-using-fetch"></a>
 
-
-#### `FETCH` { #plpgsql-cursor-using-fetch }
+#### `FETCH`
 
 
 ```
@@ -170,8 +174,9 @@ FETCH LAST FROM curs3 INTO x, y;
 FETCH RELATIVE -2 FROM curs4 INTO x;
 ```
 
+  <a id="plpgsql-cursor-using-move"></a>
 
-#### `MOVE` { #plpgsql-cursor-using-move }
+#### `MOVE`
 
 
 ```
@@ -193,8 +198,9 @@ MOVE RELATIVE -2 FROM curs4;
 MOVE FORWARD 2 FROM curs4;
 ```
 
+  <a id="plpgsql-cursor-using-update-delete"></a>
 
-#### `UPDATE/DELETE WHERE CURRENT OF` { #plpgsql-cursor-using-update-delete }
+#### `UPDATE/DELETE WHERE CURRENT OF`
 
 
 ```
@@ -214,8 +220,9 @@ DELETE FROM TABLE WHERE CURRENT OF CURSOR;
 UPDATE foo SET dataval = myval WHERE CURRENT OF curs1;
 ```
 
+  <a id="plpgsql-cursor-using-close"></a>
 
-#### `CLOSE` { #plpgsql-cursor-using-close }
+#### `CLOSE`
 
 
 ```
@@ -234,8 +241,9 @@ CLOSE CURSOR;
 CLOSE curs1;
 ```
 
+  <a id="plpgsql-cursor-returning"></a>
 
-#### Returning Cursors { #plpgsql-cursor-returning }
+#### Returning Cursors
 
 
  PL/pgSQL functions can return cursors to the caller. This is useful to return multiple rows or columns, especially with very large result sets. To do this, the function opens the cursor and returns the cursor name to the caller (or simply opens the cursor using a portal name specified by or otherwise known to the caller). The caller can then fetch rows from the cursor. The cursor can be closed by the caller, or it will be closed automatically when the transaction closes.
@@ -320,8 +328,9 @@ FETCH ALL FROM b;
 COMMIT;
 ```
 
+   <a id="plpgsql-cursor-for-loop"></a>
 
-### Looping through a Cursor's Result { #plpgsql-cursor-for-loop }
+### Looping through a Cursor's Result
 
 
  There is a variant of the `FOR` statement that allows iterating through the rows returned by a cursor. The syntax is:

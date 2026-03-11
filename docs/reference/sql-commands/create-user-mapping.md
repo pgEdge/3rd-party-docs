@@ -1,4 +1,6 @@
-# CREATE USER MAPPING { #sql-createusermapping }
+<a id="sql-createusermapping"></a>
+
+# CREATE USER MAPPING
 
 define a new mapping of a user to a foreign server
 

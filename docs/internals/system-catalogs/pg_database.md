@@ -1,4 +1,6 @@
-## `pg_database` { #catalog-pg-database }
+<a id="catalog-pg-database"></a>
+
+## `pg_database`
 
 
  The catalog `pg_database` stores information about the available databases. Databases are created with the [`CREATE DATABASE`](../../reference/sql-commands/create-database.md#sql-createdatabase) command. Consult [Managing Databases](../../server-administration/managing-databases/index.md#managing-databases) for details about the meaning of some of the parameters.

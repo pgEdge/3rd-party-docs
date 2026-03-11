@@ -1,4 +1,6 @@
-# CREATE SCHEMA { #sql-createschema }
+<a id="sql-createschema"></a>
+
+# CREATE SCHEMA
 
 define a new schema
 

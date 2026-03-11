@@ -1,4 +1,6 @@
-## Other Database Objects { #ddl-others }
+<a id="ddl-others"></a>
+
+## Other Database Objects
 
 
  Tables are the central objects in a relational database structure, because they hold your data. But they are not the only objects that exist in a database. Many other kinds of objects can be created to make the use and management of the data more efficient or convenient. They are not discussed in this chapter, but we give you a list here so that you are aware of what is possible:

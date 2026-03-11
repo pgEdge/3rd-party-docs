@@ -1,4 +1,6 @@
-## WAL Configuration { #wal-configuration }
+<a id="wal-configuration"></a>
+
+## WAL Configuration
 
 
  There are several WAL-related configuration parameters that affect database performance. This section explains their use. Consult [Server Configuration](../server-configuration/index.md#runtime-config) for general information about setting server configuration parameters.

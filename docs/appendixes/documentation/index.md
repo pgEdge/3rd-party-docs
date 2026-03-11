@@ -1,4 +1,6 @@
-# Documentation { #docguide }
+<a id="docguide"></a>
+
+# Documentation
 
  PostgreSQL has four primary documentation formats:
 

@@ -1,4 +1,6 @@
-## passwordcheck — verify password strength { #passwordcheck }
+<a id="passwordcheck"></a>
+
+## passwordcheck — verify password strength
 
 
  The `passwordcheck` module checks users' passwords whenever they are set with [sql-createrole](../../reference/sql-commands/create-role.md#sql-createrole) or [sql-alterrole](../../reference/sql-commands/alter-role.md#sql-alterrole). If a password is considered too weak, it will be rejected and the command will terminate with an error.
@@ -19,9 +21,9 @@
 
 
      Alternatively, you could modify `passwordcheck` to reject pre-encrypted passwords, but forcing users to set their passwords in clear text carries its own security risks.
+ <a id="passwordcheck-configuration-parameters"></a>
 
-
-### Configuration Parameters { #passwordcheck-configuration-parameters }
+### Configuration Parameters
 
 
 `passwordcheck.min_password_length` (`integer`)

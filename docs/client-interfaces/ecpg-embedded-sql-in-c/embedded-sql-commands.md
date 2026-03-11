@@ -1,10 +1,12 @@
-## Embedded SQL Commands { #ecpg-sql-commands }
+<a id="ecpg-sql-commands"></a>
+
+## Embedded SQL Commands
 
 
  This section describes all SQL commands that are specific to embedded SQL. Also refer to the SQL commands listed in [SQL Commands](../../reference/sql-commands/index.md#sql-commands), which can also be used in embedded SQL, unless stated otherwise.
+ <a id="ecpg-sql-allocate-descriptor"></a>
 
-
-# ALLOCATE DESCRIPTOR { #ecpg-sql-allocate-descriptor }
+# ALLOCATE DESCRIPTOR
 
 allocate an SQL descriptor area
 
@@ -51,9 +53,9 @@ EXEC SQL ALLOCATE DESCRIPTOR mydesc;
 
 
 ## See Also
-  [ecpg-sql-deallocate-descriptor](#ecpg-sql-deallocate-descriptor), [ecpg-sql-get-descriptor](#ecpg-sql-get-descriptor), [ecpg-sql-set-descriptor](#ecpg-sql-set-descriptor)
+  [ecpg-sql-deallocate-descriptor](#ecpg-sql-deallocate-descriptor), [ecpg-sql-get-descriptor](#ecpg-sql-get-descriptor), [ecpg-sql-set-descriptor](#ecpg-sql-set-descriptor)  <a id="ecpg-sql-connect"></a>
 
-# CONNECT { #ecpg-sql-connect }
+# CONNECT
 
 establish a database connection
 
@@ -199,9 +201,9 @@ EXEC SQL END DECLARE SECTION;
 
 
 ## See Also
-  [ecpg-sql-disconnect](#ecpg-sql-disconnect), [ecpg-sql-set-connection](#ecpg-sql-set-connection)
+  [ecpg-sql-disconnect](#ecpg-sql-disconnect), [ecpg-sql-set-connection](#ecpg-sql-set-connection)  <a id="ecpg-sql-deallocate-descriptor"></a>
 
-# DEALLOCATE DESCRIPTOR { #ecpg-sql-deallocate-descriptor }
+# DEALLOCATE DESCRIPTOR
 
 deallocate an SQL descriptor area
 
@@ -245,9 +247,9 @@ EXEC SQL DEALLOCATE DESCRIPTOR mydesc;
 
 
 ## See Also
-  [ecpg-sql-allocate-descriptor](#ecpg-sql-allocate-descriptor), [ecpg-sql-get-descriptor](#ecpg-sql-get-descriptor), [ecpg-sql-set-descriptor](#ecpg-sql-set-descriptor)
+  [ecpg-sql-allocate-descriptor](#ecpg-sql-allocate-descriptor), [ecpg-sql-get-descriptor](#ecpg-sql-get-descriptor), [ecpg-sql-set-descriptor](#ecpg-sql-set-descriptor)  <a id="ecpg-sql-declare"></a>
 
-# DECLARE { #ecpg-sql-declare }
+# DECLARE
 
 define a cursor
 
@@ -316,9 +318,9 @@ EXEC SQL DECLARE cur1 CURSOR FOR stmt1;
 
 
 ## See Also
-  [ecpg-sql-open](#ecpg-sql-open), [sql-close](../../reference/sql-commands/close.md#sql-close), [sql-declare](../../reference/sql-commands/declare.md#sql-declare)
+  [ecpg-sql-open](#ecpg-sql-open), [sql-close](../../reference/sql-commands/close.md#sql-close), [sql-declare](../../reference/sql-commands/declare.md#sql-declare)  <a id="ecpg-sql-declare-statement"></a>
 
-# DECLARE STATEMENT { #ecpg-sql-declare-statement }
+# DECLARE STATEMENT
 
 declare SQL statement identifier
 
@@ -383,9 +385,9 @@ EXEC SQL CLOSE cursor_name;
 
 
 ## See Also
-  [ecpg-sql-connect](#ecpg-sql-connect), [ecpg-sql-declare](#ecpg-sql-declare), [ecpg-sql-open](#ecpg-sql-open)
+  [ecpg-sql-connect](#ecpg-sql-connect), [ecpg-sql-declare](#ecpg-sql-declare), [ecpg-sql-open](#ecpg-sql-open)  <a id="ecpg-sql-describe"></a>
 
-# DESCRIBE { #ecpg-sql-describe }
+# DESCRIBE
 
 obtain information about a prepared statement or result set
 
@@ -443,9 +445,9 @@ EXEC SQL DEALLOCATE DESCRIPTOR mydesc;
 
 
 ## See Also
-  [ecpg-sql-allocate-descriptor](#ecpg-sql-allocate-descriptor), [ecpg-sql-get-descriptor](#ecpg-sql-get-descriptor)
+  [ecpg-sql-allocate-descriptor](#ecpg-sql-allocate-descriptor), [ecpg-sql-get-descriptor](#ecpg-sql-get-descriptor)  <a id="ecpg-sql-disconnect"></a>
 
-# DISCONNECT { #ecpg-sql-disconnect }
+# DISCONNECT
 
 terminate a database connection
 
@@ -510,9 +512,9 @@ main(void)
 
 
 ## See Also
-  [ecpg-sql-connect](#ecpg-sql-connect), [ecpg-sql-set-connection](#ecpg-sql-set-connection)
+  [ecpg-sql-connect](#ecpg-sql-connect), [ecpg-sql-set-connection](#ecpg-sql-set-connection)  <a id="ecpg-sql-execute-immediate"></a>
 
-# EXECUTE IMMEDIATE { #ecpg-sql-execute-immediate }
+# EXECUTE IMMEDIATE
 
 dynamically prepare and execute a statement
 
@@ -565,9 +567,9 @@ EXEC SQL EXECUTE IMMEDIATE :command;
 
 
  `EXECUTE IMMEDIATE` is specified in the SQL standard.
+  <a id="ecpg-sql-get-descriptor"></a>
 
-
-# GET DESCRIPTOR { #ecpg-sql-get-descriptor }
+# GET DESCRIPTOR
 
 get information from an SQL descriptor area
 
@@ -703,9 +705,9 @@ d_data                  = testdb
 
 
 ## See Also
-  [ecpg-sql-allocate-descriptor](#ecpg-sql-allocate-descriptor), [ecpg-sql-set-descriptor](#ecpg-sql-set-descriptor)
+  [ecpg-sql-allocate-descriptor](#ecpg-sql-allocate-descriptor), [ecpg-sql-set-descriptor](#ecpg-sql-set-descriptor)  <a id="ecpg-sql-open"></a>
 
-# OPEN { #ecpg-sql-open }
+# OPEN
 
 open a dynamic cursor
 
@@ -762,9 +764,9 @@ EXEC SQL OPEN :curname1;
 
 
 ## See Also
-  [ecpg-sql-declare](#ecpg-sql-declare), [sql-close](../../reference/sql-commands/close.md#sql-close)
+  [ecpg-sql-declare](#ecpg-sql-declare), [sql-close](../../reference/sql-commands/close.md#sql-close)  <a id="ecpg-sql-prepare"></a>
 
-# PREPARE { #ecpg-sql-prepare }
+# PREPARE
 
 prepare a statement for execution
 
@@ -826,9 +828,9 @@ EXEC SQL EXECUTE foo USING SQL DESCRIPTOR indesc INTO SQL DESCRIPTOR outdesc;
 
 
 ## See Also
-  [sql-execute](../../reference/sql-commands/execute.md#sql-execute)
+  [sql-execute](../../reference/sql-commands/execute.md#sql-execute)  <a id="ecpg-sql-set-autocommit"></a>
 
-# SET AUTOCOMMIT { #ecpg-sql-set-autocommit }
+# SET AUTOCOMMIT
 
 set the autocommit behavior of the current session
 
@@ -851,9 +853,9 @@ SET AUTOCOMMIT { = | TO } { ON | OFF }
 
 
  `SET AUTOCOMMIT` is an extension of PostgreSQL ECPG.
+  <a id="ecpg-sql-set-connection"></a>
 
-
-# SET CONNECTION { #ecpg-sql-set-connection }
+# SET CONNECTION
 
 select a database connection
 
@@ -902,9 +904,9 @@ EXEC SQL SET CONNECTION = con1;
 
 
 ## See Also
-  [ecpg-sql-connect](#ecpg-sql-connect), [ecpg-sql-disconnect](#ecpg-sql-disconnect)
+  [ecpg-sql-connect](#ecpg-sql-connect), [ecpg-sql-disconnect](#ecpg-sql-disconnect)  <a id="ecpg-sql-set-descriptor"></a>
 
-# SET DESCRIPTOR { #ecpg-sql-set-descriptor }
+# SET DESCRIPTOR
 
 set information in an SQL descriptor area
 
@@ -972,9 +974,9 @@ EXEC SQL SET DESCRIPTOR indesc VALUE 2 INDICATOR = :val2null, DATA = :val2;
 
 
 ## See Also
-  [ecpg-sql-allocate-descriptor](#ecpg-sql-allocate-descriptor), [ecpg-sql-get-descriptor](#ecpg-sql-get-descriptor)
+  [ecpg-sql-allocate-descriptor](#ecpg-sql-allocate-descriptor), [ecpg-sql-get-descriptor](#ecpg-sql-get-descriptor)  <a id="ecpg-sql-type"></a>
 
-# TYPE { #ecpg-sql-type }
+# TYPE
 
 define a new data type
 
@@ -1094,9 +1096,9 @@ t_ind.i_ind = 0
 
 
  The `TYPE` command is a PostgreSQL extension.
+  <a id="ecpg-sql-var"></a>
 
-
-# VAR { #ecpg-sql-var }
+# VAR
 
 define a variable
 
@@ -1144,9 +1146,9 @@ EXEC SQL VAR a IS int;
 
 
  The `VAR` command is a PostgreSQL extension.
+  <a id="ecpg-sql-whenever"></a>
 
-
-# WHENEVER { #ecpg-sql-whenever }
+# WHENEVER
 
 specify the action to be taken when an SQL statement causes a specific class condition to be raised
 

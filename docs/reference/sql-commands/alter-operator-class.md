@@ -1,4 +1,6 @@
-# ALTER OPERATOR CLASS { #sql-alteropclass }
+<a id="sql-alteropclass"></a>
+
+# ALTER OPERATOR CLASS
 
 change the definition of an operator class
 

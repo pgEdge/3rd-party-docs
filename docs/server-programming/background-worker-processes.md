@@ -1,4 +1,6 @@
-# Background Worker Processes { #bgworker }
+<a id="bgworker"></a>
+
+# Background Worker Processes
 
 
  PostgreSQL can be extended to run user-supplied code in separate processes. Such processes are started, stopped and monitored by `postgres`, which permits them to have a lifetime closely linked to the server's status. These processes are attached to PostgreSQL's shared memory area and have the option to connect to databases internally; they can also run multiple transactions serially, just like a regular client-connected server process. Also, by linking to libpq they can connect to the server and behave like a regular client application.

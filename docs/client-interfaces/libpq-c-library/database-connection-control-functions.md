@@ -1,4 +1,6 @@
-## Database Connection Control Functions { #libpq-connect }
+<a id="libpq-connect"></a>
+
+## Database Connection Control Functions
 
 
  The following functions deal with making a connection to a PostgreSQL backend server. An application program can have several backend connections open at one time. (One reason to do that is to access more than one database.) Each connection is represented by a `PGconn` object, which is obtained from the function [PQconnectdb](#libpq-PQconnectdb), [PQconnectdbParams](#libpq-PQconnectdbParams), or [PQsetdbLogin](#libpq-PQsetdbLogin). Note that these functions will always return a non-null object pointer, unless perhaps there is too little memory even to allocate the `PGconn` object. The [PQstatus](connection-status-functions.md#libpq-PQstatus) function should be called to check the return value for a successful connection before queries are sent via the connection object.
@@ -100,7 +102,8 @@
      This is a macro that calls [PQsetdbLogin](#libpq-PQsetdbLogin) with null pointers for the `login` and `pwd` parameters. It is provided for backward compatibility with very old programs.
 <a id="libpq-PQconnectStartParams"></a>
 
-`PQconnectStartParams`, `PQconnectStart`, `PQconnectPoll`
+`PQconnectStartParams`, `PQconnectStart`<a id="libpq-PQconnectPoll"></a>
+, `PQconnectPoll`
 :   Make a connection to the database server in a nonblocking manner.
 
     ```
@@ -405,14 +408,15 @@
     PQsslKeyPassHook_OpenSSL_type PQgetSSLKeyPassHook_OpenSSL(void);
     ```
 
+ <a id="libpq-connstring"></a>
 
-### Connection Strings { #libpq-connstring }
+### Connection Strings
 
 
  Several libpq functions parse a user-specified string to obtain connection parameters. There are two accepted formats for these strings: plain keyword/value strings and URIs. URIs generally follow [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986), except that multi-host connection strings are allowed as further described below.
+ <a id="libpq-connstring-keyword-value"></a>
 
-
-#### Keyword/Value Connection Strings { #libpq-connstring-keyword-value }
+#### Keyword/Value Connection Strings
 
 
  In the keyword/value format, each parameter setting is in the form *keyword* `=` *value*, with space(s) between settings. Spaces around a setting's equal sign are optional. To write an empty value, or a value containing spaces, surround it with single quotes, for example `keyword = 'a value'`. Single quotes and backslashes within a value must be escaped with a backslash, i.e., `\'` and `\\`.
@@ -427,9 +431,9 @@ host=localhost port=5432 dbname=mydb connect_timeout=10
 
 
  The recognized parameter key words are listed in [Parameter Key Words](#libpq-paramkeywords).
+  <a id="libpq-connstring-uris"></a>
 
-
-#### Connection URIs { #libpq-connstring-uris }
+#### Connection URIs
 
 
  The general form for a connection URI is:
@@ -500,9 +504,9 @@ postgresql://%2Fvar%2Flib%2Fpostgresql/dbname
 
 
  It is possible to specify multiple host components, each with an optional port component, in a single URI. A URI of the form `postgresql://host1:port1,host2:port2,host3:port3/` is equivalent to a connection string of the form `host=host1,host2,host3 port=port1,port2,port3`. As further described below, each host will be tried in turn until a connection is successfully established.
+  <a id="libpq-multiple-hosts"></a>
 
-
-#### Specifying Multiple Hosts { #libpq-multiple-hosts }
+#### Specifying Multiple Hosts
 
 
  It is possible to specify multiple hosts to connect to, so that they are tried in the given order. In the Keyword/Value format, the `host`, `hostaddr`, and `port` options accept comma-separated lists of values. The same number of elements must be given in each option that is specified, such that e.g., the first `hostaddr` corresponds to the first host name, the second `hostaddr` corresponds to the second host name, and so forth. As an exception, if only one `port` is specified, it applies to all the hosts.
@@ -518,9 +522,9 @@ postgresql://%2Fvar%2Flib%2Fpostgresql/dbname
 
 
  If a password file is used, you can have different passwords for different hosts. All the other connection options are the same for every host in the list; it is not possible to e.g., specify different usernames for different hosts.
+   <a id="libpq-paramkeywords"></a>
 
-
-### Parameter Key Words { #libpq-paramkeywords }
+### Parameter Key Words
 
 
  The currently recognized parameter key words are:

@@ -1,13 +1,15 @@
-## seg — a datatype for line segments or floating point intervals { #seg }
+<a id="seg"></a>
+
+## seg — a datatype for line segments or floating point intervals
 
 
  This module implements a data type `seg` for representing line segments, or floating point intervals. `seg` can represent uncertainty in the interval endpoints, making it especially useful for representing laboratory measurements.
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="seg-rationale"></a>
 
-
-### Rationale { #seg-rationale }
+### Rationale
 
 
  The geometry of measurements is usually more complex than that of a point in a numeric continuum. A measurement is usually a segment of that continuum with somewhat fuzzy limits. The measurements come out as intervals because of uncertainty and randomness, as well as because the value being measured may naturally be an interval indicating some condition, such as the temperature range of stability of a protein.
@@ -43,17 +45,17 @@ test=> select '6.25 .. 6.50'::seg as "pH";
 (1 row)
 ```
 
+  <a id="seg-syntax"></a>
 
-### Syntax { #seg-syntax }
+### Syntax
 
 
  The external representation of an interval is formed using one or two floating-point numbers joined by the range operator (`..` or `...`). Alternatively, it can be specified as a center point plus or minus a deviation. Optional certainty indicators (`<`, `>` or `~`) can be stored as well. (Certainty indicators are ignored by all the built-in operators, however.) [`seg` External Representations](#seg-repr-table) gives an overview of allowed representations; [Examples of Valid `seg` Input](#seg-input-examples) shows some examples.
 
 
  In [`seg` External Representations](#seg-repr-table), *x*, *y*, and *delta* denote floating-point numbers. *x* and *y*, but not *delta*, can be preceded by a certainty indicator.
+ <a id="seg-repr-table"></a>
 
-
-<a id="seg-repr-table"></a>
 **Table: `seg` External Representations**
 
 | <em>x</em> | Single value (zero-length interval) |
@@ -61,9 +63,8 @@ test=> select '6.25 .. 6.50'::seg as "pH";
 | <em>x</em><code> (+-) </code><em>delta</em> | Interval from *x* - *delta* to *x* + *delta* |
 | <em>x</em><code> ..</code> | Open interval with lower bound *x* |
 | <code>.. </code><em>x</em> | Open interval with upper bound *x* |
+ <a id="seg-input-examples"></a>
 
-
-<a id="seg-input-examples"></a>
 **Table: Examples of Valid `seg` Input**
 
 |  |  |
@@ -83,24 +84,23 @@ test=> select '6.25 .. 6.50'::seg as "pH";
 
 
  As a sanity check, `seg` rejects intervals with the lower bound greater than the upper, for example `5 .. 2`.
+  <a id="seg-precision"></a>
 
-
-### Precision { #seg-precision }
+### Precision
 
 
  `seg` values are stored internally as pairs of 32-bit floating point numbers. This means that numbers with more than 7 significant digits will be truncated.
 
 
  Numbers with 7 or fewer significant digits retain their original precision. That is, if your query returns 0.00, you will be sure that the trailing zeroes are not the artifacts of formatting: they reflect the precision of the original data. The number of leading zeroes does not affect precision: the value 0.0067 is considered to have just 2 significant digits.
+  <a id="seg-usage"></a>
 
-
-### Usage { #seg-usage }
+### Usage
 
 
  The `seg` module includes a GiST index operator class for `seg` values. The operators supported by the GiST operator class are shown in [Seg GiST Operators](#seg-gist-operators).
+ <a id="seg-gist-operators"></a>
 
-
-<a id="seg-gist-operators"></a>
 **Table: Seg GiST Operators**
 
 <table>
@@ -156,9 +156,9 @@ test=> select '6.25 .. 6.50'::seg as "pH";
 
 
  In addition to the above operators, the usual comparison operators shown in [Comparison Operators](../../the-sql-language/functions-and-operators/comparison-functions-and-operators.md#functions-comparison-op-table) are available for type `seg`. These operators first compare (a) to (c), and if these are equal, compare (b) to (d). That results in reasonably good sorting in most cases, which is useful if you want to use ORDER BY with this type.
+  <a id="seg-notes"></a>
 
-
-### Notes { #seg-notes }
+### Notes
 
 
  For examples of usage, see the regression test `sql/seg.sql`.
@@ -176,9 +176,9 @@ postgres=> select '10(+-)1'::seg as seg;
 
 
  The performance of an R-tree index can largely depend on the initial order of input values. It may be very helpful to sort the input table on the `seg` column; see the script `sort-segments.pl` for an example.
+  <a id="seg-credits"></a>
 
-
-### Credits { #seg-credits }
+### Credits
 
 
  Original author: Gene Selkov, Jr. [selkovjr@mcs.anl.gov](mailto:selkovjr@mcs.anl.gov), Mathematics and Computer Science Division, Argonne National Laboratory.

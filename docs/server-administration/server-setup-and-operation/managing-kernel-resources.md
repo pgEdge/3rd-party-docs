@@ -1,10 +1,12 @@
-## Managing Kernel Resources { #kernel-resources }
+<a id="kernel-resources"></a>
+
+## Managing Kernel Resources
 
 
  PostgreSQL can sometimes exhaust various operating system resource limits, especially when multiple copies of the server are running on the same system, or in very large installations. This section explains the kernel resources used by PostgreSQL and the steps you can take to resolve problems related to kernel resource consumption.
+ <a id="sysvipc"></a>
 
-
-### Shared Memory and Semaphores { #sysvipc }
+### Shared Memory and Semaphores
 
 
  PostgreSQL requires the operating system to provide inter-process communication (IPC) features, specifically shared memory and semaphores. Unix-derived systems typically provide “`System V`” IPC, “`POSIX`” IPC, or both. `Windows` has its own implementation of these features and is not discussed here.
@@ -14,9 +16,8 @@
 
 
  System V IPC features are typically constrained by system-wide allocation limits. When PostgreSQL exceeds one of these limits, the server will refuse to start and should leave an instructive error message describing the problem and what to do about it. (See also [Server Start-up Failures](starting-the-database-server.md#server-start-failures).) The relevant kernel parameters are named consistently across different systems; [`System V` IPC Parameters](#sysvipc-parameters) gives an overview. The methods to set them, however, vary. Suggestions for some platforms are given below.
+ <a id="sysvipc-parameters"></a>
 
-
-<a id="sysvipc-parameters"></a>
 **Table: `System V` IPC Parameters**
 
 | Name | Description | Values needed to run one PostgreSQL instance |
@@ -166,9 +167,9 @@ $ postgres -D $PGDATA -C num_os_semaphores
 
 
      Additionally, if you are running PostgreSQL inside a zone, you may need to raise the zone resource usage limits as well. See "Chapter2: Projects and Tasks" in the *System Administrator's Guide* for more information on `projects` and `prctl`.
+  <a id="systemd-removeipc"></a>
 
-
-### systemd RemoveIPC { #systemd-removeipc }
+### systemd RemoveIPC
 
 
  If systemd is in use, some care must be taken that IPC resources (including shared memory) are not prematurely removed by the operating system. This is especially of concern when installing PostgreSQL from source. Users of distribution packages of PostgreSQL are less likely to be affected, as the `postgres` user is then normally created as a system user.
@@ -207,9 +208,9 @@ RemoveIPC=no
 !!! caution
 
     At least one of these two things has to be ensured, or the PostgreSQL server will be very unreliable.
+  <a id="kernel-resources-limits"></a>
 
-
-### Resource Limits { #kernel-resources-limits }
+### Resource Limits
 
 
  Unix-like operating systems enforce various kinds of resource limits that might interfere with the operation of your PostgreSQL server. Of particular importance are limits on the number of processes per user, the number of open files per process, and the amount of memory available to each process. Each of these have a “hard” and a “soft” limit. The soft limit is what actually counts but it can be changed by the user up to the hard limit. The hard limit can only be changed by the root user. The system call `setrlimit` is responsible for setting these parameters. The shell's built-in command `ulimit` (Bourne shells) or `limit` (csh) is used to control the resource limits from the command line. On BSD-derived systems the file `/etc/login.conf` controls the various resource limits set during login. See the operating system documentation for details. The relevant parameters are `maxproc`, `openfiles`, and `datasize`. For example:
@@ -241,9 +242,9 @@ default:\
 
 
  Another kernel limit that may be of concern when supporting large numbers of client connections is the maximum socket connection queue length. If more than that many connection requests arrive within a very short period, some may get rejected before the PostgreSQL server can service the requests, with those clients receiving unhelpful connection failure errors such as “Resource temporarily unavailable” or “Connection refused”. The default queue length limit is 128 on many platforms. To raise it, adjust the appropriate kernel parameter via sysctl, then restart the PostgreSQL server. The parameter is variously named `net.core.somaxconn` on Linux, `kern.ipc.soacceptqueue` on newer FreeBSD, and `kern.ipc.somaxconn` on macOS and other BSD variants.
+  <a id="linux-memory-overcommit"></a>
 
-
-### Linux Memory Overcommit { #linux-memory-overcommit }
+### Linux Memory Overcommit
 
 
  The default virtual memory behavior on Linux is not optimal for PostgreSQL. Because of the way that the kernel implements memory overcommit, the kernel might terminate the PostgreSQL postmaster (the supervisor server process) if the memory demands of either PostgreSQL or another process cause the system to run out of virtual memory.
@@ -287,9 +288,9 @@ export PG_OOM_ADJUST_FILE=/proc/self/oom_score_adj
 export PG_OOM_ADJUST_VALUE=0
 ```
  These settings will cause postmaster child processes to run with the normal OOM score adjustment of zero, so that the OOM killer can still target them at need. You could use some other value for `PG_OOM_ADJUST_VALUE` if you want the child processes to run with some other OOM score adjustment. (`PG_OOM_ADJUST_VALUE` can also be omitted, in which case it defaults to zero.) If you do not set `PG_OOM_ADJUST_FILE`, the child processes will run with the same OOM score adjustment as the postmaster, which is unwise since the whole point is to ensure that the postmaster has a preferential setting.
+  <a id="linux-huge-pages"></a>
 
-
-### Linux Huge Pages { #linux-huge-pages }
+### Linux Huge Pages
 
 
  Using huge pages reduces overhead when using large contiguous chunks of memory, as PostgreSQL does, particularly when using large values of [shared_buffers](../server-configuration/resource-consumption.md#guc-shared-buffers). To use this feature in PostgreSQL you need a kernel with `CONFIG_HUGETLBFS=y` and `CONFIG_HUGETLB_PAGE=y`. You will also have to configure the operating system to provide enough huge pages of the desired size. The runtime-computed parameter [shared_memory_size_in_huge_pages](../server-configuration/preset-options.md#guc-shared-memory-size-in-huge-pages) reports the number of huge pages required. This parameter can be viewed before starting the server with a `postgres` command like:

@@ -1,4 +1,6 @@
-# ALTER SUBSCRIPTION { #sql-altersubscription }
+<a id="sql-altersubscription"></a>
+
+# ALTER SUBSCRIPTION
 
 change the definition of a subscription
 

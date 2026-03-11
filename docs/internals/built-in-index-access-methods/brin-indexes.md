@@ -1,7 +1,9 @@
-## BRIN Indexes { #brin }
+<a id="brin"></a>
 
+## BRIN Indexes
+   <a id="brin-intro"></a>
 
-### Introduction { #brin-intro }
+### Introduction
 
 
  BRIN stands for Block Range Index. BRIN is designed for handling very large tables in which certain columns have some natural correlation with their physical location within the table.
@@ -17,9 +19,9 @@
 
 
  The size of the block range is determined at index creation time by the `pages_per_range` storage parameter. The number of index entries will be equal to the size of the relation in pages divided by the selected value for `pages_per_range`. Therefore, the smaller the number, the larger the index becomes (because of the need to store more index entries), but at the same time the summary data stored can be more precise and more data blocks can be skipped during an index scan.
+ <a id="brin-operation"></a>
 
-
-#### Index Maintenance { #brin-operation }
+#### Index Maintenance
 
 
  At the time of creation, all existing heap pages are scanned and a summary index tuple is created for each range, including the possibly-incomplete range at the end. As new pages are filled with data, page ranges that are already summarized will cause the summary information to be updated with data from the new tuples. When a new page is created that does not fall within the last summarized range, the range that the new page belongs to does not automatically acquire a summary tuple; those tuples remain unsummarized until a summarization run is invoked later, creating the initial summary for that range.
@@ -44,18 +46,17 @@ LOG:  request for BRIN range summarization for index "brin_wi_idx" page 128 was 
 
 
  Conversely, a range can be de-summarized using the `brin_desummarize_range(regclass, bigint)` function, which is useful when the index tuple is no longer a very good representation because the existing values have changed. See [Index Maintenance Functions](../../the-sql-language/functions-and-operators/system-administration-functions.md#functions-admin-index) for details.
+   <a id="brin-builtin-opclasses"></a>
 
-
-### Built-in Operator Classes { #brin-builtin-opclasses }
+### Built-in Operator Classes
 
 
  The core PostgreSQL distribution includes the BRIN operator classes shown in [Built-in BRIN Operator Classes](#brin-builtin-opclasses-table).
 
 
  The *minmax* operator classes store the minimum and the maximum values appearing in the indexed column within the range. The *inclusion* operator classes store a value which includes the values in the indexed column within the range. The *bloom* operator classes build a Bloom filter for all values in the range. The *minmax-multi* operator classes store multiple minimum and maximum values, representing values appearing in the indexed column within the range.
+ <a id="brin-builtin-opclasses-table"></a>
 
-
-<a id="brin-builtin-opclasses-table"></a>
 **Table: Built-in BRIN Operator Classes**
 
 <table>
@@ -986,9 +987,9 @@ LOG:  request for BRIN range summarization for index "brin_wi_idx" page 128 was 
 </tr>
 </tbody>
 </table>
+ <a id="brin-builtin-opclasses--parameters"></a>
 
-
-#### Operator Class Parameters { #brin-builtin-opclasses--parameters }
+#### Operator Class Parameters
 
 
  Some of the built-in operator classes allow specifying parameters affecting behavior of the operator class. Each operator class has its own set of allowed parameters. Only the `bloom` and `minmax-multi` operator classes allow specifying parameters:
@@ -1009,9 +1010,9 @@ LOG:  request for BRIN range summarization for index "brin_wi_idx" page 128 was 
 
 `values_per_range`
 :   Defines the maximum number of values stored by BRIN minmax indexes to summarize a block range. Each value may represent either a point, or a boundary of an interval. Values must be between 8 and 256, and the default value is 32.
+   <a id="brin-extensibility"></a>
 
-
-### Extensibility { #brin-extensibility }
+### Extensibility
 
 
  The BRIN interface has a high level of abstraction, requiring the access method implementer only to implement the semantics of the data type being accessed. The BRIN layer itself takes care of concurrency, logging and searching the index structure.
@@ -1069,9 +1070,8 @@ LOG:  request for BRIN range summarization for index "brin_wi_idx" page 128 was 
 
 
  To write an operator class for a data type that implements a totally ordered set, it is possible to use the minmax support functions alongside the corresponding operators, as shown in [Function and Support Numbers for Minmax Operator Classes](#brin-extensibility-minmax-table). All operator class members (functions and operators) are mandatory.
+ <a id="brin-extensibility-minmax-table"></a>
 
-
-<a id="brin-extensibility-minmax-table"></a>
 **Table: Function and Support Numbers for Minmax Operator Classes**
 
 | Operator class member | Object |
@@ -1088,9 +1088,8 @@ LOG:  request for BRIN range summarization for index "brin_wi_idx" page 128 was 
 
 
  To write an operator class for a complex data type which has values included within another type, it's possible to use the inclusion support functions alongside the corresponding operators, as shown in [Function and Support Numbers for Inclusion Operator Classes](#brin-extensibility-inclusion-table). It requires only a single additional function, which can be written in any language. More functions can be defined for additional functionality. All operators are optional. Some operators require other operators, as shown as dependencies on the table.
+ <a id="brin-extensibility-inclusion-table"></a>
 
-
-<a id="brin-extensibility-inclusion-table"></a>
 **Table: Function and Support Numbers for Inclusion Operator Classes**
 
 | Operator class member | Object | Dependency |
@@ -1128,9 +1127,8 @@ LOG:  request for BRIN range summarization for index "brin_wi_idx" page 128 was 
 
 
  To write an operator class for a data type that implements only an equality operator and supports hashing, it is possible to use the bloom support procedures alongside the corresponding operators, as shown in [Procedure and Support Numbers for Bloom Operator Classes](#brin-extensibility-bloom-table). All operator class members (procedures and operators) are mandatory.
+ <a id="brin-extensibility-bloom-table"></a>
 
-
-<a id="brin-extensibility-bloom-table"></a>
 **Table: Procedure and Support Numbers for Bloom Operator Classes**
 
 | Operator class member | Object |
@@ -1148,9 +1146,8 @@ LOG:  request for BRIN range summarization for index "brin_wi_idx" page 128 was 
 
 
  The minmax-multi operator class is also intended for data types implementing a totally ordered set, and may be seen as a simple extension of the minmax operator class. While minmax operator class summarizes values from each block range into a single contiguous interval, minmax-multi allows summarization into multiple smaller intervals to improve handling of outlier values. It is possible to use the minmax-multi support procedures alongside the corresponding operators, as shown in [Procedure and Support Numbers for minmax-multi Operator Classes](#brin-extensibility-minmax-multi-table). All operator class members (procedures and operators) are mandatory.
+ <a id="brin-extensibility-minmax-multi-table"></a>
 
-
-<a id="brin-extensibility-minmax-multi-table"></a>
 **Table: Procedure and Support Numbers for minmax-multi Operator Classes**
 
 | Operator class member | Object |

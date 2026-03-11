@@ -1,4 +1,6 @@
-# pg_upgrade { #pgupgrade }
+<a id="pgupgrade"></a>
+
+# pg_upgrade
 
 upgrade a PostgreSQL server instance
 
@@ -230,6 +232,7 @@ pg_upgrade.exe
      Obviously, no one should be accessing the clusters during the upgrade. pg_upgrade defaults to running servers on port 50432 to avoid unintended client connections. You can use the same port number for both clusters when doing an upgrade because the old and new clusters will not be running at the same time. However, when checking an old running server, the old and new port numbers must be different.
 
      If an error occurs while restoring the database schema, `pg_upgrade` will exit and you will have to revert to the old cluster as outlined in [Reverting to old cluster](#pgupgrade-step-revert) below. To try `pg_upgrade` again, you will need to modify the old cluster so the pg_upgrade schema restore succeeds. If the problem is a `contrib` module, you might need to uninstall the `contrib` module from the old cluster and install it in the new cluster after the upgrade, assuming the module is not being used to store user data.
+<a id="pgupgrade-step-replicas"></a>
 11.
 
      If you used link mode and have Streaming Replication (see [Streaming Replication](../../server-administration/high-availability-load-balancing-and-replication/log-shipping-standby-servers.md#streaming-replication)) or Log-Shipping (see [Log-Shipping Standby Servers](../../server-administration/high-availability-load-balancing-and-replication/log-shipping-standby-servers.md#warm-standby)) standby servers, you can follow these steps to quickly upgrade them. You will not be running pg_upgrade on the standby servers, but rather rsync on the primary. Do not start any servers yet.
@@ -310,6 +313,7 @@ psql --username=postgres --file=script.sql postgres
 16.
 
      Once you are satisfied with the upgrade, you can delete the old cluster's data directories by running the script mentioned when `pg_upgrade` completes. (Automatic deletion is not possible if you have user-defined tablespaces inside the old data directory.) You can also delete the old installation directories (e.g., `bin`, `share`).
+<a id="pgupgrade-step-revert"></a>
 17.
 
      If, after running `pg_upgrade`, you wish to revert to the old cluster, there are several options:

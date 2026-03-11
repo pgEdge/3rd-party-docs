@@ -1,4 +1,6 @@
-# createdb { #app-createdb }
+<a id="app-createdb"></a>
+
+# createdb
 
 create a new PostgreSQL database
 
@@ -9,9 +11,9 @@ create a new PostgreSQL database
 createdb [CONNECTION-OPTION...] [OPTION...] [DBNAME
     [DESCRIPTION]]
 ```
+ <a id="r1-app-createdb-1"></a>
 
-
-## Description { #r1-app-createdb-1 }
+## Description
 
 
  createdb creates a new PostgreSQL database.

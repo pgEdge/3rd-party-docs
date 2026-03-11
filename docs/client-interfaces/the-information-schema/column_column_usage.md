@@ -1,4 +1,6 @@
-## `column_column_usage` { #infoschema-column-column-usage }
+<a id="infoschema-column-column-usage"></a>
+
+## `column_column_usage`
 
 
  The view `column_column_usage` identifies all generated columns that depend on another base column in the same table. Only tables owned by a currently enabled role are included.

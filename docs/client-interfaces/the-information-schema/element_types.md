@@ -1,4 +1,6 @@
-## `element_types` { #infoschema-element-types }
+<a id="infoschema-element-types"></a>
+
+## `element_types`
 
 
  The view `element_types` contains the data type descriptors of the elements of arrays. When a table column, composite-type attribute, domain, function parameter, or function return value is defined to be of an array type, the respective information schema view only contains `ARRAY` in the column `data_type`. To obtain information on the element type of the array, you can join the respective view with this view. For example, to show the columns of a table with data types and array element types, if applicable, you could do:

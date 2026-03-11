@@ -1,4 +1,6 @@
-# Event Triggers { #event-triggers }
+<a id="event-triggers"></a>
+
+# Event Triggers
 
  To supplement the trigger mechanism discussed in [Triggers](../triggers/index.md#triggers), PostgreSQL also provides event triggers. Unlike regular triggers, which are attached to a single table and capture only DML events, event triggers are global to a particular database and are capable of capturing DDL events.
 

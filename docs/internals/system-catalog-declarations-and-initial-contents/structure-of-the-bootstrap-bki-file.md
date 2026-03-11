@@ -1,4 +1,6 @@
-## Structure of the Bootstrap BKI File { #bki-structure }
+<a id="bki-structure"></a>
+
+## Structure of the Bootstrap BKI File
 
 
  The `open` command cannot be used until the tables it uses exist and have entries for the table that is to be opened. (These minimum tables are `pg_class`, `pg_attribute`, `pg_proc`, and `pg_type`.) To allow those tables themselves to be filled, `create` with the `bootstrap` option implicitly opens the created table for data insertion.

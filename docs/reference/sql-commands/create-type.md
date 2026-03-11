@@ -1,4 +1,6 @@
-# CREATE TYPE { #sql-createtype }
+<a id="sql-createtype"></a>
+
+# CREATE TYPE
 
 define a new data type
 
@@ -67,15 +69,15 @@ CREATE TYPE NAME
 
 
  To be able to create a composite type, you must have `USAGE` privilege on all attribute types.
+  <a id="sql-createtype-enum"></a>
 
-
-### Enumerated Types { #sql-createtype-enum }
+### Enumerated Types
 
 
  The second form of `CREATE TYPE` creates an enumerated (enum) type, as described in [Enumerated Types](../../the-sql-language/data-types/enumerated-types.md#datatype-enum). Enum types take a list of quoted labels, each of which must be less than `NAMEDATALEN` bytes long (64 bytes in a standard PostgreSQL build). (It is possible to create an enumerated type with zero labels, but such a type cannot be used to hold values before at least one label is added using [`ALTER TYPE`](alter-type.md#sql-altertype).)
+  <a id="sql-createtype-range"></a>
 
-
-### Range Types { #sql-createtype-range }
+### Range Types
 
 
  The third form of `CREATE TYPE` creates a new range type, as described in [Range Types](../../the-sql-language/data-types/range-types.md#rangetypes).
@@ -153,9 +155,9 @@ CREATE TYPE NAME
 
 
  If the optional Boolean parameter *collatable* is true, column definitions and expressions of the type may carry collation information through use of the `COLLATE` clause. It is up to the implementations of the functions operating on the type to actually make use of the collation information; this does not happen automatically merely by marking the type collatable.
+  <a id="sql-createtype-array"></a>
 
-
-### Array Types { #sql-createtype-array }
+### Array Types
 
 
  Whenever a user-defined type is created, PostgreSQL automatically creates an associated array type, whose name consists of the element type's name prepended with an underscore, and truncated if necessary to keep it less than `NAMEDATALEN` bytes long. (If the name so generated collides with an existing type name, the process is repeated until a non-colliding name is found.) This implicitly-created array type is variable length and uses the built-in input and output functions `array_in` and `array_out`. Furthermore, this type is what the system uses for constructs such as `ARRAY[]` over the user-defined type. The array type tracks any changes in its element type's owner or schema, and is dropped if the element type is.
@@ -256,9 +258,9 @@ CREATE TYPE NAME
 
 *collatable*
 :   True if this type's operations can use collation information. The default is false.
+ <a id="sql-createtype-notes"></a>
 
-
-## Notes { #sql-createtype-notes }
+## Notes
 
 
  Because there are no restrictions on use of a data type once it's been created, creating a base type or range type is tantamount to granting public execute permission on the functions mentioned in the type definition. This is usually not an issue for the sorts of functions that are useful in a type definition. But you might want to think twice before designing a type in a way that would require “secret” information to be used while converting it to or from external form.
@@ -365,16 +367,16 @@ CREATE TABLE big_objs (
 
 
  More examples, including suitable input and output functions, are in [User-Defined Types](../../server-programming/extending-sql/user-defined-types.md#xtypes).
+ <a id="sql-createtype-compatibility"></a>
 
-
-## Compatibility { #sql-createtype-compatibility }
+## Compatibility
 
 
  The first form of the `CREATE TYPE` command, which creates a composite type, conforms to the SQL standard. The other forms are PostgreSQL extensions. The `CREATE TYPE` statement in the SQL standard also defines other forms that are not implemented in PostgreSQL.
 
 
  The ability to create a composite type with zero attributes is a PostgreSQL-specific deviation from the standard (analogous to the same case in `CREATE TABLE`).
+ <a id="sql-createtype-see-also"></a>
 
-
-## See Also { #sql-createtype-see-also }
+## See Also
   [sql-altertype](alter-type.md#sql-altertype), [sql-createdomain](create-domain.md#sql-createdomain), [sql-createfunction](create-function.md#sql-createfunction), [sql-droptype](drop-type.md#sql-droptype)

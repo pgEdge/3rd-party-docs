@@ -1,10 +1,12 @@
-# Data Types { #datatype }
+<a id="datatype"></a>
+
+# Data Types
 
  PostgreSQL has a rich set of native data types available to users. Users can add new types to PostgreSQL using the [sql-createtype](../../reference/sql-commands/create-type.md#sql-createtype) command.
 
  [Data Types](#datatype-table) shows all the built-in general-purpose data types. Most of the alternative names listed in the “Aliases” column are the names used internally by PostgreSQL for historical reasons. In addition, some internally used or deprecated types are available, but are not listed here.
-
 <a id="datatype-table"></a>
+
 **Table: Data Types**
 
 | Name | Aliases | Description |

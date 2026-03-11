@@ -1,4 +1,6 @@
-# ALTER GROUP { #sql-altergroup }
+<a id="sql-altergroup"></a>
+
+# ALTER GROUP
 
 change role name or membership
 

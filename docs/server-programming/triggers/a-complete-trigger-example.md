@@ -1,4 +1,6 @@
-## A Complete Trigger Example { #trigger-example }
+<a id="trigger-example"></a>
+
+## A Complete Trigger Example
 
 
  Here is a very simple example of a trigger function written in C. (Examples of triggers written in procedural languages can be found in the documentation of the procedural languages.)

@@ -1,4 +1,6 @@
-## `pg_wait_events` { #view-pg-wait-events }
+<a id="view-pg-wait-events"></a>
+
+## `pg_wait_events`
 
 
  The view `pg_wait_events` provides description about the wait events.

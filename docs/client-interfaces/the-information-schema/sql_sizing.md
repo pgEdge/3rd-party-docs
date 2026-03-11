@@ -1,4 +1,6 @@
-## `sql_sizing` { #infoschema-sql-sizing }
+<a id="infoschema-sql-sizing"></a>
+
+## `sql_sizing`
 
 
  The table `sql_sizing` contains information about various size limits and maximum values in PostgreSQL. This information is primarily intended for use in the context of the ODBC interface; users of other interfaces will probably find this information to be of little use. For this reason, the individual sizing items are not described here; you will find them in the description of the ODBC interface.

@@ -1,4 +1,6 @@
-# ALTER TABLESPACE { #sql-altertablespace }
+<a id="sql-altertablespace"></a>
+
+# ALTER TABLESPACE
 
 change the definition of a tablespace
 

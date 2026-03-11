@@ -1,4 +1,6 @@
-## `pg_matviews` { #view-pg-matviews }
+<a id="view-pg-matviews"></a>
+
+## `pg_matviews`
 
 
  The view `pg_matviews` provides access to useful information about each materialized view in the database.

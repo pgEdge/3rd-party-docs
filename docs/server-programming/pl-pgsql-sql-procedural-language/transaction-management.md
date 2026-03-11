@@ -1,4 +1,6 @@
-## Transaction Management { #plpgsql-transactions }
+<a id="plpgsql-transactions"></a>
+
+## Transaction Management
 
 
  In procedures invoked by the `CALL` command as well as in anonymous code blocks (`DO` command), it is possible to end transactions using the commands `COMMIT` and `ROLLBACK`. A new transaction is started automatically after a transaction is ended using these commands, so there is no separate `START TRANSACTION` command. (Note that `BEGIN` and `END` have different meanings in PL/pgSQL.)
@@ -26,6 +28,7 @@ $$;
 CALL transaction_test1();
 ```
 
+  <a id="plpgsql-transaction-chain"></a>
 
  A new transaction starts out with default transaction characteristics such as transaction isolation level. In cases where transactions are committed in a loop, it might be desirable to start new transactions automatically with the same characteristics as the previous one. The commands `COMMIT AND CHAIN` and `ROLLBACK AND CHAIN` accomplish this.
 

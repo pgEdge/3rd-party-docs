@@ -1,4 +1,6 @@
-## Password Authentication { #auth-password }
+<a id="auth-password"></a>
+
+## Password Authentication
 
 
  There are several password-based authentication methods. These methods operate similarly but differ in how the users' passwords are stored on the server and how the password provided by a client is sent across the connection.

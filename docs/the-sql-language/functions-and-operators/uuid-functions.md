@@ -1,10 +1,11 @@
-## UUID Functions { #functions-uuid }
+<a id="functions-uuid"></a>
+
+## UUID Functions
 
 
  [UUID Generation Functions](#func_uuid_gen_table) shows the PostgreSQL functions that can be used to generate UUIDs.
+ <a id="func_uuid_gen_table"></a>
 
-
-<a id="func_uuid_gen_table"></a>
 **Table: UUID Generation Functions**
 
 <table>
@@ -36,9 +37,8 @@
 
 
  [UUID Extraction Functions](#func_uuid_extract_table) shows the PostgreSQL functions that can be used to extract information from UUIDs.
+ <a id="func_uuid_extract_table"></a>
 
-
-<a id="func_uuid_extract_table"></a>
 **Table: UUID Extraction Functions**
 
 <table>

@@ -1,10 +1,11 @@
-## Boolean Type { #datatype-boolean }
+<a id="datatype-boolean"></a>
+
+## Boolean Type
 
 
  PostgreSQL provides the standard SQL type `boolean`; see [Boolean Data Type](#datatype-boolean-table). The `boolean` type can have several states: “true”, “false”, and a third state, “unknown”, which is represented by the SQL null value.
+ <a id="datatype-boolean-table"></a>
 
-
-<a id="datatype-boolean-table"></a>
 **Table: Boolean Data Type**
 
 | Name | Storage Size | Description |
@@ -31,9 +32,8 @@
 
 
  The datatype output function for type `boolean` always emits either `t` or `f`, as shown in [Using the `boolean` Type](#datatype-boolean-example).
+ <a id="datatype-boolean-example"></a>
 
-
-<a id="datatype-boolean-example"></a>
 **Example: Using the `boolean` Type**
 
 

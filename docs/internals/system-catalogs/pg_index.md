@@ -1,4 +1,6 @@
-## `pg_index` { #catalog-pg-index }
+<a id="catalog-pg-index"></a>
+
+## `pg_index`
 
 
  The catalog `pg_index` contains part of the information about indexes. The rest is mostly in [`pg_class`](pg_class.md#catalog-pg-class).

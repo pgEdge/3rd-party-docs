@@ -1,4 +1,6 @@
-## `sequences` { #infoschema-sequences }
+<a id="infoschema-sequences"></a>
+
+## `sequences`
 
 
  The view `sequences` contains all sequences defined in the current database. Only those sequences are shown that the current user has access to (by way of being the owner or having some privilege).

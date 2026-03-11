@@ -1,4 +1,6 @@
-## `pg_language` { #catalog-pg-language }
+<a id="catalog-pg-language"></a>
+
+## `pg_language`
 
 
  The catalog `pg_language` registers languages in which you can write functions or stored procedures. See [sql-createlanguage](../../reference/sql-commands/create-language.md#sql-createlanguage) and [Procedural Languages](../../server-programming/procedural-languages/index.md#xplang) for more information about language handlers.

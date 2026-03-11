@@ -1,13 +1,15 @@
-## Foreign Data Wrapper Callback Routines { #fdw-callbacks }
+<a id="fdw-callbacks"></a>
+
+## Foreign Data Wrapper Callback Routines
 
 
  The FDW handler function returns a palloc'd `FdwRoutine` struct containing pointers to the callback functions described below. The scan-related functions are required, the rest are optional.
 
 
  The `FdwRoutine` struct type is declared in `src/include/foreign/fdwapi.h`, which see for additional details.
+ <a id="fdw-callbacks-scan"></a>
 
-
-### FDW Routines for Scanning Foreign Tables { #fdw-callbacks-scan }
+### FDW Routines for Scanning Foreign Tables
 
 
 ```
@@ -102,9 +104,9 @@ void
 EndForeignScan(ForeignScanState *node);
 ```
  End the scan and release resources. It is normally not important to release palloc'd memory, but for example open files and connections to remote servers should be cleaned up.
+  <a id="fdw-callbacks-join-scan"></a>
 
-
-### FDW Routines for Scanning Foreign Joins { #fdw-callbacks-join-scan }
+### FDW Routines for Scanning Foreign Joins
 
 
  If an FDW supports performing foreign joins remotely (rather than by fetching both tables' data and doing the join locally), it should provide this callback function:
@@ -138,9 +140,9 @@ GetForeignJoinPaths(PlannerInfo *root,
 
 
  See [Foreign Data Wrapper Query Planning](foreign-data-wrapper-query-planning.md#fdw-planning) for additional information.
+  <a id="fdw-callbacks-upper-planning"></a>
 
-
-### FDW Routines for Planning Post-Scan/Join Processing { #fdw-callbacks-upper-planning }
+### FDW Routines for Planning Post-Scan/Join Processing
 
 
  If an FDW supports performing remote post-scan/join processing, such as remote aggregation, it should provide this callback function:
@@ -162,9 +164,9 @@ GetForeignUpperPaths(PlannerInfo *root,
 
 
  See [Foreign Data Wrapper Query Planning](foreign-data-wrapper-query-planning.md#fdw-planning) for additional information.
+  <a id="fdw-callbacks-update"></a>
 
-
-### FDW Routines for Updating Foreign Tables { #fdw-callbacks-update }
+### FDW Routines for Updating Foreign Tables
 
 
  If an FDW supports writable foreign tables, it should provide some or all of the following callback functions depending on the needs and capabilities of the FDW:
@@ -449,9 +451,9 @@ EndDirectModify(ForeignScanState *node);
 
 
  If the `EndDirectModify` pointer is set to `NULL`, no attempts to execute a direct modification on the remote server are taken.
+  <a id="fdw-callbacks-truncate"></a>
 
-
-### FDW Routines for `TRUNCATE` { #fdw-callbacks-truncate }
+### FDW Routines for `TRUNCATE`
 
 
 ```
@@ -477,9 +479,9 @@ ExecForeignTruncate(List *rels,
 
 
  If the `ExecForeignTruncate` pointer is set to `NULL`, attempts to truncate foreign tables will fail with an error message.
+  <a id="fdw-callbacks-row-locking"></a>
 
-
-### FDW Routines for Row Locking { #fdw-callbacks-row-locking }
+### FDW Routines for Row Locking
 
 
  If an FDW wishes to support *late row locking* (as described in [Row Locking in Foreign Data Wrappers](row-locking-in-foreign-data-wrappers.md#fdw-row-locking)), it must provide the following callback functions:
@@ -543,9 +545,9 @@ RecheckForeignScan(ForeignScanState *node,
 
 
  To implement join pushdown, a foreign data wrapper will typically construct an alternative local join plan which is used only for rechecks; this will become the outer subplan of the `ForeignScan`. When a recheck is required, this subplan can be executed and the resulting tuple can be stored in the slot. This plan need not be efficient since no base table will return more than one row; for example, it may implement all joins as nested loops. The function `GetExistingLocalJoinPath` may be used to search existing paths for a suitable local join path, which can be used as the alternative local join plan. `GetExistingLocalJoinPath` searches for an unparameterized path in the path list of the specified join relation. (If it does not find such a path, it returns NULL, in which case a foreign data wrapper may build the local path by itself or may choose not to create access paths for that join.)
+  <a id="fdw-callbacks-explain"></a>
 
-
-### FDW Routines for `EXPLAIN` { #fdw-callbacks-explain }
+### FDW Routines for `EXPLAIN`
 
 
 ```
@@ -585,9 +587,9 @@ ExplainDirectModify(ForeignScanState *node,
 
 
  If the `ExplainDirectModify` pointer is set to `NULL`, no additional information is printed during `EXPLAIN`.
+  <a id="fdw-callbacks-analyze"></a>
 
-
-### FDW Routines for `ANALYZE` { #fdw-callbacks-analyze }
+### FDW Routines for `ANALYZE`
 
 
 ```
@@ -616,9 +618,9 @@ AcquireSampleRowsFunc(Relation relation,
                       double *totaldeadrows);
 ```
  A random sample of up to `targrows` rows should be collected from the table and stored into the caller-provided `rows` array. The actual number of rows collected must be returned. In addition, store estimates of the total numbers of live and dead rows in the table into the output parameters `totalrows` and `totaldeadrows`. (Set `totaldeadrows` to zero if the FDW does not have any concept of dead rows.)
+  <a id="fdw-callbacks-import"></a>
 
-
-### FDW Routines for `IMPORT FOREIGN SCHEMA` { #fdw-callbacks-import }
+### FDW Routines for `IMPORT FOREIGN SCHEMA`
 
 
 ```
@@ -639,9 +641,9 @@ ImportForeignSchema(ImportForeignSchemaStmt *stmt, Oid serverOid);
 
 
  If the FDW does not support importing table definitions, the `ImportForeignSchema` pointer can be set to `NULL`.
+  <a id="fdw-callbacks-parallel"></a>
 
-
-### FDW Routines for Parallel Execution { #fdw-callbacks-parallel }
+### FDW Routines for Parallel Execution
 
 
  A `ForeignScan` node can, optionally, support parallel execution. A parallel `ForeignScan` will be executed in multiple processes and must return each row exactly once across all cooperating processes. To do this, processes can coordinate through fixed-size chunks of dynamic shared memory. This shared memory is not guaranteed to be mapped at the same address in every process, so it must not contain pointers. The following functions are all optional, but most are required if parallel execution is to be supported.
@@ -700,9 +702,9 @@ void
 ShutdownForeignScan(ForeignScanState *node);
 ```
  Release resources when it is anticipated the node will not be executed to completion. This is not called in all cases; sometimes, `EndForeignScan` may be called without this function having been called first. Since the DSM segment used by parallel query is destroyed just after this callback is invoked, foreign data wrappers that wish to take some action before the DSM segment goes away should implement this method.
+  <a id="fdw-callbacks-async"></a>
 
-
-### FDW Routines for Asynchronous Execution { #fdw-callbacks-async }
+### FDW Routines for Asynchronous Execution
 
 
  A `ForeignScan` node can, optionally, support asynchronous execution as described in `src/backend/executor/README`. The following functions are all optional, but are all required if asynchronous execution is to be supported.
@@ -741,9 +743,9 @@ void
 ForeignAsyncNotify(AsyncRequest *areq);
 ```
  Process a relevant event that has occurred, then produce one tuple asynchronously from the `ForeignScan` node. This function should set the output parameters in the `areq` in the same way as `ForeignAsyncRequest`.
+  <a id="fdw-callbacks-reparameterize-paths"></a>
 
-
-### FDW Routines for Reparameterization of Paths { #fdw-callbacks-reparameterize-paths }
+### FDW Routines for Reparameterization of Paths
 
 
 ```

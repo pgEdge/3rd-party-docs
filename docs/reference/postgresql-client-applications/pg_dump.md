@@ -1,4 +1,6 @@
-# pg_dump { #app-pgdump }
+<a id="app-pgdump"></a>
+
+# pg_dump
 
 export a PostgreSQL database as an SQL script or to other formats
 
@@ -8,9 +10,9 @@ export a PostgreSQL database as an SQL script or to other formats
 ```
 pg_dump [CONNECTION-OPTION...] [OPTION...] [DBNAME]
 ```
+ <a id="pg-dump-description"></a>
 
-
-## Description { #pg-dump-description }
+## Description
 
 
  pg_dump is a utility for exporting a PostgreSQL database. It makes consistent exports even if the database is being used concurrently. pg_dump does not block other users accessing the database (readers or writers). Note, however, that except in simple cases, pg_dump is generally not the right choice for taking regular backups of production databases. See [Backup and Restore](../../server-administration/backup-and-restore/index.md#backup) for further discussion.
@@ -34,9 +36,9 @@ pg_dump [CONNECTION-OPTION...] [OPTION...] [DBNAME]
 !!! warning
 
     Restoring a dump causes the destination to execute arbitrary code of the source superusers' choice. Partial dumps and partial restores do not limit that. If the source superusers are not trusted, the dumped SQL statements must be inspected before restoring. Non-plain-text dumps can be inspected by using pg_restore's `--file` option. Note that the client running the dump and restore need not trust the source or destination superusers.
+ <a id="pg-dump-options"></a>
 
-
-## Options { #pg-dump-options }
+## Options
 
 
  The following command-line options control the content and format of the output.
@@ -459,18 +461,18 @@ pg_dump [CONNECTION-OPTION...] [OPTION...] [DBNAME]
 
 
  This utility, like most other PostgreSQL utilities, also uses the environment variables supported by libpq (see [Environment Variables](../../client-interfaces/libpq-c-library/environment-variables.md#libpq-envars)).
+ <a id="app-pgdump-diagnostics"></a>
 
-
-## Diagnostics { #app-pgdump-diagnostics }
+## Diagnostics
 
 
  pg_dump internally executes `SELECT` statements. If you have problems running pg_dump, make sure you are able to select information from the database using, for example, [app-psql](psql.md#app-psql). Also, any default connection settings and environment variables used by the libpq front-end library will apply.
 
 
  The database activity of pg_dump is normally collected by the cumulative statistics system. If this is undesirable, you can set parameter `track_counts` to false via `PGOPTIONS` or the `ALTER USER` command.
+ <a id="pg-dump-notes"></a>
 
-
-## Notes { #pg-dump-notes }
+## Notes
 
 
  If your database cluster has any local additions to the `template1` database, be careful to restore the output of pg_dump into a truly empty database; otherwise you are likely to get errors due to duplicate definitions of the added objects. To make an empty database without any local additions, copy from `template0` not `template1`, for example:
@@ -494,9 +496,9 @@ CREATE DATABASE foo WITH TEMPLATE template0;
 
 
  It is generally recommended to use the `-X` (`--no-psqlrc`) option when restoring a database from a plain-text pg_dump script to ensure a clean restore process and prevent potential conflicts with non-default psql configurations.
+ <a id="pg-dump-examples"></a>
 
-
-## Examples { #pg-dump-examples }
+## Examples
 
 
  To dump a database called `mydb` into an SQL-script file:

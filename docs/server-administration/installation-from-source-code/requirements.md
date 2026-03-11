@@ -1,4 +1,6 @@
-## Requirements { #install-requirements }
+<a id="install-requirements"></a>
+
+## Requirements
 
 
  In general, a modern Unix-compatible platform should be able to run PostgreSQL. The platforms that had received specific testing at the time of release are described in [Supported Platforms](supported-platforms.md#supported-platforms) below.

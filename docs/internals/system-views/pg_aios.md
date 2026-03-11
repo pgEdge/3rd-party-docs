@@ -1,4 +1,6 @@
-## `pg_aios` { #view-pg-aios }
+<a id="view-pg-aios"></a>
+
+## `pg_aios`
 
 
  The `pg_aios` view lists all [glossary-aio](../../appendixes/glossary.md#glossary-aio) handles that are currently in-use. An I/O handle is used to reference an I/O operation that is being prepared, executed or is in the process of completing. `pg_aios` contains one row for each I/O handle.
@@ -26,7 +28,7 @@
 <p>Identifier of the I/O handle. Handles are reused once the I/O completed (or if the handle is released before I/O is started). On reuse <a href="#view-pg-aios-io-generation"><code>pg_aios</code>.<code>io_generation</code></a> is incremented.</p></td>
 </tr>
 <tr>
-<td><p><code>io_generation</code> <code>int8</code></p>
+<td id="view-pg-aios-io-generation"><p><code>io_generation</code> <code>int8</code></p>
 <p>Generation of the I/O handle.</p></td>
 </tr>
 <tr>

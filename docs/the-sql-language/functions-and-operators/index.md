@@ -1,4 +1,6 @@
-# Functions and Operators { #functions }
+<a id="functions"></a>
+
+# Functions and Operators
 
  PostgreSQL provides a large number of functions and operators for the built-in data types. This chapter describes most of them, although additional special-purpose functions appear in relevant sections of the manual. Users can also define their own functions and operators, as described in [Server Programming](../../server-programming/index.md#server-programming). The psql commands `\df` and `\do` can be used to list all available functions and operators, respectively.
 

@@ -1,4 +1,6 @@
-## `recovery.conf` file merged into `postgresql.conf` { #recovery-config }
+<a id="recovery-config"></a>
+
+## `recovery.conf` file merged into `postgresql.conf`
 
 
  PostgreSQL 11 and below used a configuration file named `recovery.conf`  to manage replicas and standbys. Support for this file was removed in PostgreSQL 12. See [the release notes for PostgreSQL 12](../release-notes/prior-releases.md#release-prior) for details on this change.

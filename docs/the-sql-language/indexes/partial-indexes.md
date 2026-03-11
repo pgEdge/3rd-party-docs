@@ -1,13 +1,14 @@
-## Partial Indexes { #indexes-partial }
+<a id="indexes-partial"></a>
+
+## Partial Indexes
 
 
  A *partial index* is an index built over a subset of a table; the subset is defined by a conditional expression (called the *predicate* of the partial index). The index contains entries only for those table rows that satisfy the predicate. Partial indexes are a specialized feature, but there are several situations in which they are useful.
 
 
  One major reason for using a partial index is to avoid indexing common values. Since a query searching for a common value (one that accounts for more than a few percent of all the table rows) will not use the index anyway, there is no point in keeping those rows in the index at all. This reduces the size of the index, which will speed up those queries that do use the index. It will also speed up many table update operations because the index does not need to be updated in all cases. [Setting up a Partial Index to Exclude Common Values](#indexes-partial-ex1) shows a possible application of this idea.
+ <a id="indexes-partial-ex1"></a>
 
-
-<a id="indexes-partial-ex1"></a>
 **Example: Setting up a Partial Index to Exclude Common Values**
 
 
@@ -58,9 +59,8 @@ WHERE url = '/index.html' AND client_ip = inet '192.168.100.23';
 
 
  Another possible use for a partial index is to exclude values from the index that the typical query workload is not interested in; this is shown in [Setting up a Partial Index to Exclude Uninteresting Values](#indexes-partial-ex2). This results in the same advantages as listed above, but it prevents the “uninteresting” values from being accessed via that index, even if an index scan might be profitable in that case. Obviously, setting up partial indexes for this kind of scenario will require a lot of care and experimentation.
+ <a id="indexes-partial-ex2"></a>
 
-
-<a id="indexes-partial-ex2"></a>
 **Example: Setting up a Partial Index to Exclude Uninteresting Values**
 
 
@@ -101,9 +101,8 @@ SELECT * FROM orders WHERE order_nr = 3501;
 
 
  A third possible use for partial indexes does not require the index to be used in queries at all. The idea here is to create a unique index over a subset of a table, as in [Setting up a Partial Unique Index](#indexes-partial-ex3). This enforces uniqueness among the rows that satisfy the index predicate, without constraining those that do not.
+ <a id="indexes-partial-ex3"></a>
 
-
-<a id="indexes-partial-ex3"></a>
 **Example: Setting up a Partial Unique Index**
 
 
@@ -128,9 +127,8 @@ CREATE UNIQUE INDEX tests_success_constraint ON tests (subject, target)
 
 
  Keep in mind that setting up a partial index indicates that you know at least as much as the query planner knows, in particular you know when an index might be profitable. Forming this knowledge requires experience and understanding of how indexes in PostgreSQL work. In most cases, the advantage of a partial index over a regular index will be minimal. There are cases where they are quite counterproductive, as in [Do Not Use Partial Indexes as a Substitute for Partitioning](#indexes-partial-ex4).
+ <a id="indexes-partial-ex4"></a>
 
-
-<a id="indexes-partial-ex4"></a>
 **Example: Do Not Use Partial Indexes as a Substitute for Partitioning**
 
 

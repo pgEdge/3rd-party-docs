@@ -1,4 +1,6 @@
-# CREATE MATERIALIZED VIEW { #sql-creatematerializedview }
+<a id="sql-creatematerializedview"></a>
+
+# CREATE MATERIALIZED VIEW
 
 define a new materialized view
 

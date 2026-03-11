@@ -1,4 +1,6 @@
-## sslinfo — obtain client SSL information { #sslinfo }
+<a id="sslinfo"></a>
+
+## sslinfo — obtain client SSL information
 
 
  The `sslinfo` module provides information about the SSL certificate that the current client provided when connecting to PostgreSQL. The module is useless (most functions will return NULL) if the current connection does not use SSL.
@@ -8,9 +10,9 @@
 
 
  This extension won't build at all unless the installation was configured with `--with-ssl=openssl`.
+ <a id="sslinfo-functions"></a>
 
-
-### Functions Provided { #sslinfo-functions }
+### Functions Provided
 
 
 `ssl_is_used() returns boolean`
@@ -83,9 +85,9 @@
 
 `ssl_extension_info() returns setof record`
 :   Provide information about extensions of client certificate: extension name, extension value, and if it is a critical extension.
+  <a id="sslinfo-author"></a>
 
-
-### Author { #sslinfo-author }
+### Author
 
 
  Victor Wagner [vitus@cryptocom.ru](mailto:vitus@cryptocom.ru), Cryptocom LTD

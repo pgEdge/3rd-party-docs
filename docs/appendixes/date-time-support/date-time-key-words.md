@@ -1,10 +1,11 @@
-## Date/Time Key Words { #datetime-keywords }
+<a id="datetime-keywords"></a>
+
+## Date/Time Key Words
 
 
  [Month Names](#datetime-month-table) shows the tokens that are recognized as names of months.
+ <a id="datetime-month-table"></a>
 
-
-<a id="datetime-month-table"></a>
 **Table: Month Names**
 
 | Month | Abbreviations |
@@ -24,9 +25,8 @@
 
 
  [Day of the Week Names](#datetime-dow-table) shows the tokens that are recognized as names of days of the week.
+ <a id="datetime-dow-table"></a>
 
-
-<a id="datetime-dow-table"></a>
 **Table: Day of the Week Names**
 
 | Day | Abbreviations |
@@ -41,9 +41,8 @@
 
 
  [Date/Time Field Modifiers](#datetime-mod-table) shows the tokens that serve various modifier purposes.
+ <a id="datetime-mod-table"></a>
 
-
-<a id="datetime-mod-table"></a>
 **Table: Date/Time Field Modifiers**
 
 | Identifier | Description |

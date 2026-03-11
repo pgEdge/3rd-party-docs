@@ -1,4 +1,6 @@
-# CREATE VIEW { #sql-createview }
+<a id="sql-createview"></a>
+
+# CREATE VIEW
 
 define a new view
 
@@ -127,9 +129,9 @@ CREATE VIEW vista AS SELECT text 'Hello World' AS hello;
 
 
  When `CREATE OR REPLACE VIEW` is used on an existing view, only the view's defining SELECT rule, plus any `WITH ( ... )` parameters and its `CHECK OPTION` are changed. Other view properties, including ownership, permissions, and non-SELECT rules, remain unchanged. You must own the view to replace it (this includes being a member of the owning role).
+ <a id="sql-createview-updatable-views"></a>
 
-
-### Updatable Views { #sql-createview-updatable-views }
+### Updatable Views
 
 
  Simple views are automatically updatable: the system will allow `INSERT`, `UPDATE`, `DELETE`, and `MERGE` statements to be used on the view in the same way as on a regular table. A view is automatically updatable if it satisfies all of the following conditions:

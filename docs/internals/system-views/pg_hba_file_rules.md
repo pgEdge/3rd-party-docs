@@ -1,4 +1,6 @@
-## `pg_hba_file_rules` { #view-pg-hba-file-rules }
+<a id="view-pg-hba-file-rules"></a>
+
+## `pg_hba_file_rules`
 
 
  The view `pg_hba_file_rules` provides a summary of the contents of the client authentication configuration file, [`pg_hba.conf`](../../server-administration/client-authentication/the-pg_hba-conf-file.md#auth-pg-hba-conf). A row appears in this view for each non-empty, non-comment line in the file, with annotations indicating whether the rule could be applied successfully.

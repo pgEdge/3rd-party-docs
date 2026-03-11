@@ -1,4 +1,6 @@
-# EXPLAIN { #sql-explain }
+<a id="sql-explain"></a>
+
+# EXPLAIN
 
 show the execution plan of a statement
 

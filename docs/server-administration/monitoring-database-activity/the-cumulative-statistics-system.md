@@ -1,13 +1,15 @@
-## The Cumulative Statistics System { #monitoring-stats }
+<a id="monitoring-stats"></a>
+
+## The Cumulative Statistics System
 
 
  PostgreSQL's *cumulative statistics system* supports collection and reporting of information about server activity. Presently, accesses to tables and indexes in both disk-block and individual-row terms are counted. The total number of rows in each table, and information about vacuum and analyze actions for each table are also counted. If enabled, calls to user-defined functions and the total time spent in each one are counted as well.
 
 
  PostgreSQL also supports reporting dynamic information about exactly what is going on in the system right now, such as the exact command currently being executed by other server processes, and which other connections exist in the system. This facility is independent of the cumulative statistics system.
+ <a id="monitoring-stats-setup"></a>
 
-
-### Statistics Collection Configuration { #monitoring-stats-setup }
+### Statistics Collection Configuration
 
 
  Since collection of statistics adds some overhead to query execution, the system can be configured to collect or not collect information. This is controlled by configuration parameters that are normally set in `postgresql.conf`. (See [Server Configuration](../server-configuration/index.md#runtime-config) for details about setting configuration parameters.)
@@ -35,9 +37,9 @@
 
 
  Cumulative statistics are collected in shared memory. Every PostgreSQL process collects statistics locally, then updates the shared data at appropriate intervals. When a server, including a physical replica, shuts down cleanly, a permanent copy of the statistics data is stored in the `pg_stat` subdirectory, so that statistics can be retained across server restarts. In contrast, when starting from an unclean shutdown (e.g., after an immediate shutdown, a server crash, starting from a base backup, and point-in-time recovery), all statistics counters are reset.
+  <a id="monitoring-stats-views"></a>
 
-
-### Viewing Statistics { #monitoring-stats-views }
+### Viewing Statistics
 
 
  Several predefined views, listed in [Dynamic Statistics Views](#monitoring-stats-dynamic-views-table), are available to show the current state of the system. There are also several other views, listed in [Collected Statistics Views](#monitoring-stats-views-table), available to show the accumulated statistics. Alternatively, one can build custom views using the underlying cumulative statistics functions, as discussed in [Statistics Functions](#monitoring-stats-functions).
@@ -53,9 +55,8 @@
 
 
  Some of the information in the dynamic statistics views shown in [Dynamic Statistics Views](#monitoring-stats-dynamic-views-table) is security restricted. Ordinary users can only see all the information about their own sessions (sessions belonging to a role that they are a member of). In rows about other sessions, many columns will be null. Note, however, that the existence of a session and its general properties such as its sessions user and database are visible to all users. Superusers and roles with privileges of built-in role [`pg_read_all_stats`](../database-roles/predefined-roles.md#predefined-role-pg-monitor) can see all the information about all sessions.
+ <a id="monitoring-stats-dynamic-views-table"></a>
 
-
-<a id="monitoring-stats-dynamic-views-table"></a>
 **Table: Dynamic Statistics Views**
 
 | View Name | Description |
@@ -73,9 +74,8 @@
 | `pg_stat_progress_cluster` | One row for each backend running `CLUSTER` or `VACUUM FULL`, showing current progress. See [CLUSTER Progress Reporting](progress-reporting.md#cluster-progress-reporting). |
 | `pg_stat_progress_basebackup` | One row for each WAL sender process streaming a base backup, showing current progress. See [Base Backup Progress Reporting](progress-reporting.md#basebackup-progress-reporting). |
 | `pg_stat_progress_copy` | One row for each backend running `COPY`, showing current progress. See [COPY Progress Reporting](progress-reporting.md#copy-progress-reporting). |
+ <a id="monitoring-stats-views-table"></a>
 
-
-<a id="monitoring-stats-views-table"></a>
 **Table: Collected Statistics Views**
 
 | View Name | Description |
@@ -116,15 +116,14 @@
 
 
  The `pg_stat_io` and `pg_statio_` set of views are useful for determining the effectiveness of the buffer cache. They can be used to calculate a cache hit ratio. Note that while PostgreSQL's I/O statistics capture most instances in which the kernel was invoked in order to perform I/O, they do not differentiate between data which had to be fetched from disk and that which already resided in the kernel page cache. Users are advised to use the PostgreSQL statistics views in combination with operating system utilities for a more complete picture of their database's I/O performance.
+  <a id="monitoring-pg-stat-activity-view"></a>
 
-
-### `pg_stat_activity` { #monitoring-pg-stat-activity-view }
+### `pg_stat_activity`
 
 
  The `pg_stat_activity` view will have one row per server process, showing information related to the current activity of that process.
+ <a id="pg-stat-activity-view"></a>
 
-
-<a id="pg-stat-activity-view"></a>
 **Table: `pg_stat_activity` View**
 
 <table>
@@ -237,9 +236,8 @@
 !!! note
 
     The `wait_event` and `state` columns are independent. If a backend is in the `active` state, it may or may not be `waiting` on some event. If the state is `active` and `wait_event` is non-null, it means that a query is being executed, but is being blocked somewhere in the system. To keep the reporting overhead low, the system does not attempt to synchronize different aspects of activity data for a backend. As a result, ephemeral discrepancies may exist between the view's columns.
+ <a id="wait-event-table"></a>
 
-
-<a id="wait-event-table"></a>
 **Table: Wait Event Types**
 
 | Wait Event Type | Description |
@@ -254,9 +252,8 @@
 | `Lock` | The server process is waiting for a heavyweight lock. Heavyweight locks, also known as lock manager locks or simply locks, primarily protect SQL-visible objects such as tables. However, they are also used to ensure mutual exclusion for certain internal operations such as relation extension. `wait_event` will identify the type of lock awaited; see [Wait Events of Type `Lock`](#wait-event-lock-table). |
 | `LWLock` | The server process is waiting for a lightweight lock. Most such locks protect a particular data structure in shared memory. `wait_event` will contain a name identifying the purpose of the lightweight lock. (Some locks have specific names; others are part of a group of locks each with a similar purpose.) See [Wait Events of Type `Lwlock`](#wait-event-lwlock-table). |
 | `Timeout` | The server process is waiting for a timeout to expire. `wait_event` will identify the specific wait point; see [Wait Events of Type `Timeout`](#wait-event-timeout-table). |
+ <a id="wait-event-activity-table"></a>
 
-
-<a id="wait-event-activity-table"></a>
 **Table: Wait Events of Type `Activity`**
 
 | `Activity` Wait Event | Description |
@@ -279,17 +276,15 @@
 | `WalSenderMain` | Waiting in main loop of WAL sender process. |
 | `WalSummarizerWal` | Waiting in WAL summarizer for more WAL to be generated. |
 | `WalWriterMain` | Waiting in main loop of WAL writer process. |
+ <a id="wait-event-bufferpin-table"></a>
 
-
-<a id="wait-event-bufferpin-table"></a>
 **Table: Wait Events of Type `Bufferpin`**
 
 | `BufferPin` Wait Event | Description |
 | --- | --- |
 | `BufferPin` | Waiting to acquire an exclusive pin on a buffer. |
+ <a id="wait-event-client-table"></a>
 
-
-<a id="wait-event-client-table"></a>
 **Table: Wait Events of Type `Client`**
 
 | `Client` Wait Event | Description |
@@ -303,17 +298,15 @@
 | `WaitForStandbyConfirmation` | Waiting for WAL to be received and flushed by the physical standby. |
 | `WalSenderWaitForWal` | Waiting for WAL to be flushed in WAL sender process. |
 | `WalSenderWriteData` | Waiting for any activity when processing replies from WAL receiver in WAL sender process. |
+ <a id="wait-event-extension-table"></a>
 
-
-<a id="wait-event-extension-table"></a>
 **Table: Wait Events of Type `Extension`**
 
 | `Extension` Wait Event | Description |
 | --- | --- |
 | `Extension` | Waiting in an extension. |
+ <a id="wait-event-io-table"></a>
 
-
-<a id="wait-event-io-table"></a>
 **Table: Wait Events of Type `Io`**
 
 | `IO` Wait Event | Description |
@@ -399,9 +392,8 @@
 | `WalSync` | Waiting for a WAL file to reach durable storage. |
 | `WalSyncMethodAssign` | Waiting for data to reach durable storage while assigning a new WAL sync method. |
 | `WalWrite` | Waiting for a write to a WAL file. |
+ <a id="wait-event-ipc-table"></a>
 
-
-<a id="wait-event-ipc-table"></a>
 **Table: Wait Events of Type `Ipc`**
 
 | `IPC` Wait Event | Description |
@@ -463,9 +455,8 @@
 | `WalReceiverWaitStart` | Waiting for startup process to send initial data for streaming replication. |
 | `WalSummaryReady` | Waiting for a new WAL summary to be generated. |
 | `XactGroupUpdate` | Waiting for the group leader to update transaction status at transaction end. |
+ <a id="wait-event-lock-table"></a>
 
-
-<a id="wait-event-lock-table"></a>
 **Table: Wait Events of Type `Lock`**
 
 | `Lock` Wait Event | Description |
@@ -482,9 +473,8 @@
 | `tuple` | Waiting to acquire a lock on a tuple. |
 | `userlock` | Waiting to acquire a user lock. |
 | `virtualxid` | Waiting to acquire a virtual transaction ID lock; see [Transactions and Identifiers](../../internals/transaction-processing/transactions-and-identifiers.md#transaction-id). |
+ <a id="wait-event-lwlock-table"></a>
 
-
-<a id="wait-event-lwlock-table"></a>
 **Table: Wait Events of Type `Lwlock`**
 
 | `LWLock` Wait Event | Description |
@@ -573,9 +563,8 @@
 | `XactSLRU` | Waiting to access the transaction status SLRU cache. |
 | `XactTruncation` | Waiting to execute `pg_xact_status` or update the oldest transaction ID available to it. |
 | `XidGen` | Waiting to allocate a new transaction ID. |
+ <a id="wait-event-timeout-table"></a>
 
-
-<a id="wait-event-timeout-table"></a>
 **Table: Wait Events of Type `Timeout`**
 
 | `Timeout` Wait Event | Description |
@@ -622,15 +611,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 !!! note
 
     Extensions can add `Extension`, `InjectionPoint`, and `LWLock` events to the lists shown in [Wait Events of Type `Extension`](#wait-event-extension-table) and [Wait Events of Type `Lwlock`](#wait-event-lwlock-table). In some cases, the name of an `LWLock` assigned by an extension will not be available in all server processes. It might be reported as just “`extension`” rather than the extension-assigned name.
+  <a id="monitoring-pg-stat-replication-view"></a>
 
-
-### `pg_stat_replication` { #monitoring-pg-stat-replication-view }
+### `pg_stat_replication`
 
 
  The `pg_stat_replication` view will contain one row per WAL sender process, showing statistics about replication to that sender's connected standby server. Only directly connected standbys are listed; no information is available about downstream standby servers.
+ <a id="pg-stat-replication-view"></a>
 
-
-<a id="pg-stat-replication-view"></a>
 **Table: `pg_stat_replication` View**
 
 <table>
@@ -743,15 +731,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 !!! note
 
     The reported lag times are not predictions of how long it will take for the standby to catch up with the sending server assuming the current rate of replay. Such a system would show similar times while new WAL is being generated, but would differ when the sender becomes idle. In particular, when the standby has caught up completely, `pg_stat_replication` shows the time taken to write, flush and replay the most recent reported WAL location rather than zero as some users might expect. This is consistent with the goal of measuring synchronous commit and transaction visibility delays for recent write transactions. To reduce confusion for users expecting a different model of lag, the lag columns revert to NULL after a short time on a fully replayed idle system. Monitoring systems should choose whether to represent this as missing data, zero or continue to display the last known value.
+  <a id="monitoring-pg-stat-replication-slots-view"></a>
 
-
-### `pg_stat_replication_slots` { #monitoring-pg-stat-replication-slots-view }
+### `pg_stat_replication_slots`
 
 
  The `pg_stat_replication_slots` view will contain one row per logical replication slot, showing statistics about its usage.
+ <a id="pg-stat-replication-slots-view"></a>
 
-
-<a id="pg-stat-replication-slots-view"></a>
 **Table: `pg_stat_replication_slots` View**
 
 <table>
@@ -804,15 +791,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-wal-receiver-view"></a>
 
-
-### `pg_stat_wal_receiver` { #monitoring-pg-stat-wal-receiver-view }
+### `pg_stat_wal_receiver`
 
 
  The `pg_stat_wal_receiver` view will contain only one row, showing statistics about the WAL receiver from that receiver's connected server.
+ <a id="pg-stat-wal-receiver-view"></a>
 
-
-<a id="pg-stat-wal-receiver-view"></a>
 **Table: `pg_stat_wal_receiver` View**
 
 <table>
@@ -885,15 +871,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-recovery-prefetch"></a>
 
-
-### `pg_stat_recovery_prefetch` { #monitoring-pg-stat-recovery-prefetch }
+### `pg_stat_recovery_prefetch`
 
 
  The `pg_stat_recovery_prefetch` view will contain only one row. The columns `wal_distance`, `block_distance` and `io_depth` show current values, and the other columns show cumulative counters that can be reset with the `pg_stat_reset_shared` function.
+ <a id="pg-stat-recovery-prefetch-view"></a>
 
-
-<a id="pg-stat-recovery-prefetch-view"></a>
 **Table: `pg_stat_recovery_prefetch` View**
 
 <table>
@@ -946,12 +931,11 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-subscription"></a>
 
+### `pg_stat_subscription`
+   <a id="pg-stat-subscription"></a>
 
-### `pg_stat_subscription` { #monitoring-pg-stat-subscription }
-
-
-<a id="pg-stat-subscription"></a>
 **Table: `pg_stat_subscription` View**
 
 <table>
@@ -1008,15 +992,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-subscription-stats"></a>
 
-
-### `pg_stat_subscription_stats` { #monitoring-pg-stat-subscription-stats }
+### `pg_stat_subscription_stats`
 
 
  The `pg_stat_subscription_stats` view will contain one row per subscription.
+ <a id="pg-stat-subscription-stats"></a>
 
-
-<a id="pg-stat-subscription-stats"></a>
 **Table: `pg_stat_subscription_stats` View**
 
 <table>
@@ -1077,15 +1060,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-ssl-view"></a>
 
-
-### `pg_stat_ssl` { #monitoring-pg-stat-ssl-view }
+### `pg_stat_ssl`
 
 
  The `pg_stat_ssl` view will contain one row per backend or WAL sender process, showing statistics about SSL usage on this connection. It can be joined to `pg_stat_activity` or `pg_stat_replication` on the `pid` column to get more details about the connection.
+ <a id="pg-stat-ssl-view"></a>
 
-
-<a id="pg-stat-ssl-view"></a>
 **Table: `pg_stat_ssl` View**
 
 <table>
@@ -1130,15 +1112,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-gssapi-view"></a>
 
-
-### `pg_stat_gssapi` { #monitoring-pg-stat-gssapi-view }
+### `pg_stat_gssapi`
 
 
  The `pg_stat_gssapi` view will contain one row per backend, showing information about GSSAPI usage on this connection. It can be joined to `pg_stat_activity` or `pg_stat_replication` on the `pid` column to get more details about the connection.
+ <a id="pg-stat-gssapi-view"></a>
 
-
-<a id="pg-stat-gssapi-view"></a>
 **Table: `pg_stat_gssapi` View**
 
 <table>
@@ -1171,15 +1152,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-archiver-view"></a>
 
-
-### `pg_stat_archiver` { #monitoring-pg-stat-archiver-view }
+### `pg_stat_archiver`
 
 
  The `pg_stat_archiver` view will always have a single row, containing data about the archiver process of the cluster.
+ <a id="pg-stat-archiver-view"></a>
 
-
-<a id="pg-stat-archiver-view"></a>
 **Table: `pg_stat_archiver` View**
 
 <table>
@@ -1223,18 +1203,17 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 
 
  Normally, WAL files are archived in order, oldest to newest, but that is not guaranteed, and does not hold under special circumstances like when promoting a standby or after crash recovery. Therefore it is not safe to assume that all files older than `last_archived_wal` have also been successfully archived.
+  <a id="monitoring-pg-stat-io-view"></a>
 
-
-### `pg_stat_io` { #monitoring-pg-stat-io-view }
+### `pg_stat_io`
 
 
  The `pg_stat_io` view will contain one row for each combination of backend type, target I/O object, and I/O context, showing cluster-wide I/O statistics. Combinations which do not make sense are omitted.
 
 
  Currently, I/O on relations (e.g. tables, indexes) and WAL activity are tracked. However, relation I/O which bypasses shared buffers (e.g. when moving a table from one tablespace to another) is currently not tracked.
+ <a id="pg-stat-io-view"></a>
 
-
-<a id="pg-stat-io-view"></a>
 **Table: `pg_stat_io` View**
 
 <table>
@@ -1357,15 +1336,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 !!! note
 
     Columns tracking I/O wait time will only be non-zero when [track_io_timing](../server-configuration/run-time-statistics.md#guc-track-io-timing) is enabled. The user should be careful when referencing these columns in combination with their corresponding I/O operations in case `track_io_timing` was not enabled for the entire time since the last stats reset.
+  <a id="monitoring-pg-stat-bgwriter-view"></a>
 
-
-### `pg_stat_bgwriter` { #monitoring-pg-stat-bgwriter-view }
+### `pg_stat_bgwriter`
 
 
  The `pg_stat_bgwriter` view will always have a single row, containing data about the background writer of the cluster.
+ <a id="pg-stat-bgwriter-view"></a>
 
-
-<a id="pg-stat-bgwriter-view"></a>
 **Table: `pg_stat_bgwriter` View**
 
 <table>
@@ -1394,15 +1372,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-checkpointer-view"></a>
 
-
-### `pg_stat_checkpointer` { #monitoring-pg-stat-checkpointer-view }
+### `pg_stat_checkpointer`
 
 
  The `pg_stat_checkpointer` view will always have a single row, containing data about the checkpointer process of the cluster.
+ <a id="pg-stat-checkpointer-view"></a>
 
-
-<a id="pg-stat-checkpointer-view"></a>
 **Table: `pg_stat_checkpointer` View**
 
 <table>
@@ -1462,15 +1439,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 
 
  Checkpoints may be skipped if the server has been idle since the last one. `num_timed` and `num_requested` count both completed and skipped checkpoints, while `num_done` tracks only the completed ones. Similarly, restartpoints may be skipped if the last replayed checkpoint record is already the last restartpoint. `restartpoints_timed` and `restartpoints_req` count both completed and skipped restartpoints, while `restartpoints_done` tracks only the completed ones.
+  <a id="monitoring-pg-stat-wal-view"></a>
 
-
-### `pg_stat_wal` { #monitoring-pg-stat-wal-view }
+### `pg_stat_wal`
 
 
  The `pg_stat_wal` view will always have a single row, containing data about WAL activity of the cluster.
+ <a id="pg-stat-wal-view"></a>
 
-
-<a id="pg-stat-wal-view"></a>
 **Table: `pg_stat_wal` View**
 
 <table>
@@ -1503,15 +1479,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-database-view"></a>
 
-
-### `pg_stat_database` { #monitoring-pg-stat-database-view }
+### `pg_stat_database`
 
 
  The `pg_stat_database` view will contain one row for each database in the cluster, plus one for shared objects, showing database-wide statistics.
+ <a id="pg-stat-database-view"></a>
 
-
-<a id="pg-stat-database-view"></a>
 **Table: `pg_stat_database` View**
 
 <table>
@@ -1644,15 +1619,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-database-conflicts-view"></a>
 
-
-### `pg_stat_database_conflicts` { #monitoring-pg-stat-database-conflicts-view }
+### `pg_stat_database_conflicts`
 
 
  The `pg_stat_database_conflicts` view will contain one row per database, showing database-wide statistics about query cancels occurring due to conflicts with recovery on standby servers. This view will only contain information on standby servers, since conflicts do not occur on primary servers.
+ <a id="pg-stat-database-conflicts-view"></a>
 
-
-<a id="pg-stat-database-conflicts-view"></a>
 **Table: `pg_stat_database_conflicts` View**
 
 <table>
@@ -1697,15 +1671,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-all-tables-view"></a>
 
-
-### `pg_stat_all_tables` { #monitoring-pg-stat-all-tables-view }
+### `pg_stat_all_tables`
 
 
  The `pg_stat_all_tables` view will contain one row for each table in the current database (including TOAST tables), showing statistics about accesses to that specific table. The `pg_stat_user_tables` and `pg_stat_sys_tables` views contain the same information, but filtered to only show user and system tables respectively.
+ <a id="pg-stat-all-tables-view"></a>
 
-
-<a id="pg-stat-all-tables-view"></a>
 **Table: `pg_stat_all_tables` View**
 
 <table>
@@ -1838,15 +1811,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-all-indexes-view"></a>
 
-
-### `pg_stat_all_indexes` { #monitoring-pg-stat-all-indexes-view }
+### `pg_stat_all_indexes`
 
 
  The `pg_stat_all_indexes` view will contain one row for each index in the current database, showing statistics about accesses to that specific index. The `pg_stat_user_indexes` and `pg_stat_sys_indexes` views contain the same information, but filtered to only show user and system indexes respectively.
+ <a id="pg-stat-all-indexes-view"></a>
 
-
-<a id="pg-stat-all-indexes-view"></a>
 **Table: `pg_stat_all_indexes` View**
 
 <table>
@@ -1919,15 +1891,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 !!! tip
 
     `EXPLAIN ANALYZE` outputs the total number of index searches performed by each index scan node. See [`EXPLAIN ANALYZE`](../../the-sql-language/performance-tips/using-explain.md#using-explain-analyze) for an example demonstrating how this works.
+  <a id="monitoring-pg-statio-all-tables-view"></a>
 
-
-### `pg_statio_all_tables` { #monitoring-pg-statio-all-tables-view }
+### `pg_statio_all_tables`
 
 
  The `pg_statio_all_tables` view will contain one row for each table in the current database (including TOAST tables), showing statistics about I/O on that specific table. The `pg_statio_user_tables` and `pg_statio_sys_tables` views contain the same information, but filtered to only show user and system tables respectively.
+ <a id="pg-statio-all-tables-view"></a>
 
-
-<a id="pg-statio-all-tables-view"></a>
 **Table: `pg_statio_all_tables` View**
 
 <table>
@@ -1984,15 +1955,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-statio-all-indexes-view"></a>
 
-
-### `pg_statio_all_indexes` { #monitoring-pg-statio-all-indexes-view }
+### `pg_statio_all_indexes`
 
 
  The `pg_statio_all_indexes` view will contain one row for each index in the current database, showing statistics about I/O on that specific index. The `pg_statio_user_indexes` and `pg_statio_sys_indexes` views contain the same information, but filtered to only show user and system indexes respectively.
+ <a id="pg-statio-all-indexes-view"></a>
 
-
-<a id="pg-statio-all-indexes-view"></a>
 **Table: `pg_statio_all_indexes` View**
 
 <table>
@@ -2033,15 +2003,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-statio-all-sequences-view"></a>
 
-
-### `pg_statio_all_sequences` { #monitoring-pg-statio-all-sequences-view }
+### `pg_statio_all_sequences`
 
 
  The `pg_statio_all_sequences` view will contain one row for each sequence in the current database, showing statistics about I/O on that specific sequence.
+ <a id="pg-statio-all-sequences-view"></a>
 
-
-<a id="pg-statio-all-sequences-view"></a>
 **Table: `pg_statio_all_sequences` View**
 
 <table>
@@ -2074,15 +2043,14 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-user-functions-view"></a>
 
-
-### `pg_stat_user_functions` { #monitoring-pg-stat-user-functions-view }
+### `pg_stat_user_functions`
 
 
  The `pg_stat_user_functions` view will contain one row for each tracked function, showing statistics about executions of that function. The [track_functions](../server-configuration/run-time-statistics.md#guc-track-functions) parameter controls exactly which functions are tracked.
+ <a id="pg-stat-user-functions-view"></a>
 
-
-<a id="pg-stat-user-functions-view"></a>
 **Table: `pg_stat_user_functions` View**
 
 <table>
@@ -2119,18 +2087,17 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-pg-stat-slru-view"></a>
 
-
-### `pg_stat_slru` { #monitoring-pg-stat-slru-view }
+### `pg_stat_slru`
 
 
  PostgreSQL accesses certain on-disk information via `SLRU` (*simple least-recently-used*) caches. The `pg_stat_slru` view will contain one row for each tracked SLRU cache, showing statistics about access to cached pages.
 
 
  For each `SLRU` cache that's part of the core server, there is a configuration parameter that controls its size, with the suffix `_buffers` appended.
+ <a id="pg-stat-slru-view"></a>
 
-
-<a id="pg-stat-slru-view"></a>
 **Table: `pg_stat_slru` View**
 
 <table>
@@ -2179,18 +2146,17 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 </tbody>
 </table>
+  <a id="monitoring-stats-functions"></a>
 
-
-### Statistics Functions { #monitoring-stats-functions }
+### Statistics Functions
 
 
  Other ways of looking at the statistics can be set up by writing queries that use the same underlying statistics access functions used by the standard views shown above. For details such as the functions' names, consult the definitions of the standard views. (For example, in psql you could issue `\d+ pg_stat_activity`.) The access functions for per-database statistics take a database OID as an argument to identify which database to report on. The per-table and per-index functions take a table or index OID. The functions for per-function statistics take a function OID. Note that only tables, indexes, and functions in the current database can be seen with these functions.
 
 
  Additional functions related to the cumulative statistics system are listed in [Additional Statistics Functions](#monitoring-stats-funcs-table).
+ <a id="monitoring-stats-funcs-table"></a>
 
-
-<a id="monitoring-stats-funcs-table"></a>
 **Table: Additional Statistics Functions**
 
 <table>
@@ -2206,7 +2172,7 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 <td>Returns the process ID of the server process attached to the current session.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-stat-get-backend-io">
 <td><code>pg_stat_get_backend_io</code> ( <code>integer</code> ) <code>setof record</code></td>
 <td>Returns I/O statistics about the backend with the specified process ID. The output fields are exactly the same as the ones in the <code>pg_stat_io</code> view.</td>
 <td>The function does not return I/O statistics for the checkpointer, the background writer, the startup process and the autovacuum launcher as they are already visible in the <code>pg_stat_io</code> view and there is only one of each.</td>
@@ -2216,7 +2182,7 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 <td>Returns a record of information about the backend with the specified process ID, or one record for each active backend in the system if <code>NULL</code> is specified. The fields returned are a subset of those in the <code>pg_stat_activity</code> view.</td>
 <td></td>
 </tr>
-<tr>
+<tr id="pg-stat-get-backend-wal">
 <td><code>pg_stat_get_backend_wal</code> ( <code>integer</code> ) <code>record</code></td>
 <td>Returns WAL statistics about the backend with the specified process ID. The output fields are exactly the same as the ones in the <code>pg_stat_wal</code> view.</td>
 <td>The function does not return WAL statistics for the checkpointer, the background writer, the startup process and the autovacuum launcher.</td>
@@ -2307,8 +2273,8 @@ SELECT pg_stat_get_backend_pid(backendid) AS pid,
 FROM pg_stat_get_backend_idset() AS backendid;
 ```
 
+ <a id="monitoring-stats-backend-funcs-table"></a>
 
-<a id="monitoring-stats-backend-funcs-table"></a>
 **Table: Per-Backend Statistics Functions**
 
 <table>

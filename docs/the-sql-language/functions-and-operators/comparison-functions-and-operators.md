@@ -1,10 +1,11 @@
-## Comparison Functions and Operators { #functions-comparison }
+<a id="functions-comparison"></a>
+
+## Comparison Functions and Operators
 
 
  The usual comparison operators are available, as shown in [Comparison Operators](#functions-comparison-op-table).
+ <a id="functions-comparison-op-table"></a>
 
-
-<a id="functions-comparison-op-table"></a>
 **Table: Comparison Operators**
 
 | Operator | Description |
@@ -33,9 +34,8 @@
 
 
  There are also some comparison predicates, as shown in [Comparison Predicates](#functions-comparison-pred-table). These behave much like operators, but have special syntax mandated by the SQL standard.
+ <a id="functions-comparison-pred-table"></a>
 
-
-<a id="functions-comparison-pred-table"></a>
 **Table: Comparison Predicates**
 
 <table>
@@ -218,9 +218,8 @@ BOOLEAN_EXPRESSION IS NOT UNKNOWN
 
 
  Some comparison-related functions are also available, as shown in [Comparison Functions](#functions-comparison-func-table).
+ <a id="functions-comparison-func-table"></a>
 
-
-<a id="functions-comparison-func-table"></a>
 **Table: Comparison Functions**
 
 <table>

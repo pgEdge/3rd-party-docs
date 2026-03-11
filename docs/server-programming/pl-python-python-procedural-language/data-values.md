@@ -1,10 +1,12 @@
-## Data Values { #plpython-data }
+<a id="plpython-data"></a>
+
+## Data Values
 
 
  Generally speaking, the aim of PL/Python is to provide a “natural” mapping between the PostgreSQL and the Python worlds. This informs the data mapping rules described below.
+ <a id="plpython-data-type-mapping"></a>
 
-
-### Data Type Mapping { #plpython-data-type-mapping }
+### Data Type Mapping
 
 
  When a PL/Python function is called, its arguments are converted from their PostgreSQL data type to a corresponding Python type:
@@ -27,9 +29,9 @@
    Strings are automatically converted to the PostgreSQL server encoding when they are passed to PostgreSQL.
 -  For nonscalar data types, see below.
  Note that logical mismatches between the declared PostgreSQL return type and the Python data type of the actual return object are not flagged; the value will be converted in any case.
+  <a id="plpython-data-null"></a>
 
-
-### Null, None { #plpython-data-null }
+### Null, None
 
 
  If an SQL null value is passed to a function, the argument value will appear as `None` in Python. For example, the function definition of `pymax` shown in [PL/Python Functions](pl-python-functions.md#plpython-funcs) will return the wrong answer for null inputs. We could add `STRICT` to the function definition to make PostgreSQL do something more reasonable: if a null value is passed, the function will not be called at all, but will just return a null result automatically. Alternatively, we could check for null inputs in the function body:
@@ -47,9 +49,9 @@ AS $$
 $$ LANGUAGE plpython3u;
 ```
  As shown above, to return an SQL null value from a PL/Python function, return the value `None`. This can be done whether the function is strict or not.
+  <a id="plpython-arrays"></a>
 
-
-### Arrays, Lists { #plpython-arrays }
+### Arrays, Lists
 
 
  SQL array values are passed into PL/Python as a Python list. To return an SQL array value out of a PL/Python function, return a Python list:
@@ -104,8 +106,9 @@ SELECT return_str_arr();
 (1 row)
 ```
 
+  <a id="plpython-data-composite-types"></a>
 
-### Composite Types { #plpython-data-composite-types }
+### Composite Types
 
 
  Composite-type arguments are passed to the function as Python mappings. The element names of the mapping are the attribute names of the composite type. If an attribute in the passed row has the null value, it has the value `None` in the mapping. Here is an example:
@@ -217,8 +220,9 @@ $$ LANGUAGE plpython3u;
 CALL python_triple(5, 10);
 ```
 
+  <a id="plpython-data-set-returning-funcs"></a>
 
-### Set-Returning Functions { #plpython-data-set-returning-funcs }
+### Set-Returning Functions
 
 
  A PL/Python function can also return sets of scalar or composite types. There are several ways to achieve this because the returned object is internally turned into an iterator. The following examples assume we have composite type:

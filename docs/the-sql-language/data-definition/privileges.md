@@ -1,4 +1,6 @@
-## Privileges { #ddl-priv }
+<a id="ddl-priv"></a>
+
+## Privileges
 
 
  When an object is created, it is assigned an owner. The owner is normally the role that executed the creation statement. For most kinds of objects, the initial state is that only the owner (or a superuser) can do anything with the object. To allow other roles to use it, *privileges* must be granted.
@@ -132,15 +134,14 @@ REVOKE ALL ON accounts FROM PUBLIC;
 `MAINTAIN`
 :   Allows `VACUUM`, `ANALYZE`, `CLUSTER`, `REFRESH MATERIALIZED VIEW`, `REINDEX`, `LOCK TABLE`, and database object statistics manipulation functions (see [Database Object Statistics Manipulation Functions](../functions-and-operators/system-administration-functions.md#functions-admin-statsmod)) on a relation.
  The privileges required by other commands are listed on the reference page of the respective command.
-
+ <a id="ddl-priv-default"></a>
 
  PostgreSQL grants privileges on some types of objects to `PUBLIC` by default when the objects are created. No privileges are granted to `PUBLIC` by default on tables, table columns, sequences, foreign data wrappers, foreign servers, large objects, schemas, tablespaces, or configuration parameters. For other types of objects, the default privileges granted to `PUBLIC` are as follows: `CONNECT` and `TEMPORARY` (create temporary tables) privileges for databases; `EXECUTE` privilege for functions and procedures; and `USAGE` privilege for languages and data types (including domains). The object owner can, of course, `REVOKE` both default and expressly granted privileges. (For maximum security, issue the `REVOKE` in the same transaction that creates the object; then there is no window in which another user can use the object.) Also, these default privilege settings can be overridden using the [sql-alterdefaultprivileges](../../reference/sql-commands/alter-default-privileges.md#sql-alterdefaultprivileges) command.
 
 
  [ACL Privilege Abbreviations](#privilege-abbrevs-table) shows the one-letter abbreviations that are used for these privilege types in *ACL* values. You will see these letters in the output of the [app-psql](../../reference/postgresql-client-applications/psql.md#app-psql) commands listed below, or when looking at ACL columns of system catalogs.
+ <a id="privilege-abbrevs-table"></a>
 
-
-<a id="privilege-abbrevs-table"></a>
 **Table: ACL Privilege Abbreviations**
 
 | Privilege | Abbreviation | Applicable Object Types |
@@ -163,9 +164,8 @@ REVOKE ALL ON accounts FROM PUBLIC;
 
 
  [Summary of Access Privileges](#privileges-summary-table) summarizes the privileges available for each type of SQL object, using the abbreviations shown above. It also shows the psql command that can be used to examine privilege settings for each object type.
+ <a id="privileges-summary-table"></a>
 
-
-<a id="privileges-summary-table"></a>
 **Table: Summary of Access Privileges**
 
 | Object Type | All Privileges | Default `PUBLIC` Privileges | psql Command |

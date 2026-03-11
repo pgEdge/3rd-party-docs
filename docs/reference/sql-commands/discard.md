@@ -1,4 +1,6 @@
-# DISCARD { #sql-discard }
+<a id="sql-discard"></a>
+
+# DISCARD
 
 discard session state
 

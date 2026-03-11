@@ -1,4 +1,6 @@
-# ROLLBACK PREPARED { #sql-rollback-prepared }
+<a id="sql-rollback-prepared"></a>
+
+# ROLLBACK PREPARED
 
 cancel a transaction that was earlier prepared for two-phase commit
 
@@ -34,9 +36,9 @@ ROLLBACK PREPARED TRANSACTION_ID
 
 
  All currently available prepared transactions are listed in the [`pg_prepared_xacts`](../../internals/system-views/pg_prepared_xacts.md#view-pg-prepared-xacts) system view.
+ <a id="sql-rollback-prepared-examples"></a>
 
-
-## Examples { #sql-rollback-prepared-examples }
+## Examples
 
 
  Roll back the transaction identified by the transaction identifier `foobar`:

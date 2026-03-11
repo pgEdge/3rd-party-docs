@@ -1,4 +1,6 @@
-## `column_options` { #infoschema-column-options }
+<a id="infoschema-column-options"></a>
+
+## `column_options`
 
 
  The view `column_options` contains all the options defined for foreign table columns in the current database. Only those foreign table columns are shown that the current user has access to (by way of being the owner or having some privilege).

@@ -1,4 +1,6 @@
-# Client Authentication { #client-authentication }
+<a id="client-authentication"></a>
+
+# Client Authentication
 
  When a client application connects to the database server, it specifies which PostgreSQL database user name it wants to connect as, much the same way one logs into a Unix computer as a particular user. Within the SQL environment the active database user name determines access privileges to database objects — see [Database Roles](../database-roles/index.md#user-manag) for more information. Therefore, it is essential to restrict which database users can connect.
 

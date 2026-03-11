@@ -1,4 +1,6 @@
-# DROP SUBSCRIPTION { #sql-dropsubscription }
+<a id="sql-dropsubscription"></a>
+
+# DROP SUBSCRIPTION
 
 remove a subscription
 

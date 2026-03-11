@@ -1,4 +1,6 @@
-## Release 18.2 { #release-18-2 }
+<a id="release-18-2"></a>
+
+## Release 18.2
 
 
 **Release date:.**
@@ -8,18 +10,18 @@
 
 
  This release contains a variety of fixes from 18.1. For information about new features in major release 18, see [Release 18](release-18.md#release-18).
+ <a id="release-18-2-migration"></a>
 
-
-### Migration to Version 18.2 { #release-18-2-migration }
+### Migration to Version 18.2
 
 
  A dump/restore is not required for those running 18.X.
 
 
  However, if you have any indexes on `ltree` columns, it may be necessary to reindex them after updating. See the sixth changelog entry below.
+  <a id="release-18-2-changes"></a>
 
-
-### Changes { #release-18-2-changes }
+### Changes
 
 
 -  Guard against unexpected dimensions of `oidvector`/`int2vector` (Tom Lane) [&sect;](https://postgr.es/c/3b6588cd9)

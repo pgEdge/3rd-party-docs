@@ -1,4 +1,6 @@
-## Parallel Safety { #parallel-safety }
+<a id="parallel-safety"></a>
+
+## Parallel Safety
 
 
  The planner classifies operations involved in a query as either *parallel safe*, *parallel restricted*, or *parallel unsafe*. A parallel safe operation is one that does not conflict with the use of parallel query. A parallel restricted operation is one that cannot be performed in a parallel worker, but that can be performed in the leader while parallel query is in use. Therefore, parallel restricted operations can never occur below a `Gather` or `Gather Merge` node, but can occur elsewhere in a plan that contains such a node. A parallel unsafe operation is one that cannot be performed while parallel query is in use, not even in the leader. When a query contains anything that is parallel unsafe, parallel query is completely disabled for that query.
@@ -11,9 +13,9 @@
 -  Scans of temporary tables.
 -  Scans of foreign tables, unless the foreign data wrapper has an `IsForeignScanParallelSafe` API that indicates otherwise.
 -  Plan nodes that reference a correlated `SubPlan`.
+ <a id="parallel-labeling"></a>
 
-
-### Parallel Labeling for Functions and Aggregates { #parallel-labeling }
+### Parallel Labeling for Functions and Aggregates
 
 
  The planner cannot automatically determine whether a user-defined function or aggregate is parallel safe, parallel restricted, or parallel unsafe, because this would require predicting every operation that the function could possibly perform. In general, this is equivalent to the Halting Problem and therefore impossible. Even for simple functions where it could conceivably be done, we do not try, since this would be expensive and error-prone. Instead, all user-defined functions are assumed to be parallel unsafe unless otherwise marked. When using [sql-createfunction](../../reference/sql-commands/create-function.md#sql-createfunction) or [sql-alterfunction](../../reference/sql-commands/alter-function.md#sql-alterfunction), markings can be set by specifying `PARALLEL SAFE`, `PARALLEL RESTRICTED`, or `PARALLEL UNSAFE` as appropriate. When using [sql-createaggregate](../../reference/sql-commands/create-aggregate.md#sql-createaggregate), the `PARALLEL` option can be specified with `SAFE`, `RESTRICTED`, or `UNSAFE` as the corresponding value.

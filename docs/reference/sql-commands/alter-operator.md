@@ -1,4 +1,6 @@
-# ALTER OPERATOR { #sql-alteroperator }
+<a id="sql-alteroperator"></a>
+
+# ALTER OPERATOR
 
 change the definition of an operator
 

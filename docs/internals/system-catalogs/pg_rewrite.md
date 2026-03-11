@@ -1,4 +1,6 @@
-## `pg_rewrite` { #catalog-pg-rewrite }
+<a id="catalog-pg-rewrite"></a>
+
+## `pg_rewrite`
 
 
  The catalog `pg_rewrite` stores rewrite rules for tables and views.

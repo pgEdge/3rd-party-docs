@@ -1,16 +1,18 @@
-## Populating a Database { #populate }
+<a id="populate"></a>
+
+## Populating a Database
 
 
  One might need to insert a large amount of data when first populating a database. This section contains some suggestions on how to make this process as efficient as possible.
+ <a id="disable-autocommit"></a>
 
-
-### Disable Autocommit { #disable-autocommit }
+### Disable Autocommit
 
 
  When using multiple `INSERT`s, turn off autocommit and just do one commit at the end. (In plain SQL, this means issuing `BEGIN` at the start and `COMMIT` at the end. Some client libraries might do this behind your back, in which case you need to make sure the library does it when you want it done.) If you allow each insertion to be committed separately, PostgreSQL is doing a lot of work for each row that is added. An additional benefit of doing all insertions in one transaction is that if the insertion of one row were to fail then the insertion of all rows inserted up to that point would be rolled back, so you won't be stuck with partially loaded data.
+  <a id="populate-copy-from"></a>
 
-
-### Use `COPY` { #populate-copy-from }
+### Use `COPY`
 
 
  Use [`COPY`](../../reference/sql-commands/copy.md#sql-copy) to load all the rows in one command, instead of using a series of `INSERT` commands. The `COPY` command is optimized for loading large numbers of rows; it is less flexible than `INSERT`, but incurs significantly less overhead for large data loads. Since `COPY` is a single command, there is no need to disable autocommit if you use this method to populate a table.
@@ -23,54 +25,54 @@
 
 
  `COPY` is fastest when used within the same transaction as an earlier `CREATE TABLE` or `TRUNCATE` command. In such cases no WAL needs to be written, because in case of an error, the files containing the newly loaded data will be removed anyway. However, this consideration only applies when [wal_level](../../server-administration/server-configuration/write-ahead-log.md#guc-wal-level) is `minimal` as all commands must write WAL otherwise.
+  <a id="populate-rm-indexes"></a>
 
-
-### Remove Indexes { #populate-rm-indexes }
+### Remove Indexes
 
 
  If you are loading a freshly created table, the fastest method is to create the table, bulk load the table's data using `COPY`, then create any indexes needed for the table. Creating an index on pre-existing data is quicker than updating it incrementally as each row is loaded.
 
 
  If you are adding large amounts of data to an existing table, it might be a win to drop the indexes, load the table, and then recreate the indexes. Of course, the database performance for other users might suffer during the time the indexes are missing. One should also think twice before dropping a unique index, since the error checking afforded by the unique constraint will be lost while the index is missing.
+  <a id="populate-rm-fkeys"></a>
 
-
-### Remove Foreign Key Constraints { #populate-rm-fkeys }
+### Remove Foreign Key Constraints
 
 
  Just as with indexes, a foreign key constraint can be checked “in bulk” more efficiently than row-by-row. So it might be useful to drop foreign key constraints, load data, and re-create the constraints. Again, there is a trade-off between data load speed and loss of error checking while the constraint is missing.
 
 
  What's more, when you load data into a table with existing foreign key constraints, each new row requires an entry in the server's list of pending trigger events (since it is the firing of a trigger that checks the row's foreign key constraint). Loading many millions of rows can cause the trigger event queue to overflow available memory, leading to intolerable swapping or even outright failure of the command. Therefore it may be *necessary*, not just desirable, to drop and re-apply foreign keys when loading large amounts of data. If temporarily removing the constraint isn't acceptable, the only other recourse may be to split up the load operation into smaller transactions.
+  <a id="populate-work-mem"></a>
 
-
-### Increase `maintenance_work_mem` { #populate-work-mem }
+### Increase `maintenance_work_mem`
 
 
  Temporarily increasing the [maintenance_work_mem](../../server-administration/server-configuration/resource-consumption.md#guc-maintenance-work-mem) configuration variable when loading large amounts of data can lead to improved performance. This will help to speed up `CREATE INDEX` commands and `ALTER TABLE ADD FOREIGN KEY` commands. It won't do much for `COPY` itself, so this advice is only useful when you are using one or both of the above techniques.
+  <a id="populate-max-wal-size"></a>
 
-
-### Increase `max_wal_size` { #populate-max-wal-size }
+### Increase `max_wal_size`
 
 
  Temporarily increasing the [max_wal_size](../../server-administration/server-configuration/write-ahead-log.md#guc-max-wal-size) configuration variable can also make large data loads faster. This is because loading a large amount of data into PostgreSQL will cause checkpoints to occur more often than the normal checkpoint frequency (specified by the `checkpoint_timeout` configuration variable). Whenever a checkpoint occurs, all dirty pages must be flushed to disk. By increasing `max_wal_size` temporarily during bulk data loads, the number of checkpoints that are required can be reduced.
+  <a id="populate-pitr"></a>
 
-
-### Disable WAL Archival and Streaming Replication { #populate-pitr }
+### Disable WAL Archival and Streaming Replication
 
 
  When loading large amounts of data into an installation that uses WAL archiving or streaming replication, it might be faster to take a new base backup after the load has completed than to process a large amount of incremental WAL data. To prevent incremental WAL logging while loading, disable archiving and streaming replication, by setting [wal_level](../../server-administration/server-configuration/write-ahead-log.md#guc-wal-level) to `minimal`, [archive_mode](../../server-administration/server-configuration/write-ahead-log.md#guc-archive-mode) to `off`, and [max_wal_senders](../../server-administration/server-configuration/replication.md#guc-max-wal-senders) to zero. But note that changing these settings requires a server restart, and makes any base backups taken before unavailable for archive recovery and standby server, which may lead to data loss.
 
 
  Aside from avoiding the time for the archiver or WAL sender to process the WAL data, doing this will actually make certain commands faster, because they do not to write WAL at all if `wal_level` is `minimal` and the current subtransaction (or top-level transaction) created or truncated the table or index they change. (They can guarantee crash safety more cheaply by doing an `fsync` at the end than by writing WAL.)
+  <a id="populate-analyze"></a>
 
-
-### Run `ANALYZE` Afterwards { #populate-analyze }
+### Run `ANALYZE` Afterwards
 
 
  Whenever you have significantly altered the distribution of data within a table, running [`ANALYZE`](../../reference/sql-commands/analyze.md#sql-analyze) is strongly recommended. This includes bulk loading large amounts of data into the table. Running `ANALYZE` (or `VACUUM ANALYZE`) ensures that the planner has up-to-date statistics about the table. With no statistics or obsolete statistics, the planner might make poor decisions during query planning, leading to poor performance on any tables with inaccurate or nonexistent statistics. Note that if the autovacuum daemon is enabled, it might run `ANALYZE` automatically; see [Updating Planner Statistics](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-statistics) and [The Autovacuum Daemon](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) for more information.
+  <a id="populate-pg-dump"></a>
 
-
-### Some Notes about pg_dump { #populate-pg-dump }
+### Some Notes about pg_dump
 
 
  Dump scripts generated by pg_dump automatically apply several, but not all, of the above guidelines. To restore a pg_dump dump as quickly as possible, you need to do a few extra things manually. (Note that these points apply while *restoring* a dump, not while *creating* it. The same points apply whether loading a text dump with psql or using pg_restore to load from a pg_dump archive file.)

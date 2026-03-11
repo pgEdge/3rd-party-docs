@@ -1,4 +1,6 @@
-## Transactions and Identifiers { #transaction-id }
+<a id="transaction-id"></a>
+
+## Transactions and Identifiers
 
 
  Transactions can be created explicitly using `BEGIN` or `START TRANSACTION` and ended using `COMMIT` or `ROLLBACK`. SQL statements outside of explicit transactions automatically use single-statement transactions.

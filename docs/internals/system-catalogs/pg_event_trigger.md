@@ -1,4 +1,6 @@
-## `pg_event_trigger` { #catalog-pg-event-trigger }
+<a id="catalog-pg-event-trigger"></a>
+
+## `pg_event_trigger`
 
 
  The catalog `pg_event_trigger` stores event triggers. See [Event Triggers](../../server-programming/event-triggers/index.md#event-triggers) for more information.

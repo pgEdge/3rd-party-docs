@@ -1,4 +1,6 @@
-## Foreign Data Wrapper Functions { #fdw-functions }
+<a id="fdw-functions"></a>
+
+## Foreign Data Wrapper Functions
 
 
  The FDW author needs to implement a handler function, and optionally a validator function. Both functions must be written in a compiled language such as C, using the version-1 interface. For details on C language calling conventions and dynamic loading, see [C-Language Functions](../../server-programming/extending-sql/c-language-functions.md#xfunc-c).

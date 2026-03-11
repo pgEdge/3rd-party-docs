@@ -1,4 +1,6 @@
-# CREATE PROCEDURE { #sql-createprocedure }
+<a id="sql-createprocedure"></a>
+
+# CREATE PROCEDURE
 
 define a new procedure
 
@@ -18,9 +20,9 @@ CREATE [ OR REPLACE ] PROCEDURE
     | SQL_BODY
   } ...
 ```
+ <a id="sql-createprocedure-description"></a>
 
-
-## Description { #sql-createprocedure-description }
+## Description
 
 
  `CREATE PROCEDURE` defines a new procedure. `CREATE OR REPLACE PROCEDURE` will either create a new procedure, or replace an existing definition. To be able to define a procedure, the user must have the `USAGE` privilege on the language.
@@ -122,18 +124,18 @@ CREATE [ OR REPLACE ] PROCEDURE
 
 
      This is similar to writing the text of the procedure body as a string constant (see *definition* above), but there are some differences: This form only works for `LANGUAGE SQL`, the string constant form works for all languages. This form is parsed at procedure definition time, the string constant form is parsed at execution time; therefore this form cannot support polymorphic argument types and other constructs that are not resolvable at procedure definition time. This form tracks dependencies between the procedure and objects used in the procedure body, so `DROP ... CASCADE` will work correctly, whereas the form using string literals may leave dangling procedures. Finally, this form is more compatible with the SQL standard and other SQL implementations.
+ <a id="sql-createprocedure-notes"></a>
 
-
-## Notes { #sql-createprocedure-notes }
+## Notes
 
 
  See [sql-createfunction](create-function.md#sql-createfunction) for more details on function creation that also apply to procedures.
 
 
  Use [sql-call](call.md#sql-call) to execute a procedure.
+ <a id="sql-createprocedure-examples"></a>
 
-
-## Examples { #sql-createprocedure-examples }
+## Examples
 
 
 ```sql
@@ -162,9 +164,9 @@ END;
 
 CALL insert_data(1, 2);
 ```
+ <a id="sql-createprocedure-compat"></a>
 
-
-## Compatibility { #sql-createprocedure-compat }
+## Compatibility
 
 
  A `CREATE PROCEDURE` command is defined in the SQL standard. The PostgreSQL implementation can be used in a compatible way but has many extensions. For details see also [sql-createfunction](create-function.md#sql-createfunction).

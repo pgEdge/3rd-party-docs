@@ -1,4 +1,6 @@
-## Visibility of Data Changes { #spi-visibility }
+<a id="spi-visibility"></a>
+
+## Visibility of Data Changes
 
 
  The following rules govern the visibility of data changes in functions that use SPI (or any other C function):

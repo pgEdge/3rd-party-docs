@@ -1,4 +1,6 @@
-## Publication { #logical-replication-publication }
+<a id="logical-replication-publication"></a>
+
+## Publication
 
 
  A *publication* can be defined on any physical replication primary. The node where a publication is defined is referred to as *publisher*. A publication is a set of changes generated from a table or a group of tables, and might also be described as a change set or replication set. Each publication exists in only one database.
@@ -17,9 +19,9 @@
 
 
  The individual tables can be added and removed dynamically using [`ALTER PUBLICATION`](../../reference/sql-commands/alter-publication.md#sql-alterpublication). Both the `ADD TABLE` and `DROP TABLE` operations are transactional, so the table will start or stop replicating at the correct snapshot once the transaction has committed.
+ <a id="logical-replication-publication-replica-identity"></a>
 
-
-### Replica Identity { #logical-replication-publication-replica-identity }
+### Replica Identity
 
 
  A published table must have a *replica identity* configured in order to be able to replicate `UPDATE` and `DELETE` operations, so that appropriate rows to update or delete can be identified on the subscriber side.

@@ -1,10 +1,12 @@
-## Upgrade { #logical-replication-upgrade }
+<a id="logical-replication-upgrade"></a>
+
+## Upgrade
 
 
  Migration of *logical replication clusters* is possible only when all the members of the old logical replication clusters are version 17.0 or later.
+ <a id="prepare-publisher-upgrades"></a>
 
-
-### Prepare for Publisher Upgrades { #prepare-publisher-upgrades }
+### Prepare for Publisher Upgrades
 
 
  pg_upgrade attempts to migrate logical slots. This helps avoid the need for manually defining the same logical slots on the new publisher. Migration of logical slots is only supported when the old cluster is version 17.0 or later. Logical slots on clusters before version 17.0 will silently be ignored.
@@ -22,9 +24,9 @@
 -  The old cluster has replicated all the transactions and logical decoding messages to subscribers.
 -  All slots on the old cluster must be usable, i.e., there are no slots whose [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`conflicting` is not `true`.
 -  The new cluster must not have permanent logical slots, i.e., there must be no slots where [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`temporary` is `false`.
+  <a id="prepare-subscriber-upgrades"></a>
 
-
-### Prepare for Subscriber Upgrades { #prepare-subscriber-upgrades }
+### Prepare for Subscriber Upgrades
 
 
  Setup the [subscriber configurations](configuration-settings.md#logical-replication-config-subscriber) in the new subscriber. pg_upgrade attempts to migrate subscription dependencies which includes the subscription's table information present in [pg_subscription_rel](../../internals/system-catalogs/pg_subscription_rel.md#catalog-pg-subscription-rel) system catalog and also the subscription's replication origin. This allows logical replication on the new subscriber to continue from where the old subscriber was up to. Migration of subscription dependencies is only supported when the old cluster is version 17.0 or later. Subscription dependencies on clusters before version 17.0 will silently be ignored.
@@ -36,9 +38,9 @@
 -  All the subscription tables in the old subscriber should be in state `i` (initialize) or `r` (ready). This can be verified by checking [pg_subscription_rel](../../internals/system-catalogs/pg_subscription_rel.md#catalog-pg-subscription-rel).`srsubstate`.
 -  The replication origin entry corresponding to each of the subscriptions should exist in the old cluster. This can be found by checking [pg_subscription](../../internals/system-catalogs/pg_subscription.md#catalog-pg-subscription) and [pg_replication_origin](../../internals/system-catalogs/pg_replication_origin.md#catalog-pg-replication-origin) system tables.
 -  The new cluster must have [`max_active_replication_origins`](../server-configuration/replication.md#guc-max-active-replication-origins) configured to a value greater than or equal to the number of subscriptions present in the old cluster.
+  <a id="upgrading-logical-replication-clusters"></a>
 
-
-### Upgrading Logical Replication Clusters { #upgrading-logical-replication-clusters }
+### Upgrading Logical Replication Clusters
 
 
  While upgrading a subscriber, write operations can be performed in the publisher. These changes will be replicated to the subscriber once the subscriber upgrade is completed.
@@ -66,13 +68,15 @@
 -  Follow the steps specified in [Steps to Upgrade a Cascaded Logical Replication Cluster](#steps-cascaded-logical-replication-cluster) to upgrade a cascaded logical replication cluster.
 -  Follow the steps specified in [Steps to Upgrade a Two-node Circular Logical Replication Cluster](#steps-two-node-circular-logical-replication-cluster) to upgrade a two-node circular logical replication cluster.
 
+ <a id="steps-two-node-logical-replication-cluster"></a>
 
-#### Steps to Upgrade a Two-node Logical Replication Cluster { #steps-two-node-logical-replication-cluster }
+#### Steps to Upgrade a Two-node Logical Replication Cluster
 
 
  Let's say publisher is in `node1` and subscriber is in `node2`. The subscriber `node2` has a subscription `sub1_node1_node2` which is subscribing the changes from `node1`.
 
 
+<a id="two-node-cluster-disable-subscriptions-node2"></a>
 1.  Disable all the subscriptions on `node2` that are subscribing the changes from `node1` by using [`ALTER SUBSCRIPTION ... DISABLE`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription-params-disable), e.g.:
 
 ```
@@ -157,14 +161,15 @@ pg_ctl -D /opt/PostgreSQL/data2_upgraded start -l logfile
 !!! note
 
     In the steps described above, the publisher is upgraded first, followed by the subscriber. Alternatively, the user can use similar steps to upgrade the subscriber first, followed by the publisher.
+  <a id="steps-cascaded-logical-replication-cluster"></a>
 
-
-#### Steps to Upgrade a Cascaded Logical Replication Cluster { #steps-cascaded-logical-replication-cluster }
+#### Steps to Upgrade a Cascaded Logical Replication Cluster
 
 
  Let's say we have a cascaded logical replication setup `node1`->`node2`->`node3`. Here `node2` is subscribing the changes from `node1` and `node3` is subscribing the changes from `node2`. The `node2` has a subscription `sub1_node1_node2` which is subscribing the changes from `node1`. The `node3` has a subscription `sub1_node2_node3` which is subscribing the changes from `node2`.
 
 
+<a id="cascaded-cluster-disable-sub-node1-node2"></a>
 1.  Disable all the subscriptions on `node2` that are subscribing the changes from `node1` by using [`ALTER SUBSCRIPTION ... DISABLE`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription-params-disable), e.g.:
 
 ```
@@ -198,6 +203,7 @@ pg_upgrade
 pg_ctl -D /opt/PostgreSQL/data1_upgraded start -l logfile
 ```
 
+<a id="cascaded-cluster-disable-sub-node2-node3"></a>
 6.  Disable all the subscriptions on `node3` that are subscribing the changes from `node2` by using [`ALTER SUBSCRIPTION ... DISABLE`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription-params-disable), e.g.:
 
 ```
@@ -299,13 +305,15 @@ pg_ctl -D /opt/PostgreSQL/data3_upgraded start -l logfile
 /* node3 # */ ALTER SUBSCRIPTION sub1_node2_node3 REFRESH PUBLICATION;
 ```
 
+  <a id="steps-two-node-circular-logical-replication-cluster"></a>
 
-#### Steps to Upgrade a Two-node Circular Logical Replication Cluster { #steps-two-node-circular-logical-replication-cluster }
+#### Steps to Upgrade a Two-node Circular Logical Replication Cluster
 
 
  Let's say we have a circular logical replication setup `node1`->`node2` and `node2`->`node1`. Here `node2` is subscribing the changes from `node1` and `node1` is subscribing the changes from `node2`. The `node1` has a subscription `sub1_node2_node1` which is subscribing the changes from `node2`. The `node2` has a subscription `sub1_node1_node2` which is subscribing the changes from `node1`.
 
 
+<a id="circular-cluster-disable-sub-node2"></a>
 1.  Disable all the subscriptions on `node2` that are subscribing the changes from `node1` by using [`ALTER SUBSCRIPTION ... DISABLE`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription-params-disable), e.g.:
 
 ```
@@ -360,6 +368,7 @@ pg_ctl -D /opt/PostgreSQL/data1_upgraded start -l logfile
 /* node1 # */ ALTER SUBSCRIPTION sub1_node2_node1 REFRESH PUBLICATION;
 ```
 
+<a id="circular-cluster-disable-sub-node1"></a>
 9.  Disable all the subscriptions on `node1` that are subscribing the changes from `node2` by using [`ALTER SUBSCRIPTION ... DISABLE`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription-params-disable), e.g.:
 
 ```

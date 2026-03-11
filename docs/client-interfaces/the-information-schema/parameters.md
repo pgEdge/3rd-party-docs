@@ -1,4 +1,6 @@
-## `parameters` { #infoschema-parameters }
+<a id="infoschema-parameters"></a>
+
+## `parameters`
 
 
  The view `parameters` contains information about the parameters (arguments) of all functions in the current database. Only those functions are shown that the current user has access to (by way of being the owner or having some privilege).

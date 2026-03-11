@@ -1,4 +1,6 @@
-## Supported Platforms { #supported-platforms }
+<a id="supported-platforms"></a>
+
+## Supported Platforms
 
 
  A platform (that is, a CPU architecture and operating system combination) is considered supported by the PostgreSQL development community if the code contains provisions to work on that platform and it has recently been verified to build and pass its regression tests on that platform. Currently, most testing of platform compatibility is done automatically by test machines in the [PostgreSQL Build Farm](https://buildfarm.postgresql.org/). If you are interested in using PostgreSQL on a platform that is not represented in the build farm, but on which the code works or can be made to work, you are strongly encouraged to set up a build farm member machine so that continued compatibility can be assured.

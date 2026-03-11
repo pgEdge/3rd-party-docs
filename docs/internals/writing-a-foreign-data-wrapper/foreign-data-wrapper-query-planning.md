@@ -1,4 +1,6 @@
-## Foreign Data Wrapper Query Planning { #fdw-planning }
+<a id="fdw-planning"></a>
+
+## Foreign Data Wrapper Query Planning
 
 
  The FDW callback functions `GetForeignRelSize`, `GetForeignPaths`, `GetForeignPlan`, `PlanForeignModify`, `GetForeignJoinPaths`, `GetForeignUpperPaths`, and `PlanDirectModify` must fit into the workings of the PostgreSQL planner. Here are some notes about what they must do.

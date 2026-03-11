@@ -1,10 +1,12 @@
-## Row and Array Comparisons { #functions-comparisons }
+<a id="functions-comparisons"></a>
+
+## Row and Array Comparisons
 
 
  This section describes several specialized constructs for making multiple comparisons between groups of values. These forms are syntactically related to the subquery forms of the previous section, but do not involve subqueries. The forms involving array subexpressions are PostgreSQL extensions; the rest are SQL-compliant. All of the expression forms documented in this section return Boolean (true/false) results.
+ <a id="functions-comparisons-in-scalar"></a>
 
-
-### `IN` { #functions-comparisons-in-scalar }
+### `IN`
 
 
 ```
@@ -26,9 +28,9 @@ OR
 
 
  Note that if the left-hand expression yields null, or if there are no equal right-hand values and at least one right-hand expression yields null, the result of the `IN` construct will be null, not false. This is in accordance with SQL's normal rules for Boolean combinations of null values.
+  <a id="functions-comparisons-not-in"></a>
 
-
-### `NOT IN` { #functions-comparisons-not-in }
+### `NOT IN`
 
 
 ```
@@ -55,9 +57,9 @@ AND
 !!! tip
 
     `x NOT IN y` is equivalent to `NOT (x IN y)` in all cases. However, null values are much more likely to trip up the novice when working with `NOT IN` than when working with `IN`. It is best to express your condition positively if possible.
+  <a id="functions-comparisons-any-some"></a>
 
-
-### `ANY`/`SOME` (array) { #functions-comparisons-any-some }
+### `ANY`/`SOME` (array)
 
 
 ```
@@ -74,9 +76,9 @@ EXPRESSION OPERATOR SOME (ARRAY EXPRESSION)
 
 
  `SOME` is a synonym for `ANY`.
+  <a id="functions-comparisons-all"></a>
 
-
-### `ALL` (array) { #functions-comparisons-all }
+### `ALL` (array)
 
 
 ```
@@ -89,9 +91,9 @@ EXPRESSION OPERATOR ALL (ARRAY EXPRESSION)
 
 
  If the array expression yields a null array, the result of `ALL` will be null. If the left-hand expression yields null, the result of `ALL` is ordinarily null (though a non-strict comparison operator could possibly yield a different result). Also, if the right-hand array contains any null elements and no false comparison result is obtained, the result of `ALL` will be null, not true (again, assuming a strict comparison operator). This is in accordance with SQL's normal rules for Boolean combinations of null values.
+  <a id="row-wise-comparison"></a>
 
-
-### Row Constructor Comparison { #row-wise-comparison }
+### Row Constructor Comparison
 
 
 ```
@@ -125,9 +127,9 @@ ROW_CONSTRUCTOR IS NOT DISTINCT FROM ROW_CONSTRUCTOR
 
 
  This construct is similar to a `=` row comparison, but it does not yield null for null inputs. Instead, any null value is considered unequal to (distinct from) any non-null value, and any two nulls are considered equal (not distinct). Thus the result will always be either true or false, never null.
+  <a id="composite-type-comparison"></a>
 
-
-### Composite Type Comparison { #composite-type-comparison }
+### Composite Type Comparison
 
 
 ```

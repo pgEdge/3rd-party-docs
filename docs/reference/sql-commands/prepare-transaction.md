@@ -1,4 +1,6 @@
-# PREPARE TRANSACTION { #sql-prepare-transaction }
+<a id="sql-prepare-transaction"></a>
+
+# PREPARE TRANSACTION
 
 prepare the current transaction for two-phase commit
 
@@ -57,9 +59,9 @@ PREPARE TRANSACTION TRANSACTION_ID
 
 
      If you have not set up an external transaction manager to track prepared transactions and ensure they get closed out promptly, it is best to keep the prepared-transaction feature disabled by setting [max_prepared_transactions](../../server-administration/server-configuration/resource-consumption.md#guc-max-prepared-transactions) to zero. This will prevent accidental creation of prepared transactions that might then be forgotten and eventually cause problems.
+ <a id="sql-prepare-transaction-examples"></a>
 
-
-## Examples { #sql-prepare-transaction-examples }
+## Examples
 
 
  Prepare the current transaction for two-phase commit, using `foobar` as the transaction identifier:

@@ -1,4 +1,6 @@
-## `pg_file_settings` { #view-pg-file-settings }
+<a id="view-pg-file-settings"></a>
+
+## `pg_file_settings`
 
 
  The view `pg_file_settings` provides a summary of the contents of the server's configuration file(s). A row appears in this view for each “name = value” entry appearing in the files, with annotations indicating whether the value could be applied successfully. Additional row(s) may appear for problems not linked to a “name = value” entry, such as syntax errors in the files.

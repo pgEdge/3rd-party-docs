@@ -1,4 +1,6 @@
-## Populating a Table With Rows { #tutorial-populate }
+<a id="tutorial-populate"></a>
+
+## Populating a Table With Rows
 
 
  The `INSERT` statement is used to populate a table with rows:

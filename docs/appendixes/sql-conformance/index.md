@@ -1,4 +1,6 @@
-# SQL Conformance { #features }
+<a id="features"></a>
+
+# SQL Conformance
 
  This section attempts to outline to what extent PostgreSQL conforms to the current SQL standard. The following information is not a full statement of conformance, but it presents the main topics in as much detail as is both reasonable and useful for users.
 

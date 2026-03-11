@@ -1,4 +1,6 @@
-# Monitoring Database Activity { #monitoring }
+<a id="monitoring"></a>
+
+# Monitoring Database Activity
 
  A database administrator frequently wonders, “What is the system doing right now?” This chapter discusses how to find that out.
 

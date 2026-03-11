@@ -1,4 +1,6 @@
-## TOAST { #storage-toast }
+<a id="storage-toast"></a>
+
+## TOAST
 
 
  This section provides an overview of TOAST (The Oversized-Attribute Storage Technique).
@@ -17,9 +19,9 @@
 
 
  As mentioned, there are multiple types of TOAST pointer datums. The oldest and most common type is a pointer to out-of-line data stored in a *TOAST table* that is separate from, but associated with, the table containing the TOAST pointer datum itself. These *on-disk* pointer datums are created by the TOAST management code (in `access/common/toast_internals.c`) when a tuple to be stored on disk is too large to be stored as-is. Further details appear in [Out-of-Line, On-Disk TOAST Storage](#storage-toast-ondisk). Alternatively, a TOAST pointer datum can contain a pointer to out-of-line data that appears elsewhere in memory. Such datums are necessarily short-lived, and will never appear on-disk, but they are very useful for avoiding copying and redundant processing of large data values. Further details appear in [Out-of-Line, In-Memory TOAST Storage](#storage-toast-inmemory).
+ <a id="storage-toast-ondisk"></a>
 
-
-### Out-of-Line, On-Disk TOAST Storage { #storage-toast-ondisk }
+### Out-of-Line, On-Disk TOAST Storage
 
 
  If any of the columns of a table are TOAST-able, the table will have an associated TOAST table, whose OID is stored in the table's `pg_class`.`reltoastrelid` entry. On-disk TOASTed values are kept in the TOAST table, as described in more detail below.
@@ -44,9 +46,9 @@
 
 
  This scheme has a number of advantages compared to a more straightforward approach such as allowing row values to span pages. Assuming that queries are usually qualified by comparisons against relatively small key values, most of the work of the executor will be done using the main row entry. The big values of TOASTed attributes will only be pulled out (if selected at all) at the time the result set is sent to the client. Thus, the main table is much smaller and more of its rows fit in the shared buffer cache than would be the case without any out-of-line storage. Sort sets shrink also, and sorts will more often be done entirely in memory. A little test showed that a table containing typical HTML pages and their URLs was stored in about half of the raw data size including the TOAST table, and that the main table contained only about 10% of the entire data (the URLs and some small HTML pages). There was no run time difference compared to an un-TOASTed comparison table, in which all the HTML pages were cut down to 7 kB to fit.
+  <a id="storage-toast-inmemory"></a>
 
-
-### Out-of-Line, In-Memory TOAST Storage { #storage-toast-inmemory }
+### Out-of-Line, In-Memory TOAST Storage
 
 
  TOAST pointers can point to data that is not on disk, but is elsewhere in the memory of the current server process. Such pointers obviously cannot be long-lived, but they are nonetheless useful. There are currently two sub-cases: pointers to *indirect* data and pointers to *expanded* data.

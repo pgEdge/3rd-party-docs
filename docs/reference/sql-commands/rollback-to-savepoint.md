@@ -1,4 +1,6 @@
-# ROLLBACK TO SAVEPOINT { #sql-rollback-to }
+<a id="sql-rollback-to"></a>
+
+# ROLLBACK TO SAVEPOINT
 
 roll back to a savepoint
 

@@ -1,19 +1,21 @@
-## intagg — integer aggregator and enumerator { #intagg }
+<a id="intagg"></a>
+
+## intagg — integer aggregator and enumerator
 
 
  The `intagg` module provides an integer aggregator and an enumerator. `intagg` is now obsolete, because there are built-in functions that provide a superset of its capabilities. However, the module is still provided as a compatibility wrapper around the built-in functions.
+ <a id="intagg-functions"></a>
 
-
-### Functions { #intagg-functions }
+### Functions
 
 
  The aggregator is an aggregate function `int_array_aggregate(integer)` that produces an integer array containing exactly the integers it is fed. This is a wrapper around `array_agg`, which does the same thing for any array type.
 
 
  The enumerator is a function `int_array_enum(integer[])` that returns `setof integer`. It is essentially the reverse operation of the aggregator: given an array of integers, expand it into a set of rows. This is a wrapper around `unnest`, which does the same thing for any array type.
+  <a id="intagg-samples"></a>
 
-
-### Sample Uses { #intagg-samples }
+### Sample Uses
 
 
  Many database systems have the notion of a many to many table. Such a table usually sits between two indexed tables, for example:

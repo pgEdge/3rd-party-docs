@@ -1,4 +1,6 @@
-# ALTER DATABASE { #sql-alterdatabase }
+<a id="sql-alterdatabase"></a>
+
+# ALTER DATABASE
 
 change a database
 

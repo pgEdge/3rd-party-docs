@@ -1,10 +1,12 @@
-## Collation Support { #collation }
+<a id="collation"></a>
+
+## Collation Support
 
 
  The collation feature allows specifying the sort order and character classification behavior of data per-column, or even per-operation. This alleviates the restriction that the `LC_COLLATE` and `LC_CTYPE` settings of a database cannot be changed after its creation.
+ <a id="collation-concepts"></a>
 
-
-### Concepts { #collation-concepts }
+### Concepts
 
 
  Conceptually, every expression of a collatable data type has a collation. (The built-in collatable data types are `text`, `varchar`, and `char`. User-defined base types can also be marked collatable, and of course a *domain* over a collatable data type is collatable.) If the expression is a column reference, the collation of the expression is the defined collation of the column. If the expression is a constant, the collation is the default collation of the data type of the constant. The collation of a more complex expression is derived from the collations of its inputs, as described below.
@@ -92,8 +94,9 @@ SELECT * FROM test1 ORDER BY a || b;
 SELECT * FROM test1 ORDER BY a || b COLLATE "fr_FR";
 ```
 
+  <a id="collation-managing"></a>
 
-### Managing Collations { #collation-managing }
+### Managing Collations
 
 
  A collation is an SQL schema object that maps an SQL name to locales provided by libraries installed in the operating system. A collation definition has a *provider* that specifies which library supplies the locale data. One standard provider name is `libc`, which uses the locales provided by the operating system C library. These are the locales used by most tools provided by the operating system. Another provider is `icu`, which uses the external ICU library. ICU locales can only be used if support for ICU was configured when PostgreSQL was built.
@@ -103,9 +106,9 @@ SELECT * FROM test1 ORDER BY a || b COLLATE "fr_FR";
 
 
  A collation object provided by `icu` maps to a named collator provided by the ICU library. ICU does not support separate “collate” and “ctype” settings, so they are always the same. Also, ICU collations are independent of the encoding, so there is always only one ICU collation of a given name in a database.
+ <a id="collation-managing-standard"></a>
 
-
-#### Standard Collations { #collation-managing-standard }
+#### Standard Collations
 
 
  On all platforms, the following collations are supported:
@@ -130,18 +133,18 @@ SELECT * FROM test1 ORDER BY a || b COLLATE "fr_FR";
 
 
  Additional collations may be available depending on operating system support. The efficiency and stability of these additional collations depend on the collation provider, the provider version, and the locale.
+  <a id="collation-managing-predefined"></a>
 
-
-#### Predefined Collations { #collation-managing-predefined }
+#### Predefined Collations
 
 
  If the operating system provides support for using multiple locales within a single program (`newlocale` and related functions), or if support for ICU is configured, then when a database cluster is initialized, `initdb` populates the system catalog `pg_collation` with collations based on all the locales it finds in the operating system at the time.
 
 
  To inspect the currently available locales, use the query `SELECT * FROM pg_collation`, or the command `\dOS+` in psql.
+ <a id="collation-managing-predefined-libc"></a>
 
-
-##### libc Collations { #collation-managing-predefined-libc }
+##### libc Collations
 
 
  For example, the operating system might provide a locale named `de_DE.utf8`. `initdb` would then create a collation named `de_DE.utf8` for encoding `UTF8` that has both `LC_COLLATE` and `LC_CTYPE` set to `de_DE.utf8`. It will also create a collation with the `.utf8` tag stripped off the name. So you could also use the collation under the name `de_DE`, which is less cumbersome to write and makes the name less encoding-dependent. Note that, nevertheless, the initial set of collation names is platform-dependent.
@@ -160,9 +163,9 @@ SELECT * FROM test1 ORDER BY a || b COLLATE "fr_FR";
 SELECT a COLLATE "C" < b COLLATE "POSIX" FROM test1;
 ```
  will draw an error even though the `C` and `POSIX` collations have identical behaviors. Mixing stripped and non-stripped collation names is therefore not recommended.
+  <a id="collation-managing-predefined-icu"></a>
 
-
-##### ICU Collations { #collation-managing-predefined-icu }
+##### ICU Collations
 
 
  With ICU, it is not sensible to enumerate all possible locale names. ICU uses a particular naming system for locales, but there are many more ways to name a locale than there are actually distinct locales. `initdb` uses the ICU APIs to extract a set of distinct locales to populate the initial set of collations. Collations provided by ICU are created in the SQL environment with names in BCP 47 language tag format, with a “private use” extension `-x-icu` appended, to distinguish them from libc locales.
@@ -188,18 +191,18 @@ SELECT a COLLATE "C" < b COLLATE "POSIX" FROM test1;
 
 
  Some (less frequently used) encodings are not supported by ICU. When the database encoding is one of these, ICU collation entries in `pg_collation` are ignored. Attempting to use one will draw an error along the lines of “collation "de-x-icu" for encoding "WIN874" does not exist”.
+   <a id="collation-create"></a>
 
-
-#### Creating New Collation Objects { #collation-create }
+#### Creating New Collation Objects
 
 
  If the standard and predefined collations are not sufficient, users can create their own collation objects using the SQL command [sql-createcollation](../../reference/sql-commands/create-collation.md#sql-createcollation).
 
 
  The standard and predefined collations are in the schema `pg_catalog`, like all predefined objects. User-defined collations should be created in user schemas. This also ensures that they are saved by `pg_dump`.
+ <a id="collation-managing-create-libc"></a>
 
-
-##### libc Collations { #collation-managing-create-libc }
+##### libc Collations
 
 
  New libc collations can be created like this:
@@ -212,9 +215,9 @@ CREATE COLLATION german (provider = libc, locale = 'de_DE');
 
 
  Since the predefined libc collations already include all collations defined in the operating system when the database instance is initialized, it is not often necessary to manually create new ones. Reasons might be if a different naming system is desired (in which case see also [Copying Collations](#collation-copy)) or if the operating system has been upgraded to provide new locale definitions (in which case see also [`pg_import_system_collations()`](../../the-sql-language/functions-and-operators/system-administration-functions.md#functions-admin-collation)).
+  <a id="collation-managing-create-icu"></a>
 
-
-##### ICU Collations { #collation-managing-create-icu }
+##### ICU Collations
 
 
  ICU collations can be created like:
@@ -227,9 +230,9 @@ CREATE COLLATION german (provider = icu, locale = 'de-DE');
 
 
  New ICU collations can customize collation behavior extensively by including collation attributes in the language tag. See [ICU Custom Collations](#icu-custom-collations) for details and examples.
+  <a id="collation-copy"></a>
 
-
-##### Copying Collations { #collation-copy }
+##### Copying Collations
 
 
  The command [sql-createcollation](../../reference/sql-commands/create-collation.md#sql-createcollation) can also be used to create a new collation from an existing collation, which can be useful to be able to use operating-system-independent collation names in applications, create compatibility names, or use an ICU-provided collation under a more readable name. For example:
@@ -240,8 +243,9 @@ CREATE COLLATION german FROM "de_DE";
 CREATE COLLATION french FROM "fr-x-icu";
 ```
 
+   <a id="collation-nondeterministic"></a>
 
-#### Nondeterministic Collations { #collation-nondeterministic }
+#### Nondeterministic Collations
 
 
  A collation is either *deterministic* or *nondeterministic*. A deterministic collation uses deterministic comparisons, which means that it considers strings to be equal only if they consist of the same byte sequence. Nondeterministic comparison may determine strings to be equal even if they consist of different bytes. Typical situations include case-insensitive comparison, accent-insensitive comparison, as well as comparison of strings in different Unicode normal forms. It is up to the collation provider to actually implement such insensitive comparisons; the deterministic flag only determines whether ties are to be broken using bytewise comparison. See also [Unicode Technical Standard 10](https://www.unicode.org/reports/tr10) for more information on the terminology.
@@ -268,9 +272,9 @@ CREATE COLLATION ignore_accents (provider = icu, locale = 'und-u-ks-level1-kc-tr
 !!! tip
 
     To deal with text in different Unicode normalization forms, it is also an option to use the functions/expressions `normalize` and `is normalized` to preprocess or check the strings, instead of using nondeterministic collations. There are different trade-offs for each approach.
+   <a id="icu-custom-collations"></a>
 
-
-### ICU Custom Collations { #icu-custom-collations }
+### ICU Custom Collations
 
 
  ICU allows extensive control over collation behavior by defining new collations with collation settings as a part of the language tag. These settings can modify the collation order to suit a variety of needs. For instance:
@@ -292,18 +296,17 @@ SELECT 'id-45' < 'id-123' COLLATE num_ignore_punct; -- true
 SELECT 'w;x*y-z' = 'wxyz' COLLATE num_ignore_punct; -- true
 ```
  Many of the available options are described in [Collation Settings for an ICU Locale](#icu-collation-settings), or see [External References for ICU](#icu-external-references) for more details.
+ <a id="icu-collation-comparison-levels"></a>
 
-
-#### ICU Comparison Levels { #icu-collation-comparison-levels }
+#### ICU Comparison Levels
 
 
  Comparison of two strings (collation) in ICU is determined by a multi-level process, where textual features are grouped into "levels". Treatment of each level is controlled by the [collation settings](#icu-collation-settings-table). Higher levels correspond to finer textual features.
 
 
  [ICU Collation Levels](#icu-collation-levels) shows which textual feature differences are considered significant when determining equality at the given level. The Unicode character `U+2063` is an invisible separator, and as seen in the table, is ignored for at all levels of comparison less than `identic`.
+ <a id="icu-collation-levels"></a>
 
-
-<a id="icu-collation-levels"></a>
 **Table: ICU Collation Levels**
 
 | Level | Description | `'f' = 'f'` | `'ab' = U&'a\2063b'` | `'x-y' = 'x_y'` | `'g' = 'G'` | `'n' = 'ñ'` | `'y' = 'z'` |
@@ -316,9 +319,9 @@ SELECT 'w;x*y-z' = 'wxyz' COLLATE num_ignore_punct; -- true
 
 
  At every level, even with full normalization off, basic normalization is performed. For example, `'á'` may be composed of the code points `U&'\0061\0301'` or the single code point `U&'\00E1'`, and those sequences will be considered equal even at the `identic` level. To treat any difference in code point representation as distinct, use a collation created with `deterministic` set to `true`.
+ <a id="icu-collation-level-examples"></a>
 
-
-##### Collation Level Examples { #icu-collation-level-examples }
+##### Collation Level Examples
 
 
 ```sql
@@ -335,15 +338,14 @@ SELECT 'ab' = U&'a\2063b' COLLATE identic; -- false
 SELECT 'x-y' = 'x_y' COLLATE level3; -- true
 SELECT 'x-y' = 'x_y' COLLATE level4; -- false
 ```
+   <a id="icu-collation-settings"></a>
 
-
-#### Collation Settings for an ICU Locale { #icu-collation-settings }
+#### Collation Settings for an ICU Locale
 
 
  [ICU Collation Settings](#icu-collation-settings-table) shows the available collation settings, which can be used as part of a language tag to customize a collation.
+ <a id="icu-collation-settings-table"></a>
 
-
-<a id="icu-collation-settings-table"></a>
 **Table: ICU Collation Settings**
 
 <table>
@@ -429,9 +431,9 @@ SELECT 'x-y' = 'x_y' COLLATE level4; -- false
 !!! note
 
     For many collation settings, you must create the collation with `deterministic` set to `false` for the setting to have the desired effect (see [Nondeterministic Collations](#collation-nondeterministic)). Additionally, some settings only take effect when the key `ka` is set to `shifted` (see [ICU Collation Settings](#icu-collation-settings-table)).
+  <a id="icu-locale-examples"></a>
 
-
-#### Collation Settings Examples { #icu-locale-examples }
+#### Collation Settings Examples
 
 
 <a id="collation-managing-create-icu-de-u-co-phonebk-x-icu"></a>
@@ -454,9 +456,9 @@ SELECT 'x-y' = 'x_y' COLLATE level4; -- false
 
 `CREATE COLLATION special (provider = icu, locale = 'en-u-kf-upper-kr-grek-latn');`
 :   Combines both of the above options.
+  <a id="icu-tailoring-rules"></a>
 
-
-#### ICU Tailoring Rules { #icu-tailoring-rules }
+#### ICU Tailoring Rules
 
 
  If the options provided by the collation settings shown above are not sufficient, the order of collation elements can be changed with tailoring rules, whose syntax is detailed at [https://unicode-org.github.io/icu/userguide/collation/customization/](https://unicode-org.github.io/icu/userguide/collation/customization/).
@@ -500,8 +502,9 @@ ORDER BY c COLLATE ebcdic;
  2
 ```
 
+  <a id="icu-external-references"></a>
 
-#### External References for ICU { #icu-external-references }
+#### External References for ICU
 
 
  This section ([ICU Custom Collations](#icu-custom-collations)) is only a brief overview of ICU behavior and language tags. Refer to the following documents for technical details, additional options, and new behavior:

@@ -1,4 +1,6 @@
-## Declarations { #plpgsql-declarations }
+<a id="plpgsql-declarations"></a>
+
+## Declarations
 
 
  All variables used in a block must be declared in the declarations section of the block. (The only exceptions are that the loop variable of a `FOR` loop iterating over a range of integer values is automatically declared as an integer variable, and likewise the loop variable of a `FOR` loop iterating over a cursor's result is automatically declared as a record variable.)
@@ -51,8 +53,9 @@ DECLARE
   y integer := x + 1;
 ```
 
+ <a id="plpgsql-declaration-parameters"></a>
 
-### Declaring Function Parameters { #plpgsql-declaration-parameters }
+### Declaring Function Parameters
 
 
  Parameters passed to functions are named with the identifiers `$1`, `$2`, etc. Optionally, aliases can be declared for <code>$</code><em>n</em> parameter names for increased readability. Either the alias or the numeric identifier can then be used to refer to the parameter value.
@@ -242,9 +245,9 @@ $$ LANGUAGE plpgsql;
 SELECT add_three_values(1, 2, 4.7);
 ```
  will work, automatically promoting the integer inputs to numeric. The function using `anyelement` would require you to cast the three inputs to the same type manually.
+  <a id="plpgsql-declaration-alias"></a>
 
-
-### `ALIAS` { #plpgsql-declaration-alias }
+### `ALIAS`
 
 
 ```
@@ -267,9 +270,9 @@ DECLARE
 
 
  Since `ALIAS` creates two different ways to name the same object, unrestricted use can be confusing. It's best to use it only for the purpose of overriding predetermined names.
+  <a id="plpgsql-declaration-type"></a>
 
-
-### Copying Types { #plpgsql-declaration-type }
+### Copying Types
 
 
 ```
@@ -301,9 +304,9 @@ user_ids users.user_id%TYPE ARRAY[4];  -- equivalent to the above
 
 
  `%TYPE` is particularly valuable in polymorphic functions, since the data types needed for internal variables can change from one call to the next. Appropriate variables can be created by applying `%TYPE` to the function's arguments or result placeholders.
+  <a id="plpgsql-declaration-rowtypes"></a>
 
-
-### Row Types { #plpgsql-declaration-rowtypes }
+### Row Types
 
 
 ```
@@ -341,8 +344,9 @@ $$ LANGUAGE plpgsql;
 SELECT merge_fields(t.*) FROM table1 t WHERE ... ;
 ```
 
+  <a id="plpgsql-declaration-records"></a>
 
-### Record Types { #plpgsql-declaration-records }
+### Record Types
 
 
 ```
@@ -355,9 +359,9 @@ NAME RECORD;
 
 
  Note that `RECORD` is not a true data type, only a placeholder. One should also realize that when a PL/pgSQL function is declared to return type `record`, this is not quite the same concept as a record variable, even though such a function might use a record variable to hold its result. In both cases the actual row structure is unknown when the function is written, but for a function returning `record` the actual structure is determined when the calling query is parsed, whereas a record variable can change its row structure on-the-fly.
+  <a id="plpgsql-declaration-collation"></a>
 
-
-### Collation of PL/pgSQL Variables { #plpgsql-declaration-collation }
+### Collation of PL/pgSQL Variables
 
 
  When a PL/pgSQL function has one or more parameters of collatable data types, a collation is identified for each function call depending on the collations assigned to the actual arguments, as described in [Collation Support](../../server-administration/localization/collation-support.md#collation). If a collation is successfully identified (i.e., there are no conflicts of implicit collations among the arguments) then all the collatable parameters are treated as having that collation implicitly. This will affect the behavior of collation-sensitive operations within the function. For example, consider

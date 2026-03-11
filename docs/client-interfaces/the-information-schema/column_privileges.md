@@ -1,4 +1,6 @@
-## `column_privileges` { #infoschema-column-privileges }
+<a id="infoschema-column-privileges"></a>
+
+## `column_privileges`
 
 
  The view `column_privileges` identifies all privileges granted on columns to a currently enabled role or by a currently enabled role. There is one row for each combination of column, grantor, and grantee.

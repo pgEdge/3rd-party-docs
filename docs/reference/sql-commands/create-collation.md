@@ -1,4 +1,6 @@
-# CREATE COLLATION { #sql-createcollation }
+<a id="sql-createcollation"></a>
+
+# CREATE COLLATION
 
 define a new collation
 
@@ -18,9 +20,9 @@ CREATE COLLATION [ IF NOT EXISTS ] NAME (
 )
 CREATE COLLATION [ IF NOT EXISTS ] NAME FROM EXISTING_COLLATION
 ```
+ <a id="sql-createcollation-description"></a>
 
-
-## Description { #sql-createcollation-description }
+## Description
 
 
  `CREATE COLLATION` defines a new collation using the specified operating system locale settings, or by copying an existing collation.
@@ -73,9 +75,9 @@ CREATE COLLATION [ IF NOT EXISTS ] NAME FROM EXISTING_COLLATION
 
 *existing_collation*
 :   The name of an existing collation to copy. The new collation will have the same properties as the existing one, but it will be an independent object.
+ <a id="sql-createcollation-notes"></a>
 
-
-## Notes { #sql-createcollation-notes }
+## Notes
 
 
  `CREATE COLLATION` takes a `SHARE ROW EXCLUSIVE` lock, which is self-conflicting, on the `pg_collation` system catalog, so only one `CREATE COLLATION` command can run at a time.
@@ -88,9 +90,9 @@ CREATE COLLATION [ IF NOT EXISTS ] NAME FROM EXISTING_COLLATION
 
 
  When using the `libc` collation provider, the locale must be applicable to the current database encoding. See [sql-createdatabase](create-database.md#sql-createdatabase) for the precise rules.
+ <a id="sql-createcollation-examples"></a>
 
-
-## Examples { #sql-createcollation-examples }
+## Examples
 
 
  To create a collation from the operating system locale `fr_FR.utf8` (assuming the current database encoding is `UTF8`):
@@ -125,13 +127,13 @@ CREATE COLLATION custom (provider = icu, locale = 'und', rules = '&V << w <<< W'
 CREATE COLLATION german FROM "de_DE";
 ```
  This can be convenient to be able to use operating-system-independent collation names in applications.
+ <a id="sql-createcollation-compat"></a>
 
-
-## Compatibility { #sql-createcollation-compat }
+## Compatibility
 
 
  There is a `CREATE COLLATION` statement in the SQL standard, but it is limited to copying an existing collation. The syntax to create a new collation is a PostgreSQL extension.
+ <a id="sql-createcollation-seealso"></a>
 
-
-## See Also { #sql-createcollation-seealso }
+## See Also
   [sql-altercollation](alter-collation.md#sql-altercollation), [sql-dropcollation](drop-collation.md#sql-dropcollation)

@@ -1,10 +1,11 @@
-## Binary Data Types { #datatype-binary }
+<a id="datatype-binary"></a>
+
+## Binary Data Types
 
 
  The `bytea` data type allows storage of binary strings; see [Binary Data Types](#datatype-binary-table).
+ <a id="datatype-binary-table"></a>
 
-
-<a id="datatype-binary-table"></a>
 **Table: Binary Data Types**
 
 | Name | Storage Size | Description |
@@ -19,9 +20,9 @@
 
 
  The SQL standard defines a different binary string type, called `BLOB` or `BINARY LARGE OBJECT`. The input format is different from `bytea`, but the provided functions and operators are mostly the same.
+ <a id="datatype-binary-bytea-hex-format"></a>
 
-
-### `bytea` Hex Format { #datatype-binary-bytea-hex-format }
+### `bytea` Hex Format
 
 
  The “hex” format encodes binary data as 2 hexadecimal digits per byte, most significant nibble first. The entire string is preceded by the sequence `\x` (to distinguish it from the escape format). In some contexts, the initial backslash may need to be escaped by doubling it (see [String Constants](../sql-syntax/lexical-structure.md#sql-syntax-strings)). For input, the hexadecimal digits can be either upper or lower case, and whitespace is permitted between digit pairs (but not within a digit pair nor in the starting `\x` sequence). The hex format is compatible with a wide range of external applications and protocols, and it tends to be faster to convert than the escape format, so its use is preferred.
@@ -39,17 +40,17 @@ SELECT '\xDEADBEEF'::bytea;
  \xdeadbeef
 ```
 
+  <a id="datatype-binary-bytea-escape-format"></a>
 
-### `bytea` Escape Format { #datatype-binary-bytea-escape-format }
+### `bytea` Escape Format
 
 
  The “escape” format is the traditional PostgreSQL format for the `bytea` type. It takes the approach of representing a binary string as a sequence of ASCII characters, while converting those bytes that cannot be represented as an ASCII character into special escape sequences. If, from the point of view of the application, representing bytes as characters makes sense, then this representation can be convenient. But in practice it is usually confusing because it fuzzes up the distinction between binary strings and character strings, and also the particular escape mechanism that was chosen is somewhat unwieldy. Therefore, this format should probably be avoided for most new applications.
 
 
  When entering `bytea` values in escape format, octets of certain values *must* be escaped, while all octet values *can* be escaped. In general, to escape an octet, convert it into its three-digit octal value and precede it by a backslash. Backslash itself (octet decimal value 92) can alternatively be represented by double backslashes. [`bytea` Literal Escaped Octets](#datatype-binary-sqlesc) shows the characters that must be escaped, and gives the alternative escape sequences where applicable.
+ <a id="datatype-binary-sqlesc"></a>
 
-
-<a id="datatype-binary-sqlesc"></a>
 **Table: `bytea` Literal Escaped Octets**
 
 | Decimal Octet Value | Description | Escaped Input Representation | Example | Hex Representation |
@@ -81,9 +82,8 @@ SELECT 'abc \153\154\155 \052\251\124'::bytea;
  abc klm *\251T
 ```
  The octet with decimal value 92 (backslash) is doubled in the output. Details are in [`bytea` Output Escaped Octets](#datatype-binary-resesc).
+ <a id="datatype-binary-resesc"></a>
 
-
-<a id="datatype-binary-resesc"></a>
 **Table: `bytea` Output Escaped Octets**
 
 | Decimal Octet Value | Description | Escaped Output Representation | Example | Output Result |

@@ -1,4 +1,6 @@
-# The SQL Language { #tutorial-sql }
+<a id="tutorial-sql"></a>
+
+# The SQL Language
 
 - [Introduction](introduction.md#tutorial-sql-intro)
 - [Concepts](concepts.md#tutorial-concepts)

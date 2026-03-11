@@ -1,4 +1,6 @@
-## A Database Login Event Trigger Example { #event-trigger-database-login-example }
+<a id="event-trigger-database-login-example"></a>
+
+## A Database Login Event Trigger Example
 
 
  The event trigger on the `login` event can be useful for logging user logins, for verifying the connection and assigning roles according to current circumstances, or for session data initialization. It is very important that any event trigger using the `login` event checks whether or not the database is in recovery before performing any writes. Writing to a standby server will make it inaccessible.

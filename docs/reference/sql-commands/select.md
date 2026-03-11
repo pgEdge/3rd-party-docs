@@ -1,4 +1,6 @@
-# SELECT { #sql-select }
+<a id="sql-select"></a>
+
+# SELECT
 
 retrieve rows from a table or view
 
@@ -78,9 +80,9 @@ TABLE [ ONLY ] TABLE_NAME [ * ]
 
 
 ## Parameters
+  <a id="sql-with"></a>
 
-
-### `WITH` Clause { #sql-with }
+### `WITH` Clause
 
 
  The `WITH` clause allows you to specify one or more subqueries that can be referenced by name in the primary query. The subqueries effectively act as temporary tables or views for the duration of the primary query. Each subquery can be a `SELECT`, `TABLE`, `VALUES`, `INSERT`, `UPDATE`, `DELETE`, or `MERGE` statement. When writing a data-modifying statement (`INSERT`, `UPDATE`, `DELETE`, or `MERGE`) in `WITH`, it is usual to include a `RETURNING` clause. It is the output of `RETURNING`, *not* the underlying table that the statement modifies, that forms the temporary table that is read by the primary query. If `RETURNING` is omitted, the statement is still executed, but it produces no output so it cannot be referenced as a table by the primary query.
@@ -126,9 +128,9 @@ NON_RECURSIVE_TERM UNION [ ALL | DISTINCT ] RECURSIVE_TERM
 
 
  See [`WITH` Queries (Common Table Expressions)](../../the-sql-language/queries/with-queries-common-table-expressions.md#queries-with) for additional information.
+  <a id="sql-from"></a>
 
-
-### `FROM` Clause { #sql-from }
+### `FROM` Clause
 
 
  The `FROM` clause specifies one or more source tables for the `SELECT`. If multiple sources are specified, the result is the Cartesian product (cross join) of all the sources. But usually qualification conditions are added (via `WHERE`) to restrict the returned rows to a small subset of the Cartesian product.
@@ -230,8 +232,9 @@ NON_RECURSIVE_TERM UNION [ ALL | DISTINCT ] RECURSIVE_TERM
      The column source table(s) must be `INNER` or `LEFT` joined to the `LATERAL` item, else there would not be a well-defined set of rows from which to compute each set of rows for the `LATERAL` item. Thus, although a construct such as <em>X</em><code> RIGHT JOIN
             LATERAL </code><em>Y</em> is syntactically valid, it is not actually allowed for *Y* to reference *X*.
 
+  <a id="sql-where"></a>
 
-### `WHERE` Clause { #sql-where }
+### `WHERE` Clause
 
 
  The optional `WHERE` clause has the general form
@@ -241,9 +244,9 @@ NON_RECURSIVE_TERM UNION [ ALL | DISTINCT ] RECURSIVE_TERM
 WHERE CONDITION
 ```
  where *condition* is any expression that evaluates to a result of type `boolean`. Any row that does not satisfy this condition will be eliminated from the output. A row satisfies the condition if it returns true when the actual row values are substituted for any variable references.
+  <a id="sql-groupby"></a>
 
-
-### `GROUP BY` Clause { #sql-groupby }
+### `GROUP BY` Clause
 
 
  The optional `GROUP BY` clause has the general form
@@ -270,9 +273,9 @@ GROUP BY [ ALL | DISTINCT ] GROUPING_ELEMENT [, ...]
 
 
  Currently, `FOR NO KEY UPDATE`, `FOR UPDATE`, `FOR SHARE` and `FOR KEY SHARE` cannot be specified with `GROUP BY`.
+  <a id="sql-having"></a>
 
-
-### `HAVING` Clause { #sql-having }
+### `HAVING` Clause
 
 
  The optional `HAVING` clause has the general form
@@ -291,9 +294,9 @@ HAVING CONDITION
 
 
  Currently, `FOR NO KEY UPDATE`, `FOR UPDATE`, `FOR SHARE` and `FOR KEY SHARE` cannot be specified with `HAVING`.
+  <a id="sql-window"></a>
 
-
-### `WINDOW` Clause { #sql-window }
+### `WINDOW` Clause
 
 
  The optional `WINDOW` clause has the general form
@@ -368,9 +371,9 @@ EXCLUDE NO OTHERS
 
 
  Window functions are described in detail in [Window Functions](../../tutorial/advanced-features/window-functions.md#tutorial-window), [Window Function Calls](../../the-sql-language/sql-syntax/value-expressions.md#syntax-window-functions), and [Window Function Processing](../../the-sql-language/queries/table-expressions.md#queries-window).
+  <a id="sql-select-list"></a>
 
-
-### `SELECT` List { #sql-select-list }
+### `SELECT` List
 
 
  The `SELECT` list (between the key words `SELECT` and `FROM`) specifies expressions that form the output rows of the `SELECT` statement. The expressions can (and usually do) refer to columns computed in the `FROM` clause.
@@ -391,9 +394,9 @@ EXCLUDE NO OTHERS
 !!! note
 
     PostgreSQL versions before 9.6 did not provide any guarantees about the timing of evaluation of output expressions versus sorting and limiting; it depended on the form of the chosen query plan.
+  <a id="sql-distinct"></a>
 
-
-### `DISTINCT` Clause { #sql-distinct }
+### `DISTINCT` Clause
 
 
  If `SELECT DISTINCT` is specified, all duplicate rows are removed from the result set (one row is kept from each group of duplicates). `SELECT ALL` specifies the opposite: all rows are kept; that is the default.
@@ -414,9 +417,9 @@ SELECT DISTINCT ON (location) location, time, report
 
 
  Currently, `FOR NO KEY UPDATE`, `FOR UPDATE`, `FOR SHARE` and `FOR KEY SHARE` cannot be specified with `DISTINCT`.
+  <a id="sql-union"></a>
 
-
-### `UNION` Clause { #sql-union }
+### `UNION` Clause
 
 
  The `UNION` clause has this general form:
@@ -438,9 +441,9 @@ SELECT_STATEMENT UNION [ ALL | DISTINCT ] SELECT_STATEMENT
 
 
  Currently, `FOR NO KEY UPDATE`, `FOR UPDATE`, `FOR SHARE` and `FOR KEY SHARE` cannot be specified either for a `UNION` result or for any input of a `UNION`.
+  <a id="sql-intersect"></a>
 
-
-### `INTERSECT` Clause { #sql-intersect }
+### `INTERSECT` Clause
 
 
  The `INTERSECT` clause has this general form:
@@ -462,9 +465,9 @@ SELECT_STATEMENT INTERSECT [ ALL | DISTINCT ] SELECT_STATEMENT
 
 
  Currently, `FOR NO KEY UPDATE`, `FOR UPDATE`, `FOR SHARE` and `FOR KEY SHARE` cannot be specified either for an `INTERSECT` result or for any input of an `INTERSECT`.
+  <a id="sql-except"></a>
 
-
-### `EXCEPT` Clause { #sql-except }
+### `EXCEPT` Clause
 
 
  The `EXCEPT` clause has this general form:
@@ -486,9 +489,9 @@ SELECT_STATEMENT EXCEPT [ ALL | DISTINCT ] SELECT_STATEMENT
 
 
  Currently, `FOR NO KEY UPDATE`, `FOR UPDATE`, `FOR SHARE` and `FOR KEY SHARE` cannot be specified either for an `EXCEPT` result or for any input of an `EXCEPT`.
+  <a id="sql-orderby"></a>
 
-
-### `ORDER BY` Clause { #sql-orderby }
+### `ORDER BY` Clause
 
 
  The optional `ORDER BY` clause has this general form:
@@ -528,9 +531,9 @@ SELECT name FROM distributors ORDER BY code;
 
 
  Character-string data is sorted according to the collation that applies to the column being sorted. That can be overridden at need by including a `COLLATE` clause in the *expression*, for example `ORDER BY mycolumn COLLATE "en_US"`. For more information see [Collation Expressions](../../the-sql-language/sql-syntax/value-expressions.md#sql-syntax-collate-exprs) and [Collation Support](../../server-administration/localization/collation-support.md#collation).
+  <a id="sql-limit"></a>
 
-
-### `LIMIT` Clause { #sql-limit }
+### `LIMIT` Clause
 
 
  The `LIMIT` clause consists of two independent sub-clauses:
@@ -563,9 +566,9 @@ FETCH { FIRST | NEXT } [ COUNT ] { ROW | ROWS } { ONLY | WITH TIES }
 
 
  It is even possible for repeated executions of the same `LIMIT` query to return different subsets of the rows of a table, if there is not an `ORDER BY` to enforce selection of a deterministic subset. Again, this is not a bug; determinism of the results is simply not guaranteed in such a case.
+  <a id="sql-for-update-share"></a>
 
-
-### The Locking Clause { #sql-for-update-share }
+### The Locking Clause
 
 
  `FOR UPDATE`, `FOR NO KEY UPDATE`, `FOR SHARE` and `FOR KEY SHARE` are *locking clauses*; they affect how `SELECT` locks rows as they are obtained from the table.
@@ -640,9 +643,9 @@ ROLLBACK TO s;
 
 
      At the `REPEATABLE READ` or `SERIALIZABLE` transaction isolation level this would cause a serialization failure (with an `SQLSTATE` of `'40001'`), so there is no possibility of receiving rows out of order under these isolation levels.
+  <a id="sql-table"></a>
 
-
-### `TABLE` Command { #sql-table }
+### `TABLE` Command
 
 
  The command

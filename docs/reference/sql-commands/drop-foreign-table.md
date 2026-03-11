@@ -1,4 +1,6 @@
-# DROP FOREIGN TABLE { #sql-dropforeigntable }
+<a id="sql-dropforeigntable"></a>
+
+# DROP FOREIGN TABLE
 
 remove a foreign table
 

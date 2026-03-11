@@ -1,4 +1,6 @@
-# PL/Perl — Perl Procedural Language { #plperl }
+<a id="plperl"></a>
+
+# PL/Perl — Perl Procedural Language
 
  PL/Perl is a loadable procedural language that enables you to write PostgreSQL functions and procedures in the [Perl programming language](https://www.perl.org).
 

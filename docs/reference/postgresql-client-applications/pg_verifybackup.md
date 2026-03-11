@@ -1,4 +1,6 @@
-# pg_verifybackup { #app-pgverifybackup }
+<a id="app-pgverifybackup"></a>
+
+# pg_verifybackup
 
 verify the integrity of a base backup of a PostgreSQL cluster
 

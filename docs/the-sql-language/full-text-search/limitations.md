@@ -1,4 +1,6 @@
-## Limitations { #textsearch-limitations }
+<a id="textsearch-limitations"></a>
+
+## Limitations
 
 
  The current limitations of PostgreSQL's text search features are:

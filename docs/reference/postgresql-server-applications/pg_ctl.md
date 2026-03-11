@@ -1,4 +1,6 @@
-# pg_ctl { #app-pg-ctl }
+<a id="app-pg-ctl"></a>
+
+# pg_ctl
 
 initialize, start, stop, or control a PostgreSQL server
 
@@ -67,9 +69,9 @@ pg_ctlregister [-D DATADIR] [-N SERVICENAME] [-U USERNAME] [-P PASSWORD] [-S
 ```
 pg_ctlunregister [-N SERVICENAME]
 ```
+ <a id="app-pg-ctl-description"></a>
 
-
-## Description { #app-pg-ctl-description }
+## Description
 
 
  pg_ctl is a utility for initializing a PostgreSQL database cluster, starting, stopping, or restarting the PostgreSQL database server ([app-postgres](postgres.md#app-postgres)), or displaying the status of a running server. Although the server can be started manually, pg_ctl encapsulates tasks such as redirecting log output and properly detaching from the terminal and process group. It also provides convenient options for controlled shutdown.
@@ -106,9 +108,9 @@ pg_ctlunregister [-N SERVICENAME]
 
 
  `unregister` mode unregisters a system service on Microsoft Windows. This undoes the effects of the `register` command.
+ <a id="app-pg-ctl-options"></a>
 
-
-## Options { #app-pg-ctl-options }
+## Options
 
 
 `-c`, `--core-files`
@@ -173,9 +175,9 @@ pg_ctlunregister [-N SERVICENAME]
 
 
  If an option is specified that is valid, but not relevant to the selected operating mode, pg_ctl ignores it.
+ <a id="app-pg-ctl-windows-options"></a>
 
-
-### Options for Windows { #app-pg-ctl-windows-options }
+### Options for Windows
 
 
 <code>-e </code><em>source</em>
@@ -218,12 +220,12 @@ pg_ctlunregister [-N SERVICENAME]
 
 `postmaster.opts`
 :   If this file exists in the data directory, pg_ctl (in `restart` mode) will pass the contents of the file as options to postgres, unless overridden by the `-o` option. The contents of this file are also displayed in `status` mode.
+ <a id="r1-app-pgctl-2"></a>
 
+## Examples
+  <a id="r2-app-pgctl-3"></a>
 
-## Examples { #r1-app-pgctl-2 }
-
-
-### Starting the Server { #r2-app-pgctl-3 }
+### Starting the Server
 
 
  To start the server, waiting until the server is accepting connections:
@@ -240,9 +242,9 @@ $ pg_ctl start
 
 $ pg_ctl -o "-F -p 5433" start
 ```
+  <a id="r2-app-pgctl-4"></a>
 
-
-### Stopping the Server { #r2-app-pgctl-4 }
+### Stopping the Server
 
 
  To stop the server, use:
@@ -257,9 +259,9 @@ $ pg_ctl stop
 
 $ pg_ctl stop -m smart
 ```
+  <a id="r2-app-pgctl-5"></a>
 
-
-### Restarting the Server { #r2-app-pgctl-5 }
+### Restarting the Server
 
 
  Restarting the server is almost equivalent to stopping the server and starting it again, except that by default, `pg_ctl` saves and reuses the command line options that were passed to the previously-running instance. To restart the server using the same options as before, use:
@@ -276,9 +278,9 @@ $ pg_ctl restart
 
 $ pg_ctl -o "-F -p 5433" restart
 ```
+  <a id="r2-app-pgctl-6"></a>
 
-
-### Showing the Server Status { #r2-app-pgctl-6 }
+### Showing the Server Status
 
 
  Here is sample status output from pg_ctl:

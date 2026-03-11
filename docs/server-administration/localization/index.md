@@ -1,4 +1,6 @@
-# Localization { #charset }
+<a id="charset"></a>
+
+# Localization
 
  This chapter describes the available localization features from the point of view of the administrator. PostgreSQL supports two localization facilities:
 

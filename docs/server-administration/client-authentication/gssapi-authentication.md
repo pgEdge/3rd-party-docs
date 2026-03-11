@@ -1,4 +1,6 @@
-## GSSAPI Authentication { #gssapi-auth }
+<a id="gssapi-auth"></a>
+
+## GSSAPI Authentication
 
 
  GSSAPI is an industry-standard protocol for secure authentication defined in [RFC 2743](https://datatracker.ietf.org/doc/html/rfc2743). PostgreSQL supports GSSAPI for authentication, communications encryption, or both. GSSAPI provides automatic authentication (single sign-on) for systems that support it. The authentication itself is secure. If GSSAPI encryption or SSL encryption is used, the data sent along the database connection will be encrypted; otherwise, it will not.

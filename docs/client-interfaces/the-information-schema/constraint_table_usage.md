@@ -1,4 +1,6 @@
-## `constraint_table_usage` { #infoschema-constraint-table-usage }
+<a id="infoschema-constraint-table-usage"></a>
+
+## `constraint_table_usage`
 
 
  The view `constraint_table_usage` identifies all tables in the current database that are used by some constraint and are owned by a currently enabled role. (This is different from the view `table_constraints`, which identifies all table constraints along with the table they are defined on.) For a foreign key constraint, this view identifies the table that the foreign key references. For a unique or primary key constraint, this view simply identifies the table the constraint belongs to. Check constraints and not-null constraints are not included in this view.

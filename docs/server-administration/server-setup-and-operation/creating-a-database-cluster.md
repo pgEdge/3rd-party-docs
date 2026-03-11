@@ -1,4 +1,6 @@
-## Creating a Database Cluster { #creating-cluster }
+<a id="creating-cluster"></a>
+
+## Creating a Database Cluster
 
 
  Before you can do anything, you must initialize a database storage area on disk. We call this a *database cluster*. (The SQL standard uses the term catalog cluster.) A database cluster is a collection of databases that is managed by a single instance of a running database server. After initialization, a database cluster will contain a database named `postgres`, which is meant as a default database for use by utilities, users and third party applications. The database server itself does not require the `postgres` database to exist, but many external utility programs assume it exists. There are two more databases created within each cluster during initialization, named `template1` and `template0`. As the names suggest, these will be used as templates for subsequently-created databases; they should not be used for actual work. (See [Managing Databases](../managing-databases/index.md#managing-databases) for information about creating new databases within a cluster.)
@@ -63,21 +65,21 @@ postgres$ initdb -D /usr/local/pgsql/data
 
 
  Non-`C` and non-`POSIX` locales rely on the operating system's collation library for character set ordering. This controls the ordering of keys stored in indexes. For this reason, a cluster cannot switch to an incompatible collation library version, either through snapshot restore, binary streaming replication, a different operating system, or an operating system upgrade.
+ <a id="creating-cluster-mount-points"></a>
 
-
-### Use of Secondary File Systems { #creating-cluster-mount-points }
+### Use of Secondary File Systems
 
 
  Many installations create their database clusters on file systems (volumes) other than the machine's “root” volume. If you choose to do this, it is not advisable to try to use the secondary volume's topmost directory (mount point) as the data directory. Best practice is to create a directory within the mount-point directory that is owned by the PostgreSQL user, and then create the data directory within that. This avoids permissions problems, particularly for operations such as pg_upgrade, and it also ensures clean failures if the secondary volume is taken offline.
+  <a id="creating-cluster-filesystem"></a>
 
-
-### File Systems { #creating-cluster-filesystem }
+### File Systems
 
 
  Generally, any file system with POSIX semantics can be used for PostgreSQL. Users prefer different file systems for a variety of reasons, including vendor support, performance, and familiarity. Experience suggests that, all other things being equal, one should not expect major performance or behavior changes merely from switching file systems or making minor file system configuration changes.
+ <a id="creating-cluster-nfs"></a>
 
-
-#### NFS { #creating-cluster-nfs }
+#### NFS
 
 
  It is possible to use an NFS file system for storing the PostgreSQL data directory. PostgreSQL does nothing special for NFS file systems, meaning it assumes NFS behaves exactly like locally-connected drives. PostgreSQL does not use any functionality that is known to have nonstandard behavior on NFS, such as file locking.

@@ -1,4 +1,6 @@
-## pg_walinspect — low-level WAL inspection { #pgwalinspect }
+<a id="pgwalinspect"></a>
+
+## pg_walinspect — low-level WAL inspection
 
 
  The `pg_walinspect` module provides SQL functions that allow you to inspect the contents of write-ahead log of a running PostgreSQL database cluster at a low level, which is useful for debugging, analytical, reporting or educational purposes. It is similar to [pgwaldump](../../reference/postgresql-server-applications/pg_waldump.md#pgwaldump), but accessible through SQL rather than a separate utility.
@@ -21,9 +23,9 @@
 
 
  By default, use of these functions is restricted to superusers and members of the `pg_read_server_files` role. Access may be granted by superusers to others using `GRANT`.
+ <a id="pgwalinspect-funcs"></a>
 
-
-### General Functions { #pgwalinspect-funcs }
+### General Functions
 
 
 <a id="pgwalinspect-funcs-pg-get-wal-record-info"></a>
@@ -149,9 +151,9 @@
 
 
      The function raises an error if *start_lsn* is not available.
+  <a id="pgwalinspect-author"></a>
 
-
-### Author { #pgwalinspect-author }
+### Author
 
 
  Bharath Rupireddy [bharath.rupireddyforpostgres@gmail.com](mailto:bharath.rupireddyforpostgres@gmail.com)

@@ -1,4 +1,6 @@
-## User Name Maps { #auth-username-maps }
+<a id="auth-username-maps"></a>
+
+## User Name Maps
 
 
  When using an external authentication system such as Ident or GSSAPI, the name of the operating system user that initiated the connection might not be the same as the database user (role) that is to be used. In this case, a user name map can be applied to map the operating system user name to a database user. To use user name mapping, specify `map`=*map-name* in the options field in `pg_hba.conf`. This option is supported for all authentication methods that receive external user names. Since different mappings might be needed for different connections, the name of the map to be used is specified in the *map-name* parameter in `pg_hba.conf` to indicate which map to use for each individual connection.
@@ -50,9 +52,8 @@ mymap   /^(.*)@otherdomain\.com$   guest
 
 
  A `pg_ident.conf` file that could be used in conjunction with the `pg_hba.conf` file in [Example `pg_hba.conf` Entries](the-pg_hba-conf-file.md#example-pg-hba.conf) is shown in [An Example `pg_ident.conf` File](#example-pg-ident.conf). In this example, anyone logged in to a machine on the 192.168 network that does not have the operating system user name `bryanh`, `ann`, or `robert` would not be granted access. Unix user `robert` would only be allowed access when he tries to connect as PostgreSQL user `bob`, not as `robert` or anyone else. `ann` would only be allowed to connect as `ann`. User `bryanh` would be allowed to connect as either `bryanh` or as `guest1`.
+ <a id="example-pg-ident.conf"></a>
 
-
-<a id="example-pg-ident.conf"></a>
 **Example: An Example `pg_ident.conf` File**
 
 

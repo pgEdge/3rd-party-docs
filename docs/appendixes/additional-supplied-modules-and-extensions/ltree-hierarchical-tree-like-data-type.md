@@ -1,13 +1,15 @@
-## ltree — hierarchical tree-like data type { #ltree }
+<a id="ltree"></a>
+
+## ltree — hierarchical tree-like data type
 
 
  This module implements a data type `ltree` for representing labels of data stored in a hierarchical tree-like structure. Extensive facilities for searching through label trees are provided.
 
 
  This module is considered “trusted”, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ <a id="ltree-definitions"></a>
 
-
-### Definitions { #ltree-definitions }
+### Definitions
 
 
  A *label* is a sequence of alphanumeric characters, underscores, and hyphens. Valid alphanumeric character ranges are dependent on the database locale. For example, in C locale, the characters `A-Za-z0-9_-` are allowed. Labels must be no more than 1000 characters long.
@@ -87,15 +89,14 @@ Europe & Russia*@ & !Transportation
 
 
  Note: `ltxtquery` allows whitespace between symbols, but `ltree` and `lquery` do not.
+  <a id="ltree-ops-funcs"></a>
 
-
-### Operators and Functions { #ltree-ops-funcs }
+### Operators and Functions
 
 
  Type `ltree` has the usual comparison operators `=`, `<>`, `<`, `>`, `<=`, `>=`. Comparison sorts in the order of a tree traversal, with the children of a node sorted by label text. In addition, the specialized operators shown in [`ltree` Operators](#ltree-op-table) are available.
+ <a id="ltree-op-table"></a>
 
-
-<a id="ltree-op-table"></a>
 **Table: `ltree` Operators**
 
 <table>
@@ -194,9 +195,8 @@ Europe & Russia*@ & !Transportation
 
 
  The available functions are shown in [`ltree` Functions](#ltree-func-table).
+ <a id="ltree-func-table"></a>
 
-
-<a id="ltree-func-table"></a>
 **Table: `ltree` Functions**
 
 <table>
@@ -260,9 +260,9 @@ Europe & Russia*@ & !Transportation
 </tr>
 </tbody>
 </table>
+  <a id="ltree-indexes"></a>
 
-
-### Indexes { #ltree-indexes }
+### Indexes
 
 
  `ltree` supports several types of indexes that can speed up the indicated operators:
@@ -306,9 +306,9 @@ CREATE INDEX path_gist_idx ON test USING GIST (array_path gist__ltree_ops(siglen
 ```
 
    Note: This index type is lossy.
+  <a id="ltree-example"></a>
 
-
-### Example { #ltree-example }
+### Example
 
 
  This example uses the following data (also available in file `contrib/ltree/ltreetest.sql` in the source distribution):
@@ -448,14 +448,15 @@ ltreetest=> SELECT ins_label(path,2,'Space') FROM test WHERE path <@ 'Top.Scienc
 (3 rows)
 ```
 
+  <a id="ltree-transforms"></a>
 
-### Transforms { #ltree-transforms }
+### Transforms
 
 
  The `ltree_plpython3u` extension implements transforms for the `ltree` type for PL/Python. If installed and specified when creating a function, `ltree` values are mapped to Python lists. (The reverse is currently not supported, however.)
+  <a id="ltree-authors"></a>
 
-
-### Authors { #ltree-authors }
+### Authors
 
 
  All work was done by Teodor Sigaev ([teodor@stack.net](mailto:teodor@stack.net)) and Oleg Bartunov ([oleg@sai.msu.su](mailto:oleg@sai.msu.su)). See [http://www.sai.msu.su/~megera/postgres/gist/](http://www.sai.msu.su/~megera/postgres/gist/) for additional information. Authors would like to thank Eugeny Rodichev for helpful discussions. Comments and bug reports are welcome.

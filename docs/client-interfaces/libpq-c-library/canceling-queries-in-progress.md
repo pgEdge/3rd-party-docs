@@ -1,7 +1,9 @@
-## Canceling Queries in Progress { #libpq-cancel }
+<a id="libpq-cancel"></a>
 
+## Canceling Queries in Progress
+    <a id="libpq-cancel-functions"></a>
 
-### Functions for Sending Cancel Requests { #libpq-cancel-functions }
+### Functions for Sending Cancel Requests
 
 
 <a id="libpq-PQcancelCreate"></a>
@@ -177,9 +179,9 @@
 
 
      This can be used to create one `PGcancelConn` for a `PGconn` and reuse it multiple times throughout the lifetime of the original `PGconn`.
+  <a id="libpq-cancel-deprecated"></a>
 
-
-### Obsolete Functions for Sending Cancel Requests { #libpq-cancel-deprecated }
+### Obsolete Functions for Sending Cancel Requests
 
 
  These functions represent older methods of sending cancel requests. Although they still work, they are deprecated due to not sending the cancel requests in an encrypted manner, even when the original connection specified `sslmode` or `gssencmode` to require encryption. Thus these older methods are heavily discouraged from being used in new code, and it is recommended to change existing code to use the new functions instead.

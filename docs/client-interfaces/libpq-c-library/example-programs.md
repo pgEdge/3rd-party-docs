@@ -1,10 +1,11 @@
-## Example Programs { #libpq-example }
+<a id="libpq-example"></a>
+
+## Example Programs
 
 
  These examples and others can be found in the directory `src/test/examples` in the source code distribution.
+ <a id="libpq-example-1"></a>
 
-
-<a id="libpq-example-1"></a>
 **Example: libpq Example Program 1**
 
 
@@ -143,9 +144,8 @@ main(int argc, char **argv)
     return 0;
 }
 ```
+  <a id="libpq-example-2"></a>
 
-
-<a id="libpq-example-2"></a>
 **Example: libpq Example Program 2**
 
 
@@ -303,9 +303,8 @@ main(int argc, char **argv)
     return 0;
 }
 ```
+  <a id="libpq-example-3"></a>
 
-
-<a id="libpq-example-3"></a>
 **Example: libpq Example Program 3**
 
 

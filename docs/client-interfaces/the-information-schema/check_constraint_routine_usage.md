@@ -1,4 +1,6 @@
-## `check_constraint_routine_usage` { #infoschema-check-constraint-routine-usage }
+<a id="infoschema-check-constraint-routine-usage"></a>
+
+## `check_constraint_routine_usage`
 
 
  The view `check_constraint_routine_usage` identifies routines (functions and procedures) that are used by a check constraint. Only those routines are shown that are owned by a currently enabled role.

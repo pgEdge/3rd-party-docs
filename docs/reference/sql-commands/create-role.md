@@ -1,4 +1,6 @@
-# CREATE ROLE { #sql-createrole }
+<a id="sql-createrole"></a>
+
+# CREATE ROLE
 
 define a new database role
 

@@ -1,4 +1,6 @@
-## Date/Time Configuration Files { #datetime-config-files }
+<a id="datetime-config-files"></a>
+
+## Date/Time Configuration Files
 
 
  Since timezone abbreviations are not well standardized, PostgreSQL provides a means to customize the set of abbreviations accepted in datetime input. There are two sources for these abbreviations:

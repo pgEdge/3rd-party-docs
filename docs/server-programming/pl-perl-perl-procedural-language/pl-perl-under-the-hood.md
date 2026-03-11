@@ -1,7 +1,9 @@
-## PL/Perl Under the Hood { #plperl-under-the-hood }
+<a id="plperl-under-the-hood"></a>
 
+## PL/Perl Under the Hood
+  <a id="plperl-config"></a>
 
-### Configuration { #plperl-config }
+### Configuration
 
 
  This section lists configuration parameters that affect PL/Perl.
@@ -48,9 +50,9 @@
 
 `plperl.use_strict` (`boolean`)
 :   When set true subsequent compilations of PL/Perl functions will have the `strict` pragma enabled. This parameter does not affect functions already compiled in the current session.
+  <a id="plperl-missing"></a>
 
-
-### Limitations and Missing Features { #plperl-missing }
+### Limitations and Missing Features
 
 
  The following features are currently missing from PL/Perl, but they would make welcome contributions.

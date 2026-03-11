@@ -1,4 +1,6 @@
-# SQL Syntax { #sql-syntax }
+<a id="sql-syntax"></a>
+
+# SQL Syntax
 
  This chapter describes the syntax of SQL. It forms the foundation for understanding the following chapters which will go into detail about how SQL commands are applied to define and modify data.
 

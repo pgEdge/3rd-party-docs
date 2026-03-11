@@ -1,4 +1,6 @@
-## `pg_shadow` { #view-pg-shadow }
+<a id="view-pg-shadow"></a>
+
+## `pg_shadow`
 
 
  The view `pg_shadow` exists for backwards compatibility: it emulates a catalog that existed in PostgreSQL before version 8.1. It shows properties of all roles that are marked as `rolcanlogin` in [`pg_authid`](../system-catalogs/pg_authid.md#catalog-pg-authid).

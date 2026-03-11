@@ -1,4 +1,6 @@
-# CREATE TRIGGER { #sql-createtrigger }
+<a id="sql-createtrigger"></a>
+
+# CREATE TRIGGER
 
 define a new trigger
 
@@ -47,9 +49,8 @@ where EVENT can be one of:
 
 
  The following table summarizes which types of triggers may be used on tables, views, and foreign tables:
+ <a id="supported-trigger-types"></a>
 
-
-<a id="supported-trigger-types"></a>
 <table>
 <thead>
 <tr>
@@ -180,9 +181,9 @@ where EVENT can be one of:
 
 *arguments*
 :   An optional comma-separated list of arguments to be provided to the function when the trigger is executed. The arguments are literal string constants. Simple names and numeric constants can be written here, too, but they will all be converted to strings. Please check the description of the implementation language of the trigger function to find out how these arguments can be accessed within the function; it might be different from normal function arguments.
+ <a id="sql-createtrigger-notes"></a>
 
-
-## Notes { #sql-createtrigger-notes }
+## Notes
 
 
  To create or replace a trigger on a table, the user must have the `TRIGGER` privilege on the table. The user must also have `EXECUTE` privilege on the trigger function.
@@ -226,9 +227,9 @@ where EVENT can be one of:
 
 
  There are a few built-in trigger functions that can be used to solve common problems without having to write your own trigger code; see [Trigger Functions](../../the-sql-language/functions-and-operators/trigger-functions.md#functions-trigger).
+ <a id="sql-createtrigger-examples"></a>
 
-
-## Examples { #sql-createtrigger-examples }
+## Examples
 
 
  Execute the function `check_account_update` whenever a row of the table `accounts` is about to be updated:
@@ -301,9 +302,9 @@ CREATE TRIGGER paired_items_update
 
 
  [A Complete Trigger Example](../../server-programming/triggers/a-complete-trigger-example.md#trigger-example) contains a complete example of a trigger function written in C.
+ <a id="sql-createtrigger-compatibility"></a>
 
-
-## Compatibility { #sql-createtrigger-compatibility }
+## Compatibility
 
 
  The `CREATE TRIGGER` statement in PostgreSQL implements a subset of the SQL standard. The following functionalities are currently missing:

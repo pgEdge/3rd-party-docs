@@ -1,4 +1,6 @@
-## Formatting { #source-format }
+<a id="source-format"></a>
+
+## Formatting
 
 
  Source code formatting uses 4 column tab spacing, with tabs preserved (i.e., tabs are not expanded to spaces). Each logical indentation level is one additional tab stop.

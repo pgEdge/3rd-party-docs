@@ -1,4 +1,6 @@
-# PL/Tcl — Tcl Procedural Language { #pltcl }
+<a id="pltcl"></a>
+
+# PL/Tcl — Tcl Procedural Language
 
  PL/Tcl is a loadable procedural language for the PostgreSQL database system that enables the [Tcl language](https://www.tcl.tk/) to be used to write PostgreSQL functions and procedures.
 

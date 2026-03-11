@@ -1,4 +1,6 @@
-## Routine Reindexing { #routine-reindex }
+<a id="routine-reindex"></a>
+
+## Routine Reindexing
 
 
  In some situations it is worthwhile to rebuild indexes periodically with the [sql-reindex](../../reference/sql-commands/reindex.md#sql-reindex) command or a series of individual rebuilding steps.

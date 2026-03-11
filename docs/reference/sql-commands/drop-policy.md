@@ -1,4 +1,6 @@
-# DROP POLICY { #sql-droppolicy }
+<a id="sql-droppolicy"></a>
+
+# DROP POLICY
 
 remove a row-level security policy from a table
 

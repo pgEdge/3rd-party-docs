@@ -1,4 +1,6 @@
-## Column Lists { #logical-replication-col-lists }
+<a id="logical-replication-col-lists"></a>
+
+## Column Lists
 
 
  Each publication can optionally specify which columns of each table are replicated to subscribers. The table on the subscriber side must have at least all the columns that are published. If no column list is specified, then all columns on the publisher are replicated. See [sql-createpublication](../../reference/sql-commands/create-publication.md#sql-createpublication) for details on the syntax.
@@ -29,7 +31,7 @@
 
 
  During initial data synchronization, only the published columns are copied. However, if the subscriber is from a release prior to 15, then all the columns in the table are copied during initial data synchronization, ignoring any column lists. If the subscriber is from a release prior to 18, then initial table synchronization won't copy generated columns even if they are defined in the publisher.
-
+ <a id="logical-replication-col-list-combining"></a>
 
 !!! warning "Warning: Combining Column Lists from Multiple Publications"
 
@@ -40,9 +42,9 @@
 
 
      If a subscription is affected by this problem, the only way to resume replication is to adjust one of the column lists on the publication side so that they all match; and then either recreate the subscription, or use [`ALTER SUBSCRIPTION ... DROP PUBLICATION`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription-params-setadddrop-publication) to remove one of the offending publications and add it again.
+ <a id="logical-replication-col-list-examples"></a>
 
-
-### Examples { #logical-replication-col-list-examples }
+### Examples
 
 
  Create a table `t1` to be used in the following example.

@@ -1,4 +1,6 @@
-## Logical Decoding Examples { #logicaldecoding-example }
+<a id="logicaldecoding-example"></a>
+
+## Logical Decoding Examples
 
 
  The following example demonstrates controlling logical decoding using the SQL interface.

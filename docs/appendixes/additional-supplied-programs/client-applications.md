@@ -1,10 +1,12 @@
-## Client Applications { #contrib-prog-client }
+<a id="contrib-prog-client"></a>
+
+## Client Applications
 
 
  This section covers PostgreSQL client applications in `contrib`. They can be run from anywhere, independent of where the database server resides. See also [PostgreSQL Client Applications](../../reference/postgresql-client-applications/index.md#reference-client) for information about client applications that are part of the core PostgreSQL distribution.
+  <a id="oid2name"></a>
 
-
-# oid2name { #oid2name }
+# oid2name
 
 resolve OIDs and file nodes in a PostgreSQL data directory
 
@@ -240,9 +242,9 @@ From database "alvherre":
 
 
  B. Palmer [bpalmer@crimelabs.net](mailto:bpalmer@crimelabs.net)
+   <a id="vacuumlo"></a>
 
-
-# vacuumlo { #vacuumlo }
+# vacuumlo
 
 remove orphaned large objects from a PostgreSQL database
 

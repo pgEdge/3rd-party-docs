@@ -1,4 +1,6 @@
-## The Parser Stage { #parser-stage }
+<a id="parser-stage"></a>
+
+## The Parser Stage
 
 
  The *parser stage* consists of two parts:
@@ -6,8 +8,9 @@
 -  The *parser* defined in `gram.y` and `scan.l` is built using the Unix tools bison and flex.
 -  The *transformation process* does modifications and augmentations to the data structures returned by the parser.
 
+ <a id="parser-stage-parser"></a>
 
-### Parser { #parser-stage-parser }
+### Parser
 
 
  The parser has to check the query string (which arrives as plain text) for valid syntax. If the syntax is correct a *parse tree* is built up and handed back; otherwise an error is returned. The parser and lexer are implemented using the well-known Unix tools bison and flex.
@@ -27,9 +30,9 @@
 
 
  A detailed description of bison or the grammar rules given in `gram.y` would be beyond the scope of this manual. There are many books and documents dealing with flex and bison. You should be familiar with bison before you start to study the grammar given in `gram.y` otherwise you won't understand what happens there.
+  <a id="parser-stage-transformation-process"></a>
 
-
-### Transformation Process { #parser-stage-transformation-process }
+### Transformation Process
 
 
  The parser stage creates a parse tree using only fixed rules about the syntactic structure of SQL. It does not make any lookups in the system catalogs, so there is no possibility to understand the detailed semantics of the requested operations. After the parser completes, the *transformation process* takes the tree handed back by the parser as input and does the semantic interpretation needed to understand which tables, functions, and operators are referenced by the query. The data structure that is built to represent this information is called the *query tree*.

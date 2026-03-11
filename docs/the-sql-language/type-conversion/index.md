@@ -1,4 +1,6 @@
-# Type Conversion { #typeconv }
+<a id="typeconv"></a>
+
+# Type Conversion
 
  SQL statements can, intentionally or not, require the mixing of different data types in the same expression. PostgreSQL has extensive facilities for evaluating mixed-type expressions.
 

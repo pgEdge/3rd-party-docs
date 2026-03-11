@@ -1,4 +1,6 @@
-# ALTER MATERIALIZED VIEW { #sql-altermaterializedview }
+<a id="sql-altermaterializedview"></a>
+
+# ALTER MATERIALIZED VIEW
 
 change the definition of a materialized view
 

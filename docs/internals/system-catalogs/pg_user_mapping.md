@@ -1,4 +1,6 @@
-## `pg_user_mapping` { #catalog-pg-user-mapping }
+<a id="catalog-pg-user-mapping"></a>
+
+## `pg_user_mapping`
 
 
  The catalog `pg_user_mapping` stores the mappings from local user to remote. Access to this catalog is restricted from normal users, use the view [`pg_user_mappings`](../system-views/pg_user_mappings.md#view-pg-user-mappings) instead.

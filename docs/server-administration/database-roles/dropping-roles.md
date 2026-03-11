@@ -1,4 +1,6 @@
-## Dropping Roles { #role-removal }
+<a id="role-removal"></a>
+
+## Dropping Roles
 
 
  Because roles can own database objects and can hold privileges to access other objects, dropping a role is often not just a matter of a quick [`DROP ROLE`](../../reference/sql-commands/drop-role.md#sql-droprole). Any objects owned by the role must first be dropped or reassigned to other owners; and any permissions granted to the role must be revoked.

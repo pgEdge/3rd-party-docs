@@ -1,4 +1,6 @@
-# Writing a Custom Scan Provider { #custom-scan }
+<a id="custom-scan"></a>
+
+# Writing a Custom Scan Provider
 
  PostgreSQL supports a set of experimental facilities which are intended to allow extension modules to add new scan types to the system. Unlike a [foreign data wrapper](../writing-a-foreign-data-wrapper/index.md#fdwhandler), which is only responsible for knowing how to scan its own foreign tables, a custom scan provider can provide an alternative method of scanning any relation in the system. Typically, the motivation for writing a custom scan provider will be to allow the use of some optimization not supported by the core system, such as caching or some form of hardware acceleration. This chapter outlines how to write a new custom scan provider.
 

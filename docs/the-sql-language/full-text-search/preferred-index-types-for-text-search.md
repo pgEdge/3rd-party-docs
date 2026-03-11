@@ -1,4 +1,6 @@
-## Preferred Index Types for Text Search { #textsearch-indexes }
+<a id="textsearch-indexes"></a>
+
+## Preferred Index Types for Text Search
 
 
  There are two kinds of indexes that can be used to speed up full text searches: [GIN](../../internals/built-in-index-access-methods/gin-indexes.md#gin) and [GiST](../../internals/built-in-index-access-methods/gist-indexes.md#gist). Note that indexes are not mandatory for full text searching, but in cases where a column is searched on a regular basis, an index is usually desirable.

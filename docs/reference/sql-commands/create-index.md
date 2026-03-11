@@ -1,4 +1,6 @@
-# CREATE INDEX { #sql-createindex }
+<a id="sql-createindex"></a>
+
+# CREATE INDEX
 
 define a new index
 
@@ -124,9 +126,9 @@ CREATE [ UNIQUE ] INDEX [ CONCURRENTLY ] [ [ IF NOT EXISTS ] NAME ] ON [ ONLY ] 
 
 *predicate*
 :   The constraint expression for a partial index.
+ <a id="sql-createindex-storage-parameters"></a>
 
-
-### Index Storage Parameters { #sql-createindex-storage-parameters }
+### Index Storage Parameters
 
 
  The optional `WITH` clause specifies *storage parameters* for the index. Each index method has its own set of allowed storage parameters.
@@ -204,9 +206,9 @@ CREATE [ UNIQUE ] INDEX [ CONCURRENTLY ] [ [ IF NOT EXISTS ] NAME ] ON [ ONLY ] 
 
 `autosummarize` (`boolean`)
 :   Defines whether a summarization run is queued for the previous page range whenever an insertion is detected on the next one (see [Index Maintenance](../../internals/built-in-index-access-methods/brin-indexes.md#brin-operation) for more details). The default is `off`.
+  <a id="sql-createindex-concurrently"></a>
 
-
-### Building Indexes Concurrently { #sql-createindex-concurrently }
+### Building Indexes Concurrently
 
 
  Creating an index can interfere with regular operation of a database. Normally PostgreSQL locks the table to be indexed against writes and performs the entire index build with a single scan of the table. Other transactions can still read the table, but if they try to insert, update, or delete rows in the table they will block until the index build is finished. This could have a severe effect if the system is a live production database. Very large tables can take many hours to be indexed, and even for smaller tables, an index build can lock out writers for periods that are unacceptably long for a production system.

@@ -1,4 +1,6 @@
-## `foreign_server_options` { #infoschema-foreign-server-options }
+<a id="infoschema-foreign-server-options"></a>
+
+## `foreign_server_options`
 
 
  The view `foreign_server_options` contains all the options defined for foreign servers in the current database. Only those foreign servers are shown that the current user has access to (by way of being the owner or having some privilege).

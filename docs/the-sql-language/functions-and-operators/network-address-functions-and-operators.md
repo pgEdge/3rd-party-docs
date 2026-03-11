@@ -1,13 +1,14 @@
-## Network Address Functions and Operators { #functions-net }
+<a id="functions-net"></a>
+
+## Network Address Functions and Operators
 
 
  The IP network address types, `cidr` and `inet`, support the usual comparison operators shown in [Comparison Operators](comparison-functions-and-operators.md#functions-comparison-op-table) as well as the specialized operators and functions shown in [IP Address Operators](#cidr-inet-operators-table) and [IP Address Functions](#cidr-inet-functions-table).
 
 
  Any `cidr` value can be cast to `inet` implicitly; therefore, the operators and functions shown below as operating on `inet` also work on `cidr` values. (Where there are separate functions for `inet` and `cidr`, it is because the behavior should be different for the two cases.) Also, it is permitted to cast an `inet` value to `cidr`. When this is done, any bits to the right of the netmask are silently zeroed to create a valid `cidr` value.
+ <a id="cidr-inet-operators-table"></a>
 
-
-<a id="cidr-inet-operators-table"></a>
 **Table: IP Address Operators**
 
 <table>
@@ -81,9 +82,8 @@
 </tr>
 </tbody>
 </table>
+ <a id="cidr-inet-functions-table"></a>
 
-
-<a id="cidr-inet-functions-table"></a>
 **Table: IP Address Functions**
 
 <table>
@@ -175,9 +175,8 @@
 
 
  The MAC address types, `macaddr` and `macaddr8`, support the usual comparison operators shown in [Comparison Operators](comparison-functions-and-operators.md#functions-comparison-op-table) as well as the specialized functions shown in [MAC Address Functions](#macaddr-functions-table). In addition, they support the bitwise logical operators `~`, `&` and `|` (NOT, AND and OR), just as shown above for IP addresses.
+ <a id="macaddr-functions-table"></a>
 
-
-<a id="macaddr-functions-table"></a>
 **Table: MAC Address Functions**
 
 <table>

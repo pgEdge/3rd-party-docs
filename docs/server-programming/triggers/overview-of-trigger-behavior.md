@@ -1,4 +1,6 @@
-## Overview of Trigger Behavior { #trigger-definition }
+<a id="trigger-definition"></a>
+
+## Overview of Trigger Behavior
 
 
  A trigger is a specification that the database should automatically execute a particular function whenever a certain type of operation is performed. Triggers can be attached to tables (partitioned or not), views, and foreign tables.

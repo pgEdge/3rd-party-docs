@@ -1,4 +1,6 @@
-# pg_isready { #app-pg-isready }
+<a id="app-pg-isready"></a>
+
+# pg_isready
 
 check the connection status of a PostgreSQL server
 
@@ -8,15 +10,15 @@ check the connection status of a PostgreSQL server
 ```
 pg_isready [CONNECTION-OPTION...] [OPTION...]
 ```
+ <a id="app-pg-isready-description"></a>
 
-
-## Description { #app-pg-isready-description }
+## Description
 
 
  pg_isready is a utility for checking the connection status of a PostgreSQL database server. The exit status specifies the result of the connection check.
+ <a id="app-pg-isready-options"></a>
 
-
-## Options { #app-pg-isready-options }
+## Options
 
 
 <code>-d </code><em>dbname</em>, <code>--dbname=</code><em>dbname</em>
@@ -57,15 +59,15 @@ pg_isready [CONNECTION-OPTION...] [OPTION...]
 
 
  The environment variable `PG_COLOR` specifies whether to use color in diagnostic messages. Possible values are `always`, `auto` and `never`.
+ <a id="app-pg-isready-notes"></a>
 
-
-## Notes { #app-pg-isready-notes }
+## Notes
 
 
  It is not necessary to supply correct user name, password, or database name values to obtain the server status; however, if incorrect values are provided, the server will log a failed connection attempt.
+ <a id="app-pg-isready-examples"></a>
 
-
-## Examples { #app-pg-isready-examples }
+## Examples
 
 
  Standard Usage:

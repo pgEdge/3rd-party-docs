@@ -1,4 +1,6 @@
-## `pg_parameter_acl` { #catalog-pg-parameter-acl }
+<a id="catalog-pg-parameter-acl"></a>
+
+## `pg_parameter_acl`
 
 
  The catalog `pg_parameter_acl` records configuration parameters for which privileges have been granted to one or more roles. No entry is made for parameters that have default privileges.

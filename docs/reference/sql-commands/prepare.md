@@ -1,4 +1,6 @@
-# PREPARE { #sql-prepare }
+<a id="sql-prepare"></a>
+
+# PREPARE
 
 prepare a statement for execution
 
@@ -37,9 +39,9 @@ PREPARE NAME [ ( DATA_TYPE [, ...] ) ] AS STATEMENT
 
 *statement*
 :   Any `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `MERGE`, or `VALUES` statement.
+ <a id="sql-prepare-notes"></a>
 
-
-## Notes { #sql-prepare-notes }
+## Notes
 
 
  A prepared statement can be executed with either a *generic plan* or a *custom plan*. A generic plan is the same across all executions, while a custom plan is generated for a specific execution using the parameter values given in that call. Use of a generic plan avoids planning overhead, but in some situations a custom plan will be much more efficient to execute because the planner can make use of knowledge of the parameter values. (Of course, if the prepared statement has no parameters, then this is moot and a generic plan is always used.)
@@ -67,9 +69,9 @@ EXPLAIN EXECUTE NAME(PARAMETER_VALUES);
 
 
  You can see all prepared statements available in the session by querying the [`pg_prepared_statements`](../../internals/system-views/pg_prepared_statements.md#view-pg-prepared-statements) system view.
+ <a id="sql-prepare-examples"></a>
 
-
-## Examples { #sql-prepare-examples }
+## Examples
 
 
  Create a prepared statement for an `INSERT` statement, and then execute it:

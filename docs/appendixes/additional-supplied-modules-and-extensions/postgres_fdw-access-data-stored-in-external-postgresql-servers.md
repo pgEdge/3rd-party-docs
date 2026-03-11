@@ -1,4 +1,6 @@
-## postgres_fdw — access data stored in external PostgreSQL servers { #postgres-fdw }
+<a id="postgres-fdw"></a>
+
+## postgres_fdw — access data stored in external PostgreSQL servers
 
 
  The `postgres_fdw` module provides the foreign-data wrapper `postgres_fdw`, which can be used to access data stored in external PostgreSQL servers.
@@ -28,12 +30,12 @@
 
 
  Note that a foreign table can be declared with fewer columns, or with a different column order, than its underlying remote table has. Matching of columns to the remote table is by name, not position.
+ <a id="postgres-fdw-options"></a>
 
+### FDW Options of postgres_fdw
+  <a id="postgres-fdw-options-connection"></a>
 
-### FDW Options of postgres_fdw { #postgres-fdw-options }
-
-
-#### Connection Options { #postgres-fdw-options-connection }
+#### Connection Options
 
 
  A foreign server using the `postgres_fdw` foreign data wrapper can have the same options that libpq accepts in connection strings, as described in [Parameter Key Words](../../client-interfaces/libpq-c-library/database-connection-control-functions.md#libpq-paramkeywords), except that these options are not allowed or have special handling:
@@ -62,9 +64,9 @@ OPTIONS (ADD password_required 'false');
 
 
  Care is required to ensure that this does not allow the mapped user the ability to connect as superuser to the mapped database per CVE-2007-3278 and CVE-2007-6601. Don't set `password_required=false` on the `public` role. Keep in mind that the mapped user can potentially use any client certificates, `.pgpass`, `.pg_service.conf` etc. in the unix home directory of the system user the postgres server runs as. (For details on how home directories are found, see [The Password File](../../client-interfaces/libpq-c-library/the-password-file.md#libpq-pgpass).) They can also use any trust relationship granted by authentication modes like `peer` or `ident` authentication.
+  <a id="postgres-fdw-options-object-name"></a>
 
-
-#### Object Name Options { #postgres-fdw-options-object-name }
+#### Object Name Options
 
 
  These options can be used to control the names used in SQL statements sent to the remote PostgreSQL server. These options are needed when a foreign table is created with names different from the underlying remote table's names.
@@ -78,9 +80,9 @@ OPTIONS (ADD password_required 'false');
 
 `column_name` (`string`)
 :   This option, which can be specified for a column of a foreign table, gives the column name to use for the column on the remote server. If this option is omitted, the column's name is used.
+  <a id="postgres-fdw-options-cost-estimation"></a>
 
-
-#### Cost Estimation Options { #postgres-fdw-options-cost-estimation }
+#### Cost Estimation Options
 
 
  `postgres_fdw` retrieves remote data by executing queries against remote servers, so ideally the estimated cost of scanning a foreign table should be whatever it costs to be done on the remote server, plus some overhead for communication. The most reliable way to get such an estimate is to ask the remote server and then add something for overhead — but for simple queries, it may not be worth the cost of an additional remote query to get a cost estimate. So `postgres_fdw` provides the following options to control how cost estimation is done:
@@ -104,9 +106,9 @@ OPTIONS (ADD password_required 'false');
 
 `analyze_sampling` (`string`)
 :   This option, which can be specified for a foreign table or a foreign server, determines if `ANALYZE` on a foreign table samples the data on the remote side, or reads and transfers all data and performs the sampling locally. The supported values are `off`, `random`, `system`, `bernoulli` and `auto`. `off` disables remote sampling, so all data are transferred and sampled locally. `random` performs remote sampling using the `random()` function to choose returned rows, while `system` and `bernoulli` rely on the built-in `TABLESAMPLE` methods of those names. `random` works on all remote server versions, while `TABLESAMPLE` is supported only since 9.5. `auto` (the default) picks the recommended sampling method automatically; currently it means either `bernoulli` or `random` depending on the remote server version.
+  <a id="postgres-fdw-options-remote-execution"></a>
 
-
-#### Remote Execution Options { #postgres-fdw-options-remote-execution }
+#### Remote Execution Options
 
 
  By default, only `WHERE` clauses using built-in operators and functions will be considered for execution on the remote server. Clauses involving non-built-in functions are checked locally after rows are fetched. If such functions are available on the remote server and can be relied on to produce the same results as they do locally, performance can be improved by sending such `WHERE` clauses for remote execution. This behavior can be controlled using the following option:
@@ -129,9 +131,9 @@ OPTIONS (ADD password_required 'false');
 
 
      This option also applies when copying into foreign tables. In that case the actual number of rows `postgres_fdw` copies at once is determined in a similar way to the insert case, but it is limited to at most 1000 due to implementation restrictions of the `COPY` command.
+  <a id="postgres-fdw-options-asynchronous-execution"></a>
 
-
-#### Asynchronous Execution Options { #postgres-fdw-options-asynchronous-execution }
+#### Asynchronous Execution Options
 
 
  `postgres_fdw` supports asynchronous execution, which runs multiple parts of an `Append` node concurrently rather than serially to improve performance. This execution can be controlled using the following option:
@@ -145,9 +147,9 @@ OPTIONS (ADD password_required 'false');
 
 
      Asynchronous execution is applied even when an `Append` node contains subplan(s) executed synchronously as well as subplan(s) executed asynchronously. In such a case, if the asynchronous subplans are ones processed using `postgres_fdw`, tuples from the asynchronous subplans are not returned until after at least one synchronous subplan returns all tuples, as that subplan is executed while the asynchronous subplans are waiting for the results of asynchronous queries sent to foreign servers. This behavior might change in a future release.
+  <a id="postgres-fdw-options-transaction-management"></a>
 
-
-#### Transaction Management Options { #postgres-fdw-options-transaction-management }
+#### Transaction Management Options
 
 
  As described in the Transaction Management section, in `postgres_fdw` transactions are managed by creating corresponding remote transactions, and subtransactions are managed by creating corresponding remote subtransactions. When multiple remote transactions are involved in the current local transaction, by default `postgres_fdw` commits or aborts those remote transactions serially when the local transaction is committed or aborted. When multiple remote subtransactions are involved in the current local subtransaction, by default `postgres_fdw` commits or aborts those remote subtransactions serially when the local subtransaction is committed or aborted. Performance can be improved with the following options:
@@ -164,9 +166,9 @@ OPTIONS (ADD password_required 'false');
 
 
  When these options are enabled, a foreign server with many remote transactions may see a negative performance impact when the local transaction is committed or aborted.
+  <a id="postgres-fdw-options-updatability"></a>
 
-
-#### Updatability Options { #postgres-fdw-options-updatability }
+#### Updatability Options
 
 
  By default all foreign tables using `postgres_fdw` are assumed to be updatable. This may be overridden using the following option:
@@ -177,9 +179,9 @@ OPTIONS (ADD password_required 'false');
 
 
      Of course, if the remote table is not in fact updatable, an error would occur anyway. Use of this option primarily allows the error to be thrown locally without querying the remote server. Note however that the `information_schema` views will report a `postgres_fdw` foreign table to be updatable (or not) according to the setting of this option, without any check of the remote server.
+  <a id="postgres-fdw-options-truncatability"></a>
 
-
-#### Truncatability Options { #postgres-fdw-options-truncatability }
+#### Truncatability Options
 
 
  By default all foreign tables using `postgres_fdw` are assumed to be truncatable. This may be overridden using the following option:
@@ -190,9 +192,9 @@ OPTIONS (ADD password_required 'false');
 
 
      Of course, if the remote table is not in fact truncatable, an error would occur anyway. Use of this option primarily allows the error to be thrown locally without querying the remote server.
+  <a id="postgres-fdw-options-importing"></a>
 
-
-#### Importing Options { #postgres-fdw-options-importing }
+#### Importing Options
 
 
  `postgres_fdw` is able to import foreign table definitions using [sql-importforeignschema](../../reference/sql-commands/import-foreign-schema.md#sql-importforeignschema). This command creates foreign table definitions on the local server that match tables or views present on the remote server. If the remote tables to be imported have columns of user-defined data types, the local server must have compatible types of the same names.
@@ -221,9 +223,9 @@ OPTIONS (ADD password_required 'false');
 
 
  Tables or foreign tables which are partitions of some other table are imported only when they are explicitly specified in `LIMIT TO` clause. Otherwise they are automatically excluded from [sql-importforeignschema](../../reference/sql-commands/import-foreign-schema.md#sql-importforeignschema). Since all data can be accessed through the partitioned table which is the root of the partitioning hierarchy, importing only partitioned tables should allow access to all the data without creating extra objects.
+  <a id="postgres-fdw-options-connection-management"></a>
 
-
-#### Connection Management Options { #postgres-fdw-options-connection-management }
+#### Connection Management Options
 
 
  By default, all connections that `postgres_fdw` establishes to foreign servers are kept open in the local session for re-use.
@@ -248,9 +250,9 @@ OPTIONS (ADD password_required 'false');
 
        As a corollary, if FDW connections to multiple hosts are to be made, for example for partitioned foreign tables/sharding, then all hosts must have identical SCRAM secrets for the users involved.
     -  The current session on the PostgreSQL instance that makes the outgoing FDW connections also must also use SCRAM authentication for its incoming client connection. (Hence “pass-through”: SCRAM must be used going in and out.) This is a technical requirement of the SCRAM protocol.
+   <a id="postgres-fdw-functions"></a>
 
-
-### Functions { #postgres-fdw-functions }
+### Functions
 
 
 `postgres_fdw_get_connections( IN check_conn boolean DEFAULT false, OUT server_name text, OUT user_name text, OUT valid boolean, OUT used_in_xact boolean, OUT closed boolean, OUT remote_backend_pid int4) returns setof record`
@@ -272,9 +274,8 @@ OPTIONS (ADD password_required 'false');
      loopback3   |           | f     | t            | f      |            1353156
     ```
      The output columns are described in [`postgres_fdw_get_connections` Output Columns](#postgres-fdw-get-connections-columns).
+     <a id="postgres-fdw-get-connections-columns"></a>
 
-
-    <a id="postgres-fdw-get-connections-columns"></a>
     **Table: `postgres_fdw_get_connections` Output Columns**
 
     | Column | Type | Description |
@@ -307,9 +308,9 @@ OPTIONS (ADD password_required 'false');
     -----------------------------
      t
     ```
+  <a id="postgres-fdw-connection-management"></a>
 
-
-### Connection Management { #postgres-fdw-connection-management }
+### Connection Management
 
 
  `postgres_fdw` establishes a connection to a foreign server during the first query that uses a foreign table associated with the foreign server. By default this connection is kept and re-used for subsequent queries in the same session. This behavior can be controlled using `keep_connections` option for a foreign server. If multiple user identities (user mappings) are used to access the foreign server, a connection is established for each user mapping.
@@ -319,9 +320,9 @@ OPTIONS (ADD password_required 'false');
 
 
  Once a connection to a foreign server has been established, it's by default kept until the local or corresponding remote session exits. To disconnect a connection explicitly, `keep_connections` option for a foreign server may be disabled, or `postgres_fdw_disconnect` and `postgres_fdw_disconnect_all` functions may be used. For example, these are useful to close connections that are no longer necessary, thereby releasing connections on the foreign server.
+  <a id="postgres-fdw-transaction-management"></a>
 
-
-### Transaction Management { #postgres-fdw-transaction-management }
+### Transaction Management
 
 
  During a query that references any remote tables on a foreign server, `postgres_fdw` opens a transaction on the remote server if one is not already open corresponding to the current local transaction. The remote transaction is committed or aborted when the local transaction commits or aborts. Savepoints are similarly managed by creating corresponding remote savepoints.
@@ -331,9 +332,9 @@ OPTIONS (ADD password_required 'false');
 
 
  Note that it is currently not supported by `postgres_fdw` to prepare the remote transaction for two-phase commit.
+  <a id="postgres-fdw-remote-query-optimization"></a>
 
-
-### Remote Query Optimization { #postgres-fdw-remote-query-optimization }
+### Remote Query Optimization
 
 
  `postgres_fdw` attempts to optimize remote queries to reduce the amount of data transferred from foreign servers. This is done by sending query `WHERE` clauses to the remote server for execution, and by not retrieving table columns that are not needed for the current query. To reduce the risk of misexecution of queries, `WHERE` clauses are not sent to the remote server unless they use only data types, operators, and functions that are built-in or belong to an extension that's listed in the foreign server's `extensions` option. Operators and functions in such clauses must be `IMMUTABLE` as well. For an `UPDATE` or `DELETE` query, `postgres_fdw` attempts to optimize the query execution by sending the whole query to the remote server if there are no query `WHERE` clauses that cannot be sent to the remote server, no local joins for the query, no row-level local `BEFORE` or `AFTER` triggers or stored generated columns on the target table, and no `CHECK OPTION` constraints from parent views. In `UPDATE`, expressions to assign to target columns must use only built-in data types, `IMMUTABLE` operators, or `IMMUTABLE` functions, to reduce the risk of misexecution of the query.
@@ -343,9 +344,9 @@ OPTIONS (ADD password_required 'false');
 
 
  The query that is actually sent to the remote server for execution can be examined using `EXPLAIN VERBOSE`.
+  <a id="postgres-fdw-remote-query-execution-environment"></a>
 
-
-### Remote Query Execution Environment { #postgres-fdw-remote-query-execution-environment }
+### Remote Query Execution Environment
 
 
  In the remote sessions opened by `postgres_fdw`, the [search_path](../../server-administration/server-configuration/client-connection-defaults.md#guc-search-path) parameter is set to just `pg_catalog`, so that only built-in objects are visible without schema qualification. This is not an issue for queries generated by `postgres_fdw` itself, because it always supplies such qualification. However, this can pose a hazard for functions that are executed on the remote server via triggers or rules on remote tables. For example, if a remote table is actually a view, any functions used in that view will be executed with the restricted search path. It is recommended to schema-qualify all names in such functions, or else attach `SET search_path` options (see [sql-createfunction](../../reference/sql-commands/create-function.md#sql-createfunction)) to such functions to establish their expected search path environment.
@@ -361,9 +362,9 @@ OPTIONS (ADD password_required 'false');
 
 
  It is *not* recommended that you override this behavior by changing the session-level settings of these parameters; that is likely to cause `postgres_fdw` to malfunction.
+  <a id="postgres-fdw-cross-version-compatibility"></a>
 
-
-### Cross-Version Compatibility { #postgres-fdw-cross-version-compatibility }
+### Cross-Version Compatibility
 
 
  `postgres_fdw` can be used with remote servers dating back to PostgreSQL 8.3. Read-only capability is available back to 8.1.
@@ -373,9 +374,9 @@ OPTIONS (ADD password_required 'false');
 
 
  Another limitation is that when executing `INSERT` statements with an `ON CONFLICT DO NOTHING` clause on a foreign table, the remote server must be running PostgreSQL 9.5 or later, as earlier versions do not support this feature.
+  <a id="postgres-fdw-wait-events"></a>
 
-
-### Wait Events { #postgres-fdw-wait-events }
+### Wait Events
 
 
  `postgres_fdw` can report the following wait events under the wait event type `Extension`:
@@ -389,9 +390,9 @@ OPTIONS (ADD password_required 'false');
 
 `PostgresFdwGetResult`
 :   Waiting to receive the results of a query from a remote server.
+  <a id="postgres-fdw-configuration-parameters"></a>
 
-
-### Configuration Parameters { #postgres-fdw-configuration-parameters }
+### Configuration Parameters
 
 
 <a id="guc-pgfdw-application-name"></a>
@@ -418,9 +419,9 @@ OPTIONS (ADD password_required 'false');
 
 
      For example, suppose user `local_user` establishes a connection from database `local_db` to `foreign_db` as user `foreign_user`, the setting `'db=%d, user=%u'` is replaced with `'db=local_db, user=local_user'`.
+  <a id="postgres-fdw-examples"></a>
 
-
-### Examples { #postgres-fdw-examples }
+### Examples
 
 
  Here is an example of creating a foreign table with `postgres_fdw`. First install the extension:
@@ -464,9 +465,9 @@ CREATE FOREIGN TABLE foreign_table (
         OPTIONS (schema_name 'some_schema', table_name 'some_table');
 ```
  It's essential that the data types and other properties of the columns declared in `CREATE FOREIGN TABLE` match the actual remote table. Column names must match as well, unless you attach `column_name` options to the individual columns to show how they are named in the remote table. In many cases, use of [`IMPORT FOREIGN SCHEMA`](../../reference/sql-commands/import-foreign-schema.md#sql-importforeignschema) is preferable to constructing foreign table definitions manually.
+  <a id="postgres-fdw-author"></a>
 
-
-### Author { #postgres-fdw-author }
+### Author
 
 
  Shigeru Hanada [shigeru.hanada@gmail.com](mailto:shigeru.hanada@gmail.com)

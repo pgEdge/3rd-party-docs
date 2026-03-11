@@ -1,4 +1,6 @@
-## `usage_privileges` { #infoschema-usage-privileges }
+<a id="infoschema-usage-privileges"></a>
+
+## `usage_privileges`
 
 
  The view `usage_privileges` identifies `USAGE` privileges granted on various kinds of objects to a currently enabled role or by a currently enabled role. In PostgreSQL, this currently applies to collations, domains, foreign-data wrappers, foreign servers, and sequences. There is one row for each combination of object, grantor, and grantee.

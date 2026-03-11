@@ -1,4 +1,6 @@
-## Trigger Functions { #plpython-trigger }
+<a id="plpython-trigger"></a>
+
+## Trigger Functions
 
 
  When a function is used as a trigger, the dictionary `TD` contains trigger-related values:

@@ -1,4 +1,6 @@
-## `pg_ts_parser` { #catalog-pg-ts-parser }
+<a id="catalog-pg-ts-parser"></a>
+
+## `pg_ts_parser`
 
 
  The `pg_ts_parser` catalog contains entries defining text search parsers. A parser is responsible for splitting input text into lexemes and assigning a token type to each lexeme. Since a parser must be implemented by C-language-level functions, creation of new parsers is restricted to database superusers.

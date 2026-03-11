@@ -1,4 +1,6 @@
-# Backup and Restore { #backup }
+<a id="backup"></a>
+
+# Backup and Restore
 
  As with everything that contains valuable data, PostgreSQL databases should be backed up regularly. While the procedure is essentially simple, it is important to have a clear understanding of the underlying techniques and assumptions.
 

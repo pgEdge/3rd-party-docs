@@ -1,7 +1,9 @@
-## Resource Consumption { #runtime-config-resource }
+<a id="runtime-config-resource"></a>
 
+## Resource Consumption
+  <a id="runtime-config-resource-memory"></a>
 
-### Memory { #runtime-config-resource-memory }
+### Memory
 
 
 <a id="guc-shared-buffers"></a>
@@ -137,9 +139,9 @@
 
 `min_dynamic_shared_memory` (`integer`)
 :   Specifies the amount of memory that should be allocated at server startup for use by parallel queries. When this memory region is insufficient or exhausted by concurrent queries, new parallel queries try to allocate extra shared memory temporarily from the operating system using the method configured with `dynamic_shared_memory_type`, which may be slower due to memory management overheads. Memory that is allocated at startup with `min_dynamic_shared_memory` is affected by the `huge_pages` setting on operating systems where that is supported, and may be more likely to benefit from larger pages on operating systems where that is managed automatically. The default value is `0` (none). This parameter can only be set at server start.
+  <a id="runtime-config-resource-disk"></a>
 
-
-### Disk { #runtime-config-resource-disk }
+### Disk
 
 
 <a id="guc-temp-file-limit"></a>
@@ -175,9 +177,9 @@
 
 `max_notify_queue_pages` (`integer`)
 :   Specifies the maximum amount of allocated pages for [sql-notify](../../reference/sql-commands/notify.md#sql-notify) / [sql-listen](../../reference/sql-commands/listen.md#sql-listen) queue. The default value is 1048576. For 8 KB pages it allows to consume up to 8 GB of disk space. This parameter can only be set at server start.
+  <a id="runtime-config-resource-kernel"></a>
 
-
-### Kernel Resource Usage { #runtime-config-resource-kernel }
+### Kernel Resource Usage
 
 
 <a id="guc-max-files-per-process"></a>
@@ -187,9 +189,9 @@
 
 
      If the kernel is enforcing a safe per-process limit, you don't need to worry about this setting. But on some platforms (notably, most BSD systems), the kernel will allow individual processes to open many more files than the system can actually support if many processes all try to open that many files. If you find yourself seeing “Too many open files” failures, try reducing this setting. This parameter can only be set at server start.
+  <a id="runtime-config-resource-background-writer"></a>
 
-
-### Background Writer { #runtime-config-resource-background-writer }
+### Background Writer
 
 
  There is a separate server process called the *background writer*, whose function is to issue writes of “dirty” (new or modified) shared buffers. When the number of clean shared buffers appears to be insufficient, the background writer writes some dirty buffers to the file system and marks them as clean. This reduces the likelihood that server processes handling user queries will be unable to find clean buffers and have to write dirty buffers themselves. However, the background writer does cause a net overall increase in I/O load, because while a repeatedly-dirtied page might otherwise be written only once per checkpoint interval, the background writer might write it several times as it is dirtied in the same interval. The parameters discussed in this subsection can be used to tune the behavior for local needs.
@@ -214,9 +216,9 @@
 
 
  Smaller values of `bgwriter_lru_maxpages` and `bgwriter_lru_multiplier` reduce the extra I/O load caused by the background writer, but make it more likely that server processes will have to issue writes for themselves, delaying interactive queries.
+  <a id="runtime-config-resource-io"></a>
 
-
-### I/O { #runtime-config-resource-io }
+### I/O
 
 
 <a id="guc-backend-flush-after"></a>
@@ -280,9 +282,9 @@
 
 
      Only has an effect if [io_method](#guc-io-method) is set to `worker`.
+  <a id="runtime-config-resource-worker-processes"></a>
 
-
-### Worker Processes { #runtime-config-resource-worker-processes }
+### Worker Processes
 
 
 <a id="guc-max-worker-processes"></a>

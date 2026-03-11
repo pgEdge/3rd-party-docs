@@ -1,4 +1,6 @@
-## Encryption Options { #encryption-options }
+<a id="encryption-options"></a>
+
+## Encryption Options
 
 
  PostgreSQL offers encryption at several levels, and provides flexibility in protecting data from disclosure due to database server theft, unscrupulous administrators, and insecure networks. Encryption might also be required to secure sensitive data such as medical records or financial transactions.

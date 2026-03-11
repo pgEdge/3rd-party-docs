@@ -1,4 +1,6 @@
-# SECURITY LABEL { #sql-security-label }
+<a id="sql-security-label"></a>
+
+# SECURITY LABEL
 
 define or change a security label applied to an object
 

@@ -1,4 +1,6 @@
-## `pg_auth_members` { #catalog-pg-auth-members }
+<a id="catalog-pg-auth-members"></a>
+
+## `pg_auth_members`
 
 
  The catalog `pg_auth_members` shows the membership relations between roles. Any non-circular set of relationships is allowed.

@@ -1,4 +1,6 @@
-## `routine_column_usage` { #infoschema-routine-column-usage }
+<a id="infoschema-routine-column-usage"></a>
+
+## `routine_column_usage`
 
 
  The view `routine_column_usage` identifies all columns that are used by a function or procedure, either in the SQL body or in parameter default expressions. (This only works for unquoted SQL bodies, not quoted bodies or functions in other languages.) A column is only included if its table is owned by a currently enabled role.

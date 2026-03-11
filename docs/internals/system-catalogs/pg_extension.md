@@ -1,4 +1,6 @@
-## `pg_extension` { #catalog-pg-extension }
+<a id="catalog-pg-extension"></a>
+
+## `pg_extension`
 
 
  The catalog `pg_extension` stores information about the installed extensions. See [Packaging Related Objects into an Extension](../../server-programming/extending-sql/packaging-related-objects-into-an-extension.md#extend-extensions) for details about extensions.

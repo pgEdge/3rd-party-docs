@@ -1,4 +1,6 @@
-## Logical Replication Message Formats { #protocol-logicalrep-message-formats }
+<a id="protocol-logicalrep-message-formats"></a>
+
+## Logical Replication Message Formats
 
 
  This section describes the detailed format of each logical replication message. These messages are either returned by the replication slot SQL interface or are sent by a walsender. In the case of a walsender, they are encapsulated inside replication protocol WAL messages as described in [Streaming Replication Protocol](streaming-replication-protocol.md#protocol-replication), and generally obey the same message flow as physical replication.

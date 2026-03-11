@@ -1,4 +1,6 @@
-## Logical Operators { #functions-logical }
+<a id="functions-logical"></a>
+
+## Logical Operators
 
 
  The usual logical operators are available:
