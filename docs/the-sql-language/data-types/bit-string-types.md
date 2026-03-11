@@ -1,0 +1,40 @@
+## Bit String Types { #datatype-bit }
+
+
+ Bit strings are strings of 1's and 0's. They can be used to store or visualize bit masks. There are two SQL bit types: <code>bit(</code><em>n</em><code>)</code> and <code>bit
+    varying(</code><em>n</em><code>)</code>, where *n* is a positive integer.
+
+
+ `bit` type data must match the length *n* exactly; it is an error to attempt to store shorter or longer bit strings. `bit varying` data is of variable length up to the maximum length *n*; longer strings will be rejected. Writing `bit` without a length is equivalent to `bit(1)`, while `bit varying` without a length specification means unlimited length.
+
+
+!!! note
+
+    If one explicitly casts a bit-string value to <code>bit(</code><em>n</em><code>)</code>, it will be truncated or zero-padded on the right to be exactly *n* bits, without raising an error. Similarly, if one explicitly casts a bit-string value to <code>bit varying(</code><em>n</em><code>)</code>, it will be truncated on the right if it is more than *n* bits.
+
+
+ Refer to [Bit-String Constants](../sql-syntax/lexical-structure.md#sql-syntax-bit-strings) for information about the syntax of bit string constants. Bit-logical operators and string manipulation functions are available; see [Bit String Functions and Operators](../functions-and-operators/bit-string-functions-and-operators.md#functions-bitstring).
+
+
+**Example: Using the Bit String Types**
+
+
+```sql
+
+CREATE TABLE test (a BIT(3), b BIT VARYING(5));
+INSERT INTO test VALUES (B'101', B'00');
+INSERT INTO test VALUES (B'10', B'101');
+
+ERROR:  bit string length 2 does not match type bit(3)
+
+INSERT INTO test VALUES (B'10'::bit(3), B'101');
+SELECT * FROM test;
+
+  a  |  b
+-----+-----
+ 101 | 00
+ 100 | 101
+```
+
+
+ A bit string value requires 1 byte for each group of 8 bits, plus 5 or 8 bytes overhead depending on the length of the string (but long values may be compressed or moved out-of-line, as explained in [Character Types](character-types.md#datatype-character) for character strings).

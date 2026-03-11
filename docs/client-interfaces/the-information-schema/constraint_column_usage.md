@@ -1,0 +1,46 @@
+## `constraint_column_usage` { #infoschema-constraint-column-usage }
+
+
+ The view `constraint_column_usage` identifies all columns in the current database that are used by some constraint. Only those columns are shown that are contained in a table owned by a currently enabled role. For a check constraint, this view identifies the columns that are used in the check expression. For a foreign key constraint, this view identifies the columns that the foreign key references. For a unique or primary key constraint, this view identifies the constrained columns.
+
+
+**Table: `constraint_column_usage` Columns**
+
+<table>
+<thead>
+<tr>
+<th><p>Column Type</p>
+<p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p><code>table_catalog</code> <code>sql_identifier</code></p>
+<p>Name of the database that contains the table that contains the column that is used by some constraint (always the current database)</p></td>
+</tr>
+<tr>
+<td><p><code>table_schema</code> <code>sql_identifier</code></p>
+<p>Name of the schema that contains the table that contains the column that is used by some constraint</p></td>
+</tr>
+<tr>
+<td><p><code>table_name</code> <code>sql_identifier</code></p>
+<p>Name of the table that contains the column that is used by some constraint</p></td>
+</tr>
+<tr>
+<td><p><code>column_name</code> <code>sql_identifier</code></p>
+<p>Name of the column that is used by some constraint</p></td>
+</tr>
+<tr>
+<td><p><code>constraint_catalog</code> <code>sql_identifier</code></p>
+<p>Name of the database that contains the constraint (always the current database)</p></td>
+</tr>
+<tr>
+<td><p><code>constraint_schema</code> <code>sql_identifier</code></p>
+<p>Name of the schema that contains the constraint</p></td>
+</tr>
+<tr>
+<td><p><code>constraint_name</code> <code>sql_identifier</code></p>
+<p>Name of the constraint</p></td>
+</tr>
+</tbody>
+</table>

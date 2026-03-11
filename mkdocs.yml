@@ -1,4 +1,4 @@
-site_name: PostgreSQL 19devel
+site_name: PostgreSQL 16.13
 
 extra_css:
   - stylesheets/extra.css
@@ -97,11 +97,9 @@ nav:
       - the-sql-language/data-definition/index.md
       - Table Basics: the-sql-language/data-definition/table-basics.md
       - Default Values: the-sql-language/data-definition/default-values.md
-      - Identity Columns: the-sql-language/data-definition/identity-columns.md
       - Generated Columns: the-sql-language/data-definition/generated-columns.md
       - Constraints: the-sql-language/data-definition/constraints.md
       - System Columns: the-sql-language/data-definition/system-columns.md
-      - Temporal Tables: the-sql-language/data-definition/temporal-tables.md
       - Modifying Tables: the-sql-language/data-definition/modifying-tables.md
       - Privileges: the-sql-language/data-definition/privileges.md
       - Row Security Policies: the-sql-language/data-definition/row-security-policies.md
@@ -174,7 +172,6 @@ nav:
       - Range/Multirange Functions and Operators: the-sql-language/functions-and-operators/range-multirange-functions-and-operators.md
       - Aggregate Functions: the-sql-language/functions-and-operators/aggregate-functions.md
       - Window Functions: the-sql-language/functions-and-operators/window-functions.md
-      - Merge Support Functions: the-sql-language/functions-and-operators/merge-support-functions.md
       - Subquery Expressions: the-sql-language/functions-and-operators/subquery-expressions.md
       - Row and Array Comparisons: the-sql-language/functions-and-operators/row-and-array-comparisons.md
       - Set Returning Functions: the-sql-language/functions-and-operators/set-returning-functions.md
@@ -252,6 +249,9 @@ nav:
       - Post-Installation Setup: server-administration/installation-from-source-code/post-installation-setup.md
       - Supported Platforms: server-administration/installation-from-source-code/supported-platforms.md
       - Platform-Specific Notes: server-administration/installation-from-source-code/platform-specific-notes.md
+    - Installation from Source Code on Windows:
+      - server-administration/installation-from-source-code-on-windows/index.md
+      - Building with Visual C++ or the Microsoft Windows SDK: server-administration/installation-from-source-code-on-windows/building-with-visual-c-or-the-microsoft-windows-sdk.md
     - Server Setup and Operation:
       - server-administration/server-setup-and-operation/index.md
       - The PostgreSQL User Account: server-administration/server-setup-and-operation/the-postgresql-user-account.md
@@ -277,7 +277,7 @@ nav:
       - Query Planning: server-administration/server-configuration/query-planning.md
       - Error Reporting and Logging: server-administration/server-configuration/error-reporting-and-logging.md
       - Run-time Statistics: server-administration/server-configuration/run-time-statistics.md
-      - Vacuuming: server-administration/server-configuration/vacuuming.md
+      - Automatic Vacuuming: server-administration/server-configuration/automatic-vacuuming.md
       - Client Connection Defaults: server-administration/server-configuration/client-connection-defaults.md
       - Lock Management: server-administration/server-configuration/lock-management.md
       - Version and Platform Compatibility: server-administration/server-configuration/version-and-platform-compatibility.md
@@ -302,7 +302,6 @@ nav:
       - Certificate Authentication: server-administration/client-authentication/certificate-authentication.md
       - PAM Authentication: server-administration/client-authentication/pam-authentication.md
       - BSD Authentication: server-administration/client-authentication/bsd-authentication.md
-      - OAuth Authorization/Authentication: server-administration/client-authentication/oauth-authorization-authentication.md
       - Authentication Problems: server-administration/client-authentication/authentication-problems.md
     - Database Roles:
       - server-administration/database-roles/index.md
@@ -348,7 +347,10 @@ nav:
       - Viewing Locks: server-administration/monitoring-database-activity/viewing-locks.md
       - Progress Reporting: server-administration/monitoring-database-activity/progress-reporting.md
       - Dynamic Tracing: server-administration/monitoring-database-activity/dynamic-tracing.md
-      - Monitoring Disk Usage: server-administration/monitoring-database-activity/monitoring-disk-usage.md
+    - Monitoring Disk Usage:
+      - server-administration/monitoring-disk-usage/index.md
+      - Determining Disk Usage: server-administration/monitoring-disk-usage/determining-disk-usage.md
+      - Disk Full Failure: server-administration/monitoring-disk-usage/disk-full-failure.md
     - Reliability and the Write-Ahead Log:
       - server-administration/reliability-and-the-write-ahead-log/index.md
       - Reliability: server-administration/reliability-and-the-write-ahead-log/reliability.md
@@ -361,18 +363,14 @@ nav:
       - server-administration/logical-replication/index.md
       - Publication: server-administration/logical-replication/publication.md
       - Subscription: server-administration/logical-replication/subscription.md
-      - Logical Replication Failover: server-administration/logical-replication/logical-replication-failover.md
       - Row Filters: server-administration/logical-replication/row-filters.md
       - Column Lists: server-administration/logical-replication/column-lists.md
-      - Generated Column Replication: server-administration/logical-replication/generated-column-replication.md
-      - Replicating Sequences: server-administration/logical-replication/replicating-sequences.md
       - Conflicts: server-administration/logical-replication/conflicts.md
       - Restrictions: server-administration/logical-replication/restrictions.md
       - Architecture: server-administration/logical-replication/architecture.md
       - Monitoring: server-administration/logical-replication/monitoring.md
       - Security: server-administration/logical-replication/security.md
       - Configuration Settings: server-administration/logical-replication/configuration-settings.md
-      - Upgrade: server-administration/logical-replication/upgrade.md
       - Quick Setup: server-administration/logical-replication/quick-setup.md
     - Just-in-Time Compilation (JIT):
       - server-administration/just-in-time-compilation-jit/index.md
@@ -396,7 +394,7 @@ nav:
       - Command Execution Functions: client-interfaces/libpq-c-library/command-execution-functions.md
       - Asynchronous Command Processing: client-interfaces/libpq-c-library/asynchronous-command-processing.md
       - Pipeline Mode: client-interfaces/libpq-c-library/pipeline-mode.md
-      - Retrieving Query Results in Chunks: client-interfaces/libpq-c-library/retrieving-query-results-in-chunks.md
+      - Retrieving Query Results Row-by-Row: client-interfaces/libpq-c-library/retrieving-query-results-row-by-row.md
       - Canceling Queries in Progress: client-interfaces/libpq-c-library/canceling-queries-in-progress.md
       - The Fast-Path Interface: client-interfaces/libpq-c-library/the-fast-path-interface.md
       - Asynchronous Notification: client-interfaces/libpq-c-library/asynchronous-notification.md
@@ -410,7 +408,6 @@ nav:
       - The Connection Service File: client-interfaces/libpq-c-library/the-connection-service-file.md
       - LDAP Lookup of Connection Parameters: client-interfaces/libpq-c-library/ldap-lookup-of-connection-parameters.md
       - SSL Support: client-interfaces/libpq-c-library/ssl-support.md
-      - OAuth Support: client-interfaces/libpq-c-library/oauth-support.md
       - Behavior in Threaded Programs: client-interfaces/libpq-c-library/behavior-in-threaded-programs.md
       - Building libpq Programs: client-interfaces/libpq-c-library/building-libpq-programs.md
       - Example Programs: client-interfaces/libpq-c-library/example-programs.md
@@ -539,10 +536,10 @@ nav:
     - Event Triggers:
       - server-programming/event-triggers/index.md
       - Overview of Event Trigger Behavior: server-programming/event-triggers/overview-of-event-trigger-behavior.md
+      - Event Trigger Firing Matrix: server-programming/event-triggers/event-trigger-firing-matrix.md
       - Writing Event Trigger Functions in C: server-programming/event-triggers/writing-event-trigger-functions-in-c.md
       - A Complete Event Trigger Example: server-programming/event-triggers/a-complete-event-trigger-example.md
       - A Table Rewrite Event Trigger Example: server-programming/event-triggers/a-table-rewrite-event-trigger-example.md
-      - A Database Login Event Trigger Example: server-programming/event-triggers/a-database-login-event-trigger-example.md
     - The Rule System:
       - server-programming/the-rule-system/index.md
       - The Query Tree: server-programming/the-rule-system/the-query-tree.md
@@ -601,7 +598,6 @@ nav:
       - Sharing Data: server-programming/pl-python-python-procedural-language/sharing-data.md
       - Anonymous Code Blocks: server-programming/pl-python-python-procedural-language/anonymous-code-blocks.md
       - Trigger Functions: server-programming/pl-python-python-procedural-language/trigger-functions.md
-      - Event Trigger Functions: server-programming/pl-python-python-procedural-language/event-trigger-functions.md
       - Database Access: server-programming/pl-python-python-procedural-language/database-access.md
       - Explicit Subtransactions: server-programming/pl-python-python-procedural-language/explicit-subtransactions.md
       - Transaction Management: server-programming/pl-python-python-procedural-language/transaction-management.md
@@ -625,7 +621,6 @@ nav:
       - Logical Decoding SQL Interface: server-programming/logical-decoding/logical-decoding-sql-interface.md
       - System Catalogs Related to Logical Decoding: server-programming/logical-decoding/system-catalogs-related-to-logical-decoding.md
       - Logical Decoding Output Plugins: server-programming/logical-decoding/logical-decoding-output-plugins.md
-      - Writing Logical Decoding Output Plugins: server-programming/logical-decoding/writing-logical-decoding-output-plugins.md
       - Logical Decoding Output Writers: server-programming/logical-decoding/logical-decoding-output-writers.md
       - Synchronous Replication Support for Logical Decoding: server-programming/logical-decoding/synchronous-replication-support-for-logical-decoding.md
       - Streaming of Large Transactions for Logical Decoding: server-programming/logical-decoding/streaming-of-large-transactions-for-logical-decoding.md
@@ -635,11 +630,6 @@ nav:
       - server-programming/archive-modules/index.md
       - Initialization Functions: server-programming/archive-modules/initialization-functions.md
       - Archive Module Callbacks: server-programming/archive-modules/archive-module-callbacks.md
-    - OAuth Validator Modules:
-      - server-programming/oauth-validator-modules/index.md
-      - Safely Designing a Validator Module: server-programming/oauth-validator-modules/safely-designing-a-validator-module.md
-      - Initialization Functions: server-programming/oauth-validator-modules/initialization-functions.md
-      - OAuth Validator Callbacks: server-programming/oauth-validator-modules/oauth-validator-callbacks.md
   - Reference:
     - reference/index.md
     - SQL Commands:
@@ -806,7 +796,6 @@ nav:
       - REFRESH MATERIALIZED VIEW: reference/sql-commands/refresh-materialized-view.md
       - REINDEX: reference/sql-commands/reindex.md
       - RELEASE SAVEPOINT: reference/sql-commands/release-savepoint.md
-      - REPACK: reference/sql-commands/repack.md
       - RESET: reference/sql-commands/reset.md
       - REVOKE: reference/sql-commands/revoke.md
       - ROLLBACK: reference/sql-commands/rollback.md
@@ -828,7 +817,6 @@ nav:
       - UPDATE: reference/sql-commands/update.md
       - VACUUM: reference/sql-commands/vacuum.md
       - VALUES: reference/sql-commands/values.md
-      - WAIT FOR: reference/sql-commands/wait-for.md
     - PostgreSQL Client Applications:
       - reference/postgresql-client-applications/index.md
       - clusterdb: reference/postgresql-client-applications/clusterdb.md
@@ -840,7 +828,6 @@ nav:
       - pg_amcheck: reference/postgresql-client-applications/pg_amcheck.md
       - pg_basebackup: reference/postgresql-client-applications/pg_basebackup.md
       - pgbench: reference/postgresql-client-applications/pgbench.md
-      - pg_combinebackup: reference/postgresql-client-applications/pg_combinebackup.md
       - pg_config: reference/postgresql-client-applications/pg_config.md
       - pg_dump: reference/postgresql-client-applications/pg_dump.md
       - pg_dumpall: reference/postgresql-client-applications/pg_dumpall.md
@@ -858,7 +845,6 @@ nav:
       - pg_archivecleanup: reference/postgresql-server-applications/pg_archivecleanup.md
       - pg_checksums: reference/postgresql-server-applications/pg_checksums.md
       - pg_controldata: reference/postgresql-server-applications/pg_controldata.md
-      - pg_createsubscriber: reference/postgresql-server-applications/pg_createsubscriber.md
       - pg_ctl: reference/postgresql-server-applications/pg_ctl.md
       - pg_resetwal: reference/postgresql-server-applications/pg_resetwal.md
       - pg_rewind: reference/postgresql-server-applications/pg_rewind.md
@@ -866,7 +852,6 @@ nav:
       - pg_test_timing: reference/postgresql-server-applications/pg_test_timing.md
       - pg_upgrade: reference/postgresql-server-applications/pg_upgrade.md
       - pg_waldump: reference/postgresql-server-applications/pg_waldump.md
-      - pg_walsummary: reference/postgresql-server-applications/pg_walsummary.md
       - postgres: reference/postgresql-server-applications/postgres.md
   - Internals:
     - internals/index.md
@@ -948,13 +933,11 @@ nav:
     - System Views:
       - internals/system-views/index.md
       - Overview: internals/system-views/overview.md
-      - '`pg_aios`': internals/system-views/pg_aios.md
       - '`pg_available_extensions`': internals/system-views/pg_available_extensions.md
       - '`pg_available_extension_versions`': internals/system-views/pg_available_extension_versions.md
       - '`pg_backend_memory_contexts`': internals/system-views/pg_backend_memory_contexts.md
       - '`pg_config`': internals/system-views/pg_config.md
       - '`pg_cursors`': internals/system-views/pg_cursors.md
-      - '`pg_dsm_registry_allocations`': internals/system-views/pg_dsm_registry_allocations.md
       - '`pg_file_settings`': internals/system-views/pg_file_settings.md
       - '`pg_group`': internals/system-views/pg_group.md
       - '`pg_hba_file_rules`': internals/system-views/pg_hba_file_rules.md
@@ -965,7 +948,6 @@ nav:
       - '`pg_policies`': internals/system-views/pg_policies.md
       - '`pg_prepared_statements`': internals/system-views/pg_prepared_statements.md
       - '`pg_prepared_xacts`': internals/system-views/pg_prepared_xacts.md
-      - '`pg_publication_sequences`': internals/system-views/pg_publication_sequences.md
       - '`pg_publication_tables`': internals/system-views/pg_publication_tables.md
       - '`pg_replication_origin_status`': internals/system-views/pg_replication_origin_status.md
       - '`pg_replication_slots`': internals/system-views/pg_replication_slots.md
@@ -976,7 +958,6 @@ nav:
       - '`pg_settings`': internals/system-views/pg_settings.md
       - '`pg_shadow`': internals/system-views/pg_shadow.md
       - '`pg_shmem_allocations`': internals/system-views/pg_shmem_allocations.md
-      - '`pg_shmem_allocations_numa`': internals/system-views/pg_shmem_allocations_numa.md
       - '`pg_stats`': internals/system-views/pg_stats.md
       - '`pg_stats_ext`': internals/system-views/pg_stats_ext.md
       - '`pg_stats_ext_exprs`': internals/system-views/pg_stats_ext_exprs.md
@@ -986,7 +967,6 @@ nav:
       - '`pg_user`': internals/system-views/pg_user.md
       - '`pg_user_mappings`': internals/system-views/pg_user_mappings.md
       - '`pg_views`': internals/system-views/pg_views.md
-      - '`pg_wait_events`': internals/system-views/pg_wait_events.md
     - Frontend/Backend Protocol:
       - internals/frontend-backend-protocol/index.md
       - Overview: internals/frontend-backend-protocol/overview.md
@@ -1040,18 +1020,46 @@ nav:
       - Index Locking Considerations: internals/index-access-method-interface-definition/index-locking-considerations.md
       - Index Uniqueness Checks: internals/index-access-method-interface-definition/index-uniqueness-checks.md
       - Index Cost Estimation Functions: internals/index-access-method-interface-definition/index-cost-estimation-functions.md
-    - Write Ahead Logging for Extensions:
-      - internals/write-ahead-logging-for-extensions/index.md
-      - Generic WAL Records: internals/write-ahead-logging-for-extensions/generic-wal-records.md
-      - Custom WAL Resource Managers: internals/write-ahead-logging-for-extensions/custom-wal-resource-managers.md
-    - Built-in Index Access Methods:
-      - internals/built-in-index-access-methods/index.md
-      - B-Tree Indexes: internals/built-in-index-access-methods/b-tree-indexes.md
-      - GiST Indexes: internals/built-in-index-access-methods/gist-indexes.md
-      - SP-GiST Indexes: internals/built-in-index-access-methods/sp-gist-indexes.md
-      - GIN Indexes: internals/built-in-index-access-methods/gin-indexes.md
-      - BRIN Indexes: internals/built-in-index-access-methods/brin-indexes.md
-      - Hash Indexes: internals/built-in-index-access-methods/hash-indexes.md
+    - Generic WAL Records: internals/generic-wal-records.md
+    - Custom WAL Resource Managers: internals/custom-wal-resource-managers.md
+    - B-Tree Indexes:
+      - internals/b-tree-indexes/index.md
+      - Introduction: internals/b-tree-indexes/introduction.md
+      - Behavior of B-Tree Operator Classes: internals/b-tree-indexes/behavior-of-b-tree-operator-classes.md
+      - B-Tree Support Functions: internals/b-tree-indexes/b-tree-support-functions.md
+      - Implementation: internals/b-tree-indexes/implementation.md
+    - GiST Indexes:
+      - internals/gist-indexes/index.md
+      - Introduction: internals/gist-indexes/introduction.md
+      - Built-in Operator Classes: internals/gist-indexes/built-in-operator-classes.md
+      - Extensibility: internals/gist-indexes/extensibility.md
+      - Implementation: internals/gist-indexes/implementation.md
+      - Examples: internals/gist-indexes/examples.md
+    - SP-GiST Indexes:
+      - internals/sp-gist-indexes/index.md
+      - Introduction: internals/sp-gist-indexes/introduction.md
+      - Built-in Operator Classes: internals/sp-gist-indexes/built-in-operator-classes.md
+      - Extensibility: internals/sp-gist-indexes/extensibility.md
+      - Implementation: internals/sp-gist-indexes/implementation.md
+      - Examples: internals/sp-gist-indexes/examples.md
+    - GIN Indexes:
+      - internals/gin-indexes/index.md
+      - Introduction: internals/gin-indexes/introduction.md
+      - Built-in Operator Classes: internals/gin-indexes/built-in-operator-classes.md
+      - Extensibility: internals/gin-indexes/extensibility.md
+      - Implementation: internals/gin-indexes/implementation.md
+      - GIN Tips and Tricks: internals/gin-indexes/gin-tips-and-tricks.md
+      - Limitations: internals/gin-indexes/limitations.md
+      - Examples: internals/gin-indexes/examples.md
+    - BRIN Indexes:
+      - internals/brin-indexes/index.md
+      - Introduction: internals/brin-indexes/introduction.md
+      - Built-in Operator Classes: internals/brin-indexes/built-in-operator-classes.md
+      - Extensibility: internals/brin-indexes/extensibility.md
+    - Hash Indexes:
+      - internals/hash-indexes/index.md
+      - Overview: internals/hash-indexes/overview.md
+      - Implementation: internals/hash-indexes/implementation.md
     - Database Physical Storage:
       - internals/database-physical-storage/index.md
       - Database File Layout: internals/database-physical-storage/database-file-layout.md
@@ -1105,10 +1113,24 @@ nav:
       - XML Limits and Conformance to SQL/XML: appendixes/sql-conformance/xml-limits-and-conformance-to-sql-xml.md
     - Release Notes:
       - appendixes/release-notes/index.md
-      - Release 19: appendixes/release-notes/release-19.md
+      - Release 16.13: appendixes/release-notes/release-16-13.md
+      - Release 16.12: appendixes/release-notes/release-16-12.md
+      - Release 16.11: appendixes/release-notes/release-16-11.md
+      - Release 16.10: appendixes/release-notes/release-16-10.md
+      - Release 16.9: appendixes/release-notes/release-16-9.md
+      - Release 16.8: appendixes/release-notes/release-16-8.md
+      - Release 16.7: appendixes/release-notes/release-16-7.md
+      - Release 16.6: appendixes/release-notes/release-16-6.md
+      - Release 16.5: appendixes/release-notes/release-16-5.md
+      - Release 16.4: appendixes/release-notes/release-16-4.md
+      - Release 16.3: appendixes/release-notes/release-16-3.md
+      - Release 16.2: appendixes/release-notes/release-16-2.md
+      - Release 16.1: appendixes/release-notes/release-16-1.md
+      - Release 16: appendixes/release-notes/release-16.md
       - Prior Releases: appendixes/release-notes/prior-releases.md
     - Additional Supplied Modules and Extensions:
       - appendixes/additional-supplied-modules-and-extensions/index.md
+      - adminpack — pgAdmin support toolpack: appendixes/additional-supplied-modules-and-extensions/adminpack-pgadmin-support-toolpack.md
       - amcheck — tools to verify table and index consistency: appendixes/additional-supplied-modules-and-extensions/amcheck-tools-to-verify-table-and-index-consistency.md
       - auth_delay — pause on authentication failure: appendixes/additional-supplied-modules-and-extensions/auth_delay-pause-on-authentication-failure.md
       - auto_explain — log execution plans of slow queries: appendixes/additional-supplied-modules-and-extensions/auto_explain-log-execution-plans-of-slow-queries.md
@@ -1131,13 +1153,12 @@ nav:
       - 'isn — data types for international standard numbers (ISBN, EAN, UPC, etc.)': appendixes/additional-supplied-modules-and-extensions/isn-data-types-for-international-standard-numbers-isbn-ean-upc-etc.md
       - lo — manage large objects: appendixes/additional-supplied-modules-and-extensions/lo-manage-large-objects.md
       - ltree — hierarchical tree-like data type: appendixes/additional-supplied-modules-and-extensions/ltree-hierarchical-tree-like-data-type.md
+      - 'old_snapshot — inspect `old_snapshot_threshold` state': appendixes/additional-supplied-modules-and-extensions/old_snapshot-inspect-old_snapshot_threshold-state.md
       - pageinspect — low-level inspection of database pages: appendixes/additional-supplied-modules-and-extensions/pageinspect-low-level-inspection-of-database-pages.md
       - passwordcheck — verify password strength: appendixes/additional-supplied-modules-and-extensions/passwordcheck-verify-password-strength.md
       - pg_buffercache — inspect PostgreSQL buffer cache state: appendixes/additional-supplied-modules-and-extensions/pg_buffercache-inspect-postgresql-buffer-cache-state.md
       - pgcrypto — cryptographic functions: appendixes/additional-supplied-modules-and-extensions/pgcrypto-cryptographic-functions.md
       - pg_freespacemap — examine the free space map: appendixes/additional-supplied-modules-and-extensions/pg_freespacemap-examine-the-free-space-map.md
-      - pg_logicalinspect — logical decoding components inspection: appendixes/additional-supplied-modules-and-extensions/pg_logicalinspect-logical-decoding-components-inspection.md
-      - pg_overexplain — allow EXPLAIN to dump even more details: appendixes/additional-supplied-modules-and-extensions/pg_overexplain-allow-explain-to-dump-even-more-details.md
       - pg_prewarm — preload relation data into buffer caches: appendixes/additional-supplied-modules-and-extensions/pg_prewarm-preload-relation-data-into-buffer-caches.md
       - 'pgrowlocks — show a table''s row locking information': appendixes/additional-supplied-modules-and-extensions/pgrowlocks-show-a-tables-row-locking-information.md
       - pg_stat_statements — track statistics of SQL planning and execution: appendixes/additional-supplied-modules-and-extensions/pg_stat_statements-track-statistics-of-sql-planning-and-execution.md
