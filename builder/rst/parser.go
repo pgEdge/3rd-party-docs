@@ -229,22 +229,36 @@ func (p *Parser) parseHeading(parent *Node) {
 	p.pos += 2
 }
 
-// isLabel checks if a line is a cross-reference label.
+// isLabel checks if a line is a cross-reference label or
+// hyperlink target (.. _name: or .. _name: URL).
 func (p *Parser) isLabel(line string) bool {
 	trimmed := strings.TrimSpace(line)
-	return strings.HasPrefix(trimmed, ".. _") &&
-		strings.HasSuffix(trimmed, ":")
+	if !strings.HasPrefix(trimmed, ".. _") {
+		return false
+	}
+	// Must contain a colon after the name
+	rest := trimmed[4:]
+	return strings.Contains(rest, ":")
 }
 
-// parseLabel parses a label definition.
+// parseLabel parses a label definition or hyperlink target.
 func (p *Parser) parseLabel(parent *Node) {
 	line := strings.TrimSpace(p.lines[p.pos])
-	// Extract label name from ".. _name:"
-	name := line[4 : len(line)-1]
-	parent.Children = append(parent.Children, &Node{
+	// ".. _name:" (label) or ".. _name: URL" (hyperlink target)
+	rest := line[4:]
+	colonIdx := strings.Index(rest, ":")
+	name := rest[:colonIdx]
+	url := strings.TrimSpace(rest[colonIdx+1:])
+
+	node := &Node{
 		Type:  LabelNode,
 		Label: name,
-	})
+	}
+	// If there's a URL, store it in Text for hyperlink resolution
+	if url != "" {
+		node.Text = url
+	}
+	parent.Children = append(parent.Children, node)
 	p.pos++
 }
 

@@ -27,11 +27,12 @@ type ConvertContext struct {
 	PgAdminSrcDir string
 	Verbose       bool
 
-	FileMap       map[string]string
-	LabelMap      map[string]labelInfo
-	Substitutions map[string]*Node
-	CurrentFile   string
-	Warnings      []string
+	FileMap          map[string]string
+	LabelMap         map[string]labelInfo
+	Substitutions    map[string]*Node
+	HyperlinkTargets map[string]string // name -> URL
+	CurrentFile      string
+	Warnings         []string
 }
 
 // Converter orchestrates RST-to-Markdown conversion.
@@ -46,13 +47,14 @@ func NewConverter(
 ) *Converter {
 	return &Converter{
 		ctx: &ConvertContext{
-			SrcDir:        srcDir,
-			OutDir:        outDir,
-			Version:       version,
-			Copyright:     copyright,
-			PgAdminSrcDir: pgadminSrc,
-			Verbose:       verbose,
-			Substitutions: make(map[string]*Node),
+			SrcDir:           srcDir,
+			OutDir:           outDir,
+			Version:          version,
+			Copyright:        copyright,
+			PgAdminSrcDir:    pgadminSrc,
+			Verbose:          verbose,
+			Substitutions:    make(map[string]*Node),
+			HyperlinkTargets: make(map[string]string),
 		},
 	}
 }
@@ -134,7 +136,7 @@ func (c *Converter) convertFile(rstName, outputPath string) error {
 	root := Parse(string(data))
 
 	// Collect substitution definitions from this file
-	collectSubstitutions(root, ctx.Substitutions)
+	collectSubstitutions(root, ctx.Substitutions, ctx.HyperlinkTargets)
 
 	// Convert
 	w := shared.NewMarkdownWriter()
@@ -416,15 +418,20 @@ func convertInlineCtx(ctx *ConvertContext, text string) string {
 		ctx.FileMap,
 		ctx.CurrentFile,
 		ctx.Substitutions,
+		ctx.HyperlinkTargets,
 	)
 }
 
-// collectSubstitutions extracts substitution definitions from a
-// document tree.
-func collectSubstitutions(root *Node, subs map[string]*Node) {
+// collectSubstitutions extracts substitution definitions and
+// hyperlink targets from a document tree.
+func collectSubstitutions(root *Node, subs map[string]*Node, targets map[string]string) {
 	for _, child := range root.Children {
 		if child.Type == SubstitutionDefNode {
 			subs[child.SubstitutionName] = child
+		}
+		if child.Type == LabelNode && child.Text != "" {
+			// Hyperlink target: .. _name: URL
+			targets[child.Label] = child.Text
 		}
 	}
 }

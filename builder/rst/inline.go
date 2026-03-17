@@ -37,38 +37,36 @@ var (
 	reExternalLink = regexp.MustCompile(
 		"`([^<]+)<([^>]+)>`_{1,2}")
 
-	// `text`_ (named reference)
-	reNamedRef = regexp.MustCompile("`([^`]+)`_(?:[^_]|$)")
+	// `text`_ (backtick named reference)
+	reBacktickRef = regexp.MustCompile("`([^`]+)`_(?:[^_]|$)")
+
+	// word_ (standalone named reference — word followed by _)
+	reStandaloneRef = regexp.MustCompile(`\b([A-Za-z][A-Za-z0-9]+)_\b`)
+
+	// |substitution|_ (substitution with hyperlink)
+	reSubstitutionLink = regexp.MustCompile(`\|([a-zA-Z0-9_-]+)\|_`)
 
 	// |substitution|
 	reSubstitution = regexp.MustCompile(`\|([a-zA-Z0-9_-]+)\|`)
+
+	// RST backslash escape: \x (any character after backslash)
+	reBackslashEscape = regexp.MustCompile(`\\(.)`)
 )
 
 // ConvertInline converts RST inline markup to Markdown.
-// The labelMap maps label names to (file, anchor) pairs.
-// The fileMap maps RST basenames to output .md paths.
-// The substitutions map holds substitution definitions.
 func ConvertInline(
 	text string,
 	labelMap map[string]labelInfo,
 	fileMap map[string]string,
 	currentFile string,
 	substitutions map[string]*Node,
+	hyperlinkTargets map[string]string,
 ) string {
 	if text == "" {
 		return ""
 	}
 
-	// Process in order to avoid double-conversion:
-	// 1. Literal spans (protect from further processing)
-	// 2. Roles
-	// 3. External links
-	// 4. Named references
-	// 5. Bold/italic
-	// 6. Substitutions
-	// 7. Index entries
-
-	// Step 1: Protect literal spans
+	// Step 1: Protect literal spans from further processing
 	type placeholder struct {
 		key     string
 		replace string
@@ -76,7 +74,6 @@ func ConvertInline(
 	var placeholders []placeholder
 	phIdx := 0
 
-	// Protect ``literal``
 	text = reLiteral.ReplaceAllStringFunc(text, func(m string) string {
 		sub := reLiteral.FindStringSubmatch(m)
 		key := "\x00LIT" + string(rune('A'+phIdx)) + "\x00"
@@ -98,7 +95,7 @@ func ConvertInline(
 			currentFile)
 	})
 
-	// Step 4: External links
+	// Step 4: External links `text <URL>`_
 	text = reExternalLink.ReplaceAllStringFunc(text, func(m string) string {
 		sub := reExternalLink.FindStringSubmatch(m)
 		title := strings.TrimSpace(sub[1])
@@ -106,7 +103,24 @@ func ConvertInline(
 		return "[" + title + "](" + url + ")"
 	})
 
-	// Step 5: Substitutions
+	// Step 5: |substitution|_ (substitution + hyperlink ref)
+	if hyperlinkTargets != nil {
+		text = reSubstitutionLink.ReplaceAllStringFunc(text,
+			func(m string) string {
+				sub := reSubstitutionLink.FindStringSubmatch(m)
+				name := sub[1]
+				display := name
+				if def, ok := substitutions[name]; ok {
+					display = def.DirectiveArg
+				}
+				if url, ok := hyperlinkTargets[name]; ok {
+					return "[" + display + "](" + url + ")"
+				}
+				return display
+			})
+	}
+
+	// Step 6: Substitutions |name|
 	text = reSubstitution.ReplaceAllStringFunc(text, func(m string) string {
 		sub := reSubstitution.FindStringSubmatch(m)
 		name := sub[1]
@@ -124,6 +138,36 @@ func ConvertInline(
 		}
 		return m
 	})
+
+	// Step 7: `text`_ backtick named references
+	if hyperlinkTargets != nil {
+		text = reBacktickRef.ReplaceAllStringFunc(text,
+			func(m string) string {
+				sub := reBacktickRef.FindStringSubmatch(m)
+				name := sub[1]
+				if url, ok := hyperlinkTargets[name]; ok {
+					return "[" + name + "](" + url + ")"
+				}
+				// Not a known target — just strip backticks
+				return name
+			})
+	}
+
+	// Step 8: standalone word_ named references
+	if hyperlinkTargets != nil {
+		text = reStandaloneRef.ReplaceAllStringFunc(text,
+			func(m string) string {
+				sub := reStandaloneRef.FindStringSubmatch(m)
+				name := sub[1]
+				if url, ok := hyperlinkTargets[name]; ok {
+					return "[" + name + "](" + url + ")"
+				}
+				return m // leave as-is if not a known target
+			})
+	}
+
+	// Step 9: Backslash escapes
+	text = reBackslashEscape.ReplaceAllString(text, "$1")
 
 	// Restore literal placeholders
 	for _, ph := range placeholders {
@@ -153,7 +197,6 @@ func convertRole(
 	case "doc":
 		return convertDoc(content, fileMap, currentFile)
 	case "index":
-		// Strip index entries — just return the content
 		return content
 	case "menuselection", "guilabel":
 		return "**" + content + "**"
@@ -170,7 +213,6 @@ func convertRole(
 		return "[PEP " + content + "](https://peps.python.org/pep-" +
 			strings.TrimLeft(content, "0") + "/)"
 	case "abbr":
-		// :abbr:`text (expansion)`
 		return content
 	case "sup":
 		return "<sup>" + content + "</sup>"
@@ -187,7 +229,6 @@ func convertRef(
 	labelMap map[string]labelInfo,
 	currentFile string,
 ) string {
-	// :ref:`Title <target>` or :ref:`target`
 	title := ""
 	target := content
 	if idx := strings.Index(content, "<"); idx >= 0 {
@@ -231,7 +272,6 @@ func convertDoc(
 		}
 	}
 
-	// Clean target
 	target = strings.TrimPrefix(target, "/")
 	target = strings.TrimSuffix(target, ".rst")
 
@@ -258,14 +298,10 @@ func resolveLink(currentFile, targetFile, anchor string) string {
 		return ""
 	}
 
-	// Simple relative path calculation
 	fromParts := strings.Split(currentFile, "/")
 	toParts := strings.Split(targetFile, "/")
-
-	// Remove filename from from
 	fromParts = fromParts[:len(fromParts)-1]
 
-	// Find common prefix
 	common := 0
 	for common < len(fromParts) && common < len(toParts) {
 		if fromParts[common] == toParts[common] {
@@ -275,7 +311,6 @@ func resolveLink(currentFile, targetFile, anchor string) string {
 		}
 	}
 
-	// Build relative path
 	var parts []string
 	for i := common; i < len(fromParts); i++ {
 		parts = append(parts, "..")

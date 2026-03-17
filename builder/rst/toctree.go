@@ -168,18 +168,33 @@ func extractDocTitle(root *Node) string {
 	return ""
 }
 
-// cleanTitle removes RST index markup from a title.
+// cleanTitle removes RST index markup and inline formatting
+// from a title for use in nav entries.
 func cleanTitle(text string) string {
 	// Strip `Title`:index: pattern
 	suffix := "`:index:"
 	if idx := strings.Index(text, suffix); idx >= 0 {
-		// Find the opening backtick before the closing one
 		sub := text[:idx]
 		start := strings.LastIndex(sub, "`")
 		if start >= 0 && start < idx {
-			return strings.TrimSpace(text[start+1 : idx])
+			text = text[start+1 : idx]
 		}
 	}
+
+	// Strip ``literal`` -> literal (double backticks)
+	text = strings.ReplaceAll(text, "``", "")
+
+	// Strip remaining single backticks
+	text = strings.ReplaceAll(text, "`", "")
+
+	// Strip RST backslash escapes
+	for strings.Contains(text, "\\") {
+		text = reBackslashEscape.ReplaceAllString(text, "$1")
+		if !strings.Contains(text, "\\") {
+			break
+		}
+	}
+
 	return strings.TrimSpace(text)
 }
 

@@ -287,21 +287,21 @@ func TestParseComment(t *testing.T) {
 // --- Inline conversion tests ---
 
 func TestConvertInline_Bold(t *testing.T) {
-	result := ConvertInline("This is **bold** text", nil, nil, "", nil)
+	result := ConvertInline("This is **bold** text", nil, nil, "", nil, nil)
 	if result != "This is **bold** text" {
 		t.Errorf("unexpected result: %q", result)
 	}
 }
 
 func TestConvertInline_Italic(t *testing.T) {
-	result := ConvertInline("This is *italic* text", nil, nil, "", nil)
+	result := ConvertInline("This is *italic* text", nil, nil, "", nil, nil)
 	if result != "This is *italic* text" {
 		t.Errorf("unexpected result: %q", result)
 	}
 }
 
 func TestConvertInline_Literal(t *testing.T) {
-	result := ConvertInline("Use ``config.py`` file", nil, nil, "", nil)
+	result := ConvertInline("Use ``config.py`` file", nil, nil, "", nil, nil)
 	if result != "Use `config.py` file" {
 		t.Errorf("unexpected result: %q", result)
 	}
@@ -310,7 +310,7 @@ func TestConvertInline_Literal(t *testing.T) {
 func TestConvertInline_ExternalLink(t *testing.T) {
 	result := ConvertInline(
 		"`PostgreSQL <https://www.postgresql.org/>`_",
-		nil, nil, "", nil)
+		nil, nil, "", nil, nil)
 	if result != "[PostgreSQL](https://www.postgresql.org/)" {
 		t.Errorf("unexpected result: %q", result)
 	}
@@ -326,7 +326,7 @@ func TestConvertInline_Ref(t *testing.T) {
 	}
 	result := ConvertInline(
 		":ref:`config.py <config_py>`",
-		labels, nil, "mfa.md", nil)
+		labels, nil, "mfa.md", nil, nil)
 	if !strings.Contains(result, "[config.py]") {
 		t.Errorf("expected link text 'config.py', got %q", result)
 	}
@@ -337,7 +337,7 @@ func TestConvertInline_Ref(t *testing.T) {
 
 func TestConvertInline_IndexRole(t *testing.T) {
 	result := ConvertInline(
-		"`Getting Started`:index:", nil, nil, "", nil)
+		"`Getting Started`:index:", nil, nil, "", nil, nil)
 	if result != "Getting Started" {
 		t.Errorf("expected 'Getting Started', got %q", result)
 	}
@@ -351,7 +351,7 @@ func TestConvertInline_Substitution(t *testing.T) {
 			Options:       map[string]string{"alt": "Icon"},
 		},
 	}
-	result := ConvertInline("Click |icon| here", nil, nil, "", subs)
+	result := ConvertInline("Click |icon| here", nil, nil, "", subs, nil)
 	if !strings.Contains(result, "<img") {
 		t.Errorf("expected img tag, got %q", result)
 	}

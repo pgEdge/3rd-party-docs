@@ -437,28 +437,28 @@ func TestInlineToHTML_NoMarkup(t *testing.T) {
 
 func TestConvertRole_MenuSelection(t *testing.T) {
 	result := ConvertInline(":menuselection:`File > Save`",
-		nil, nil, "", nil)
+		nil, nil, "", nil, nil)
 	if result != "**File > Save**" {
 		t.Errorf("got %q", result)
 	}
 }
 
 func TestConvertRole_Kbd(t *testing.T) {
-	result := ConvertInline(":kbd:`Ctrl+S`", nil, nil, "", nil)
+	result := ConvertInline(":kbd:`Ctrl+S`", nil, nil, "", nil, nil)
 	if result != "`Ctrl+S`" {
 		t.Errorf("got %q", result)
 	}
 }
 
 func TestConvertRole_File(t *testing.T) {
-	result := ConvertInline(":file:`config.py`", nil, nil, "", nil)
+	result := ConvertInline(":file:`config.py`", nil, nil, "", nil, nil)
 	if result != "`config.py`" {
 		t.Errorf("got %q", result)
 	}
 }
 
 func TestConvertRole_Code(t *testing.T) {
-	result := ConvertInline(":code:`x = 1`", nil, nil, "", nil)
+	result := ConvertInline(":code:`x = 1`", nil, nil, "", nil, nil)
 	if result != "`x = 1`" {
 		t.Errorf("got %q", result)
 	}
@@ -466,28 +466,28 @@ func TestConvertRole_Code(t *testing.T) {
 
 func TestConvertRole_Abbr(t *testing.T) {
 	result := ConvertInline(":abbr:`SQL (Structured Query Language)`",
-		nil, nil, "", nil)
+		nil, nil, "", nil, nil)
 	if result != "SQL (Structured Query Language)" {
 		t.Errorf("got %q", result)
 	}
 }
 
 func TestConvertRole_Sup(t *testing.T) {
-	result := ConvertInline(":sup:`2`", nil, nil, "", nil)
+	result := ConvertInline(":sup:`2`", nil, nil, "", nil, nil)
 	if result != "<sup>2</sup>" {
 		t.Errorf("got %q", result)
 	}
 }
 
 func TestConvertRole_Sub(t *testing.T) {
-	result := ConvertInline(":sub:`i`", nil, nil, "", nil)
+	result := ConvertInline(":sub:`i`", nil, nil, "", nil, nil)
 	if result != "<sub>i</sub>" {
 		t.Errorf("got %q", result)
 	}
 }
 
 func TestConvertRole_Unknown(t *testing.T) {
-	result := ConvertInline(":custom:`value`", nil, nil, "", nil)
+	result := ConvertInline(":custom:`value`", nil, nil, "", nil, nil)
 	if result != "`value`" {
 		t.Errorf("got %q", result)
 	}
@@ -498,7 +498,7 @@ func TestConvertRole_Doc(t *testing.T) {
 		"coding_standards": "coding_standards.md",
 	}
 	result := ConvertInline(":doc:`coding_standards`",
-		nil, fileMap, "code_review.md", nil)
+		nil, fileMap, "code_review.md", nil, nil)
 	if !strings.Contains(result, "coding_standards.md") {
 		t.Errorf("expected link: %q", result)
 	}
@@ -510,7 +510,7 @@ func TestConvertRole_Doc_WithTitle(t *testing.T) {
 	}
 	result := ConvertInline(
 		":doc:`Standards <coding_standards>`",
-		nil, fileMap, "test.md", nil)
+		nil, fileMap, "test.md", nil, nil)
 	if !strings.Contains(result, "[Standards]") {
 		t.Errorf("expected title: %q", result)
 	}
@@ -518,7 +518,7 @@ func TestConvertRole_Doc_WithTitle(t *testing.T) {
 
 func TestConvertRole_Ref_NoMatch(t *testing.T) {
 	result := ConvertInline(":ref:`nonexistent`",
-		map[string]labelInfo{}, nil, "", nil)
+		map[string]labelInfo{}, nil, "", nil, nil)
 	if result != "nonexistent" {
 		t.Errorf("expected plain text: %q", result)
 	}
@@ -526,7 +526,7 @@ func TestConvertRole_Ref_NoMatch(t *testing.T) {
 
 func TestConvertRole_Index(t *testing.T) {
 	result := ConvertInline(":index:`Search Term`",
-		nil, nil, "", nil)
+		nil, nil, "", nil, nil)
 	if result != "Search Term" {
 		t.Errorf("expected stripped: %q", result)
 	}
