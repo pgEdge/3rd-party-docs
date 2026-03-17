@@ -1,4 +1,4 @@
-site_name: PostgreSQL 19devel
+site_name: pgAdmin 4 v9.11
 
 extra_css:
   - stylesheets/extra.css
@@ -51,1147 +51,265 @@ extra:
 repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
-  - Preface:
-    - preface/index.md
-    - What Is PostgreSQL?: preface/what-is-postgresql.md
-    - A Brief History of PostgreSQL: preface/a-brief-history-of-postgresql.md
-    - Conventions: preface/conventions.md
-    - Further Information: preface/further-information.md
-    - Bug Reporting Guidelines: preface/bug-reporting-guidelines.md
-  - Tutorial:
-    - tutorial/index.md
-    - Getting Started:
-      - tutorial/getting-started/index.md
-      - Installation: tutorial/getting-started/installation.md
-      - Architectural Fundamentals: tutorial/getting-started/architectural-fundamentals.md
-      - Creating a Database: tutorial/getting-started/creating-a-database.md
-      - Accessing a Database: tutorial/getting-started/accessing-a-database.md
-    - The SQL Language:
-      - tutorial/the-sql-language/index.md
-      - Introduction: tutorial/the-sql-language/introduction.md
-      - Concepts: tutorial/the-sql-language/concepts.md
-      - Creating a New Table: tutorial/the-sql-language/creating-a-new-table.md
-      - Populating a Table With Rows: tutorial/the-sql-language/populating-a-table-with-rows.md
-      - Querying a Table: tutorial/the-sql-language/querying-a-table.md
-      - Joins Between Tables: tutorial/the-sql-language/joins-between-tables.md
-      - Aggregate Functions: tutorial/the-sql-language/aggregate-functions.md
-      - Updates: tutorial/the-sql-language/updates.md
-      - Deletions: tutorial/the-sql-language/deletions.md
-    - Advanced Features:
-      - tutorial/advanced-features/index.md
-      - Introduction: tutorial/advanced-features/introduction.md
-      - Views: tutorial/advanced-features/views.md
-      - Foreign Keys: tutorial/advanced-features/foreign-keys.md
-      - Transactions: tutorial/advanced-features/transactions.md
-      - Window Functions: tutorial/advanced-features/window-functions.md
-      - Inheritance: tutorial/advanced-features/inheritance.md
-      - Conclusion: tutorial/advanced-features/conclusion.md
-  - The SQL Language:
-    - the-sql-language/index.md
-    - SQL Syntax:
-      - the-sql-language/sql-syntax/index.md
-      - Lexical Structure: the-sql-language/sql-syntax/lexical-structure.md
-      - Value Expressions: the-sql-language/sql-syntax/value-expressions.md
-      - Calling Functions: the-sql-language/sql-syntax/calling-functions.md
-    - Data Definition:
-      - the-sql-language/data-definition/index.md
-      - Table Basics: the-sql-language/data-definition/table-basics.md
-      - Default Values: the-sql-language/data-definition/default-values.md
-      - Identity Columns: the-sql-language/data-definition/identity-columns.md
-      - Generated Columns: the-sql-language/data-definition/generated-columns.md
-      - Constraints: the-sql-language/data-definition/constraints.md
-      - System Columns: the-sql-language/data-definition/system-columns.md
-      - Temporal Tables: the-sql-language/data-definition/temporal-tables.md
-      - Modifying Tables: the-sql-language/data-definition/modifying-tables.md
-      - Privileges: the-sql-language/data-definition/privileges.md
-      - Row Security Policies: the-sql-language/data-definition/row-security-policies.md
-      - Schemas: the-sql-language/data-definition/schemas.md
-      - Inheritance: the-sql-language/data-definition/inheritance.md
-      - Table Partitioning: the-sql-language/data-definition/table-partitioning.md
-      - Foreign Data: the-sql-language/data-definition/foreign-data.md
-      - Other Database Objects: the-sql-language/data-definition/other-database-objects.md
-      - Dependency Tracking: the-sql-language/data-definition/dependency-tracking.md
-    - Data Manipulation:
-      - the-sql-language/data-manipulation/index.md
-      - Inserting Data: the-sql-language/data-manipulation/inserting-data.md
-      - Updating Data: the-sql-language/data-manipulation/updating-data.md
-      - Deleting Data: the-sql-language/data-manipulation/deleting-data.md
-      - Returning Data from Modified Rows: the-sql-language/data-manipulation/returning-data-from-modified-rows.md
-    - Queries:
-      - the-sql-language/queries/index.md
-      - Overview: the-sql-language/queries/overview.md
-      - Table Expressions: the-sql-language/queries/table-expressions.md
-      - Select Lists: the-sql-language/queries/select-lists.md
-      - 'Combining Queries (`UNION`, `INTERSECT`, `EXCEPT`)': the-sql-language/queries/combining-queries-union-intersect-except.md
-      - 'Sorting Rows (`ORDER BY`)': the-sql-language/queries/sorting-rows-order-by.md
-      - '`LIMIT` and `OFFSET`': the-sql-language/queries/limit-and-offset.md
-      - '`VALUES` Lists': the-sql-language/queries/values-lists.md
-      - '`WITH` Queries (Common Table Expressions)': the-sql-language/queries/with-queries-common-table-expressions.md
-    - Data Types:
-      - the-sql-language/data-types/index.md
-      - Numeric Types: the-sql-language/data-types/numeric-types.md
-      - Monetary Types: the-sql-language/data-types/monetary-types.md
-      - Character Types: the-sql-language/data-types/character-types.md
-      - Binary Data Types: the-sql-language/data-types/binary-data-types.md
-      - Date/Time Types: the-sql-language/data-types/date-time-types.md
-      - Boolean Type: the-sql-language/data-types/boolean-type.md
-      - Enumerated Types: the-sql-language/data-types/enumerated-types.md
-      - Geometric Types: the-sql-language/data-types/geometric-types.md
-      - Network Address Types: the-sql-language/data-types/network-address-types.md
-      - Bit String Types: the-sql-language/data-types/bit-string-types.md
-      - Text Search Types: the-sql-language/data-types/text-search-types.md
-      - UUID Type: the-sql-language/data-types/uuid-type.md
-      - XML Type: the-sql-language/data-types/xml-type.md
-      - JSON Types: the-sql-language/data-types/json-types.md
-      - Arrays: the-sql-language/data-types/arrays.md
-      - Composite Types: the-sql-language/data-types/composite-types.md
-      - Range Types: the-sql-language/data-types/range-types.md
-      - Domain Types: the-sql-language/data-types/domain-types.md
-      - Object Identifier Types: the-sql-language/data-types/object-identifier-types.md
-      - '`pg_lsn` Type': the-sql-language/data-types/pg_lsn-type.md
-      - Pseudo-Types: the-sql-language/data-types/pseudo-types.md
-    - Functions and Operators:
-      - the-sql-language/functions-and-operators/index.md
-      - Logical Operators: the-sql-language/functions-and-operators/logical-operators.md
-      - Comparison Functions and Operators: the-sql-language/functions-and-operators/comparison-functions-and-operators.md
-      - Mathematical Functions and Operators: the-sql-language/functions-and-operators/mathematical-functions-and-operators.md
-      - String Functions and Operators: the-sql-language/functions-and-operators/string-functions-and-operators.md
-      - Binary String Functions and Operators: the-sql-language/functions-and-operators/binary-string-functions-and-operators.md
-      - Bit String Functions and Operators: the-sql-language/functions-and-operators/bit-string-functions-and-operators.md
-      - Pattern Matching: the-sql-language/functions-and-operators/pattern-matching.md
-      - Data Type Formatting Functions: the-sql-language/functions-and-operators/data-type-formatting-functions.md
-      - Date/Time Functions and Operators: the-sql-language/functions-and-operators/date-time-functions-and-operators.md
-      - Enum Support Functions: the-sql-language/functions-and-operators/enum-support-functions.md
-      - Geometric Functions and Operators: the-sql-language/functions-and-operators/geometric-functions-and-operators.md
-      - Network Address Functions and Operators: the-sql-language/functions-and-operators/network-address-functions-and-operators.md
-      - Text Search Functions and Operators: the-sql-language/functions-and-operators/text-search-functions-and-operators.md
-      - UUID Functions: the-sql-language/functions-and-operators/uuid-functions.md
-      - XML Functions: the-sql-language/functions-and-operators/xml-functions.md
-      - JSON Functions and Operators: the-sql-language/functions-and-operators/json-functions-and-operators.md
-      - Sequence Manipulation Functions: the-sql-language/functions-and-operators/sequence-manipulation-functions.md
-      - Conditional Expressions: the-sql-language/functions-and-operators/conditional-expressions.md
-      - Array Functions and Operators: the-sql-language/functions-and-operators/array-functions-and-operators.md
-      - Range/Multirange Functions and Operators: the-sql-language/functions-and-operators/range-multirange-functions-and-operators.md
-      - Aggregate Functions: the-sql-language/functions-and-operators/aggregate-functions.md
-      - Window Functions: the-sql-language/functions-and-operators/window-functions.md
-      - Merge Support Functions: the-sql-language/functions-and-operators/merge-support-functions.md
-      - Subquery Expressions: the-sql-language/functions-and-operators/subquery-expressions.md
-      - Row and Array Comparisons: the-sql-language/functions-and-operators/row-and-array-comparisons.md
-      - Set Returning Functions: the-sql-language/functions-and-operators/set-returning-functions.md
-      - System Information Functions and Operators: the-sql-language/functions-and-operators/system-information-functions-and-operators.md
-      - System Administration Functions: the-sql-language/functions-and-operators/system-administration-functions.md
-      - Trigger Functions: the-sql-language/functions-and-operators/trigger-functions.md
-      - Event Trigger Functions: the-sql-language/functions-and-operators/event-trigger-functions.md
-      - Statistics Information Functions: the-sql-language/functions-and-operators/statistics-information-functions.md
-    - Type Conversion:
-      - the-sql-language/type-conversion/index.md
-      - Overview: the-sql-language/type-conversion/overview.md
-      - Operators: the-sql-language/type-conversion/operators.md
-      - Functions: the-sql-language/type-conversion/functions.md
-      - Value Storage: the-sql-language/type-conversion/value-storage.md
-      - '`UNION`, `CASE`, and Related Constructs': the-sql-language/type-conversion/union-case-and-related-constructs.md
-      - '`SELECT` Output Columns': the-sql-language/type-conversion/select-output-columns.md
-    - Indexes:
-      - the-sql-language/indexes/index.md
-      - Introduction: the-sql-language/indexes/introduction.md
-      - Index Types: the-sql-language/indexes/index-types.md
-      - Multicolumn Indexes: the-sql-language/indexes/multicolumn-indexes.md
-      - 'Indexes and `ORDER BY`': the-sql-language/indexes/indexes-and-order-by.md
-      - Combining Multiple Indexes: the-sql-language/indexes/combining-multiple-indexes.md
-      - Unique Indexes: the-sql-language/indexes/unique-indexes.md
-      - Indexes on Expressions: the-sql-language/indexes/indexes-on-expressions.md
-      - Partial Indexes: the-sql-language/indexes/partial-indexes.md
-      - Index-Only Scans and Covering Indexes: the-sql-language/indexes/index-only-scans-and-covering-indexes.md
-      - Operator Classes and Operator Families: the-sql-language/indexes/operator-classes-and-operator-families.md
-      - Indexes and Collations: the-sql-language/indexes/indexes-and-collations.md
-      - Examining Index Usage: the-sql-language/indexes/examining-index-usage.md
-    - Full Text Search:
-      - the-sql-language/full-text-search/index.md
-      - Introduction: the-sql-language/full-text-search/introduction.md
-      - Tables and Indexes: the-sql-language/full-text-search/tables-and-indexes.md
-      - Controlling Text Search: the-sql-language/full-text-search/controlling-text-search.md
-      - Additional Features: the-sql-language/full-text-search/additional-features.md
-      - Parsers: the-sql-language/full-text-search/parsers.md
-      - Dictionaries: the-sql-language/full-text-search/dictionaries.md
-      - Configuration Example: the-sql-language/full-text-search/configuration-example.md
-      - Testing and Debugging Text Search: the-sql-language/full-text-search/testing-and-debugging-text-search.md
-      - Preferred Index Types for Text Search: the-sql-language/full-text-search/preferred-index-types-for-text-search.md
-      - psql Support: the-sql-language/full-text-search/psql-support.md
-      - Limitations: the-sql-language/full-text-search/limitations.md
-    - Concurrency Control:
-      - the-sql-language/concurrency-control/index.md
-      - Introduction: the-sql-language/concurrency-control/introduction.md
-      - Transaction Isolation: the-sql-language/concurrency-control/transaction-isolation.md
-      - Explicit Locking: the-sql-language/concurrency-control/explicit-locking.md
-      - Data Consistency Checks at the Application Level: the-sql-language/concurrency-control/data-consistency-checks-at-the-application-level.md
-      - Serialization Failure Handling: the-sql-language/concurrency-control/serialization-failure-handling.md
-      - Caveats: the-sql-language/concurrency-control/caveats.md
-      - Locking and Indexes: the-sql-language/concurrency-control/locking-and-indexes.md
-    - Performance Tips:
-      - the-sql-language/performance-tips/index.md
-      - 'Using `EXPLAIN`': the-sql-language/performance-tips/using-explain.md
-      - Statistics Used by the Planner: the-sql-language/performance-tips/statistics-used-by-the-planner.md
-      - 'Controlling the Planner with Explicit `JOIN` Clauses': the-sql-language/performance-tips/controlling-the-planner-with-explicit-join-clauses.md
-      - Populating a Database: the-sql-language/performance-tips/populating-a-database.md
-      - Non-Durable Settings: the-sql-language/performance-tips/non-durable-settings.md
-    - Parallel Query:
-      - the-sql-language/parallel-query/index.md
-      - How Parallel Query Works: the-sql-language/parallel-query/how-parallel-query-works.md
-      - When Can Parallel Query Be Used?: the-sql-language/parallel-query/when-can-parallel-query-be-used.md
-      - Parallel Plans: the-sql-language/parallel-query/parallel-plans.md
-      - Parallel Safety: the-sql-language/parallel-query/parallel-safety.md
-  - Server Administration:
-    - server-administration/index.md
-    - Installation from Binaries: server-administration/installation-from-binaries.md
-    - Installation from Source Code:
-      - server-administration/installation-from-source-code/index.md
-      - Requirements: server-administration/installation-from-source-code/requirements.md
-      - Getting the Source: server-administration/installation-from-source-code/getting-the-source.md
-      - Building and Installation with Autoconf and Make: server-administration/installation-from-source-code/building-and-installation-with-autoconf-and-make.md
-      - Building and Installation with Meson: server-administration/installation-from-source-code/building-and-installation-with-meson.md
-      - Post-Installation Setup: server-administration/installation-from-source-code/post-installation-setup.md
-      - Supported Platforms: server-administration/installation-from-source-code/supported-platforms.md
-      - Platform-Specific Notes: server-administration/installation-from-source-code/platform-specific-notes.md
-    - Server Setup and Operation:
-      - server-administration/server-setup-and-operation/index.md
-      - The PostgreSQL User Account: server-administration/server-setup-and-operation/the-postgresql-user-account.md
-      - Creating a Database Cluster: server-administration/server-setup-and-operation/creating-a-database-cluster.md
-      - Starting the Database Server: server-administration/server-setup-and-operation/starting-the-database-server.md
-      - Managing Kernel Resources: server-administration/server-setup-and-operation/managing-kernel-resources.md
-      - Shutting Down the Server: server-administration/server-setup-and-operation/shutting-down-the-server.md
-      - Upgrading a PostgreSQL Cluster: server-administration/server-setup-and-operation/upgrading-a-postgresql-cluster.md
-      - Preventing Server Spoofing: server-administration/server-setup-and-operation/preventing-server-spoofing.md
-      - Encryption Options: server-administration/server-setup-and-operation/encryption-options.md
-      - Secure TCP/IP Connections with SSL: server-administration/server-setup-and-operation/secure-tcp-ip-connections-with-ssl.md
-      - Secure TCP/IP Connections with GSSAPI Encryption: server-administration/server-setup-and-operation/secure-tcp-ip-connections-with-gssapi-encryption.md
-      - Secure TCP/IP Connections with SSH Tunnels: server-administration/server-setup-and-operation/secure-tcp-ip-connections-with-ssh-tunnels.md
-      - 'Registering Event Log on `Windows`': server-administration/server-setup-and-operation/registering-event-log-on-windows.md
-    - Server Configuration:
-      - server-administration/server-configuration/index.md
-      - Setting Parameters: server-administration/server-configuration/setting-parameters.md
-      - File Locations: server-administration/server-configuration/file-locations.md
-      - Connections and Authentication: server-administration/server-configuration/connections-and-authentication.md
-      - Resource Consumption: server-administration/server-configuration/resource-consumption.md
-      - Write Ahead Log: server-administration/server-configuration/write-ahead-log.md
-      - Replication: server-administration/server-configuration/replication.md
-      - Query Planning: server-administration/server-configuration/query-planning.md
-      - Error Reporting and Logging: server-administration/server-configuration/error-reporting-and-logging.md
-      - Run-time Statistics: server-administration/server-configuration/run-time-statistics.md
-      - Vacuuming: server-administration/server-configuration/vacuuming.md
-      - Client Connection Defaults: server-administration/server-configuration/client-connection-defaults.md
-      - Lock Management: server-administration/server-configuration/lock-management.md
-      - Version and Platform Compatibility: server-administration/server-configuration/version-and-platform-compatibility.md
-      - Error Handling: server-administration/server-configuration/error-handling.md
-      - Preset Options: server-administration/server-configuration/preset-options.md
-      - Customized Options: server-administration/server-configuration/customized-options.md
-      - Developer Options: server-administration/server-configuration/developer-options.md
-      - Short Options: server-administration/server-configuration/short-options.md
-    - Client Authentication:
-      - server-administration/client-authentication/index.md
-      - 'The `pg_hba.conf` File': server-administration/client-authentication/the-pg_hba-conf-file.md
-      - User Name Maps: server-administration/client-authentication/user-name-maps.md
-      - Authentication Methods: server-administration/client-authentication/authentication-methods.md
-      - Trust Authentication: server-administration/client-authentication/trust-authentication.md
-      - Password Authentication: server-administration/client-authentication/password-authentication.md
-      - GSSAPI Authentication: server-administration/client-authentication/gssapi-authentication.md
-      - SSPI Authentication: server-administration/client-authentication/sspi-authentication.md
-      - Ident Authentication: server-administration/client-authentication/ident-authentication.md
-      - Peer Authentication: server-administration/client-authentication/peer-authentication.md
-      - LDAP Authentication: server-administration/client-authentication/ldap-authentication.md
-      - RADIUS Authentication: server-administration/client-authentication/radius-authentication.md
-      - Certificate Authentication: server-administration/client-authentication/certificate-authentication.md
-      - PAM Authentication: server-administration/client-authentication/pam-authentication.md
-      - BSD Authentication: server-administration/client-authentication/bsd-authentication.md
-      - OAuth Authorization/Authentication: server-administration/client-authentication/oauth-authorization-authentication.md
-      - Authentication Problems: server-administration/client-authentication/authentication-problems.md
-    - Database Roles:
-      - server-administration/database-roles/index.md
-      - Database Roles: server-administration/database-roles/database-roles.md
-      - Role Attributes: server-administration/database-roles/role-attributes.md
-      - Role Membership: server-administration/database-roles/role-membership.md
-      - Dropping Roles: server-administration/database-roles/dropping-roles.md
-      - Predefined Roles: server-administration/database-roles/predefined-roles.md
-      - Function Security: server-administration/database-roles/function-security.md
-    - Managing Databases:
-      - server-administration/managing-databases/index.md
-      - Overview: server-administration/managing-databases/overview.md
-      - Creating a Database: server-administration/managing-databases/creating-a-database.md
-      - Template Databases: server-administration/managing-databases/template-databases.md
-      - Database Configuration: server-administration/managing-databases/database-configuration.md
-      - Destroying a Database: server-administration/managing-databases/destroying-a-database.md
-      - Tablespaces: server-administration/managing-databases/tablespaces.md
-    - Localization:
-      - server-administration/localization/index.md
-      - Locale Support: server-administration/localization/locale-support.md
-      - Collation Support: server-administration/localization/collation-support.md
-      - Character Set Support: server-administration/localization/character-set-support.md
-    - Routine Database Maintenance Tasks:
-      - server-administration/routine-database-maintenance-tasks/index.md
-      - Routine Vacuuming: server-administration/routine-database-maintenance-tasks/routine-vacuuming.md
-      - Routine Reindexing: server-administration/routine-database-maintenance-tasks/routine-reindexing.md
-      - Log File Maintenance: server-administration/routine-database-maintenance-tasks/log-file-maintenance.md
-    - Backup and Restore:
-      - server-administration/backup-and-restore/index.md
-      - SQL Dump: server-administration/backup-and-restore/sql-dump.md
-      - File System Level Backup: server-administration/backup-and-restore/file-system-level-backup.md
-      - Continuous Archiving and Point-in-Time Recovery (PITR): server-administration/backup-and-restore/continuous-archiving-and-point-in-time-recovery-pitr.md
-    - 'High Availability, Load Balancing, and Replication':
-      - server-administration/high-availability-load-balancing-and-replication/index.md
-      - Comparison of Different Solutions: server-administration/high-availability-load-balancing-and-replication/comparison-of-different-solutions.md
-      - Log-Shipping Standby Servers: server-administration/high-availability-load-balancing-and-replication/log-shipping-standby-servers.md
-      - Failover: server-administration/high-availability-load-balancing-and-replication/failover.md
-      - Hot Standby: server-administration/high-availability-load-balancing-and-replication/hot-standby.md
-    - Monitoring Database Activity:
-      - server-administration/monitoring-database-activity/index.md
-      - Standard Unix Tools: server-administration/monitoring-database-activity/standard-unix-tools.md
-      - The Cumulative Statistics System: server-administration/monitoring-database-activity/the-cumulative-statistics-system.md
-      - Viewing Locks: server-administration/monitoring-database-activity/viewing-locks.md
-      - Progress Reporting: server-administration/monitoring-database-activity/progress-reporting.md
-      - Dynamic Tracing: server-administration/monitoring-database-activity/dynamic-tracing.md
-      - Monitoring Disk Usage: server-administration/monitoring-database-activity/monitoring-disk-usage.md
-    - Reliability and the Write-Ahead Log:
-      - server-administration/reliability-and-the-write-ahead-log/index.md
-      - Reliability: server-administration/reliability-and-the-write-ahead-log/reliability.md
-      - Data Checksums: server-administration/reliability-and-the-write-ahead-log/data-checksums.md
-      - Write-Ahead Logging (WAL): server-administration/reliability-and-the-write-ahead-log/write-ahead-logging-wal.md
-      - Asynchronous Commit: server-administration/reliability-and-the-write-ahead-log/asynchronous-commit.md
-      - WAL Configuration: server-administration/reliability-and-the-write-ahead-log/wal-configuration.md
-      - WAL Internals: server-administration/reliability-and-the-write-ahead-log/wal-internals.md
-    - Logical Replication:
-      - server-administration/logical-replication/index.md
-      - Publication: server-administration/logical-replication/publication.md
-      - Subscription: server-administration/logical-replication/subscription.md
-      - Logical Replication Failover: server-administration/logical-replication/logical-replication-failover.md
-      - Row Filters: server-administration/logical-replication/row-filters.md
-      - Column Lists: server-administration/logical-replication/column-lists.md
-      - Generated Column Replication: server-administration/logical-replication/generated-column-replication.md
-      - Replicating Sequences: server-administration/logical-replication/replicating-sequences.md
-      - Conflicts: server-administration/logical-replication/conflicts.md
-      - Restrictions: server-administration/logical-replication/restrictions.md
-      - Architecture: server-administration/logical-replication/architecture.md
-      - Monitoring: server-administration/logical-replication/monitoring.md
-      - Security: server-administration/logical-replication/security.md
-      - Configuration Settings: server-administration/logical-replication/configuration-settings.md
-      - Upgrade: server-administration/logical-replication/upgrade.md
-      - Quick Setup: server-administration/logical-replication/quick-setup.md
-    - Just-in-Time Compilation (JIT):
-      - server-administration/just-in-time-compilation-jit/index.md
-      - What Is JIT compilation?: server-administration/just-in-time-compilation-jit/what-is-jit-compilation.md
-      - When to JIT?: server-administration/just-in-time-compilation-jit/when-to-jit.md
-      - Configuration: server-administration/just-in-time-compilation-jit/configuration.md
-      - Extensibility: server-administration/just-in-time-compilation-jit/extensibility.md
-    - Regression Tests:
-      - server-administration/regression-tests/index.md
-      - Running the Tests: server-administration/regression-tests/running-the-tests.md
-      - Test Evaluation: server-administration/regression-tests/test-evaluation.md
-      - Variant Comparison Files: server-administration/regression-tests/variant-comparison-files.md
-      - TAP Tests: server-administration/regression-tests/tap-tests.md
-      - Test Coverage Examination: server-administration/regression-tests/test-coverage-examination.md
-  - Client Interfaces:
-    - client-interfaces/index.md
-    - libpq — C Library:
-      - client-interfaces/libpq-c-library/index.md
-      - Database Connection Control Functions: client-interfaces/libpq-c-library/database-connection-control-functions.md
-      - Connection Status Functions: client-interfaces/libpq-c-library/connection-status-functions.md
-      - Command Execution Functions: client-interfaces/libpq-c-library/command-execution-functions.md
-      - Asynchronous Command Processing: client-interfaces/libpq-c-library/asynchronous-command-processing.md
-      - Pipeline Mode: client-interfaces/libpq-c-library/pipeline-mode.md
-      - Retrieving Query Results in Chunks: client-interfaces/libpq-c-library/retrieving-query-results-in-chunks.md
-      - Canceling Queries in Progress: client-interfaces/libpq-c-library/canceling-queries-in-progress.md
-      - The Fast-Path Interface: client-interfaces/libpq-c-library/the-fast-path-interface.md
-      - Asynchronous Notification: client-interfaces/libpq-c-library/asynchronous-notification.md
-      - 'Functions Associated with the `COPY` Command': client-interfaces/libpq-c-library/functions-associated-with-the-copy-command.md
-      - Control Functions: client-interfaces/libpq-c-library/control-functions.md
-      - Miscellaneous Functions: client-interfaces/libpq-c-library/miscellaneous-functions.md
-      - Notice Processing: client-interfaces/libpq-c-library/notice-processing.md
-      - Event System: client-interfaces/libpq-c-library/event-system.md
-      - Environment Variables: client-interfaces/libpq-c-library/environment-variables.md
-      - The Password File: client-interfaces/libpq-c-library/the-password-file.md
-      - The Connection Service File: client-interfaces/libpq-c-library/the-connection-service-file.md
-      - LDAP Lookup of Connection Parameters: client-interfaces/libpq-c-library/ldap-lookup-of-connection-parameters.md
-      - SSL Support: client-interfaces/libpq-c-library/ssl-support.md
-      - OAuth Support: client-interfaces/libpq-c-library/oauth-support.md
-      - Behavior in Threaded Programs: client-interfaces/libpq-c-library/behavior-in-threaded-programs.md
-      - Building libpq Programs: client-interfaces/libpq-c-library/building-libpq-programs.md
-      - Example Programs: client-interfaces/libpq-c-library/example-programs.md
-    - Large Objects:
-      - client-interfaces/large-objects/index.md
-      - Introduction: client-interfaces/large-objects/introduction.md
-      - Implementation Features: client-interfaces/large-objects/implementation-features.md
-      - Client Interfaces: client-interfaces/large-objects/client-interfaces.md
-      - Server-Side Functions: client-interfaces/large-objects/server-side-functions.md
-      - Example Program: client-interfaces/large-objects/example-program.md
-    - ECPG — Embedded SQL in C:
-      - client-interfaces/ecpg-embedded-sql-in-c/index.md
-      - The Concept: client-interfaces/ecpg-embedded-sql-in-c/the-concept.md
-      - Managing Database Connections: client-interfaces/ecpg-embedded-sql-in-c/managing-database-connections.md
-      - Running SQL Commands: client-interfaces/ecpg-embedded-sql-in-c/running-sql-commands.md
-      - Using Host Variables: client-interfaces/ecpg-embedded-sql-in-c/using-host-variables.md
-      - Dynamic SQL: client-interfaces/ecpg-embedded-sql-in-c/dynamic-sql.md
-      - pgtypes Library: client-interfaces/ecpg-embedded-sql-in-c/pgtypes-library.md
-      - Using Descriptor Areas: client-interfaces/ecpg-embedded-sql-in-c/using-descriptor-areas.md
-      - Error Handling: client-interfaces/ecpg-embedded-sql-in-c/error-handling.md
-      - Preprocessor Directives: client-interfaces/ecpg-embedded-sql-in-c/preprocessor-directives.md
-      - Processing Embedded SQL Programs: client-interfaces/ecpg-embedded-sql-in-c/processing-embedded-sql-programs.md
-      - Library Functions: client-interfaces/ecpg-embedded-sql-in-c/library-functions.md
-      - Large Objects: client-interfaces/ecpg-embedded-sql-in-c/large-objects.md
-      - C++ Applications: client-interfaces/ecpg-embedded-sql-in-c/c-applications.md
-      - Embedded SQL Commands: client-interfaces/ecpg-embedded-sql-in-c/embedded-sql-commands.md
-      - Informix Compatibility Mode: client-interfaces/ecpg-embedded-sql-in-c/informix-compatibility-mode.md
-      - Oracle Compatibility Mode: client-interfaces/ecpg-embedded-sql-in-c/oracle-compatibility-mode.md
-      - Internals: client-interfaces/ecpg-embedded-sql-in-c/internals.md
-    - The Information Schema:
-      - client-interfaces/the-information-schema/index.md
-      - The Schema: client-interfaces/the-information-schema/the-schema.md
-      - Data Types: client-interfaces/the-information-schema/data-types.md
-      - '`information_schema_catalog_name`': client-interfaces/the-information-schema/information_schema_catalog_name.md
-      - '`administrable_role_​authorizations`': client-interfaces/the-information-schema/administrable_role_authorizations.md
-      - '`applicable_roles`': client-interfaces/the-information-schema/applicable_roles.md
-      - '`attributes`': client-interfaces/the-information-schema/attributes.md
-      - '`character_sets`': client-interfaces/the-information-schema/character_sets.md
-      - '`check_constraint_routine_usage`': client-interfaces/the-information-schema/check_constraint_routine_usage.md
-      - '`check_constraints`': client-interfaces/the-information-schema/check_constraints.md
-      - '`collations`': client-interfaces/the-information-schema/collations.md
-      - '`collation_character_set_​applicability`': client-interfaces/the-information-schema/collation_character_set_applicability.md
-      - '`column_column_usage`': client-interfaces/the-information-schema/column_column_usage.md
-      - '`column_domain_usage`': client-interfaces/the-information-schema/column_domain_usage.md
-      - '`column_options`': client-interfaces/the-information-schema/column_options.md
-      - '`column_privileges`': client-interfaces/the-information-schema/column_privileges.md
-      - '`column_udt_usage`': client-interfaces/the-information-schema/column_udt_usage.md
-      - '`columns`': client-interfaces/the-information-schema/columns.md
-      - '`constraint_column_usage`': client-interfaces/the-information-schema/constraint_column_usage.md
-      - '`constraint_table_usage`': client-interfaces/the-information-schema/constraint_table_usage.md
-      - '`data_type_privileges`': client-interfaces/the-information-schema/data_type_privileges.md
-      - '`domain_constraints`': client-interfaces/the-information-schema/domain_constraints.md
-      - '`domain_udt_usage`': client-interfaces/the-information-schema/domain_udt_usage.md
-      - '`domains`': client-interfaces/the-information-schema/domains.md
-      - '`element_types`': client-interfaces/the-information-schema/element_types.md
-      - '`enabled_roles`': client-interfaces/the-information-schema/enabled_roles.md
-      - '`foreign_data_wrapper_options`': client-interfaces/the-information-schema/foreign_data_wrapper_options.md
-      - '`foreign_data_wrappers`': client-interfaces/the-information-schema/foreign_data_wrappers.md
-      - '`foreign_server_options`': client-interfaces/the-information-schema/foreign_server_options.md
-      - '`foreign_servers`': client-interfaces/the-information-schema/foreign_servers.md
-      - '`foreign_table_options`': client-interfaces/the-information-schema/foreign_table_options.md
-      - '`foreign_tables`': client-interfaces/the-information-schema/foreign_tables.md
-      - '`key_column_usage`': client-interfaces/the-information-schema/key_column_usage.md
-      - '`parameters`': client-interfaces/the-information-schema/parameters.md
-      - '`referential_constraints`': client-interfaces/the-information-schema/referential_constraints.md
-      - '`role_column_grants`': client-interfaces/the-information-schema/role_column_grants.md
-      - '`role_routine_grants`': client-interfaces/the-information-schema/role_routine_grants.md
-      - '`role_table_grants`': client-interfaces/the-information-schema/role_table_grants.md
-      - '`role_udt_grants`': client-interfaces/the-information-schema/role_udt_grants.md
-      - '`role_usage_grants`': client-interfaces/the-information-schema/role_usage_grants.md
-      - '`routine_column_usage`': client-interfaces/the-information-schema/routine_column_usage.md
-      - '`routine_privileges`': client-interfaces/the-information-schema/routine_privileges.md
-      - '`routine_routine_usage`': client-interfaces/the-information-schema/routine_routine_usage.md
-      - '`routine_sequence_usage`': client-interfaces/the-information-schema/routine_sequence_usage.md
-      - '`routine_table_usage`': client-interfaces/the-information-schema/routine_table_usage.md
-      - '`routines`': client-interfaces/the-information-schema/routines.md
-      - '`schemata`': client-interfaces/the-information-schema/schemata.md
-      - '`sequences`': client-interfaces/the-information-schema/sequences.md
-      - '`sql_features`': client-interfaces/the-information-schema/sql_features.md
-      - '`sql_implementation_info`': client-interfaces/the-information-schema/sql_implementation_info.md
-      - '`sql_parts`': client-interfaces/the-information-schema/sql_parts.md
-      - '`sql_sizing`': client-interfaces/the-information-schema/sql_sizing.md
-      - '`table_constraints`': client-interfaces/the-information-schema/table_constraints.md
-      - '`table_privileges`': client-interfaces/the-information-schema/table_privileges.md
-      - '`tables`': client-interfaces/the-information-schema/tables.md
-      - '`transforms`': client-interfaces/the-information-schema/transforms.md
-      - '`triggered_update_columns`': client-interfaces/the-information-schema/triggered_update_columns.md
-      - '`triggers`': client-interfaces/the-information-schema/triggers.md
-      - '`udt_privileges`': client-interfaces/the-information-schema/udt_privileges.md
-      - '`usage_privileges`': client-interfaces/the-information-schema/usage_privileges.md
-      - '`user_defined_types`': client-interfaces/the-information-schema/user_defined_types.md
-      - '`user_mapping_options`': client-interfaces/the-information-schema/user_mapping_options.md
-      - '`user_mappings`': client-interfaces/the-information-schema/user_mappings.md
-      - '`view_column_usage`': client-interfaces/the-information-schema/view_column_usage.md
-      - '`view_routine_usage`': client-interfaces/the-information-schema/view_routine_usage.md
-      - '`view_table_usage`': client-interfaces/the-information-schema/view_table_usage.md
-      - '`views`': client-interfaces/the-information-schema/views.md
-  - Server Programming:
-    - server-programming/index.md
-    - Extending SQL:
-      - server-programming/extending-sql/index.md
-      - How Extensibility Works: server-programming/extending-sql/how-extensibility-works.md
-      - The PostgreSQL Type System: server-programming/extending-sql/the-postgresql-type-system.md
-      - User-Defined Functions: server-programming/extending-sql/user-defined-functions.md
-      - User-Defined Procedures: server-programming/extending-sql/user-defined-procedures.md
-      - Query Language (SQL) Functions: server-programming/extending-sql/query-language-sql-functions.md
-      - Function Overloading: server-programming/extending-sql/function-overloading.md
-      - Function Volatility Categories: server-programming/extending-sql/function-volatility-categories.md
-      - Procedural Language Functions: server-programming/extending-sql/procedural-language-functions.md
-      - Internal Functions: server-programming/extending-sql/internal-functions.md
-      - C-Language Functions: server-programming/extending-sql/c-language-functions.md
-      - Function Optimization Information: server-programming/extending-sql/function-optimization-information.md
-      - User-Defined Aggregates: server-programming/extending-sql/user-defined-aggregates.md
-      - User-Defined Types: server-programming/extending-sql/user-defined-types.md
-      - User-Defined Operators: server-programming/extending-sql/user-defined-operators.md
-      - Operator Optimization Information: server-programming/extending-sql/operator-optimization-information.md
-      - Interfacing Extensions to Indexes: server-programming/extending-sql/interfacing-extensions-to-indexes.md
-      - Packaging Related Objects into an Extension: server-programming/extending-sql/packaging-related-objects-into-an-extension.md
-      - Extension Building Infrastructure: server-programming/extending-sql/extension-building-infrastructure.md
-    - Triggers:
-      - server-programming/triggers/index.md
-      - Overview of Trigger Behavior: server-programming/triggers/overview-of-trigger-behavior.md
-      - Visibility of Data Changes: server-programming/triggers/visibility-of-data-changes.md
-      - Writing Trigger Functions in C: server-programming/triggers/writing-trigger-functions-in-c.md
-      - A Complete Trigger Example: server-programming/triggers/a-complete-trigger-example.md
-    - Event Triggers:
-      - server-programming/event-triggers/index.md
-      - Overview of Event Trigger Behavior: server-programming/event-triggers/overview-of-event-trigger-behavior.md
-      - Writing Event Trigger Functions in C: server-programming/event-triggers/writing-event-trigger-functions-in-c.md
-      - A Complete Event Trigger Example: server-programming/event-triggers/a-complete-event-trigger-example.md
-      - A Table Rewrite Event Trigger Example: server-programming/event-triggers/a-table-rewrite-event-trigger-example.md
-      - A Database Login Event Trigger Example: server-programming/event-triggers/a-database-login-event-trigger-example.md
-    - The Rule System:
-      - server-programming/the-rule-system/index.md
-      - The Query Tree: server-programming/the-rule-system/the-query-tree.md
-      - Views and the Rule System: server-programming/the-rule-system/views-and-the-rule-system.md
-      - Materialized Views: server-programming/the-rule-system/materialized-views.md
-      - 'Rules on `INSERT`, `UPDATE`, and `DELETE`': server-programming/the-rule-system/rules-on-insert-update-and-delete.md
-      - Rules and Privileges: server-programming/the-rule-system/rules-and-privileges.md
-      - Rules and Command Status: server-programming/the-rule-system/rules-and-command-status.md
-      - Rules Versus Triggers: server-programming/the-rule-system/rules-versus-triggers.md
-    - Procedural Languages:
-      - server-programming/procedural-languages/index.md
-      - Installing Procedural Languages: server-programming/procedural-languages/installing-procedural-languages.md
-    - PL/pgSQL — SQL Procedural Language:
-      - server-programming/pl-pgsql-sql-procedural-language/index.md
-      - Overview: server-programming/pl-pgsql-sql-procedural-language/overview.md
-      - Structure of PL/pgSQL: server-programming/pl-pgsql-sql-procedural-language/structure-of-pl-pgsql.md
-      - Declarations: server-programming/pl-pgsql-sql-procedural-language/declarations.md
-      - Expressions: server-programming/pl-pgsql-sql-procedural-language/expressions.md
-      - Basic Statements: server-programming/pl-pgsql-sql-procedural-language/basic-statements.md
-      - Control Structures: server-programming/pl-pgsql-sql-procedural-language/control-structures.md
-      - Cursors: server-programming/pl-pgsql-sql-procedural-language/cursors.md
-      - Transaction Management: server-programming/pl-pgsql-sql-procedural-language/transaction-management.md
-      - Errors and Messages: server-programming/pl-pgsql-sql-procedural-language/errors-and-messages.md
-      - Trigger Functions: server-programming/pl-pgsql-sql-procedural-language/trigger-functions.md
-      - PL/pgSQL under the Hood: server-programming/pl-pgsql-sql-procedural-language/pl-pgsql-under-the-hood.md
-      - Tips for Developing in PL/pgSQL: server-programming/pl-pgsql-sql-procedural-language/tips-for-developing-in-pl-pgsql.md
-      - Porting from Oracle PL/SQL: server-programming/pl-pgsql-sql-procedural-language/porting-from-oracle-pl-sql.md
-    - PL/Tcl — Tcl Procedural Language:
-      - server-programming/pl-tcl-tcl-procedural-language/index.md
-      - Overview: server-programming/pl-tcl-tcl-procedural-language/overview.md
-      - PL/Tcl Functions and Arguments: server-programming/pl-tcl-tcl-procedural-language/pl-tcl-functions-and-arguments.md
-      - Data Values in PL/Tcl: server-programming/pl-tcl-tcl-procedural-language/data-values-in-pl-tcl.md
-      - Global Data in PL/Tcl: server-programming/pl-tcl-tcl-procedural-language/global-data-in-pl-tcl.md
-      - Database Access from PL/Tcl: server-programming/pl-tcl-tcl-procedural-language/database-access-from-pl-tcl.md
-      - Trigger Functions in PL/Tcl: server-programming/pl-tcl-tcl-procedural-language/trigger-functions-in-pl-tcl.md
-      - Event Trigger Functions in PL/Tcl: server-programming/pl-tcl-tcl-procedural-language/event-trigger-functions-in-pl-tcl.md
-      - Error Handling in PL/Tcl: server-programming/pl-tcl-tcl-procedural-language/error-handling-in-pl-tcl.md
-      - Explicit Subtransactions in PL/Tcl: server-programming/pl-tcl-tcl-procedural-language/explicit-subtransactions-in-pl-tcl.md
-      - Transaction Management: server-programming/pl-tcl-tcl-procedural-language/transaction-management.md
-      - PL/Tcl Configuration: server-programming/pl-tcl-tcl-procedural-language/pl-tcl-configuration.md
-      - Tcl Procedure Names: server-programming/pl-tcl-tcl-procedural-language/tcl-procedure-names.md
-    - PL/Perl — Perl Procedural Language:
-      - server-programming/pl-perl-perl-procedural-language/index.md
-      - PL/Perl Functions and Arguments: server-programming/pl-perl-perl-procedural-language/pl-perl-functions-and-arguments.md
-      - Data Values in PL/Perl: server-programming/pl-perl-perl-procedural-language/data-values-in-pl-perl.md
-      - Built-in Functions: server-programming/pl-perl-perl-procedural-language/built-in-functions.md
-      - Global Values in PL/Perl: server-programming/pl-perl-perl-procedural-language/global-values-in-pl-perl.md
-      - Trusted and Untrusted PL/Perl: server-programming/pl-perl-perl-procedural-language/trusted-and-untrusted-pl-perl.md
-      - PL/Perl Triggers: server-programming/pl-perl-perl-procedural-language/pl-perl-triggers.md
-      - PL/Perl Event Triggers: server-programming/pl-perl-perl-procedural-language/pl-perl-event-triggers.md
-      - PL/Perl Under the Hood: server-programming/pl-perl-perl-procedural-language/pl-perl-under-the-hood.md
-    - PL/Python — Python Procedural Language:
-      - server-programming/pl-python-python-procedural-language/index.md
-      - PL/Python Functions: server-programming/pl-python-python-procedural-language/pl-python-functions.md
-      - Data Values: server-programming/pl-python-python-procedural-language/data-values.md
-      - Sharing Data: server-programming/pl-python-python-procedural-language/sharing-data.md
-      - Anonymous Code Blocks: server-programming/pl-python-python-procedural-language/anonymous-code-blocks.md
-      - Trigger Functions: server-programming/pl-python-python-procedural-language/trigger-functions.md
-      - Event Trigger Functions: server-programming/pl-python-python-procedural-language/event-trigger-functions.md
-      - Database Access: server-programming/pl-python-python-procedural-language/database-access.md
-      - Explicit Subtransactions: server-programming/pl-python-python-procedural-language/explicit-subtransactions.md
-      - Transaction Management: server-programming/pl-python-python-procedural-language/transaction-management.md
-      - Utility Functions: server-programming/pl-python-python-procedural-language/utility-functions.md
-      - Python 2 vs. Python 3: server-programming/pl-python-python-procedural-language/python-2-vs-python-3.md
-      - Environment Variables: server-programming/pl-python-python-procedural-language/environment-variables.md
-    - Server Programming Interface:
-      - server-programming/server-programming-interface/index.md
-      - Interface Functions: server-programming/server-programming-interface/interface-functions.md
-      - Interface Support Functions: server-programming/server-programming-interface/interface-support-functions.md
-      - Memory Management: server-programming/server-programming-interface/memory-management.md
-      - Transaction Management: server-programming/server-programming-interface/transaction-management.md
-      - Visibility of Data Changes: server-programming/server-programming-interface/visibility-of-data-changes.md
-      - Examples: server-programming/server-programming-interface/examples.md
-    - Background Worker Processes: server-programming/background-worker-processes.md
-    - Logical Decoding:
-      - server-programming/logical-decoding/index.md
-      - Logical Decoding Examples: server-programming/logical-decoding/logical-decoding-examples.md
-      - Logical Decoding Concepts: server-programming/logical-decoding/logical-decoding-concepts.md
-      - Streaming Replication Protocol Interface: server-programming/logical-decoding/streaming-replication-protocol-interface.md
-      - Logical Decoding SQL Interface: server-programming/logical-decoding/logical-decoding-sql-interface.md
-      - System Catalogs Related to Logical Decoding: server-programming/logical-decoding/system-catalogs-related-to-logical-decoding.md
-      - Logical Decoding Output Plugins: server-programming/logical-decoding/logical-decoding-output-plugins.md
-      - Writing Logical Decoding Output Plugins: server-programming/logical-decoding/writing-logical-decoding-output-plugins.md
-      - Logical Decoding Output Writers: server-programming/logical-decoding/logical-decoding-output-writers.md
-      - Synchronous Replication Support for Logical Decoding: server-programming/logical-decoding/synchronous-replication-support-for-logical-decoding.md
-      - Streaming of Large Transactions for Logical Decoding: server-programming/logical-decoding/streaming-of-large-transactions-for-logical-decoding.md
-      - Two-phase Commit Support for Logical Decoding: server-programming/logical-decoding/two-phase-commit-support-for-logical-decoding.md
-    - Replication Progress Tracking: server-programming/replication-progress-tracking.md
-    - Archive Modules:
-      - server-programming/archive-modules/index.md
-      - Initialization Functions: server-programming/archive-modules/initialization-functions.md
-      - Archive Module Callbacks: server-programming/archive-modules/archive-module-callbacks.md
-    - OAuth Validator Modules:
-      - server-programming/oauth-validator-modules/index.md
-      - Safely Designing a Validator Module: server-programming/oauth-validator-modules/safely-designing-a-validator-module.md
-      - Initialization Functions: server-programming/oauth-validator-modules/initialization-functions.md
-      - OAuth Validator Callbacks: server-programming/oauth-validator-modules/oauth-validator-callbacks.md
-  - Reference:
-    - reference/index.md
-    - SQL Commands:
-      - reference/sql-commands/index.md
-      - ABORT: reference/sql-commands/abort.md
-      - ALTER AGGREGATE: reference/sql-commands/alter-aggregate.md
-      - ALTER COLLATION: reference/sql-commands/alter-collation.md
-      - ALTER CONVERSION: reference/sql-commands/alter-conversion.md
-      - ALTER DATABASE: reference/sql-commands/alter-database.md
-      - ALTER DEFAULT PRIVILEGES: reference/sql-commands/alter-default-privileges.md
-      - ALTER DOMAIN: reference/sql-commands/alter-domain.md
-      - ALTER EVENT TRIGGER: reference/sql-commands/alter-event-trigger.md
-      - ALTER EXTENSION: reference/sql-commands/alter-extension.md
-      - ALTER FOREIGN DATA WRAPPER: reference/sql-commands/alter-foreign-data-wrapper.md
-      - ALTER FOREIGN TABLE: reference/sql-commands/alter-foreign-table.md
-      - ALTER FUNCTION: reference/sql-commands/alter-function.md
-      - ALTER GROUP: reference/sql-commands/alter-group.md
-      - ALTER INDEX: reference/sql-commands/alter-index.md
-      - ALTER LANGUAGE: reference/sql-commands/alter-language.md
-      - ALTER LARGE OBJECT: reference/sql-commands/alter-large-object.md
-      - ALTER MATERIALIZED VIEW: reference/sql-commands/alter-materialized-view.md
-      - ALTER OPERATOR: reference/sql-commands/alter-operator.md
-      - ALTER OPERATOR CLASS: reference/sql-commands/alter-operator-class.md
-      - ALTER OPERATOR FAMILY: reference/sql-commands/alter-operator-family.md
-      - ALTER POLICY: reference/sql-commands/alter-policy.md
-      - ALTER PROCEDURE: reference/sql-commands/alter-procedure.md
-      - ALTER PUBLICATION: reference/sql-commands/alter-publication.md
-      - ALTER ROLE: reference/sql-commands/alter-role.md
-      - ALTER ROUTINE: reference/sql-commands/alter-routine.md
-      - ALTER RULE: reference/sql-commands/alter-rule.md
-      - ALTER SCHEMA: reference/sql-commands/alter-schema.md
-      - ALTER SEQUENCE: reference/sql-commands/alter-sequence.md
-      - ALTER SERVER: reference/sql-commands/alter-server.md
-      - ALTER STATISTICS: reference/sql-commands/alter-statistics.md
-      - ALTER SUBSCRIPTION: reference/sql-commands/alter-subscription.md
-      - ALTER SYSTEM: reference/sql-commands/alter-system.md
-      - ALTER TABLE: reference/sql-commands/alter-table.md
-      - ALTER TABLESPACE: reference/sql-commands/alter-tablespace.md
-      - ALTER TEXT SEARCH CONFIGURATION: reference/sql-commands/alter-text-search-configuration.md
-      - ALTER TEXT SEARCH DICTIONARY: reference/sql-commands/alter-text-search-dictionary.md
-      - ALTER TEXT SEARCH PARSER: reference/sql-commands/alter-text-search-parser.md
-      - ALTER TEXT SEARCH TEMPLATE: reference/sql-commands/alter-text-search-template.md
-      - ALTER TRIGGER: reference/sql-commands/alter-trigger.md
-      - ALTER TYPE: reference/sql-commands/alter-type.md
-      - ALTER USER: reference/sql-commands/alter-user.md
-      - ALTER USER MAPPING: reference/sql-commands/alter-user-mapping.md
-      - ALTER VIEW: reference/sql-commands/alter-view.md
-      - ANALYZE: reference/sql-commands/analyze.md
-      - BEGIN: reference/sql-commands/begin.md
-      - CALL: reference/sql-commands/call.md
-      - CHECKPOINT: reference/sql-commands/checkpoint.md
-      - CLOSE: reference/sql-commands/close.md
-      - CLUSTER: reference/sql-commands/cluster.md
-      - COMMENT: reference/sql-commands/comment.md
-      - COMMIT: reference/sql-commands/commit.md
-      - COMMIT PREPARED: reference/sql-commands/commit-prepared.md
-      - COPY: reference/sql-commands/copy.md
-      - CREATE ACCESS METHOD: reference/sql-commands/create-access-method.md
-      - CREATE AGGREGATE: reference/sql-commands/create-aggregate.md
-      - CREATE CAST: reference/sql-commands/create-cast.md
-      - CREATE COLLATION: reference/sql-commands/create-collation.md
-      - CREATE CONVERSION: reference/sql-commands/create-conversion.md
-      - CREATE DATABASE: reference/sql-commands/create-database.md
-      - CREATE DOMAIN: reference/sql-commands/create-domain.md
-      - CREATE EVENT TRIGGER: reference/sql-commands/create-event-trigger.md
-      - CREATE EXTENSION: reference/sql-commands/create-extension.md
-      - CREATE FOREIGN DATA WRAPPER: reference/sql-commands/create-foreign-data-wrapper.md
-      - CREATE FOREIGN TABLE: reference/sql-commands/create-foreign-table.md
-      - CREATE FUNCTION: reference/sql-commands/create-function.md
-      - CREATE GROUP: reference/sql-commands/create-group.md
-      - CREATE INDEX: reference/sql-commands/create-index.md
-      - CREATE LANGUAGE: reference/sql-commands/create-language.md
-      - CREATE MATERIALIZED VIEW: reference/sql-commands/create-materialized-view.md
-      - CREATE OPERATOR: reference/sql-commands/create-operator.md
-      - CREATE OPERATOR CLASS: reference/sql-commands/create-operator-class.md
-      - CREATE OPERATOR FAMILY: reference/sql-commands/create-operator-family.md
-      - CREATE POLICY: reference/sql-commands/create-policy.md
-      - CREATE PROCEDURE: reference/sql-commands/create-procedure.md
-      - CREATE PUBLICATION: reference/sql-commands/create-publication.md
-      - CREATE ROLE: reference/sql-commands/create-role.md
-      - CREATE RULE: reference/sql-commands/create-rule.md
-      - CREATE SCHEMA: reference/sql-commands/create-schema.md
-      - CREATE SEQUENCE: reference/sql-commands/create-sequence.md
-      - CREATE SERVER: reference/sql-commands/create-server.md
-      - CREATE STATISTICS: reference/sql-commands/create-statistics.md
-      - CREATE SUBSCRIPTION: reference/sql-commands/create-subscription.md
-      - CREATE TABLE: reference/sql-commands/create-table.md
-      - CREATE TABLE AS: reference/sql-commands/create-table-as.md
-      - CREATE TABLESPACE: reference/sql-commands/create-tablespace.md
-      - CREATE TEXT SEARCH CONFIGURATION: reference/sql-commands/create-text-search-configuration.md
-      - CREATE TEXT SEARCH DICTIONARY: reference/sql-commands/create-text-search-dictionary.md
-      - CREATE TEXT SEARCH PARSER: reference/sql-commands/create-text-search-parser.md
-      - CREATE TEXT SEARCH TEMPLATE: reference/sql-commands/create-text-search-template.md
-      - CREATE TRANSFORM: reference/sql-commands/create-transform.md
-      - CREATE TRIGGER: reference/sql-commands/create-trigger.md
-      - CREATE TYPE: reference/sql-commands/create-type.md
-      - CREATE USER: reference/sql-commands/create-user.md
-      - CREATE USER MAPPING: reference/sql-commands/create-user-mapping.md
-      - CREATE VIEW: reference/sql-commands/create-view.md
-      - DEALLOCATE: reference/sql-commands/deallocate.md
-      - DECLARE: reference/sql-commands/declare.md
-      - DELETE: reference/sql-commands/delete.md
-      - DISCARD: reference/sql-commands/discard.md
-      - DO: reference/sql-commands/do.md
-      - DROP ACCESS METHOD: reference/sql-commands/drop-access-method.md
-      - DROP AGGREGATE: reference/sql-commands/drop-aggregate.md
-      - DROP CAST: reference/sql-commands/drop-cast.md
-      - DROP COLLATION: reference/sql-commands/drop-collation.md
-      - DROP CONVERSION: reference/sql-commands/drop-conversion.md
-      - DROP DATABASE: reference/sql-commands/drop-database.md
-      - DROP DOMAIN: reference/sql-commands/drop-domain.md
-      - DROP EVENT TRIGGER: reference/sql-commands/drop-event-trigger.md
-      - DROP EXTENSION: reference/sql-commands/drop-extension.md
-      - DROP FOREIGN DATA WRAPPER: reference/sql-commands/drop-foreign-data-wrapper.md
-      - DROP FOREIGN TABLE: reference/sql-commands/drop-foreign-table.md
-      - DROP FUNCTION: reference/sql-commands/drop-function.md
-      - DROP GROUP: reference/sql-commands/drop-group.md
-      - DROP INDEX: reference/sql-commands/drop-index.md
-      - DROP LANGUAGE: reference/sql-commands/drop-language.md
-      - DROP MATERIALIZED VIEW: reference/sql-commands/drop-materialized-view.md
-      - DROP OPERATOR: reference/sql-commands/drop-operator.md
-      - DROP OPERATOR CLASS: reference/sql-commands/drop-operator-class.md
-      - DROP OPERATOR FAMILY: reference/sql-commands/drop-operator-family.md
-      - DROP OWNED: reference/sql-commands/drop-owned.md
-      - DROP POLICY: reference/sql-commands/drop-policy.md
-      - DROP PROCEDURE: reference/sql-commands/drop-procedure.md
-      - DROP PUBLICATION: reference/sql-commands/drop-publication.md
-      - DROP ROLE: reference/sql-commands/drop-role.md
-      - DROP ROUTINE: reference/sql-commands/drop-routine.md
-      - DROP RULE: reference/sql-commands/drop-rule.md
-      - DROP SCHEMA: reference/sql-commands/drop-schema.md
-      - DROP SEQUENCE: reference/sql-commands/drop-sequence.md
-      - DROP SERVER: reference/sql-commands/drop-server.md
-      - DROP STATISTICS: reference/sql-commands/drop-statistics.md
-      - DROP SUBSCRIPTION: reference/sql-commands/drop-subscription.md
-      - DROP TABLE: reference/sql-commands/drop-table.md
-      - DROP TABLESPACE: reference/sql-commands/drop-tablespace.md
-      - DROP TEXT SEARCH CONFIGURATION: reference/sql-commands/drop-text-search-configuration.md
-      - DROP TEXT SEARCH DICTIONARY: reference/sql-commands/drop-text-search-dictionary.md
-      - DROP TEXT SEARCH PARSER: reference/sql-commands/drop-text-search-parser.md
-      - DROP TEXT SEARCH TEMPLATE: reference/sql-commands/drop-text-search-template.md
-      - DROP TRANSFORM: reference/sql-commands/drop-transform.md
-      - DROP TRIGGER: reference/sql-commands/drop-trigger.md
-      - DROP TYPE: reference/sql-commands/drop-type.md
-      - DROP USER: reference/sql-commands/drop-user.md
-      - DROP USER MAPPING: reference/sql-commands/drop-user-mapping.md
-      - DROP VIEW: reference/sql-commands/drop-view.md
-      - END: reference/sql-commands/end.md
-      - EXECUTE: reference/sql-commands/execute.md
-      - EXPLAIN: reference/sql-commands/explain.md
-      - FETCH: reference/sql-commands/fetch.md
-      - GRANT: reference/sql-commands/grant.md
-      - IMPORT FOREIGN SCHEMA: reference/sql-commands/import-foreign-schema.md
-      - INSERT: reference/sql-commands/insert.md
-      - LISTEN: reference/sql-commands/listen.md
-      - LOAD: reference/sql-commands/load.md
-      - LOCK: reference/sql-commands/lock.md
-      - MERGE: reference/sql-commands/merge.md
-      - MOVE: reference/sql-commands/move.md
-      - NOTIFY: reference/sql-commands/notify.md
-      - PREPARE: reference/sql-commands/prepare.md
-      - PREPARE TRANSACTION: reference/sql-commands/prepare-transaction.md
-      - REASSIGN OWNED: reference/sql-commands/reassign-owned.md
-      - REFRESH MATERIALIZED VIEW: reference/sql-commands/refresh-materialized-view.md
-      - REINDEX: reference/sql-commands/reindex.md
-      - RELEASE SAVEPOINT: reference/sql-commands/release-savepoint.md
-      - REPACK: reference/sql-commands/repack.md
-      - RESET: reference/sql-commands/reset.md
-      - REVOKE: reference/sql-commands/revoke.md
-      - ROLLBACK: reference/sql-commands/rollback.md
-      - ROLLBACK PREPARED: reference/sql-commands/rollback-prepared.md
-      - ROLLBACK TO SAVEPOINT: reference/sql-commands/rollback-to-savepoint.md
-      - SAVEPOINT: reference/sql-commands/savepoint.md
-      - SECURITY LABEL: reference/sql-commands/security-label.md
-      - SELECT: reference/sql-commands/select.md
-      - SELECT INTO: reference/sql-commands/select-into.md
-      - SET: reference/sql-commands/set.md
-      - SET CONSTRAINTS: reference/sql-commands/set-constraints.md
-      - SET ROLE: reference/sql-commands/set-role.md
-      - SET SESSION AUTHORIZATION: reference/sql-commands/set-session-authorization.md
-      - SET TRANSACTION: reference/sql-commands/set-transaction.md
-      - SHOW: reference/sql-commands/show.md
-      - START TRANSACTION: reference/sql-commands/start-transaction.md
-      - TRUNCATE: reference/sql-commands/truncate.md
-      - UNLISTEN: reference/sql-commands/unlisten.md
-      - UPDATE: reference/sql-commands/update.md
-      - VACUUM: reference/sql-commands/vacuum.md
-      - VALUES: reference/sql-commands/values.md
-      - WAIT FOR: reference/sql-commands/wait-for.md
-    - PostgreSQL Client Applications:
-      - reference/postgresql-client-applications/index.md
-      - clusterdb: reference/postgresql-client-applications/clusterdb.md
-      - createdb: reference/postgresql-client-applications/createdb.md
-      - createuser: reference/postgresql-client-applications/createuser.md
-      - dropdb: reference/postgresql-client-applications/dropdb.md
-      - dropuser: reference/postgresql-client-applications/dropuser.md
-      - ecpg: reference/postgresql-client-applications/ecpg.md
-      - pg_amcheck: reference/postgresql-client-applications/pg_amcheck.md
-      - pg_basebackup: reference/postgresql-client-applications/pg_basebackup.md
-      - pgbench: reference/postgresql-client-applications/pgbench.md
-      - pg_combinebackup: reference/postgresql-client-applications/pg_combinebackup.md
-      - pg_config: reference/postgresql-client-applications/pg_config.md
-      - pg_dump: reference/postgresql-client-applications/pg_dump.md
-      - pg_dumpall: reference/postgresql-client-applications/pg_dumpall.md
-      - pg_isready: reference/postgresql-client-applications/pg_isready.md
-      - pg_receivewal: reference/postgresql-client-applications/pg_receivewal.md
-      - pg_recvlogical: reference/postgresql-client-applications/pg_recvlogical.md
-      - pg_restore: reference/postgresql-client-applications/pg_restore.md
-      - pg_verifybackup: reference/postgresql-client-applications/pg_verifybackup.md
-      - psql: reference/postgresql-client-applications/psql.md
-      - reindexdb: reference/postgresql-client-applications/reindexdb.md
-      - vacuumdb: reference/postgresql-client-applications/vacuumdb.md
-    - PostgreSQL Server Applications:
-      - reference/postgresql-server-applications/index.md
-      - initdb: reference/postgresql-server-applications/initdb.md
-      - pg_archivecleanup: reference/postgresql-server-applications/pg_archivecleanup.md
-      - pg_checksums: reference/postgresql-server-applications/pg_checksums.md
-      - pg_controldata: reference/postgresql-server-applications/pg_controldata.md
-      - pg_createsubscriber: reference/postgresql-server-applications/pg_createsubscriber.md
-      - pg_ctl: reference/postgresql-server-applications/pg_ctl.md
-      - pg_resetwal: reference/postgresql-server-applications/pg_resetwal.md
-      - pg_rewind: reference/postgresql-server-applications/pg_rewind.md
-      - pg_test_fsync: reference/postgresql-server-applications/pg_test_fsync.md
-      - pg_test_timing: reference/postgresql-server-applications/pg_test_timing.md
-      - pg_upgrade: reference/postgresql-server-applications/pg_upgrade.md
-      - pg_waldump: reference/postgresql-server-applications/pg_waldump.md
-      - pg_walsummary: reference/postgresql-server-applications/pg_walsummary.md
-      - postgres: reference/postgresql-server-applications/postgres.md
-  - Internals:
-    - internals/index.md
-    - Overview of PostgreSQL Internals:
-      - internals/overview-of-postgresql-internals/index.md
-      - The Path of a Query: internals/overview-of-postgresql-internals/the-path-of-a-query.md
-      - How Connections Are Established: internals/overview-of-postgresql-internals/how-connections-are-established.md
-      - The Parser Stage: internals/overview-of-postgresql-internals/the-parser-stage.md
-      - The PostgreSQL Rule System: internals/overview-of-postgresql-internals/the-postgresql-rule-system.md
-      - Planner/Optimizer: internals/overview-of-postgresql-internals/planner-optimizer.md
-      - Executor: internals/overview-of-postgresql-internals/executor.md
-    - System Catalogs:
-      - internals/system-catalogs/index.md
-      - Overview: internals/system-catalogs/overview.md
-      - '`pg_aggregate`': internals/system-catalogs/pg_aggregate.md
-      - '`pg_am`': internals/system-catalogs/pg_am.md
-      - '`pg_amop`': internals/system-catalogs/pg_amop.md
-      - '`pg_amproc`': internals/system-catalogs/pg_amproc.md
-      - '`pg_attrdef`': internals/system-catalogs/pg_attrdef.md
-      - '`pg_attribute`': internals/system-catalogs/pg_attribute.md
-      - '`pg_authid`': internals/system-catalogs/pg_authid.md
-      - '`pg_auth_members`': internals/system-catalogs/pg_auth_members.md
-      - '`pg_cast`': internals/system-catalogs/pg_cast.md
-      - '`pg_class`': internals/system-catalogs/pg_class.md
-      - '`pg_collation`': internals/system-catalogs/pg_collation.md
-      - '`pg_constraint`': internals/system-catalogs/pg_constraint.md
-      - '`pg_conversion`': internals/system-catalogs/pg_conversion.md
-      - '`pg_database`': internals/system-catalogs/pg_database.md
-      - '`pg_db_role_setting`': internals/system-catalogs/pg_db_role_setting.md
-      - '`pg_default_acl`': internals/system-catalogs/pg_default_acl.md
-      - '`pg_depend`': internals/system-catalogs/pg_depend.md
-      - '`pg_description`': internals/system-catalogs/pg_description.md
-      - '`pg_enum`': internals/system-catalogs/pg_enum.md
-      - '`pg_event_trigger`': internals/system-catalogs/pg_event_trigger.md
-      - '`pg_extension`': internals/system-catalogs/pg_extension.md
-      - '`pg_foreign_data_wrapper`': internals/system-catalogs/pg_foreign_data_wrapper.md
-      - '`pg_foreign_server`': internals/system-catalogs/pg_foreign_server.md
-      - '`pg_foreign_table`': internals/system-catalogs/pg_foreign_table.md
-      - '`pg_index`': internals/system-catalogs/pg_index.md
-      - '`pg_inherits`': internals/system-catalogs/pg_inherits.md
-      - '`pg_init_privs`': internals/system-catalogs/pg_init_privs.md
-      - '`pg_language`': internals/system-catalogs/pg_language.md
-      - '`pg_largeobject`': internals/system-catalogs/pg_largeobject.md
-      - '`pg_largeobject_metadata`': internals/system-catalogs/pg_largeobject_metadata.md
-      - '`pg_namespace`': internals/system-catalogs/pg_namespace.md
-      - '`pg_opclass`': internals/system-catalogs/pg_opclass.md
-      - '`pg_operator`': internals/system-catalogs/pg_operator.md
-      - '`pg_opfamily`': internals/system-catalogs/pg_opfamily.md
-      - '`pg_parameter_acl`': internals/system-catalogs/pg_parameter_acl.md
-      - '`pg_partitioned_table`': internals/system-catalogs/pg_partitioned_table.md
-      - '`pg_policy`': internals/system-catalogs/pg_policy.md
-      - '`pg_proc`': internals/system-catalogs/pg_proc.md
-      - '`pg_publication`': internals/system-catalogs/pg_publication.md
-      - '`pg_publication_namespace`': internals/system-catalogs/pg_publication_namespace.md
-      - '`pg_publication_rel`': internals/system-catalogs/pg_publication_rel.md
-      - '`pg_range`': internals/system-catalogs/pg_range.md
-      - '`pg_replication_origin`': internals/system-catalogs/pg_replication_origin.md
-      - '`pg_rewrite`': internals/system-catalogs/pg_rewrite.md
-      - '`pg_seclabel`': internals/system-catalogs/pg_seclabel.md
-      - '`pg_sequence`': internals/system-catalogs/pg_sequence.md
-      - '`pg_shdepend`': internals/system-catalogs/pg_shdepend.md
-      - '`pg_shdescription`': internals/system-catalogs/pg_shdescription.md
-      - '`pg_shseclabel`': internals/system-catalogs/pg_shseclabel.md
-      - '`pg_statistic`': internals/system-catalogs/pg_statistic.md
-      - '`pg_statistic_ext`': internals/system-catalogs/pg_statistic_ext.md
-      - '`pg_statistic_ext_data`': internals/system-catalogs/pg_statistic_ext_data.md
-      - '`pg_subscription`': internals/system-catalogs/pg_subscription.md
-      - '`pg_subscription_rel`': internals/system-catalogs/pg_subscription_rel.md
-      - '`pg_tablespace`': internals/system-catalogs/pg_tablespace.md
-      - '`pg_transform`': internals/system-catalogs/pg_transform.md
-      - '`pg_trigger`': internals/system-catalogs/pg_trigger.md
-      - '`pg_ts_config`': internals/system-catalogs/pg_ts_config.md
-      - '`pg_ts_config_map`': internals/system-catalogs/pg_ts_config_map.md
-      - '`pg_ts_dict`': internals/system-catalogs/pg_ts_dict.md
-      - '`pg_ts_parser`': internals/system-catalogs/pg_ts_parser.md
-      - '`pg_ts_template`': internals/system-catalogs/pg_ts_template.md
-      - '`pg_type`': internals/system-catalogs/pg_type.md
-      - '`pg_user_mapping`': internals/system-catalogs/pg_user_mapping.md
-    - System Views:
-      - internals/system-views/index.md
-      - Overview: internals/system-views/overview.md
-      - '`pg_aios`': internals/system-views/pg_aios.md
-      - '`pg_available_extensions`': internals/system-views/pg_available_extensions.md
-      - '`pg_available_extension_versions`': internals/system-views/pg_available_extension_versions.md
-      - '`pg_backend_memory_contexts`': internals/system-views/pg_backend_memory_contexts.md
-      - '`pg_config`': internals/system-views/pg_config.md
-      - '`pg_cursors`': internals/system-views/pg_cursors.md
-      - '`pg_dsm_registry_allocations`': internals/system-views/pg_dsm_registry_allocations.md
-      - '`pg_file_settings`': internals/system-views/pg_file_settings.md
-      - '`pg_group`': internals/system-views/pg_group.md
-      - '`pg_hba_file_rules`': internals/system-views/pg_hba_file_rules.md
-      - '`pg_ident_file_mappings`': internals/system-views/pg_ident_file_mappings.md
-      - '`pg_indexes`': internals/system-views/pg_indexes.md
-      - '`pg_locks`': internals/system-views/pg_locks.md
-      - '`pg_matviews`': internals/system-views/pg_matviews.md
-      - '`pg_policies`': internals/system-views/pg_policies.md
-      - '`pg_prepared_statements`': internals/system-views/pg_prepared_statements.md
-      - '`pg_prepared_xacts`': internals/system-views/pg_prepared_xacts.md
-      - '`pg_publication_sequences`': internals/system-views/pg_publication_sequences.md
-      - '`pg_publication_tables`': internals/system-views/pg_publication_tables.md
-      - '`pg_replication_origin_status`': internals/system-views/pg_replication_origin_status.md
-      - '`pg_replication_slots`': internals/system-views/pg_replication_slots.md
-      - '`pg_roles`': internals/system-views/pg_roles.md
-      - '`pg_rules`': internals/system-views/pg_rules.md
-      - '`pg_seclabels`': internals/system-views/pg_seclabels.md
-      - '`pg_sequences`': internals/system-views/pg_sequences.md
-      - '`pg_settings`': internals/system-views/pg_settings.md
-      - '`pg_shadow`': internals/system-views/pg_shadow.md
-      - '`pg_shmem_allocations`': internals/system-views/pg_shmem_allocations.md
-      - '`pg_shmem_allocations_numa`': internals/system-views/pg_shmem_allocations_numa.md
-      - '`pg_stats`': internals/system-views/pg_stats.md
-      - '`pg_stats_ext`': internals/system-views/pg_stats_ext.md
-      - '`pg_stats_ext_exprs`': internals/system-views/pg_stats_ext_exprs.md
-      - '`pg_tables`': internals/system-views/pg_tables.md
-      - '`pg_timezone_abbrevs`': internals/system-views/pg_timezone_abbrevs.md
-      - '`pg_timezone_names`': internals/system-views/pg_timezone_names.md
-      - '`pg_user`': internals/system-views/pg_user.md
-      - '`pg_user_mappings`': internals/system-views/pg_user_mappings.md
-      - '`pg_views`': internals/system-views/pg_views.md
-      - '`pg_wait_events`': internals/system-views/pg_wait_events.md
-    - Frontend/Backend Protocol:
-      - internals/frontend-backend-protocol/index.md
-      - Overview: internals/frontend-backend-protocol/overview.md
-      - Message Flow: internals/frontend-backend-protocol/message-flow.md
-      - SASL Authentication: internals/frontend-backend-protocol/sasl-authentication.md
-      - Streaming Replication Protocol: internals/frontend-backend-protocol/streaming-replication-protocol.md
-      - Logical Streaming Replication Protocol: internals/frontend-backend-protocol/logical-streaming-replication-protocol.md
-      - Message Data Types: internals/frontend-backend-protocol/message-data-types.md
-      - Message Formats: internals/frontend-backend-protocol/message-formats.md
-      - Error and Notice Message Fields: internals/frontend-backend-protocol/error-and-notice-message-fields.md
-      - Logical Replication Message Formats: internals/frontend-backend-protocol/logical-replication-message-formats.md
-      - Summary of Changes since Protocol 2.0: internals/frontend-backend-protocol/summary-of-changes-since-protocol-2-0.md
-    - PostgreSQL Coding Conventions:
-      - internals/postgresql-coding-conventions/index.md
-      - Formatting: internals/postgresql-coding-conventions/formatting.md
-      - Reporting Errors Within the Server: internals/postgresql-coding-conventions/reporting-errors-within-the-server.md
-      - Error Message Style Guide: internals/postgresql-coding-conventions/error-message-style-guide.md
-      - Miscellaneous Coding Conventions: internals/postgresql-coding-conventions/miscellaneous-coding-conventions.md
-    - Native Language Support:
-      - internals/native-language-support/index.md
-      - For the Translator: internals/native-language-support/for-the-translator.md
-      - For the Programmer: internals/native-language-support/for-the-programmer.md
-    - Writing a Procedural Language Handler: internals/writing-a-procedural-language-handler.md
-    - Writing a Foreign Data Wrapper:
-      - internals/writing-a-foreign-data-wrapper/index.md
-      - Foreign Data Wrapper Functions: internals/writing-a-foreign-data-wrapper/foreign-data-wrapper-functions.md
-      - Foreign Data Wrapper Callback Routines: internals/writing-a-foreign-data-wrapper/foreign-data-wrapper-callback-routines.md
-      - Foreign Data Wrapper Helper Functions: internals/writing-a-foreign-data-wrapper/foreign-data-wrapper-helper-functions.md
-      - Foreign Data Wrapper Query Planning: internals/writing-a-foreign-data-wrapper/foreign-data-wrapper-query-planning.md
-      - Row Locking in Foreign Data Wrappers: internals/writing-a-foreign-data-wrapper/row-locking-in-foreign-data-wrappers.md
-    - Writing a Table Sampling Method:
-      - internals/writing-a-table-sampling-method/index.md
-      - Sampling Method Support Functions: internals/writing-a-table-sampling-method/sampling-method-support-functions.md
-    - Writing a Custom Scan Provider:
-      - internals/writing-a-custom-scan-provider/index.md
-      - Creating Custom Scan Paths: internals/writing-a-custom-scan-provider/creating-custom-scan-paths.md
-      - Creating Custom Scan Plans: internals/writing-a-custom-scan-provider/creating-custom-scan-plans.md
-      - Executing Custom Scans: internals/writing-a-custom-scan-provider/executing-custom-scans.md
-    - Genetic Query Optimizer:
-      - internals/genetic-query-optimizer/index.md
-      - Query Handling as a Complex Optimization Problem: internals/genetic-query-optimizer/query-handling-as-a-complex-optimization-problem.md
-      - Genetic Algorithms: internals/genetic-query-optimizer/genetic-algorithms.md
-      - Genetic Query Optimization (GEQO) in PostgreSQL: internals/genetic-query-optimizer/genetic-query-optimization-geqo-in-postgresql.md
-      - Further Reading: internals/genetic-query-optimizer/further-reading.md
-    - Table Access Method Interface Definition: internals/table-access-method-interface-definition.md
-    - Index Access Method Interface Definition:
-      - internals/index-access-method-interface-definition/index.md
-      - Basic API Structure for Indexes: internals/index-access-method-interface-definition/basic-api-structure-for-indexes.md
-      - Index Access Method Functions: internals/index-access-method-interface-definition/index-access-method-functions.md
-      - Index Scanning: internals/index-access-method-interface-definition/index-scanning.md
-      - Index Locking Considerations: internals/index-access-method-interface-definition/index-locking-considerations.md
-      - Index Uniqueness Checks: internals/index-access-method-interface-definition/index-uniqueness-checks.md
-      - Index Cost Estimation Functions: internals/index-access-method-interface-definition/index-cost-estimation-functions.md
-    - Write Ahead Logging for Extensions:
-      - internals/write-ahead-logging-for-extensions/index.md
-      - Generic WAL Records: internals/write-ahead-logging-for-extensions/generic-wal-records.md
-      - Custom WAL Resource Managers: internals/write-ahead-logging-for-extensions/custom-wal-resource-managers.md
-    - Built-in Index Access Methods:
-      - internals/built-in-index-access-methods/index.md
-      - B-Tree Indexes: internals/built-in-index-access-methods/b-tree-indexes.md
-      - GiST Indexes: internals/built-in-index-access-methods/gist-indexes.md
-      - SP-GiST Indexes: internals/built-in-index-access-methods/sp-gist-indexes.md
-      - GIN Indexes: internals/built-in-index-access-methods/gin-indexes.md
-      - BRIN Indexes: internals/built-in-index-access-methods/brin-indexes.md
-      - Hash Indexes: internals/built-in-index-access-methods/hash-indexes.md
-    - Database Physical Storage:
-      - internals/database-physical-storage/index.md
-      - Database File Layout: internals/database-physical-storage/database-file-layout.md
-      - TOAST: internals/database-physical-storage/toast.md
-      - Free Space Map: internals/database-physical-storage/free-space-map.md
-      - Visibility Map: internals/database-physical-storage/visibility-map.md
-      - The Initialization Fork: internals/database-physical-storage/the-initialization-fork.md
-      - Database Page Layout: internals/database-physical-storage/database-page-layout.md
-      - Heap-Only Tuples (HOT): internals/database-physical-storage/heap-only-tuples-hot.md
-    - Transaction Processing:
-      - internals/transaction-processing/index.md
-      - Transactions and Identifiers: internals/transaction-processing/transactions-and-identifiers.md
-      - Transactions and Locking: internals/transaction-processing/transactions-and-locking.md
-      - Subtransactions: internals/transaction-processing/subtransactions.md
-      - Two-Phase Transactions: internals/transaction-processing/two-phase-transactions.md
-    - System Catalog Declarations and Initial Contents:
-      - internals/system-catalog-declarations-and-initial-contents/index.md
-      - System Catalog Declaration Rules: internals/system-catalog-declarations-and-initial-contents/system-catalog-declaration-rules.md
-      - System Catalog Initial Data: internals/system-catalog-declarations-and-initial-contents/system-catalog-initial-data.md
-      - BKI File Format: internals/system-catalog-declarations-and-initial-contents/bki-file-format.md
-      - BKI Commands: internals/system-catalog-declarations-and-initial-contents/bki-commands.md
-      - Structure of the Bootstrap BKI File: internals/system-catalog-declarations-and-initial-contents/structure-of-the-bootstrap-bki-file.md
-      - BKI Example: internals/system-catalog-declarations-and-initial-contents/bki-example.md
-    - How the Planner Uses Statistics:
-      - internals/how-the-planner-uses-statistics/index.md
-      - Row Estimation Examples: internals/how-the-planner-uses-statistics/row-estimation-examples.md
-      - Multivariate Statistics Examples: internals/how-the-planner-uses-statistics/multivariate-statistics-examples.md
-      - Planner Statistics and Security: internals/how-the-planner-uses-statistics/planner-statistics-and-security.md
-    - Backup Manifest Format:
-      - internals/backup-manifest-format/index.md
-      - Backup Manifest Top-level Object: internals/backup-manifest-format/backup-manifest-top-level-object.md
-      - Backup Manifest File Object: internals/backup-manifest-format/backup-manifest-file-object.md
-      - Backup Manifest WAL Range Object: internals/backup-manifest-format/backup-manifest-wal-range-object.md
-  - Appendixes:
-    - appendixes/index.md
-    - PostgreSQL Error Codes: appendixes/postgresql-error-codes.md
-    - Date/Time Support:
-      - appendixes/date-time-support/index.md
-      - Date/Time Input Interpretation: appendixes/date-time-support/date-time-input-interpretation.md
-      - Handling of Invalid or Ambiguous Timestamps: appendixes/date-time-support/handling-of-invalid-or-ambiguous-timestamps.md
-      - Date/Time Key Words: appendixes/date-time-support/date-time-key-words.md
-      - Date/Time Configuration Files: appendixes/date-time-support/date-time-configuration-files.md
-      - POSIX Time Zone Specifications: appendixes/date-time-support/posix-time-zone-specifications.md
-      - History of Units: appendixes/date-time-support/history-of-units.md
-      - Julian Dates: appendixes/date-time-support/julian-dates.md
-    - SQL Key Words: appendixes/sql-key-words.md
-    - SQL Conformance:
-      - appendixes/sql-conformance/index.md
-      - Supported Features: appendixes/sql-conformance/supported-features.md
-      - Unsupported Features: appendixes/sql-conformance/unsupported-features.md
-      - XML Limits and Conformance to SQL/XML: appendixes/sql-conformance/xml-limits-and-conformance-to-sql-xml.md
-    - Release Notes:
-      - appendixes/release-notes/index.md
-      - Release 19: appendixes/release-notes/release-19.md
-      - Prior Releases: appendixes/release-notes/prior-releases.md
-    - Additional Supplied Modules and Extensions:
-      - appendixes/additional-supplied-modules-and-extensions/index.md
-      - amcheck — tools to verify table and index consistency: appendixes/additional-supplied-modules-and-extensions/amcheck-tools-to-verify-table-and-index-consistency.md
-      - auth_delay — pause on authentication failure: appendixes/additional-supplied-modules-and-extensions/auth_delay-pause-on-authentication-failure.md
-      - auto_explain — log execution plans of slow queries: appendixes/additional-supplied-modules-and-extensions/auto_explain-log-execution-plans-of-slow-queries.md
-      - 'basebackup_to_shell — example "shell" pg_basebackup module': appendixes/additional-supplied-modules-and-extensions/basebackup_to_shell-example-shell-pg_basebackup-module.md
-      - basic_archive — an example WAL archive module: appendixes/additional-supplied-modules-and-extensions/basic_archive-an-example-wal-archive-module.md
-      - bloom — bloom filter index access method: appendixes/additional-supplied-modules-and-extensions/bloom-bloom-filter-index-access-method.md
-      - btree_gin — GIN operator classes with B-tree behavior: appendixes/additional-supplied-modules-and-extensions/btree_gin-gin-operator-classes-with-b-tree-behavior.md
-      - btree_gist — GiST operator classes with B-tree behavior: appendixes/additional-supplied-modules-and-extensions/btree_gist-gist-operator-classes-with-b-tree-behavior.md
-      - citext — a case-insensitive character string type: appendixes/additional-supplied-modules-and-extensions/citext-a-case-insensitive-character-string-type.md
-      - cube — a multi-dimensional cube data type: appendixes/additional-supplied-modules-and-extensions/cube-a-multi-dimensional-cube-data-type.md
-      - dblink — connect to other PostgreSQL databases: appendixes/additional-supplied-modules-and-extensions/dblink-connect-to-other-postgresql-databases.md
-      - dict_int — example full-text search dictionary for integers: appendixes/additional-supplied-modules-and-extensions/dict_int-example-full-text-search-dictionary-for-integers.md
-      - dict_xsyn — example synonym full-text search dictionary: appendixes/additional-supplied-modules-and-extensions/dict_xsyn-example-synonym-full-text-search-dictionary.md
-      - earthdistance — calculate great-circle distances: appendixes/additional-supplied-modules-and-extensions/earthdistance-calculate-great-circle-distances.md
-      - 'file_fdw — access data files in the server''s file system': appendixes/additional-supplied-modules-and-extensions/file_fdw-access-data-files-in-the-servers-file-system.md
-      - fuzzystrmatch — determine string similarities and distance: appendixes/additional-supplied-modules-and-extensions/fuzzystrmatch-determine-string-similarities-and-distance.md
-      - hstore — hstore key/value datatype: appendixes/additional-supplied-modules-and-extensions/hstore-hstore-key-value-datatype.md
-      - intagg — integer aggregator and enumerator: appendixes/additional-supplied-modules-and-extensions/intagg-integer-aggregator-and-enumerator.md
-      - intarray — manipulate arrays of integers: appendixes/additional-supplied-modules-and-extensions/intarray-manipulate-arrays-of-integers.md
-      - 'isn — data types for international standard numbers (ISBN, EAN, UPC, etc.)': appendixes/additional-supplied-modules-and-extensions/isn-data-types-for-international-standard-numbers-isbn-ean-upc-etc.md
-      - lo — manage large objects: appendixes/additional-supplied-modules-and-extensions/lo-manage-large-objects.md
-      - ltree — hierarchical tree-like data type: appendixes/additional-supplied-modules-and-extensions/ltree-hierarchical-tree-like-data-type.md
-      - pageinspect — low-level inspection of database pages: appendixes/additional-supplied-modules-and-extensions/pageinspect-low-level-inspection-of-database-pages.md
-      - passwordcheck — verify password strength: appendixes/additional-supplied-modules-and-extensions/passwordcheck-verify-password-strength.md
-      - pg_buffercache — inspect PostgreSQL buffer cache state: appendixes/additional-supplied-modules-and-extensions/pg_buffercache-inspect-postgresql-buffer-cache-state.md
-      - pgcrypto — cryptographic functions: appendixes/additional-supplied-modules-and-extensions/pgcrypto-cryptographic-functions.md
-      - pg_freespacemap — examine the free space map: appendixes/additional-supplied-modules-and-extensions/pg_freespacemap-examine-the-free-space-map.md
-      - pg_logicalinspect — logical decoding components inspection: appendixes/additional-supplied-modules-and-extensions/pg_logicalinspect-logical-decoding-components-inspection.md
-      - pg_overexplain — allow EXPLAIN to dump even more details: appendixes/additional-supplied-modules-and-extensions/pg_overexplain-allow-explain-to-dump-even-more-details.md
-      - pg_prewarm — preload relation data into buffer caches: appendixes/additional-supplied-modules-and-extensions/pg_prewarm-preload-relation-data-into-buffer-caches.md
-      - 'pgrowlocks — show a table''s row locking information': appendixes/additional-supplied-modules-and-extensions/pgrowlocks-show-a-tables-row-locking-information.md
-      - pg_stat_statements — track statistics of SQL planning and execution: appendixes/additional-supplied-modules-and-extensions/pg_stat_statements-track-statistics-of-sql-planning-and-execution.md
-      - pgstattuple — obtain tuple-level statistics: appendixes/additional-supplied-modules-and-extensions/pgstattuple-obtain-tuple-level-statistics.md
-      - pg_surgery — perform low-level surgery on relation data: appendixes/additional-supplied-modules-and-extensions/pg_surgery-perform-low-level-surgery-on-relation-data.md
-      - pg_trgm — support for similarity of text using trigram matching: appendixes/additional-supplied-modules-and-extensions/pg_trgm-support-for-similarity-of-text-using-trigram-matching.md
-      - pg_visibility — visibility map information and utilities: appendixes/additional-supplied-modules-and-extensions/pg_visibility-visibility-map-information-and-utilities.md
-      - pg_walinspect — low-level WAL inspection: appendixes/additional-supplied-modules-and-extensions/pg_walinspect-low-level-wal-inspection.md
-      - postgres_fdw — access data stored in external PostgreSQL servers: appendixes/additional-supplied-modules-and-extensions/postgres_fdw-access-data-stored-in-external-postgresql-servers.md
-      - seg — a datatype for line segments or floating point intervals: appendixes/additional-supplied-modules-and-extensions/seg-a-datatype-for-line-segments-or-floating-point-intervals.md
-      - 'sepgsql — SELinux-, label-based mandatory access control (MAC) security module': appendixes/additional-supplied-modules-and-extensions/sepgsql-selinux-label-based-mandatory-access-control-mac-security-module.md
-      - spi — Server Programming Interface features/examples: appendixes/additional-supplied-modules-and-extensions/spi-server-programming-interface-features-examples.md
-      - sslinfo — obtain client SSL information: appendixes/additional-supplied-modules-and-extensions/sslinfo-obtain-client-ssl-information.md
-      - 'tablefunc — functions that return tables (`crosstab` and others)': appendixes/additional-supplied-modules-and-extensions/tablefunc-functions-that-return-tables-crosstab-and-others.md
-      - tcn — a trigger function to notify listeners of changes to table content: appendixes/additional-supplied-modules-and-extensions/tcn-a-trigger-function-to-notify-listeners-of-changes-to-table-content.md
-      - test_decoding — SQL-based test/example module for WAL logical decoding: appendixes/additional-supplied-modules-and-extensions/test_decoding-sql-based-test-example-module-for-wal-logical-decoding.md
-      - 'tsm_system_rows — the `SYSTEM_ROWS` sampling method for `TABLESAMPLE`': appendixes/additional-supplied-modules-and-extensions/tsm_system_rows-the-system_rows-sampling-method-for-tablesample.md
-      - 'tsm_system_time — the `SYSTEM_TIME` sampling method for `TABLESAMPLE`': appendixes/additional-supplied-modules-and-extensions/tsm_system_time-the-system_time-sampling-method-for-tablesample.md
-      - unaccent — a text search dictionary which removes diacritics: appendixes/additional-supplied-modules-and-extensions/unaccent-a-text-search-dictionary-which-removes-diacritics.md
-      - uuid-ossp — a UUID generator: appendixes/additional-supplied-modules-and-extensions/uuid-ossp-a-uuid-generator.md
-      - xml2 — XPath querying and XSLT functionality: appendixes/additional-supplied-modules-and-extensions/xml2-xpath-querying-and-xslt-functionality.md
-    - Additional Supplied Programs:
-      - appendixes/additional-supplied-programs/index.md
-      - Client Applications: appendixes/additional-supplied-programs/client-applications.md
-      - Server Applications: appendixes/additional-supplied-programs/server-applications.md
-    - External Projects:
-      - appendixes/external-projects/index.md
-      - Client Interfaces: appendixes/external-projects/client-interfaces.md
-      - Administration Tools: appendixes/external-projects/administration-tools.md
-      - Procedural Languages: appendixes/external-projects/procedural-languages.md
-      - Extensions: appendixes/external-projects/extensions.md
-    - The Source Code Repository:
-      - appendixes/the-source-code-repository/index.md
-      - Getting the Source via Git: appendixes/the-source-code-repository/getting-the-source-via-git.md
-    - Documentation:
-      - appendixes/documentation/index.md
-      - DocBook: appendixes/documentation/docbook.md
-      - Tool Sets: appendixes/documentation/tool-sets.md
-      - Building the Documentation with Make: appendixes/documentation/building-the-documentation-with-make.md
-      - Building the Documentation with Meson: appendixes/documentation/building-the-documentation-with-meson.md
-      - Documentation Authoring: appendixes/documentation/documentation-authoring.md
-      - Style Guide: appendixes/documentation/style-guide.md
-    - PostgreSQL Limits: appendixes/postgresql-limits.md
-    - Acronyms: appendixes/acronyms.md
-    - Glossary: appendixes/glossary.md
-    - Color Support:
-      - appendixes/color-support/index.md
-      - When Color is Used: appendixes/color-support/when-color-is-used.md
-      - Configuring the Colors: appendixes/color-support/configuring-the-colors.md
-    - Obsolete or Renamed Features:
-      - appendixes/obsolete-or-renamed-features/index.md
-      - '`recovery.conf` file merged into `postgresql.conf`': appendixes/obsolete-or-renamed-features/recovery-conf-file-merged-into-postgresql-conf.md
-      - Default Roles Renamed to Predefined Roles: appendixes/obsolete-or-renamed-features/default-roles-renamed-to-predefined-roles.md
-      - '`pg_xlogdump` renamed to `pg_waldump`': appendixes/obsolete-or-renamed-features/pg_xlogdump-renamed-to-pg_waldump.md
-      - '`pg_resetxlog` renamed to `pg_resetwal`': appendixes/obsolete-or-renamed-features/pg_resetxlog-renamed-to-pg_resetwal.md
-      - '`pg_receivexlog` renamed to `pg_receivewal`': appendixes/obsolete-or-renamed-features/pg_receivexlog-renamed-to-pg_receivewal.md
-
+  - Home: index.md
+  - Getting Started:
+    - getting_started.md
+    - Deployment:
+      - getting-started/deployment.md
+      - The config.py File: getting-started/deployment/config_py.md
+      - Desktop Deployment:
+        - getting-started/deployment/desktop_deployment.md
+        - Auto-Update of pgAdmin 4 Desktop Application: getting-started/deployment/desktop-deployment/auto_update_desktop_app.md
+      - Server Deployment: getting-started/deployment/server_deployment.md
+      - Container Deployment: getting-started/deployment/container_deployment.md
+    - Login Page: getting-started/login.md
+    - Enabling two-factor authentication (2FA): getting-started/mfa.md
+    - User Management: getting-started/user_management.md
+    - Change Ownership Dialog: getting-started/change_ownership.md
+    - Change User Password Dialog: getting-started/change_user_password.md
+    - Lock/Restore Account: getting-started/restore_locked_user.md
+    - Enabling LDAP Authentication: getting-started/ldap.md
+    - Enabling Kerberos Authentication: getting-started/kerberos.md
+    - Enabling OAUTH2 Authentication: getting-started/oauth2.md
+    - Enabling Webserver Authentication: getting-started/webserver.md
+    - User Interface: getting-started/user_interface.md
+    - Menu Bar: getting-started/menu_bar.md
+    - Toolbar: getting-started/toolbar.md
+    - Tabbed Browser: getting-started/tabbed_browser.md
+    - Tree Control: getting-started/tree_control.md
+    - Preferences: getting-started/preferences.md
+    - Keyboard Shortcuts: getting-started/keyboard_shortcuts.md
+    - Search objects: getting-started/search_objects.md
+  - External database for pgAdmin user settings: external_database.md
+  - Connecting To A Server:
+    - connecting.md
+    - Server Group Dialog: connecting-to-a-server/server_group_dialog.md
+    - Server Dialog:
+      - connecting-to-a-server/server_dialog.md
+      - Clear Saved Passwords: connecting-to-a-server/server-dialog/clear_saved_passwords.md
+    - PostgreSQL Cloud Deployment:
+      - connecting-to-a-server/cloud_deployment.md
+      - Amazon RDS Cloud Deployment: connecting-to-a-server/postgresql-cloud-deployment/cloud_aws_rds.md
+      - EDB BigAnimal Cloud Deployment: connecting-to-a-server/postgresql-cloud-deployment/cloud_edb_biganimal.md
+      - Azure Database Cloud Deployment: connecting-to-a-server/postgresql-cloud-deployment/cloud_azure_database.md
+      - Google Cloud SQL Deployment: connecting-to-a-server/postgresql-cloud-deployment/cloud_google_cloud_sql.md
+    - Master Password: connecting-to-a-server/master_password.md
+    - Connect to Server: connecting-to-a-server/connect_to_server.md
+    - Connection Error: connecting-to-a-server/connect_error.md
+    - Import/Export Servers: connecting-to-a-server/import_export_servers.md
+  - Managing Cluster Objects:
+    - managing_cluster_objects.md
+    - Database Dialog: managing-cluster-objects/database_dialog.md
+    - Resource Group Dialog: managing-cluster-objects/resource_group_dialog.md
+    - Login/Group Role Dialog: managing-cluster-objects/role_dialog.md
+    - Tablespace Dialog: managing-cluster-objects/tablespace_dialog.md
+    - Replica Node Dialog: managing-cluster-objects/replica_nodes_dialog.md
+    - PGD Replication Group Node Dialog:
+      - managing-cluster-objects/pgd_replication_group_dialog.md
+      - PGD Replication Server Node Dialog: managing-cluster-objects/pgd-replication-group-node-dialog/pgd_replication_server_dialog.md
+    - Role Reassign/Drop Own Dialog: managing-cluster-objects/role_reassign_dialog.md
+    - Directory Dialog: managing-cluster-objects/directory_dialog.md
+  - Managing Database Objects:
+    - managing_database_objects.md
+    - Cast Dialog: managing-database-objects/cast_dialog.md
+    - Using EDB Job Scheduler:
+      - managing-database-objects/dbms_job_scheduler.md
+      - DBMS Job: managing-database-objects/using-edb-job-scheduler/dbms_job.md
+      - DBMS Program: managing-database-objects/using-edb-job-scheduler/dbms_program.md
+      - DBMS Schedule: managing-database-objects/using-edb-job-scheduler/dbms_schedule.md
+    - Collation Dialog: managing-database-objects/collation_dialog.md
+    - Domain Dialog: managing-database-objects/domain_dialog.md
+    - Domain Constraints Dialog: managing-database-objects/domain_constraint_dialog.md
+    - Event Trigger Dialog: managing-database-objects/event_trigger_dialog.md
+    - Extension Dialog: managing-database-objects/extension_dialog.md
+    - Foreign Data Wrapper Dialog: managing-database-objects/foreign_data_wrapper_dialog.md
+    - Foreign Server Dialog: managing-database-objects/foreign_server_dialog.md
+    - Foreign Table Dialog: managing-database-objects/foreign_table_dialog.md
+    - FTS Configuration Dialog: managing-database-objects/fts_configuration_dialog.md
+    - FTS Dictionary Dialog: managing-database-objects/fts_dictionary_dialog.md
+    - FTS Parser Dialog: managing-database-objects/fts_parser_dialog.md
+    - FTS Template Dialog: managing-database-objects/fts_template_dialog.md
+    - Function Dialog: managing-database-objects/function_dialog.md
+    - Language Dialog: managing-database-objects/language_dialog.md
+    - Materialized View Dialog: managing-database-objects/materialized_view_dialog.md
+    - Package Dialog: managing-database-objects/package_dialog.md
+    - Procedure Dialog: managing-database-objects/procedure_dialog.md
+    - Publication Dialog: managing-database-objects/publication_dialog.md
+    - Schema Dialog: managing-database-objects/schema_dialog.md
+    - Sequence Dialog: managing-database-objects/sequence_dialog.md
+    - Subscription Dialog: managing-database-objects/subscription_dialog.md
+    - Synonym Dialog: managing-database-objects/synonym_dialog.md
+    - Trigger Function Dialog: managing-database-objects/trigger_function_dialog.md
+    - Type Dialog: managing-database-objects/type_dialog.md
+    - User Mapping Dialog: managing-database-objects/user_mapping_dialog.md
+    - View Dialog: managing-database-objects/view_dialog.md
+  - Creating or Modifying a Table:
+    - modifying_tables.md
+    - Check Dialog: creating-or-modifying-a-table/check_dialog.md
+    - Column Dialog: creating-or-modifying-a-table/column_dialog.md
+    - Compound Trigger Dialog: creating-or-modifying-a-table/compound_trigger_dialog.md
+    - Exclusion Constraint Dialog: creating-or-modifying-a-table/exclusion_constraint_dialog.md
+    - Foreign key Dialog: creating-or-modifying-a-table/foreign_key_dialog.md
+    - Index Dialog: creating-or-modifying-a-table/index_dialog.md
+    - Primary key Dialog: creating-or-modifying-a-table/primary_key_dialog.md
+    - RLS Policy Dialog: creating-or-modifying-a-table/rls_policy_dialog.md
+    - Rule Dialog: creating-or-modifying-a-table/rule_dialog.md
+    - Table Dialog: creating-or-modifying-a-table/table_dialog.md
+    - Trigger Dialog: creating-or-modifying-a-table/trigger_dialog.md
+    - Unique Constraint Dialog: creating-or-modifying-a-table/unique_constraint_dialog.md
+  - Management Basics:
+    - management_basics.md
+    - Add Named Restore Point Dialog: management-basics/add_restore_point_dialog.md
+    - Change Password Dialog: management-basics/change_password_dialog.md
+    - Grant Wizard: management-basics/grant_wizard.md
+    - Export Data Using Query Dialog: management-basics/export_data_using_query.md
+    - Import/Export Data Dialog: management-basics/import_export_data.md
+    - Maintenance Dialog: management-basics/maintenance_dialog.md
+    - Storage Manager: management-basics/storage_manager.md
+  - Backup and Restore:
+    - backup_and_restore.md
+    - Backup Dialog: backup-and-restore/backup_dialog.md
+    - Backup Globals Dialog: backup-and-restore/backup_globals_dialog.md
+    - Backup Server Dialog: backup-and-restore/backup_server_dialog.md
+    - Restore Dialog: backup-and-restore/restore_dialog.md
+  - Developer Tools:
+    - developer_tools.md
+    - Debugger: developer-tools/debugger.md
+    - Query Tool:
+      - developer-tools/query_tool.md
+      - Query Tool Toolbar: developer-tools/query-tool/query_tool_toolbar.md
+    - View/Edit Data:
+      - developer-tools/editgrid.md
+      - View/Edit Data Filter: developer-tools/view-edit-data/viewdata_filter.md
+    - Schema Diff: developer-tools/schema_diff.md
+    - ERD Tool: developer-tools/erd_tool.md
+    - PSQL Tool: developer-tools/psql_tool.md
+  - Processes: processes.md
+  - pgAgent:
+    - pgagent.md
+    - Using pgAgent: pgagent/using_pgagent.md
+    - Installing pgAgent: pgagent/pgagent_install.md
+    - Creating a pgAgent Job: pgagent/pgagent_jobs.md
+  - pgAdmin Project Contributions:
+    - contributions.md
+    - Submitting Pull Requests: pgadmin-project-contributions/submitting_pull_requests.md
+    - Code Overview: pgadmin-project-contributions/code_overview.md
+    - Coding Standards: pgadmin-project-contributions/coding_standards.md
+    - Code Review Notes: pgadmin-project-contributions/code_review.md
+    - Translations: pgadmin-project-contributions/translations.md
+  - Release Notes:
+    - release_notes.md
+    - Version 9.11: release-notes/release_notes_9_11.md
+    - Version 9.10: release-notes/release_notes_9_10.md
+    - Version 9.9: release-notes/release_notes_9_9.md
+    - Version 9.8: release-notes/release_notes_9_8.md
+    - Version 9.7: release-notes/release_notes_9_7.md
+    - Version 9.6: release-notes/release_notes_9_6.md
+    - Version 9.5: release-notes/release_notes_9_5.md
+    - Version 9.4: release-notes/release_notes_9_4.md
+    - Version 9.3: release-notes/release_notes_9_3.md
+    - Version 9.2: release-notes/release_notes_9_2.md
+    - Version 9.1: release-notes/release_notes_9_1.md
+    - Version 9.0: release-notes/release_notes_9_0.md
+    - Version 8.14: release-notes/release_notes_8_14.md
+    - Version 8.13: release-notes/release_notes_8_13.md
+    - Version 8.12: release-notes/release_notes_8_12.md
+    - Version 8.11: release-notes/release_notes_8_11.md
+    - Version 8.10: release-notes/release_notes_8_10.md
+    - Version 8.9: release-notes/release_notes_8_9.md
+    - Version 8.8: release-notes/release_notes_8_8.md
+    - Version 8.7: release-notes/release_notes_8_7.md
+    - Version 8.6: release-notes/release_notes_8_6.md
+    - Version 8.5: release-notes/release_notes_8_5.md
+    - Version 8.4: release-notes/release_notes_8_4.md
+    - Version 8.3: release-notes/release_notes_8_3.md
+    - Version 8.2: release-notes/release_notes_8_2.md
+    - Version 8.1: release-notes/release_notes_8_1.md
+    - Version 8.0: release-notes/release_notes_8_0.md
+    - Version 7.8: release-notes/release_notes_7_8.md
+    - Version 7.7: release-notes/release_notes_7_7.md
+    - Version 7.6: release-notes/release_notes_7_6.md
+    - Version 7.5: release-notes/release_notes_7_5.md
+    - Version 7.4: release-notes/release_notes_7_4.md
+    - Version 7.3: release-notes/release_notes_7_3.md
+    - Version 7.2: release-notes/release_notes_7_2.md
+    - Version 7.1: release-notes/release_notes_7_1.md
+    - Version 7.0: release-notes/release_notes_7_0.md
+    - Version 6.21: release-notes/release_notes_6_21.md
+    - Version 6.20: release-notes/release_notes_6_20.md
+    - Version 6.19: release-notes/release_notes_6_19.md
+    - Version 6.18: release-notes/release_notes_6_18.md
+    - Version 6.17: release-notes/release_notes_6_17.md
+    - Version 6.16: release-notes/release_notes_6_16.md
+    - Version 6.15: release-notes/release_notes_6_15.md
+    - Version 6.14: release-notes/release_notes_6_14.md
+    - Version 6.13: release-notes/release_notes_6_13.md
+    - Version 6.12: release-notes/release_notes_6_12.md
+    - Version 6.11: release-notes/release_notes_6_11.md
+    - Version 6.10: release-notes/release_notes_6_10.md
+    - Version 6.9: release-notes/release_notes_6_9.md
+    - Version 6.8: release-notes/release_notes_6_8.md
+    - Version 6.7: release-notes/release_notes_6_7.md
+    - Version 6.6: release-notes/release_notes_6_6.md
+    - Version 6.5: release-notes/release_notes_6_5.md
+    - Version 6.4: release-notes/release_notes_6_4.md
+    - Version 6.3: release-notes/release_notes_6_3.md
+    - Version 6.2: release-notes/release_notes_6_2.md
+    - Version 6.1: release-notes/release_notes_6_1.md
+    - Version 6.0: release-notes/release_notes_6_0.md
+    - Version 5.7: release-notes/release_notes_5_7.md
+    - Version 5.6: release-notes/release_notes_5_6.md
+    - Version 5.5: release-notes/release_notes_5_5.md
+    - Version 5.4: release-notes/release_notes_5_4.md
+    - Version 5.3: release-notes/release_notes_5_3.md
+    - Version 5.2: release-notes/release_notes_5_2.md
+    - Version 5.1: release-notes/release_notes_5_1.md
+    - Version 5.0: release-notes/release_notes_5_0.md
+    - Version 4.30: release-notes/release_notes_4_30.md
+    - Version 4.29: release-notes/release_notes_4_29.md
+    - Version 4.28: release-notes/release_notes_4_28.md
+    - Version 4.27: release-notes/release_notes_4_27.md
+    - Version 4.26: release-notes/release_notes_4_26.md
+    - Version 4.25: release-notes/release_notes_4_25.md
+    - Version 4.24: release-notes/release_notes_4_24.md
+    - Version 4.23: release-notes/release_notes_4_23.md
+    - Version 4.22: release-notes/release_notes_4_22.md
+    - Version 4.21: release-notes/release_notes_4_21.md
+    - Version 4.20: release-notes/release_notes_4_20.md
+    - Version 4.19: release-notes/release_notes_4_19.md
+    - Version 4.18: release-notes/release_notes_4_18.md
+    - Version 4.17: release-notes/release_notes_4_17.md
+    - Version 4.16: release-notes/release_notes_4_16.md
+    - Version 4.15: release-notes/release_notes_4_15.md
+    - Version 4.14: release-notes/release_notes_4_14.md
+    - Version 4.13: release-notes/release_notes_4_13.md
+    - Version 4.12: release-notes/release_notes_4_12.md
+    - Version 4.11: release-notes/release_notes_4_11.md
+    - Version 4.10: release-notes/release_notes_4_10.md
+    - Version 4.9: release-notes/release_notes_4_9.md
+    - Version 4.8: release-notes/release_notes_4_8.md
+    - Version 4.7: release-notes/release_notes_4_7.md
+    - Version 4.6: release-notes/release_notes_4_6.md
+    - Version 4.5: release-notes/release_notes_4_5.md
+    - Version 4.4: release-notes/release_notes_4_4.md
+    - Version 4.3: release-notes/release_notes_4_3.md
+    - Version 4.2: release-notes/release_notes_4_2.md
+    - Version 4.1: release-notes/release_notes_4_1.md
+    - Version 4.0: release-notes/release_notes_4_0.md
+    - Version 3.6: release-notes/release_notes_3_6.md
+    - Version 3.5: release-notes/release_notes_3_5.md
+    - Version 3.4: release-notes/release_notes_3_4.md
+    - Version 3.3: release-notes/release_notes_3_3.md
+    - Version 3.2: release-notes/release_notes_3_2.md
+    - Version 3.1: release-notes/release_notes_3_1.md
+    - Version 3.0: release-notes/release_notes_3_0.md
+    - Version 2.1: release-notes/release_notes_2_1.md
+    - Version 2.0: release-notes/release_notes_2_0.md
+    - Version 1.6: release-notes/release_notes_1_6.md
+    - Version 1.5: release-notes/release_notes_1_5.md
+    - Version 1.4: release-notes/release_notes_1_4.md
+    - Version 1.3: release-notes/release_notes_1_3.md
+    - Version 1.2: release-notes/release_notes_1_2.md
+    - Version 1.1: release-notes/release_notes_1_1.md
+    - Version 1.0: release-notes/release_notes_1_0.md
+  - Licence: licence.md
