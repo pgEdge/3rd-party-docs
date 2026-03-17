@@ -120,6 +120,12 @@ func (p *Parser) parseBody(parent *Node, indent int) {
 		// Literal block: previous paragraph ended with ::
 		// (handled within paragraph parsing)
 
+		// Doctest block: indented lines starting with >>>
+		if p.isDoctestBlock(line, indent) {
+			p.parseDoctestBlock(parent, indent)
+			continue
+		}
+
 		// Default: paragraph
 		p.parseParagraph(parent, indent)
 	}
@@ -1216,6 +1222,65 @@ func (p *Parser) parseLineBlock(parent *Node, indent int) {
 		parent.Children = append(parent.Children, &Node{
 			Type: LineBlockNode,
 			Text: strings.Join(lines, "\n"),
+		})
+	}
+}
+
+// isDoctestBlock checks if the current line starts an indented
+// doctest block (lines beginning with >>>).
+func (p *Parser) isDoctestBlock(line string, indent int) bool {
+	li := countIndent(line)
+	if li <= indent {
+		return false
+	}
+	trimmed := strings.TrimSpace(line)
+	return strings.HasPrefix(trimmed, ">>>")
+}
+
+// parseDoctestBlock parses an indented doctest block (>>> lines)
+// as a Python code block.
+func (p *Parser) parseDoctestBlock(parent *Node, indent int) {
+	if p.pos >= len(p.lines) {
+		return
+	}
+
+	blockIndent := countIndent(p.lines[p.pos])
+	var lines []string
+
+	for p.pos < len(p.lines) {
+		line := p.lines[p.pos]
+		if strings.TrimSpace(line) == "" {
+			// Check if doctest continues after blank
+			next := p.peekNonBlank()
+			if next >= 0 && countIndent(p.lines[next]) >= blockIndent {
+				nextTrimmed := strings.TrimSpace(p.lines[next])
+				if strings.HasPrefix(nextTrimmed, ">>>") ||
+					strings.HasPrefix(nextTrimmed, "...") ||
+					strings.HasPrefix(nextTrimmed, "'") {
+					lines = append(lines, "")
+					p.pos++
+					continue
+				}
+			}
+			break
+		}
+		if countIndent(line) < blockIndent {
+			break
+		}
+		if len(line) > blockIndent {
+			lines = append(lines, line[blockIndent:])
+		} else {
+			lines = append(lines, "")
+		}
+		p.pos++
+	}
+
+	if len(lines) > 0 {
+		parent.Children = append(parent.Children, &Node{
+			Type:          DirectiveNode,
+			DirectiveName: "code-block",
+			DirectiveArg:  "python",
+			Body:          strings.Join(lines, "\n"),
 		})
 	}
 }
