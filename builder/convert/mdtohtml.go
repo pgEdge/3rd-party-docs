@@ -99,6 +99,7 @@ func isHTMLBlock(text string) bool {
 	return strings.HasPrefix(trimmed, "<a ") ||
 		strings.HasPrefix(trimmed, "<pre>") ||
 		strings.HasPrefix(trimmed, "<div") ||
+		strings.HasPrefix(trimmed, "<img") ||
 		strings.HasPrefix(trimmed, "<sup>") ||
 		strings.HasPrefix(trimmed, "<sub>")
 }
@@ -139,6 +140,7 @@ var (
 	reSingleBacktick = regexp.MustCompile("`([^`]+)`")
 	reBold           = regexp.MustCompile(`\*\*([^\*]+)\*\*`)
 	reItalic         = regexp.MustCompile(`\*([^\*]+)\*`)
+	reImage          = regexp.MustCompile(`!\[([^\]]*)\]\(([^)]+)\)`)
 	reLink           = regexp.MustCompile(`\[([^\]]+)\]\(([^)]+)\)`)
 )
 
@@ -161,6 +163,9 @@ func convertInlineMarkdown(text string) string {
 
 	// Replace italic (*text*)
 	text = reItalic.ReplaceAllString(text, "<em>$1</em>")
+
+	// Replace images ![alt](src) — before links to avoid partial match
+	text = reImage.ReplaceAllString(text, `<img src="$2" alt="$1">`)
 
 	// Replace links [text](url)
 	text = reLink.ReplaceAllString(text, `<a href="$2">$1</a>`)

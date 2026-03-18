@@ -174,13 +174,15 @@ func tableNeedsHTML(tgroup *sgml.Node) bool {
 		}
 
 		// Check for complex content (multiple paragraphs, lists, etc.)
+		// Use FindDescendants to catch nested elements inside <para>.
 		paras := entry.FindChildren("para")
 		if len(paras) > 1 {
 			return true
 		}
-		if len(entry.FindChildren("itemizedlist")) > 0 ||
-			len(entry.FindChildren("orderedlist")) > 0 ||
-			len(entry.FindChildren("programlisting")) > 0 {
+		if len(entry.FindDescendants("itemizedlist")) > 0 ||
+			len(entry.FindDescendants("orderedlist")) > 0 ||
+			len(entry.FindDescendants("programlisting")) > 0 ||
+			len(entry.FindDescendants("mediaobject")) > 0 {
 			return true
 		}
 	}
