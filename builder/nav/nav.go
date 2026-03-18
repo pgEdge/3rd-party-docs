@@ -156,6 +156,10 @@ func UpdateMkdocsYML(mkdocsPath, navYAML, siteName string) error {
 		content = strings.Join(lines, "\n")
 	}
 
+	// Ensure md_in_html extension is present (needed for
+	// markdown="block" in HTML table cells).
+	content = ensureExtension(content, "md_in_html")
+
 	// Find the nav: section and replace it
 	navIdx := strings.Index(content, "\nnav:")
 	if navIdx == -1 {
@@ -206,6 +210,56 @@ func yamlQuote(s string) string {
 // slugMatch checks if a title matches a directory slug.
 func slugMatch(title, slug string) bool {
 	return shared.Slugify(title) == slug
+}
+
+// ensureExtension adds an extension to the markdown_extensions
+// list if it is not already present.
+func ensureExtension(content, ext string) string {
+	// Check if already present
+	if strings.Contains(content, "- "+ext) {
+		return content
+	}
+
+	// Find the markdown_extensions: block and append
+	idx := strings.Index(content, "markdown_extensions:")
+	if idx == -1 {
+		return content
+	}
+
+	// Find the last extension line in the block
+	lines := strings.Split(content, "\n")
+	lastExtLine := -1
+	inBlock := false
+	for i, line := range lines {
+		if strings.TrimSpace(line) == "markdown_extensions:" {
+			inBlock = true
+			continue
+		}
+		if inBlock {
+			trimmed := strings.TrimSpace(line)
+			if strings.HasPrefix(trimmed, "- ") {
+				lastExtLine = i
+			} else if trimmed != "" {
+				break
+			}
+		}
+	}
+
+	if lastExtLine == -1 {
+		return content
+	}
+
+	// Get the indentation from the last extension line
+	indent := lines[lastExtLine][:len(lines[lastExtLine])-len(strings.TrimLeft(lines[lastExtLine], " "))]
+
+	// Insert the new extension after the last one
+	newLine := indent + "- " + ext
+	result := make([]string, 0, len(lines)+1)
+	result = append(result, lines[:lastExtLine+1]...)
+	result = append(result, newLine)
+	result = append(result, lines[lastExtLine+1:]...)
+
+	return strings.Join(result, "\n")
 }
 
 // deslugify converts a slug back to a readable title.

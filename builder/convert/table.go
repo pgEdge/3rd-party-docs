@@ -354,13 +354,25 @@ func renderHTMLRow(ctx *Context, row *sgml.Node, colNames map[string]int, w *Mar
 			}
 		}
 
-		// Render cell content as Markdown, then convert to HTML.
+		// Render cell content as Markdown, then convert to HTML
+		// or leave as Markdown for md_in_html processing.
 		cellW := NewMarkdownWriter()
 		convertChildren(ctx, entry, cellW)
-		content := markdownToHTML(cellW.String())
+		cellContent := strings.TrimSpace(cellW.String())
 
-		w.WriteString(fmt.Sprintf("<%s%s>%s</%s>\n",
-			cellTag, attrs, content, cellTag))
+		// If the cell contains images or code blocks, use
+		// markdown="block" so MkDocs handles path rewriting
+		// and code highlighting natively.
+		if strings.Contains(cellContent, "![") ||
+			strings.Contains(cellContent, "```") {
+			attrs += ` markdown="block"`
+			w.WriteString(fmt.Sprintf("<%s%s>\n%s\n</%s>\n",
+				cellTag, attrs, cellContent, cellTag))
+		} else {
+			content := markdownToHTML(cellContent)
+			w.WriteString(fmt.Sprintf("<%s%s>%s</%s>\n",
+				cellTag, attrs, content, cellTag))
+		}
 	}
 	w.WriteString("</tr>\n")
 }

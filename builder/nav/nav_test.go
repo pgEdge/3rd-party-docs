@@ -585,3 +585,35 @@ func TestGenerateYAML_DeepNesting(t *testing.T) {
 		t.Errorf("missing Section A at depth 3:\n%s", yaml)
 	}
 }
+
+func TestEnsureExtension_Adds(t *testing.T) {
+	input := "site_name: Test\n\nmarkdown_extensions:\n  - admonition\n  - attr_list\n\nplugins:\n  - search\n"
+	result := ensureExtension(input, "md_in_html")
+	if !strings.Contains(result, "  - md_in_html") {
+		t.Errorf("expected md_in_html to be added:\n%s", result)
+	}
+	// Should still have original extensions
+	if !strings.Contains(result, "  - admonition") {
+		t.Errorf("lost original extensions:\n%s", result)
+	}
+	// plugins section should be preserved
+	if !strings.Contains(result, "plugins:") {
+		t.Errorf("lost plugins section:\n%s", result)
+	}
+}
+
+func TestEnsureExtension_AlreadyPresent(t *testing.T) {
+	input := "markdown_extensions:\n  - admonition\n  - md_in_html\n  - attr_list\n"
+	result := ensureExtension(input, "md_in_html")
+	if result != input {
+		t.Errorf("should not modify when already present:\n%s", result)
+	}
+}
+
+func TestEnsureExtension_NoBlock(t *testing.T) {
+	input := "site_name: Test\nplugins:\n  - search\n"
+	result := ensureExtension(input, "md_in_html")
+	if result != input {
+		t.Errorf("should not modify when no extensions block:\n%s", result)
+	}
+}
