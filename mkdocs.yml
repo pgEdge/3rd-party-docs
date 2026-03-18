@@ -1,4 +1,4 @@
-site_name: dev
+site_name: pgAdmin 4 dev
 
 extra_css:
   - stylesheets/extra.css
