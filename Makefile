@@ -5,6 +5,7 @@ MKDOCS ?= ./mkdocs.yml
 VERSION ?= ""
 COPYRIGHT ?= ""
 PGADMIN_SRC ?= ""
+SKIP_SECTIONS ?= ""
 
 .PHONY: build test lint clean convert convert-rst validate setup
 
@@ -31,7 +32,8 @@ convert-rst: build
 	./$(BINARY) -mode rst -src $(SRC_DIR) -out $(OUT_DIR) \
 		-mkdocs $(MKDOCS) -version $(VERSION) \
 		-copyright $(COPYRIGHT) \
-		-pgadmin-src $(PGADMIN_SRC) -verbose
+		-pgadmin-src $(PGADMIN_SRC) \
+		-skip-sections $(SKIP_SECTIONS) -verbose
 
 validate: build
 	./$(BINARY) -src $(SRC_DIR) -out $(OUT_DIR) \

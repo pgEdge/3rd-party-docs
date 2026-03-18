@@ -123,6 +123,37 @@ func TestParseDirectiveWithBody(t *testing.T) {
 	}
 }
 
+func TestParseDirectiveWithTwoSpaceIndent(t *testing.T) {
+	rst := ".. code-block:: bash\n\n  sudo docker run --name tut\n"
+	root := Parse(rst)
+	if len(root.Children) != 1 {
+		t.Fatalf("expected 1 child, got %d", len(root.Children))
+	}
+	d := root.Children[0]
+	if d.DirectiveName != "code-block" {
+		t.Errorf("expected 'code-block', got %q", d.DirectiveName)
+	}
+	if !strings.Contains(d.Body, "sudo docker run") {
+		t.Errorf("body missing content: %q", d.Body)
+	}
+}
+
+func TestParseAdmonitionWithTwoSpaceIndent(t *testing.T) {
+	rst := ".. note::\n\n  This is a note.\n"
+	root := Parse(rst)
+	if len(root.Children) != 1 {
+		t.Fatalf("expected 1 child, got %d", len(root.Children))
+	}
+	d := root.Children[0]
+	if d.DirectiveName != "note" {
+		t.Errorf("expected 'note', got %q", d.DirectiveName)
+	}
+	if len(d.Children) == 0 {
+		t.Errorf("expected parsed children, got none (body=%q)",
+			d.Body)
+	}
+}
+
 func TestParseBulletList(t *testing.T) {
 	rst := "* Item 1\n* Item 2\n* Item 3\n"
 	root := Parse(rst)
@@ -418,7 +449,7 @@ This is page 1 with a :ref:` + "`link <page1_label>`" + `.
 	os.WriteFile(filepath.Join(srcDir, "images", "test.png"),
 		[]byte("PNG"), 0644)
 
-	converter := NewConverter(srcDir, outDir, "1.0", "", "", false)
+	converter := NewConverter(srcDir, outDir, "1.0", "", "", nil, false)
 	if err := converter.Convert(); err != nil {
 		t.Fatalf("conversion failed: %v", err)
 	}

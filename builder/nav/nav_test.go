@@ -314,7 +314,7 @@ extra:
 	}
 
 	newNav := "nav:\n  - Intro: intro.md\n  - Setup: setup.md\n"
-	err = UpdateMkdocsYML(mkdocsPath, newNav, "17.2")
+	err = UpdateMkdocsYML(mkdocsPath, newNav, "PostgreSQL 17.2")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -384,14 +384,14 @@ func TestUpdateMkdocsYML_VersionUpdate(t *testing.T) {
 	original := "site_name: PostgreSQL Docs\n"
 	os.WriteFile(mkdocsPath, []byte(original), 0644)
 
-	err := UpdateMkdocsYML(mkdocsPath, "nav:\n", "16.1")
+	err := UpdateMkdocsYML(mkdocsPath, "nav:\n", "PostgreSQL 16.1")
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	data, _ := os.ReadFile(mkdocsPath)
 	if !strings.Contains(string(data), "site_name: PostgreSQL 16.1") {
-		t.Errorf("version not set:\n%s", string(data))
+		t.Errorf("site_name not set:\n%s", string(data))
 	}
 }
 

@@ -33,6 +33,9 @@ type ConvertContext struct {
 	HyperlinkTargets map[string]string // name -> URL
 	CurrentFile      string
 	Warnings         []string
+	PrevWasImage     bool     // tracks consecutive image directives
+	SkipSections     []string // section headings to suppress
+	ColorScheme      string   // "dark", "light", or "" (from container class)
 }
 
 // Converter orchestrates RST-to-Markdown conversion.
@@ -43,6 +46,7 @@ type Converter struct {
 // NewConverter creates a new RST converter.
 func NewConverter(
 	srcDir, outDir, version, copyright, pgadminSrc string,
+	skipSections []string,
 	verbose bool,
 ) *Converter {
 	return &Converter{
@@ -55,6 +59,7 @@ func NewConverter(
 			Verbose:          verbose,
 			Substitutions:    make(map[string]*Node),
 			HyperlinkTargets: make(map[string]string),
+			SkipSections:     skipSections,
 		},
 	}
 }
@@ -114,6 +119,39 @@ func (c *Converter) Warnings() []string {
 	return c.ctx.Warnings
 }
 
+// ProjectName extracts the project name from conf.py in the
+// source directory.  Returns "" if conf.py is missing or the
+// project field cannot be parsed.
+func (c *Converter) ProjectName() string {
+	confPath := filepath.Join(c.ctx.SrcDir, "conf.py")
+	data, err := os.ReadFile(confPath)
+	if err != nil {
+		return ""
+	}
+	for _, line := range strings.Split(string(data), "\n") {
+		trimmed := strings.TrimSpace(line)
+		if !strings.HasPrefix(trimmed, "project") {
+			continue
+		}
+		rest := strings.TrimSpace(
+			strings.TrimPrefix(trimmed, "project"))
+		if len(rest) == 0 || rest[0] != '=' {
+			continue
+		}
+		rest = strings.TrimSpace(rest[1:])
+		// Extract the first quoted string (single or double)
+		for _, q := range []byte{'"', '\''} {
+			if len(rest) > 0 && rest[0] == q {
+				end := strings.IndexByte(rest[1:], q)
+				if end >= 0 {
+					return strings.TrimSpace(rest[1 : end+1])
+				}
+			}
+		}
+	}
+	return ""
+}
+
 // Files returns the list of generated files for nav generation.
 func (c *Converter) Files() []*shared.FileEntry {
 	_, _, _, fileEntries, _ := ResolveToctree(c.ctx.SrcDir)
@@ -144,13 +182,56 @@ func (c *Converter) convertFile(rstName, outputPath string) error {
 
 	// Convert
 	w := shared.NewMarkdownWriter()
-	for _, child := range root.Children {
-		convertNode(ctx, child, w)
-	}
+	convertChildren(ctx, root.Children, w)
 
 	// Write output
 	content := cleanMarkdown(w.String())
 	return c.writeFile(outputPath, content)
+}
+
+// convertChildren converts a slice of nodes, suppressing any
+// sections whose heading matches a SkipSections entry.  All
+// nodes between a skipped heading and the next heading at the
+// same or higher level are omitted.
+func convertChildren(
+	ctx *ConvertContext,
+	children []*Node,
+	w *shared.MarkdownWriter,
+) {
+	skipLevel := 0 // >0 means we are inside a skipped section
+	for _, child := range children {
+		if child.Type == HeadingNode {
+			if skipLevel > 0 && child.Level <= skipLevel {
+				// Leaving the skipped section
+				skipLevel = 0
+			}
+			if skipLevel == 0 && ctx.shouldSkipSection(child.Text) {
+				skipLevel = child.Level
+				continue
+			}
+		}
+		if skipLevel > 0 {
+			continue
+		}
+		convertNode(ctx, child, w)
+	}
+}
+
+// shouldSkipSection reports whether a heading title matches one
+// of the configured SkipSections (case-insensitive).
+func (ctx *ConvertContext) shouldSkipSection(title string) bool {
+	cleaned := strings.ToLower(strings.TrimSpace(cleanTitle(title)))
+	for _, s := range ctx.SkipSections {
+		if strings.ToLower(strings.TrimSpace(s)) == cleaned {
+			return true
+		}
+	}
+	return false
+}
+
+// isImageDirective reports whether a node is an image directive.
+func isImageDirective(node *Node) bool {
+	return node.Type == DirectiveNode && node.DirectiveName == "image"
 }
 
 // convertNode converts a single RST node to Markdown.
@@ -159,6 +240,10 @@ func convertNode(
 	node *Node,
 	w *shared.MarkdownWriter,
 ) {
+	// Track consecutive image directives so they render inline.
+	wasImage := isImageDirective(node)
+	defer func() { ctx.PrevWasImage = wasImage }()
+
 	switch node.Type {
 	case HeadingNode:
 		convertHeading(ctx, node, w)
@@ -212,6 +297,10 @@ func convertParagraph(
 	node *Node,
 	w *shared.MarkdownWriter,
 ) {
+	// A bare "|" is an RST vertical spacer — skip it.
+	if strings.TrimSpace(node.Text) == "|" {
+		return
+	}
 	w.BlankLine()
 	text := convertInlineCtx(ctx, node.Text)
 	w.WriteString(text + "\n")
@@ -492,32 +581,61 @@ func collectSubstitutions(root *Node, subs map[string]*Node, targets map[string]
 }
 
 // copyImage copies an image from source to output directory.
-func (ctx *ConvertContext) copyImage(imgPath string) {
+// It returns the output-relative path for the copied image.
+// Image paths in RST are relative to the current file, so we
+// resolve them via the current file's directory within SrcDir.
+func (ctx *ConvertContext) copyImage(imgPath string) string {
 	if ctx.SrcDir == "" || ctx.OutDir == "" {
-		return
+		return imgPath
 	}
 
-	srcPath := filepath.Join(ctx.SrcDir, imgPath)
-	dstPath := filepath.Join(ctx.OutDir, imgPath)
+	// Resolve relative to the current file's directory
+	fileDir := filepath.Dir(ctx.CurrentFile)
+	resolved := filepath.Clean(filepath.Join(fileDir, imgPath))
+
+	// If the resolved path escapes the source root (starts with
+	// ..), the image lives above SrcDir.  Resolve the source
+	// from the parent and flatten the destination into docs/.
+	srcPath := filepath.Join(ctx.SrcDir, resolved)
+	if strings.HasPrefix(resolved, "..") {
+		srcPath = filepath.Clean(
+			filepath.Join(ctx.SrcDir, resolved))
+		// Strip leading .. components for the output path
+		parts := strings.Split(resolved,
+			string(filepath.Separator))
+		var kept []string
+		for _, p := range parts {
+			if p != ".." {
+				kept = append(kept, p)
+			}
+		}
+		resolved = filepath.Join(kept...)
+	}
+
+	// Output destination
+	dstPath := filepath.Join(ctx.OutDir, resolved)
 
 	// Create destination directory
 	if err := os.MkdirAll(filepath.Dir(dstPath), 0755); err != nil {
 		ctx.Warnings = append(ctx.Warnings,
 			fmt.Sprintf("could not create image dir: %v", err))
-		return
+		return resolved
 	}
 
 	data, err := os.ReadFile(srcPath)
 	if err != nil {
 		ctx.Warnings = append(ctx.Warnings,
-			fmt.Sprintf("could not read image %s: %v", srcPath, err))
-		return
+			fmt.Sprintf("could not read image %s: %v",
+				srcPath, err))
+		return resolved
 	}
 
 	if err := os.WriteFile(dstPath, data, 0644); err != nil {
 		ctx.Warnings = append(ctx.Warnings,
-			fmt.Sprintf("could not write image %s: %v", dstPath, err))
+			fmt.Sprintf("could not write image %s: %v",
+				dstPath, err))
 	}
+	return resolved
 }
 
 // copyAllImages copies the entire images directory.

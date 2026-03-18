@@ -1,4 +1,4 @@
-# PostgreSQL & pgAdmin Documentation
+# PostgreSQL & Component Documentation
 
 [![CI](https://github.com/pgEdge/postgresql-docs/actions/workflows/ci.yml/badge.svg)](https://github.com/pgEdge/postgresql-docs/actions/workflows/ci.yml)
 
@@ -7,6 +7,8 @@ sources:
 
 - **PostgreSQL** — SGML/DocBook sources converted to Markdown
 - **pgAdmin 4** — reStructuredText (RST) sources converted to
+  Markdown
+- **PostgREST** — reStructuredText (RST) sources converted to
   Markdown
 
 ## Branch Layout
@@ -20,6 +22,7 @@ on product/version branches:
 | `pg16` .. `pg19` | PostgreSQL 16–19 | SGML (upstream `doc/src/sgml/`) |
 | `pgadmin911` .. `pgadmin913` | pgAdmin 4 v9.11–v9.13 | RST (`docs/en_US/`) |
 | `pgadminmaster` | pgAdmin 4 dev | RST (upstream `master`) |
+| `postgrest145` | PostgREST v14.5 | RST (`docs/`) |
 
 ## Prerequisites
 
@@ -40,6 +43,10 @@ make convert SRC_DIR=/path/to/postgresql/doc/src/sgml VERSION=17.2
 
 # pgAdmin 4 (RST mode)
 make convert-rst SRC_DIR=/path/to/pgadmin4/docs/en_US VERSION=9.13
+
+# PostgREST (RST mode, suppressing Sponsors section)
+make convert-rst SRC_DIR=/path/to/postgrest/docs VERSION=v14.5 \
+    SKIP_SECTIONS="Sponsors"
 ```
 
 Preview the site locally:
@@ -62,19 +69,24 @@ MkDocs Material. It supports two modes:
 - Two-pass conversion: ID map then content generation
 - Image copying from the PostgreSQL source tree
 
-### RST Mode (pgAdmin)
+### RST Mode (pgAdmin, PostgREST)
 
 - Line-by-line RST parser (headings, directives, lists,
   grid tables, labels, substitutions, literal blocks)
 - Toctree resolution for hierarchical nav structure
 - Directive handlers: image, code-block, admonitions,
-  csv-table, grid tables (including merged cells), youtube,
-  literalinclude, topic, and more
+  csv-table, list-table, grid tables (including merged
+  cells), container, tabs, youtube, literalinclude, topic,
+  Sphinx domain directives, and more
 - Inline markup: `:ref:`, `:doc:`, external links, bold,
   italic, literal, substitutions, index entries
 - Cross-reference resolution via label scanning
 - HTML rendering for complex table cells (bullet lists,
   inline formatting)
+- Dark/light mode image support via MkDocs Material
+  `#only-dark`/`#only-light` fragments
+- Section suppression (`-skip-sections` flag)
+- Project name inference from Sphinx `conf.py`
 
 ### Shared
 
@@ -99,16 +111,18 @@ MkDocs Material. It supports two modes:
 
 ```
 pgdoc-converter [flags]
-  -mode        Conversion mode: sgml or rst (default "sgml")
-  -src         Path to source documentation directory
-  -out         Output directory for .md files (default "./docs")
-  -mkdocs      Path to mkdocs.yml (default "./mkdocs.yml")
-  -version     Version label (e.g. "17.2" or "9.13")
-  -copyright   Copyright string (RST mode only)
-  -pgadmin-src Path to pgAdmin source tree (for
-               literalinclude directives, RST mode only)
-  -validate    Run link validation after conversion
-  -verbose     Show detailed progress
+  -mode           Conversion mode: sgml or rst (default "sgml")
+  -src            Path to source documentation directory
+  -out            Output directory for .md files (default "./docs")
+  -mkdocs         Path to mkdocs.yml (default "./mkdocs.yml")
+  -version        Version label (e.g. "17.2" or "9.13")
+  -copyright      Copyright string (RST mode only)
+  -pgadmin-src    Path to pgAdmin source tree (for
+                  literalinclude directives, RST mode only)
+  -skip-sections  Comma-separated section headings to suppress
+                  (RST mode only, e.g. "Sponsors,Changelog")
+  -validate       Run link validation after conversion
+  -verbose        Show detailed progress
 ```
 
 ### Makefile Variables
@@ -121,6 +135,7 @@ pgdoc-converter [flags]
 | `VERSION` | (empty) | Version label for site_name |
 | `COPYRIGHT` | (empty) | Copyright string (RST mode) |
 | `PGADMIN_SRC` | (empty) | pgAdmin source (RST mode) |
+| `SKIP_SECTIONS` | (empty) | Sections to suppress (RST mode) |
 
 ## TODO: Additional Component Docs Sites
 
@@ -132,7 +147,7 @@ pgdoc-converter [flags]
 - [ ] pgvector (0.8.0–0.8.1)
 - [ ] pgAudit (16.1–18.0)
 - [ ] psycopg2 (2.9.10)
-- [ ] PostgREST (14.5)
+- [x] PostgREST (14.5)
 
 ## Project Structure
 

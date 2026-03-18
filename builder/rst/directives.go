@@ -106,6 +106,18 @@ func initDirectiveHandlers() {
 	}
 }
 
+// colorSchemeFragment returns the MkDocs Material URL fragment
+// for dark/light image switching, or "" if not in a themed container.
+func colorSchemeFragment(ctx *ConvertContext) string {
+	switch ctx.ColorScheme {
+	case "dark":
+		return "#only-dark"
+	case "light":
+		return "#only-light"
+	}
+	return ""
+}
+
 // handleImage converts an image directive to Markdown.
 func handleImage(
 	ctx *ConvertContext,
@@ -118,33 +130,40 @@ func handleImage(
 		alt = "image"
 	}
 	target := node.Options["target"]
+	frag := colorSchemeFragment(ctx)
 
 	// External URLs — use directly, don't copy
 	if strings.HasPrefix(imgPath, "http://") ||
 		strings.HasPrefix(imgPath, "https://") {
-		w.BlankLine()
+		if !ctx.PrevWasImage {
+			w.BlankLine()
+		}
 		if target != "" {
 			w.WriteString(fmt.Sprintf(
-				"[![%s](%s)](%s)\n", alt, imgPath, target))
+				"[![%s](%s%s)](%s)\n", alt, imgPath, frag, target))
 		} else {
-			w.WriteString(fmt.Sprintf("![%s](%s)\n", alt, imgPath))
+			w.WriteString(fmt.Sprintf(
+				"![%s](%s%s)\n", alt, imgPath, frag))
 		}
 		return nil
 	}
 
-	// Compute relative path from current output file to the image
-	relImg := relativeImagePath(ctx.CurrentFile, imgPath)
+	// Copy image file and get the output-relative path
+	dstRel := ctx.copyImage(imgPath)
 
-	w.BlankLine()
+	// Compute relative path from current output file to the image
+	relImg := relativeImagePath(ctx.CurrentFile, dstRel)
+
+	if !ctx.PrevWasImage {
+		w.BlankLine()
+	}
 	if target != "" {
 		w.WriteString(fmt.Sprintf(
-			"[![%s](%s)](%s)\n", alt, relImg, target))
+			"[![%s](%s%s)](%s)\n", alt, relImg, frag, target))
 	} else {
-		w.WriteString(fmt.Sprintf("![%s](%s)\n", alt, relImg))
+		w.WriteString(fmt.Sprintf(
+			"![%s](%s%s)\n", alt, relImg, frag))
 	}
-
-	// Copy image file
-	ctx.copyImage(imgPath)
 
 	return nil
 }
@@ -161,11 +180,11 @@ func handleFigure(
 		alt = "image"
 	}
 
-	relImg := relativeImagePath(ctx.CurrentFile, imgPath)
+	dstRel := ctx.copyImage(imgPath)
+	relImg := relativeImagePath(ctx.CurrentFile, dstRel)
 
 	w.BlankLine()
 	w.WriteString(fmt.Sprintf("![%s](%s)\n", alt, relImg))
-	ctx.copyImage(imgPath)
 
 	// Caption is in the body
 	if node.Body != "" {
@@ -609,7 +628,13 @@ func handleSkipDirective(
 	return nil
 }
 
-// handleRaw passes through raw HTML content.
+// reObjectTag matches <object ... data="path" ...> so we can
+// convert it to a Markdown image that MkDocs handles correctly.
+var reObjectTag = regexp.MustCompile(
+	`<object\b[^>]*\bdata="([^"]+)"[^>]*>.*?</object>`)
+
+// handleRaw passes through raw HTML content, rewriting local
+// asset paths so they resolve correctly in MkDocs output.
 func handleRaw(
 	ctx *ConvertContext,
 	node *Node,
@@ -617,8 +642,29 @@ func handleRaw(
 ) error {
 	format := node.DirectiveArg
 	if format == "html" && node.Body != "" {
+		body := node.Body
+
+		// Convert <object data="..."> tags to Markdown
+		// images so MkDocs resolves the paths correctly
+		// (raw HTML paths break with use_directory_urls).
+		body = reObjectTag.ReplaceAllStringFunc(
+			body, func(m string) string {
+				sub := reObjectTag.FindStringSubmatch(m)
+				origPath := sub[1]
+				if strings.HasPrefix(origPath, "http://") ||
+					strings.HasPrefix(origPath, "https://") {
+					return m
+				}
+				dstRel := ctx.copyImage(origPath)
+				relPath := relativeImagePath(
+					ctx.CurrentFile, dstRel)
+				frag := colorSchemeFragment(ctx)
+				return fmt.Sprintf(
+					"![image](%s%s)", relPath, frag)
+			})
+
 		w.BlankLine()
-		w.WriteString(node.Body + "\n")
+		w.WriteString(body + "\n")
 	}
 	return nil
 }
@@ -783,11 +829,24 @@ func resolveAnonymousLinks(text string) string {
 // output .md file to an image (whose path is relative to the
 // docs root, e.g. "images/foo.png").
 // handleContainer passes through the body content of a container.
+// Containers with class "img-dark" or "img-light" set the color
+// scheme so child images get MkDocs Material #only-dark / #only-light
+// fragments appended.
 func handleContainer(
 	ctx *ConvertContext,
 	node *Node,
 	w *shared.MarkdownWriter,
 ) error {
+	// Detect dark/light image containers
+	arg := strings.TrimSpace(node.DirectiveArg)
+	prevScheme := ctx.ColorScheme
+	if arg == "img-dark" {
+		ctx.ColorScheme = "dark"
+	} else if arg == "img-light" {
+		ctx.ColorScheme = "light"
+	}
+	defer func() { ctx.ColorScheme = prevScheme }()
+
 	if len(node.Children) > 0 {
 		for _, child := range node.Children {
 			convertNode(ctx, child, w)

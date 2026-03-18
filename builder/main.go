@@ -15,6 +15,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/pgEdge/postgresql-docs/builder/convert"
 	"github.com/pgEdge/postgresql-docs/builder/nav"
@@ -31,6 +32,7 @@ func main() {
 	version := flag.String("version", "", "Version label (e.g., 17.2 or 9.13)")
 	copyright := flag.String("copyright", "", "Copyright string (RST mode)")
 	pgadminSrc := flag.String("pgadmin-src", "", "Path to pgAdmin source (for literalinclude)")
+	skipSections := flag.String("skip-sections", "", "Comma-separated section headings to suppress")
 	doValidate := flag.Bool("validate", false, "Run link validation after conversion")
 	verbose := flag.Bool("verbose", false, "Verbose output")
 
@@ -66,7 +68,7 @@ func main() {
 		runSGML(*srcDir, *outDir, *mkdocsFile, *version, *doValidate, *verbose)
 	case "rst":
 		runRST(*srcDir, *outDir, *mkdocsFile, *version, *copyright,
-			*pgadminSrc, *doValidate, *verbose)
+			*pgadminSrc, *skipSections, *doValidate, *verbose)
 	default:
 		fmt.Fprintf(os.Stderr, "error: unknown mode %q (use sgml or rst)\n", *mode)
 		os.Exit(1)
@@ -156,7 +158,11 @@ func runSGML(srcDir, outDir, mkdocsFile, version string, doValidate, verbose boo
 
 	if mkdocsFile != "" {
 		if _, err := os.Stat(mkdocsFile); err == nil {
-			if err := nav.UpdateMkdocsYML(mkdocsFile, navYAML, version); err != nil {
+			siteName := ""
+			if version != "" {
+				siteName = "PostgreSQL " + version
+			}
+			if err := nav.UpdateMkdocsYML(mkdocsFile, navYAML, siteName); err != nil {
 				fmt.Fprintf(os.Stderr, "error updating mkdocs.yml: %v\n", err)
 				os.Exit(1)
 			}
@@ -175,14 +181,29 @@ func runSGML(srcDir, outDir, mkdocsFile, version string, doValidate, verbose boo
 // runRST runs the RST conversion pipeline.
 func runRST(
 	srcDir, outDir, mkdocsFile, version, copyright, pgadminSrc string,
+	skipSections string,
 	doValidate, verbose bool,
 ) {
 	if verbose {
 		fmt.Println("Converting RST documentation...")
 	}
 
+	// Parse comma-separated skip sections
+	var skip []string
+	if skipSections != "" {
+		for _, s := range strings.Split(skipSections, ",") {
+			s = strings.TrimSpace(s)
+			if s != "" {
+				skip = append(skip, s)
+			}
+		}
+		if verbose && len(skip) > 0 {
+			fmt.Printf("  Skipping sections: %v\n", skip)
+		}
+	}
+
 	converter := rst.NewConverter(
-		srcDir, outDir, version, copyright, pgadminSrc, verbose)
+		srcDir, outDir, version, copyright, pgadminSrc, skip, verbose)
 
 	if err := converter.Convert(); err != nil {
 		fmt.Fprintf(os.Stderr, "error converting RST: %v\n", err)
@@ -211,7 +232,17 @@ func runRST(
 
 	if mkdocsFile != "" {
 		if _, err := os.Stat(mkdocsFile); err == nil {
-			if err := nav.UpdateMkdocsYML(mkdocsFile, navYAML, version); err != nil {
+			// Build site name from conf.py project name + version
+			siteName := ""
+			if project := converter.ProjectName(); project != "" {
+				siteName = project
+				if version != "" {
+					siteName += " " + version
+				}
+			} else if version != "" {
+				siteName = version
+			}
+			if err := nav.UpdateMkdocsYML(mkdocsFile, navYAML, siteName); err != nil {
 				fmt.Fprintf(os.Stderr, "error updating mkdocs.yml: %v\n", err)
 				os.Exit(1)
 			}

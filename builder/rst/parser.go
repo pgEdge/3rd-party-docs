@@ -296,6 +296,10 @@ func (p *Parser) isDirective(line string) bool {
 
 // parseDirective parses an RST directive.
 func (p *Parser) parseDirective(parent *Node, baseIndent int) {
+	// Use the actual indent of the directive line, which may be
+	// deeper than the parent's baseIndent when the directive
+	// appears inside indented content.
+	baseIndent = countIndent(p.lines[p.pos])
 	line := strings.TrimSpace(p.lines[p.pos])
 	// ".. name:: arg"
 	rest := line[3:]
@@ -339,6 +343,19 @@ func (p *Parser) parseDirective(parent *Node, baseIndent int) {
 		} else {
 			// Not an option — must be body content
 			break
+		}
+	}
+
+	// Re-detect body indent from the first non-blank body line.
+	// The initial detection may have failed if the line immediately
+	// after the directive was blank (standard RST formatting).
+	if p.pos < len(p.lines) {
+		nextNB := p.peekNonBlank()
+		if nextNB >= 0 {
+			ni := countIndent(p.lines[nextNB])
+			if ni > baseIndent && ni < directiveIndent {
+				directiveIndent = ni
+			}
 		}
 	}
 

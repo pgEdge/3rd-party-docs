@@ -85,6 +85,17 @@ func insertEntry(root *NavEntry, filePath, title, navParent string) {
 func GenerateYAML(root *NavEntry) string {
 	var b strings.Builder
 	b.WriteString("nav:\n")
+
+	// Emit root index page first if present
+	if root.Path != "" {
+		title := root.Title
+		if title == "" || title == "root" {
+			title = "Home"
+		}
+		b.WriteString(fmt.Sprintf("  - %s: %s\n",
+			yamlQuote(title), root.Path))
+	}
+
 	for _, child := range root.Children {
 		writeNavEntry(&b, child, 1)
 	}
@@ -122,9 +133,10 @@ func writeNavEntry(b *strings.Builder, entry *NavEntry, depth int) {
 }
 
 // UpdateMkdocsYML reads an existing mkdocs.yml, replaces the nav:
-// section and updates the site_name with the version, then writes
-// it back.
-func UpdateMkdocsYML(mkdocsPath, navYAML, version string) error {
+// section and sets the site_name, then writes it back.
+// siteName is the full display name (e.g. "PostgREST v14.5").
+// If siteName is empty the site_name line is left unchanged.
+func UpdateMkdocsYML(mkdocsPath, navYAML, siteName string) error {
 	data, err := os.ReadFile(mkdocsPath)
 	if err != nil {
 		return fmt.Errorf("reading %s: %w", mkdocsPath, err)
@@ -132,12 +144,12 @@ func UpdateMkdocsYML(mkdocsPath, navYAML, version string) error {
 
 	content := string(data)
 
-	// Update site_name with version
-	if version != "" {
+	// Update site_name if a name was provided.
+	if siteName != "" {
 		lines := strings.Split(content, "\n")
 		for i, line := range lines {
 			if strings.HasPrefix(line, "site_name:") {
-				lines[i] = "site_name: PostgreSQL " + version
+				lines[i] = "site_name: " + siteName
 				break
 			}
 		}
