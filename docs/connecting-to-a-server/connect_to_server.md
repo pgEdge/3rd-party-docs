@@ -4,7 +4,7 @@
 
 Use the *Connect to Server* dialog to authenticate with a defined server and access the objects stored on the server through the pgAdmin tree control. To access the dialog, right click on the server name in the *pgAdmin* tree control, and select *Connect Server...* from the context menu.
 
-![Connect to server dialog](images/connect_to_server.png)
+![Connect to server dialog](../images/connect_to_server.png)
 
 Provide authentication information for the selected server:
 
@@ -18,7 +18,7 @@ Provide authentication information for the selected server:
 
 When using SSH Tunneling, the *Connect to Server* dialog will prompt for the SSH Tunnel and Database server passwords if not already saved.
 
-![Connect to server dialog](images/connect_to_tunneled_server.png)
+![Connect to server dialog](../images/connect_to_tunneled_server.png)
 
 Provide authentication information for the selected server:
 

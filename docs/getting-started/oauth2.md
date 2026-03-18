@@ -62,7 +62,7 @@ In the multi user mode, pgAdmin uses user's login password to encrypt/decrypt th
 
 After configuration, on restart, you can see the login page with the Oauth2 login button(s).
 
-![Oauth2 login](images/oauth2_login.png)
+![Oauth2 login](../images/oauth2_login.png)
 
 ## PKCE Workflow
 

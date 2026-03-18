@@ -34,7 +34,7 @@ Before using AI Reports, you must:
 
 To configure AI Reports, navigate to *File → Preferences → AI* (or click the *Settings* button and select *AI*).
 
-![AI preferences](images/preferences_ai.png)
+![AI preferences](../images/preferences_ai.png)
 
 Select your preferred LLM provider from the dropdown:
 
@@ -77,7 +77,7 @@ To generate a security report:
 
 3. The report will be generated and displayed in a new tab.
 
-![AI security report](images/ai_security_report.png)
+![AI security report](../images/ai_security_report.png)
 
 **Security Report Scope:**
 

@@ -6,7 +6,7 @@ The pgAdmin menu bar provides drop-down menus for access to options, commands, a
 
 # The File Menu
 
-![pgAdmin file menu bar](images/file_menu.png)
+![pgAdmin file menu bar](../images/file_menu.png)
 
 Use the *File* menu available in web mode to access the following options:
 
@@ -17,7 +17,7 @@ Use the *File* menu available in web mode to access the following options:
 
 # The pgAdmin4 Menu
 
-![pgAdmin pgadmin4 menu bar](images/pgadmin4_menu.png)
+![pgAdmin pgadmin4 menu bar](../images/pgadmin4_menu.png)
 
 Use the *pgAdmin4* menu available in desktop mode to access the following options:
 
@@ -31,7 +31,7 @@ Use the *pgAdmin4* menu available in desktop mode to access the following option
 
 # The Object Menu
 
-![pgAdmin object menu bar](images/object_menu.png)
+![pgAdmin object menu bar](../images/object_menu.png)
 
 The *Object* menu is context-sensitive. Use the *Object* menu to access the following options (in alphabetical order):
 
@@ -128,7 +128,7 @@ The *Object* menu is context-sensitive. Use the *Object* menu to access the foll
 
 # The Tools Menu
 
-![pgAdmin tools menu bar](images/tool_menu.png)
+![pgAdmin tools menu bar](../images/tool_menu.png)
 
 Use the *Tools* menu to access the following options (in alphabetical order):
 
@@ -221,7 +221,7 @@ Use the *Tools* menu to access the following options (in alphabetical order):
 
 # The Help Menu
 
-![pgAdmin help menu bar](images/help_menu.png)
+![pgAdmin help menu bar](../images/help_menu.png)
 
 Use the options on the *Help* menu to access online help documents, or to review information about the pgAdmin installation (in alphabetical order):
 

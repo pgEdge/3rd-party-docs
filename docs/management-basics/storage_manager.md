@@ -14,7 +14,7 @@
 
 You can access *Storage Manager* from the *Tools* Menu.
 
-![Storage Manager](images/storage_manager.png)
+![Storage Manager](../images/storage_manager.png)
 
 Use icons on the top of the *Storage Manager* window to manage storage:
 
@@ -34,7 +34,7 @@ Use the *Format* drop down list to select the format of the files to be displaye
 
 # Shared Storage
 
-![Other options](images/shared_storage.png)
+![Other options](../images/shared_storage.png)
 
 In the storage manager, `My Storage` is the pgAdmin user’s storage directory, and other listed directories are shared storages set by the pgAdmin server administrator. Using these, pgAdmin users can have common storages to share files. pgAdmin server administrator can configure the shared storages using the [config file](../getting-started/deployment/config_py.md#config_py). Storages can be marked as restricted to give read-only access to non-admin pgAdmin users.
 
@@ -44,7 +44,7 @@ In the storage manager, `My Storage` is the pgAdmin user’s storage directory, 
 
 # Other Options
 
-![Other options](images/sm_options.png)
+![Other options](../images/sm_options.png)
 
 | Menu | Behavior |
 |---|---|
@@ -59,4 +59,4 @@ You can also download backup files through *Storage Manager* at the successful c
 
 At the successful completion of a backup, click on the icon to open the current backup file in *Storage Manager* on the *process watcher* window.
 
-![Process watcher with storage manager icon](images/process_watcher_storage_manager.png)
+![Process watcher with storage manager icon](../images/process_watcher_storage_manager.png)

@@ -6,7 +6,7 @@
 
 You can backup a single table, a schema, or a complete database. Select the name of the backup source in the *pgAdmin* tree control, right click to open the context menu, and select *Backup...* to open the *Backup* dialog.  The name of the object selected will appear in the dialog title bar.
 
-![Backup dialog general tab](images/backup_general.png)
+![Backup dialog general tab](../images/backup_general.png)
 
 Use the fields in the *General* tab to specify parameters for the backup:
 
@@ -61,7 +61,7 @@ Use the fields in the *General* tab to specify parameters for the backup:
 
 Click the *Data Options* tab to continue. Use the fields in the *Data Options* tab to provide options related to data or pgAdmin objects that correspond to *pg_dump*.
 
-![Sections option on backup dialog](images/backup_sections.png)
+![Sections option on backup dialog](../images/backup_sections.png)
 
 - Move switches in the **Sections** field box to select a portion of the object
     that will be backed up.
@@ -76,7 +76,7 @@ Click the *Data Options* tab to continue. Use the fields in the *Data Options* t
     definitions of indexes, triggers, rules, and constraints other than
     validated check constraints.
 
-![Type of objects option on backup dialog](images/backup_objects.png)
+![Type of objects option on backup dialog](../images/backup_objects.png)
 
 - Move switches in the **Type of objects** field box to specify details about
     the type of objects that will be backed up.
@@ -90,7 +90,7 @@ Click the *Data Options* tab to continue. Use the fields in the *Data Options* t
 - Move the switch next to *Blobs* to the *No* position to exclude large
     objects in the backup.
 
-![Do not save option on backup dialog](images/backup_do_not_save.png)
+![Do not save option on backup dialog](../images/backup_do_not_save.png)
 
 - Move switches in the **Do not save** field box to select the objects that will
     not be included in the backup.
@@ -128,7 +128,7 @@ Click the *Data Options* tab to continue. Use the fields in the *Data Options* t
     Table access methods. **Note:** This option is visible only for
     database server greater than or equal to 15.
 
-![Queries option on backup dialog](images/backup_queries.png)
+![Queries option on backup dialog](../images/backup_queries.png)
 
 Click the *Query Options* tab to continue. Use these additional fields to specify the type of statements that should be included in the backup.
 
@@ -160,7 +160,7 @@ Click the *Query Options* tab to continue. Use these additional fields to specif
     position to add an IF EXISTS clause to drop databases and other objects.
     This option is not valid unless *Include DROP DATABASE statement* is also set.
 
-![Backup dialog tables section](images/backup_table.png)
+![Backup dialog tables section](../images/backup_table.png)
 
 Click the *Table Options* tab to continue. Use the fields in the *Table Options* tab related to tables that should be included in the backup.
 
@@ -205,7 +205,7 @@ Click the *Table Options* tab to continue. Use the fields in the *Table Options*
 
 Click the *Options* tab to continue. Use the fields in the *Options* tab to provide other backup options.
 
-![Disable option on backup dialog](images/backup_disable.png)
+![Disable option on backup dialog](../images/backup_disable.png)
 
 - Move switches in the **Disable** field box to specify the type of statements
     that should be excluded from the backup.
@@ -218,7 +218,7 @@ Click the *Options* tab to continue. Use the fields in the *Options* tab to prov
     quoting within function bodies; if disabled, the function body will be
     quoted using SQL standard string syntax.
 
-![Miscellaneous option on backup dialog](images/backup_miscellaneous.png)
+![Miscellaneous option on backup dialog](../images/backup_miscellaneous.png)
 
 - Move switches in the **Miscellaneous** field box to specify miscellaneous
     backup options.
@@ -245,7 +245,7 @@ Click the *Options* tab to continue. Use the fields in the *Options* tab to prov
 
 Click the *Objects* tab to continue.
 
-![Select objects in backup dialog](images/backup_object_selection.png)
+![Select objects in backup dialog](../images/backup_object_selection.png)
 
 - Select the objects from tree to take backup of selected objects only.
       * If Schema is selected then it will take the backup of that selected schema only.

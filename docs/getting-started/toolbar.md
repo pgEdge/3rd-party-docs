@@ -4,7 +4,7 @@
 
 The pgAdmin toolbar provides shortcut buttons for frequently used features like the Query Tool, View/Edit Data, Search Object and the PSQL Tool. This toolbar is visible on the Object explorer panel. Buttons get enabled/disabled based on the selected object node.
 
-![pgAdmin Toolbar](images/toolbar.png)
+![pgAdmin Toolbar](../images/toolbar.png)
 
 - Use the [Object filter](#object-explorer-filter) button to access
     the Object Filter popup. It helps you filter objects in the Object Explorer tree.
@@ -27,7 +27,7 @@ The pgAdmin toolbar provides shortcut buttons for frequently used features like 
 
 # Object Explorer Filter
 
-![Object Explorer Filter Dialog](images/object_explorer_filter.png)
+![Object Explorer Filter Dialog](../images/object_explorer_filter.png)
 
 Use this tool to filter objects in the Object Explorer by following fields:
 

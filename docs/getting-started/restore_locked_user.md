@@ -40,7 +40,7 @@ External database:
 
 Account locking by failed login attempts:
 
-![Failed login attempt for current user](images/login_attempt_user.png)
+![Failed login attempt for current user](../images/login_attempt_user.png)
 
 pgAdmin application is configured to lock a user account when a number of consecutive failed login attempts are exceeded.
 

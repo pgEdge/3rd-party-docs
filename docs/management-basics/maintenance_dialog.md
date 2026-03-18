@@ -8,7 +8,7 @@ While this utility is useful for ad-hoc maintenance purposes, you are encouraged
 
 Select a button next to *Maintenance operation* to specify the type of maintenance:
 
-![Maintenance dialog](images/maintenance_vacuum.png)
+![Maintenance dialog](../images/maintenance_vacuum.png)
 
 - Click *VACUUM* to scan the selected database or table to reclaim storage used
     by dead tuples.
@@ -62,7 +62,7 @@ Select a button next to *Maintenance operation* to specify the type of maintenan
     shared buffers which will be reused as part of this strategy. This option
     is available from v16 onwards
 
-![Maintenance dialog](images/maintenance_analyze.png)
+![Maintenance dialog](../images/maintenance_analyze.png)
 
 - Click *ANALYZE* to update the stored statistics used by the query planner.
     This enables the query optimizer to select the fastest query plan for optimal
@@ -77,7 +77,7 @@ Select a button next to *Maintenance operation* to specify the type of maintenan
     shared buffers which will be reused as part of this strategy. This option
     is available from v16 onwards
 
-![Maintenance dialog](images/maintenance_reindex.png)
+![Maintenance dialog](../images/maintenance_reindex.png)
 
 - Click *REINDEX* to rebuild any index in case it has degenerated due to the
     insertion of unusual data patterns. This happens, for example, if you insert
@@ -94,7 +94,7 @@ Select a button next to *Maintenance operation* to specify the type of maintenan
 - Use the *TABLESPACE* field to specify that indexes will be rebuilt on
     a new tablespace. This option is available from v14 onwards.
 
-![Maintenance dialog](images/maintenance_cluster.png)
+![Maintenance dialog](../images/maintenance_cluster.png)
 
 - Click *CLUSTER* to instruct PostgreSQL to cluster the selected table.
 
