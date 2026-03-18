@@ -134,10 +134,18 @@ Requires GEOS >= 3.12.0
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_coveragesimplify01.svg" alt="image"></p>
-<p>Input coverage</p></td>
-<td><p><img src="images/st_coveragesimplify02.svg" alt="image"></p>
-<p>Simplified coverage</p></td>
+<td markdown="block">
+![image](images/st_coveragesimplify01.svg)
+
+
+Input coverage
+</td>
+<td markdown="block">
+![image](images/st_coveragesimplify02.svg)
+
+
+Simplified coverage
+</td>
 </tr>
 </tbody>
 </table>
@@ -202,10 +210,18 @@ Availability: 3.4.0 - requires GEOS >= 3.8.0
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_coverageunion01.svg" alt="image"></p>
-<p>Input coverage</p></td>
-<td><p><img src="images/st_coverageunion02.svg" alt="image"></p>
-<p>Union result</p></td>
+<td markdown="block">
+![image](images/st_coverageunion01.svg)
+
+
+Input coverage
+</td>
+<td markdown="block">
+![image](images/st_coverageunion02.svg)
+
+
+Union result
+</td>
 </tr>
 </tbody>
 </table>

@@ -77,120 +77,224 @@ Performed by the GEOS module.
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_buffer01.svg" alt="image"></p>
-<p>quad_segs=8 (default)</p>
-<pre><code class="language-sql">
+<td markdown="block">
+![image](images/st_buffer01.svg)
+
+
+quad_segs=8 (default)
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText('POINT(100 90)'),
  50, 'quad_segs=8');
-                </code></pre></td>
-<td><p><img src="images/st_buffer02.svg" alt="image"></p>
-<p>quad_segs=2 (lame)</p>
-<pre><code class="language-sql">
+
+```
+</td>
+<td markdown="block">
+![image](images/st_buffer02.svg)
+
+
+quad_segs=2 (lame)
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText('POINT(100 90)'),
  50, 'quad_segs=2');
-                </code></pre></td>
+
+```
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_buffer03.svg" alt="image"></p>
-<p>endcap=round join=round (default)</p>
-<pre><code class="language-sql">
+<td markdown="block">
+![image](images/st_buffer03.svg)
+
+
+endcap=round join=round (default)
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText(
   'LINESTRING(50 50,150 150,150 50)'
  ), 10, 'endcap=round join=round');
-                </code></pre></td>
-<td><p><img src="images/st_buffer04.svg" alt="image"></p>
-<p>endcap=square</p>
-<pre><code class="language-sql">
+
+```
+</td>
+<td markdown="block">
+![image](images/st_buffer04.svg)
+
+
+endcap=square
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText(
   'LINESTRING(50 50,150 150,150 50)'
  ), 10, 'endcap=square join=round');
-                </code></pre></td>
-<td><p><img src="images/st_buffer05.svg" alt="image"></p>
-<p>endcap=flat</p>
-<pre><code class="language-sql">
+
+```
+</td>
+<td markdown="block">
+![image](images/st_buffer05.svg)
+
+
+endcap=flat
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText(
   'LINESTRING(50 50,150 150,150 50)'
  ), 10, 'endcap=flat join=round');
-                </code></pre></td>
+
+```
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_buffer07.svg" alt="image"></p>
-<p>join=bevel</p>
-<pre><code class="language-sql">
+<td markdown="block">
+![image](images/st_buffer07.svg)
+
+
+join=bevel
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText(
   'LINESTRING(50 50,150 150,150 50)'
  ), 10, 'join=bevel');
-                </code></pre></td>
-<td><p><img src="images/st_buffer06.svg" alt="image"></p>
-<p>join=mitre mitre_limit=5.0 (default mitre limit)</p>
-<pre><code class="language-sql">
+
+```
+</td>
+<td markdown="block">
+![image](images/st_buffer06.svg)
+
+
+join=mitre mitre_limit=5.0 (default mitre limit)
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText(
   'LINESTRING(50 50,150 150,150 50)'
  ), 10, 'join=mitre mitre_limit=5.0');
-                </code></pre></td>
-<td><p><img src="images/st_buffer08.svg" alt="image"></p>
-<p>join=mitre mitre_limit=1</p>
-<pre><code class="language-sql">
+
+```
+</td>
+<td markdown="block">
+![image](images/st_buffer08.svg)
+
+
+join=mitre mitre_limit=1
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText(
   'LINESTRING(50 50,150 150,150 50)'
  ), 10, 'join=mitre mitre_limit=1.0');
-                </code></pre></td>
+
+```
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_buffer09.svg" alt="image"></p>
-<p>side=left</p>
-<pre><code class="language-sql">
+<td markdown="block">
+![image](images/st_buffer09.svg)
+
+
+side=left
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText(
   'LINESTRING(50 50,150 150,150 50)'
  ), 10, 'side=left');
-                </code></pre></td>
-<td><p><img src="images/st_buffer10.svg" alt="image"></p>
-<p>side=right</p>
-<pre><code class="language-sql">
+
+```
+</td>
+<td markdown="block">
+![image](images/st_buffer10.svg)
+
+
+side=right
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText(
   'LINESTRING(50 50,150 150,150 50)'
  ), 10, 'side=right');
-                </code></pre></td>
-<td><p><img src="images/st_buffer11.svg" alt="image"></p>
-<p>side=left join=mitre</p>
-<pre><code class="language-sql">
+
+```
+</td>
+<td markdown="block">
+![image](images/st_buffer11.svg)
+
+
+side=left join=mitre
+
+
+```sql
+
 SELECT ST_Buffer(
  ST_GeomFromText(
   'LINESTRING(50 50,150 150,150 50)'
  ), 10, 'side=left join=mitre');
-                </code></pre></td>
+
+```
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_buffer12.svg" alt="image"></p>
-<p>right-hand-winding, polygon boundary side=left</p>
-<pre><code class="language-sql">
+<td markdown="block">
+![image](images/st_buffer12.svg)
+
+
+right-hand-winding, polygon boundary side=left
+
+
+```sql
+
 SELECT ST_Buffer(
 ST_ForceRHR(
 ST_Boundary(
  ST_GeomFromText(
 'POLYGON ((50 50, 50 150, 150 150, 150 50, 50 50))'))),
  ), 20, 'side=left');
-                </code></pre></td>
-<td><p><img src="images/st_buffer13.svg" alt="image"></p>
-<p>right-hand-winding, polygon boundary side=right</p>
-<pre><code class="language-sql">
+
+```
+</td>
+<td markdown="block">
+![image](images/st_buffer13.svg)
+
+
+right-hand-winding, polygon boundary side=right
+
+
+```sql
+
 SELECT ST_Buffer(
 ST_ForceRHR(
 ST_Boundary(
  ST_GeomFromText(
 'POLYGON ((50 50, 50 150, 150 150, 150 50, 50 50))'))
 ), 20,'side=right')
-                </code></pre></td>
+
+```
+</td>
 </tr>
 </tbody>
 </table>
@@ -272,10 +376,18 @@ Availability: 1.1.0
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_buildarea02.svg" alt="image"></p>
-<p>Input lines</p></td>
-<td><p><img src="images/st_buildarea03.svg" alt="image"></p>
-<p>Area result</p></td>
+<td markdown="block">
+![image](images/st_buildarea02.svg)
+
+
+Input lines
+</td>
+<td markdown="block">
+![image](images/st_buildarea03.svg)
+
+
+Area result
+</td>
 </tr>
 </tbody>
 </table>
@@ -364,16 +476,32 @@ In the following illustrations the red dot is the centroid of the source geometr
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_centroid01.svg" alt="image"></p>
-<p>Centroid of a <code>MULTIPOINT</code></p></td>
-<td><p><img src="images/st_centroid02.svg" alt="image"></p>
-<p>Centroid of a <code>LINESTRING</code></p></td>
+<td markdown="block">
+![image](images/st_centroid01.svg)
+
+
+Centroid of a `MULTIPOINT`
+</td>
+<td markdown="block">
+![image](images/st_centroid02.svg)
+
+
+Centroid of a `LINESTRING`
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_centroid03.svg" alt="image"></p>
-<p>Centroid of a <code>POLYGON</code></p></td>
-<td><p><img src="images/st_centroid04.svg" alt="image"></p>
-<p>Centroid of a <code>GEOMETRYCOLLECTION</code></p></td>
+<td markdown="block">
+![image](images/st_centroid03.svg)
+
+
+Centroid of a `POLYGON`
+</td>
+<td markdown="block">
+![image](images/st_centroid04.svg)
+
+
+Centroid of a `GEOMETRYCOLLECTION`
+</td>
 </tr>
 </tbody>
 </table>
@@ -460,12 +588,24 @@ Smoothing a Polygon using 1, 2 and 3 iterations:
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_chaikinsmoothing01.svg" alt="image"></p>
-<p>nIterations = 1</p></td>
-<td><p><img src="images/st_chaikinsmoothing02.svg" alt="image"></p>
-<p>nIterations = 2</p></td>
-<td><p><img src="images/st_chaikinsmoothing03.svg" alt="image"></p>
-<p>nIterations = 3</p></td>
+<td markdown="block">
+![image](images/st_chaikinsmoothing01.svg)
+
+
+nIterations = 1
+</td>
+<td markdown="block">
+![image](images/st_chaikinsmoothing02.svg)
+
+
+nIterations = 2
+</td>
+<td markdown="block">
+![image](images/st_chaikinsmoothing03.svg)
+
+
+nIterations = 3
+</td>
 </tr>
 </tbody>
 </table>
@@ -485,12 +625,24 @@ Smoothing a LineString using 1, 2 and 3 iterations:
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_chaikinsmoothing04.svg" alt="image"></p>
-<p>nIterations = 1</p></td>
-<td><p><img src="images/st_chaikinsmoothing05.svg" alt="image"></p>
-<p>nIterations = 2</p></td>
-<td><p><img src="images/st_chaikinsmoothing06.svg" alt="image"></p>
-<p>nIterations = 3</p></td>
+<td markdown="block">
+![image](images/st_chaikinsmoothing04.svg)
+
+
+nIterations = 1
+</td>
+<td markdown="block">
+![image](images/st_chaikinsmoothing05.svg)
+
+
+nIterations = 2
+</td>
+<td markdown="block">
+![image](images/st_chaikinsmoothing06.svg)
+
+
+nIterations = 3
+</td>
 </tr>
 </tbody>
 </table>
@@ -591,10 +743,18 @@ POLYGON ((43 69, 50 84, 57 100, 63 118, 68 133, 74 149, 81 164, 88 180, 101 180,
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_concavehull03.svg" alt="image"></p>
-<p><code>polygon_hull</code></p></td>
-<td><p><img src="images/st_concavehull04.svg" alt="image"></p>
-<p><code>points_hull</code></p></td>
+<td markdown="block">
+![image](images/st_concavehull03.svg)
+
+
+`polygon_hull`
+</td>
+<td markdown="block">
+![image](images/st_concavehull04.svg)
+
+
+`points_hull`
+</td>
 </tr>
 </tbody>
 </table>
@@ -745,19 +905,33 @@ Availability: 2.1.0
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_delaunaytriangles01.png" alt="image"></p>
-<p>Original polygons</p>
-<pre><code>
+<td markdown="block">
+![image](images/st_delaunaytriangles01.png)
+
+
+Original polygons
+
+
+```
+
 our original geometry
     ST_Union(ST_GeomFromText('POLYGON((175 150, 20 40,
             50 60, 125 100, 175 150))'),
         ST_Buffer(ST_GeomFromText('POINT(110 170)'), 20)
-        )</code></pre></td>
+        )
+```
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_delaunaytriangles03.png" alt="image"></p>
-<p>ST_DelaunayTriangles of 2 polygons: delaunay triangle polygons each triangle themed in different color</p>
-<pre><code>
+<td markdown="block">
+![image](images/st_delaunaytriangles03.png)
+
+
+ST_DelaunayTriangles of 2 polygons: delaunay triangle polygons each triangle themed in different color
+
+
+```
+
 
 geometries overlaid multilinestring triangles
 
@@ -768,23 +942,39 @@ SELECT
         ST_Buffer(ST_GeomFromText('POINT(110 170)'), 20)
         ))
      As  dtriag;
-                </code></pre></td>
+
+```
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_delaunaytriangles02.png" alt="image"></p>
-<p>-- delaunay triangles as multilinestring</p>
-<pre><code class="language-sql">SELECT
+<td markdown="block">
+![image](images/st_delaunaytriangles02.png)
+
+
+-- delaunay triangles as multilinestring
+
+
+```sql
+SELECT
     ST_DelaunayTriangles(
         ST_Union(ST_GeomFromText('POLYGON((175 150, 20 40,
             50 60, 125 100, 175 150))'),
         ST_Buffer(ST_GeomFromText('POINT(110 170)'), 20)
         ),0.001,1)
-     As  dtriag;</code></pre></td>
+     As  dtriag;
+```
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_delaunaytriangles04.svg" alt="image"></p>
-<p>-- delaunay triangles of 45 points as 55 triangle polygons</p>
-<pre><code>
+<td markdown="block">
+![image](images/st_delaunaytriangles04.svg)
+
+
+-- delaunay triangles of 45 points as 55 triangle polygons
+
+
+```
+
 
 this produces a table of 42 points that form an L shape
 
@@ -810,7 +1000,9 @@ POLYGON((14 194,6 190,14 174,14 194))
 POLYGON((14 194,14 174,154 14,14 194))
 POLYGON((154 14,14 174,14 154,154 14))
 POLYGON((154 14,14 154,150 14,154 14))
-POLYGON((154 14,150 14,154 6,154 14))</code></pre></td>
+POLYGON((154 14,150 14,154 6,154 14))
+```
+</td>
 </tr>
 </tbody>
 </table>
@@ -1570,9 +1762,15 @@ FROM someroadstable;
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_offsetcurve01.svg" alt="image"></p>
-<p>15, 'quad_segs=4 join=round' original line and its offset 15 units.</p>
-<pre><code class="language-sql">
+<td markdown="block">
+![image](images/st_offsetcurve01.svg)
+
+
+15, 'quad_segs=4 join=round' original line and its offset 15 units.
+
+
+```sql
+
 SELECT ST_AsText(ST_OffsetCurve(ST_GeomFromText(
 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,
     44 16,24 16,20 16,18 16,17 17,
@@ -1586,10 +1784,18 @@ LINESTRING(164 1,18 1,12.2597485145237 2.1418070123307,
     7.39339828220179 5.39339828220179,
     5.39339828220179 7.39339828220179,
     2.14180701233067 12.2597485145237,1 18,1 195)
-                </code></pre></td>
-<td><p><img src="images/st_offsetcurve02.svg" alt="image"></p>
-<p>-15, 'quad_segs=4 join=round' original line and its offset -15 units</p>
-<pre><code class="language-sql">
+
+```
+</td>
+<td markdown="block">
+![image](images/st_offsetcurve02.svg)
+
+
+-15, 'quad_segs=4 join=round' original line and its offset -15 units
+
+
+```sql
+
 SELECT ST_AsText(ST_OffsetCurve(geom,
     -15, 'quad_segs=4 join=round')) As notsocurvy
     FROM ST_GeomFromText(
@@ -1601,12 +1807,20 @@ SELECT ST_AsText(ST_OffsetCurve(geom,
 notsocurvy
 
 LINESTRING(31 195,31 31,164 31)
-                </code></pre></td>
+
+```
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_offsetcurve05.svg" alt="image"></p>
-<p>double-offset to get more curvy, note the first reverses direction, so -30 + 15 = -15</p>
-<pre><code class="language-sql">
+<td markdown="block">
+![image](images/st_offsetcurve05.svg)
+
+
+double-offset to get more curvy, note the first reverses direction, so -30 + 15 = -15
+
+
+```sql
+
 SELECT ST_AsText(ST_OffsetCurve(ST_OffsetCurve(geom,
     -30, 'quad_segs=4 join=round'), -15, 'quad_segs=4 join=round')) As morecurvy
     FROM ST_GeomFromText(
@@ -1620,10 +1834,18 @@ morecurvy
 LINESTRING(164 31,46 31,40.2597485145236 32.1418070123307,
 35.3933982822018 35.3933982822018,
 32.1418070123307 40.2597485145237,31 46,31 195)
-                </code></pre></td>
-<td><p><img src="images/st_offsetcurve06.svg" alt="image"></p>
-<p>double-offset to get more curvy,combined with regular offset 15 to get parallel lines. Overlaid with original.</p>
-<pre><code class="language-sql">SELECT ST_AsText(ST_Collect(
+
+```
+</td>
+<td markdown="block">
+![image](images/st_offsetcurve06.svg)
+
+
+double-offset to get more curvy,combined with regular offset 15 to get parallel lines. Overlaid with original.
+
+
+```sql
+SELECT ST_AsText(ST_Collect(
     ST_OffsetCurve(geom, 15, 'quad_segs=4 join=round'),
     ST_OffsetCurve(ST_OffsetCurve(geom,
     -30, 'quad_segs=4 join=round'), -15, 'quad_segs=4 join=round')
@@ -1642,12 +1864,20 @@ MULTILINESTRING((164 1,18 1,12.2597485145237 2.1418070123307,
 2.14180701233067 12.2597485145237,1 18,1 195),
 (164 31,46 31,40.2597485145236 32.1418070123307,35.3933982822018 35.3933982822018,
 32.1418070123307 40.2597485145237,31 46,31 195))
-                </code></pre></td>
+
+```
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_offsetcurve03.svg" alt="image"></p>
-<p>15, 'quad_segs=4 join=bevel' shown with original line</p>
-<pre><code class="language-sql">
+<td markdown="block">
+![image](images/st_offsetcurve03.svg)
+
+
+15, 'quad_segs=4 join=bevel' shown with original line
+
+
+```sql
+
 SELECT ST_AsText(ST_OffsetCurve(ST_GeomFromText(
 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,
     44 16,24 16,20 16,18 16,17 17,
@@ -1659,10 +1889,18 @@ output
 
 LINESTRING(164 1,18 1,7.39339828220179 5.39339828220179,
     5.39339828220179 7.39339828220179,1 18,1 195)
-                </code></pre></td>
-<td><p><img src="images/st_offsetcurve04.svg" alt="image"></p>
-<p>15,-15 collected, join=mitre mitre_limit=2.1</p>
-<pre><code class="language-sql">
+
+```
+</td>
+<td markdown="block">
+![image](images/st_offsetcurve04.svg)
+
+
+15,-15 collected, join=mitre mitre_limit=2.1
+
+
+```sql
+
 SELECT ST_AsText(ST_Collect(
     ST_OffsetCurve(geom, 15, 'quad_segs=4 join=mitre mitre_limit=2.2'),
     ST_OffsetCurve(geom, -15, 'quad_segs=4 join=mitre mitre_limit=2.2')
@@ -1677,7 +1915,9 @@ output
 
 MULTILINESTRING((164 1,11.7867965644036 1,1 11.7867965644036,1 195),
     (31 195,31 31,164 31))
-                </code></pre></td>
+
+```
+</td>
 </tr>
 </tbody>
 </table>
@@ -1720,16 +1960,32 @@ Returns a `POINT` which is guaranteed to lie in the interior of a surface (`POLY
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_pointonsurface01.svg" alt="image"></p>
-<p>Point on surface of a <code>MULTIPOINT</code></p></td>
-<td><p><img src="images/st_pointonsurface02.svg" alt="image"></p>
-<p>Point on surface of a <code>LINESTRING</code></p></td>
+<td markdown="block">
+![image](images/st_pointonsurface01.svg)
+
+
+Point on surface of a `MULTIPOINT`
+</td>
+<td markdown="block">
+![image](images/st_pointonsurface02.svg)
+
+
+Point on surface of a `LINESTRING`
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_pointonsurface03.svg" alt="image"></p>
-<p>Point on surface of a <code>POLYGON</code></p></td>
-<td><p><img src="images/st_pointonsurface04.svg" alt="image"></p>
-<p>Point on surface of a <code>GEOMETRYCOLLECTION</code></p></td>
+<td markdown="block">
+![image](images/st_pointonsurface03.svg)
+
+
+Point on surface of a `POLYGON`
+</td>
+<td markdown="block">
+![image](images/st_pointonsurface04.svg)
+
+
+Point on surface of a `GEOMETRYCOLLECTION`
+</td>
 </tr>
 </tbody>
 </table>
@@ -1826,10 +2082,18 @@ Availability: 1.0.0RC1
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_polygonize01.svg" alt="image"></p>
-<p>Input lines</p></td>
-<td><p><img src="images/st_polygonize02.svg" alt="image"></p>
-<p>Polygonized result</p></td>
+<td markdown="block">
+![image](images/st_polygonize01.svg)
+
+
+Input lines
+</td>
+<td markdown="block">
+![image](images/st_polygonize02.svg)
+
+
+Polygonized result
+</td>
 </tr>
 </tbody>
 </table>
@@ -2007,13 +2271,23 @@ Availability: 2.0.0
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_sharedpaths01.svg" alt="image"></p>
-<p>A multilinestring and a linestring</p></td>
+<td markdown="block">
+![image](images/st_sharedpaths01.svg)
+
+
+A multilinestring and a linestring
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_sharedpaths02.svg" alt="image"></p>
-<p>The shared path of multilinestring and linestring overlaid with original geometries.</p>
-<pre><code class="language-sql">
+<td markdown="block">
+![image](images/st_sharedpaths02.svg)
+
+
+The shared path of multilinestring and linestring overlaid with original geometries.
+
+
+```sql
+
  SELECT ST_AsText(
   ST_SharedPaths(
     ST_GeomFromText('MULTILINESTRING((26 125,26 200,126 200,126 125,26 125),
@@ -2026,10 +2300,14 @@ Availability: 2.0.0
 -------------------------------------------------------------
 GEOMETRYCOLLECTION(MULTILINESTRING((126 156.25,126 125),
  (101 150,90 161),(90 161,76 175)),MULTILINESTRING EMPTY)
-              </code></pre></td>
+
+```
+</td>
 </tr>
 <tr>
-<td><pre><code>
+<td markdown="block">
+```
+
 
 same example but linestring orientation flipped
 
@@ -2045,7 +2323,9 @@ SELECT ST_AsText(
 -------------------------------------------------------------
 GEOMETRYCOLLECTION(MULTILINESTRING EMPTY,
 MULTILINESTRING((76 175,90 161),(90 161,101 150),(126 125,126 156.25)))
-              </code></pre></td>
+
+```
+</td>
 </tr>
 </tbody>
 </table>
@@ -2566,10 +2846,18 @@ GEOMETRYCOLLECTION(POLYGON((50 160,120 190,120 160,50 160))
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_tesselate03.svg" alt="image"></p>
-<p>Original polygon</p></td>
-<td><p><img src="images/st_triangulatepolygon02.svg" alt="image"></p>
-<p>Triangulated Polygon</p></td>
+<td markdown="block">
+![image](images/st_tesselate03.svg)
+
+
+Original polygon
+</td>
+<td markdown="block">
+![image](images/st_triangulatepolygon02.svg)
+
+
+Triangulated Polygon
+</td>
 </tr>
 </tbody>
 </table>

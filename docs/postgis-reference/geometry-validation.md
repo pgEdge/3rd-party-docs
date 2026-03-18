@@ -305,13 +305,27 @@ Enhanced: 3.2.0, added algorithm options, 'linework' and 'structure' which requi
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_makevalid01.svg" alt="image"></p>
-<p>before_geom: MULTIPOLYGON of 2 overlapping polygons</p>
-<p><img src="images/st_makevalid02.svg" alt="image"></p>
-<p>after_geom: MULTIPOLYGON of 4 non-overlapping polygons</p>
-<p><img src="images/st_makevalid05.svg" alt="image"></p>
-<p>after_geom_structure: MULTIPOLYGON of 1 non-overlapping polygon</p>
-<pre><code class="language-sql">SELECT f.geom AS before_geom, ST_MakeValid(f.geom) AS after_geom, ST_MakeValid(f.geom, 'method=structure') AS after_geom_structure
+<td markdown="block">
+![image](images/st_makevalid01.svg)
+
+
+before_geom: MULTIPOLYGON of 2 overlapping polygons
+
+
+![image](images/st_makevalid02.svg)
+
+
+after_geom: MULTIPOLYGON of 4 non-overlapping polygons
+
+
+![image](images/st_makevalid05.svg)
+
+
+after_geom_structure: MULTIPOLYGON of 1 non-overlapping polygon
+
+
+```sql
+SELECT f.geom AS before_geom, ST_MakeValid(f.geom) AS after_geom, ST_MakeValid(f.geom, 'method=structure') AS after_geom_structure
 FROM (SELECT 'MULTIPOLYGON(((186 194,187 194,188 195,189 195,190 195,
 191 195,192 195,193 194,194 194,194 193,195 192,195 191,
 195 190,195 189,195 188,194 187,194 186,14 6,13 6,12 5,11 5,
@@ -319,16 +333,32 @@ FROM (SELECT 'MULTIPOLYGON(((186 194,187 194,188 195,189 195,190 195,
 ((150 90,149 80,146 71,142 62,135 55,128 48,119 44,110 41,100 40,
 90 41,81 44,72 48,65 55,58 62,54 71,51 80,50 90,51 100,
 54 109,58 118,65 125,72 132,81 136,90 139,100 140,110 139,
-119 136,128 132,135 125,142 118,146 109,149 100,150 90)))'::geometry AS geom) AS f;</code></pre></td>
+119 136,128 132,135 125,142 118,146 109,149 100,150 90)))'::geometry AS geom) AS f;
+```
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_makevalid03.svg" alt="image"></p>
-<p>before_geom: MULTIPOLYGON of 6 overlapping polygons</p>
-<p><img src="images/st_makevalid04.svg" alt="image"></p>
-<p>after_geom: MULTIPOLYGON of 14 Non-overlapping polygons</p>
-<p><img src="images/st_makevalid06.svg" alt="image"></p>
-<p>after_geom_structure: MULTIPOLYGON of 1 Non-overlapping polygon</p>
-<pre><code class="language-sql">SELECT c.geom AS before_geom,
+<td markdown="block">
+![image](images/st_makevalid03.svg)
+
+
+before_geom: MULTIPOLYGON of 6 overlapping polygons
+
+
+![image](images/st_makevalid04.svg)
+
+
+after_geom: MULTIPOLYGON of 14 Non-overlapping polygons
+
+
+![image](images/st_makevalid06.svg)
+
+
+after_geom_structure: MULTIPOLYGON of 1 Non-overlapping polygon
+
+
+```sql
+SELECT c.geom AS before_geom,
                     ST_MakeValid(c.geom) AS after_geom,
                     ST_MakeValid(c.geom, 'method=structure') AS after_geom_structure
 	FROM (SELECT 'MULTIPOLYGON(((91 50,79 22,51 10,23 22,11 50,23 78,51 90,79 78,91 50)),
@@ -336,7 +366,9 @@ FROM (SELECT 'MULTIPOLYGON(((186 194,187 194,188 195,189 195,190 195,
 		  ((91 150,79 122,51 110,23 122,11 150,23 178,51 190,79 178,91 150)),
 		  ((141 50,129 22,101 10,73 22,61 50,73 78,101 90,129 78,141 50)),
 		  ((141 100,129 72,101 60,73 72,61 100,73 128,101 140,129 128,141 100)),
-		  ((141 150,129 122,101 110,73 122,61 150,73 178,101 190,129 178,141 150)))'::geometry AS geom) AS c;</code></pre></td>
+		  ((141 150,129 122,101 110,73 122,61 150,73 178,101 190,129 178,141 150)))'::geometry AS geom) AS c;
+```
+</td>
 </tr>
 </tbody>
 </table>

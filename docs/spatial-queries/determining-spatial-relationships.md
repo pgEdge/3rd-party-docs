@@ -56,10 +56,14 @@ Visually, for two overlapping polygonal geometries, this looks like:
 <tbody>
 <tr>
 <td></td>
-<td><img src="images/de9im04.svg" alt="image"></td>
+<td markdown="block">
+![image](images/de9im04.svg)
+</td>
 </tr>
 <tr>
-<td><img src="images/de9im03.svg" alt="image"></td>
+<td markdown="block">
+![image](images/de9im03.svg)
+</td>
 </tr>
 </tbody>
 </table>
@@ -104,10 +108,18 @@ In some cases the named spatial relationships are insufficient to provide a desi
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/de9im01.svg" alt="image"></p>
-<p>For example, consider a linear dataset representing a road network. It may be required to identify all road segments that cross each other, not at a point, but in a line (perhaps to validate some business rule). In this case <a href="../postgis-reference/spatial-relationships.md#ST_Crosses">ST_Crosses</a> does not provide the necessary spatial filter, since for linear features it returns <code>true</code> only where they cross at a point.</p>
-<p>A two-step solution would be to first compute the actual intersection (<a href="../postgis-reference/overlay-functions.md#ST_Intersection">ST_Intersection</a>) of pairs of road lines that spatially intersect (<a href="../postgis-reference/spatial-relationships.md#ST_Intersects">ST_Intersects</a>), and then check if the intersection's <a href="../postgis-reference/geometry-accessors.md#ST_GeometryType">ST_GeometryType</a> is '<code>LINESTRING</code>' (properly dealing with cases that return <code>GEOMETRYCOLLECTION</code>s of <code>[MULTI]POINT</code>s, <code>[MULTI]LINESTRING</code>s, etc.).</p>
-<p>Clearly, a simpler and faster solution is desirable.</p></td>
+<td markdown="block">
+![image](images/de9im01.svg)
+
+
+For example, consider a linear dataset representing a road network. It may be required to identify all road segments that cross each other, not at a point, but in a line (perhaps to validate some business rule). In this case [ST_Crosses](../postgis-reference/spatial-relationships.md#ST_Crosses) does not provide the necessary spatial filter, since for linear features it returns `true` only where they cross at a point.
+
+
+A two-step solution would be to first compute the actual intersection ([ST_Intersection](../postgis-reference/overlay-functions.md#ST_Intersection)) of pairs of road lines that spatially intersect ([ST_Intersects](../postgis-reference/spatial-relationships.md#ST_Intersects)), and then check if the intersection's [ST_GeometryType](../postgis-reference/geometry-accessors.md#ST_GeometryType) is '`LINESTRING`' (properly dealing with cases that return `GEOMETRYCOLLECTION`s of `[MULTI]POINT`s, `[MULTI]LINESTRING`s, etc.).
+
+
+Clearly, a simpler and faster solution is desirable.
+</td>
 </tr>
 </tbody>
 </table>
@@ -116,13 +128,20 @@ In some cases the named spatial relationships are insufficient to provide a desi
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/de9im02.svg" alt="image"></p>
-<p>A second example is locating wharves that intersect a lake's boundary on a line and where one end of the wharf is up on shore. In other words, where a wharf is within but not completely contained by a lake, intersects the boundary of a lake on a line, and where exactly one of the wharf's endpoints is within or on the boundary of the lake. It is possible to use a combination of spatial predicates to find the required features:</p>
-<p>- <a href="../postgis-reference/spatial-relationships.md#ST_Contains">ST_Contains</a>(lake, wharf) = TRUE<br>
-- <a href="../postgis-reference/spatial-relationships.md#ST_ContainsProperly">ST_ContainsProperly</a>(lake, wharf) = FALSE<br>
-- <a href="../postgis-reference/geometry-accessors.md#ST_GeometryType">ST_GeometryType</a>(<a href="../postgis-reference/overlay-functions.md#ST_Intersection">ST_Intersection</a>(wharf, lake)) = 'LINESTRING'<br>
-- <a href="../postgis-reference/geometry-accessors.md#ST_NumGeometries">ST_NumGeometries</a>(<a href="../postgis-reference/geometry-editors.md#ST_Multi">ST_Multi</a>(<a href="../postgis-reference/overlay-functions.md#ST_Intersection">ST_Intersection</a>(<a href="../postgis-reference/geometry-accessors.md#ST_Boundary">ST_Boundary</a>(wharf), <a href="../postgis-reference/geometry-accessors.md#ST_Boundary">ST_Boundary</a>(lake)))) = 1</p>
-<p>... but needless to say, this is quite complicated.</p></td>
+<td markdown="block">
+![image](images/de9im02.svg)
+
+
+A second example is locating wharves that intersect a lake's boundary on a line and where one end of the wharf is up on shore. In other words, where a wharf is within but not completely contained by a lake, intersects the boundary of a lake on a line, and where exactly one of the wharf's endpoints is within or on the boundary of the lake. It is possible to use a combination of spatial predicates to find the required features:
+
+
+- [ST_Contains](../postgis-reference/spatial-relationships.md#ST_Contains)(lake, wharf) = TRUE
+- [ST_ContainsProperly](../postgis-reference/spatial-relationships.md#ST_ContainsProperly)(lake, wharf) = FALSE
+- [ST_GeometryType](../postgis-reference/geometry-accessors.md#ST_GeometryType)([ST_Intersection](../postgis-reference/overlay-functions.md#ST_Intersection)(wharf, lake)) = 'LINESTRING'
+- [ST_NumGeometries](../postgis-reference/geometry-accessors.md#ST_NumGeometries)([ST_Multi](../postgis-reference/geometry-editors.md#ST_Multi)([ST_Intersection](../postgis-reference/overlay-functions.md#ST_Intersection)([ST_Boundary](../postgis-reference/geometry-accessors.md#ST_Boundary)(wharf), [ST_Boundary](../postgis-reference/geometry-accessors.md#ST_Boundary)(lake)))) = 1
+
+  ... but needless to say, this is quite complicated.
+</td>
 </tr>
 </tbody>
 </table>
