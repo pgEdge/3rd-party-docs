@@ -27,7 +27,7 @@ import (
 )
 
 func main() {
-	mode := flag.String("mode", "sgml", "Conversion mode: sgml, rst, or md")
+	mode := flag.String("mode", "sgml", "Conversion mode: sgml, xml, rst, or md")
 	srcDir := flag.String("src", "", "Path to source documentation directory")
 	outDir := flag.String("out", "./docs", "Output directory for .md files")
 	mkdocsFile := flag.String("mkdocs", "./mkdocs.yml", "Path to mkdocs.yml")
@@ -35,6 +35,8 @@ func main() {
 	copyright := flag.String("copyright", "", "Copyright string (RST mode)")
 	pgadminSrc := flag.String("pgadmin-src", "", "Path to pgAdmin source (for literalinclude)")
 	skipSections := flag.String("skip-sections", "", "Comma-separated section headings to suppress")
+	entryFile := flag.String("entry-file", "", "Entry file name (xml mode, default: auto-detect)")
+	sitePrefix := flag.String("site-prefix", "", "Site name prefix (e.g., PostGIS)")
 	doValidate := flag.Bool("validate", false, "Run link validation after conversion")
 	verbose := flag.Bool("verbose", false, "Verbose output")
 
@@ -68,6 +70,9 @@ func main() {
 	switch *mode {
 	case "sgml":
 		runSGML(*srcDir, *outDir, *mkdocsFile, *version, *doValidate, *verbose)
+	case "xml":
+		runXML(*srcDir, *outDir, *mkdocsFile, *version, *entryFile,
+			*sitePrefix, *skipSections, *doValidate, *verbose)
 	case "rst":
 		runRST(*srcDir, *outDir, *mkdocsFile, *version, *copyright,
 			*pgadminSrc, *skipSections, *doValidate, *verbose)
@@ -75,7 +80,7 @@ func main() {
 		runMD(*srcDir, *outDir, *mkdocsFile, *version,
 			*doValidate, *verbose)
 	default:
-		fmt.Fprintf(os.Stderr, "error: unknown mode %q (use sgml, rst, or md)\n", *mode)
+		fmt.Fprintf(os.Stderr, "error: unknown mode %q (use sgml, xml, rst, or md)\n", *mode)
 		os.Exit(1)
 	}
 }
@@ -181,6 +186,163 @@ func runSGML(srcDir, outDir, mkdocsFile, version string, doValidate, verbose boo
 
 	// Phase 6: Validation
 	runValidation(doValidate, verbose, outDir, warnings, convWarnings, len(files))
+}
+
+// runXML runs the DocBook XML conversion pipeline, reusing the
+// SGML entity resolver, parser, and converter with DocBook 5
+// normalization (xml:id → id, refsection → refsect1, etc.).
+func runXML(
+	srcDir, outDir, mkdocsFile, version, entryFile,
+	sitePrefix, skipSections string,
+	doValidate, verbose bool,
+) {
+	// Auto-detect entry file if not specified
+	if entryFile == "" {
+		// Look for common DocBook XML entry files
+		for _, candidate := range []string{
+			"postgis.xml", "index.xml", "book.xml",
+		} {
+			path := srcDir + "/" + candidate
+			if _, err := os.Stat(path); err == nil {
+				entryFile = candidate
+				break
+			}
+		}
+		if entryFile == "" {
+			fmt.Fprintln(os.Stderr,
+				"error: no entry file found; use -entry-file")
+			os.Exit(1)
+		}
+	}
+
+	if verbose {
+		fmt.Printf("Converting DocBook XML (%s)...\n", entryFile)
+	}
+
+	// Phase 1: Entity resolution
+	if verbose {
+		fmt.Println("Phase 1: Resolving entities...")
+	}
+	resolver := sgml.NewEntityResolver(srcDir)
+	body, err := resolver.ResolveFile(entryFile)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error resolving entities: %v\n", err)
+		os.Exit(1)
+	}
+
+	// Replace build-time placeholders
+	if version != "" {
+		body = strings.ReplaceAll(body,
+			"@@LAST_RELEASE_VERSION@@", version)
+	}
+	body = strings.ReplaceAll(body,
+		"@@POSTGIS_DOWNLOAD_URL@@",
+		"https://download.osgeo.org/postgis/source")
+
+	if verbose {
+		fmt.Printf("  Resolved %d entities\n", resolver.EntityCount())
+		fmt.Printf("  Document body: %d bytes\n", len(body))
+		for _, w := range resolver.Warnings() {
+			fmt.Printf("  Warning: %s\n", w)
+		}
+	}
+
+	// Phase 2: Parse (reuses SGML parser with XML normalization)
+	if verbose {
+		fmt.Println("Phase 2: Parsing XML...")
+	}
+
+	// Parse skip-sections
+	var skip []string
+	if skipSections != "" {
+		for _, s := range strings.Split(skipSections, ",") {
+			s = strings.TrimSpace(s)
+			if s != "" {
+				skip = append(skip, s)
+			}
+		}
+	}
+
+	root, warnings, err := sgml.ParseString(body)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error parsing XML: %v\n", err)
+		os.Exit(1)
+	}
+	if verbose && len(warnings) > 0 {
+		fmt.Printf("  Parser warnings: %d\n", len(warnings))
+		for _, w := range warnings {
+			fmt.Printf("    %s\n", w)
+		}
+	}
+
+	// Remove skipped sections from the tree
+	if len(skip) > 0 {
+		sgml.RemoveSections(root, skip)
+		if verbose {
+			fmt.Printf("  Skipping sections: %v\n", skip)
+		}
+	}
+
+	// Phases 3-4: Convert
+	if verbose {
+		fmt.Println("Phase 3: Building ID map...")
+		fmt.Println("Phase 4: Converting to Markdown...")
+	}
+	converter := convert.NewConverter(root, srcDir, outDir, version)
+	if err := converter.Convert(); err != nil {
+		fmt.Fprintf(os.Stderr, "error converting: %v\n", err)
+		os.Exit(1)
+	}
+
+	convWarnings := converter.Warnings()
+	if verbose && len(convWarnings) > 0 {
+		fmt.Printf("  Conversion warnings: %d\n", len(convWarnings))
+		for _, w := range convWarnings {
+			fmt.Printf("    %s\n", w)
+		}
+	}
+
+	files := converter.Files()
+	if verbose {
+		fmt.Printf("  Generated %d files\n", len(files))
+	}
+
+	// Phase 5: Nav generation
+	if verbose {
+		fmt.Println("Phase 5: Generating nav...")
+	}
+	navRoot := nav.BuildNav(files)
+	navYAML := nav.GenerateYAML(navRoot)
+
+	if mkdocsFile != "" {
+		if _, err := os.Stat(mkdocsFile); err == nil {
+			siteName := ""
+			if sitePrefix != "" {
+				siteName = sitePrefix
+				if version != "" {
+					siteName += " " + version
+				}
+			} else if version != "" {
+				siteName = version
+			}
+			if err := nav.UpdateMkdocsYML(
+				mkdocsFile, navYAML, siteName); err != nil {
+				fmt.Fprintf(os.Stderr,
+					"error updating mkdocs.yml: %v\n", err)
+				os.Exit(1)
+			}
+			if verbose {
+				fmt.Printf("  Updated %s\n", mkdocsFile)
+			}
+		} else if verbose {
+			fmt.Printf("  %s not found, skipping nav update\n",
+				mkdocsFile)
+		}
+	}
+
+	// Phase 6: Validation
+	runValidation(doValidate, verbose, outDir,
+		warnings, convWarnings, len(files))
 }
 
 // runRST runs the RST conversion pipeline.

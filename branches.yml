@@ -5,7 +5,7 @@
 #
 # Fields:
 #   branch       Local/remote branch name
-#   mode         Conversion mode: sgml, rst, or md
+#   mode         Conversion mode: sgml, xml, rst, or md
 #   version      Version label for site_name
 #   upstream     Git URL of the upstream source repository
 #   ref          Git ref to checkout (tag, branch, or commit)
@@ -14,6 +14,9 @@
 #   pgadmin_src  (optional) Set to "yes" to pass upstream root as
 #                -pgadmin-src (for literalinclude directives)
 #   skip_sections (optional) Comma-separated headings to suppress
+#   entry_file   (optional) Entry file name (XML mode)
+#   site_prefix  (optional) Site name prefix (e.g., "PostGIS")
+#   img_symlink  (optional) Create symlink: src_subdir/images -> this path
 
 cache_dir: .doc-cache
 
@@ -103,6 +106,35 @@ branches:
     ref: main
     src_subdir: docs
     skip_sections: "Sponsors"
+
+  # --- PostGIS (XML/DocBook mode) ---
+
+  - branch: postgis355
+    mode: xml
+    version: "3.5.5"
+    upstream: https://github.com/postgis/postgis.git
+    ref: "3.5.5"
+    src_subdir: doc
+    site_prefix: "PostGIS"
+    img_symlink: html/images/static
+
+  - branch: postgis362
+    mode: xml
+    version: "3.6.2"
+    upstream: https://github.com/postgis/postgis.git
+    ref: "3.6.2"
+    src_subdir: doc
+    site_prefix: "PostGIS"
+    img_symlink: html/images/static
+
+  - branch: postgismaster
+    mode: xml
+    version: dev
+    upstream: https://github.com/postgis/postgis.git
+    ref: main
+    src_subdir: doc
+    site_prefix: "PostGIS"
+    img_symlink: html/images/static
 
   # --- psycopg2 (RST mode) ---
 

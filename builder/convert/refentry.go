@@ -86,6 +86,47 @@ func handleRefentry(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 	return nil
 }
 
+// handleFuncSynopsis converts <funcsynopsis> to a code block showing
+// one or more function prototypes.
+func handleFuncSynopsis(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
+	w.BlankLine()
+	w.StartCodeBlock("sql")
+	for _, child := range node.Children {
+		if child.Type != sgml.ElementNode {
+			continue
+		}
+		if child.Tag == "funcprototype" {
+			renderFuncPrototype(child, w)
+		}
+	}
+	w.EndCodeBlock()
+	return nil
+}
+
+// renderFuncPrototype renders a single <funcprototype>.
+func renderFuncPrototype(node *sgml.Node, w *MarkdownWriter) {
+	funcdef := node.FindChild("funcdef")
+	if funcdef != nil {
+		w.WriteString(strings.TrimSpace(funcdef.TextContent()))
+	}
+	w.WriteString("(")
+
+	first := true
+	for _, child := range node.Children {
+		if child.Type != sgml.ElementNode || child.Tag != "paramdef" {
+			continue
+		}
+		if !first {
+			w.WriteString(", ")
+		}
+		first = false
+		text := strings.TrimSpace(child.TextContent())
+		w.WriteString(text)
+	}
+	w.WriteString(")")
+	w.Newline()
+}
+
 // handleCmdSynopsis converts <cmdsynopsis> to a code-block representation.
 func handleCmdSynopsis(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 	w.StartCodeBlock("")

@@ -810,3 +810,17 @@ func handleBiblioentry(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 	w.WriteString(strings.Join(parts, ". ") + ".\n")
 	return nil
 }
+
+// handleQuestion renders a Q&A question as bold text.
+func handleQuestion(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
+	w.BlankLine()
+	w.WriteString("**Q: ")
+	textW := NewMarkdownWriter()
+	textW.SetSuppressNewlines(true)
+	if err := convertChildren(ctx, node, textW); err != nil {
+		return err
+	}
+	w.WriteString(strings.TrimSpace(textW.String()))
+	w.WriteString("**\n")
+	return nil
+}

@@ -45,7 +45,13 @@ func handleXref(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 }
 
 // handleLink converts <link linkend="...">text</link> to a Markdown link.
+// Also handles DocBook 5 <link xlink:href="..."> (normalized to url attr).
 func handleLink(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
+	// DocBook 5: <link xlink:href="..."> → treat like ulink
+	if url := node.GetAttr("url"); url != "" {
+		return handleUlink(ctx, node, w)
+	}
+
 	linkend := node.GetAttr("linkend")
 	if linkend == "" {
 		// No linkend — just render children

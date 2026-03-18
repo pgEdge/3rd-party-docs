@@ -215,4 +215,20 @@ func init() {
 	registerHandler("co", handleSkip)
 	registerHandler("calloutlist", handlePassthrough)
 	registerHandler("callout", handlePassthrough)
+
+	// DocBook 5 / XML elements
+	registerHandler("inlinemediaobject", handlePassthrough)
+	registerHandler("funcsynopsis", handleFuncSynopsis)
+	registerHandler("funcprototype", handlePassthrough)
+	registerHandler("funcdef", handlePassthrough)
+	registerHandler("paramdef", handlePassthrough)
+	registerHandler("code", handleCode)
+	registerHandler("markup", handleCode)
+	registerHandler("database", handleCode)
+	registerHandler("lineannotation", handleEmphasis)
+	registerHandler("member", handlePassthrough)
+	registerHandler("qandaset", handlePassthrough)
+	registerHandler("qandaentry", handlePassthrough)
+	registerHandler("question", handleQuestion)
+	registerHandler("answer", handlePassthrough)
 }

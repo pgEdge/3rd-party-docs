@@ -233,6 +233,8 @@ run_converter() {
     local copyright="$5"
     local pgadmin_src="$6"
     local skip_sections="$7"
+    local entry_file="${8:-}"
+    local site_prefix="${9:-}"
 
     local cmd=("$BINARY"
         -mode "$mode"
@@ -247,6 +249,15 @@ run_converter() {
             cmd+=(-copyright "$copyright")
         [[ -n "$pgadmin_src" ]] && \
             cmd+=(-pgadmin-src "$pgadmin_src")
+        [[ -n "$skip_sections" ]] && \
+            cmd+=(-skip-sections "$skip_sections")
+    fi
+
+    if [[ "$mode" == "xml" ]]; then
+        [[ -n "$entry_file" ]] && \
+            cmd+=(-entry-file "$entry_file")
+        [[ -n "$site_prefix" ]] && \
+            cmd+=(-site-prefix "$site_prefix")
         [[ -n "$skip_sections" ]] && \
             cmd+=(-skip-sections "$skip_sections")
     fi
@@ -385,9 +396,15 @@ main() {
         skip_sections="$(yq -r \
             ".branches[$i].skip_sections // \"\"" "$CONFIG")"
 
-        local use_pgadmin_src
+        local use_pgadmin_src entry_file site_prefix img_symlink
         use_pgadmin_src="$(yq -r \
             ".branches[$i].pgadmin_src // \"\"" "$CONFIG")"
+        entry_file="$(yq -r \
+            ".branches[$i].entry_file // \"\"" "$CONFIG")"
+        site_prefix="$(yq -r \
+            ".branches[$i].site_prefix // \"\"" "$CONFIG")"
+        img_symlink="$(yq -r \
+            ".branches[$i].img_symlink // \"\"" "$CONFIG")"
 
         echo -e "${BOLD}=== ${branch} " \
             "(${mode}, ${version}) ===${RESET}"
@@ -406,6 +423,16 @@ main() {
         pgadmin_src_flag=""
         if [[ "$use_pgadmin_src" == "yes" ]]; then
             pgadmin_src_flag="$repo_path"
+        fi
+
+        # Create image symlink if specified
+        if [[ -n "$img_symlink" ]]; then
+            local link_target="${src_path}/images"
+            local link_source="${src_path}/${img_symlink}"
+            if [[ -d "$link_source" ]] && \
+               [[ ! -e "$link_target" ]]; then
+                ln -sf "$img_symlink" "$link_target"
+            fi
         fi
 
         # Setup branch worktree
@@ -427,7 +454,8 @@ main() {
         echo "  Converting..."
         if ! run_converter "$worktree" "$mode" "$src_path" \
                 "$version" "$copyright" \
-                "$pgadmin_src_flag" "$skip_sections"; then
+                "$pgadmin_src_flag" "$skip_sections" \
+                "$entry_file" "$site_prefix"; then
             echo -e "  ${RED}Conversion failed${RESET}"
             RESULTS["$branch"]="FAILED (convert)"
             remove_worktree "$branch"

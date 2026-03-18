@@ -97,3 +97,39 @@ func (n *Node) AppendChild(child *Node) {
 	child.Parent = n
 	n.Children = append(n.Children, child)
 }
+
+// RemoveSections removes sections/chapters whose title matches
+// any of the given headings from the document tree.
+func RemoveSections(root *Node, headings []string) {
+	skip := make(map[string]bool)
+	for _, h := range headings {
+		skip[strings.TrimSpace(strings.ToLower(h))] = true
+	}
+
+	var walk func(n *Node)
+	walk = func(n *Node) {
+		var kept []*Node
+		for _, child := range n.Children {
+			if child.Type == ElementNode {
+				// Check if this is a section-like element
+				switch child.Tag {
+				case "chapter", "section", "appendix",
+					"sect1", "refsect1", "simplesect":
+					title := child.FindChild("title")
+					if title != nil {
+						text := strings.TrimSpace(
+							strings.ToLower(
+								title.TextContent()))
+						if skip[text] {
+							continue // remove
+						}
+					}
+				}
+			}
+			walk(child)
+			kept = append(kept, child)
+		}
+		n.Children = kept
+	}
+	walk(root)
+}

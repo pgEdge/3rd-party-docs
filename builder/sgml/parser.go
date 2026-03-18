@@ -18,15 +18,16 @@ import (
 // the PostgreSQL documentation. These are elements where the
 // DocBook DTD specifies EMPTY content model.
 var emptyElements = map[string]bool{
-	"xref":    true,
-	"anchor":  true,
-	"graphic": true,
-	"colspec": true,
-	"sbr":     true,
-	"co":      true,
-	"area":    true,
-	"void":    true,
-	"varargs": true,
+	"xref":     true,
+	"anchor":   true,
+	"graphic":  true,
+	"colspec":  true,
+	"sbr":      true,
+	"co":       true,
+	"area":     true,
+	"void":     true,
+	"varargs":  true,
+	"spanspec": true,
 }
 
 // htmlElements lists HTML tags that may appear as literal content
@@ -58,6 +59,12 @@ var htmlElements = map[string]bool{
 	// XML/SQL tag names in ECPG and other examples
 	"order": true, "query": true, "fetch": true,
 	"result": true, "offset": true, "describe": true,
+	// PostGIS XML examples and SQL code snippets
+	"srid": true, "from_srid": true, "geometry": true,
+	"linestring": true, "curve": true, "host": true,
+	"port": true, "user": true, "password": true,
+	"policy": true, "tablespace": true,
+	"dimensionality": true, "encoding": true,
 }
 
 // Parser builds a document tree from a token stream.
@@ -132,13 +139,15 @@ func (p *Parser) parseChildren(parent *Node) error {
 			p.pos++ // skip processing instructions
 
 		case TokenTagClose:
+			// Normalize DocBook 5 close tag names
+			closeTag := normalizeTag(tok.Tag, nil)
 			// Check if this closes our parent
-			if tok.Tag == parent.Tag {
+			if closeTag == parent.Tag {
 				p.pos++
 				return nil
 			}
 			// HTML close tags in DocBook content — convert to text
-			if htmlElements[tok.Tag] {
+			if htmlElements[closeTag] {
 				p.pos++
 				child := &Node{
 					Type: TextNode,
@@ -150,21 +159,24 @@ func (p *Parser) parseChildren(parent *Node) error {
 			}
 			// Mismatched close tag — could be implicit close of
 			// an ancestor. Don't consume it; let the parent handle it.
-			if p.isAncestor(parent, tok.Tag) {
+			if p.isAncestor(parent, closeTag) {
 				return nil
 			}
 			// Stray close tag with no matching open — skip and warn
 			p.warn(tok.Line, "unexpected closing tag </%s> inside <%s>",
-				tok.Tag, parent.Tag)
+				closeTag, parent.Tag)
 			p.pos++
 
 		case TokenTagOpen:
 			p.pos++
 
+			// Normalize DocBook 5 tag names
+			tag := normalizeTag(tok.Tag, tok.Attrs)
+
 			// HTML tags in DocBook content — convert to text
-			if htmlElements[tok.Tag] {
+			if htmlElements[tag] {
 				// Reconstruct the tag as text
-				text := "<" + tok.Tag
+				text := "<" + tag
 				for k, v := range cleanAttrs(tok.Attrs) {
 					text += fmt.Sprintf(` %s="%s"`, k, v)
 				}
@@ -180,7 +192,7 @@ func (p *Parser) parseChildren(parent *Node) error {
 
 			child := &Node{
 				Type:  ElementNode,
-				Tag:   tok.Tag,
+				Tag:   tag,
 				Attrs: cleanAttrs(tok.Attrs),
 				Line:  tok.Line,
 			}
@@ -224,14 +236,29 @@ func (p *Parser) warn(line int, format string, args ...any) {
 	p.warnings = append(p.warnings, msg)
 }
 
-// cleanAttrs removes internal marker attributes.
+// cleanAttrs removes internal marker attributes and normalizes
+// DocBook 5 XML attribute names to their DocBook 4 equivalents
+// (e.g., xml:id → id, xlink:href → url).
 func cleanAttrs(attrs map[string]string) map[string]string {
 	if attrs == nil {
 		return nil
 	}
 	result := make(map[string]string)
 	for k, v := range attrs {
-		if !strings.HasPrefix(k, "\x00") {
+		if strings.HasPrefix(k, "\x00") {
+			continue
+		}
+		// Normalize DocBook 5 XML attributes
+		switch k {
+		case "xml:id":
+			result["id"] = v
+		case "xlink:href":
+			result["url"] = v
+		default:
+			// Skip namespace declarations
+			if k == "xmlns" || strings.HasPrefix(k, "xmlns:") {
+				continue
+			}
 			result[k] = v
 		}
 	}
@@ -239,6 +266,23 @@ func cleanAttrs(attrs map[string]string) map[string]string {
 		return nil
 	}
 	return result
+}
+
+// xmlTagMap maps DocBook 5 element names to their DocBook 4
+// equivalents so the rest of the converter can handle them.
+var xmlTagMap = map[string]string{
+	"refsection": "refsect1",
+	"info":       "bookinfo",
+	"simpara":    "para",
+}
+
+// normalizeTag maps DocBook 5 XML element names to their DocBook 4
+// equivalents.
+func normalizeTag(tag string, _ map[string]string) string {
+	if mapped, ok := xmlTagMap[tag]; ok {
+		return mapped
+	}
+	return tag
 }
 
 // ParseString is a convenience function that tokenizes and parses
