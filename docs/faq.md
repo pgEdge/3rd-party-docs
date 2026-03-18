@@ -161,17 +161,17 @@ Starting from psycopg 2.6.2, the `wait_select` callback can handle a `Ctrl-C` co
 <a id="_"></a>
 
 ```pycon
-     >>> psycopg2.extensions.set_wait_callback(psycopg2.extras.wait_select)
-     >>> cnn = psycopg2.connect('')
-     >>> cur = cnn.cursor()
-     >>> cur.execute("select pg_sleep(10)")
-     ^C
-     Traceback (most recent call last):
-       File "<stdin>", line 1, in <module>
-       QueryCanceledError: canceling statement due to user request
+ >>> psycopg2.extensions.set_wait_callback(psycopg2.extras.wait_select)
+ >>> cnn = psycopg2.connect('')
+ >>> cur = cnn.cursor()
+ >>> cur.execute("select pg_sleep(10)")
+ ^C
+ Traceback (most recent call last):
+   File "<stdin>", line 1, in <module>
+   QueryCanceledError: canceling statement due to user request
 
-     >>> cnn.rollback()
-     >>> # You can use the connection and cursor again from here
+ >>> cnn.rollback()
+ >>> # You can use the connection and cursor again from here
 ```
 <a id="faq-compile"></a>
 
@@ -194,16 +194,13 @@ Fast-forward several years, if the message reports *undefined symbol: lo_truncat
 You can use:
 
 ```shell
-     $ ldd /path/to/packages/psycopg2/_psycopg.so | grep libpq
-
- to find what is the libpq dynamic library used at runtime.
-
- You can avoid the problem by using the same version of the
- :program:`pg_config` at install time and the libpq at runtime.
-
- .. |lo_truncate| replace:: `!lo_truncate()`
- .. _lo_truncate: https://www.postgresql.org/docs/current/static/lo-interfaces.html#LO-TRUNCATE
+ $ ldd /path/to/packages/psycopg2/_psycopg.so | grep libpq
 ```
+
+to find what is the libpq dynamic library used at runtime.
+
+You can avoid the problem by using the same version of the `pg_config` at install time and the libpq at runtime.
+<a id="lo_truncate"></a>
 <a id="faq-import-mod_wsgi"></a>
 
 Psycopg raises *ImportError: cannot import name tz* on import in mod_wsgi / ASP, but it works fine otherwise. If `psycopg2` is installed in an [egg](http://peak.telecommunity.com/DevCenter/PythonEggs) (e.g. because installed by `easy_install`), the user running the program may be unable to write in the `eggs cache`__. Set the env variable `PYTHON_EGG_CACHE` to a writable directory. With modwsgi you can use the WSGIPythonEggs__ directive.

@@ -263,7 +263,7 @@ The following table shows the default mapping between Python and PostgreSQL type
 <tr>
   <td>Anything U+2122</td>
   <td><code>json</code></td>
-  <td><a href="extras.md#adapt-json">JSON_ adaptation</a></td>
+  <td><a href="https://www.json.org/">[JSON</a> adaptation](extras.md#adapt-json)</td>
 </tr>
 <tr>
   <td><code>UUID</code></td>
@@ -648,28 +648,28 @@ Named cursors are usually created `WITHOUT HOLD`, meaning they live only as long
     It is also possible to use a named cursor to consume a cursor created in some other way than using the :sql:`DECLARE` executed by `execute()`. For example, you may have a PL/pgSQL function returning a cursor:
 
     ```postgres
-      CREATE FUNCTION reffunc(refcursor) RETURNS refcursor AS $$
-      BEGIN
-          OPEN $1 FOR SELECT col FROM test;
-          RETURN $1;
-      END;
-      $$ LANGUAGE plpgsql;
+     CREATE FUNCTION reffunc(refcursor) RETURNS refcursor AS $$
+     BEGIN
+         OPEN $1 FOR SELECT col FROM test;
+         RETURN $1;
+     END;
+     $$ LANGUAGE plpgsql;
     ```
 
     You can read the cursor content by calling the function with a regular, non-named, Psycopg cursor:
 
     ```python
-      cur1 = conn.cursor()
-      cur1.callproc('reffunc', ['curname'])
+     cur1 = conn.cursor()
+     cur1.callproc('reffunc', ['curname'])
     ```
 
     and then use a named cursor in the same transaction to "steal the cursor":
 
     ```python
-      cur2 = conn.cursor('curname')
-      for record in cur2:     # or cur2.fetchone, fetchmany...
-          # do something with record
-          pass
+     cur2 = conn.cursor('curname')
+     for record in cur2:     # or cur2.fetchone, fetchmany...
+         # do something with record
+         pass
     ```
 <a id="DECLARE"></a>
 <a id="thread-safety"></a>

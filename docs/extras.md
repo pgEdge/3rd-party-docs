@@ -580,11 +580,11 @@ This Python type is only used to pass and retrieve range values to and from Post
 
 `Range` objects are immutable, hashable, and support the `in` operator (checking if an element is within the range). They can be tested for equivalence. Empty ranges evaluate to `False` in boolean context, nonempty evaluate to `True`.
 
-*Changed in version 2.5.3.*   `Range` objects can be sorted although, as on the server-side, this
-  ordering is not particularly meangingful. It is only meant to be used
-  by programs assuming objects using `Range` as primary key can be
-  sorted on them. In previous versions comparing `Range`s raises
-  `TypeError`.
+*Changed in version 2.5.3.*  `Range` objects can be sorted although, as on the server-side, this
+ ordering is not particularly meangingful. It is only meant to be used
+ by programs assuming objects using `Range` as primary key can be
+ sorted on them. In previous versions comparing `Range`s raises
+ `TypeError`.
 
 Although it is possible to instantiate `Range` objects, the class doesn't have an adapter registered, so you cannot normally pass these instances as query arguments. To use range objects as query arguments you can either use one of the provided subclasses, such as `NumericRange` or create a custom subclass using `register_range()`.
 
@@ -713,11 +713,11 @@ The current implementation of `executemany()` is (using an extremely charitable 
 *function* `execute_batch`
 
 ```python
-  >>> nums = ((1,), (5,), (10,))
-  >>> execute_batch(cur, "INSERT INTO test (num) VALUES (%s)", nums)
+ >>> nums = ((1,), (5,), (10,))
+ >>> execute_batch(cur, "INSERT INTO test (num) VALUES (%s)", nums)
 
-  >>> tuples = ((123, "foo"), (42, "bar"), (23, "baz"))
-  >>> execute_batch(cur, "INSERT INTO test (num, data) VALUES (%s, %s)", tuples)
+ >>> tuples = ((123, "foo"), (42, "bar"), (23, "baz"))
+ >>> execute_batch(cur, "INSERT INTO test (num, data) VALUES (%s, %s)", tuples)
 ```
 
 *New in version 2.7.*
@@ -747,8 +747,9 @@ The current implementation of `executemany()` is (using an extremely charitable 
 
 *function* `execute_values`
 
-*New in version 2.7.* .. versionchanged:: 2.8
-    added the *fetch* parameter.
+*New in version 2.7.*
+
+*Changed in version 2.8.* added the *fetch* parameter.
 
 ## Coroutine support
 

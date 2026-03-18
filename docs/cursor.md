@@ -11,10 +11,10 @@ Cursors are *not* thread safe: a multithread application can create many cursors
 Cursors can be used as context managers: leaving the context will close the cursor.
 
 ```python
-  with conn.cursor() as curs:
-      curs.execute(SQL)
+ with conn.cursor() as curs:
+     curs.execute(SQL)
 
-  # the cursor is now closed
+ # the cursor is now closed
 ```
 
 *attribute* `description`
@@ -121,11 +121,11 @@ The function is mostly useful for commands that update the database: any result 
 Parameters are bounded to the query using the same rules described in the `execute()` method.
 
 ```python
-   >>> nums = ((1,), (5,), (10,))
-   >>> cur.executemany("INSERT INTO test (num) VALUES (%s)", nums)
+ >>> nums = ((1,), (5,), (10,))
+ >>> cur.executemany("INSERT INTO test (num) VALUES (%s)", nums)
 
-   >>> tuples = ((123, "foo"), (42, "bar"), (23, "baz"))
-   >>> cur.executemany("INSERT INTO test (num, data) VALUES (%s, %s)", tuples)
+ >>> tuples = ((123, "foo"), (42, "bar"), (23, "baz"))
+ >>> cur.executemany("INSERT INTO test (num, data) VALUES (%s, %s)", tuples)
 ```
 
 !!! warning

@@ -45,10 +45,10 @@ While this method is still available, the specialised class allows for a more id
 *function* `lookup`
 
 ```python
-  try:
-      cur.execute("LOCK TABLE mytable IN ACCESS EXCLUSIVE MODE NOWAIT")
-  except psycopg2.errors.lookup("55P03"):
-      locked = True
+ try:
+     cur.execute("LOCK TABLE mytable IN ACCESS EXCLUSIVE MODE NOWAIT")
+ except psycopg2.errors.lookup("55P03"):
+     locked = True
 ```
 
 ## SQLSTATE exception classes
