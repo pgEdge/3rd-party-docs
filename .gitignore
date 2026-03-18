@@ -1,6 +1,10 @@
 /.claude/
+/.doc-cache/
+/.doc-source/
 /.venv/
+/.worktrees/
 /bin/
+/doc-source/
 /postgresql/
 /site/
 .DS_Store

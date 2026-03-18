@@ -27,15 +27,40 @@ on product/version branches:
 ## Prerequisites
 
 - Go 1.25+
+- [yq](https://github.com/mikefarah/yq) (for `build-all.sh`)
 - Python 3 with
   [MkDocs Material](https://squidfunk.github.io/mkdocs-material/)
-- Upstream source tree for the product being converted
 
 ## Quick Start
 
-Checkout the branch for the version you want to build, place the
-upstream documentation source at the path configured in `SRC_DIR`
-(defaults to `/doc-source`), then run the converter:
+### Build All Branches
+
+The `build-all.sh` script automates the full pipeline:
+cloning/fetching upstream repos, converting docs, and
+committing to each branch. All branches are defined in
+`branches.yml`.
+
+```sh
+# Build everything
+./build-all.sh
+
+# Build only PostgreSQL branches
+./build-all.sh --branches "pg*"
+
+# Build specific branches
+./build-all.sh --branches pg17,postgrest145
+
+# Preview what would be built
+./build-all.sh --dry-run
+```
+
+After building, the script shows a summary and prompts to
+push updated branches to the remote.
+
+### Build a Single Branch Manually
+
+For manual builds, checkout the target branch, provide the
+upstream source, and run the converter:
 
 ```sh
 # PostgreSQL (SGML mode)
@@ -152,6 +177,8 @@ pgdoc-converter [flags]
 ## Project Structure
 
 ```
+build-all.sh        Build orchestration script
+branches.yml        Branch/product configuration
 builder/            Go converter source
   shared/             Shared types and Markdown writer
   convert/            SGML-to-Markdown conversion

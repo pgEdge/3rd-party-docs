@@ -1,0 +1,121 @@
+# branches.yml — Defines all documentation branches to build.
+#
+# The build-all.sh script reads this file, clones/fetches upstream
+# repos, and runs the converter for each branch.
+#
+# Fields:
+#   branch       Local/remote branch name
+#   mode         Conversion mode: sgml or rst
+#   version      Version label for site_name
+#   upstream     Git URL of the upstream source repository
+#   ref          Git ref to checkout (tag, branch, or commit)
+#   src_subdir   Subdirectory within the upstream repo containing docs
+#   copyright    (optional) Copyright string (RST mode)
+#   pgadmin_src  (optional) Set to "yes" to pass upstream root as
+#                -pgadmin-src (for literalinclude directives)
+#   skip_sections (optional) Comma-separated headings to suppress
+
+cache_dir: .doc-cache
+
+branches:
+  # --- PostgreSQL (SGML mode) ---
+
+  - branch: pg16
+    mode: sgml
+    version: "16.13"
+    upstream: https://git.postgresql.org/git/postgresql.git
+    ref: REL_16_STABLE
+    src_subdir: doc/src/sgml
+
+  - branch: pg17
+    mode: sgml
+    version: "17.9"
+    upstream: https://git.postgresql.org/git/postgresql.git
+    ref: REL_17_STABLE
+    src_subdir: doc/src/sgml
+
+  - branch: pg18
+    mode: sgml
+    version: "18.3"
+    upstream: https://git.postgresql.org/git/postgresql.git
+    ref: REL_18_STABLE
+    src_subdir: doc/src/sgml
+
+  - branch: pg19
+    mode: sgml
+    version: 19devel
+    upstream: https://git.postgresql.org/git/postgresql.git
+    ref: master
+    src_subdir: doc/src/sgml
+
+  # --- pgAdmin 4 (RST mode) ---
+
+  - branch: pgadmin911
+    mode: rst
+    version: "v9.11"
+    upstream: https://github.com/pgadmin-org/pgadmin4.git
+    ref: REL-9_11
+    src_subdir: docs/en_US
+    pgadmin_src: "yes"
+    copyright: "Copyright (C) pgAdmin Development Team"
+
+  - branch: pgadmin912
+    mode: rst
+    version: "v9.12"
+    upstream: https://github.com/pgadmin-org/pgadmin4.git
+    ref: REL-9_12
+    src_subdir: docs/en_US
+    pgadmin_src: "yes"
+    copyright: "Copyright (C) pgAdmin Development Team"
+
+  - branch: pgadmin913
+    mode: rst
+    version: "v9.13"
+    upstream: https://github.com/pgadmin-org/pgadmin4.git
+    ref: REL-9_13
+    src_subdir: docs/en_US
+    pgadmin_src: "yes"
+    copyright: "Copyright (C) pgAdmin Development Team"
+
+  - branch: pgadminmaster
+    mode: rst
+    version: dev
+    upstream: https://github.com/pgadmin-org/pgadmin4.git
+    ref: master
+    src_subdir: docs/en_US
+    pgadmin_src: "yes"
+    copyright: "Copyright (C) pgAdmin Development Team"
+
+  # --- PostgREST (RST mode) ---
+
+  - branch: postgrest145
+    mode: rst
+    version: "v14.5"
+    upstream: https://github.com/PostgREST/postgrest.git
+    ref: v14.5
+    src_subdir: docs
+    skip_sections: "Sponsors"
+
+  - branch: postgrestmaster
+    mode: rst
+    version: dev
+    upstream: https://github.com/PostgREST/postgrest.git
+    ref: main
+    src_subdir: docs
+    skip_sections: "Sponsors"
+
+  # --- psycopg2 (RST mode) ---
+
+  - branch: psycopg2910
+    mode: rst
+    version: "v2.9.10"
+    upstream: https://github.com/psycopg/psycopg2.git
+    ref: "2_9_10"
+    src_subdir: doc/src
+
+  - branch: psycopg2master
+    mode: rst
+    version: dev
+    upstream: https://github.com/psycopg/psycopg2.git
+    ref: master
+    src_subdir: doc/src
