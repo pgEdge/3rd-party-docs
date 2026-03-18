@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: PostGIS 3.6.2
 
 extra_css:
   - stylesheets/extra.css
@@ -49,3 +49,144 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - PostGIS 3.6.2 Manual: index.md
+  - Introduction:
+    - introduction/index.md
+    - Project Steering Committee: introduction/project-steering-committee.md
+    - Core Contributors Present: introduction/core-contributors-present.md
+    - Core Contributors Past: introduction/core-contributors-past.md
+    - Other Contributors: introduction/other-contributors.md
+  - PostGIS Installation:
+    - postgis-installation/index.md
+    - Short Version: postgis-installation/short-version.md
+    - Compiling and Install from Source: postgis-installation/compiling-and-install-from-source.md
+    - Installing and Using the address standardizer: postgis-installation/installing-and-using-the-address-standardizer.md
+    - 'Installing, Upgrading Tiger Geocoder, and loading data': postgis-installation/installing-upgrading-tiger-geocoder-and-loading-data.md
+    - Common Problems during installation: postgis-installation/common-problems-during-installation.md
+  - PostGIS Administration:
+    - postgis-administration/index.md
+    - Performance Tuning: postgis-administration/performance-tuning.md
+    - Configuring raster support: postgis-administration/configuring-raster-support.md
+    - Creating spatial databases: postgis-administration/creating-spatial-databases.md
+    - Upgrading spatial databases: postgis-administration/upgrading-spatial-databases.md
+  - Data Management:
+    - data-management/index.md
+    - Spatial Data Model: data-management/spatial-data-model.md
+    - Geometry Data Type: data-management/geometry-data-type.md
+    - Geography Data Type: data-management/geography-data-type.md
+    - Geometry Validation: data-management/geometry-validation.md
+    - Spatial Reference Systems: data-management/spatial-reference-systems.md
+    - Spatial Tables: data-management/spatial-tables.md
+    - Loading Spatial Data: data-management/loading-spatial-data.md
+    - Extracting Spatial Data: data-management/extracting-spatial-data.md
+    - Spatial Indexes: data-management/spatial-indexes.md
+  - Spatial Queries:
+    - spatial-queries/index.md
+    - Determining Spatial Relationships: spatial-queries/determining-spatial-relationships.md
+    - Using Spatial Indexes: spatial-queries/using-spatial-indexes.md
+    - Examples of Spatial SQL: spatial-queries/examples-of-spatial-sql.md
+  - Performance Tips:
+    - performance-tips/index.md
+    - Small tables of large geometries: performance-tips/small-tables-of-large-geometries.md
+    - CLUSTERing on geometry indices: performance-tips/clustering-on-geometry-indices.md
+    - Avoiding dimension conversion: performance-tips/avoiding-dimension-conversion.md
+  - PostGIS Reference:
+    - postgis-reference/index.md
+    - PostGIS Geometry/Geography/Box Data Types: postgis-reference/postgis-geometry-geography-box-data-types.md
+    - Table Management Functions: postgis-reference/table-management-functions.md
+    - Geometry Constructors: postgis-reference/geometry-constructors.md
+    - Geometry Accessors: postgis-reference/geometry-accessors.md
+    - Geometry Editors: postgis-reference/geometry-editors.md
+    - Geometry Validation: postgis-reference/geometry-validation.md
+    - Spatial Reference System Functions: postgis-reference/spatial-reference-system-functions.md
+    - Geometry Input: postgis-reference/geometry-input.md
+    - Geometry Output: postgis-reference/geometry-output.md
+    - Operators: postgis-reference/operators.md
+    - Spatial Relationships: postgis-reference/spatial-relationships.md
+    - Measurement Functions: postgis-reference/measurement-functions.md
+    - Overlay Functions: postgis-reference/overlay-functions.md
+    - Geometry Processing: postgis-reference/geometry-processing.md
+    - Coverages: postgis-reference/coverages.md
+    - Affine Transformations: postgis-reference/affine-transformations.md
+    - Clustering Functions: postgis-reference/clustering-functions.md
+    - Bounding Box Functions: postgis-reference/bounding-box-functions.md
+    - Linear Referencing: postgis-reference/linear-referencing.md
+    - Trajectory Functions: postgis-reference/trajectory-functions.md
+    - Version Functions: postgis-reference/version-functions.md
+    - Grand Unified Custom Variables (GUCs): postgis-reference/grand-unified-custom-variables-gucs.md
+    - Troubleshooting Functions: postgis-reference/troubleshooting-functions.md
+  - SFCGAL Functions Reference:
+    - sfcgal-functions-reference/index.md
+    - SFCGAL Management Functions: sfcgal-functions-reference/sfcgal-management-functions.md
+    - SFCGAL Accessors and Setters: sfcgal-functions-reference/sfcgal-accessors-and-setters.md
+    - SFCGAL Processing and Relationship Functions: sfcgal-functions-reference/sfcgal-processing-and-relationship-functions.md
+  - Topology:
+    - topology/index.md
+    - Topology Types: topology/topology-types.md
+    - Topology Domains: topology/topology-domains.md
+    - Topology and TopoGeometry Management: topology/topology-and-topogeometry-management.md
+    - Topology Statistics Management: topology/topology-statistics-management.md
+    - Topology Constructors: topology/topology-constructors.md
+    - Topology Editors: topology/topology-editors.md
+    - Topology Accessors: topology/topology-accessors.md
+    - Topology Processing: topology/topology-processing.md
+    - TopoGeometry Constructors: topology/topogeometry-constructors.md
+    - TopoGeometry Editors: topology/topogeometry-editors.md
+    - TopoGeometry Accessors: topology/topogeometry-accessors.md
+    - TopoGeometry Outputs: topology/topogeometry-outputs.md
+    - Topology Spatial Relationships: topology/topology-spatial-relationships.md
+    - Importing and exporting Topologies: topology/importing-and-exporting-topologies.md
+  - 'Raster Data Management, Queries, and Applications':
+    - raster-data-management-queries-and-applications/index.md
+    - Loading and Creating Rasters: raster-data-management-queries-and-applications/loading-and-creating-rasters.md
+    - Raster Catalogs: raster-data-management-queries-and-applications/raster-catalogs.md
+    - Building Custom Applications with PostGIS Raster: raster-data-management-queries-and-applications/building-custom-applications-with-postgis-raster.md
+  - Raster Reference:
+    - raster-reference/index.md
+    - Raster Support Data types: raster-reference/raster-support-data-types.md
+    - Raster Management: raster-reference/raster-management.md
+    - Raster Constructors: raster-reference/raster-constructors.md
+    - Raster Accessors: raster-reference/raster-accessors.md
+    - Raster Band Accessors: raster-reference/raster-band-accessors.md
+    - Raster Pixel Accessors and Setters: raster-reference/raster-pixel-accessors-and-setters.md
+    - Raster Editors: raster-reference/raster-editors.md
+    - Raster Band Editors: raster-reference/raster-band-editors.md
+    - Raster Band Statistics and Analytics: raster-reference/raster-band-statistics-and-analytics.md
+    - Raster Inputs: raster-reference/raster-inputs.md
+    - Raster Outputs: raster-reference/raster-outputs.md
+    - 'Raster Processing: Map Algebra': raster-reference/raster-processing-map-algebra.md
+    - Built-in Map Algebra Callback Functions: raster-reference/built-in-map-algebra-callback-functions.md
+    - 'Raster Processing: DEM (Elevation)': raster-reference/raster-processing-dem-elevation.md
+    - 'Raster Processing: Raster to Geometry': raster-reference/raster-processing-raster-to-geometry.md
+    - Raster Operators: raster-reference/raster-operators.md
+    - Raster and Raster Band Spatial Relationships: raster-reference/raster-and-raster-band-spatial-relationships.md
+    - Raster Tips: raster-reference/raster-tips.md
+  - PostGIS Extras:
+    - postgis-extras/index.md
+    - Address Standardizer: postgis-extras/address-standardizer.md
+    - Tiger Geocoder: postgis-extras/tiger-geocoder.md
+  - PostGIS Special Functions Index:
+    - postgis-special-functions-index/index.md
+    - PostGIS Aggregate Functions: postgis-special-functions-index/postgis-aggregate-functions.md
+    - PostGIS Window Functions: postgis-special-functions-index/postgis-window-functions.md
+    - PostGIS SQL-MM Compliant Functions: postgis-special-functions-index/postgis-sql-mm-compliant-functions.md
+    - PostGIS Geography Support Functions: postgis-special-functions-index/postgis-geography-support-functions.md
+    - PostGIS Raster Support Functions: postgis-special-functions-index/postgis-raster-support-functions.md
+    - PostGIS Geometry / Geography / Raster Dump Functions: postgis-special-functions-index/postgis-geometry-geography-raster-dump-functions.md
+    - PostGIS Box Functions: postgis-special-functions-index/postgis-box-functions.md
+    - PostGIS Functions that support 3D: postgis-special-functions-index/postgis-functions-that-support-3d.md
+    - PostGIS Curved Geometry Support Functions: postgis-special-functions-index/postgis-curved-geometry-support-functions.md
+    - PostGIS Polyhedral Surface Support Functions: postgis-special-functions-index/postgis-polyhedral-surface-support-functions.md
+    - PostGIS Function Support Matrix: postgis-special-functions-index/postgis-function-support-matrix.md
+    - 'New, Enhanced or changed PostGIS Functions': postgis-special-functions-index/new-enhanced-or-changed-postgis-functions.md
+  - Reporting Problems:
+    - reporting-problems/index.md
+    - Reporting Software Bugs: reporting-problems/reporting-software-bugs.md
+    - Reporting Documentation Issues: reporting-problems/reporting-documentation-issues.md
+  - Appendix:
+    - appendix/index.md
+    - PostGIS 3.6.2: appendix/postgis-3-6-2.md
+    - PostGIS 3.6.1: appendix/postgis-3-6-1.md
+    - PostGIS 3.6.0: appendix/postgis-3-6-0.md
