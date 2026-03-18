@@ -5,12 +5,8 @@
 
  This section describes how you can handle exceptional conditions and warnings in an embedded SQL program. There are two nonexclusive facilities for this.
 
--
-
-   Callbacks can be configured to handle warning and error conditions using the `WHENEVER` command.
--
-
-   Detailed information about the error or warning can be obtained from the `sqlca` variable.
+-  Callbacks can be configured to handle warning and error conditions using the `WHENEVER` command.
+-  Detailed information about the error or warning can be obtained from the `sqlca` variable.
 
  <a id="ecpg-whenever"></a>
 

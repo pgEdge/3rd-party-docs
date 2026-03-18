@@ -22,18 +22,10 @@ EXEC SQL INCLUDE "FILENAME";
 
  The `ecpg` preprocessor will search a file at several directories in following order:
 
--
-
-  current directory
--
-
-`/usr/local/include`
--
-
-  PostgreSQL include directory, defined at build time (e.g., `/usr/local/pgsql/include`)
--
-
-`/usr/include`
+- current directory
+- `/usr/local/include`
+- PostgreSQL include directory, defined at build time (e.g., `/usr/local/pgsql/include`)
+- `/usr/include`
  But when <code>EXEC SQL INCLUDE
     "</code><em>filename</em><code>"</code> is used, only the current directory is searched.
 
