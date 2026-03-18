@@ -473,38 +473,71 @@ main() {
     done
     echo -e "${BOLD}===============================${RESET}"
 
+    # ── Detect unpushed branches ────────────────────────────────
+
+    # In addition to branches updated in this run, check all
+    # selected branches for commits that are ahead of the remote.
+    # This catches branches rebuilt in a prior run but never pushed.
+    local pushable_branches=()
+    for branch in "${selected[@]}"; do
+        local status="${RESULTS[$branch]:-skipped}"
+        [[ "$status" == FAILED* ]] && continue
+
+        # Check if local branch is ahead of remote
+        if git show-ref --verify --quiet \
+            "refs/remotes/origin/${branch}" 2>/dev/null; then
+            local ahead
+            ahead="$(git rev-list --count \
+                "origin/${branch}..${branch}" 2>/dev/null || echo 0)"
+            if [[ "$ahead" -gt 0 ]]; then
+                pushable_branches+=("$branch")
+            fi
+        else
+            # No remote branch — needs initial push
+            if git show-ref --verify --quiet \
+                "refs/heads/${branch}" 2>/dev/null; then
+                pushable_branches+=("$branch")
+            fi
+        fi
+    done
+
     # ── Push prompt ───────────────────────────────────────────────
 
-    if [[ ${#updated_branches[@]} -eq 0 ]]; then
+    if [[ ${#pushable_branches[@]} -eq 0 ]]; then
         echo ""
-        echo "No branches were updated."
+        echo "All branches are up to date with origin."
         return
     fi
 
     echo ""
-    echo "The following branches have new commits:"
-    for b in "${updated_branches[@]}"; do
-        # Show the commit that was made
-        local msg
-        msg="$(git log -1 --oneline "$b" 2>/dev/null)"
-        echo "  $msg"
+    echo "The following branches are ahead of origin:"
+    for b in "${pushable_branches[@]}"; do
+        local ahead
+        if git show-ref --verify --quiet \
+            "refs/remotes/origin/${b}" 2>/dev/null; then
+            ahead="$(git rev-list --count \
+                "origin/${b}..${b}" 2>/dev/null)"
+            echo -e "  ${b} (${ahead} commit(s) ahead)"
+        else
+            echo -e "  ${b} ${YELLOW}(new branch)${RESET}"
+        fi
     done
     echo ""
     if [[ ! -t 0 ]]; then
         echo "Non-interactive mode — skipping push. Run:"
-        echo "  git push origin ${updated_branches[*]}"
+        echo "  git push origin ${pushable_branches[*]}"
         return
     fi
-    read -rp "Push all updated branches to origin? [y/N] " confirm
+    read -rp "Push all branches to origin? [y/N] " confirm
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
-        for b in "${updated_branches[@]}"; do
+        for b in "${pushable_branches[@]}"; do
             echo -e "  Pushing ${CYAN}${b}${RESET}..."
             git push origin "$b"
         done
         echo -e "${GREEN}Done.${RESET}"
     else
         echo "Skipped. Push manually with:"
-        echo "  git push origin ${updated_branches[*]}"
+        echo "  git push origin ${pushable_branches[*]}"
     fi
 }
 
