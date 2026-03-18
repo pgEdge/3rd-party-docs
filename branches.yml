@@ -138,6 +138,13 @@ branches:
     ref: pgbouncer_1_25_1
     src_subdir: doc
 
+  - branch: pgbouncermaster
+    mode: md
+    version: "PgBouncer dev"
+    upstream: https://github.com/pgbouncer/pgbouncer.git
+    ref: master
+    src_subdir: doc
+
   # --- pgvector (Markdown mode) ---
 
   - branch: pgvector080
@@ -152,6 +159,13 @@ branches:
     version: "pgvector v0.8.1"
     upstream: https://github.com/pgvector/pgvector.git
     ref: v0.8.1
+    src_subdir: .
+
+  - branch: pgvectormaster
+    mode: md
+    version: "pgvector dev"
+    upstream: https://github.com/pgvector/pgvector.git
+    ref: master
     src_subdir: .
 
   # --- pgAudit (Markdown mode) ---
@@ -175,4 +189,11 @@ branches:
     version: "pgAudit 18.0"
     upstream: https://github.com/pgaudit/pgaudit.git
     ref: "18.0"
+    src_subdir: .
+
+  - branch: pgauditmaster
+    mode: md
+    version: "pgAudit dev"
+    upstream: https://github.com/pgaudit/pgaudit.git
+    ref: master
     src_subdir: .
