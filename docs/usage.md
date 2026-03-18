@@ -263,7 +263,7 @@ The following table shows the default mapping between Python and PostgreSQL type
 <tr>
   <td>Anything U+2122</td>
   <td><code>json</code></td>
-  <td><a href="https://www.json.org/">[JSON</a> adaptation](extras.md#adapt-json)</td>
+  <td><a href="extras.md#adapt-json">JSON_ adaptation</a></td>
 </tr>
 <tr>
   <td><code>UUID</code></td>
