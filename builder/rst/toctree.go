@@ -12,6 +12,7 @@ package rst
 import (
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/pgEdge/postgresql-docs/builder/shared"
@@ -109,7 +110,24 @@ func ResolveToctree(
 		// Find toctree directives and walk children.
 		// Children of this file go into a subdirectory named
 		// after this file's slug, creating the nav hierarchy.
-		toctreeEntries := collectToctreeEntries(root)
+		toctreeEntries := collectToctreeEntries(root, srcDir)
+
+		// Resolve relative toctree paths based on the current
+		// file's directory (e.g. "api/foo" in references/api.rst
+		// becomes "references/api/foo").
+		rstDir := filepath.Dir(rstName)
+		for i, e := range toctreeEntries {
+			// Only resolve if not already absolute from srcDir
+			candidate := filepath.Join(rstDir, e)
+			rstPath := filepath.Join(srcDir, candidate+".rst")
+			if _, err := os.Stat(rstPath); err == nil {
+				if _, err2 := os.Stat(
+					filepath.Join(srcDir, e+".rst")); err2 != nil {
+					toctreeEntries[i] = candidate
+				}
+			}
+		}
+
 		childPath := parentPath
 		if len(toctreeEntries) > 0 && !isTopLevel {
 			childPath = filepath.Join(parentPath, slug)
@@ -135,7 +153,8 @@ func ResolveToctree(
 }
 
 // collectToctreeEntries returns all toctree entries from a document.
-func collectToctreeEntries(root *Node) []string {
+// srcDir is needed to resolve glob patterns like "tutorials/*".
+func collectToctreeEntries(root *Node, srcDir string) []string {
 	var entries []string
 	var visit func(*Node)
 	visit = func(n *Node) {
@@ -143,6 +162,13 @@ func collectToctreeEntries(root *Node) []string {
 			for _, line := range strings.Split(n.Body, "\n") {
 				name := strings.TrimSpace(line)
 				if name == "" {
+					continue
+				}
+				// Handle glob patterns
+				if strings.Contains(name, "*") {
+					name = strings.TrimSuffix(name, ".rst")
+					globbed := expandGlob(srcDir, name)
+					entries = append(entries, globbed...)
 					continue
 				}
 				// Strip .rst extension if present
@@ -156,6 +182,27 @@ func collectToctreeEntries(root *Node) []string {
 	}
 	visit(root)
 	return entries
+}
+
+// expandGlob resolves a glob pattern like "tutorials/*" to a sorted
+// list of RST file basenames (without .rst extension).
+func expandGlob(srcDir, pattern string) []string {
+	globPath := filepath.Join(srcDir, pattern+".rst")
+	matches, err := filepath.Glob(globPath)
+	if err != nil || len(matches) == 0 {
+		return nil
+	}
+	sort.Strings(matches)
+	var results []string
+	for _, m := range matches {
+		rel, err := filepath.Rel(srcDir, m)
+		if err != nil {
+			continue
+		}
+		rel = strings.TrimSuffix(rel, ".rst")
+		results = append(results, rel)
+	}
+	return results
 }
 
 // extractDocTitle returns the title of an RST document (first heading).

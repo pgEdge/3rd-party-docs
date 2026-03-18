@@ -96,6 +96,13 @@ func initDirectiveHandlers() {
 		"extension":      handleAPIDef,
 		"include":        handleInclude,
 		"code":           handleCodeBlock,
+
+		// Container/layout directives
+		"container":  handleContainer,
+		"title":      handleSkipDirective,
+		"list-table": handleListTable,
+		"tabs":       handleTabs,
+		"tab":        handleTab,
 	}
 }
 
@@ -110,12 +117,31 @@ func handleImage(
 	if alt == "" {
 		alt = "image"
 	}
+	target := node.Options["target"]
+
+	// External URLs — use directly, don't copy
+	if strings.HasPrefix(imgPath, "http://") ||
+		strings.HasPrefix(imgPath, "https://") {
+		w.BlankLine()
+		if target != "" {
+			w.WriteString(fmt.Sprintf(
+				"[![%s](%s)](%s)\n", alt, imgPath, target))
+		} else {
+			w.WriteString(fmt.Sprintf("![%s](%s)\n", alt, imgPath))
+		}
+		return nil
+	}
 
 	// Compute relative path from current output file to the image
 	relImg := relativeImagePath(ctx.CurrentFile, imgPath)
 
 	w.BlankLine()
-	w.WriteString(fmt.Sprintf("![%s](%s)\n", alt, relImg))
+	if target != "" {
+		w.WriteString(fmt.Sprintf(
+			"[![%s](%s)](%s)\n", alt, relImg, target))
+	} else {
+		w.WriteString(fmt.Sprintf("![%s](%s)\n", alt, relImg))
+	}
 
 	// Copy image file
 	ctx.copyImage(imgPath)
@@ -756,6 +782,170 @@ func resolveAnonymousLinks(text string) string {
 // relativeImagePath computes the relative path from the current
 // output .md file to an image (whose path is relative to the
 // docs root, e.g. "images/foo.png").
+// handleContainer passes through the body content of a container.
+func handleContainer(
+	ctx *ConvertContext,
+	node *Node,
+	w *shared.MarkdownWriter,
+) error {
+	if len(node.Children) > 0 {
+		for _, child := range node.Children {
+			convertNode(ctx, child, w)
+		}
+	} else if node.Body != "" {
+		subRoot := Parse(node.Body)
+		for _, child := range subRoot.Children {
+			convertNode(ctx, child, w)
+		}
+	}
+	return nil
+}
+
+// handleListTable converts a list-table directive to a Markdown table.
+func handleListTable(
+	ctx *ConvertContext,
+	node *Node,
+	w *shared.MarkdownWriter,
+) error {
+	title := node.DirectiveArg
+	if title != "" {
+		w.BlankLine()
+		w.WriteString("**" + convertInlineCtx(ctx, title) + "**\n")
+	}
+
+	if node.Body == "" {
+		return nil
+	}
+
+	// Parse the body — list-table body is a bullet list of rows,
+	// each row is a sub-list of cells.
+	lines := strings.Split(node.Body, "\n")
+	var rows [][]string
+	var currentRow []string
+	var currentCell strings.Builder
+
+	flushCell := func() {
+		if currentCell.Len() > 0 {
+			currentRow = append(currentRow,
+				strings.TrimSpace(currentCell.String()))
+			currentCell.Reset()
+		}
+	}
+	flushRow := func() {
+		flushCell()
+		if len(currentRow) > 0 {
+			rows = append(rows, currentRow)
+			currentRow = nil
+		}
+	}
+
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		if trimmed == "" {
+			continue
+		}
+		indent := countIndent(line)
+		if strings.HasPrefix(trimmed, "* -") ||
+			(strings.HasPrefix(trimmed, "*") && indent == 0) {
+			flushRow()
+			rest := strings.TrimPrefix(trimmed, "* - ")
+			if rest == trimmed {
+				rest = strings.TrimPrefix(trimmed, "* ")
+			}
+			currentCell.WriteString(rest)
+		} else if strings.HasPrefix(trimmed, "- ") && indent >= 2 {
+			flushCell()
+			currentCell.WriteString(trimmed[2:])
+		} else {
+			if currentCell.Len() > 0 {
+				currentCell.WriteString(" ")
+			}
+			currentCell.WriteString(trimmed)
+		}
+	}
+	flushRow()
+
+	if len(rows) == 0 {
+		return nil
+	}
+
+	// Determine column count
+	numCols := 0
+	for _, row := range rows {
+		if len(row) > numCols {
+			numCols = len(row)
+		}
+	}
+
+	// Check if we have a header row
+	headerRows := 1
+	if h, ok := node.Options["header-rows"]; ok && h == "0" {
+		headerRows = 0
+	}
+
+	w.BlankLine()
+	for i, row := range rows {
+		w.WriteString("|")
+		for j := 0; j < numCols; j++ {
+			cell := ""
+			if j < len(row) {
+				cell = convertInlineCtx(ctx, row[j])
+			}
+			w.WriteString(" " + cell + " |")
+		}
+		w.WriteString("\n")
+		if i == headerRows-1 {
+			w.WriteString("|")
+			for j := 0; j < numCols; j++ {
+				_ = j
+				w.WriteString("---|")
+			}
+			w.WriteString("\n")
+		}
+	}
+
+	return nil
+}
+
+// handleTabs converts a tabs directive to sequential sections.
+func handleTabs(
+	ctx *ConvertContext,
+	node *Node,
+	w *shared.MarkdownWriter,
+) error {
+	// Tabs don't have direct MkDocs equivalent — render body
+	if node.Body != "" {
+		subRoot := Parse(node.Body)
+		for _, child := range subRoot.Children {
+			convertNode(ctx, child, w)
+		}
+	}
+	for _, child := range node.Children {
+		convertNode(ctx, child, w)
+	}
+	return nil
+}
+
+// handleTab converts a single tab to a bold heading + content.
+func handleTab(
+	ctx *ConvertContext,
+	node *Node,
+	w *shared.MarkdownWriter,
+) error {
+	if node.DirectiveArg != "" {
+		w.BlankLine()
+		w.WriteString("**" +
+			convertInlineCtx(ctx, node.DirectiveArg) + "**\n")
+	}
+	if node.Body != "" {
+		subRoot := Parse(node.Body)
+		for _, child := range subRoot.Children {
+			convertNode(ctx, child, w)
+		}
+	}
+	return nil
+}
+
 func relativeImagePath(currentFile, imgPath string) string {
 	dir := filepath.Dir(currentFile)
 	if dir == "." || dir == "" {
