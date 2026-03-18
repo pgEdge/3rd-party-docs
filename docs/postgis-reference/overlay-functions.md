@@ -88,7 +88,16 @@ Requires GEOS >= 3.9.0 to use the gridSize parameter.
 ## Examples
 
 
-| ![image](images/st_symdifference01.svg)   The input linestrings | ![image](images/st_difference01.svg)   The difference of the two linestrings |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_symdifference01.svg" alt="image"></p>
+<p>The input linestrings</p></td>
+<td><p><img src="images/st_difference01.svg" alt="image"></p>
+<p>The difference of the two linestrings</p></td>
+</tr>
+</tbody>
+</table>
 
 
 The difference of 2D linestrings.
@@ -428,7 +437,16 @@ Enhanced: 2.5.0 support for splitting a polygon by a multiline was introduced.
 Split a Polygon by a Line.
 
 
-| ![image](images/st_split01.svg)   Before Split | ![image](images/st_split02.svg)   After split |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_split01.svg" alt="image"></p>
+<p>Before Split</p></td>
+<td><p><img src="images/st_split02.svg" alt="image"></p>
+<p>After split</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```sql
@@ -450,7 +468,16 @@ SELECT ST_AsText( ST_Split(
 Split a MultiLineString by a Point, where the point lies exactly on both LineStrings elements.
 
 
-| ![image](images/st_split03.svg)   Before Split | ![image](images/st_split04.svg)   After split |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_split03.svg" alt="image"></p>
+<p>Before Split</p></td>
+<td><p><img src="images/st_split04.svg" alt="image"></p>
+<p>After split</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```sql
@@ -681,7 +708,16 @@ Requires GEOS >= 3.9.0 to use the gridSize parameter
 ## Examples
 
 
-| ![image](images/st_symdifference01.svg)   The original linestrings shown together | ![image](images/st_symdifference02.svg)   The symmetric difference of the two linestrings |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_symdifference01.svg" alt="image"></p>
+<p>The original linestrings shown together</p></td>
+<td><p><img src="images/st_symdifference02.svg" alt="image"></p>
+<p>The symmetric difference of the two linestrings</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```

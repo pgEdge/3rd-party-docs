@@ -393,7 +393,18 @@ WHERE rid=2;
 ```
 
 
-| ![image](images/st_band01.png)   original (column rast) | ![image](images/st_band02.png)   dupe_band | ![image](images/st_band03.png)   sing_band |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_band01.png" alt="image"></p>
+<p>original (column rast)</p></td>
+<td><p><img src="images/st_band02.png" alt="image"></p>
+<p>dupe_band</p></td>
+<td><p><img src="images/st_band03.png" alt="image"></p>
+<p>sing_band</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```

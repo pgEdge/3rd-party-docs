@@ -102,7 +102,16 @@ WHERE rid = 6) As foo;
 ```
 
 
-| ![image](images/st_clip01.png)    Full raster tile before clipping | ![image](images/st_clip02.png)    After Clipping |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_clip01.png" alt="image"></p>
+<p>Full raster tile before clipping</p></td>
+<td><p><img src="images/st_clip02.png" alt="image"></p>
+<p>After Clipping</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## Examples: 1 band clipping with no crop and add back other bands unchanged
@@ -120,7 +129,16 @@ WHERE rid = 6;
 ```
 
 
-| ![image](images/st_clip04.png)    Full raster tile before clipping | ![image](images/st_clip05.png)    After Clipping - surreal |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_clip04.png" alt="image"></p>
+<p>Full raster tile before clipping</p></td>
+<td><p><img src="images/st_clip05.png" alt="image"></p>
+<p>After Clipping - surreal</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## Examples: Clip all bands
@@ -140,7 +158,16 @@ WHERE rid = 4;
 ```
 
 
-| ![image](images/st_clip01.png)    Full raster tile before clipping | ![image](images/st_clip03.png)    After Clipping |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_clip01.png" alt="image"></p>
+<p>Full raster tile before clipping</p></td>
+<td><p><img src="images/st_clip03.png" alt="image"></p>
+<p>After Clipping</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -318,8 +345,26 @@ FROM funky_shapes;
 ```
 
 
-| ![image](images/st_colormap_orig.png)    orig_png | ![image](images/st_colormap_grey.png)    grey_png | ![image](images/st_colormap_pseudo.png)    pseudo_png |
-| ![image](images/st_colormap_fire.png)    fire_png | ![image](images/st_colormap_bluered.png)    bluered_png | ![image](images/st_colormap_red.png)    red_png |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_colormap_orig.png" alt="image"></p>
+<p>orig_png</p></td>
+<td><p><img src="images/st_colormap_grey.png" alt="image"></p>
+<p>grey_png</p></td>
+<td><p><img src="images/st_colormap_pseudo.png" alt="image"></p>
+<p>pseudo_png</p></td>
+</tr>
+<tr>
+<td><p><img src="images/st_colormap_fire.png" alt="image"></p>
+<p>fire_png</p></td>
+<td><p><img src="images/st_colormap_bluered.png" alt="image"></p>
+<p>bluered_png</p></td>
+<td><p><img src="images/st_colormap_red.png" alt="image"></p>
+<p>red_png</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -382,7 +427,16 @@ FROM apple;
 ```
 
 
-| ![image](images/apple.png)    original_png | ![image](images/apple_st_grayscale.png)    grayscale_png |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/apple.png" alt="image"></p>
+<p>original_png</p></td>
+<td><p><img src="images/apple_st_grayscale.png" alt="image"></p>
+<p>grayscale_png</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## Examples: Variant 2
@@ -885,8 +939,22 @@ FROM foo;
 ```
 
 
-| ![image](images/st_mapalgebramask01.png)    original | ![image](images/st_mapalgebramask02.png)    no mask mean value (same as having all 1s in mask matrix) |
-| ![image](images/st_mapalgebramask03.png)    mask only consider neighbors, exclude center | ![image](images/st_mapalgebramask04.png)    mask weighted only consider neighbors, exclude center multi other pixel values by 2 |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_mapalgebramask01.png" alt="image"></p>
+<p>original</p></td>
+<td><p><img src="images/st_mapalgebramask02.png" alt="image"></p>
+<p>no mask mean value (same as having all 1s in mask matrix)</p></td>
+</tr>
+<tr>
+<td><p><img src="images/st_mapalgebramask03.png" alt="image"></p>
+<p>mask only consider neighbors, exclude center</p></td>
+<td><p><img src="images/st_mapalgebramask04.png" alt="image"></p>
+<p>mask weighted only consider neighbors, exclude center multi other pixel values by 2</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -1128,7 +1196,16 @@ WHERE rid = 2;
 ```
 
 
-| ![image](images/st_mapalgebraexpr01.png)    original (column rast_view) | ![image](images/st_mapalgebraexpr02.png)    rast_view_ma |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_mapalgebraexpr01.png" alt="image"></p>
+<p>original (column rast_view)</p></td>
+<td><p><img src="images/st_mapalgebraexpr02.png" alt="image"></p>
+<p>rast_view_ma</p></td>
+</tr>
+</tbody>
+</table>
 
 
 Create a new 3 band raster same pixel type from our original 3 band raster with first band altered by map algebra and remaining 2 bands unaltered.
@@ -1262,7 +1339,16 @@ FROM fun_shapes WHERE
 ```
 
 
-| ![image](images/st_mapalgebraexpr2_01.png)    mapalgebra intersection | ![image](images/st_mapalgebraexpr2_02.png)    map algebra union |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_mapalgebraexpr2_01.png" alt="image"></p>
+<p>mapalgebra intersection</p></td>
+<td><p><img src="images/st_mapalgebraexpr2_02.png" alt="image"></p>
+<p>map algebra union</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## Example: Overlaying rasters on a canvas as separate bands
@@ -1302,8 +1388,22 @@ WITH mygeoms
 ```
 
 
-| ![image](images/st_mapalgebraexpr2_04.png)   rast1 | ![image](images/st_mapalgebraexpr2_05.png)    rast2 |
-| ![image](images/st_mapalgebraexpr2_06.png)    rast3 | ![image](images/st_mapalgebraexpr2_07.png)    final_rast |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_mapalgebraexpr2_04.png" alt="image"></p>
+<p>rast1</p></td>
+<td><p><img src="images/st_mapalgebraexpr2_05.png" alt="image"></p>
+<p>rast2</p></td>
+</tr>
+<tr>
+<td><p><img src="images/st_mapalgebraexpr2_06.png" alt="image"></p>
+<p>rast3</p></td>
+<td><p><img src="images/st_mapalgebraexpr2_07.png" alt="image"></p>
+<p>final_rast</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## Example: Overlay 2 meter boundary of select parcels over an aerial imagery
@@ -1339,7 +1439,14 @@ FROM prunion;
 ```
 
 
-| ![image](images/st_mapalgebraexpr2_08.png)    The blue lines are the boundaries of select parcels |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_mapalgebraexpr2_08.png" alt="image"></p>
+<p>The blue lines are the boundaries of select parcels</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -1514,7 +1621,16 @@ FROM dummy_rast WHERE rid = 2;
 ```
 
 
-| ![image](images/st_mapalgebraexpr01.png)   original (column rast-view) | ![image](images/st_mapalgebraexpr02.png)   rast_view_ma |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_mapalgebraexpr01.png" alt="image"></p>
+<p>original (column rast-view)</p></td>
+<td><p><img src="images/st_mapalgebraexpr02.png" alt="image"></p>
+<p>rast_view_ma</p></td>
+</tr>
+</tbody>
+</table>
 
 
 Create a new 3 band raster same pixel type from our original 3 band raster with first band altered by map algebra and remaining 2 bands unaltered.
@@ -1695,7 +1811,14 @@ SELECT ST_AddBand(ST_AddBand(rasts[1], rasts[2]),rasts[3]), 4, 'map bands overla
 ```
 
 
-| ![image](images/st_mapalgebrafct2_01.png)   map bands overlay (canvas) (R: small road, G: circle, B: big road) |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_mapalgebrafct2_01.png" alt="image"></p>
+<p>map bands overlay (canvas) (R: small road, G: circle, B: big road)</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## User Defined function that takes extra args
@@ -1852,7 +1975,16 @@ SELECT ST_MapAlgebraFctNgb(rast, 1,  '8BUI', 4,4,
 ```
 
 
-| ![image](images/st_mapalgebrafctngb01.png)    First band of our raster | ![image](images/st_mapalgebrafctngb02.png)    new raster after averaging pixels within 4x4 pixels of each other |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_mapalgebrafctngb01.png" alt="image"></p>
+<p>First band of our raster</p></td>
+<td><p><img src="images/st_mapalgebrafctngb02.png" alt="image"></p>
+<p>new raster after averaging pixels within 4x4 pixels of each other</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also

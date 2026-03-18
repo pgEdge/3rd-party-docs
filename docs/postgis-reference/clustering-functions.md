@@ -47,7 +47,46 @@ Availability: 2.3.0
  Clustering polygon within 50 meters of each other, and requiring at least 2 polygons per cluster.
 
 
-| ![image](images/st_clusterdbscan01.png)   Clusters within 50 meters with at least 2 items per cluster. Singletons have NULL for cid    ```sql  SELECT name, ST_ClusterDBSCAN(geom, eps => 50, minpoints => 2) over () AS cid FROM boston_polys WHERE name > '' AND building > '' 	AND ST_DWithin(geom,         ST_Transform(             ST_GeomFromText('POINT(-71.04054 42.35141)', 4326), 26986),            500); ``` | ```                  name                 | bucket -------------------------------------+--------  Manulife Tower                      |      0  Park Lane Seaport I                 |      0  Park Lane Seaport II                |      0  Renaissance Boston Waterfront Hotel |      0  Seaport Boston Hotel                |      0  Seaport Hotel & World Trade Center  |      0  Waterside Place                     |      0  World Trade Center East             |      0  100 Northern Avenue                 |      1  100 Pier 4                          |      1  The Institute of Contemporary Art   |      1  101 Seaport                         |      2  District Hall                       |      2  One Marina Park Drive               |      2  Twenty Two Liberty                  |      2  Vertex                              |      2  Vertex                              |      2  Watermark Seaport                   |      2  Blue Hills Bank Pavilion            |   NULL  World Trade Center West             |   NULL (20 rows) ``` |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_clusterdbscan01.png" alt="image"></p>
+<p>Clusters within 50 meters with at least 2 items per cluster. Singletons have NULL for cid</p>
+<pre><code class="language-sql">
+SELECT name, ST_ClusterDBSCAN(geom, eps =&gt; 50, minpoints =&gt; 2) over () AS cid
+FROM boston_polys
+WHERE name &gt; '' AND building &gt; ''
+	AND ST_DWithin(geom,
+        ST_Transform(
+            ST_GeomFromText('POINT(-71.04054 42.35141)', 4326), 26986),
+           500);</code></pre></td>
+<td><pre><code>
+                name                 | bucket
+-------------------------------------+--------
+ Manulife Tower                      |      0
+ Park Lane Seaport I                 |      0
+ Park Lane Seaport II                |      0
+ Renaissance Boston Waterfront Hotel |      0
+ Seaport Boston Hotel                |      0
+ Seaport Hotel &amp; World Trade Center  |      0
+ Waterside Place                     |      0
+ World Trade Center East             |      0
+ 100 Northern Avenue                 |      1
+ 100 Pier 4                          |      1
+ The Institute of Contemporary Art   |      1
+ 101 Seaport                         |      2
+ District Hall                       |      2
+ One Marina Park Drive               |      2
+ Twenty Two Liberty                  |      2
+ Vertex                              |      2
+ Vertex                              |      2
+ Watermark Seaport                   |      2
+ Blue Hills Bank Pavilion            |   NULL
+ World Trade Center West             |   NULL
+(20 rows)</code></pre></td>
+</tr>
+</tbody>
+</table>
 
 
  A example showing combining parcels with the same cluster number into geometry collections.

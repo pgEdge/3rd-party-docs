@@ -131,7 +131,16 @@ Requires GEOS >= 3.12.0
 ## Examples
 
 
-| ![image](images/st_coveragesimplify01.svg)   Input coverage | ![image](images/st_coveragesimplify02.svg)   Simplified coverage |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_coveragesimplify01.svg" alt="image"></p>
+<p>Input coverage</p></td>
+<td><p><img src="images/st_coveragesimplify02.svg" alt="image"></p>
+<p>Simplified coverage</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```sql
@@ -190,7 +199,16 @@ Availability: 3.4.0 - requires GEOS >= 3.8.0
 ## Examples
 
 
-| ![image](images/st_coverageunion01.svg)   Input coverage | ![image](images/st_coverageunion02.svg)   Union result |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_coverageunion01.svg" alt="image"></p>
+<p>Input coverage</p></td>
+<td><p><img src="images/st_coverageunion02.svg" alt="image"></p>
+<p>Union result</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```sql
