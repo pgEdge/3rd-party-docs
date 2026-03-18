@@ -756,9 +756,6 @@ Availability: 3.5.0 - requires SFCGAL >= 1.4.1.
 ## Examples
 
 
-![image](images/st_alphashape01.png)
-
-
 Alpha-shape of a MultiPoint (same example As [CG_OptimalAlphaShape](#CG_OptimalAlphaShape))
 
 
@@ -781,9 +778,6 @@ POLYGON((89 53,91 50,87 42,90 30,88 29,84 19,78 16,73 16,65 16,53 18,43 19,
 ```
 
 
-![image](images/st_alphashape02.png)
-
-
 Alpha-shape of a MultiPoint, allowing holes (same example as [CG_OptimalAlphaShape](#CG_OptimalAlphaShape))
 
 
@@ -802,9 +796,6 @@ POLYGON((89 53,91 50,87 42,90 30,84 19,78 16,73 16,65 16,53 18,43 19,30 22,28 33
 76 88,75 84,83 72,85 71,88 58,89 53),(36 61,36 68,40 75,43 80,60 81,68 73,77 67,
 81 60,82 54,81 47,78 43,76 27,62 22,54 32,44 42,38 46,36 61))
 ```
-
-
-![image](images/st_alphashape03.png)
 
 
 Alpha-shape of a MultiPoint, allowing holes (same example as [ST_ConcaveHull](../postgis-reference/geometry-processing.md#ST_ConcaveHull))
@@ -860,9 +851,6 @@ Requires SFCGAL >= 1.5.0
 
 
 ## Examples
-
-
-![image](images/cg_approxconvexpartition01.png)
 
 
 Approximal Convex Partition (same example As [CG_YMonotonePartition](#CG_YMonotonePartition), [CG_GreeneApproxConvexPartition](#CG_GreeneApproxConvexPartition) and [CG_OptimalConvexPartition](#CG_OptimalConvexPartition))
@@ -941,7 +929,7 @@ SELECT CG_ApproximateMedialAxis(ST_GeomFromText('POLYGON (( 190 190, 10 190, 10 
 ```
 
 
-| ![image](images/st_approximatemedialaxis01.png)   A polygon and its approximate medial axis |
+| A polygon and its approximate medial axis |
 
 
 ## See Also
@@ -1002,7 +990,7 @@ Availability: 3.0.0
 ## Examples
 
 
-| ![image](images/st_constraineddelaunaytriangles01.png)   CG_ConstrainedDelaunayTriangles of 2 polygons    ```                                          select CG_ConstrainedDelaunayTriangles(                                         ST_Union(                                         'POLYGON((175 150, 20 40, 50 60, 125 100, 175 150))'::geometry,                                         ST_Buffer('POINT(110 170)'::geometry, 20)                                         )                                         );                                      ``` | ![image](images/st_constraineddelaunaytriangles02.png)   [ST_DelaunayTriangles](../postgis-reference/geometry-processing.md#ST_DelaunayTriangles) of 2 polygons. Triangle edges cross polygon boundaries.    ```                                          select ST_DelaunayTriangles(                                         ST_Union(                                         'POLYGON((175 150, 20 40, 50 60, 125 100, 175 150))'::geometry,                                         ST_Buffer('POINT(110 170)'::geometry, 20)                                         )                                         );                                      ``` |
+| CG_ConstrainedDelaunayTriangles of 2 polygons    ```                                          select CG_ConstrainedDelaunayTriangles(                                         ST_Union(                                         'POLYGON((175 150, 20 40, 50 60, 125 100, 175 150))'::geometry,                                         ST_Buffer('POINT(110 170)'::geometry, 20)                                         )                                         );                                      ``` | [ST_DelaunayTriangles](../postgis-reference/geometry-processing.md#ST_DelaunayTriangles) of 2 polygons. Triangle edges cross polygon boundaries.    ```                                          select ST_DelaunayTriangles(                                         ST_Union(                                         'POLYGON((175 150, 20 40, 50 60, 125 100, 175 150))'::geometry,                                         ST_Buffer('POINT(110 170)'::geometry, 20)                                         )                                         );                                      ``` |
 
 
 ## See Also
@@ -1060,8 +1048,8 @@ Availability: 3.5.0
 3D images were generated using PostGIS [ST_AsX3D](../postgis-reference/geometry-output.md#ST_AsX3D) and rendering in HTML using [X3Dom HTML Javascript rendering library](http://www.x3dom.org).
 
 
-| ```sql SELECT ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                     50, 'quad_segs=2'),0,0,30); ```     ![image](images/st_extrude01.png)   Original octagon formed from buffering point | ``` CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                 50, 'quad_segs=2'),0,0,30); ```     ![image](images/st_extrude02.png)   Hexagon extruded 30 units along Z produces a PolyhedralSurfaceZ |
-| ```sql SELECT ST_GeomFromText('LINESTRING(50 50, 100 90, 95 150)') ```     ![image](images/st_extrude03.png)   Original linestring | ```sql SELECT CG_Extrude(                             ST_GeomFromText('LINESTRING(50 50, 100 90, 95 150)'),0,0,10)); ```     ![image](images/st_extrude04.png)   LineString Extruded along Z produces a PolyhedralSurfaceZ |
+| ```sql SELECT ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                     50, 'quad_segs=2'),0,0,30); ```       Original octagon formed from buffering point | ``` CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                 50, 'quad_segs=2'),0,0,30); ```     ![image](images/st_extrude02.png)   Hexagon extruded 30 units along Z produces a PolyhedralSurfaceZ |
+| ```sql SELECT ST_GeomFromText('LINESTRING(50 50, 100 90, 95 150)') ```       Original linestring | ```sql SELECT CG_Extrude(                             ST_GeomFromText('LINESTRING(50 50, 100 90, 95 150)'),0,0,10)); ```     ![image](images/st_extrude04.png)   LineString Extruded along Z produces a PolyhedralSurfaceZ |
 
 
 ## See Also
@@ -1148,9 +1136,6 @@ Requires SFCGAL >= 1.5.0
 
 
 ## Examples
-
-
-![image](images/cg_greeneapproxconvexpartition01.png)
 
 
 Greene Approximal Convex Partition (same example As [CG_YMonotonePartition](#CG_YMonotonePartition), [CG_ApproxConvexPartition](#CG_ApproxConvexPartition) and [CG_OptimalConvexPartition](#CG_OptimalConvexPartition))
@@ -1245,7 +1230,7 @@ Availability: 3.5.0
 Minkowski Sum of Linestring and circle polygon where Linestring cuts thru the circle
 
 
-| ![image](images/st_minkowskisum01.png)   Before Summing | ![image](images/st_minkowskisum02.png)   After summing |
+| Before Summing | After summing |
 
 
 ```sql
@@ -1265,7 +1250,7 @@ Minkowski Sum of Linestring and circle polygon where Linestring cuts thru the ci
 Minkowski Sum of a polygon and multipoint
 
 
-| ![image](images/st_minkowskisum03.png)   Before Summing | ![image](images/st_minkowskisum04.png)   After summing: polygon is duplicated and translated to position of points |
+| Before Summing | After summing: polygon is duplicated and translated to position of points |
 
 
 ```sql
@@ -1350,9 +1335,6 @@ Availability: 3.5.0 - requires SFCGAL >= 1.4.1.
 ## Examples
 
 
-![image](images/st_optimalalphashape01.png)
-
-
 Optimal alpha-shape of a MultiPoint (same example as [CG_AlphaShape](#CG_AlphaShape))
 
 
@@ -1371,9 +1353,6 @@ SELECT ST_AsText(CG_OptimalAlphaShape('MULTIPOINT((63 84),(76 88),(68 73),(53 18
 POLYGON((89 53,91 50,87 42,90 30,88 29,84 19,78 16,73 16,65 16,53 18,43 19,37 23,30 22,28 33,23 36,
         26 44,27 54,23 60,24 67,27 77,24 82,26 85,34 86,39 88,45 90,49 95,52 98,57 97,64 97,72 95,76 88,75 84,75 77,83 72,85 71,83 64,88 58,89 53))
 ```
-
-
-![image](images/st_optimalalphashape02.png)
 
 
 Optimal alpha-shape of a MultiPoint, allowing holes (same example as [CG_AlphaShape](#CG_AlphaShape))
@@ -1429,9 +1408,6 @@ Requires SFCGAL >= 1.5.0
 
 
 ## Examples
-
-
-![image](images/cg_optimalconvexpartition01.png)
 
 
 Optimal Convex Partition (same example As [CG_YMonotonePartition](#CG_YMonotonePartition), [CG_ApproxConvexPartition](#CG_ApproxConvexPartition) and [CG_GreeneApproxConvexPartition](#CG_GreeneApproxConvexPartition))
@@ -1502,7 +1478,7 @@ ERROR:  straight skeleton of Polygon with point touching rings is not implemente
 ```
 
 
-| ![image](images/st_straightskeleton01.png)   Original polygon | ![image](images/st_straightskeleton02.png)   Straight Skeleton of polygon |
+| Original polygon | ![image](images/st_straightskeleton02.png)   Straight Skeleton of polygon |
 
 
 ## See Also
@@ -1542,7 +1518,7 @@ SELECT ST_StraightSkeleton(ST_GeomFromText('POLYGON (( 190 190, 10 190, 10 10, 1
 ```
 
 
-| ![image](images/st_straightskeleton01.png)   Original polygon | ![image](images/st_straightskeleton02.png)   Straight Skeleton of polygon |
+| Original polygon | ![image](images/st_straightskeleton02.png)   Straight Skeleton of polygon |
 
 
 ## See Also
@@ -1639,7 +1615,6 @@ Availability: 3.5.0
 </tr>
 <tr>
 <td><pre><code class="language-sql">SELECT 'POLYGON (( 10 190, 10 70, 80 70, 80 130, 50 160, 120 160, 120 190, 10 190 ))'::geometry;</code></pre>
-<p>!<a href="images/st_tesselate03.png">image</a></p>
 <p>Original polygon</p></td>
 <td><pre><code class="language-sql">SELECT
                         CG_Tesselate('POLYGON (( 10 190, 10 70, 80 70, 80 130, 50 160, 120 160, 120 190, 10 190 ))'::geometry);</code></pre>
@@ -1647,7 +1622,6 @@ Availability: 3.5.0
 <pre><code>TIN(((80 130,50 160,80 70,80 130)),((50 160,10 190,10 70,50 160)),
                 ((80 70,50 160,10 70,80 70)),((120 160,120 190,50 160,120 160)),
                 ((120 190,10 190,50 160,120 190)))</code></pre>
-<p>!<a href="images/st_tesselate04.png">image</a></p>
 <p>Tessellated Polygon</p></td>
 </tr>
 </tbody>
@@ -1744,7 +1718,7 @@ SELECT CG_Visibility('POLYGON((23.5 23.5,23.5 173.5,173.5 173.5,173.5 23.5,23.5 
 ```
 
 
-| ![image](images/cg_visibility01.png)   Original polygon | ![image](images/cg_visibility02.png)   Visibility from the point | ![image](images/cg_visibility03.png)   Visibility from the segment |
+| Original polygon | Visibility from the point | Visibility from the segment |
   <a id="CG_YMonotonePartition"></a>
 
 # CG_YMonotonePartition
@@ -1779,7 +1753,7 @@ Requires SFCGAL >= 1.5.0
 ## Examples
 
 
-| ![image](images/cg_ymonotonepartition01.png)   Original polygon | ![image](images/cg_ymonotonepartition02.png)   Y-Monotone Partition (same example As [CG_ApproxConvexPartition](#CG_ApproxConvexPartition), [CG_GreeneApproxConvexPartition](#CG_GreeneApproxConvexPartition) and [CG_OptimalConvexPartition](#CG_OptimalConvexPartition)) |
+| Original polygon | Y-Monotone Partition (same example As [CG_ApproxConvexPartition](#CG_ApproxConvexPartition), [CG_GreeneApproxConvexPartition](#CG_GreeneApproxConvexPartition) and [CG_OptimalConvexPartition](#CG_OptimalConvexPartition)) |
 
 
 ```sql
@@ -1835,7 +1809,7 @@ SELECT CG_StraightSkeletonPartition(ST_GeomFromText('POLYGON (( 190 190, 10 190,
 ```
 
 
-| ![image](images/st_straightskeleton01.png)   Original polygon | ![image](images/cg_straightskeletonpartition01.png)   Straight Skeleton Partition of polygon |
+| Original polygon | Straight Skeleton Partition of polygon |
 
 
 ## See Also
@@ -2374,9 +2348,6 @@ SELECT geom FROM depts_pds;
 ```
 
 
-![image](images/cg_simplify00.png)
-
-
 Originals geometries
 
 
@@ -2391,9 +2362,6 @@ SELECT (ST_Dump(CG_Simplify(geom, 0.5, true))).geom FROM depts_pds;
 ```
 
 
-![image](images/cg_simplify01.png)
-
-
 Simplification with 0.5 and topology preserved
 
 
@@ -2406,9 +2374,6 @@ POLYGON((112.69 118.46,146.15 103.46,190 60.77,185.38 43.46,126.54 26.15,83.85 2
 SELECT (ST_Dump(CG_Simplify(geom, 0.5, false))).geom FROM depts_pds;
 
 ```
-
-
-![image](images/cg_simplify02.png)
 
 
 Simplification with 0.5 without topology preservation
@@ -2462,9 +2427,6 @@ SELECT CG_3DAlphaWrapping('MULTIPOINT((63 84),(76 88),(68 73),(53 18),(91 50),(8
 ```
 
 
-![image](images/cg_3dalphawrapping01.png)
-
-
 Alpha wrapping of a MultiPoint (same example As [CG_OptimalAlphaShape](#CG_OptimalAlphaShape))
 
 
@@ -2479,9 +2441,6 @@ SELECT CG_3DAlphaWrapping('MULTIPOINT((132 64),(114 64),(99 64),(81 64),(63 64),
            (108 147),(119 153),(110 171),(103 164),(92 171),(86 160),(88 142),(79 140),(72 124),(83 131),(79 118),(68 113),
            (63 102),(68 93),(35 45))'::geometry,14);
 ```
-
-
-![image](images/cg_3dalphawrapping02.png)
 
 
 Alpha wrapping of a MultiPoint (same example as [ST_ConcaveHull](../postgis-reference/geometry-processing.md#ST_ConcaveHull))
