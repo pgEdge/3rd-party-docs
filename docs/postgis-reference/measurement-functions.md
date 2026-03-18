@@ -177,18 +177,10 @@ SELECT degrees(ST_Azimuth( ST_Point(25, 45),  ST_Point(75, 100))) AS degA_B,
 <table>
 <tbody>
 <tr>
-<td markdown="block">
-![image](images/st_azimuth01.svg)
-
-
-Blue: origin Point(25,45); Green: target Point(75, 100); Yellow: Y axis or North; Red: azimuth angle.
-</td>
-<td markdown="block">
-![image](images/st_azimuth02.svg)
-
-
-Blue: origin Point(75, 100); Green: target Point(25, 45); Yellow: Y axis or North; Red: azimuth angle.
-</td>
+<td><p><img src="../images/st_azimuth01.svg" alt="image"></p>
+<p>Blue: origin Point(25,45); Green: target Point(75, 100); Yellow: Y axis or North; Red: azimuth angle.</p></td>
+<td><p><img src="../images/st_azimuth02.svg" alt="image"></p>
+<p>Blue: origin Point(75, 100); Green: target Point(25, 45); Yellow: Y axis or North; Red: azimuth angle.</p></td>
 </tr>
 </tbody>
 </table>
@@ -393,11 +385,8 @@ Changed: 2.2.0 - if 2 2D geometries are input, a 2D point is returned (instead o
 <table>
 <tbody>
 <tr>
-<td markdown="block">
-linestring and point -- both 3d and 2d closest point
-
-```sql
-
+<td><p>linestring and point -- both 3d and 2d closest point</p>
+<pre><code class="language-sql">
 SELECT ST_AsEWKT(ST_3DClosestPoint(line,pt)) AS cp3d_line_pt,
 		ST_AsEWKT(ST_ClosestPoint(line,pt)) As cp2d_line_pt
 	FROM (SELECT 'POINT(100 100 30)'::geometry As pt,
@@ -408,16 +397,11 @@ SELECT ST_AsEWKT(ST_3DClosestPoint(line,pt)) AS cp3d_line_pt,
  cp3d_line_pt						|               cp2d_line_pt
 -----------------------------------------------------------+------------------------------------------
  POINT(54.6993798867619 128.935022917228 11.5475869506606) | POINT(73.0769230769231 115.384615384615)
-
-```
-</td>
+					</code></pre></td>
 </tr>
 <tr>
-<td markdown="block">
-linestring and multipoint -- both 3d and 2d closest point
-
-```sql
-SELECT ST_AsEWKT(ST_3DClosestPoint(line,pt)) AS cp3d_line_pt,
+<td><p>linestring and multipoint -- both 3d and 2d closest point</p>
+<pre><code class="language-sql">SELECT ST_AsEWKT(ST_3DClosestPoint(line,pt)) AS cp3d_line_pt,
 		ST_AsEWKT(ST_ClosestPoint(line,pt)) As cp2d_line_pt
 	FROM (SELECT 'MULTIPOINT(100 100 30, 50 74 1000)'::geometry As pt,
 			'LINESTRING (20 80 20, 98 190 1, 110 180 3, 50 75 900)'::geometry As line
@@ -427,16 +411,11 @@ SELECT ST_AsEWKT(ST_3DClosestPoint(line,pt)) AS cp3d_line_pt,
                        cp3d_line_pt                        | cp2d_line_pt
 -----------------------------------------------------------+--------------
  POINT(54.6993798867619 128.935022917228 11.5475869506606) | POINT(50 75)
-
-```
-</td>
+					</code></pre></td>
 </tr>
 <tr>
-<td markdown="block">
-Multilinestring and polygon both 3d and 2d closest point
-
-```sql
-SELECT ST_AsEWKT(ST_3DClosestPoint(poly, mline)) As cp3d,
+<td><p>Multilinestring and polygon both 3d and 2d closest point</p>
+<pre><code class="language-sql">SELECT ST_AsEWKT(ST_3DClosestPoint(poly, mline)) As cp3d,
     ST_AsEWKT(ST_ClosestPoint(poly, mline)) As cp2d
         FROM (SELECT  ST_GeomFromEWKT('POLYGON((175 150 5, 20 40 5, 35 45 5, 50 60 5, 100 100 5, 175 150 5))') As poly,
                 ST_GeomFromEWKT('MULTILINESTRING((175 155 2, 20 40 20, 50 60 -2, 125 100 1, 175 155 1),
@@ -444,9 +423,7 @@ SELECT ST_AsEWKT(ST_3DClosestPoint(poly, mline)) As cp3d,
                    cp3d                    |     cp2d
 -------------------------------------------+--------------
  POINT(39.993580415989 54.1889925532825 5) | POINT(20 40)
-
-```
-</td>
+             </code></pre></td>
 </tr>
 </tbody>
 </table>
@@ -1309,11 +1286,8 @@ Changed: 2.2.0 - if 2 2D geometries are input, a 2D point is returned (instead o
 <table>
 <tbody>
 <tr>
-<td markdown="block">
-linestring and point -- both 3d and 2d longest line
-
-```sql
-
+<td><p>linestring and point -- both 3d and 2d longest line</p>
+<pre><code class="language-sql">
 SELECT ST_AsEWKT(ST_3DLongestLine(line,pt)) AS lol3d_line_pt,
 		ST_AsEWKT(ST_LongestLine(line,pt)) As lol2d_line_pt
 	FROM (SELECT 'POINT(100 100 30)'::geometry As pt,
@@ -1324,16 +1298,11 @@ SELECT ST_AsEWKT(ST_3DLongestLine(line,pt)) AS lol3d_line_pt,
            lol3d_line_pt           |       lol2d_line_pt
 -----------------------------------+----------------------------
  LINESTRING(50 75 1000,100 100 30) | LINESTRING(98 190,100 100)
-
-```
-</td>
+					</code></pre></td>
 </tr>
 <tr>
-<td markdown="block">
-linestring and multipoint -- both 3d and 2d longest line
-
-```sql
-SELECT ST_AsEWKT(ST_3DLongestLine(line,pt)) AS lol3d_line_pt,
+<td><p>linestring and multipoint -- both 3d and 2d longest line</p>
+<pre><code class="language-sql">SELECT ST_AsEWKT(ST_3DLongestLine(line,pt)) AS lol3d_line_pt,
 		ST_AsEWKT(ST_LongestLine(line,pt)) As lol2d_line_pt
 	FROM (SELECT 'MULTIPOINT(100 100 30, 50 74 1000)'::geometry As pt,
 			'LINESTRING (20 80 20, 98 190 1, 110 180 3, 50 75 900)'::geometry As line
@@ -1343,16 +1312,11 @@ SELECT ST_AsEWKT(ST_3DLongestLine(line,pt)) AS lol3d_line_pt,
           lol3d_line_pt          |      lol2d_line_pt
 ---------------------------------+--------------------------
  LINESTRING(98 190 1,50 74 1000) | LINESTRING(98 190,50 74)
-
-```
-</td>
+					</code></pre></td>
 </tr>
 <tr>
-<td markdown="block">
-MultiLineString and Polygon both 3d and 2d longest line
-
-```sql
-SELECT ST_AsEWKT(ST_3DLongestLine(poly, mline)) As lol3d,
+<td><p>MultiLineString and Polygon both 3d and 2d longest line</p>
+<pre><code class="language-sql">SELECT ST_AsEWKT(ST_3DLongestLine(poly, mline)) As lol3d,
     ST_AsEWKT(ST_LongestLine(poly, mline)) As lol2d
         FROM (SELECT  ST_GeomFromEWKT('POLYGON((175 150 5, 20 40 5, 35 45 5, 50 60 5, 100 100 5, 175 150 5))') As poly,
                 ST_GeomFromEWKT('MULTILINESTRING((175 155 2, 20 40 20, 50 60 -2, 125 100 1, 175 155 1),
@@ -1360,9 +1324,7 @@ SELECT ST_AsEWKT(ST_3DLongestLine(poly, mline)) As lol3d,
             lol3d             |          lol2d
 ------------------------------+--------------------------
  LINESTRING(175 150 5,1 10 2) | LINESTRING(175 150,1 10)
-
-```
-</td>
+             </code></pre></td>
 </tr>
 </tbody>
 </table>
@@ -1874,11 +1836,8 @@ Changed: 2.2.0 - if 2 2D geometries are input, a 2D point is returned (instead o
 <table>
 <tbody>
 <tr>
-<td markdown="block">
-linestring and point -- both 3d and 2d shortest line
-
-```sql
-
+<td><p>linestring and point -- both 3d and 2d shortest line</p>
+<pre><code class="language-sql">
 SELECT ST_AsEWKT(ST_3DShortestLine(line,pt)) AS shl3d_line_pt,
 		ST_AsEWKT(ST_ShortestLine(line,pt)) As shl2d_line_pt
 	FROM (SELECT 'POINT(100 100 30)'::geometry As pt,
@@ -1889,16 +1848,11 @@ SELECT ST_AsEWKT(ST_3DShortestLine(line,pt)) AS shl3d_line_pt,
  shl3d_line_pt						                 |               shl2d_line_pt
 ----------------------------------------------------------------------------+------------------------------------------------------
  LINESTRING(54.6993798867619 128.935022917228 11.5475869506606,100 100 30)  | LINESTRING(73.0769230769231 115.384615384615,100 100)
-
-```
-</td>
+					</code></pre></td>
 </tr>
 <tr>
-<td markdown="block">
-linestring and multipoint -- both 3d and 2d shortest line
-
-```sql
-SELECT ST_AsEWKT(ST_3DShortestLine(line,pt)) AS shl3d_line_pt,
+<td><p>linestring and multipoint -- both 3d and 2d shortest line</p>
+<pre><code class="language-sql">SELECT ST_AsEWKT(ST_3DShortestLine(line,pt)) AS shl3d_line_pt,
 		ST_AsEWKT(ST_ShortestLine(line,pt)) As shl2d_line_pt
 	FROM (SELECT 'MULTIPOINT(100 100 30, 50 74 1000)'::geometry As pt,
 			'LINESTRING (20 80 20, 98 190 1, 110 180 3, 50 75 900)'::geometry As line
@@ -1908,16 +1862,11 @@ SELECT ST_AsEWKT(ST_3DShortestLine(line,pt)) AS shl3d_line_pt,
                        shl3d_line_pt                                       | shl2d_line_pt
 ---------------------------------------------------------------------------+------------------------
  LINESTRING(54.6993798867619 128.935022917228 11.5475869506606,100 100 30) | LINESTRING(50 75,50 74)
-
-```
-</td>
+					</code></pre></td>
 </tr>
 <tr>
-<td markdown="block">
-MultiLineString and polygon both 3d and 2d shortest line
-
-```sql
-SELECT ST_AsEWKT(ST_3DShortestLine(poly, mline)) As shl3d,
+<td><p>MultiLineString and polygon both 3d and 2d shortest line</p>
+<pre><code class="language-sql">SELECT ST_AsEWKT(ST_3DShortestLine(poly, mline)) As shl3d,
     ST_AsEWKT(ST_ShortestLine(poly, mline)) As shl2d
         FROM (SELECT  ST_GeomFromEWKT('POLYGON((175 150 5, 20 40 5, 35 45 5, 50 60 5, 100 100 5, 175 150 5))') As poly,
                 ST_GeomFromEWKT('MULTILINESTRING((175 155 2, 20 40 20, 50 60 -2, 125 100 1, 175 155 1),
@@ -1925,9 +1874,7 @@ SELECT ST_AsEWKT(ST_3DShortestLine(poly, mline)) As shl3d,
                    shl3d                                                                           |     shl2d
 ---------------------------------------------------------------------------------------------------+------------------------
  LINESTRING(39.993580415989 54.1889925532825 5,40.4078575708294 53.6052383805529 5.03423778139177) | LINESTRING(20 40,20 40)
-
-```
-</td>
+             </code></pre></td>
 </tr>
 </tbody>
 </table>
