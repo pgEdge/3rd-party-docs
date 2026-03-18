@@ -16,6 +16,7 @@ import (
 	"strings"
 
 	"github.com/pgEdge/postgresql-docs/builder/sgml"
+	"github.com/pgEdge/postgresql-docs/builder/wkt"
 )
 
 // handleBook converts the root <book> element.
@@ -381,7 +382,13 @@ func handleImagedata(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 		// Only emit the image reference if the source file exists
 		data, err := os.ReadFile(srcPath)
 		if err != nil {
-			// Source image missing (e.g., build-generated) — skip
+			// Source image missing — try generating SVG from WKT
+			svgRef, ok := tryGenerateSVG(ctx, fileref)
+			if !ok {
+				return nil
+			}
+			w.BlankLine()
+			w.WriteString(fmt.Sprintf("![image](%s)\n", svgRef))
 			return nil
 		}
 
@@ -405,6 +412,58 @@ func handleImagedata(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
 	}
 
 	return nil
+}
+
+// tryGenerateSVG looks for a WKT source file corresponding to a
+// missing image and generates an SVG. Returns the new fileref and
+// true on success.
+func tryGenerateSVG(ctx *Context, fileref string) (string, bool) {
+	// Extract base name: images/st_buffer01.png → st_buffer01
+	base := strings.TrimSuffix(filepath.Base(fileref), filepath.Ext(fileref))
+	imgDir := filepath.Dir(fileref) // e.g., "images"
+
+	// Search for WKT file in several locations
+	wktCandidates := []string{
+		filepath.Join(ctx.SrcDir, imgDir, "wkt", base+".wkt"),
+		filepath.Join(ctx.SrcDir, "html", imgDir, "wkt", base+".wkt"),
+	}
+
+	var wktPath string
+	for _, c := range wktCandidates {
+		if _, err := os.Stat(c); err == nil {
+			wktPath = c
+			break
+		}
+	}
+	if wktPath == "" {
+		return "", false
+	}
+
+	// Determine output dimensions (resized images use 100x100)
+	width, height := 200, 200
+
+	// Generate SVG
+	svg, err := wkt.RenderFile(wktPath, width, height)
+	if err != nil {
+		ctx.Warn("could not generate SVG from %s: %v", wktPath, err)
+		return "", false
+	}
+
+	// Write SVG to output directory
+	svgRef := strings.TrimSuffix(fileref, filepath.Ext(fileref)) + ".svg"
+	outDir := filepath.Dir(filepath.Join(ctx.OutDir, ctx.CurrentFile))
+	dstPath := filepath.Join(outDir, svgRef)
+
+	if err := os.MkdirAll(filepath.Dir(dstPath), 0755); err != nil {
+		ctx.Warn("could not create image dir: %v", err)
+		return "", false
+	}
+	if err := os.WriteFile(dstPath, []byte(svg), 0644); err != nil {
+		ctx.Warn("could not write SVG %s: %v", dstPath, err)
+		return "", false
+	}
+
+	return svgRef, true
 }
 
 // handleFootnote converts <footnote> to a parenthetical.
