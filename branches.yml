@@ -229,3 +229,26 @@ branches:
     upstream: https://github.com/pgaudit/pgaudit.git
     ref: master
     src_subdir: .
+
+  # --- pgBackRest (custom XML mode) ---
+
+  - branch: pgbackrest257
+    mode: backrest
+    version: "v2.57.0"
+    upstream: https://github.com/pgbackrest/pgbackrest.git
+    ref: release/2.57.0
+    src_subdir: doc
+
+  - branch: pgbackrest258
+    mode: backrest
+    version: "v2.58.0"
+    upstream: https://github.com/pgbackrest/pgbackrest.git
+    ref: release/2.58.0
+    src_subdir: doc
+
+  - branch: pgbackrestmaster
+    mode: backrest
+    version: dev
+    upstream: https://github.com/pgbackrest/pgbackrest.git
+    ref: main
+    src_subdir: doc

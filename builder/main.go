@@ -18,6 +18,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/pgEdge/postgresql-docs/builder/backrest"
 	"github.com/pgEdge/postgresql-docs/builder/convert"
 	"github.com/pgEdge/postgresql-docs/builder/md"
 	"github.com/pgEdge/postgresql-docs/builder/nav"
@@ -27,7 +28,7 @@ import (
 )
 
 func main() {
-	mode := flag.String("mode", "sgml", "Conversion mode: sgml, xml, rst, or md")
+	mode := flag.String("mode", "sgml", "Conversion mode: sgml, xml, rst, md, or backrest")
 	srcDir := flag.String("src", "", "Path to source documentation directory")
 	outDir := flag.String("out", "./docs", "Output directory for .md files")
 	mkdocsFile := flag.String("mkdocs", "./mkdocs.yml", "Path to mkdocs.yml")
@@ -79,8 +80,11 @@ func main() {
 	case "md":
 		runMD(*srcDir, *outDir, *mkdocsFile, *version,
 			*doValidate, *verbose)
+	case "backrest":
+		runBackRest(*srcDir, *outDir, *mkdocsFile, *version,
+			*doValidate, *verbose)
 	default:
-		fmt.Fprintf(os.Stderr, "error: unknown mode %q (use sgml, xml, rst, or md)\n", *mode)
+		fmt.Fprintf(os.Stderr, "error: unknown mode %q (use sgml, xml, rst, md, or backrest)\n", *mode)
 		os.Exit(1)
 	}
 }
@@ -465,6 +469,68 @@ func runMD(
 	if mkdocsFile != "" {
 		if _, err := os.Stat(mkdocsFile); err == nil {
 			siteName := version
+			if err := nav.UpdateMkdocsYML(
+				mkdocsFile, navYAML, siteName); err != nil {
+				fmt.Fprintf(os.Stderr,
+					"error updating mkdocs.yml: %v\n", err)
+				os.Exit(1)
+			}
+			if verbose {
+				fmt.Printf("  Updated %s\n", mkdocsFile)
+			}
+		} else if verbose {
+			fmt.Printf("  %s not found, skipping nav update\n",
+				mkdocsFile)
+		}
+	}
+
+	// Validation
+	runValidation(doValidate, verbose, outDir, nil,
+		convWarnings, len(files))
+}
+
+// runBackRest runs the pgBackRest custom XML conversion pipeline.
+func runBackRest(
+	srcDir, outDir, mkdocsFile, version string,
+	doValidate, verbose bool,
+) {
+	if verbose {
+		fmt.Println("Converting pgBackRest documentation...")
+	}
+
+	converter := backrest.NewConverter(srcDir, outDir, version, verbose)
+
+	if err := converter.Convert(); err != nil {
+		fmt.Fprintf(os.Stderr, "error converting pgBackRest: %v\n", err)
+		os.Exit(1)
+	}
+
+	convWarnings := converter.Warnings()
+	if verbose && len(convWarnings) > 0 {
+		fmt.Printf("  Conversion warnings: %d\n", len(convWarnings))
+		for _, w := range convWarnings {
+			fmt.Printf("    %s\n", w)
+		}
+	}
+
+	files := converter.Files()
+	if verbose {
+		fmt.Printf("  Generated %d files\n", len(files))
+	}
+
+	// Nav generation
+	if verbose {
+		fmt.Println("Generating nav...")
+	}
+	navRoot := nav.BuildNav(files)
+	navYAML := nav.GenerateYAML(navRoot)
+
+	if mkdocsFile != "" {
+		if _, err := os.Stat(mkdocsFile); err == nil {
+			siteName := "pgBackRest"
+			if version != "" {
+				siteName += " " + version
+			}
 			if err := nav.UpdateMkdocsYML(
 				mkdocsFile, navYAML, siteName); err != nil {
 				fmt.Fprintf(os.Stderr,

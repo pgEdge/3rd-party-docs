@@ -189,7 +189,7 @@ pgdoc-converter [flags]
 - [x] PostgreSQL (SGML converter)
 - [x] pgAdmin 4 (RST converter)
 - [x] PgBouncer (1.24–1.25)
-- [ ] pgBackRest (2.56–2.57)
+- [x] pgBackRest (2.57–2.58)
 - [ ] PostGIS (3.5.3–3.5.5)
 - [x] pgvector (0.8.0–0.8.1)
 - [x] pgAudit (16.1–18.0)
