@@ -23,6 +23,6 @@ To set up 2FA for pgAdmin 4, you must configure the Two-factor Authentication se
 
 To configure 2FA for a user, you must click on 'Two-factor Authentication' in the `User` menu in right-top corner. It will list down all the supported multi factor authentication methods. Click on 'Setup' of one of those methods and follow the steps for each authentication method. You will see the `Delete` button for the authentication method, which is already been configured. Clicking on `Delete` button will deregister the authentication method for the current user.
 
-![Configure two-factor authentication](images/mfa_registration.png)
+![Configure two-factor authentication](../images/mfa_registration.png)
 
 You can also force users to configure the two-factor authentication methods on login by setting *MFA_FORCE_REGISTRATION* parameter to *True*.

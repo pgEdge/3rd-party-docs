@@ -17,7 +17,7 @@ A master password is required to secure and later unlock the saved server passwo
 - The server passwords which are saved in the SQLite DB file or External
     Database are encrypted and decrypted using the master password.
 
-![Set master password](images/master_password_set.png)
+![Set master password](../images/master_password_set.png)
 
 !!! note
 
@@ -40,12 +40,12 @@ A master password is required to secure and later unlock the saved server passwo
 - You are prompted to enter the master password when pgAdmin server is
     restarted.
 
-![Enter master password](images/master_password_enter.png)
+![Enter master password](../images/master_password_enter.png)
 
 - If you forget the master password, you can use the *Reset Master Password*
     button to reset the password.
 
-![Reset master password](images/master_password_reset.png)
+![Reset master password](../images/master_password_reset.png)
 
 !!! warning
 

@@ -28,11 +28,11 @@ See [The config.py File](config_py.md#config_py) for more information on configu
 
 The Desktop Runtime is based on [Electron](https://www.electronjs.org/) which integrates a browser and the Python server creating a standalone application.
 
-![Runtime Standalone](images/runtime_standalone.png)
+![Runtime Standalone](../../images/runtime_standalone.png)
 
 ### Runtime Menu Items
 
-![Runtime Menu](images/runtime_menu.png)
+![Runtime Menu](../../images/runtime_menu.png)
 
 Use the *File Menu* to access the runtime menu items:
 
@@ -45,7 +45,7 @@ Use the *File Menu* to access the runtime menu items:
 
 Use the *Configure runtime...* option to access the *Configuration* dialog:
 
-![Runtime Configuration](images/runtime_configuration.png)
+![Runtime Configuration](../../images/runtime_configuration.png)
 
 Following are the details of the *Fixed port number?*, *Port Number*, *Connection Timeout*, and 'Open Documentation in Default Browser?' configuration parameters:
 
@@ -60,13 +60,13 @@ Following are the details of the *Fixed port number?*, *Port Number*, *Connectio
 
 Use the *File Menu* to access the *View Logs* dialog:
 
-![Runtime View Log](images/runtime_view_log.png)
+![Runtime View Log](../../images/runtime_view_log.png)
 
 Click on the *Reload* button at the bottom to view the latest logs of pgAdmin 4 Server.
 
 When executed, the runtime will automatically try to execute the pgAdmin Python application. If execution fails, it will prompt you with error message displaying a *Configure* button at the bottom. You can configure a fixed port number to avoid clashes of the default random port number with other applications and a connection timeout if desired.
 
-![Runtime Error](images/runtime_error.png)
+![Runtime Error](../../images/runtime_error.png)
 
 If the error is related to Python Path or pgAdmin Python file then you need to create a file named 'dev_config.json' and specify the following entries:
 

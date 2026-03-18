@@ -10,10 +10,10 @@ The EDB Job Scheduler has a scheduler process that starts when the database clus
 
 Instructions for configuring the EDB Job Scheduler can be found in the [Configuring EDB Job Scheduler](https://www.enterprisedb.com/docs/pg_extensions/edb_job_scheduler/configuring/).
 
-![DBMS Job Scheduler Object Browser](images/dbms_job_scheduler.png)
+![DBMS Job Scheduler Object Browser](../images/dbms_job_scheduler.png)
 
 # Check the status of all the jobs
 
 To check the running status of all the jobs select the 'DBMS Job Scheduler' collection node from the object explorer and select the Properties tab.
 
-![DBMS Job Details](images/dbms_job_details.png)
+![DBMS Job Details](../images/dbms_job_details.png)

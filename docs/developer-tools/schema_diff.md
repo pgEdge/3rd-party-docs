@@ -24,7 +24,7 @@ Click on *Schema Diff* under the *Tools* menu to open a selection panel. To comp
 
 You can open multiple copies of *Schema Diff* in individual tabs simultaneously. To close a copy of Schema Diff, click the *X* in the upper-right hand corner of the tab bar. You can rename the panel title by right-clicking and select the "Rename Panel" option.
 
-![schema diff dialog](images/schema_diff_dialog.png)
+![schema diff dialog](../images/schema_diff_dialog.png)
 
 Use the [Preferences](../getting-started/preferences.md#preferences) dialog to specify following:
 
@@ -40,7 +40,7 @@ The workspace layout offers a distraction-free, dedicated area for the Schema Di
 
 **Note**: In the Workspace layout, all Schema Diff tabs open within the Schema Diff workspace.
 
-![schema diff workspace](images/schema_diff_workspace.png)
+![schema diff workspace](../images/schema_diff_workspace.png)
 
 The *Schema Diff* panel is divided into two panels; an Object Comparison panel and a DDL Comparison panel.
 
@@ -50,7 +50,7 @@ In the object comparison panel, you can select the source and target servers of 
 
 Next, select the databases that will be compared. The databases can be the same or different (and within the same server or from different servers).
 
-![Schema diff compare button](images/schema_diff_compare_button.png)
+![Schema diff compare button](../images/schema_diff_compare_button.png)
 
 Use the drop-down near to *Compare* button to ignore owner, whitespace, tablespace and grants.
 
@@ -64,7 +64,7 @@ Use the drop-down near to *Compare* button to ignore owner, whitespace, tablespa
 
 After you select servers, and databases, click on the *Compare* button to obtain the *Comparison Result*.
 
-![Schema diff comparison results](images/schema_diff_comparison_results.png)
+![Schema diff comparison results](../images/schema_diff_comparison_results.png)
 
 Use the drop-down lists of Database Objects to view the DDL statements.
 
@@ -78,7 +78,7 @@ In the upper-right hand corner of the object comparison panel is a *Filter* opti
 
 - Target Only – If the object is found in target database only and not in source database, then the comparison result is target only.
 
-![Schema diff filter option](images/schema_diff_filter_option.png)
+![Schema diff filter option](../images/schema_diff_filter_option.png)
 
 Click on any of the database objects in the object comparison panel to display the DDL Statements of that object in the DDL Comparison panel.
 
@@ -94,7 +94,7 @@ The *DDL Comparison* panel displays three columns:
 
 - The third column displays the difference in the SQL statement of the target database object.
 
-![Schema diff DDL comparison](images/schema_diff_DDL_comparison.png)
+![Schema diff DDL comparison](../images/schema_diff_DDL_comparison.png)
 
 You can review the DDL statements of all the database objects to check for the differences in the SQL statements.
 
@@ -106,6 +106,6 @@ If you have clicked on the database object to check the difference generated in 
 
 You can also use the *Copy* button to copy the difference generated in the *DDL Comparison* panel.
 
-![Schema diff generate script query editor](images/schema_diff_generate_script_query_editor.png)
+![Schema diff generate script query editor](../images/schema_diff_generate_script_query_editor.png)
 
 Apply the SQL Statement in the target database to synchronize the databases.

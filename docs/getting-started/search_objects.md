@@ -2,7 +2,7 @@
 
 # Search objects
 
-![Search objects dialog](images/search_objects.png)
+![Search objects dialog](../images/search_objects.png)
 
 With this dialog, you can search for almost any kind of objects in a database.
 

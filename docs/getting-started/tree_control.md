@@ -4,7 +4,7 @@
 
 The left pane of the main window displays a tree control (Object explorer) that provides access to the objects that reside on a server.
 
-![object explorer panel](images/main_left_pane.png)
+![object explorer panel](../images/main_left_pane.png)
 
 You can expand nodes in the tree control to view the database objects that reside on a selected server. The tree control expands to display a hierarchical view:
 

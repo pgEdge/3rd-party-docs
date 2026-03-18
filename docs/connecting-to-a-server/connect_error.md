@@ -6,13 +6,13 @@ When connecting to a PostgreSQL server, you may get an error message. If you enc
 
 **Connection to the server has been lost**
 
-![Connection to the server has been lost](images/ce_timeout.png)
+![Connection to the server has been lost](../images/ce_timeout.png)
 
 This error message indicates that the connection attempt has taken longer than the specified threshold; there may be a problem with the connection properties provided on the *Server* dialog, network connectivity issues, or the server may not be running.
 
 **could not connect to Server: Connection refused**
 
-![Could not connect to server](images/ce_not_running.png)
+![Could not connect to server](../images/ce_not_running.png)
 
 If pgAdmin displays this message, there are two possible reasons for this:
 
@@ -26,7 +26,7 @@ For further information, please refer to the PostgreSQL documentation about [run
 
 **FATAL: no pg_hba.conf entry**
 
-![No pg_hba.conf entry](images/ce_error_hba.png)
+![No pg_hba.conf entry](../images/ce_error_hba.png)
 
 If pgAdmin displays this message when connecting, your server can be contacted correctly over the network, but is not configured to accept your connection. Your client has not been detected as a legal user for the database.
 
@@ -40,6 +40,6 @@ For more information, please refer to the PostgreSQL documentation about [client
 
 **FATAL: password authentication failed**
 
-![Password authentication failed](images/ce_password_failed.png)
+![Password authentication failed](../images/ce_password_failed.png)
 
 The *password authentication failed for user* error message indicates there may be a problem with the password you entered. Retry the password to confirm you entered it correctly. If the error message returns, make sure that you have the correct password, that you are authorized to access the server, and that the access has been correctly configured in the server's postgresql.conf configuration file.

@@ -28,7 +28,7 @@ Features of pgAdmin 4 include:
 
 When pgAdmin opens, the interface features a menu bar and a window divided into two panes: the *Object Explorer* tree control in the left pane, and a tabbed browser in the right pane.
 
-![pgAdmin4 welcome page](images/welcome.png)
+![pgAdmin4 welcome page](../images/welcome.png)
 
 Select an icon from the *Quick Links* panel on the *Dashboard* tab to:
 
