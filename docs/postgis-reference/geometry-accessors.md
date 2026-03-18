@@ -124,7 +124,7 @@ Changed: 3.2.0 support for TIN, does not use geos, does not linearize curves
 ## Examples
 
 
-| ![image](images/st_boundary01.png)   Linestring with boundary points overlaid    ```sql SELECT ST_Boundary(geom) FROM (SELECT 'LINESTRING(100 150,50 60, 70 80, 160 170)'::geometry As geom) As f; 				 ```  ```   ST_AsText output  MULTIPOINT((100 150),(160 170)) ``` | ![image](images/st_boundary02.png)   polygon holes with boundary multilinestring    ```sql SELECT ST_Boundary(geom) FROM (SELECT 'POLYGON (( 10 130, 50 190, 110 190, 140 150, 150 80, 100 10, 20 40, 10 130 ), 	( 70 40, 100 50, 120 80, 80 110, 50 90, 70 40 ))'::geometry As geom) As f; 				 ```  ```   ST_AsText output  MULTILINESTRING((10 130,50 190,110 190,140 150,150 80,100 10,20 40,10 130), 	(70 40,100 50,120 80,80 110,50 90,70 40)) ``` |
+| Linestring with boundary points overlaid    ```sql SELECT ST_Boundary(geom) FROM (SELECT 'LINESTRING(100 150,50 60, 70 80, 160 170)'::geometry As geom) As f; 				 ```  ```   ST_AsText output  MULTIPOINT((100 150),(160 170)) ``` | polygon holes with boundary multilinestring    ```sql SELECT ST_Boundary(geom) FROM (SELECT 'POLYGON (( 10 130, 50 190, 110 190, 140 150, 150 80, 100 10, 20 40, 10 130 ), 	( 70 40, 100 50, 120 80, 80 110, 50 90, 70 40 ))'::geometry As geom) As f; 				 ```  ```   ST_AsText output  MULTILINESTRING((10 130,50 190,110 190,140 150,150 80,100 10,20 40,10 130), 	(70 40,100 50,120 80,80 110,50 90,70 40)) ``` |
 
 
 ```sql
@@ -475,9 +475,6 @@ FROM (SELECT 1 As edge_id
 
 
 ## Standard Geometry Examples
-
-
-![image](images/st_dumppoints01.png)
 
 
 ```sql
@@ -980,9 +977,6 @@ SELECT Box3D(geom), Box2D(geom), ST_AsText(ST_Envelope(geom)) As envelopewkt
 
 
 ```
-
-
-![image](images/st_envelope01.png)
 
 
 Envelope of a point and linestring.
