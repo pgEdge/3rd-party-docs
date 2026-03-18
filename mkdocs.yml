@@ -1,4 +1,4 @@
-site_name: pgAdmin 4 v9.12
+site_name: v9.12
 
 extra_css:
   - stylesheets/extra.css
@@ -51,7 +51,7 @@ extra:
 repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
-  - Home: index.md
+  - pgAdmin 4: index.md
   - Getting Started:
     - getting_started.md
     - Deployment:

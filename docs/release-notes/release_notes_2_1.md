@@ -66,7 +66,7 @@ This release contains a number of features and fixes reported since the release 
 [Issue #2886](https://redmine.postgresql.org/issues/2886) - Resolve issue where Insert failed when tried with default primary key value<br>
 [Issue #2891](https://redmine.postgresql.org/issues/2891) - Allow changing of the users password without leaving the app<br>
 [Issue #2892](https://redmine.postgresql.org/issues/2892) - Refuse password changes (and tell the user) if the notification email cannot be sent<br>
-[Issue #2908](https://redmine.postgresql.org/issues/2908) - Fix bundle creation on Windows which was failing due to \r\n line endings in code mirror<br>
+[Issue #2908](https://redmine.postgresql.org/issues/2908) - Fix bundle creation on Windows which was failing due to rn line endings in code mirror<br>
 [Issue #2918](https://redmine.postgresql.org/issues/2918) - Add missing init.py to backports.csv when building the MSVC windows build<br>
 [Issue #2920](https://redmine.postgresql.org/issues/2920) - Push HTTPD logs to container stdout/stderr as appropriate<br>
 [Issue #2921](https://redmine.postgresql.org/issues/2921) - Fixes in pgAgent module including; 1) allowing start date earlier than end date when scheduling job, 2) Datetime picker not displaying in grid and 3) validation error not displaying propertly for Datetime control<br>

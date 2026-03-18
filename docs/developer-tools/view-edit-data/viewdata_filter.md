@@ -6,4 +6,4 @@ You can access *Data Filter dialog* by clicking on *Filtered Rows* toolbar butto
 
 This allows you to specify an SQL Filter to limit the data displayed in the edit grid window:
 
-![View Data filter dialog window](../../images/viewdata_filter_dialog.png)
+![View Data filter dialog window](images/viewdata_filter_dialog.png)

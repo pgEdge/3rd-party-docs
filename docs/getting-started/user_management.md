@@ -20,13 +20,13 @@ An administrative user can use the *Users* tab to:
 
 - unlock a locked user
 
-![pgAdmin user management window](../images/users.png)
+![pgAdmin user management window](images/users.png)
 
 Use the *Search* field to specify a criteria and review a list of users that matches with the specified criteria. You can enter a value that matches the following criteria types: *Authentication source*, *Username*, or *Email*. For example, you can enter *ldap* in the search box and only the records having *ldap* as authentication source will be displayed in the *User Management* table.
 
 To add a user, click the Add (+) button at the top left corner. It will open a dialog where you can fill in details for the new user.
 
-![pgAdmin user management window add new user](../images/add_user.png)
+![pgAdmin user management window add new user](images/add_user.png)
 
 Provide information about the new pgAdmin role in the row:
 
@@ -78,13 +78,13 @@ An administrative user can use the *Roles* tab to:
 
 - delete roles
 
-![pgAdmin roles management window](../images/roles.png)
+![pgAdmin roles management window](images/roles.png)
 
 Use the *Search* field to specify criteria and review a list of roles that match the specified criteria. You can enter a value that matches the following criteria types: *Role Name* or *Description*.
 
 To add a role, click the Add (+) button at the top left corner. It will open a dialog where you can fill in details for the new role.
 
-![pgAdmin roles management window add new role](../images/add_role.png)
+![pgAdmin roles management window add new role](images/add_role.png)
 
 Provide information about the new pgAdmin role in the row:
 
@@ -104,7 +104,7 @@ Roles allow administrators to group privileges and assign them to users more eff
 
 An administrative user can use the *Permissions* tab to manage pgAdmin permissions for a role.
 
-![pgAdmin permissions management window](../images/permissions.png)
+![pgAdmin permissions management window](images/permissions.png)
 
 - Filter permissions using the *Search* field by entering names that match the list.
 

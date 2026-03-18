@@ -4,7 +4,7 @@
 
 To view or modify data, right click on a table or view name in the *Object Explorer*. When the context menu opens, use the *View/Edit Data* menu to specify the number of rows you would like to display in the editor panel.
 
-![Edit grid window](../images/editgrid.png)
+![Edit grid window](images/editgrid.png)
 
 To modify the content of a table, each row in the table must be uniquely identifiable. If the table definition does not include an OID or a primary key, the displayed data is read only. Note that views cannot be edited; updatable views (using rules) are not supported.
 
@@ -41,7 +41,7 @@ To add a new row to the table, enter data into the last (unnumbered) row of the 
 
 To write a SQL NULL to the table, simply leave the field empty. When you store the new row, the server will fill in the default value for that column. If you store a change to an existing row, the value NULL will explicitly be written.
 
-To write an empty string to the table, enter the special string '' (two single quotes) in the field. If you want to write a string containing solely two single quotes to the table, you need to escape these quotes, by typing \'\'
+To write an empty string to the table, enter the special string '' (two single quotes) in the field. If you want to write a string containing solely two single quotes to the table, you need to escape these quotes, by typing ''
 
 To delete a row, press the *Delete* toolbar button.  A popup will open, asking you to confirm the deletion.
 
@@ -51,11 +51,11 @@ To commit the changes to the server, select the *Save Data* toolbar button.
 
 If PostGIS is installed, you can view GIS objects in a map by selecting row(s) and clicking the 'View Geometry' button in the column. If no rows are selected, the entire data set will be rendered:
 
-![Geometry Viewer Button](../images/geometry_viewer.png)
+![Geometry Viewer Button](images/geometry_viewer.png)
 
 You can adjust the layout by dragging the title of the panel. To view the properties of the geometries directly in map, just click the specific geometry:
 
-![Geometry Viewer Property Table](../images/geometry_viewer_property_table.png)
+![Geometry Viewer Property Table](images/geometry_viewer_property_table.png)
 
 !!! note
 
@@ -77,7 +77,7 @@ You can adjust the layout by dragging the title of the panel. To view the proper
 
 A built-in JSON editor is provided for *JSON/JSONB Data*. Double-clicking on a JSON/JSONB data type cell in the data grid will open the JSON Editor. The editor provides different modes to view and edit JSON data.
 
-![Json Editor](../images/json_editor_modes.png)
+![Json Editor](images/json_editor_modes.png)
 
 *Code Mode*: Provides a way to format and compact JSON data. Also provides the ability to repair JSON data by fixing quotes and escape characters, removing comments and JSONP notation, and turning JavaScript objects into JSON.
 
@@ -93,11 +93,11 @@ Different options are provided to manipulate json data.
 
 Code/Preview mode:
 
-![Json Editor Code/Preview mode Tool Bar](../images/json_editor_code_preview_tool_bar.png)
+![Json Editor Code/Preview mode Tool Bar](images/json_editor_code_preview_tool_bar.png)
 
 Tree/Form mode:
 
-![Json Editor Tree/Form mode Tool Bar](../images/json_editor_tree_form_mode_tool_bar.png)
+![Json Editor Tree/Form mode Tool Bar](images/json_editor_tree_form_mode_tool_bar.png)
 
 | Icon | Behavior | Available in mode |
 |---|---|---|
@@ -116,7 +116,7 @@ Tree/Form mode:
 
 You can access *Sort/Filter options dialog* by clicking on Sort/Filter button. This allows you to specify an SQL Filter to limit the data displayed and data sorting options in the edit grid window:
 
-![Edit grid filter dialog window](../images/editgrid_filter_dialog.png)
+![Edit grid filter dialog window](images/editgrid_filter_dialog.png)
 
 - Use *SQL Filter* to provide SQL filtering criteria. These will be added to
     the "WHERE" clause of the query used to retrieve the data. For example,
@@ -146,7 +146,7 @@ To delete a row from the grid, click the trash icon.
 
 A View/Edit Data tab can be converted to a Query Tool Tab just by editing the query. Once you start editing, it will ask if you really want to move away from View/Edit.
 
-![Promote View/Edit Data tab to Query Tool tab warning](../images/promote_view_edit_data_warning.png)
+![Promote View/Edit Data tab to Query Tool tab warning](images/promote_view_edit_data_warning.png)
 
 You can disable the dialog by selecting the "Don't Ask again" checkbox. If you wish to resume the confirmation dialog, you can do it from "Preferences -> Query Tool -> Editor -> Show View/Edit Data Promotion Warning?"
 

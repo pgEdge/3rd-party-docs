@@ -31,7 +31,7 @@ This release contains a number of bug fixes and new features since the release o
 [Issue #9297](https://github.com/pgadmin-org/pgadmin4/issues/9297) -  Fixed an issue where EXPLAIN should run on query under cursor if no text is selected.<br>
 [Issue #9351](https://github.com/pgadmin-org/pgadmin4/issues/9351) -  Fixed an issue where opening file in Query Tool does not retain file name in tab.<br>
 [Issue #9354](https://github.com/pgadmin-org/pgadmin4/issues/9354) -  Fixed an issue where connection is failing via Query Tool/PSQL Tool workspaces.<br>
-[Issue #9368](https://github.com/pgadmin-org/pgadmin4/issues/9368) -  Plain SQL restore runs with '\restrict' option to prevent harmful psql meta-commands (CVE-2025-13780).<br>
+[Issue #9368](https://github.com/pgadmin-org/pgadmin4/issues/9368) -  Plain SQL restore runs with 'restrict' option to prevent harmful psql meta-commands (CVE-2025-13780).<br>
 [Issue #9372](https://github.com/pgadmin-org/pgadmin4/issues/9372) -  Fixed an issue where copying highlighted text in the query tool data output cell editor would copy the complete string.<br>
 [Issue #9373](https://github.com/pgadmin-org/pgadmin4/issues/9373) -  Fixed an issue where copying a single cell should not add quoting.<br>
 [Issue #9393](https://github.com/pgadmin-org/pgadmin4/issues/9393) -  Fix the Helm chart server definition and change the app version.<br>

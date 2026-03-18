@@ -8,7 +8,7 @@ The *Query Tool* toolbar uses context-sensitive icons that provide shortcuts to 
 
     The [Query Tool](../query_tool.md#query_tool) and [View/Edit Data](../editgrid.md#editgrid) tools are actually different operating modes of the same tool. Some controls will be disabled in either mode.
 
-![Query tool toolbar](../../images/query_toolbar.png)
+![Query tool toolbar](images/query_toolbar.png)
 
 Hover over an icon in pgAdmin to display a tooltip that describes the icon's functionality.
 
@@ -62,7 +62,7 @@ Hover over an icon in pgAdmin to display a tooltip that describes the icon's fun
 
 # Query Editing Options
 
-![Query tool editing options](../../images/query_editing.png)
+![Query tool editing options](images/query_editing.png)
 
 | Icon | Behavior | Shortcut |
 |---|---|---|
@@ -78,7 +78,7 @@ Hover over an icon in pgAdmin to display a tooltip that describes the icon's fun
 
 # Query Execution
 
-![Query tool execute options](../../images/query_execution.png)
+![Query tool execute options](images/query_execution.png)
 
 <table>
 <thead>
@@ -134,7 +134,7 @@ Hover over an icon in pgAdmin to display a tooltip that describes the icon's fun
 
 # Data Editing Options
 
-![Query tool data editing options](../../images/query_data_editing.png)
+![Query tool data editing options](images/query_data_editing.png)
 
 <table>
 <thead>
@@ -190,7 +190,7 @@ Hover over an icon in pgAdmin to display a tooltip that describes the icon's fun
 
 # Pagination Options
 
-![Query tool data pagination options](../../images/query_data_pagination.png)
+![Query tool data pagination options](images/query_data_pagination.png)
 
 | Icon | Behavior | Shortcut |
 |---|---|---|
@@ -203,7 +203,7 @@ Hover over an icon in pgAdmin to display a tooltip that describes the icon's fun
 | *Next Page* | Click to go to the next page. |  |
 | *Last Page* | Click to go to the last page. |  |
 
-![Query tool data pagination options](../../images/query_data_pagination_edit.png)
+![Query tool data pagination options](images/query_data_pagination_edit.png)
 
 One can click the edit range button to open rows range editor:
 
@@ -217,7 +217,7 @@ One can click the edit range button to open rows range editor:
 
 # Status Bar
 
-![Query tool status bar](../../images/query_status_bar.png)
+![Query tool status bar](images/query_status_bar.png)
 
 The status bar shows the following information:
 

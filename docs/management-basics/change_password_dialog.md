@@ -23,7 +23,7 @@ Please consider the following guidelines when selecting a password:
 
 The guidelines above should be considered a starting point: They are not a comprehensive list and they **will not guarantee security**.
 
-![Change database password dialog](../images/password.png)
+![Change database password dialog](images/password.png)
 
 Use the *Change Password* dialog to change your password:
 

@@ -18,7 +18,7 @@ The following instructions demonstrate how pgAdmin may be run as a WSGI applicat
 
 !!! tip "See Also"
 
-    scratch, please see the README file in the top level directory of the source code.
+    For detailed instructions on building and configuring pgAdmin from scratch, please see the README file in the top level directory of the source code.
     For convenience, you can find the latest version of the file
     [here](https://github.com/pgadmin-org/pgadmin4/blob/master/README.md),
     but be aware that this may differ from the version included with the source code

@@ -6,7 +6,7 @@ Use the *Export Data Using Query* dialog to copy data to a file.
 
 The *Export Data Using Query* dialog organizes the export of data through the *General*, *Options* and *Query* tabs.
 
-![Export data using query dialog general tab](../images/export_query_general.png)
+![Export data using query dialog general tab](images/export_query_general.png)
 
 Use the fields in the *General* tab to specify export preferences:
 
@@ -26,7 +26,7 @@ Use the fields in the *General* tab to specify export preferences:
 - Use the drop-down listbox in the *Encoding* field to specify the type of
     character encoding.
 
-![Export data using query dialog options tab](../images/export_query_options.png)
+![Export data using query dialog options tab](images/export_query_options.png)
 
 - Use the fields in the *Options* tab to specify additional information:
 
@@ -51,7 +51,7 @@ Use the fields in the *General* tab to specify export preferences:
 
 Click the *Query* tab to continue.
 
-![Export data using query dialog query tab](../images/export_query.png)
+![Export data using query dialog query tab](images/export_query.png)
 
 Use the fields in the *Query* tab to write the query that will be exported:
 
@@ -65,13 +65,13 @@ Use the fields in the *Query* tab to write the query that will be exported:
 
 After completing the *Export Data Using Query* dialog, click the *OK* button to perform the export. pgAdmin will notify you when the background process completes:
 
-![Export data using query completion notification](../images/export_query_complete.png)
+![Export data using query completion notification](images/export_query_complete.png)
 
 Use the *View Processes* button on the notification to open the *Process Watcher* and review detailed information about the execution of the command that performed the export:
 
 Use the **End Process** button to end the Export process.
 
-![Export data using query process watcher](../images/export_query_pw.png)
+![Export data using query process watcher](images/export_query_pw.png)
 
 !!! note
 

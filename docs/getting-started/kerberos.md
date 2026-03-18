@@ -82,7 +82,7 @@ You need to configure the browser settings on the client machine to use Kerberos
     command as follows:
 
 ```text
-    google-chrome --auth-server-whitelist = "hostname/domain"
+google-chrome --auth-server-whitelist = "hostname/domain"
 ```
 
 ## PostgreSQL Server settings to configure Kerberos Authentication
