@@ -233,21 +233,11 @@
 
  Now that we have seen the ideas, here is the promised example of creating a new operator class. (You can find a working copy of this example in `src/tutorial/complex.c` and `src/tutorial/complex.sql` in the source distribution.) The operator class encapsulates operators that sort complex numbers in absolute value order, so we choose the name `complex_abs_ops`. First, we need a set of operators. The procedure for defining operators was discussed in [User-Defined Operators](user-defined-operators.md#xoper). For an operator class on B-trees, the operators we require are:
 
--
-
-  absolute-value less-than (strategy 1)
--
-
-  absolute-value less-than-or-equal (strategy 2)
--
-
-  absolute-value equal (strategy 3)
--
-
-  absolute-value greater-than-or-equal (strategy 4)
--
-
-  absolute-value greater-than (strategy 5)
+- absolute-value less-than (strategy 1)
+- absolute-value less-than-or-equal (strategy 2)
+- absolute-value equal (strategy 3)
+- absolute-value greater-than-or-equal (strategy 4)
+- absolute-value greater-than (strategy 5)
 
 
  The least error-prone way to define a related set of comparison operators is to write the B-tree comparison support function first, and then write the other functions as one-line wrappers around the support function. This reduces the odds of getting inconsistent results for corner cases. Following this approach, we first write:

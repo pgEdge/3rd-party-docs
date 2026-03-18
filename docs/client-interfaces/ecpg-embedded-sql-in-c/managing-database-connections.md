@@ -17,24 +17,12 @@ EXEC SQL CONNECT TO TARGET [AS CONNECTION-NAME] [USER USER-NAME];
 ```
  The *target* can be specified in the following ways:
 
--
-
-   <em>dbname[@*hostname*][:*port*]</em>
--
-
-   <code>tcp:postgresql://</code><em>hostname[:*port*][/*dbname*][?*options*]</em>
--
-
-   <code>unix:postgresql://localhost[:*port*][/*dbname*][?*options*]</code>
--
-
-   an SQL string literal containing one of the above forms
--
-
-   a reference to a character variable containing one of the above forms (see examples)
--
-
-   `DEFAULT`
+-  <em>dbname[@*hostname*][:*port*]</em>
+-  <code>tcp:postgresql://</code><em>hostname[:*port*][/*dbname*][?*options*]</em>
+-  <code>unix:postgresql://localhost[:*port*][/*dbname*][?*options*]</code>
+-  an SQL string literal containing one of the above forms
+-  a reference to a character variable containing one of the above forms (see examples)
+-  `DEFAULT`
  The connection target `DEFAULT` initiates a connection to the default database under the default user name. No separate user name or connection name can be specified in that case.
 
 
@@ -43,18 +31,10 @@ EXEC SQL CONNECT TO TARGET [AS CONNECTION-NAME] [USER USER-NAME];
 
  There are also different ways to specify the user name:
 
--
-
-   <em>username</em>
--
-
-   <em>username</em><code>/</code><em>password</em>
--
-
-   <em>username</em><code> IDENTIFIED BY </code><em>password</em>
--
-
-   <em>username</em><code> USING </code><em>password</em>
+-  <em>username</em>
+-  <em>username</em><code>/</code><em>password</em>
+-  <em>username</em><code> IDENTIFIED BY </code><em>password</em>
+-  <em>username</em><code> USING </code><em>password</em>
  As above, the parameters *username* and *password* can be an SQL identifier, an SQL string literal, or a reference to a character variable.
 
 
@@ -221,15 +201,9 @@ EXEC SQL DISCONNECT [CONNECTION];
 ```
  The *connection* can be specified in the following ways:
 
--
-
-   <em>connection-name</em>
--
-
-   `CURRENT`
--
-
-   `ALL`
+-  <em>connection-name</em>
+-  `CURRENT`
+-  `ALL`
  If no connection name is specified, the current connection is closed.
 
 

@@ -173,30 +173,14 @@ EXEC SQL DESCRIBE prepared_statement INTO mysqlda;
 ```
 
 
-1.
-
-   Prepare a query, and declare a cursor for it.
-2.
-
-   Declare an SQLDA for the result rows.
-3.
-
-   Declare an SQLDA for the input parameters, and initialize them (memory allocation, parameter settings).
-4.
-
-   Open a cursor with the input SQLDA.
-5.
-
-   Fetch rows from the cursor, and store them into an output SQLDA.
-6.
-
-   Read values from the output SQLDA into the host variables (with conversion if necessary).
-7.
-
-   Close the cursor.
-8.
-
-   Free the memory area allocated for the input SQLDA.
+1. Prepare a query, and declare a cursor for it.
+2. Declare an SQLDA for the result rows.
+3. Declare an SQLDA for the input parameters, and initialize them (memory allocation, parameter settings).
+4. Open a cursor with the input SQLDA.
+5. Fetch rows from the cursor, and store them into an output SQLDA.
+6. Read values from the output SQLDA into the host variables (with conversion if necessary).
+7. Close the cursor.
+8. Free the memory area allocated for the input SQLDA.
  <a id="ecpg-sqlda-descriptors-sqlda"></a>
 
 #### SQLDA Data Structure
@@ -335,24 +319,12 @@ struct sqlname
 #### Retrieving a Result Set Using an SQLDA
 
 
-1.
-
-   Declare an `sqlda_t` structure to receive the result set.
-2.
-
-   Execute `FETCH`/`EXECUTE`/`DESCRIBE` commands to process a query specifying the declared SQLDA.
-3.
-
-   Check the number of records in the result set by looking at `sqln`, a member of the `sqlda_t` structure.
-4.
-
-   Get the values of each column from `sqlvar[0]`, `sqlvar[1]`, etc., members of the `sqlda_t` structure.
-5.
-
-   Go to next row (`sqlda_t` structure) by following the `desc_next` pointer, a member of the `sqlda_t` structure.
-6.
-
-   Repeat above as you need.
+1. Declare an `sqlda_t` structure to receive the result set.
+2. Execute `FETCH`/`EXECUTE`/`DESCRIBE` commands to process a query specifying the declared SQLDA.
+3. Check the number of records in the result set by looking at `sqln`, a member of the `sqlda_t` structure.
+4. Get the values of each column from `sqlvar[0]`, `sqlvar[1]`, etc., members of the `sqlda_t` structure.
+5. Go to next row (`sqlda_t` structure) by following the `desc_next` pointer, a member of the `sqlda_t` structure.
+6. Repeat above as you need.
 
 
  Here is an example retrieving a result set through an SQLDA.
@@ -430,21 +402,11 @@ switch (v.sqltype)
 #### Passing Query Parameters Using an SQLDA
 
 
-1.
-
-   Create a prepared query (prepared statement)
-2.
-
-   Declare an sqlda_t structure as an input SQLDA.
-3.
-
-   Allocate memory area (as sqlda_t structure) for the input SQLDA.
-4.
-
-   Set (copy) input values in the allocated memory.
-5.
-
-   Open a cursor with specifying the input SQLDA.
+1. Create a prepared query (prepared statement)
+2. Declare an sqlda_t structure as an input SQLDA.
+3. Allocate memory area (as sqlda_t structure) for the input SQLDA.
+4. Set (copy) input values in the allocated memory.
+5. Open a cursor with specifying the input SQLDA.
 
 
  Here is an example.
