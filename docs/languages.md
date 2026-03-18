@@ -1,0 +1,42 @@
+# Languages
+
+Use pgvector from any language with a Postgres client. You can even generate and store vectors in one language and query them in another.
+
+Language | Libraries / Examples
+--- | ---
+Ada | [pgvector-ada](https://github.com/pgvector/pgvector-ada)
+Algol | [pgvector-algol](https://github.com/pgvector/pgvector-algol)
+C | [pgvector-c](https://github.com/pgvector/pgvector-c)
+C++ | [pgvector-cpp](https://github.com/pgvector/pgvector-cpp)
+C#, F#, Visual Basic | [pgvector-dotnet](https://github.com/pgvector/pgvector-dotnet)
+COBOL | [pgvector-cobol](https://github.com/pgvector/pgvector-cobol)
+Crystal | [pgvector-crystal](https://github.com/pgvector/pgvector-crystal)
+D | [pgvector-d](https://github.com/pgvector/pgvector-d)
+Dart | [pgvector-dart](https://github.com/pgvector/pgvector-dart)
+Elixir | [pgvector-elixir](https://github.com/pgvector/pgvector-elixir)
+Erlang | [pgvector-erlang](https://github.com/pgvector/pgvector-erlang)
+Fortran | [pgvector-fortran](https://github.com/pgvector/pgvector-fortran)
+Gleam | [pgvector-gleam](https://github.com/pgvector/pgvector-gleam)
+Go | [pgvector-go](https://github.com/pgvector/pgvector-go)
+Haskell | [pgvector-haskell](https://github.com/pgvector/pgvector-haskell)
+Java, Kotlin, Groovy, Scala | [pgvector-java](https://github.com/pgvector/pgvector-java)
+JavaScript, TypeScript | [pgvector-node](https://github.com/pgvector/pgvector-node)
+Julia | [Pgvector.jl](https://github.com/pgvector/Pgvector.jl)
+Lisp | [pgvector-lisp](https://github.com/pgvector/pgvector-lisp)
+Lua | [pgvector-lua](https://github.com/pgvector/pgvector-lua)
+Nim | [pgvector-nim](https://github.com/pgvector/pgvector-nim)
+OCaml | [pgvector-ocaml](https://github.com/pgvector/pgvector-ocaml)
+Pascal | [pgvector-pascal](https://github.com/pgvector/pgvector-pascal)
+Perl | [pgvector-perl](https://github.com/pgvector/pgvector-perl)
+PHP | [pgvector-php](https://github.com/pgvector/pgvector-php)
+Prolog | [pgvector-prolog](https://github.com/pgvector/pgvector-prolog)
+Python | [pgvector-python](https://github.com/pgvector/pgvector-python)
+R | [pgvector-r](https://github.com/pgvector/pgvector-r)
+Racket | [pgvector-racket](https://github.com/pgvector/pgvector-racket)
+Raku | [pgvector-raku](https://github.com/pgvector/pgvector-raku)
+Ruby | [pgvector-ruby](https://github.com/pgvector/pgvector-ruby), [Neighbor](https://github.com/ankane/neighbor)
+Rust | [pgvector-rust](https://github.com/pgvector/pgvector-rust)
+Swift | [pgvector-swift](https://github.com/pgvector/pgvector-swift)
+Tcl | [pgvector-tcl](https://github.com/pgvector/pgvector-tcl)
+Zig | [pgvector-zig](https://github.com/pgvector/pgvector-zig)
+
