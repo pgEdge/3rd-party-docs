@@ -151,9 +151,14 @@ func (c *Converter) buildMaps(docs map[string]*sgml.Node) {
 	for key, doc := range docs {
 		sections := doc.FindChildren("section")
 
-		if len(sections) <= 1 || key == "faq" || key == "metric" ||
+		// Determine if this document should be single-page
+		singlePage := len(sections) <= 1 ||
+			key == "faq" || key == "metric" ||
 			key == "coding" || key == "contributing" ||
-			key == "documentation" || key == "release" {
+			key == "documentation" || key == "release" ||
+			key == "index"
+
+		if singlePage {
 			// Single-page document
 			slug := shared.Slugify(key)
 			outPath := slug + ".md"
@@ -235,9 +240,13 @@ func (c *Converter) mapSectionIDs(node *sgml.Node, filePath string) {
 func (c *Converter) convertDocument(key string, doc *sgml.Node) error {
 	sections := doc.FindChildren("section")
 
-	if len(sections) <= 1 || key == "faq" || key == "metric" ||
+	singlePage := len(sections) <= 1 ||
+		key == "faq" || key == "metric" ||
 		key == "coding" || key == "contributing" ||
-		key == "documentation" || key == "release" {
+		key == "documentation" || key == "release" ||
+		key == "index"
+
+	if singlePage {
 		return c.convertSinglePage(key, doc)
 	}
 	return c.convertMultiPage(key, doc)
@@ -1143,28 +1152,27 @@ func (c *Converter) convertInlineContent(
 func (c *Converter) handleLink(
 	node *sgml.Node, w *shared.MarkdownWriter,
 ) {
-	url := node.GetAttr("url")
-	page := node.GetAttr("page")
-	section := node.GetAttr("section")
+	url := substituteVariables(node.GetAttr("url"), c.vars)
+	page := substituteVariables(node.GetAttr("page"), c.vars)
+	section := substituteVariables(node.GetAttr("section"), c.vars)
 
 	text := c.inlineToString(node)
 	text = substituteVariables(text, c.vars)
 
 	if url != "" {
-		url = substituteVariables(url, c.vars)
+		// Convert relative .html links to pgbackrest.org
+		if !strings.Contains(url, "://") &&
+			!strings.HasPrefix(url, "/") &&
+			(strings.HasSuffix(url, ".html") ||
+				strings.Contains(url, ".html#")) {
+			url = "https://pgbackrest.org/" + url
+		}
 		w.Write("[" + text + "](" + url + ")")
 		return
 	}
 
 	if page != "" {
-		// Internal cross-reference to another page
-		target := c.pageMap[page]
-		if target == "" {
-			target = shared.Slugify(page) + ".md"
-		}
-		if section != "" {
-			target += "#" + section
-		}
+		target := c.resolvePageLink(page, section)
 		if text == "" {
 			text = page
 		}
@@ -1173,20 +1181,81 @@ func (c *Converter) handleLink(
 	}
 
 	if section != "" {
-		// Same-page anchor reference
+		target := c.resolveSectionLink(section)
 		if text == "" {
-			if entry, ok := c.idMap[section]; ok {
-				text = entry.Title
-			} else {
-				text = section
-			}
+			text = section
 		}
-		w.Write("[" + text + "](#" + section + ")")
+		w.Write("[" + text + "](" + target + ")")
 		return
 	}
 
 	// No link target — just emit text
 	w.Write(text)
+}
+
+// resolvePageLink resolves a page reference to an output path.
+func (c *Converter) resolvePageLink(page, section string) string {
+	target := c.pageMap[page]
+	if target == "" {
+		// Try as an external pgbackrest.org link
+		target = "https://pgbackrest.org/" + page + ".html"
+		if section != "" {
+			target += "#" + strings.ReplaceAll(section, "/", "-")
+		}
+		return target
+	}
+	if section != "" {
+		// Section may use / separators (e.g. "quickstart/configure-stanza")
+		// Try to find the subsection as a separate page first
+		parts := strings.SplitN(section, "/", 2)
+		if len(parts) == 2 {
+			// Look up the subsection ID in the idMap
+			if entry, ok := c.idMap[parts[1]]; ok {
+				return entry.File + "#" + parts[1]
+			}
+			if entry, ok := c.idMap[parts[0]]; ok {
+				return entry.File + "#" + parts[1]
+			}
+		}
+		// Try the full section as an anchor
+		flat := strings.ReplaceAll(section, "/", "-")
+		if entry, ok := c.idMap[flat]; ok {
+			return entry.File + "#" + flat
+		}
+		target += "#" + strings.ReplaceAll(section, "/", "-")
+	}
+	return target
+}
+
+// resolveSectionLink resolves a section-only link.
+// Sections may use / path format (e.g. "/quickstart/perform-restore").
+func (c *Converter) resolveSectionLink(section string) string {
+	// Strip leading /
+	section = strings.TrimPrefix(section, "/")
+
+	// Try exact match first
+	if entry, ok := c.idMap[section]; ok {
+		if entry.File != "" {
+			return entry.File + "#" + section
+		}
+		return "#" + section
+	}
+
+	// Try splitting on / — "quickstart/perform-restore" means
+	// section "perform-restore" within page "quickstart"
+	parts := strings.SplitN(section, "/", 2)
+	if len(parts) == 2 {
+		if entry, ok := c.idMap[parts[1]]; ok {
+			return entry.File + "#" + parts[1]
+		}
+		// Look up the parent section as a page
+		if entry, ok := c.idMap[parts[0]]; ok {
+			return entry.File + "#" + parts[1]
+		}
+	}
+
+	// Fall back to same-page anchor
+	return "#" + strings.ReplaceAll(section, "/", "-")
 }
 
 // inlineToString renders inline content to a plain string.
