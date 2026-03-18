@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: pgvector v0.8.1
 
 extra_css:
   - stylesheets/extra.css
@@ -49,3 +49,37 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - pgvector: index.md
+  - Installation: installation.md
+  - Getting Started: getting-started.md
+  - Storing: storing.md
+  - Querying: querying.md
+  - Indexing: indexing.md
+  - HNSW: hnsw.md
+  - IVFFlat: ivfflat.md
+  - Filtering: filtering.md
+  - Iterative Index Scans: iterative-index-scans.md
+  - Half-Precision Vectors: half-precision-vectors.md
+  - Half-Precision Indexing: half-precision-indexing.md
+  - Binary Vectors: binary-vectors.md
+  - Binary Quantization: binary-quantization.md
+  - Sparse Vectors: sparse-vectors.md
+  - Hybrid Search: hybrid-search.md
+  - Indexing Subvectors: indexing-subvectors.md
+  - Performance: performance.md
+  - Monitoring: monitoring.md
+  - Scaling: scaling.md
+  - Languages: languages.md
+  - Frequently Asked Questions: frequently-asked-questions.md
+  - Troubleshooting: troubleshooting.md
+  - Reference: reference.md
+  - Installation Notes - Linux and Mac: installation-notes-linux-and-mac.md
+  - Installation Notes - Windows: installation-notes-windows.md
+  - Additional Installation Methods: additional-installation-methods.md
+  - Hosted Postgres: hosted-postgres.md
+  - Upgrading: upgrading.md
+  - Thanks: thanks.md
+  - History: history.md
+  - Contributing: contributing.md
