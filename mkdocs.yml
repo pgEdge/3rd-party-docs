@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: pgBackRest v2.57.0
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,48 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - pgBackRest: contributing.md
+  - pgBackRest: documentation.md
+  - pgBackRest Releases: release.md
+  - pgBackRest: index/index.md
+  - Index:
+    - Introduction: index/introduction.md
+    - Features: index/features.md
+    - Getting Started: index/getting-started.md
+    - Contributions: index/contributions.md
+    - Support: index/support.md
+    - Recognition: index/recognition.md
+  - pgBackRest User Guide: user-guide/index.md
+  - User Guide:
+    - Introduction: user-guide/introduction.md
+    - Concepts: user-guide/concept.md
+    - Upgrading pgBackRest: user-guide/upgrading.md
+    - Build: user-guide/build.md
+    - Installation: user-guide/installation.md
+    - Quick Start: user-guide/quickstart.md
+    - Monitoring: user-guide/monitor.md
+    - Backup: user-guide/backup.md
+    - Retention: user-guide/retention.md
+    - Restore: user-guide/restore.md
+    - Point-in-Time Recovery: user-guide/pitr.md
+    - Delete a Stanza: user-guide/delete-stanza.md
+    - Multiple Repositories: user-guide/multi-repo.md
+    - Azure-Compatible Object Store Support: user-guide/azure-support.md
+    - S3-Compatible Object Store Support: user-guide/s3-support.md
+    - SFTP Support: user-guide/sftp-support.md
+    - GCS-Compatible Object Store Support: user-guide/gcs-support.md
+    - Target Time for Repository: user-guide/repo-target-time.md
+    - Dedicated Repository Host: user-guide/repo-host.md
+    - Parallel Backup / Restore: user-guide/parallel-backup-restore.md
+    - Starting and Stopping: user-guide/start-stop.md
+    - Replication: user-guide/replication.md
+    - Multiple Stanzas: user-guide/multi-stanza.md
+    - Asynchronous Archiving: user-guide/async-archiving.md
+    - Backup from a Standby: user-guide/standby-backup.md
+    - Stress Testing: user-guide/stress.md
+    - Upgrading: user-guide/upgrade-stanza.md
+  - pgBackRest: faq.md
+  - pgBackRest: metric.md
+  - pgBackRest: coding.md
