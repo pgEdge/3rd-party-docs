@@ -431,6 +431,7 @@ main() {
             echo -e "  ${RED}Conversion failed${RESET}"
             RESULTS["$branch"]="FAILED (convert)"
             remove_worktree "$branch"
+            cd "$SCRIPT_DIR"
             continue
         fi
 
@@ -445,6 +446,7 @@ main() {
             echo -e "  ${CYAN}No changes${RESET}"
         fi
 
+        cd "$SCRIPT_DIR"
         remove_worktree "$branch"
         echo ""
     done

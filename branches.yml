@@ -52,7 +52,7 @@ branches:
 
   - branch: pgadmin911
     mode: rst
-    version: "v9.11"
+    version: "pgAdmin 4 v9.11"
     upstream: https://github.com/pgadmin-org/pgadmin4.git
     ref: REL-9_11
     src_subdir: docs/en_US
@@ -61,7 +61,7 @@ branches:
 
   - branch: pgadmin912
     mode: rst
-    version: "v9.12"
+    version: "pgAdmin 4 v9.12"
     upstream: https://github.com/pgadmin-org/pgadmin4.git
     ref: REL-9_12
     src_subdir: docs/en_US
@@ -70,7 +70,7 @@ branches:
 
   - branch: pgadmin913
     mode: rst
-    version: "v9.13"
+    version: "pgAdmin 4 v9.13"
     upstream: https://github.com/pgadmin-org/pgadmin4.git
     ref: REL-9_13
     src_subdir: docs/en_US
@@ -79,7 +79,7 @@ branches:
 
   - branch: pgadminmaster
     mode: rst
-    version: dev
+    version: "pgAdmin 4 dev"
     upstream: https://github.com/pgadmin-org/pgadmin4.git
     ref: master
     src_subdir: docs/en_US
