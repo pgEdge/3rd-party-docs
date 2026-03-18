@@ -11,10 +11,40 @@ package convert
 
 import (
 	"fmt"
+	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/pgEdge/postgresql-docs/builder/sgml"
 )
+
+// reMarkdownImage matches Markdown image syntax ![alt](path).
+var reMarkdownImage = regexp.MustCompile(`!\[([^\]]*)\]\(([^)]+)\)`)
+
+// adjustImagePaths prefixes relative image paths with ../ to
+// account for MkDocs use_directory_urls. Non-index pages like
+// foo/bar.md become foo/bar/index.html, so relative paths need
+// one extra ../ to resolve correctly.
+func adjustImagePaths(ctx *Context, content string) string {
+	if ctx.CurrentFile == "" {
+		return content
+	}
+	base := filepath.Base(ctx.CurrentFile)
+	if base == "index.md" {
+		return content // index pages don't get an extra level
+	}
+	return reMarkdownImage.ReplaceAllStringFunc(content, func(m string) string {
+		parts := reMarkdownImage.FindStringSubmatch(m)
+		alt, src := parts[1], parts[2]
+		// Only adjust relative paths (not absolute or URLs)
+		if strings.HasPrefix(src, "/") ||
+			strings.HasPrefix(src, "http://") ||
+			strings.HasPrefix(src, "https://") {
+			return m
+		}
+		return "![" + alt + "](../" + src + ")"
+	})
+}
 
 // handleTable converts <table> and <informaltable> to Markdown or HTML.
 func handleTable(ctx *Context, node *sgml.Node, w *MarkdownWriter) error {
@@ -354,25 +384,21 @@ func renderHTMLRow(ctx *Context, row *sgml.Node, colNames map[string]int, w *Mar
 			}
 		}
 
-		// Render cell content as Markdown, then convert to HTML
-		// or leave as Markdown for md_in_html processing.
+		// Render cell content as Markdown, then convert to HTML.
+		// Image paths are adjusted for use_directory_urls which
+		// adds one directory level for non-index pages.
 		cellW := NewMarkdownWriter()
 		convertChildren(ctx, entry, cellW)
 		cellContent := strings.TrimSpace(cellW.String())
 
-		// If the cell contains images or code blocks, use
-		// markdown="block" so MkDocs handles path rewriting
-		// and code highlighting natively.
-		if strings.Contains(cellContent, "![") ||
-			strings.Contains(cellContent, "```") {
-			attrs += ` markdown="block"`
-			w.WriteString(fmt.Sprintf("<%s%s>\n%s\n</%s>\n",
-				cellTag, attrs, cellContent, cellTag))
-		} else {
-			content := markdownToHTML(cellContent)
-			w.WriteString(fmt.Sprintf("<%s%s>%s</%s>\n",
-				cellTag, attrs, content, cellTag))
-		}
+		// Adjust relative image paths for use_directory_urls:
+		// non-index pages become dir/index.html, so relative
+		// paths need ../ prefix.
+		cellContent = adjustImagePaths(ctx, cellContent)
+
+		content := markdownToHTML(cellContent)
+		w.WriteString(fmt.Sprintf("<%s%s>%s</%s>\n",
+			cellTag, attrs, content, cellTag))
 	}
 	w.WriteString("</tr>\n")
 }
