@@ -146,16 +146,32 @@ NOTE: this is the "allowable" version that returns a boolean, not an integer.
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_contains01.svg" alt="image"></p>
-<p><code>LINESTRING</code> / <code>MULTIPOINT</code></p></td>
-<td><p><img src="images/st_contains02.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>POINT</code></p></td>
+<td markdown="block">
+![image](images/st_contains01.svg)
+
+
+`LINESTRING` / `MULTIPOINT`
+</td>
+<td markdown="block">
+![image](images/st_contains02.svg)
+
+
+`POLYGON` / `POINT`
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_contains03.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>LINESTRING</code></p></td>
-<td><p><img src="images/st_contains04.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>POLYGON</code></p></td>
+<td markdown="block">
+![image](images/st_contains03.svg)
+
+
+`POLYGON` / `LINESTRING`
+</td>
+<td markdown="block">
+![image](images/st_contains04.svg)
+
+
+`POLYGON` / `POLYGON`
+</td>
 </tr>
 </tbody>
 </table>
@@ -167,10 +183,18 @@ NOTE: this is the "allowable" version that returns a boolean, not an integer.
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_contains05.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>MULTIPOINT</code></p></td>
-<td><p><img src="images/st_contains06.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>LINESTRING</code></p></td>
+<td markdown="block">
+![image](images/st_contains05.svg)
+
+
+`POLYGON` / `MULTIPOINT`
+</td>
+<td markdown="block">
+![image](images/st_contains06.svg)
+
+
+`POLYGON` / `LINESTRING`
+</td>
 </tr>
 </tbody>
 </table>
@@ -182,10 +206,18 @@ Due to the interior intersection condition `ST_Contains` returns `FALSE` in the 
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_contains07.svg" alt="image"></p>
-<p><code>LINESTRING</code> / <code>POINT</code></p></td>
-<td><p><img src="images/st_contains08.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>LINESTRING</code></p></td>
+<td markdown="block">
+![image](images/st_contains07.svg)
+
+
+`LINESTRING` / `POINT`
+</td>
+<td markdown="block">
+![image](images/st_contains08.svg)
+
+
+`POLYGON` / `LINESTRING`
+</td>
 </tr>
 </tbody>
 </table>
@@ -590,16 +622,32 @@ The following situations all return `true`.
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_crosses01.svg" alt="image"></p>
-<p><code>MULTIPOINT</code> / <code>LINESTRING</code></p></td>
-<td><p><img src="images/st_crosses02.svg" alt="image"></p>
-<p><code>MULTIPOINT</code> / <code>POLYGON</code></p></td>
+<td markdown="block">
+![image](images/st_crosses01.svg)
+
+
+`MULTIPOINT` / `LINESTRING`
+</td>
+<td markdown="block">
+![image](images/st_crosses02.svg)
+
+
+`MULTIPOINT` / `POLYGON`
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_crosses03.svg" alt="image"></p>
-<p><code>LINESTRING</code> / <code>POLYGON</code></p></td>
-<td><p><img src="images/st_crosses04.svg" alt="image"></p>
-<p><code>LINESTRING</code> / <code>LINESTRING</code></p></td>
+<td markdown="block">
+![image](images/st_crosses03.svg)
+
+
+`LINESTRING` / `POLYGON`
+</td>
+<td markdown="block">
+![image](images/st_crosses04.svg)
+
+
+`LINESTRING` / `LINESTRING`
+</td>
 </tr>
 </tbody>
 </table>
@@ -611,16 +659,24 @@ Consider a situation where a user has two tables: a table of roads and a table o
 <table>
 <tbody>
 <tr>
-<td><pre><code class="language-sql">CREATE TABLE roads (
+<td markdown="block">
+```sql
+CREATE TABLE roads (
   id serial NOT NULL,
   geom geometry,
   CONSTRAINT roads_pkey PRIMARY KEY (road_id)
-);</code></pre></td>
-<td><pre><code class="language-sql">CREATE TABLE highways (
+);
+```
+</td>
+<td markdown="block">
+```sql
+CREATE TABLE highways (
   id serial NOT NULL,
   the_gem geometry,
   CONSTRAINT roads_pkey PRIMARY KEY (road_id)
-);</code></pre></td>
+);
+```
+</td>
 </tr>
 </tbody>
 </table>
@@ -1142,12 +1198,24 @@ NOTE: this is the "allowable" version that returns a boolean, not an integer.
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_overlaps01.svg" alt="image"></p>
-<p><code>MULTIPOINT</code> / <code>MULTIPOINT</code></p></td>
-<td><p><img src="images/st_overlaps02.svg" alt="image"></p>
-<p><code>LINESTRING</code> / <code>LINESTRING</code></p></td>
-<td><p><img src="images/st_overlaps03.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>POLYGON</code></p></td>
+<td markdown="block">
+![image](images/st_overlaps01.svg)
+
+
+`MULTIPOINT` / `MULTIPOINT`
+</td>
+<td markdown="block">
+![image](images/st_overlaps02.svg)
+
+
+`LINESTRING` / `LINESTRING`
+</td>
+<td markdown="block">
+![image](images/st_overlaps03.svg)
+
+
+`POLYGON` / `POLYGON`
+</td>
 </tr>
 </tbody>
 </table>
@@ -1507,20 +1575,44 @@ The `ST_Touches` predicate returns `TRUE` in the following examples.
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_touches01.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>POLYGON</code></p></td>
-<td><p><img src="images/st_touches02.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>POLYGON</code></p></td>
-<td><p><img src="images/st_touches03.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>LINESTRING</code></p></td>
+<td markdown="block">
+![image](images/st_touches01.svg)
+
+
+`POLYGON` / `POLYGON`
+</td>
+<td markdown="block">
+![image](images/st_touches02.svg)
+
+
+`POLYGON` / `POLYGON`
+</td>
+<td markdown="block">
+![image](images/st_touches03.svg)
+
+
+`POLYGON` / `LINESTRING`
+</td>
 </tr>
 <tr>
-<td><p><img src="images/st_touches04.svg" alt="image"></p>
-<p><code>LINESTRING</code> / <code>LINESTRING</code></p></td>
-<td><p><img src="images/st_touches05.svg" alt="image"></p>
-<p><code>LINESTRING</code> / <code>LINESTRING</code></p></td>
-<td><p><img src="images/st_touches06.svg" alt="image"></p>
-<p><code>POLYGON</code> / <code>POINT</code></p></td>
+<td markdown="block">
+![image](images/st_touches04.svg)
+
+
+`LINESTRING` / `LINESTRING`
+</td>
+<td markdown="block">
+![image](images/st_touches05.svg)
+
+
+`LINESTRING` / `LINESTRING`
+</td>
+<td markdown="block">
+![image](images/st_touches06.svg)
+
+
+`POLYGON` / `POINT`
+</td>
 </tr>
 </tbody>
 </table>

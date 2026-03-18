@@ -91,10 +91,18 @@ Requires GEOS >= 3.9.0 to use the gridSize parameter.
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_symdifference01.svg" alt="image"></p>
-<p>The input linestrings</p></td>
-<td><p><img src="images/st_difference01.svg" alt="image"></p>
-<p>The difference of the two linestrings</p></td>
+<td markdown="block">
+![image](images/st_symdifference01.svg)
+
+
+The input linestrings
+</td>
+<td markdown="block">
+![image](images/st_difference01.svg)
+
+
+The difference of the two linestrings
+</td>
 </tr>
 </tbody>
 </table>
@@ -440,10 +448,18 @@ Split a Polygon by a Line.
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_split01.svg" alt="image"></p>
-<p>Before Split</p></td>
-<td><p><img src="images/st_split02.svg" alt="image"></p>
-<p>After split</p></td>
+<td markdown="block">
+![image](images/st_split01.svg)
+
+
+Before Split
+</td>
+<td markdown="block">
+![image](images/st_split02.svg)
+
+
+After split
+</td>
 </tr>
 </tbody>
 </table>
@@ -471,10 +487,18 @@ Split a MultiLineString by a Point, where the point lies exactly on both LineStr
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_split03.svg" alt="image"></p>
-<p>Before Split</p></td>
-<td><p><img src="images/st_split04.svg" alt="image"></p>
-<p>After split</p></td>
+<td markdown="block">
+![image](images/st_split03.svg)
+
+
+Before Split
+</td>
+<td markdown="block">
+![image](images/st_split04.svg)
+
+
+After split
+</td>
 </tr>
 </tbody>
 </table>
@@ -711,10 +735,18 @@ Requires GEOS >= 3.9.0 to use the gridSize parameter
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/st_symdifference01.svg" alt="image"></p>
-<p>The original linestrings shown together</p></td>
-<td><p><img src="images/st_symdifference02.svg" alt="image"></p>
-<p>The symmetric difference of the two linestrings</p></td>
+<td markdown="block">
+![image](images/st_symdifference01.svg)
+
+
+The original linestrings shown together
+</td>
+<td markdown="block">
+![image](images/st_symdifference02.svg)
+
+
+The symmetric difference of the two linestrings
+</td>
 </tr>
 </tbody>
 </table>

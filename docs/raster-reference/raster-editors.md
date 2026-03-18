@@ -806,12 +806,24 @@ SELECT ST_Width(mass_stm) As w_before, ST_Width(wgs_84) As w_after,
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/rt_st_transform01.png" alt="image"></p>
-<p>original mass state plane meters (mass_stm)</p></td>
-<td><p><img src="images/rt_st_transform02.png" alt="image"></p>
-<p>After transform to wgs 84 long lat (wgs_84)</p></td>
-<td><p><img src="images/rt_st_transform03.png" alt="image"></p>
-<p>After transform to wgs 84 long lat with bilinear algorithm instead of NN default (wgs_84_bilin)</p></td>
+<td markdown="block">
+![image](images/rt_st_transform01.png)
+
+
+original mass state plane meters (mass_stm)
+</td>
+<td markdown="block">
+![image](images/rt_st_transform02.png)
+
+
+After transform to wgs 84 long lat (wgs_84)
+</td>
+<td markdown="block">
+![image](images/rt_st_transform03.png)
+
+
+After transform to wgs 84 long lat with bilinear algorithm instead of NN default (wgs_84_bilin)
+</td>
 </tr>
 </tbody>
 </table>
@@ -867,10 +879,18 @@ FROM baz
 <table>
 <tbody>
 <tr>
-<td><p><img src="images/rt_st_transform04.png" alt="image"></p>
-<p>not_aligned</p></td>
-<td><p><img src="images/rt_st_transform05.png" alt="image"></p>
-<p>aligned</p></td>
+<td markdown="block">
+![image](images/rt_st_transform04.png)
+
+
+not_aligned
+</td>
+<td markdown="block">
+![image](images/rt_st_transform05.png)
+
+
+aligned
+</td>
 </tr>
 </tbody>
 </table>
