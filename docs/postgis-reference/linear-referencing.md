@@ -44,6 +44,9 @@ Changed: 2.1.0. Up to 2.0.x this was called ST_Line_Interpolate_Point.
 ## Examples
 
 
+![image](images/st_line_interpolate_point01.svg)
+
+
 A LineString with the interpolated point at 20% position (0.20)
 
 
@@ -166,6 +169,9 @@ Availability: 2.5.0
 
 
 ## Examples
+
+
+![image](images/st_line_interpolate_points01.svg)
 
 
 A LineString with points interpolated every 20%
@@ -301,6 +307,9 @@ Availability: 1.1.0, Z and M supported added in 1.1.1
 
 
 ## Examples
+
+
+![image](images/st_line_substring01.svg)
 
 
 A LineString seen with 1/3 midrange overlaid (0.333, 0.666)
@@ -490,6 +499,9 @@ SELECT ST_AsText(
 ------------------------------------------------------------------------
  GEOMETRYCOLLECTION M (LINESTRING M (1 2 3,3 4 2,9 4 3),POINT M (1 2 3))
 ```
+
+
+![image](images/st_locatebetween01.svg)
 
 
 A LineString with the section between measures 2 and 8, offset to the left

@@ -74,11 +74,11 @@ Performed by the GEOS module.
 ## Examples
 
 
-| quad_segs=8 (default)    ```sql  SELECT ST_Buffer(  ST_GeomFromText('POINT(100 90)'),  50, 'quad_segs=8');                  ``` | quad_segs=2 (lame)    ```sql  SELECT ST_Buffer(  ST_GeomFromText('POINT(100 90)'),  50, 'quad_segs=2');                  ``` |
-| endcap=round join=round (default)    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'endcap=round join=round');                  ``` | endcap=square    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'endcap=square join=round');                  ``` | endcap=flat    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'endcap=flat join=round');                  ``` |
-| join=bevel    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'join=bevel');                  ``` | join=mitre mitre_limit=5.0 (default mitre limit)    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'join=mitre mitre_limit=5.0');                  ``` | join=mitre mitre_limit=1    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'join=mitre mitre_limit=1.0');                  ``` |
-| side=left    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'side=left');                  ``` | side=right    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'side=right');                  ``` | side=left join=mitre    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'side=left join=mitre');                  ``` |
-| right-hand-winding, polygon boundary side=left    ```sql  SELECT ST_Buffer( ST_ForceRHR( ST_Boundary(  ST_GeomFromText( 'POLYGON ((50 50, 50 150, 150 150, 150 50, 50 50))'))),  ), 20, 'side=left');                  ``` | right-hand-winding, polygon boundary side=right    ```sql  SELECT ST_Buffer( ST_ForceRHR( ST_Boundary(  ST_GeomFromText( 'POLYGON ((50 50, 50 150, 150 150, 150 50, 50 50))')) ), 20,'side=right')                  ``` |
+| ![image](images/st_buffer01.svg)   quad_segs=8 (default)    ```sql  SELECT ST_Buffer(  ST_GeomFromText('POINT(100 90)'),  50, 'quad_segs=8');                  ``` | ![image](images/st_buffer02.svg)   quad_segs=2 (lame)    ```sql  SELECT ST_Buffer(  ST_GeomFromText('POINT(100 90)'),  50, 'quad_segs=2');                  ``` |
+| ![image](images/st_buffer03.svg)   endcap=round join=round (default)    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'endcap=round join=round');                  ``` | ![image](images/st_buffer04.svg)   endcap=square    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'endcap=square join=round');                  ``` | ![image](images/st_buffer05.svg)   endcap=flat    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'endcap=flat join=round');                  ``` |
+| ![image](images/st_buffer07.svg)   join=bevel    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'join=bevel');                  ``` | ![image](images/st_buffer06.svg)   join=mitre mitre_limit=5.0 (default mitre limit)    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'join=mitre mitre_limit=5.0');                  ``` | ![image](images/st_buffer08.svg)   join=mitre mitre_limit=1    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'join=mitre mitre_limit=1.0');                  ``` |
+| ![image](images/st_buffer09.svg)   side=left    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'side=left');                  ``` | ![image](images/st_buffer10.svg)   side=right    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'side=right');                  ``` | ![image](images/st_buffer11.svg)   side=left join=mitre    ```sql  SELECT ST_Buffer(  ST_GeomFromText(   'LINESTRING(50 50,150 150,150 50)'  ), 10, 'side=left join=mitre');                  ``` |
+| ![image](images/st_buffer12.svg)   right-hand-winding, polygon boundary side=left    ```sql  SELECT ST_Buffer( ST_ForceRHR( ST_Boundary(  ST_GeomFromText( 'POLYGON ((50 50, 50 150, 150 150, 150 50, 50 50))'))),  ), 20, 'side=left');                  ``` | ![image](images/st_buffer13.svg)   right-hand-winding, polygon boundary side=right    ```sql  SELECT ST_Buffer( ST_ForceRHR( ST_Boundary(  ST_GeomFromText( 'POLYGON ((50 50, 50 150, 150 150, 150 50, 50 50))')) ), 20,'side=right')                  ``` |
 
 
 ```
@@ -154,7 +154,7 @@ Availability: 1.1.0
 ## Examples
 
 
-| Input lines | Area result |
+| ![image](images/st_buildarea02.svg)   Input lines | ![image](images/st_buildarea03.svg)   Area result |
 
 
 ```sql
@@ -171,6 +171,9 @@ SELECT ST_AsText( ST_BuildArea( ST_Collect( geom )))
 ------------------------------------------------------------------------------------------
 POLYGON((180 40,30 20,20 90,80 120,80 190,160 160,180 40),(150 80,120 130,80 60,150 80))
 ```
+
+
+![image](images/st_buildarea01.svg)
 
 
 Create a donut from two circular polygons
@@ -234,8 +237,8 @@ Availability: 2.4.0 support for geography was introduced.
 In the following illustrations the red dot is the centroid of the source geometry.
 
 
-| Centroid of a `MULTIPOINT` | Centroid of a `LINESTRING` |
-| Centroid of a `POLYGON` | Centroid of a `GEOMETRYCOLLECTION` |
+| ![image](images/st_centroid01.svg)   Centroid of a `MULTIPOINT` | ![image](images/st_centroid02.svg)   Centroid of a `LINESTRING` |
+| ![image](images/st_centroid03.svg)   Centroid of a `POLYGON` | ![image](images/st_centroid04.svg)   Centroid of a `GEOMETRYCOLLECTION` |
 
 
 ```sql
@@ -316,7 +319,7 @@ FROM (SELECT  'POLYGON((0 0, 8 8, 0 16, 0 0))'::geometry geom) AS foo;
 Smoothing a Polygon using 1, 2 and 3 iterations:
 
 
-| nIterations = 1 | nIterations = 2 | nIterations = 3 |
+| ![image](images/st_chaikinsmoothing01.svg)   nIterations = 1 | ![image](images/st_chaikinsmoothing02.svg)   nIterations = 2 | ![image](images/st_chaikinsmoothing03.svg)   nIterations = 3 |
 
 
 ```sql
@@ -330,7 +333,7 @@ SELECT ST_ChaikinSmoothing(
 Smoothing a LineString using 1, 2 and 3 iterations:
 
 
-| nIterations = 1 | nIterations = 2 | nIterations = 3 |
+| ![image](images/st_chaikinsmoothing04.svg)   nIterations = 1 | ![image](images/st_chaikinsmoothing05.svg)   nIterations = 2 | ![image](images/st_chaikinsmoothing06.svg)   nIterations = 3 |
 
 
 ```sql
@@ -391,6 +394,9 @@ Enhanced: 3.3.0, GEOS native implementation enabled for GEOS 3.11+
 ## Examples
 
 
+![image](images/st_concavehull01.svg)
+
+
 Concave Hull of a MultiPoint
 
 
@@ -403,6 +409,9 @@ SELECT ST_AsText( ST_ConcaveHull(
 POLYGON ((18 142, 21 151, 27 160, 35 167, 44 172, 54 175, 64 178, 74 180, 84 181, 94 181, 104 181, 114 181, 124 181, 134 179, 144 177, 153 173, 162 168, 171 162, 177 154, 182 145, 184 135, 173 134, 161 134, 150 133, 139 132, 136 142, 128 149, 119 153, 109 155, 99 155, 89 155, 79 153, 69 150, 61 144, 63 134, 72 128, 82 125, 92 123, 102 121, 112 119, 122 118, 132 116, 142 113, 151 110, 161 106, 170 102, 178 96, 185 88, 189 78, 190 68, 189 58, 185 49, 179 41, 171 34, 162 29, 153 25, 143 23, 133 21, 123 19, 113 19, 102 19, 92 19, 82 19, 72 21, 62 22, 52 25, 43 29, 33 34, 25 41, 19 49, 14 58, 10 72, 21 73, 31 74, 42 74, 53 76, 56 66, 63 58, 71 51, 81 48, 91 46, 101 45, 111 46, 121 47, 131 50, 140 55, 145 64, 144 74, 135 80, 125 83, 115 85, 105 87, 95 89, 85 91, 75 93, 65 95, 55 98, 45 102, 37 107, 29 114, 22 122, 19 132, 18 142))
 
 ```
+
+
+![image](images/st_concavehull02.svg)
 
 
 Concave Hull of a MultiPoint, allowing holes
@@ -419,7 +428,7 @@ POLYGON ((43 69, 50 84, 57 100, 63 118, 68 133, 74 149, 81 164, 88 180, 101 180,
 ```
 
 
-| `polygon_hull` | `points_hull` |
+| ![image](images/st_concavehull03.svg)   `polygon_hull` | ![image](images/st_concavehull04.svg)   `points_hull` |
 
 
 Comparing a concave hull of a Polygon to the concave hull of the constituent points. The hull respects the boundary of the polygon, whereas the points-based hull does not.
@@ -492,6 +501,9 @@ Performed by the GEOS module
 
 
 ## Examples
+
+
+![image](images/st_convexhull01.svg)
 
 
 Convex Hull of a MultiLinestring and a MultiPoint
@@ -601,7 +613,8 @@ SELECT
      As  dtriag;</code></pre></td>
 </tr>
 <tr>
-<td><p>-- delaunay triangles of 45 points as 55 triangle polygons</p>
+<td><p>!<a href="images/st_delaunaytriangles04.svg">image</a></p>
+<p>-- delaunay triangles of 45 points as 55 triangle polygons</p>
 <pre><code>
 
 this produces a table of 42 points that form an L shape
@@ -751,6 +764,9 @@ Enhanced: 3.0.0, added seed parameter
 ## Examples
 
 
+![image](images/st_generatepoints01.svg)
+
+
 Generated a multipoint consisting of 12 Points overlaid on top of original polygon using a random seed value 1996
 
 
@@ -816,6 +832,9 @@ Enhanced: 2.5.0 Added support for M as weight of points.
 
 
 ## Examples
+
+
+![image](images/st_geometricmedian01.svg)
 
 
  Comparison of the geometric median (red) and centroid (turquoise) of a MultiPoint.
@@ -891,6 +910,9 @@ Availability: 1.1.0
 ## Examples
 
 
+![image](images/st_linemerge01.svg)
+
+
 Merging lines with different orientation.
 
 
@@ -901,6 +923,9 @@ SELECT ST_AsText(ST_LineMerge(
 --------------------------------------------
  LINESTRING(10 160,60 120,120 140,180 120)
 ```
+
+
+![image](images/st_linemerge02.svg)
 
 
 Lines are not merged across intersections with degree > 2.
@@ -926,6 +951,9 @@ SELECT ST_AsText(ST_LineMerge(
 ----------------
 MULTILINESTRING((-45.2 -33.2,-46 -32),(-29 -27,-30 -29.7,-36 -31,-45 -33))
 ```
+
+
+![image](images/st_linemerge03.svg)
 
 
 Lines with opposite directions are not merged if directed = TRUE.
@@ -995,6 +1023,9 @@ Requires GEOS >= 3.9.0.
 ## Examples
 
 
+![image](images/st_maximuminscribedcircle01.svg)
+
+
 Maximum inscribed circle of a polygon. Center, nearest point, and radius are returned.
 
 
@@ -1008,6 +1039,9 @@ SELECT radius, ST_AsText(center) AS center, ST_AsText(nearest) AS nearest
 -----------------+----------------------------+---------------
  45.165845650018 | POINT(96.953125 76.328125) | POINT(140 90)
 ```
+
+
+![image](images/st_maximuminscribedcircle02.svg)
 
 
 Maximum inscribed circle of a multi-linestring. Center, nearest point, and radius are returned.
@@ -1072,6 +1106,9 @@ SELECT radius,
 ```
 
 
+![image](images/st_largestemptycircle01.svg)
+
+
 Largest Empty Circle within a set of lines.
 
 
@@ -1087,6 +1124,9 @@ SELECT radius,
          'POLYGON ((90 190, 10 100, 60 10, 190 40, 120 100, 190 180, 90 190))'::geometry
        );
 ```
+
+
+![image](images/st_largestemptycircle02.svg)
 
 
 Largest Empty Circle within a set of points, constrained to lie in a polygon. The constraint polygon boundary must be included as an obstacle, as well as specified as the constraint for the circle center.
@@ -1145,6 +1185,9 @@ SELECT d.disease_type,
     FROM disease_obs As d
     GROUP BY d.disease_type;
 ```
+
+
+![image](images/st_minimumboundingcircle01.svg)
 
 
 Minimum bounding circle of a point and linestring. Using 8 segs to approximate a quarter circle
@@ -1261,6 +1304,9 @@ Requires GEOS >= 3.6.0.
 ```
 
 
+![image](images/st_orientedenvelope01.svg)
+
+
 Oriented envelope of a point and linestring.
 
 
@@ -1352,9 +1398,9 @@ FROM someroadstable;
 ```
 
 
-| 15, 'quad_segs=4 join=round' original line and its offset 15 units.    ```sql  SELECT ST_AsText(ST_OffsetCurve(ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)'),     15, 'quad_segs=4 join=round'));  output  LINESTRING(164 1,18 1,12.2597485145237 2.1418070123307,     7.39339828220179 5.39339828220179,     5.39339828220179 7.39339828220179,     2.14180701233067 12.2597485145237,1 18,1 195)                  ``` | -15, 'quad_segs=4 join=round' original line and its offset -15 units     ```sql  SELECT ST_AsText(ST_OffsetCurve(geom,     -15, 'quad_segs=4 join=round')) As notsocurvy     FROM ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)') As geom;  notsocurvy  LINESTRING(31 195,31 31,164 31)                  ``` |
-| double-offset to get more curvy, note the first reverses direction, so -30 + 15 = -15    ```sql  SELECT ST_AsText(ST_OffsetCurve(ST_OffsetCurve(geom,     -30, 'quad_segs=4 join=round'), -15, 'quad_segs=4 join=round')) As morecurvy     FROM ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)') As geom;  morecurvy  LINESTRING(164 31,46 31,40.2597485145236 32.1418070123307, 35.3933982822018 35.3933982822018, 32.1418070123307 40.2597485145237,31 46,31 195)                  ``` | double-offset to get more curvy,combined with regular offset 15 to get parallel lines. Overlaid with original.    ```sql SELECT ST_AsText(ST_Collect(     ST_OffsetCurve(geom, 15, 'quad_segs=4 join=round'),     ST_OffsetCurve(ST_OffsetCurve(geom,     -30, 'quad_segs=4 join=round'), -15, 'quad_segs=4 join=round')     ) ) As parallel_curves     FROM ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)') As geom;  parallel curves  MULTILINESTRING((164 1,18 1,12.2597485145237 2.1418070123307, 7.39339828220179 5.39339828220179,5.39339828220179 7.39339828220179, 2.14180701233067 12.2597485145237,1 18,1 195), (164 31,46 31,40.2597485145236 32.1418070123307,35.3933982822018 35.3933982822018, 32.1418070123307 40.2597485145237,31 46,31 195))                  ``` |
-| 15, 'quad_segs=4 join=bevel' shown with original line    ```sql  SELECT ST_AsText(ST_OffsetCurve(ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)'),         15, 'quad_segs=4 join=bevel'));  output  LINESTRING(164 1,18 1,7.39339828220179 5.39339828220179,     5.39339828220179 7.39339828220179,1 18,1 195)                  ``` | 15,-15 collected, join=mitre mitre_limit=2.1    ```sql  SELECT ST_AsText(ST_Collect(     ST_OffsetCurve(geom, 15, 'quad_segs=4 join=mitre mitre_limit=2.2'),     ST_OffsetCurve(geom, -15, 'quad_segs=4 join=mitre mitre_limit=2.2')     ) )     FROM ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)') As geom;  output  MULTILINESTRING((164 1,11.7867965644036 1,1 11.7867965644036,1 195),     (31 195,31 31,164 31))                  ``` |
+| ![image](images/st_offsetcurve01.svg)   15, 'quad_segs=4 join=round' original line and its offset 15 units.    ```sql  SELECT ST_AsText(ST_OffsetCurve(ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)'),     15, 'quad_segs=4 join=round'));  output  LINESTRING(164 1,18 1,12.2597485145237 2.1418070123307,     7.39339828220179 5.39339828220179,     5.39339828220179 7.39339828220179,     2.14180701233067 12.2597485145237,1 18,1 195)                  ``` | ![image](images/st_offsetcurve02.svg)   -15, 'quad_segs=4 join=round' original line and its offset -15 units     ```sql  SELECT ST_AsText(ST_OffsetCurve(geom,     -15, 'quad_segs=4 join=round')) As notsocurvy     FROM ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)') As geom;  notsocurvy  LINESTRING(31 195,31 31,164 31)                  ``` |
+| ![image](images/st_offsetcurve05.svg)   double-offset to get more curvy, note the first reverses direction, so -30 + 15 = -15    ```sql  SELECT ST_AsText(ST_OffsetCurve(ST_OffsetCurve(geom,     -30, 'quad_segs=4 join=round'), -15, 'quad_segs=4 join=round')) As morecurvy     FROM ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)') As geom;  morecurvy  LINESTRING(164 31,46 31,40.2597485145236 32.1418070123307, 35.3933982822018 35.3933982822018, 32.1418070123307 40.2597485145237,31 46,31 195)                  ``` | ![image](images/st_offsetcurve06.svg)   double-offset to get more curvy,combined with regular offset 15 to get parallel lines. Overlaid with original.    ```sql SELECT ST_AsText(ST_Collect(     ST_OffsetCurve(geom, 15, 'quad_segs=4 join=round'),     ST_OffsetCurve(ST_OffsetCurve(geom,     -30, 'quad_segs=4 join=round'), -15, 'quad_segs=4 join=round')     ) ) As parallel_curves     FROM ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)') As geom;  parallel curves  MULTILINESTRING((164 1,18 1,12.2597485145237 2.1418070123307, 7.39339828220179 5.39339828220179,5.39339828220179 7.39339828220179, 2.14180701233067 12.2597485145237,1 18,1 195), (164 31,46 31,40.2597485145236 32.1418070123307,35.3933982822018 35.3933982822018, 32.1418070123307 40.2597485145237,31 46,31 195))                  ``` |
+| ![image](images/st_offsetcurve03.svg)   15, 'quad_segs=4 join=bevel' shown with original line    ```sql  SELECT ST_AsText(ST_OffsetCurve(ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)'),         15, 'quad_segs=4 join=bevel'));  output  LINESTRING(164 1,18 1,7.39339828220179 5.39339828220179,     5.39339828220179 7.39339828220179,1 18,1 195)                  ``` | ![image](images/st_offsetcurve04.svg)   15,-15 collected, join=mitre mitre_limit=2.1    ```sql  SELECT ST_AsText(ST_Collect(     ST_OffsetCurve(geom, 15, 'quad_segs=4 join=mitre mitre_limit=2.2'),     ST_OffsetCurve(geom, -15, 'quad_segs=4 join=mitre mitre_limit=2.2')     ) )     FROM ST_GeomFromText( 'LINESTRING(164 16,144 16,124 16,104 16,84 16,64 16,     44 16,24 16,20 16,18 16,17 17,     16 18,16 20,16 40,16 60,16 80,16 100,     16 120,16 140,16 160,16 180,16 195)') As geom;  output  MULTILINESTRING((164 1,11.7867965644036 1,1 11.7867965644036,1 195),     (31 195,31 31,164 31))                  ``` |
 
 
 ## See Also
@@ -1391,8 +1437,8 @@ Returns a `POINT` which is guaranteed to lie in the interior of a surface (`POLY
 ## Examples
 
 
-| Point on surface of a `MULTIPOINT` | Point on surface of a `LINESTRING` |
-| Point on surface of a `POLYGON` | Point on surface of a `GEOMETRYCOLLECTION` |
+| ![image](images/st_pointonsurface01.svg)   Point on surface of a `MULTIPOINT` | ![image](images/st_pointonsurface02.svg)   Point on surface of a `LINESTRING` |
+| ![image](images/st_pointonsurface03.svg)   Point on surface of a `POLYGON` | ![image](images/st_pointonsurface04.svg)   Point on surface of a `GEOMETRYCOLLECTION` |
 
 
 ```sql
@@ -1415,6 +1461,9 @@ SELECT ST_AsEWKT(ST_PointOnSurface(ST_GeomFromEWKT('LINESTRING(0 5 1, 0 0 1, 0 1
 
 
 **Example:** The result of ST_PointOnSurface is guaranteed to lie within polygons, whereas the point computed by [ST_Centroid](#ST_Centroid) may be outside.
+
+
+![image](images/st_pointonsurface.svg)
 
 
 Red: point on surface; Green: centroid
@@ -1480,7 +1529,7 @@ Availability: 1.0.0RC1
 ## Examples
 
 
-| Input lines | Polygonized result |
+| ![image](images/st_polygonize01.svg)   Input lines | ![image](images/st_polygonize02.svg)   Polygonized result |
 
 
 ```sql
@@ -1652,8 +1701,8 @@ Availability: 2.0.0
 ## Examples: Finding shared paths
 
 
-| A multilinestring and a linestring |
-| The shared path of multilinestring and linestring overlaid with original geometries.    ```sql   SELECT ST_AsText(   ST_SharedPaths(     ST_GeomFromText('MULTILINESTRING((26 125,26 200,126 200,126 125,26 125),        (51 150,101 150,76 175,51 150))'),     ST_GeomFromText('LINESTRING(151 100,126 156.25,126 125,90 161, 76 175)')     )   ) As wkt                                  wkt ------------------------------------------------------------- GEOMETRYCOLLECTION(MULTILINESTRING((126 156.25,126 125),  (101 150,90 161),(90 161,76 175)),MULTILINESTRING EMPTY)                ``` |
+| ![image](images/st_sharedpaths01.svg)   A multilinestring and a linestring |
+| ![image](images/st_sharedpaths02.svg)   The shared path of multilinestring and linestring overlaid with original geometries.    ```sql   SELECT ST_AsText(   ST_SharedPaths(     ST_GeomFromText('MULTILINESTRING((26 125,26 200,126 200,126 125,26 125),        (51 150,101 150,76 175,51 150))'),     ST_GeomFromText('LINESTRING(151 100,126 156.25,126 125,90 161, 76 175)')     )   ) As wkt                                  wkt ------------------------------------------------------------- GEOMETRYCOLLECTION(MULTILINESTRING((126 156.25,126 125),  (101 150,90 161),(90 161,76 175)),MULTILINESTRING EMPTY)                ``` |
 | ```   same example but linestring orientation flipped  SELECT ST_AsText(   ST_SharedPaths(    ST_GeomFromText('LINESTRING(76 175,90 161,126 125,126 156.25,151 100)'),    ST_GeomFromText('MULTILINESTRING((26 125,26 200,126 200,126 125,26 125),        (51 150,101 150,76 175,51 150))')     )   ) As wkt                                  wkt ------------------------------------------------------------- GEOMETRYCOLLECTION(MULTILINESTRING EMPTY, MULTILINESTRING((76 175,90 161),(90 161,101 150),(126 125,126 156.25)))                ``` |
 
 
@@ -1725,6 +1774,9 @@ SELECT ST_Npoints(geom) AS np_before,
 Simplifying a set of lines. Lines may intersect after simplification.
 
 
+![image](images/st_simplify01.svg)
+
+
 ```sql
 SELECT ST_Simplify(
   'MULTILINESTRING ((20 180, 20 150, 50 150, 50 100, 110 150, 150 140, 170 120), (20 10, 80 30, 90 120), (90 120, 130 130), (130 130, 130 70, 160 40, 180 60, 180 90, 140 80), (50 40, 70 40, 80 70, 70 60, 60 60, 50 50, 50 40))',
@@ -1733,6 +1785,9 @@ SELECT ST_Simplify(
 
 
 Simplifying a MultiPolygon. Polygonal results may be invalid.
+
+
+![image](images/st_simplify02.svg)
 
 
 ```sql
@@ -1805,6 +1860,9 @@ FROM (SELECT ST_Buffer('POINT(1 3)', 10,12) AS geom) AS t;
 Simplifying a set of lines, preserving topology of non-intersecting lines.
 
 
+![image](images/st_simplifypreservetopology01.svg)
+
+
 ```sql
 SELECT ST_SimplifyPreserveTopology(
   'MULTILINESTRING ((20 180, 20 150, 50 150, 50 100, 110 150, 150 140, 170 120), (20 10, 80 30, 90 120), (90 120, 130 130), (130 130, 130 70, 160 40, 180 60, 180 90, 140 80), (50 40, 70 40, 80 70, 70 60, 60 60, 50 50, 50 40))',
@@ -1813,6 +1871,9 @@ SELECT ST_SimplifyPreserveTopology(
 
 
 Simplifying a MultiPolygon, preserving topology of shells and holes.
+
+
+![image](images/st_simplifypreservetopology02.svg)
 
 
 ```sql
@@ -1867,6 +1928,9 @@ Requires GEOS >= 3.11.0.
 ## Examples
 
 
+![image](images/st_simplifypolygonhull02.svg)
+
+
 Outer hull of a Polygon
 
 
@@ -1877,6 +1941,9 @@ SELECT ST_SimplifyPolygonHull(
 ```
 
 
+![image](images/st_simplifypolygonhull03.svg)
+
+
 Inner hull of a Polygon
 
 
@@ -1885,6 +1952,9 @@ SELECT ST_SimplifyPolygonHull(
   'POLYGON ((131 158, 136 163, 161 165, 173 156, 179 148, 169 140, 186 144, 190 137, 185 131, 174 128, 174 124, 166 119, 158 121, 158 115, 165 107, 161 97, 166 88, 166 79, 158 57, 145 57, 112 53, 111 47, 93 43, 90 48, 88 40, 80 39, 68 32, 51 33, 40 31, 39 34, 49 38, 34 38, 25 34, 28 39, 36 40, 44 46, 24 41, 17 41, 14 46, 19 50, 33 54, 21 55, 13 52, 11 57, 22 60, 34 59, 41 68, 75 72, 62 77, 56 70, 46 72, 31 69, 46 76, 52 82, 47 84, 56 90, 66 90, 64 94, 56 91, 33 97, 36 100, 23 100, 22 107, 29 106, 31 112, 46 116, 36 118, 28 131, 53 132, 59 127, 62 131, 76 130, 80 135, 89 137, 87 143, 73 145, 80 150, 88 150, 85 157, 99 162, 116 158, 115 165, 123 165, 122 170, 134 164, 131 158))',
     0.3, false);
 ```
+
+
+![image](images/st_simplifypolygonhull01.svg)
 
 
 Outer hull simplification of a MultiPolygon, with segmentization
@@ -1962,6 +2032,9 @@ LINESTRING(5 2,7 25,10 10)
 Simplifying a line.
 
 
+![image](images/st_simplifyvw01.svg)
+
+
 ```sql
 SELECT ST_SimplifyVW(
   'LINESTRING (10 10, 50 40, 30 70, 50 60, 70 80, 50 110, 100 100, 90 140, 100 180, 150 170, 170 140, 190 90, 180 40, 110 40, 150 20)',
@@ -1970,6 +2043,9 @@ SELECT ST_SimplifyVW(
 
 
 Simplifying a polygon.
+
+
+![image](images/st_simplifyvw02.svg)
 
 
 ```sql
@@ -2114,6 +2190,9 @@ SELECT ST_AsText(ST_TriangulatePolygon(
 ```
 
 
+![image](images/st_triangulatepolygon01.svg)
+
+
 Polygon Triangulation
 
 
@@ -2139,7 +2218,7 @@ GEOMETRYCOLLECTION(POLYGON((50 160,120 190,120 160,50 160))
 ```
 
 
-| Original polygon | Triangulated Polygon |
+| ![image](images/st_tesselate03.svg)   Original polygon | ![image](images/st_triangulatepolygon02.svg)   Triangulated Polygon |
 
 
 ## See Also
@@ -2179,6 +2258,9 @@ Availability: 2.3.0
 
 
 ## Examples
+
+
+![image](images/st_voronoi03.svg)
 
 
 Voronoi diagram lines, with tolerance of 30 units
@@ -2237,6 +2319,9 @@ Availability: 2.3.0
 ## Examples
 
 
+![image](images/st_voronoi01.svg)
+
+
 Points overlaid on top of Voronoi diagram
 
 
@@ -2255,6 +2340,9 @@ POLYGON((55 -90,-110 -90,-110 43.3333333333333,36.8181818181818 92.2727272727273
 POLYGON((230 47.5,230 -20.7142857142857,55 79.2857142857143,36.8181818181818 92.2727272727273,59.3478260869565 132.826086956522,230 47.5)),POLYGON((230 -20.7142857142857,230 -90,55 -90,55 79.2857142857143,230 -20.7142857142857)),
 POLYGON((100.5 270,230 270,230 47.5,59.3478260869565 132.826086956522,100.5 270)))
 ```
+
+
+![image](images/st_voronoi02.svg)
 
 
 Voronoi diagram, with tolerance of 30 units

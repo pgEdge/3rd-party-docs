@@ -88,7 +88,7 @@ Requires GEOS >= 3.9.0 to use the gridSize parameter.
 ## Examples
 
 
-| The input linestrings | The difference of the two linestrings |
+| ![image](images/st_symdifference01.svg)   The input linestrings | ![image](images/st_difference01.svg)   The difference of the two linestrings |
 
 
 The difference of 2D linestrings.
@@ -428,7 +428,7 @@ Enhanced: 2.5.0 support for splitting a polygon by a multiline was introduced.
 Split a Polygon by a Line.
 
 
-| Before Split | After split |
+| ![image](images/st_split01.svg)   Before Split | ![image](images/st_split02.svg)   After split |
 
 
 ```sql
@@ -450,7 +450,7 @@ SELECT ST_AsText( ST_Split(
 Split a MultiLineString by a Point, where the point lies exactly on both LineStrings elements.
 
 
-| Before Split | After split |
+| ![image](images/st_split03.svg)   Before Split | ![image](images/st_split04.svg)   After split |
 
 
 ```sql
@@ -551,6 +551,9 @@ Requires GEOS >= 3.9.0 to use the gridSize parameter
 **Example:** Subdivide a polygon into parts with no more than 10 vertices, and assign each part a unique id.
 
 
+![image](images/st_subdivide01.svg)
+
+
 Subdivided to maximum 10 vertices
 
 
@@ -577,6 +580,9 @@ SELECT row_number() OVER() As rn, ST_AsText(geom) As wkt
 
 
 **Example:** Densify a long geography line using ST_Segmentize(geography, distance), and use ST_Subdivide to split the resulting line into sublines of 8 vertices. Densification minimizes the impact of changes to the geography representation of a geometry when subdividing.
+
+
+![image](images/st_subdivide02.svg)
 
 
 The densified and split lines.
@@ -675,7 +681,7 @@ Requires GEOS >= 3.9.0 to use the gridSize parameter
 ## Examples
 
 
-| The original linestrings shown together | The symmetric difference of the two linestrings |
+| ![image](images/st_symdifference01.svg)   The original linestrings shown together | ![image](images/st_symdifference02.svg)   The symmetric difference of the two linestrings |
 
 
 ```

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<rect width="200" height="200" fill="white"/>
+<polyline points="164.00,184.00 144.00,184.00 124.00,184.00 104.00,184.00 84.00,184.00 64.00,184.00 44.00,184.00 24.00,184.00 20.00,184.00 18.00,184.00 17.00,183.00 16.00,182.00 16.00,180.00 16.00,160.00 16.00,140.00 16.00,120.00 16.00,100.00 16.00,80.00 16.00,60.00 16.00,40.00 16.00,20.00 16.00,5.00" fill="none" stroke="#6495ED" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="164.00,169.00 46.00,169.00 40.26,167.86 35.39,164.61 32.14,159.74 31.00,154.00 31.00,5.00" fill="none" stroke="#770000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

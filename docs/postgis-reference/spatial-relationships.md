@@ -143,20 +143,20 @@ NOTE: this is the "allowable" version that returns a boolean, not an integer.
 `ST_Contains` returns `TRUE` in the following situations:
 
 
-| `LINESTRING` / `MULTIPOINT` | `POLYGON` / `POINT` |
-| `POLYGON` / `LINESTRING` | `POLYGON` / `POLYGON` |
+| ![image](images/st_contains01.svg)   `LINESTRING` / `MULTIPOINT` | ![image](images/st_contains02.svg)   `POLYGON` / `POINT` |
+| ![image](images/st_contains03.svg)   `POLYGON` / `LINESTRING` | ![image](images/st_contains04.svg)   `POLYGON` / `POLYGON` |
 
 
 `ST_Contains` returns `FALSE` in the following situations:
 
 
-| `POLYGON` / `MULTIPOINT` | `POLYGON` / `LINESTRING` |
+| ![image](images/st_contains05.svg)   `POLYGON` / `MULTIPOINT` | ![image](images/st_contains06.svg)   `POLYGON` / `LINESTRING` |
 
 
 Due to the interior intersection condition `ST_Contains` returns `FALSE` in the following situations (whereas `ST_Covers` returns `TRUE`):
 
 
-| `LINESTRING` / `POINT` | `POLYGON` / `LINESTRING` |
+| ![image](images/st_contains07.svg)   `LINESTRING` / `POINT` | ![image](images/st_contains08.svg)   `POLYGON` / `LINESTRING` |
 
 
 ```
@@ -555,8 +555,8 @@ Geometries cross if their DE-9IM Intersection Matrix matches:
 The following situations all return `true`.
 
 
-| `MULTIPOINT` / `LINESTRING` | `MULTIPOINT` / `POLYGON` |
-| `LINESTRING` / `POLYGON` | `LINESTRING` / `LINESTRING` |
+| ![image](images/st_crosses01.svg)   `MULTIPOINT` / `LINESTRING` | ![image](images/st_crosses02.svg)   `MULTIPOINT` / `POLYGON` |
+| ![image](images/st_crosses03.svg)   `LINESTRING` / `POLYGON` | ![image](images/st_crosses04.svg)   `LINESTRING` / `LINESTRING` |
 
 
 Consider a situation where a user has two tables: a table of roads and a table of highways.
@@ -877,6 +877,9 @@ Availability: 1.4
 **Example:** LINE CROSS LEFT and LINE CROSS RIGHT
 
 
+![image](images/st_linecrossingdirection03.svg)
+
+
 Blue: Line A; Green: Line B
 
 
@@ -898,6 +901,9 @@ FROM (SELECT
 **Example:** LINE MULTICROSS END SAME FIRST LEFT and LINE MULTICROSS END SAME FIRST RIGHT
 
 
+![image](images/st_linecrossingdirection01.svg)
+
+
 Blue: Line A; Green: Line B
 
 
@@ -917,6 +923,9 @@ FROM (SELECT
 
 
 **Example:** LINE MULTICROSS END LEFT and LINE MULTICROSS END RIGHT
+
+
+![image](images/st_linecrossingdirection04.svg)
 
 
 Blue: Line A; Green: Line B
@@ -1069,7 +1078,10 @@ NOTE: this is the "allowable" version that returns a boolean, not an integer.
 `ST_Overlaps` returns `TRUE` in the following situations:
 
 
-| `MULTIPOINT` / `MULTIPOINT` | `LINESTRING` / `LINESTRING` | `POLYGON` / `POLYGON` |
+| ![image](images/st_overlaps01.svg)   `MULTIPOINT` / `MULTIPOINT` | ![image](images/st_overlaps02.svg)   `LINESTRING` / `LINESTRING` | ![image](images/st_overlaps03.svg)   `POLYGON` / `POLYGON` |
+
+
+![image](images/st_overlaps04.svg)
 
 
 A Point on a LineString is contained, but since it has lower dimension it does not overlap or cross.
@@ -1088,6 +1100,9 @@ f        | f       | t          | t
 ```
 
 
+![image](images/st_overlaps05.svg)
+
+
 A LineString that partly covers a Polygon intersects and crosses, but does not overlap since it has different dimension.
 
 
@@ -1102,6 +1117,9 @@ FROM (SELECT ST_GeomFromText('POLYGON ((40 170, 90 30, 180 100, 40 170))') AS a,
 ---------+---------+------------+--------------
  f       | t       | t          | f
 ```
+
+
+![image](images/st_overlaps06.svg)
 
 
 Two Polygons that intersect but with neither contained by the other overlap, but do not cross because their intersection has the same dimension.
@@ -1414,8 +1432,8 @@ This relationship holds if the DE-9IM Intersection Matrix for the two geometries
 The `ST_Touches` predicate returns `TRUE` in the following examples.
 
 
-| `POLYGON` / `POLYGON` | `POLYGON` / `POLYGON` | `POLYGON` / `LINESTRING` |
-| `LINESTRING` / `LINESTRING` | `LINESTRING` / `LINESTRING` | `POLYGON` / `POINT` |
+| ![image](images/st_touches01.svg)   `POLYGON` / `POLYGON` | ![image](images/st_touches02.svg)   `POLYGON` / `POLYGON` | ![image](images/st_touches03.svg)   `POLYGON` / `LINESTRING` |
+| ![image](images/st_touches04.svg)   `LINESTRING` / `LINESTRING` | ![image](images/st_touches05.svg)   `LINESTRING` / `LINESTRING` | ![image](images/st_touches06.svg)   `POLYGON` / `POINT` |
 
 
 ```sql
@@ -1523,6 +1541,9 @@ SELECT ST_Buffer(ST_GeomFromText('POINT(50 50)'), 20) As smallc,
 (1 row)
 
 ```
+
+
+![image](images/st_within01.svg)
 
 
 ## See Also

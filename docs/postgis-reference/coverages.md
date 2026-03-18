@@ -48,6 +48,9 @@ Requires GEOS >= 3.12.0
 ## Examples
 
 
+![image](images/st_coverageinvalidedges01.svg)
+
+
 Invalid edges caused by overlap and non-matching vertices
 
 
@@ -128,7 +131,7 @@ Requires GEOS >= 3.12.0
 ## Examples
 
 
-| Input coverage | Simplified coverage |
+| ![image](images/st_coveragesimplify01.svg)   Input coverage | ![image](images/st_coveragesimplify02.svg)   Simplified coverage |
 
 
 ```sql
@@ -187,7 +190,7 @@ Availability: 3.4.0 - requires GEOS >= 3.8.0
 ## Examples
 
 
-| Input coverage | Union result |
+| ![image](images/st_coverageunion01.svg)   Input coverage | ![image](images/st_coverageunion02.svg)   Union result |
 
 
 ```sql
