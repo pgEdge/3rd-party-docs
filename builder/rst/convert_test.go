@@ -1335,3 +1335,93 @@ func TestConvertInline_RoleBangPrefix(t *testing.T) {
 		t.Errorf("expected unsuppressed name, got %q", result)
 	}
 }
+
+// --- copyImage tests ---
+
+// TestCopyImage_ResolvesViaSourceFile verifies that image paths are
+// resolved relative to the RST source file (SourceFile), not the
+// output markdown file (CurrentFile).  This matters when toctree
+// reorganisation places the output file in a different subdirectory.
+func TestCopyImage_ResolvesViaSourceFile(t *testing.T) {
+	// Set up temp source and output directories
+	srcDir := t.TempDir()
+	outDir := t.TempDir()
+
+	// Create source images directory with a test image
+	imgDir := filepath.Join(srcDir, "images")
+	if err := os.MkdirAll(imgDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	imgData := []byte("fake-png-data")
+	if err := os.WriteFile(
+		filepath.Join(imgDir, "test.png"), imgData, 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	ctx := &ConvertContext{
+		SrcDir: srcDir,
+		OutDir: outDir,
+		// Source RST file is at the root of SrcDir
+		SourceFile: "page.rst",
+		// Output file is nested in a subdirectory
+		CurrentFile: "subdir/page.md",
+	}
+
+	// Copy with path relative to the source RST file
+	result := ctx.copyImage("images/test.png")
+
+	// The resolved path should be images/test.png (relative to
+	// source root), not subdir/images/test.png
+	if result != "images/test.png" {
+		t.Errorf("expected images/test.png, got %q", result)
+	}
+
+	// Verify the image was actually copied
+	copied := filepath.Join(outDir, "images", "test.png")
+	data, err := os.ReadFile(copied)
+	if err != nil {
+		t.Fatalf("image not copied to %s: %v", copied, err)
+	}
+	if string(data) != string(imgData) {
+		t.Error("copied image content mismatch")
+	}
+}
+
+// TestCopyImage_NestedSourceAndOutput verifies correct behaviour
+// when both source and output files are in subdirectories.
+func TestCopyImage_NestedSourceAndOutput(t *testing.T) {
+	srcDir := t.TempDir()
+	outDir := t.TempDir()
+
+	// Create _static directory with a test image
+	staticDir := filepath.Join(srcDir, "_static")
+	if err := os.MkdirAll(staticDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	imgData := []byte("fake-png-data")
+	if err := os.WriteFile(
+		filepath.Join(staticDir, "test.png"), imgData, 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	ctx := &ConvertContext{
+		SrcDir:      srcDir,
+		OutDir:      outDir,
+		SourceFile:  "explanations/install.rst",
+		CurrentFile: "explanations/install.md",
+	}
+
+	// Image ref: ../_static/test.png (relative to source file)
+	result := ctx.copyImage("../_static/test.png")
+
+	// Should resolve to _static/test.png
+	if result != "_static/test.png" {
+		t.Errorf("expected _static/test.png, got %q", result)
+	}
+
+	// Verify copy
+	copied := filepath.Join(outDir, "_static", "test.png")
+	if _, err := os.Stat(copied); err != nil {
+		t.Fatalf("image not copied to %s: %v", copied, err)
+	}
+}

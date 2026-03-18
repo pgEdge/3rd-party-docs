@@ -32,6 +32,7 @@ type ConvertContext struct {
 	Substitutions    map[string]*Node
 	HyperlinkTargets map[string]string // name -> URL
 	CurrentFile      string
+	SourceFile       string // RST source path relative to SrcDir
 	Warnings         []string
 	PrevWasImage     bool     // tracks consecutive image directives
 	SkipSections     []string // section headings to suppress
@@ -169,6 +170,7 @@ func (c *Converter) convertFile(rstName, outputPath string) error {
 	}
 
 	ctx.CurrentFile = outputPath
+	ctx.SourceFile = rstName + ".rst"
 
 	// Pre-scan raw text for substitution defs and hyperlink targets
 	// that may be deeply nested inside directive bodies.
@@ -589,8 +591,14 @@ func (ctx *ConvertContext) copyImage(imgPath string) string {
 		return imgPath
 	}
 
-	// Resolve relative to the current file's directory
-	fileDir := filepath.Dir(ctx.CurrentFile)
+	// Resolve relative to the source RST file's directory (not
+	// the output file, which may be in a different subdirectory
+	// due to toctree reorganization).
+	sourceFile := ctx.SourceFile
+	if sourceFile == "" {
+		sourceFile = ctx.CurrentFile
+	}
+	fileDir := filepath.Dir(sourceFile)
 	resolved := filepath.Clean(filepath.Join(fileDir, imgPath))
 
 	// If the resolved path escapes the source root (starts with
