@@ -161,8 +161,8 @@ The number is formed by converting the major, minor, and revision numbers into t
 
 Description of one result column, exposed as items of the `cursor.description` sequence.
 
-*New in version 2.8.*   in previous version the `description` attribute was a sequence of
-  simple tuples or namedtuples.
+*New in version 2.8.*  in previous version the `description` attribute was a sequence of
+ simple tuples or namedtuples.
 
 *attribute* `name`
 

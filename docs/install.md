@@ -107,9 +107,8 @@ Psycopg is a C wrapper around the [libpq](https://www.postgresql.org/docs/curren
 - The `pg_config` program: it is usually installed by the **libpq-dev** package but sometimes it is not in a `PATH` directory. Having it in the `PATH` greatly streamlines the installation, so try running `pg_config --version`: if it returns an error or an unexpected version number then locate the directory containing the `pg_config` shipped with the right libpq version (usually `/usr/lib/postgresql/X.Y/bin/`) and add it to the `PATH`:
 
     ```console
-    ```
-
     $ export PATH=/usr/lib/postgresql/X.Y/bin/:$PATH
+    ```
 
     You only need `pg_config` to compile `psycopg2`, not for its regular usage.
 

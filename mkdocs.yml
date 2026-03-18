@@ -1,4 +1,4 @@
-site_name: psycopg2 dev
+site_name: Psycopg dev
 
 extra_css:
   - stylesheets/extra.css
@@ -51,7 +51,7 @@ extra:
 repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
-  - Home: index.md
+  - Psycopg -- PostgreSQL database adapter for Python: index.md
   - Installation: install.md
   - Basic module usage: usage.md
   - The psycopg2 module content: module.md

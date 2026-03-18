@@ -30,15 +30,15 @@ Constants representing all the error values defined by PostgreSQL versions betwe
 *function* `lookup(code)`
 
 ```python
-  >>> try:
-  ...     cur.execute("SELECT ouch FROM aargh;")
-  ... except Exception as e:
-  ...     pass
-  ...
-  >>> errorcodes.lookup(e.pgcode[:2])
-  'CLASS_SYNTAX_ERROR_OR_ACCESS_RULE_VIOLATION'
-  >>> errorcodes.lookup(e.pgcode)
-  'UNDEFINED_TABLE'
+ >>> try:
+ ...     cur.execute("SELECT ouch FROM aargh;")
+ ... except Exception as e:
+ ...     pass
+ ...
+ >>> errorcodes.lookup(e.pgcode[:2])
+ 'CLASS_SYNTAX_ERROR_OR_ACCESS_RULE_VIOLATION'
+ >>> errorcodes.lookup(e.pgcode)
+ 'UNDEFINED_TABLE'
 ```
 
 *New in version 2.0.14.*

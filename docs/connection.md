@@ -11,18 +11,18 @@ Connections are thread safe and can be shared among many threads. See [Thread an
 Connections can be used as context managers. Note that a context wraps a transaction: if the context exits with success the transaction is committed, if it exits with an exception the transaction is rolled back. Note that the connection is not closed by the context and it can be used for several contexts.
 
 ```python
-  conn = psycopg2.connect(DSN)
+ conn = psycopg2.connect(DSN)
 
-  with conn:
-      with conn.cursor() as curs:
-          curs.execute(SQL1)
+ with conn:
+     with conn.cursor() as curs:
+         curs.execute(SQL1)
 
-  with conn:
-      with conn.cursor() as curs:
-          curs.execute(SQL2)
+ with conn:
+     with conn.cursor() as curs:
+         curs.execute(SQL2)
 
-  # leaving contexts doesn't close the connection
-  conn.close()
+ # leaving contexts doesn't close the connection
+ conn.close()
 ```
 
 *method* `cursor(name=None, cursor_factory=None, scrollable=None, withhold=False)`
@@ -38,11 +38,11 @@ cursor name.
 
 The *cursor_factory* argument can be used to create non-standard cursors. The class returned must be a subclass of `psycopg2.extensions.cursor`. See [Connection and cursor factories](advanced.md#subclassing-cursor) for details. A default factory for the connection can also be specified using the `cursor_factory` attribute.
 
-*Changed in version 2.4.3 added the *withhold* argument..* .. versionchanged:: 2.5 added the *scrollable* argument.
+*Changed in version 2.4.3 added the *withhold* argument..*
 
-.. extension::
+*Changed in version 2.5 added the *scrollable* argument..*
 
-    All the function arguments are Psycopg extensions to the |DBAPI|.
+All the function arguments are Psycopg extensions to the |DBAPI|.
 
 *method* `commit()`
 
@@ -267,20 +267,20 @@ The default is `False` (manual commit) as per DBAPI specification.
 
 Return or set the transaction isolation levelfor the current session.  The value is one of the [Isolation level constants](extensions.md#isolation-level-constants) defined in the `psycopg2.extensions` module.  On set it is also possible to use one of the literal values `READ UNCOMMITTED`, `READ COMMITTED`, `REPEATABLE READ`, `SERIALIZABLE`, `DEFAULT`.
 
-*Changed in version 2.7.*    the property is writable.
+*Changed in version 2.7.*  the property is writable.
 
-*Changed in version 2.7.*    the default value for `isolation_level` is
-   `ISOLATION_LEVEL_DEFAULT`; previously the
-   property would have queried the server and returned the real value
-   applied. To know this value you can run a query such as `show
-   transaction_isolation`. Usually the default value is `READ
-   COMMITTED`, but this may be changed in the server configuration.
+*Changed in version 2.7.*  the default value for `isolation_level` is
+ `ISOLATION_LEVEL_DEFAULT`; previously the
+ property would have queried the server and returned the real value
+ applied. To know this value you can run a query such as `show
+ transaction_isolation`. Usually the default value is `READ
+ COMMITTED`, but this may be changed in the server configuration.
 
-   This value is now entirely separate from the `autocommit`
-   property: in previous version, if `autocommit` was set to `True`
-   this property would have returned
-   `ISOLATION_LEVEL_AUTOCOMMIT`; it will now
-   return the server isolation level.
+ This value is now entirely separate from the `autocommit`
+ property: in previous version, if `autocommit` was set to `True`
+ this property would have returned
+ `ISOLATION_LEVEL_AUTOCOMMIT`; it will now
+ return the server isolation level.
 
 *attribute* `readonly`
 
