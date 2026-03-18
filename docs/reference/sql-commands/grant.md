@@ -70,6 +70,11 @@ GRANT { { SET | ALTER SYSTEM } [, ... ] | ALL [ PRIVILEGES ] }
     TO ROLE_SPECIFICATION [, ...] [ WITH GRANT OPTION ]
     [ GRANTED BY ROLE_SPECIFICATION ]
 
+GRANT { SELECT | ALL [ PRIVILEGES ] }
+    ON PROPERTY GRAPH GRAPH_NAME [, ...]
+    TO ROLE_SPECIFICATION [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY ROLE_SPECIFICATION ]
+
 GRANT { { CREATE | USAGE } [, ...] | ALL [ PRIVILEGES ] }
     ON SCHEMA SCHEMA_NAME [, ...]
     TO ROLE_SPECIFICATION [, ...] [ WITH GRANT OPTION ]
@@ -102,7 +107,7 @@ where ROLE_SPECIFICATION can be:
 ## Description
 
 
- The `GRANT` command has two basic variants: one that grants privileges on a database object (table, column, view, foreign table, sequence, database, foreign-data wrapper, foreign server, function, procedure, procedural language, large object, configuration parameter, schema, tablespace, or type), and one that grants membership in a role. These variants are similar in many ways, but they are different enough to be described separately.
+ The `GRANT` command has two basic variants: one that grants privileges on a database object (table, column, view, foreign table, sequence, database, foreign-data wrapper, foreign server, function, procedure, procedural language, large object, configuration parameter, property graph, schema, tablespace, or type), and one that grants membership in a role. These variants are similar in many ways, but they are different enough to be described separately.
  <a id="sql-grant-description-objects"></a>
 
 ### GRANT on Database Objects

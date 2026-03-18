@@ -453,6 +453,9 @@ ORDER BY p;
  Table functions appearing in `FROM` can also be preceded by the key word `LATERAL`, but for functions the key word is optional; the function's arguments can contain references to columns provided by preceding `FROM` items in any case.
 
 
+ A `GRAPH_TABLE` `FROM` item can also always contain lateral references.
+
+
  A `LATERAL` item can appear at the top level in the `FROM` list, or within a `JOIN` tree. In the latter case it can also refer to any items that are on the left-hand side of a `JOIN` that it is on the right-hand side of.
 
 

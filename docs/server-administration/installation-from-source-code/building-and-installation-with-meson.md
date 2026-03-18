@@ -519,6 +519,14 @@ ninja install
 
 `update-unicode`
 :   Update Unicode data to new version
+<a id="meson-target-headerscheck"></a>
+
+`headerscheck`
+:   Check that all headers compile standalone
+<a id="meson-target-cpluspluscheck"></a>
+
+`cpluspluscheck`
+:   Check that all headers compile as C++
   <a id="targets-meson-documentation"></a>
 
 #### Documentation Targets

@@ -28,12 +28,20 @@
 <p>Name of table</p></td>
 </tr>
 <tr>
+<td><p><code>tableid</code> <code>oid</code> (references <a href="../system-catalogs/pg_class.md#catalog-pg-class"><code>pg_class</code></a>.<code>oid</code>)</p>
+<p>OID of table</p></td>
+</tr>
+<tr>
 <td><p><code>statistics_schemaname</code> <code>name</code> (references <a href="../system-catalogs/pg_namespace.md#catalog-pg-namespace"><code>pg_namespace</code></a>.<code>nspname</code>)</p>
 <p>Name of schema containing extended statistics object</p></td>
 </tr>
 <tr>
 <td><p><code>statistics_name</code> <code>name</code> (references <a href="../system-catalogs/pg_statistic_ext.md#catalog-pg-statistic-ext"><code>pg_statistic_ext</code></a>.<code>stxname</code>)</p>
 <p>Name of extended statistics object</p></td>
+</tr>
+<tr>
+<td><p><code>statistics_id</code> <code>oid</code> (references <a href="../system-catalogs/pg_statistic_ext.md#catalog-pg-statistic-ext"><code>pg_statistic_ext</code></a>.<code>oid</code>)</p>
+<p>OID of extended statistics object</p></td>
 </tr>
 <tr>
 <td><p><code>statistics_owner</code> <code>name</code> (references <a href="../system-catalogs/pg_authid.md#catalog-pg-authid"><code>pg_authid</code></a>.<code>rolname</code>)</p>

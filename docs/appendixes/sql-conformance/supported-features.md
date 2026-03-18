@@ -280,6 +280,32 @@
 | F867 |  | FETCH FIRST clause: WITH TIES option |  |
 | F868 |  | ORDER BY in grouped table |  |
 | F869 |  | SQL implementation info population |  |
+| G000 |  | Graph pattern | SQL/PGQ required |
+| G001 |  | Repeatable-elements match mode | SQL/PGQ required |
+| G008 |  | Graph pattern WHERE clause | SQL/PGQ required |
+| G034 |  | Path concatenation | SQL/PGQ required |
+| G040 |  | Vertex pattern | SQL/PGQ required |
+| G042 |  | Basic full edge patterns | SQL/PGQ required |
+| G044 |  | Basic abbreviated edge patterns |  |
+| G070 |  | Label expression: label disjunction | SQL/PGQ required |
+| G073 |  | Label expression: individual label name | SQL/PGQ required |
+| G090 |  | Property reference | SQL/PGQ required |
+| G850 |  | SQL/PGQ Information Schema views |  |
+| G900 |  | GRAPH_TABLE | SQL/PGQ required |
+| G920 |  | DDL-based SQL-property graphs | SQL/PGQ required |
+| G921 |  | Empty SQL-property graph |  |
+| G922 |  | Views as element tables |  |
+| G924 |  | Explicit key clause for element tables | SQL/PGQ required |
+| G925 |  | Explicit label and properties clause for element tables | SQL/PGQ required |
+| G926 |  | More than one label for vertex tables |  |
+| G927 |  | More than one label for edge tables |  |
+| G928 |  | Value expressions as properties and renaming of properties |  |
+| G940 |  | Multi-sourced/destined edges |  |
+| G941 |  | Implicit removal of incomplete edges |  |
+| G950 |  | Alter property graph statement: ADD/DROP element table |  |
+| G960 |  | Alter element table definition: ADD/DROP LABEL |  |
+| G970 |  | Alter element table definition: ALTER LABEL |  |
+| G980 |  | DROP PROPERTY GRAPH: CASCADE drop behavior |  |
 | S071 |  | SQL paths in function and type name resolution |  |
 | S090 |  | Minimal array support |  |
 | S092 |  | Arrays of user-defined types |  |

@@ -183,6 +183,36 @@ make check LANG=C ENCODING=EUC_JP
 
 
  The database encoding can be set for tests against either a temporary or an existing installation, though in the latter case it must be compatible with the installation's locale.
+  <a id="regress-run-path-substitution"></a>
+
+### Path Substitution
+
+
+ The test suites driven by `pg_regress` can use the following environment variables for path substitutions:
+
+`PG_ABS_SRCDIR`
+:   Absolute path to the source directory.
+
+`PG_ABS_BUILDDIR`
+:   Absolute path to the build directory.
+
+`PG_DLSUFFIX`
+:   Name of extension for dynamically-loadable modules (e.g. `.so` on Linux).
+
+`PG_LIBDIR`
+:   Absolute path to dynamic libraries.
+
+
+ These variables should be set in the tests with the meta-command `\getenv`, like:
+
+```
+
+\getenv abs_builddir PG_ABS_BUILDDIR
+\getenv abs_srcdir PG_ABS_SRCDIR
+```
+
+
+ These are useful when dealing with function and object loading that require specific paths to work, like paths defined in a `CREATE FUNCTION` or `LOAD` command.
   <a id="regress-run-custom-settings"></a>
 
 ### Custom Server Settings

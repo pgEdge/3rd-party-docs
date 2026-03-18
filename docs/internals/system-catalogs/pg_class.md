@@ -86,7 +86,7 @@
 </tr>
 <tr>
 <td><p><code>relkind</code> <code>char</code></p>
-<p><code>r</code> = ordinary table, <code>i</code> = index, <code>S</code> = sequence, <code>t</code> = TOAST table, <code>v</code> = view, <code>m</code> = materialized view, <code>c</code> = composite type, <code>f</code> = foreign table, <code>p</code> = partitioned table, <code>I</code> = partitioned index</p></td>
+<p><code>r</code> = ordinary table, <code>i</code> = index, <code>S</code> = sequence, <code>t</code> = TOAST table, <code>v</code> = view, <code>m</code> = materialized view, <code>c</code> = composite type, <code>f</code> = foreign table, <code>p</code> = partitioned table, <code>I</code> = partitioned index, <code>g</code> = property graph</p></td>
 </tr>
 <tr>
 <td><p><code>relnatts</code> <code>int2</code></p>

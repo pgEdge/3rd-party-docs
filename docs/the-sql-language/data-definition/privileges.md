@@ -52,7 +52,7 @@ REVOKE ALL ON accounts FROM PUBLIC;
 <a id="ddl-priv-select"></a>
 
 `SELECT`
-:   Allows `SELECT` from any column, or specific column(s), of a table, view, materialized view, or other table-like object. Also allows use of `COPY TO`. This privilege is also needed to reference existing column values in `UPDATE`, `DELETE`, or `MERGE`. For sequences, this privilege also allows use of the `currval` function. For large objects, this privilege allows the object to be read.
+:   Allows `SELECT` from any column, or specific column(s), of a table, view, materialized view, or other table-like object. Also allows use of `COPY TO`. This privilege is also needed to reference existing column values in `UPDATE`, `DELETE`, or `MERGE`. For property graphs, this privilege allows the object to be referenced in a `GRAPH_TABLE` clause. For sequences, this privilege also allows use of the `currval` function. For large objects, this privilege allows the object to be read.
 <a id="ddl-priv-insert"></a>
 
 `INSERT`

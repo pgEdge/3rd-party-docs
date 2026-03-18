@@ -264,7 +264,7 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 <a id="sql-altertable-desc-alter-constraint"></a>
 
 `ALTER CONSTRAINT`
-:   This form alters the attributes of a constraint that was previously created. Currently only foreign key constraints may be altered in this fashion, but see below.
+:   This form alters the attributes of a constraint that was previously created. Currently `FOREIGN KEY` and `CHECK` constraints may be altered in this fashion, but see below.
 <a id="sql-altertable-desc-alter-constraint-inherit"></a>
 
 `ALTER CONSTRAINT ... INHERIT`, `ALTER CONSTRAINT ... NO INHERIT`

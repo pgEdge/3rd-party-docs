@@ -32,6 +32,7 @@ where MEMBER_OBJECT is:
   OPERATOR FAMILY OBJECT_NAME USING INDEX_METHOD |
   [ PROCEDURAL ] LANGUAGE OBJECT_NAME |
   PROCEDURE PROCEDURE_NAME [ ( [ [ ARGMODE ] [ ARGNAME ] ARGTYPE [, ...] ] ) ] |
+  PROPERTY GRAPH OBJECT_NAME |
   ROUTINE ROUTINE_NAME [ ( [ [ ARGMODE ] [ ARGNAME ] ARGTYPE [, ...] ] ) ] |
   SCHEMA OBJECT_NAME |
   SEQUENCE OBJECT_NAME |
@@ -88,7 +89,7 @@ and AGGREGATE_SIGNATURE is:
 :   The new schema for the extension.
 
 *object_name*, *aggregate_name*, *function_name*, *operator_name*, *procedure_name*, *routine_name*
-:   The name of an object to be added to or removed from the extension. Names of tables, aggregates, domains, foreign tables, functions, operators, operator classes, operator families, procedures, routines, sequences, text search objects, types, and views can be schema-qualified.
+:   The name of an object to be added to or removed from the extension. Names of tables, aggregates, domains, foreign tables, functions, operators, operator classes, operator families, procedures, property graphs, routines, sequences, text search objects, types, and views can be schema-qualified.
 
 *source_type*
 :   The name of the source data type of the cast.

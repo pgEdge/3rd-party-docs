@@ -538,6 +538,11 @@ SELECT pg_type_is_visible('myschema.widget'::regtype);
 <td></td>
 </tr>
 <tr>
+<td><code>pg_get_propgraphdef</code> ( <code>propgraph</code> <code>oid</code> ) <code>text</code></td>
+<td>Reconstructs the creating command for a property graph. (This is a decompiled reconstruction, not the original text of the command.)</td>
+<td></td>
+</tr>
+<tr>
 <td><code>pg_get_ruledef</code> ( <code>rule</code> <code>oid</code> [, <code>pretty</code> <code>boolean</code> ] ) <code>text</code></td>
 <td>Reconstructs the creating command for a rule. (This is a decompiled reconstruction, not the original text of the command.)</td>
 <td></td>

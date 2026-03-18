@@ -109,6 +109,7 @@ nav:
       - Inheritance: the-sql-language/data-definition/inheritance.md
       - Table Partitioning: the-sql-language/data-definition/table-partitioning.md
       - Foreign Data: the-sql-language/data-definition/foreign-data.md
+      - Property Graphs: the-sql-language/data-definition/property-graphs.md
       - Other Database Objects: the-sql-language/data-definition/other-database-objects.md
       - Dependency Tracking: the-sql-language/data-definition/dependency-tracking.md
     - Data Manipulation:
@@ -127,6 +128,7 @@ nav:
       - '`LIMIT` and `OFFSET`': the-sql-language/queries/limit-and-offset.md
       - '`VALUES` Lists': the-sql-language/queries/values-lists.md
       - '`WITH` Queries (Common Table Expressions)': the-sql-language/queries/with-queries-common-table-expressions.md
+      - Graph Queries: the-sql-language/queries/graph-queries.md
     - Data Types:
       - the-sql-language/data-types/index.md
       - Numeric Types: the-sql-language/data-types/numeric-types.md
@@ -475,6 +477,16 @@ nav:
       - '`foreign_tables`': client-interfaces/the-information-schema/foreign_tables.md
       - '`key_column_usage`': client-interfaces/the-information-schema/key_column_usage.md
       - '`parameters`': client-interfaces/the-information-schema/parameters.md
+      - '`pg_edge_table_components`': client-interfaces/the-information-schema/pg_edge_table_components.md
+      - '`pg_element_table_key_columns`': client-interfaces/the-information-schema/pg_element_table_key_columns.md
+      - '`pg_element_table_labels`': client-interfaces/the-information-schema/pg_element_table_labels.md
+      - '`pg_element_table_properties`': client-interfaces/the-information-schema/pg_element_table_properties.md
+      - '`pg_element_tables`': client-interfaces/the-information-schema/pg_element_tables.md
+      - '`pg_label_properties`': client-interfaces/the-information-schema/pg_label_properties.md
+      - '`pg_labels`': client-interfaces/the-information-schema/pg_labels.md
+      - '`pg_property_data_types`': client-interfaces/the-information-schema/pg_property_data_types.md
+      - '`pg_property_graph_privileges`': client-interfaces/the-information-schema/pg_property_graph_privileges.md
+      - '`property_graphs`': client-interfaces/the-information-schema/property_graphs.md
       - '`referential_constraints`': client-interfaces/the-information-schema/referential_constraints.md
       - '`role_column_grants`': client-interfaces/the-information-schema/role_column_grants.md
       - '`role_routine_grants`': client-interfaces/the-information-schema/role_routine_grants.md
@@ -666,6 +678,7 @@ nav:
       - ALTER OPERATOR FAMILY: reference/sql-commands/alter-operator-family.md
       - ALTER POLICY: reference/sql-commands/alter-policy.md
       - ALTER PROCEDURE: reference/sql-commands/alter-procedure.md
+      - ALTER PROPERTY GRAPH: reference/sql-commands/alter-property-graph.md
       - ALTER PUBLICATION: reference/sql-commands/alter-publication.md
       - ALTER ROLE: reference/sql-commands/alter-role.md
       - ALTER ROUTINE: reference/sql-commands/alter-routine.md
@@ -718,6 +731,7 @@ nav:
       - CREATE OPERATOR FAMILY: reference/sql-commands/create-operator-family.md
       - CREATE POLICY: reference/sql-commands/create-policy.md
       - CREATE PROCEDURE: reference/sql-commands/create-procedure.md
+      - CREATE PROPERTY GRAPH: reference/sql-commands/create-property-graph.md
       - CREATE PUBLICATION: reference/sql-commands/create-publication.md
       - CREATE ROLE: reference/sql-commands/create-role.md
       - CREATE RULE: reference/sql-commands/create-rule.md
@@ -766,6 +780,7 @@ nav:
       - DROP OWNED: reference/sql-commands/drop-owned.md
       - DROP POLICY: reference/sql-commands/drop-policy.md
       - DROP PROCEDURE: reference/sql-commands/drop-procedure.md
+      - DROP PROPERTY GRAPH: reference/sql-commands/drop-property-graph.md
       - DROP PUBLICATION: reference/sql-commands/drop-publication.md
       - DROP ROLE: reference/sql-commands/drop-role.md
       - DROP ROUTINE: reference/sql-commands/drop-routine.md
@@ -919,6 +934,11 @@ nav:
       - '`pg_partitioned_table`': internals/system-catalogs/pg_partitioned_table.md
       - '`pg_policy`': internals/system-catalogs/pg_policy.md
       - '`pg_proc`': internals/system-catalogs/pg_proc.md
+      - '`pg_propgraph_element`': internals/system-catalogs/pg_propgraph_element.md
+      - '`pg_propgraph_element_label`': internals/system-catalogs/pg_propgraph_element_label.md
+      - '`pg_propgraph_label`': internals/system-catalogs/pg_propgraph_label.md
+      - '`pg_propgraph_label_property`': internals/system-catalogs/pg_propgraph_label_property.md
+      - '`pg_propgraph_property`': internals/system-catalogs/pg_propgraph_property.md
       - '`pg_publication`': internals/system-catalogs/pg_publication.md
       - '`pg_publication_namespace`': internals/system-catalogs/pg_publication_namespace.md
       - '`pg_publication_rel`': internals/system-catalogs/pg_publication_rel.md
@@ -1138,6 +1158,7 @@ nav:
       - pg_freespacemap — examine the free space map: appendixes/additional-supplied-modules-and-extensions/pg_freespacemap-examine-the-free-space-map.md
       - pg_logicalinspect — logical decoding components inspection: appendixes/additional-supplied-modules-and-extensions/pg_logicalinspect-logical-decoding-components-inspection.md
       - pg_overexplain — allow EXPLAIN to dump even more details: appendixes/additional-supplied-modules-and-extensions/pg_overexplain-allow-explain-to-dump-even-more-details.md
+      - pg_plan_advice — help the planner get the right plan: appendixes/additional-supplied-modules-and-extensions/pg_plan_advice-help-the-planner-get-the-right-plan.md
       - pg_prewarm — preload relation data into buffer caches: appendixes/additional-supplied-modules-and-extensions/pg_prewarm-preload-relation-data-into-buffer-caches.md
       - 'pgrowlocks — show a table''s row locking information': appendixes/additional-supplied-modules-and-extensions/pgrowlocks-show-a-tables-row-locking-information.md
       - pg_stat_statements — track statistics of SQL planning and execution: appendixes/additional-supplied-modules-and-extensions/pg_stat_statements-track-statistics-of-sql-planning-and-execution.md
@@ -1195,4 +1216,3 @@ nav:
       - '`pg_resetxlog` renamed to `pg_resetwal`': appendixes/obsolete-or-renamed-features/pg_resetxlog-renamed-to-pg_resetwal.md
       - '`pg_receivexlog` renamed to `pg_receivewal`': appendixes/obsolete-or-renamed-features/pg_receivexlog-renamed-to-pg_receivewal.md
   - Bibliography: bibliography.md
-

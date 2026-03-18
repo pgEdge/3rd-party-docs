@@ -162,14 +162,7 @@ $ postgres -D $PGDATA -C num_os_semaphores
      This command adds the `user.postgres` project and sets the shared memory maximum for the `postgres` user to 8GB, and takes effect the next time that user logs in, or when you restart PostgreSQL (not reload). The above assumes that PostgreSQL is run by the `postgres` user in the `postgres` group. No server reboot is required.
 
 
-     Other recommended kernel setting changes for database servers which will have a large number of connections are:
-
-    ```
-
-    project.max-shm-ids=(priv,32768,deny)
-    project.max-sem-ids=(priv,4096,deny)
-    project.max-msg-ids=(priv,4096,deny)
-    ```
+     To run a very large server, or multiple servers concurrently, you might also need to raise `project.max-shm-ids`.
 
 
      Additionally, if you are running PostgreSQL inside a zone, you may need to raise the zone resource usage limits as well. See "Chapter2: Projects and Tasks" in the *System Administrator's Guide* for more information on `projects` and `prctl`.

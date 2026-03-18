@@ -36,6 +36,7 @@ where FROM_ITEM can be one of:
     [ LATERAL ] FUNCTION_NAME ( [ ARGUMENT [, ...] ] ) AS ( COLUMN_DEFINITION [, ...] )
     [ LATERAL ] ROWS FROM( FUNCTION_NAME ( [ ARGUMENT [, ...] ] ) [ AS ( COLUMN_DEFINITION [, ...] ) ] [, ...] )
                 [ WITH ORDINALITY ] [ [ AS ] ALIAS [ ( COLUMN_ALIAS [, ...] ) ] ]
+    GRAPH_TABLE ( GRAPH_NAME MATCH GRAPH_PATTERN COLUMNS ( { EXPRESSION [ AS NAME ] } [, ...] ) ) [ [ AS ] ALIAS [ ( COLUMN_ALIAS [, ...] ) ] ]
     FROM_ITEM JOIN_TYPE FROM_ITEM { ON JOIN_CONDITION | USING ( JOIN_COLUMN [, ...] ) [ AS JOIN_USING_ALIAS ] }
     FROM_ITEM NATURAL JOIN_TYPE FROM_ITEM
     FROM_ITEM CROSS JOIN FROM_ITEM
@@ -179,6 +180,21 @@ NON_RECURSIVE_TERM UNION [ ALL | DISTINCT ] RECURSIVE_TERM
 
 
      To use `ORDINALITY` together with a column definition list, you must use the `ROWS FROM( ... )` syntax and put the column definition list inside `ROWS FROM( ... )`.
+
+<code>GRAPH_TABLE ( </code><em>graph_name</em><code> MATCH </code><em>graph_pattern</em><code> COLUMNS ( { </code><em>expression</em><code> [ AS </code><em>name</em><code> ] } [, ...] ) )</code>
+:   This clause produces output from matching the specifying graph pattern against a property graph. See [Property Graphs](../../the-sql-language/data-definition/property-graphs.md#ddl-property-graphs) and [Graph Queries](../../the-sql-language/queries/graph-queries.md#queries-graph) for more information.
+
+
+     *graph_name* is the name (optionally schema-qualified) of an existing property graph (defined with [sql-create-property-graph](create-property-graph.md#sql-create-property-graph)).
+
+
+     *graph_pattern* is a graph pattern in a special graph pattern sublanguage. See [Graph Patterns](../../the-sql-language/queries/graph-queries.md#queries-graph-patterns).
+
+
+     The `COLUMNS` clause defines the output columns of the `GRAPH_TABLE` clause. *expression* is a scalar expression using the graph pattern variables defined in the *graph_pattern*. The name of the output columns are specified using the `AS` clauses. If the expressions are simple property references, the property names are used as the output names, otherwise an explicit name must be specified.
+
+
+     Like for other `FROM` clause items, a table alias name and column alias names may follow the `GRAPH_TABLE (...)` clause. (A column alias list would be redundant with the `COLUMNS` clause.)
 
 *join_type*
 :   One of

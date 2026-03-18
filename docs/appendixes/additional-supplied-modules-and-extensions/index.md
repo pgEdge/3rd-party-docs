@@ -98,6 +98,7 @@ CREATE EXTENSION EXTENSION_NAME;
 - [pg_freespacemap — examine the free space map](pg_freespacemap-examine-the-free-space-map.md#pgfreespacemap)
 - [pg_logicalinspect — logical decoding components inspection](pg_logicalinspect-logical-decoding-components-inspection.md#pglogicalinspect)
 - [pg_overexplain — allow EXPLAIN to dump even more details](pg_overexplain-allow-explain-to-dump-even-more-details.md#pgoverexplain)
+- [pg_plan_advice — help the planner get the right plan](pg_plan_advice-help-the-planner-get-the-right-plan.md#pgplanadvice)
 - [pg_prewarm — preload relation data into buffer caches](pg_prewarm-preload-relation-data-into-buffer-caches.md#pgprewarm)
 - [pgrowlocks — show a table's row locking information](pgrowlocks-show-a-tables-row-locking-information.md#pgrowlocks)
 - [pg_stat_statements — track statistics of SQL planning and execution](pg_stat_statements-track-statistics-of-sql-planning-and-execution.md#pgstatstatements)

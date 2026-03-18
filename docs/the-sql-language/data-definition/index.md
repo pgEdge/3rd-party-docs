@@ -18,5 +18,6 @@
 - [Inheritance](inheritance.md#ddl-inherit)
 - [Table Partitioning](table-partitioning.md#ddl-partitioning)
 - [Foreign Data](foreign-data.md#ddl-foreign-data)
+- [Property Graphs](property-graphs.md#ddl-property-graphs)
 - [Other Database Objects](other-database-objects.md#ddl-others)
 - [Dependency Tracking](dependency-tracking.md#ddl-depend)

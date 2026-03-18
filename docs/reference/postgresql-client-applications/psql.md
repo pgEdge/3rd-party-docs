@@ -468,7 +468,7 @@ testdb=>
 <a id="app-psql-meta-command-d"></a>
 
 <code>\d[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>
-:   For each relation (table, view, materialized view, index, sequence, or foreign table) or composite type matching the *pattern*, show all columns, their types, the tablespace (if not the default) and any special attributes such as `NOT NULL` or defaults. Associated objects, such as indexes, constraints, rules, triggers, and publications, are also shown. For foreign tables, the associated foreign server is shown as well. (“Matching the pattern” is defined in [Patterns](#app-psql-patterns) below.)
+:   For each relation (table, view, materialized view, index, property graph, sequence, or foreign table) or composite type matching the *pattern*, show all columns, their types, the tablespace (if not the default) and any special attributes such as `NOT NULL` or defaults. Associated objects, such as indexes, constraints, rules, triggers, and publications, are also shown. For foreign tables, the associated foreign server is shown as well. (“Matching the pattern” is defined in [Patterns](#app-psql-patterns) below.)
 
 
      For some types of relation, `\d` shows additional information for each column: column values for sequences, indexed expressions for indexes, and foreign data wrapper options for foreign tables.
@@ -482,7 +482,7 @@ testdb=>
 
     !!! note
 
-        If `\d` is used without a *pattern* argument, it is equivalent to `\dtvmsE` which will show a list of all visible tables, views, materialized views, sequences and foreign tables. This is purely a convenience measure.
+        If `\d` is used without a *pattern* argument, it is equivalent to `\dtvmsEG` which will show a list of all visible tables, views, materialized views, sequences, foreign tables, and property graphs. This is purely a convenience measure.
 
 
          As with many other commands, if `x` is appended to the command name, the results are displayed in expanded mode, but note that this only applies when `\d` is used without a *pattern* argument, and the `x` modifier cannot appear immediately after the `\d` (because `\dx` is a different command); the `x` modifier may only appear after an `S` or `+` modifier. For example, `\d+x` is equivalent to `\dtvmsE+x` and will show a list of all relations in expanded mode.
@@ -561,8 +561,8 @@ testdb=>
      The [`ALTER DEFAULT PRIVILEGES`](../sql-commands/alter-default-privileges.md#sql-alterdefaultprivileges) command is used to set default access privileges. The meaning of the privilege display is explained in [Privileges](../../the-sql-language/data-definition/privileges.md#ddl-priv).
 <a id="app-psql-meta-command-de"></a>
 
-<code>\dE[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\di[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dm[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\ds[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dt[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dv[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>
-:   In this group of commands, the letters `E`, `i`, `m`, `s`, `t`, and `v` stand for foreign table, index, materialized view, sequence, table, and view, respectively. You can specify any or all of these letters, in any order, to obtain a listing of objects of these types. For example, `\dti` lists tables and indexes. If `x` is appended to the command name, the results are displayed in expanded mode. If `+` is appended to the command name, each object is listed with its persistence status (permanent, temporary, or unlogged), physical size on disk, and associated description if any. If *pattern* is specified, only objects whose names match the pattern are listed. By default, only user-created objects are shown; supply a pattern or the `S` modifier to include system objects.
+<code>\dE[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dG[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\di[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dm[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\ds[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dt[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dv[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>
+:   In this group of commands, the letters `E`, `G`, `i`, `m`, `s`, `t`, and `v` stand for foreign table, index, property graph, materialized view, sequence, table, and view, respectively. You can specify any or all of these letters, in any order, to obtain a listing of objects of these types. For example, `\dti` lists tables and indexes. If `x` is appended to the command name, the results are displayed in expanded mode. If `+` is appended to the command name, each object is listed with its persistence status (permanent, temporary, or unlogged), physical size on disk, and associated description if any. If *pattern* is specified, only objects whose names match the pattern are listed. By default, only user-created objects are shown; supply a pattern or the `S` modifier to include system objects.
 <a id="app-psql-meta-command-des"></a>
 
 <code>\des[x+] [ [*pattern*](#app-psql-patterns) ]</code>

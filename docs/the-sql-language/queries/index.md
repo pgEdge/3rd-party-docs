@@ -12,3 +12,4 @@
 - [`LIMIT` and `OFFSET`](limit-and-offset.md#queries-limit)
 - [`VALUES` Lists](values-lists.md#queries-values)
 - [`WITH` Queries (Common Table Expressions)](with-queries-common-table-expressions.md#queries-with)
+- [Graph Queries](graph-queries.md#queries-graph)

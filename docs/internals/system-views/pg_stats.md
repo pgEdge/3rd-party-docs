@@ -28,8 +28,16 @@
 <p>Name of table</p></td>
 </tr>
 <tr>
+<td><p><code>tableid</code> <code>oid</code> (references <a href="../system-catalogs/pg_class.md#catalog-pg-class"><code>pg_class</code></a>.<code>oid</code>)</p>
+<p>OID of table</p></td>
+</tr>
+<tr>
 <td><p><code>attname</code> <code>name</code> (references <a href="../system-catalogs/pg_attribute.md#catalog-pg-attribute"><code>pg_attribute</code></a>.<code>attname</code>)</p>
 <p>Name of column described by this row</p></td>
+</tr>
+<tr>
+<td><p><code>attnum</code> <code>int2</code> (references <a href="../system-catalogs/pg_attribute.md#catalog-pg-attribute"><code>pg_attribute</code></a>.<code>attnum</code>)</p>
+<p>Number of column described by this row</p></td>
 </tr>
 <tr>
 <td><p><code>inherited</code> <code>bool</code></p>

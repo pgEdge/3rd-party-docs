@@ -72,8 +72,8 @@
 | `pg_stat_progress_analyze` | One row for each backend (including autovacuum worker processes) running `ANALYZE`, showing current progress. See [ANALYZE Progress Reporting](progress-reporting.md#analyze-progress-reporting). |
 | `pg_stat_progress_create_index` | One row for each backend running `CREATE INDEX` or `REINDEX`, showing current progress. See [CREATE INDEX Progress Reporting](progress-reporting.md#create-index-progress-reporting). |
 | `pg_stat_progress_vacuum` | One row for each backend (including autovacuum worker processes) running `VACUUM`, showing current progress. See [VACUUM Progress Reporting](progress-reporting.md#vacuum-progress-reporting). |
-| `pg_stat_progress_cluster` | One row for each backend running `CLUSTER` or `VACUUM FULL`, showing current progress. See [CLUSTER Progress Reporting](progress-reporting.md#cluster-progress-reporting). |
-| `pg_stat_progress_repack` | One row for each backend running `REPACK`, showing current progress. See [REPACK Progress Reporting](progress-reporting.md#repack-progress-reporting). |
+| `pg_stat_progress_cluster` | One row for each backend running `REPACK`, `CLUSTER` or `VACUUM FULL`, showing current progress. See [CLUSTER Progress Reporting](progress-reporting.md#cluster-progress-reporting). |
+| `pg_stat_progress_repack` | One row for each backend running `REPACK`, `CLUSTER` or `VACUUM FULL`, showing current progress. [REPACK Progress Reporting](progress-reporting.md#repack-progress-reporting). |
 | `pg_stat_progress_basebackup` | One row for each WAL sender process streaming a base backup, showing current progress. See [Base Backup Progress Reporting](progress-reporting.md#basebackup-progress-reporting). |
 | `pg_stat_progress_copy` | One row for each backend running `COPY`, showing current progress. See [COPY Progress Reporting](progress-reporting.md#copy-progress-reporting). |
  <a id="monitoring-stats-views-table"></a>
@@ -1771,6 +1771,10 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 <td><p><code>confl_active_logicalslot</code> <code>bigint</code></p>
 <p>Number of uses of logical slots in this database that have been canceled due to old snapshots or too low a <a href="../server-configuration/write-ahead-log.md#guc-wal-level">wal_level</a> on the primary</p></td>
 </tr>
+<tr>
+<td><p><code>stats_reset</code> <code>timestamp with time zone</code></p>
+<p>Time at which these statistics were last reset</p></td>
+</tr>
 </tbody>
 </table>
   <a id="monitoring-pg-stat-all-tables-view"></a>
@@ -2159,6 +2163,10 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 <td><p><code>blks_hit</code> <code>bigint</code></p>
 <p>Number of buffer hits in this sequence</p></td>
 </tr>
+<tr>
+<td><p><code>stats_reset</code> <code>timestamp with time zone</code></p>
+<p>Time at which these statistics were last reset</p></td>
+</tr>
 </tbody>
 </table>
   <a id="monitoring-pg-stat-user-functions-view"></a>
@@ -2349,7 +2357,7 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 <tr>
 <td><code>pg_stat_reset_single_table_counters</code> ( <code>oid</code> ) <code>void</code></td>
-<td>Resets statistics for a single table or index in the current database or shared across all databases in the cluster to zero.</td>
+<td>Resets statistics for a single table or index in the current database or shared across all databases in the cluster to zero. It also resets statistics for a single sequence or materialized view in the current database.</td>
 <td>This function is restricted to superusers by default, but other users can be granted EXECUTE to run the function.</td>
 </tr>
 <tr>

@@ -82,6 +82,80 @@
 | F846 |  | Octet support in regular expression operators |  |
 | F847 |  | Non-constant regular expressions |  |
 | F866 |  | FETCH FIRST clause: PERCENT option |  |
+| G002 |  | Different-edges match mode |  |
+| G003 |  | Explicit REPEATABLE ELEMENTS keyword |  |
+| G004 |  | Path variables |  |
+| G005 |  | Path search prefix in a path pattern |  |
+| G006 |  | Graph pattern KEEP clause: path mode prefix |  |
+| G007 |  | Graph pattern KEEP clause: path search prefix |  |
+| G010 |  | Explicit WALK keyword |  |
+| G011 |  | Advanced path modes: TRAIL |  |
+| G012 |  | Advanced path modes: SIMPLE |  |
+| G013 |  | Advanced path modes: ACYCLIC |  |
+| G014 |  | Explicit PATH/PATHS keywords |  |
+| G015 |  | All path search: explicit ALL keyword |  |
+| G016 |  | Any path search |  |
+| G017 |  | All shortest path search |  |
+| G018 |  | Any shortest path search |  |
+| G019 |  | Counted shortest path search |  |
+| G020 |  | Counted shortest group search |  |
+| G030 |  | Path multiset alternation |  |
+| G031 |  | Path multiset alternation: variable length path operands |  |
+| G032 |  | Path pattern union |  |
+| G033 |  | Path pattern union: variable length path operands |  |
+| G035 |  | Quantified paths |  |
+| G036 |  | Quantified edges |  |
+| G037 |  | Questioned paths |  |
+| G038 |  | Parenthesized path pattern expression |  |
+| G039 |  | Simplified path pattern expression: full defaulting |  |
+| G041 |  | Non-local element pattern predicates |  |
+| G043 |  | Complete full edge patterns |  |
+| G045 |  | Complete abbreviated edge patterns |  |
+| G046 |  | Relaxed topological consistency: adjacent vertex patterns |  |
+| G047 |  | Relaxed topological consistency: concise edge patterns |  |
+| G048 |  | Parenthesized path pattern: subpath variable declaration |  |
+| G049 |  | Parenthesized path pattern: path mode prefix |  |
+| G050 |  | Parenthesized path pattern: WHERE clause |  |
+| G051 |  | Parenthesized path pattern: non-local predicates |  |
+| G060 |  | Bounded graph pattern quantifiers |  |
+| G061 |  | Unbounded graph pattern quantifiers |  |
+| G071 |  | Label expression: label conjunction |  |
+| G072 |  | Label expression: label negation |  |
+| G074 |  | Label expression: wildcard label |  |
+| G075 |  | Parenthesized label expression |  |
+| G080 |  | Simplified path pattern expression: basic defaulting |  |
+| G081 |  | Simplified path pattern expression: full overrides |  |
+| G082 |  | Simplified path pattern expression: basic overrides |  |
+| G100 |  | ELEMENT_ID function |  |
+| G110 |  | IS DIRECTED predicate |  |
+| G111 |  | IS LABELED predicate |  |
+| G112 |  | IS SOURCE and IS DESTINATION predicate |  |
+| G113 |  | ALL_DIFFERENT predicate |  |
+| G114 |  | SAME predicate |  |
+| G115 |  | PROPERTY_EXISTS predicate |  |
+| G120 |  | Within-match aggregates |  |
+| G800 |  | PATH_NAME function |  |
+| G801 |  | ELEMENT_NUMBER function |  |
+| G802 |  | PATH_LENGTH function |  |
+| G803 |  | MATCHNUM function |  |
+| G810 |  | IS BOUND predicate |  |
+| G811 |  | IS BOUND predicate: AS option |  |
+| G820 |  | BINDING_COUNT |  |
+| G830 |  | Colon in 'is label' expression |  |
+| G840 |  | Path-ordered aggregates |  |
+| G860 |  | GET DIAGNOSTICS enhancements for SQL-property graphs |  |
+| G901 |  | GRAPH_TABLE: ONE ROW PER VERTEX |  |
+| G902 |  | GRAPH_TABLE: ONE ROW PER STEP |  |
+| G903 |  | GRAPH_TABLE: explicit ONE ROW PER MATCH keywords |  |
+| G904 |  | All properties reference |  |
+| G905 |  | GRAPH_TABLE: optional COLUMNS clause |  |
+| G906 |  | GRAPH_TABLE: explicit EXPORT ALL |  |
+| G907 |  | GRAPH_TABLE: EXPORT ALL EXCEPT |  |
+| G908 |  | GRAPH_TABLE: EXPORT SINGLETONS list |  |
+| G909 |  | GRAPH_TABLE: explicit EXPORT NO SINGLETONS |  |
+| G910 |  | GRAPH_TABLE: 'in paths clause' |  |
+| G923 |  | In-line views as element tables |  |
+| G929 |  | Labels and properties: EXCEPT list |  |
 | R010 |  | Row pattern recognition: FROM clause |  |
 | R020 |  | Row pattern recognition: WINDOW clause |  |
 | R030 |  | Row pattern recognition: full aggregate support |  |

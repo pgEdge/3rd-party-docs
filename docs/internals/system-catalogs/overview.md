@@ -51,6 +51,11 @@
 | [`pg_partitioned_table`](pg_partitioned_table.md#catalog-pg-partitioned-table) | information about partition key of tables |
 | [`pg_policy`](pg_policy.md#catalog-pg-policy) | row-security policies |
 | [`pg_proc`](pg_proc.md#catalog-pg-proc) | functions and procedures |
+| [`pg_propgraph_element`](pg_propgraph_element.md#catalog-pg-propgraph-element) | property graph elements (vertices and edges) |
+| [`pg_propgraph_element_label`](pg_propgraph_element_label.md#catalog-pg-propgraph-element-label) | property graph links between elements and labels |
+| [`pg_propgraph_label`](pg_propgraph_label.md#catalog-pg-propgraph-label) | property graph labels |
+| [`pg_propgraph_label_property`](pg_propgraph_label_property.md#catalog-pg-propgraph-label-property) | property graph label-specific property definitions |
+| [`pg_propgraph_property`](pg_propgraph_property.md#catalog-pg-propgraph-property) | property graph properties |
 | [`pg_publication`](pg_publication.md#catalog-pg-publication) | publications for logical replication |
 | [`pg_publication_namespace`](pg_publication_namespace.md#catalog-pg-publication-namespace) | schema to publication mapping |
 | [`pg_publication_rel`](pg_publication_rel.md#catalog-pg-publication-rel) | relation to publication mapping |

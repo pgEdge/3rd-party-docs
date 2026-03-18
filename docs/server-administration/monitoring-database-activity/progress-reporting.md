@@ -104,7 +104,7 @@
 ### CLUSTER Progress Reporting
 
 
- Whenever `CLUSTER` or `VACUUM FULL` is running, the `pg_stat_progress_cluster` view will contain a row for each backend that is currently running either command. The tables below describe the information that will be reported and provide information about how to interpret it.
+ Whenever `REPACK`, `CLUSTER` or `VACUUM FULL` is running, the backwards-compatibility `pg_stat_progress_cluster` view will contain a row for each backend that is currently running either command. The tables below describe the information that will be reported and provide information about how to interpret it.
  <a id="pg-stat-progress-cluster-view"></a>
 
 **Table: `pg_stat_progress_cluster` View**
@@ -135,7 +135,7 @@
 </tr>
 <tr>
 <td><p><code>command</code> <code>text</code></p>
-<p>The command that is running. Either <code>CLUSTER</code> or <code>VACUUM FULL</code>.</p></td>
+<p>The command that is running. Either <code>CLUSTER</code> or <code>VACUUM FULL</code>. Because this view exists for backwards-compatibility purposes only, it will translate any <code>REPACK</code> command into one of these other two.</p></td>
 </tr>
 <tr>
 <td><p><code>phase</code> <code>text</code></p>
@@ -378,6 +378,10 @@
 <tr>
 <td><p><code>relid</code> <code>oid</code></p>
 <p>OID of the table being repacked.</p></td>
+</tr>
+<tr>
+<td><p><code>command</code> <code>text</code></p>
+<p>The command that is running. Either <code>REPACK</code> or <code>VACUUM FULL</code>, or <code>CLUSTER</code>.</p></td>
 </tr>
 <tr>
 <td><p><code>phase</code> <code>text</code></p>
