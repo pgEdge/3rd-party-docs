@@ -8,7 +8,7 @@ Server definitions (and their groups) can be exported to a JSON file and re-impo
 
 To launch the *Import/Export Servers...* tool, navigate through *Tools* on the menu bar to click on the *Import/Export Servers* option.
 
-![Import/Export Servers step one page](images/import_export_servers_step1.png)
+![Import/Export Servers step one page](../images/import_export_servers_step1.png)
 
 - Use the *Import/Export* field to select the Server Groups/Servers
     to be imported or exported.
@@ -22,13 +22,13 @@ To launch the *Import/Export Servers...* tool, navigate through *Tools* on the m
 
 Click the *Next* button to continue, or the *X* button to close the wizard.
 
-![Import/Export Servers step two page](images/import_export_servers_step2.png)
+![Import/Export Servers step two page](../images/import_export_servers_step2.png)
 
 - Select the Server Groups/ Servers to be imported/exported.
 
 Click the *Next* button to continue, or the *X* button to close the wizard.
 
-![Import/Export Servers step three page](images/import_export_servers_step3.png)
+![Import/Export Servers step three page](../images/import_export_servers_step3.png)
 
 Check the summary of the servers that are going to be imported/exported on the Summary page.
 

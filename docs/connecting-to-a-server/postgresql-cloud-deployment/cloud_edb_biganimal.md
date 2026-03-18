@@ -4,15 +4,15 @@
 
 To deploy a PostgreSQL server on the EDB BigAnimal cloud, follow the below steps.
 
-![Cloud Deployment Provider](images/cloud_provider_for_postgresql.png)
+![Cloud Deployment Provider](../../images/cloud_provider_for_postgresql.png)
 
 Once you launch the tool, select the EDB BigAnimal option. Click on the *Next* button to proceed further.
 
-![Cloud Deployment Provider](images/cloud_biganimal_credentials.png)
+![Cloud Deployment Provider](../../images/cloud_biganimal_credentials.png)
 
 The next steps is to authenticate the user to EDB BigAninal. Click the given button to authenticate, by clicking the button, the user will be redirected to the new tab for the verification. Once you confirm the one time code, the pgAdmin will automatically detect it and the next button will be enabled. To proceed further, click on the next button.
 
-![Cloud Deployment Provider](images/cloud_biganimal_cluster.png)
+![Cloud Deployment Provider](../../images/cloud_biganimal_cluster.png)
 
 - Use the *Project* field to choose a project in your Biganimal account.
 
@@ -22,7 +22,7 @@ The next steps is to authenticate the user to EDB BigAninal. Click the given but
 
 - Use the *Cluster provider* field to choose the provider.
 
-![Cloud Deployment Provider](images/cloud_biganimal_instance.png)
+![Cloud Deployment Provider](../../images/cloud_biganimal_instance.png)
 
 Use the fields from the Instance Specification tab to specify the Instance details.
 
@@ -51,7 +51,7 @@ Use the fields from the Instance Specification tab to specify the Instance detai
 
 - Use the *Disk throughput* field to specify the disk throughput. This field is specific to AWS.
 
-![Cloud Deployment Provider](images/cloud_biganimal_database.png)
+![Cloud Deployment Provider](../../images/cloud_biganimal_database.png)
 
 Use the fields from the Database Details tab to specify the Instance details.
 
@@ -69,11 +69,11 @@ Use the fields from the Database Details tab to specify the Instance details.
 
 - Use the *Confirm password* field to repeat the password.
 
-![Cloud Deployment Provider](images/cloud_biganimal_review.png)
+![Cloud Deployment Provider](../../images/cloud_biganimal_review.png)
 
 At the end, review the Cluster details that you provided. Click on Finish button to deploy the instance on EDB BigAnimal.
 
-![Cloud Deployment Provider](images/cloud_deployment_tree.png)
+![Cloud Deployment Provider](../../images/cloud_deployment_tree.png)
 
 Once you click on the finish, one background process will start which will deploy the instance in the cloud and monitor the progress of the deployment. You can view all the background processes with their running status and logs on the [Processes](../../processes.md#processes) tab.
 

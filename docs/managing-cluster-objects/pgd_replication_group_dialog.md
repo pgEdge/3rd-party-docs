@@ -6,7 +6,7 @@ Use the *Replication Group Node* dialog to view a PGD group/sub-group. A PGD clu
 
 The dialog organizes the information through the following tabs: *General*
 
-![Replication Group Node Dialog general tab](images/pgd_group_node_dialog.png)
+![Replication Group Node Dialog general tab](../images/pgd_group_node_dialog.png)
 
 - The *ID* field is the ID of the node group.
 

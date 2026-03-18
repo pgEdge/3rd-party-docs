@@ -4,7 +4,7 @@
 
 Use the *Server* dialog to describe a connection to a server. Note: you must ensure that the pg_hba.conf file of the server from which you are connecting allows connections from the host of the client.
 
-![Server dialog general tab](images/server_general.png)
+![Server dialog general tab](../images/server_general.png)
 
 Use the fields in the *General* tab to identify the server:
 
@@ -47,7 +47,7 @@ Please note that once the server is shared, it's icon is changed in the object e
 
 Click the *Connection* tab to continue.
 
-![Server dialog connection tab](images/server_connection.png)
+![Server dialog connection tab](../images/server_connection.png)
 
 Use the fields in the *Connection* tab to configure a connection:
 
@@ -89,7 +89,7 @@ Use the fields in the *Connection* tab to configure a connection:
 
 Click the *Parameters* tab to continue.
 
-![Server dialog ssl tab](images/server_parameters.png)
+![Server dialog ssl tab](../images/server_parameters.png)
 
 Use the fields in the *Parameters* tab to configure a connection:
 
@@ -149,7 +149,7 @@ If pgAdmin is installed in Server mode (the default mode), you can use the platf
 
 Click the *SSH Tunnel* tab to continue.
 
-![Server dialog ssh tunnel tab](images/server_ssh_tunnel.png)
+![Server dialog ssh tunnel tab](../images/server_ssh_tunnel.png)
 
 Use the fields in the *SSH Tunnel* tab to configure SSH Tunneling:
 
@@ -198,7 +198,7 @@ You can use the "SSH Tunnel" tab to connect pgAdmin (through an intermediary pro
 
 Click the *Advanced* tab to continue.
 
-![Server dialog advanced tab](images/server_advanced.png)
+![Server dialog advanced tab](../images/server_advanced.png)
 
 Use the fields in the *Advanced* tab to configure a connection:
 
@@ -249,14 +249,14 @@ Use the fields in the *Advanced* tab to configure a connection:
 
 Click the *Post Connection SQL* tab to continue.
 
-![Server dialog post connection sql tab](images/server_post_connection_sql.png)
+![Server dialog post connection sql tab](../images/server_post_connection_sql.png)
 
 - Use the *Post Connection SQL* field to write the SQL queries that will be
     executed in autocommit mode for each connection made to any database on this server.
 
 Click the *Tags* tab to continue.
 
-![Server dialog tags tab](images/server_tags.png)
+![Server dialog tags tab](../images/server_tags.png)
 
 Use the table in the *Tags* tab to add tags. The tags will be shown on the right side of a server node label in the object explorer tree.
 

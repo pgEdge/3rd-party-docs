@@ -6,7 +6,7 @@ The *Restore* dialog provides an easy way to use a Custom, tar, or Directory for
 
 You can use the *Query Tool* to play back the script created during a plain-text backup made with the *Backup* dialog.  For more information about backing up or restoring, please refer to the documentation for [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html) or [pg_restore](https://www.postgresql.org/docs/current/app-pgrestore.html).
 
-![Restore dialog general tab](images/restore_general.png)
+![Restore dialog general tab](../images/restore_general.png)
 
 Use the fields on the *General* tab to specify general information about the restore process:
 
@@ -38,7 +38,7 @@ Use the fields on the *General* tab to specify general information about the res
 
 Click the *Data Options* tab to continue. Use the fields in the *Data Options* tab to provide options related to data or pgAdmin objects that correspond to *pg_restore*.
 
-![Restore dialog options section](images/restore_sections.png)
+![Restore dialog options section](../images/restore_sections.png)
 
 - Move switches in the **Sections** field box to specify the content that will be
     restored:
@@ -53,7 +53,7 @@ Click the *Data Options* tab to continue. Use the fields in the *Data Options* t
     definitions of indexes, triggers, rules, and constraints (other than
     validated check constraints).
 
-![Restore dialog sections section](images/restore_objects.png)
+![Restore dialog sections section](../images/restore_objects.png)
 
 - Move switches in the **Type of objects** field box to specify the objects that
     will be restored:
@@ -64,7 +64,7 @@ Click the *Data Options* tab to continue. Use the fields in the *Data Options* t
 - Move the switch next to *Only schema* to limit the restoration to
     schema-level database objects.
 
-![Restore dialog do not save section](images/restore_do_not_save.png)
+![Restore dialog do not save section](../images/restore_do_not_save.png)
 
 - Move switches in the **Do not save** box to specify which objects will not
     be restored:
@@ -95,7 +95,7 @@ Click the *Data Options* tab to continue. Use the fields in the *Data Options* t
     Table access methods. **Note:** This option is visible only for
     database server greater than or equal to 15.
 
-![Restore dialog queries section](images/restore_queries.png)
+![Restore dialog queries section](../images/restore_queries.png)
 
 Click the *Query Options* tab to continue. Use these additional fields to specify the type of statements that should be included in the restore:
 
@@ -115,7 +115,7 @@ Click the *Query Options* tab to continue. Use these additional fields to specif
     complete successfully, or no changes are applied. This option implies
     *--exit-on-error*.
 
-![Restore dialog tables section](images/restore_table.png)
+![Restore dialog tables section](../images/restore_table.png)
 
 Click the *Table Options* tab to continue. Use the fields in the *Table Options* tab related to tables that should be included in the backup.
 
@@ -129,7 +129,7 @@ Click the *Table Options* tab to continue. Use the fields in the *Table Options*
 
 Click the *Options* tab to continue. Use the fields in the *Options* tab to provide other restore options.
 
-![Restore dialog miscellaneous section](images/restore_miscellaneous.png)
+![Restore dialog miscellaneous section](../images/restore_miscellaneous.png)
 
 - Move switches in the **Disable** box to specify the type of statements that
     should be excluded from the restore:

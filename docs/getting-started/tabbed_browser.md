@@ -4,7 +4,7 @@
 
 The right pane of the *pgAdmin* window features a collection of tabs that display information about the object currently selected in the *pgAdmin* tree control in the left window.  Select a tab to access information about the highlighted object in the tree control.
 
-![Dashboard Activity](images/dashboard_activity.png)
+![Dashboard Activity](../images/dashboard_activity.png)
 
 The graphs and tables on the *Dashboard* tab provides an active analysis of system statistics and the usage statistics for the selected server or database.
 
@@ -26,7 +26,7 @@ Click the *Activity* tab to get the usage statistics for the selected server or 
     or fetched from the buffer cache (but not the operating system's file system
     cache) for the server or database.
 
-![Dashboard Activity](images/dashboard_stat.png)
+![Dashboard Activity](../images/dashboard_stat.png)
 
 Click the *Stat* tab to get the usage statistics for the selected server or database:
 
@@ -57,11 +57,11 @@ You can use icons in the *Sessions* table to review or control the state of a se
 - Use the *Details* icon (located in the third column) to open the *Details*
     tab; the tab displays information about the selected session.
 
-![Dashboard Activity](images/dashboard_config.png)
+![Dashboard Activity](../images/dashboard_config.png)
 
 Click the *Configuration* tab to get the server configuration details.
 
-![Dashboard Activity](images/dashboard_logs.png)
+![Dashboard Activity](../images/dashboard_logs.png)
 
 Click the *Logs* tab to get the server logs.
 
@@ -72,7 +72,7 @@ Click the *Logs* tab to get the server logs.
 
 Click the *System Statistics* tab to get the statistics for the system:
 
-![Summary panel](images/main_dashboard_sys_statistics_summary.png)
+![Summary panel](../images/main_dashboard_sys_statistics_summary.png)
 
 Click the *Summary* tab to get the summary of the system:
 
@@ -82,7 +82,7 @@ Click the *Summary* tab to get the summary of the system:
 
 - The *Process & Handle Count* graph displays the total count of processes running and handles opened for the system.
 
-![CPU panel](images/main_dashboard_sys_statistics_cpu.png)
+![CPU panel](../images/main_dashboard_sys_statistics_cpu.png)
 
 Click the *CPU* tab to get the detailed usage statistics of the system CPU:
 
@@ -92,7 +92,7 @@ Click the *CPU* tab to get the detailed usage statistics of the system CPU:
 
 - The *Process CPU Usage* table displays information about CPU for each process ID. Enter a value like process ID or name in the Search box to restrict the table content to one or more processes that satisfy the search criteria.
 
-![Memory panel](images/main_dashboard_sys_statistics_memory.png)
+![Memory panel](../images/main_dashboard_sys_statistics_memory.png)
 
 Click the *Memory* tab to get the detailed usage statistics of the system memory:
 
@@ -102,7 +102,7 @@ Click the *Memory* tab to get the detailed usage statistics of the system memory
 
 - The *Process Memory Usage* table displays information about memory for each process ID. Enter a value like process ID or name in the Search box to restrict the table content to one or more processes that satisfy the search criteria.
 
-![Storage panel](images/main_dashboard_sys_statistics_storage.png)
+![Storage panel](../images/main_dashboard_sys_statistics_storage.png)
 
 Click the *Storage* tab to get the detailed information of the system storage:
 
@@ -118,7 +118,7 @@ The *disk0* panel displays statistics about the only I/O block device of system:
 
 - The *Time spent in I/O operations* graph displays the time spent by the device for reading and writing in minutes per second.
 
-![Properties panel](images/main_properties_table.png)
+![Properties panel](../images/main_properties_table.png)
 
 The *Properties* tab displays information about the object selected.
 
@@ -126,21 +126,21 @@ Click the *Delete* icon in the toolbar under the browser tab to delete the selec
 
 Click the *Drop Cascade* icon in the toolbar under the browser tab to delete the selected objects and all dependent objects in the Properties panel.
 
-![Object editor icon](images/main_properties_icons.png)
+![Object editor icon](../images/main_properties_icons.png)
 
 Click the *Edit* icon in the toolbar under the browser tabs to launch the *Properties* dialog for the selected object.
 
 To preserve any changes to the *Properties* dialog, click the *Save* icon; your modifications will be displayed in the updated *Properties* tab.
 
-![Object editor window](images/main_properties_edit.png)
+![Object editor window](../images/main_properties_edit.png)
 
 Details about the object highlighted in the tree control are displayed in one or more collapsible panels. You can use the arrow to the left of each panel label to open or close a panel.
 
-![SQL panel](images/main_sql.png)
+![SQL panel](../images/main_sql.png)
 
 The *SQL* tab displays the SQL script that created the highlighted object, and when applicable, a (commented out) SQL statement that will *DROP* the selected object. You can copy the SQL statements to the editor of your choice using cut and paste shortcuts.
 
-![Statistics panel](images/main_statistics.png)
+![Statistics panel](../images/main_statistics.png)
 
 The *Statistics* tab displays the statistics gathered for each object on the tree control; the statistics displayed in the table vary by the type of object that is selected. Click a column heading to sort the table by the data displayed in the column; click again to reverse the sort order.  The following table lists some of the statistics that are available:
 
@@ -172,7 +172,7 @@ The *Statistics* tab displays the statistics gathered for each object on the tre
 | *Block write time* | displays the number of milliseconds required to write the blocks read. |
 | *Size* | displays the size (in megabytes) of the selected database. |
 
-![Dependencies panel](images/main_dependencies.png)
+![Dependencies panel](../images/main_dependencies.png)
 
 The *Dependencies* tab displays the objects on which the currently selected object depends. If a dependency is dropped, the object currently selected in the pgAdmin tree control will be affected. To ensure the integrity of the entire database structure, the database server makes sure that you do not accidentally drop objects that other objects depend on; you must use the DROP CASCADE command to remove an object with a dependency.
 
@@ -198,7 +198,7 @@ The *Dependencies* table displays the following information:
 - If the field is *blank*, the selected object is required by the system,
     and cannot be dropped.
 
-![Dependents panel](images/main_dependents.png)
+![Dependents panel](../images/main_dependents.png)
 
 The *Dependents* tab displays a table of objects that depend on the object currently selected in the *pgAdmin* browser. A dependent object can be dropped without affecting the object currently selected in the *pgAdmin* tree control.
 
@@ -208,7 +208,7 @@ The *Dependents* tab displays a table of objects that depend on the object curre
 
 - The *Database* field specifies the database in which the object resides.
 
-![Query tool panel](images/main_query_tool.png)
+![Query tool panel](../images/main_query_tool.png)
 
 Additional tabs open when you access the extended functionality offered by pgAdmin tools (such as the Query tool, Debugger, or SQL editor). Use the close icon (X) located in the upper-right corner of each tab to close the tab when you are finished using the tool. Like permanent tabs, these tabs may be repositioned in the pgAdmin client window.
 
