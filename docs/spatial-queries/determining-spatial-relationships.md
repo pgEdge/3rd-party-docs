@@ -56,10 +56,10 @@ Visually, for two overlapping polygonal geometries, this looks like:
 <tbody>
 <tr>
 <td></td>
-<td>!<a href="images/de9im04.svg">image</a></td>
+<td><img src="images/de9im04.svg" alt="image"></td>
 </tr>
 <tr>
-<td>!<a href="images/de9im03.svg">image</a></td>
+<td><img src="images/de9im03.svg" alt="image"></td>
 </tr>
 </tbody>
 </table>
@@ -104,7 +104,7 @@ In some cases the named spatial relationships are insufficient to provide a desi
 <table>
 <tbody>
 <tr>
-<td><p>!<a href="images/de9im01.svg">image</a></p>
+<td><p><img src="images/de9im01.svg" alt="image"></p>
 <p>For example, consider a linear dataset representing a road network. It may be required to identify all road segments that cross each other, not at a point, but in a line (perhaps to validate some business rule). In this case <a href="../postgis-reference/spatial-relationships.md#ST_Crosses">ST_Crosses</a> does not provide the necessary spatial filter, since for linear features it returns <code>true</code> only where they cross at a point.</p>
 <p>A two-step solution would be to first compute the actual intersection (<a href="../postgis-reference/overlay-functions.md#ST_Intersection">ST_Intersection</a>) of pairs of road lines that spatially intersect (<a href="../postgis-reference/spatial-relationships.md#ST_Intersects">ST_Intersects</a>), and then check if the intersection's <a href="../postgis-reference/geometry-accessors.md#ST_GeometryType">ST_GeometryType</a> is '<code>LINESTRING</code>' (properly dealing with cases that return <code>GEOMETRYCOLLECTION</code>s of <code>[MULTI]POINT</code>s, <code>[MULTI]LINESTRING</code>s, etc.).</p>
 <p>Clearly, a simpler and faster solution is desirable.</p></td>
@@ -116,7 +116,7 @@ In some cases the named spatial relationships are insufficient to provide a desi
 <table>
 <tbody>
 <tr>
-<td><p>!<a href="images/de9im02.svg">image</a></p>
+<td><p><img src="images/de9im02.svg" alt="image"></p>
 <p>A second example is locating wharves that intersect a lake's boundary on a line and where one end of the wharf is up on shore. In other words, where a wharf is within but not completely contained by a lake, intersects the boundary of a lake on a line, and where exactly one of the wharf's endpoints is within or on the boundary of the lake. It is possible to use a combination of spatial predicates to find the required features:</p>
 <p>- <a href="../postgis-reference/spatial-relationships.md#ST_Contains">ST_Contains</a>(lake, wharf) = TRUE<br>
 - <a href="../postgis-reference/spatial-relationships.md#ST_ContainsProperly">ST_ContainsProperly</a>(lake, wharf) = FALSE<br>

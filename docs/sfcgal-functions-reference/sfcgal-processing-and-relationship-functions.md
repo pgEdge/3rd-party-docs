@@ -266,7 +266,26 @@ Availability: 3.5.0
 3D images were generated using PostGIS [ST_AsX3D](../postgis-reference/geometry-output.md#ST_AsX3D) and rendering in HTML using [X3Dom HTML Javascript rendering library](http://www.x3dom.org).
 
 
-| ```sql SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                 50, 'quad_segs=2'),0,0,30) AS geom1,                                 CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),                                 50, 'quad_segs=1'),0,0,30) AS geom2;                              ```     ![image](images/st_3ddifference01.png)   Original 3D geometries overlaid. geom2 is the part that will be removed. | ```sql SELECT CG_3DDifference(geom1,geom2)                             FROM ( SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),                             50, 'quad_segs=2'),0,0,30) AS geom1,                             CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),                             50, 'quad_segs=1'),0,0,30) AS geom2 ) As t; ```     ![image](images/st_3ddifference02.png)   What's left after removing geom2 |
+<table>
+<tbody>
+<tr>
+<td><pre><code class="language-sql">SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),
+                                50, 'quad_segs=2'),0,0,30) AS geom1,
+                                CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),
+                                50, 'quad_segs=1'),0,0,30) AS geom2;
+                            </code></pre>
+<p><img src="images/st_3ddifference01.png" alt="image"></p>
+<p>Original 3D geometries overlaid. geom2 is the part that will be removed.</p></td>
+<td><pre><code class="language-sql">SELECT CG_3DDifference(geom1,geom2)
+                            FROM ( SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),
+                            50, 'quad_segs=2'),0,0,30) AS geom1,
+                            CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),
+                            50, 'quad_segs=1'),0,0,30) AS geom2 ) As t;</code></pre>
+<p><img src="images/st_3ddifference02.png" alt="image"></p>
+<p>What's left after removing geom2</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -511,7 +530,26 @@ Availability: 3.5.0
 3D images were generated using PostGIS [ST_AsX3D](../postgis-reference/geometry-output.md#ST_AsX3D) and rendering in HTML using [X3Dom HTML Javascript rendering library](http://www.x3dom.org).
 
 
-| ```sql SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                     50, 'quad_segs=2'),0,0,30) AS geom1,                                     CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),                                     50, 'quad_segs=1'),0,0,30) AS geom2;                                  ```     ![image](images/st_3ddifference01.png)   Original 3D geometries overlaid. geom2 is shown semi-transparent | ```sql SELECT CG_3DIntersection(geom1,geom2)                                 FROM ( SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                 50, 'quad_segs=2'),0,0,30) AS geom1,                                 CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),                                 50, 'quad_segs=1'),0,0,30) AS geom2 ) As t; ```     ![image](images/st_3dintersection01.png)   Intersection of geom1 and geom2 |
+<table>
+<tbody>
+<tr>
+<td><pre><code class="language-sql">SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),
+                                    50, 'quad_segs=2'),0,0,30) AS geom1,
+                                    CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),
+                                    50, 'quad_segs=1'),0,0,30) AS geom2;
+                                </code></pre>
+<p><img src="images/st_3ddifference01.png" alt="image"></p>
+<p>Original 3D geometries overlaid. geom2 is shown semi-transparent</p></td>
+<td><pre><code class="language-sql">SELECT CG_3DIntersection(geom1,geom2)
+                                FROM ( SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),
+                                50, 'quad_segs=2'),0,0,30) AS geom1,
+                                CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),
+                                50, 'quad_segs=1'),0,0,30) AS geom2 ) As t;</code></pre>
+<p><img src="images/st_3dintersection01.png" alt="image"></p>
+<p>Intersection of geom1 and geom2</p></td>
+</tr>
+</tbody>
+</table>
 
 
 3D linestrings and polygons
@@ -686,7 +724,26 @@ Availability: 3.5.0
 3D images were generated using PostGIS [ST_AsX3D](../postgis-reference/geometry-output.md#ST_AsX3D) and rendering in HTML using [X3Dom HTML Javascript rendering library](http://www.x3dom.org).
 
 
-| ```sql SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                     50, 'quad_segs=2'),0,0,30) AS geom1,                                     CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),                                     50, 'quad_segs=1'),0,0,30) AS geom2;                                  ```     ![image](images/st_3ddifference01.png)   Original 3D geometries overlaid. geom2 is the one with transparency. | ```sql SELECT CG_3DUnion(geom1,geom2)                                 FROM ( SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                 50, 'quad_segs=2'),0,0,30) AS geom1,                                 CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),                                 50, 'quad_segs=1'),0,0,30) AS geom2 ) As t; ```     ![image](images/st_3dunion01.png)   Union of geom1 and geom2 |
+<table>
+<tbody>
+<tr>
+<td><pre><code class="language-sql">SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),
+                                    50, 'quad_segs=2'),0,0,30) AS geom1,
+                                    CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),
+                                    50, 'quad_segs=1'),0,0,30) AS geom2;
+                                </code></pre>
+<p><img src="images/st_3ddifference01.png" alt="image"></p>
+<p>Original 3D geometries overlaid. geom2 is the one with transparency.</p></td>
+<td><pre><code class="language-sql">SELECT CG_3DUnion(geom1,geom2)
+                                FROM ( SELECT CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),
+                                50, 'quad_segs=2'),0,0,30) AS geom1,
+                                CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(80 80)'),
+                                50, 'quad_segs=1'),0,0,30) AS geom2 ) As t;</code></pre>
+<p><img src="images/st_3dunion01.png" alt="image"></p>
+<p>Union of geom1 and geom2</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -941,7 +998,14 @@ SELECT CG_ApproximateMedialAxis(ST_GeomFromText('POLYGON (( 190 190, 10 190, 10 
 ```
 
 
-| ![image](images/st_approximatemedialaxis01.svg)   A polygon and its approximate medial axis |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_approximatemedialaxis01.svg" alt="image"></p>
+<p>A polygon and its approximate medial axis</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -1002,7 +1066,32 @@ Availability: 3.0.0
 ## Examples
 
 
-| ![image](images/st_constraineddelaunaytriangles01.svg)   CG_ConstrainedDelaunayTriangles of 2 polygons    ```                                          select CG_ConstrainedDelaunayTriangles(                                         ST_Union(                                         'POLYGON((175 150, 20 40, 50 60, 125 100, 175 150))'::geometry,                                         ST_Buffer('POINT(110 170)'::geometry, 20)                                         )                                         );                                      ``` | ![image](images/st_constraineddelaunaytriangles02.svg)   [ST_DelaunayTriangles](../postgis-reference/geometry-processing.md#ST_DelaunayTriangles) of 2 polygons. Triangle edges cross polygon boundaries.    ```                                          select ST_DelaunayTriangles(                                         ST_Union(                                         'POLYGON((175 150, 20 40, 50 60, 125 100, 175 150))'::geometry,                                         ST_Buffer('POINT(110 170)'::geometry, 20)                                         )                                         );                                      ``` |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_constraineddelaunaytriangles01.svg" alt="image"></p>
+<p>CG_ConstrainedDelaunayTriangles of 2 polygons</p>
+<pre><code>
+                                        select CG_ConstrainedDelaunayTriangles(
+                                        ST_Union(
+                                        'POLYGON((175 150, 20 40, 50 60, 125 100, 175 150))'::geometry,
+                                        ST_Buffer('POINT(110 170)'::geometry, 20)
+                                        )
+                                        );
+                                    </code></pre></td>
+<td><p><img src="images/st_constraineddelaunaytriangles02.svg" alt="image"></p>
+<p><a href="../postgis-reference/geometry-processing.md#ST_DelaunayTriangles">ST_DelaunayTriangles</a> of 2 polygons. Triangle edges cross polygon boundaries.</p>
+<pre><code>
+                                        select ST_DelaunayTriangles(
+                                        ST_Union(
+                                        'POLYGON((175 150, 20 40, 50 60, 125 100, 175 150))'::geometry,
+                                        ST_Buffer('POINT(110 170)'::geometry, 20)
+                                        )
+                                        );
+                                    </code></pre></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -1060,8 +1149,29 @@ Availability: 3.5.0
 3D images were generated using PostGIS [ST_AsX3D](../postgis-reference/geometry-output.md#ST_AsX3D) and rendering in HTML using [X3Dom HTML Javascript rendering library](http://www.x3dom.org).
 
 
-| ```sql SELECT ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                     50, 'quad_segs=2'),0,0,30); ```     ![image](images/st_extrude01.svg)   Original octagon formed from buffering point | ``` CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),                                 50, 'quad_segs=2'),0,0,30); ```     ![image](images/st_extrude02.png)   Hexagon extruded 30 units along Z produces a PolyhedralSurfaceZ |
-| ```sql SELECT ST_GeomFromText('LINESTRING(50 50, 100 90, 95 150)') ```     ![image](images/st_extrude03.svg)   Original linestring | ```sql SELECT CG_Extrude(                             ST_GeomFromText('LINESTRING(50 50, 100 90, 95 150)'),0,0,10)); ```     ![image](images/st_extrude04.png)   LineString Extruded along Z produces a PolyhedralSurfaceZ |
+<table>
+<tbody>
+<tr>
+<td><pre><code class="language-sql">SELECT ST_Buffer(ST_GeomFromText('POINT(100 90)'),
+                                    50, 'quad_segs=2'),0,0,30);</code></pre>
+<p><img src="images/st_extrude01.svg" alt="image"></p>
+<p>Original octagon formed from buffering point</p></td>
+<td><pre><code>CG_Extrude(ST_Buffer(ST_GeomFromText('POINT(100 90)'),
+                                50, 'quad_segs=2'),0,0,30);</code></pre>
+<p><img src="images/st_extrude02.png" alt="image"></p>
+<p>Hexagon extruded 30 units along Z produces a PolyhedralSurfaceZ</p></td>
+</tr>
+<tr>
+<td><pre><code class="language-sql">SELECT ST_GeomFromText('LINESTRING(50 50, 100 90, 95 150)')</code></pre>
+<p><img src="images/st_extrude03.svg" alt="image"></p>
+<p>Original linestring</p></td>
+<td><pre><code class="language-sql">SELECT CG_Extrude(
+                            ST_GeomFromText('LINESTRING(50 50, 100 90, 95 150)'),0,0,10));</code></pre>
+<p><img src="images/st_extrude04.png" alt="image"></p>
+<p>LineString Extruded along Z produces a PolyhedralSurfaceZ</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -1245,7 +1355,16 @@ Availability: 3.5.0
 Minkowski Sum of Linestring and circle polygon where Linestring cuts thru the circle
 
 
-| ![image](images/st_minkowskisum01.svg)   Before Summing | ![image](images/st_minkowskisum02.svg)   After summing |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_minkowskisum01.svg" alt="image"></p>
+<p>Before Summing</p></td>
+<td><p><img src="images/st_minkowskisum02.svg" alt="image"></p>
+<p>After summing</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```sql
@@ -1265,7 +1384,16 @@ Minkowski Sum of Linestring and circle polygon where Linestring cuts thru the ci
 Minkowski Sum of a polygon and multipoint
 
 
-| ![image](images/st_minkowskisum03.svg)   Before Summing | ![image](images/st_minkowskisum04.svg)   After summing: polygon is duplicated and translated to position of points |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_minkowskisum03.svg" alt="image"></p>
+<p>Before Summing</p></td>
+<td><p><img src="images/st_minkowskisum04.svg" alt="image"></p>
+<p>After summing: polygon is duplicated and translated to position of points</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```sql
@@ -1502,7 +1630,16 @@ ERROR:  straight skeleton of Polygon with point touching rings is not implemente
 ```
 
 
-| ![image](images/st_straightskeleton01.svg)   Original polygon | ![image](images/st_straightskeleton02.png)   Straight Skeleton of polygon |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_straightskeleton01.svg" alt="image"></p>
+<p>Original polygon</p></td>
+<td><p><img src="images/st_straightskeleton02.png" alt="image"></p>
+<p>Straight Skeleton of polygon</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -1542,7 +1679,16 @@ SELECT ST_StraightSkeleton(ST_GeomFromText('POLYGON (( 190 190, 10 190, 10 10, 1
 ```
 
 
-| ![image](images/st_straightskeleton01.svg)   Original polygon | ![image](images/st_straightskeleton02.png)   Straight Skeleton of polygon |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_straightskeleton01.svg" alt="image"></p>
+<p>Original polygon</p></td>
+<td><p><img src="images/st_straightskeleton02.png" alt="image"></p>
+<p>Straight Skeleton of polygon</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -1620,7 +1766,7 @@ Availability: 3.5.0
                                     ((0 0 0, 0 1 0, 1 1 0, 1 0 0, 0 0 0)), ((0 0 0, 1 0 0, 1 0 1, 0 0 1, 0 0 0)),
                                     ((1 1 0, 1 1 1, 1 0 1, 1 0 0, 1 1 0)),
                                     ((0 1 0, 0 1 1, 1 1 1, 1 1 0, 0 1 0)), ((0 0 1, 1 0 1, 1 1 1, 0 1 1, 0 0 1)) )');</code></pre>
-<p>!<a href="images/st_tesselate01.png">image</a></p>
+<p><img src="images/st_tesselate01.png" alt="image"></p>
 <p>Original Cube</p></td>
 <td><pre><code class="language-sql">SELECT CG_Tesselate(ST_GeomFromText('POLYHEDRALSURFACE Z( ((0 0 0, 0 0 1, 0 1 1, 0 1 0, 0 0 0)),
                                 ((0 0 0, 0 1 0, 1 1 0, 1 0 0, 0 0 0)), ((0 0 0, 1 0 0, 1 0 1, 0 0 1, 0 0 0)),
@@ -1634,12 +1780,12 @@ Availability: 3.5.0
                         ((1 1 0,1 1 1,1 0 1,1 1 0)),((1 0 0,1 1 0,1 0 1,1 0 0)),
                         ((0 1 0,0 1 1,1 1 1,0 1 0)),((1 1 0,0 1 0,1 1 1,1 1 0)),
                         ((0 1 1,1 0 1,1 1 1,0 1 1)),((0 1 1,0 0 1,1 0 1,0 1 1)))</code></pre>
-<p>!<a href="images/st_tesselate02.png">image</a></p>
+<p><img src="images/st_tesselate02.png" alt="image"></p>
 <p>Tessellated Cube with triangles colored</p></td>
 </tr>
 <tr>
 <td><pre><code class="language-sql">SELECT 'POLYGON (( 10 190, 10 70, 80 70, 80 130, 50 160, 120 160, 120 190, 10 190 ))'::geometry;</code></pre>
-<p>!<a href="images/st_tesselate03.svg">image</a></p>
+<p><img src="images/st_tesselate03.svg" alt="image"></p>
 <p>Original polygon</p></td>
 <td><pre><code class="language-sql">SELECT
                         CG_Tesselate('POLYGON (( 10 190, 10 70, 80 70, 80 130, 50 160, 120 160, 120 190, 10 190 ))'::geometry);</code></pre>
@@ -1647,7 +1793,7 @@ Availability: 3.5.0
 <pre><code>TIN(((80 130,50 160,80 70,80 130)),((50 160,10 190,10 70,50 160)),
                 ((80 70,50 160,10 70,80 70)),((120 160,120 190,50 160,120 160)),
                 ((120 190,10 190,50 160,120 190)))</code></pre>
-<p>!<a href="images/st_tesselate04.svg">image</a></p>
+<p><img src="images/st_tesselate04.svg" alt="image"></p>
 <p>Tessellated Polygon</p></td>
 </tr>
 </tbody>
@@ -1744,7 +1890,18 @@ SELECT CG_Visibility('POLYGON((23.5 23.5,23.5 173.5,173.5 173.5,173.5 23.5,23.5 
 ```
 
 
-| ![image](images/cg_visibility01.svg)   Original polygon | ![image](images/cg_visibility02.svg)   Visibility from the point | ![image](images/cg_visibility03.svg)   Visibility from the segment |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/cg_visibility01.svg" alt="image"></p>
+<p>Original polygon</p></td>
+<td><p><img src="images/cg_visibility02.svg" alt="image"></p>
+<p>Visibility from the point</p></td>
+<td><p><img src="images/cg_visibility03.svg" alt="image"></p>
+<p>Visibility from the segment</p></td>
+</tr>
+</tbody>
+</table>
   <a id="CG_YMonotonePartition"></a>
 
 # CG_YMonotonePartition
@@ -1779,7 +1936,16 @@ Requires SFCGAL >= 1.5.0
 ## Examples
 
 
-| ![image](images/cg_ymonotonepartition01.svg)   Original polygon | ![image](images/cg_ymonotonepartition02.svg)   Y-Monotone Partition (same example As [CG_ApproxConvexPartition](#CG_ApproxConvexPartition), [CG_GreeneApproxConvexPartition](#CG_GreeneApproxConvexPartition) and [CG_OptimalConvexPartition](#CG_OptimalConvexPartition)) |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/cg_ymonotonepartition01.svg" alt="image"></p>
+<p>Original polygon</p></td>
+<td><p><img src="images/cg_ymonotonepartition02.svg" alt="image"></p>
+<p>Y-Monotone Partition (same example As <a href="#CG_ApproxConvexPartition">CG_ApproxConvexPartition</a>, <a href="#CG_GreeneApproxConvexPartition">CG_GreeneApproxConvexPartition</a> and <a href="#CG_OptimalConvexPartition">CG_OptimalConvexPartition</a>)</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```sql
@@ -1835,7 +2001,16 @@ SELECT CG_StraightSkeletonPartition(ST_GeomFromText('POLYGON (( 190 190, 10 190,
 ```
 
 
-| ![image](images/st_straightskeleton01.svg)   Original polygon | ![image](images/cg_straightskeletonpartition01.svg)   Straight Skeleton Partition of polygon |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_straightskeleton01.svg" alt="image"></p>
+<p>Original polygon</p></td>
+<td><p><img src="images/cg_straightskeletonpartition01.svg" alt="image"></p>
+<p>Straight Skeleton Partition of polygon</p></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also
@@ -1888,8 +2063,39 @@ SELECT string_agg('<Shape>' || ST_AsX3D(cgbuffer3d_output)  || '<Appearance>
 ```
 
 
-| ![image](images/cg_3dbuffer01.png)   segments=32 (rounded buffer)    ```sql SELECT CG_3DBuffer(ST_GeomFromText('POINT(100 90)'), 50,32,0); ``` | ![image](images/cg_3dbuffer02.png)   5 segments rounded    ```sql SELECT CG_3DBuffer(  ST_GeomFromText('POINT(100 90)'),  50,5,0);              ``` |
-| ![image](images/cg_3dbuffer03.png)   32 segments, round    ```sql SELECT CG_3DBuffer(   ST_GeomFromText(     'LINESTRING(50 50,150 150,150 50)'     ),  10,32,0);              ``` | ![image](images/cg_3dbuffer04.png)   32 segments, square    ```sql SELECT CG_3DBuffer(   ST_GeomFromText(     'LINESTRING(50 50,150 150,150 50)'     ),  10,32,2);              ``` |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/cg_3dbuffer01.png" alt="image"></p>
+<p>segments=32 (rounded buffer)</p>
+<pre><code class="language-sql">SELECT CG_3DBuffer(ST_GeomFromText('POINT(100 90)'), 50,32,0);</code></pre></td>
+<td><p><img src="images/cg_3dbuffer02.png" alt="image"></p>
+<p>5 segments rounded</p>
+<pre><code class="language-sql">SELECT CG_3DBuffer(
+ ST_GeomFromText('POINT(100 90)'),
+ 50,5,0);
+            </code></pre></td>
+</tr>
+<tr>
+<td><p><img src="images/cg_3dbuffer03.png" alt="image"></p>
+<p>32 segments, round</p>
+<pre><code class="language-sql">SELECT CG_3DBuffer(
+  ST_GeomFromText(
+    'LINESTRING(50 50,150 150,150 50)'
+    ),
+ 10,32,0);
+            </code></pre></td>
+<td><p><img src="images/cg_3dbuffer04.png" alt="image"></p>
+<p>32 segments, square</p>
+<pre><code class="language-sql">SELECT CG_3DBuffer(
+  ST_GeomFromText(
+    'LINESTRING(50 50,150 150,150 50)'
+    ),
+ 10,32,2);
+            </code></pre></td>
+</tr>
+</tbody>
+</table>
 
 
 ## See Also

@@ -143,20 +143,52 @@ NOTE: this is the "allowable" version that returns a boolean, not an integer.
 `ST_Contains` returns `TRUE` in the following situations:
 
 
-| ![image](images/st_contains01.svg)   `LINESTRING` / `MULTIPOINT` | ![image](images/st_contains02.svg)   `POLYGON` / `POINT` |
-| ![image](images/st_contains03.svg)   `POLYGON` / `LINESTRING` | ![image](images/st_contains04.svg)   `POLYGON` / `POLYGON` |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_contains01.svg" alt="image"></p>
+<p><code>LINESTRING</code> / <code>MULTIPOINT</code></p></td>
+<td><p><img src="images/st_contains02.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>POINT</code></p></td>
+</tr>
+<tr>
+<td><p><img src="images/st_contains03.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>LINESTRING</code></p></td>
+<td><p><img src="images/st_contains04.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>POLYGON</code></p></td>
+</tr>
+</tbody>
+</table>
 
 
 `ST_Contains` returns `FALSE` in the following situations:
 
 
-| ![image](images/st_contains05.svg)   `POLYGON` / `MULTIPOINT` | ![image](images/st_contains06.svg)   `POLYGON` / `LINESTRING` |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_contains05.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>MULTIPOINT</code></p></td>
+<td><p><img src="images/st_contains06.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>LINESTRING</code></p></td>
+</tr>
+</tbody>
+</table>
 
 
 Due to the interior intersection condition `ST_Contains` returns `FALSE` in the following situations (whereas `ST_Covers` returns `TRUE`):
 
 
-| ![image](images/st_contains07.svg)   `LINESTRING` / `POINT` | ![image](images/st_contains08.svg)   `POLYGON` / `LINESTRING` |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_contains07.svg" alt="image"></p>
+<p><code>LINESTRING</code> / <code>POINT</code></p></td>
+<td><p><img src="images/st_contains08.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>LINESTRING</code></p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```
@@ -555,14 +587,43 @@ Geometries cross if their DE-9IM Intersection Matrix matches:
 The following situations all return `true`.
 
 
-| ![image](images/st_crosses01.svg)   `MULTIPOINT` / `LINESTRING` | ![image](images/st_crosses02.svg)   `MULTIPOINT` / `POLYGON` |
-| ![image](images/st_crosses03.svg)   `LINESTRING` / `POLYGON` | ![image](images/st_crosses04.svg)   `LINESTRING` / `LINESTRING` |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_crosses01.svg" alt="image"></p>
+<p><code>MULTIPOINT</code> / <code>LINESTRING</code></p></td>
+<td><p><img src="images/st_crosses02.svg" alt="image"></p>
+<p><code>MULTIPOINT</code> / <code>POLYGON</code></p></td>
+</tr>
+<tr>
+<td><p><img src="images/st_crosses03.svg" alt="image"></p>
+<p><code>LINESTRING</code> / <code>POLYGON</code></p></td>
+<td><p><img src="images/st_crosses04.svg" alt="image"></p>
+<p><code>LINESTRING</code> / <code>LINESTRING</code></p></td>
+</tr>
+</tbody>
+</table>
 
 
 Consider a situation where a user has two tables: a table of roads and a table of highways.
 
 
-| ```sql CREATE TABLE roads (   id serial NOT NULL,   geom geometry,   CONSTRAINT roads_pkey PRIMARY KEY (road_id) ); ``` | ```sql CREATE TABLE highways (   id serial NOT NULL,   the_gem geometry,   CONSTRAINT roads_pkey PRIMARY KEY (road_id) ); ``` |
+<table>
+<tbody>
+<tr>
+<td><pre><code class="language-sql">CREATE TABLE roads (
+  id serial NOT NULL,
+  geom geometry,
+  CONSTRAINT roads_pkey PRIMARY KEY (road_id)
+);</code></pre></td>
+<td><pre><code class="language-sql">CREATE TABLE highways (
+  id serial NOT NULL,
+  the_gem geometry,
+  CONSTRAINT roads_pkey PRIMARY KEY (road_id)
+);</code></pre></td>
+</tr>
+</tbody>
+</table>
 
 
 To determine a list of roads that cross a highway, use a query similar to:
@@ -1078,7 +1139,18 @@ NOTE: this is the "allowable" version that returns a boolean, not an integer.
 `ST_Overlaps` returns `TRUE` in the following situations:
 
 
-| ![image](images/st_overlaps01.svg)   `MULTIPOINT` / `MULTIPOINT` | ![image](images/st_overlaps02.svg)   `LINESTRING` / `LINESTRING` | ![image](images/st_overlaps03.svg)   `POLYGON` / `POLYGON` |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_overlaps01.svg" alt="image"></p>
+<p><code>MULTIPOINT</code> / <code>MULTIPOINT</code></p></td>
+<td><p><img src="images/st_overlaps02.svg" alt="image"></p>
+<p><code>LINESTRING</code> / <code>LINESTRING</code></p></td>
+<td><p><img src="images/st_overlaps03.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>POLYGON</code></p></td>
+</tr>
+</tbody>
+</table>
 
 
 ![image](images/st_overlaps04.svg)
@@ -1432,8 +1504,26 @@ This relationship holds if the DE-9IM Intersection Matrix for the two geometries
 The `ST_Touches` predicate returns `TRUE` in the following examples.
 
 
-| ![image](images/st_touches01.svg)   `POLYGON` / `POLYGON` | ![image](images/st_touches02.svg)   `POLYGON` / `POLYGON` | ![image](images/st_touches03.svg)   `POLYGON` / `LINESTRING` |
-| ![image](images/st_touches04.svg)   `LINESTRING` / `LINESTRING` | ![image](images/st_touches05.svg)   `LINESTRING` / `LINESTRING` | ![image](images/st_touches06.svg)   `POLYGON` / `POINT` |
+<table>
+<tbody>
+<tr>
+<td><p><img src="images/st_touches01.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>POLYGON</code></p></td>
+<td><p><img src="images/st_touches02.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>POLYGON</code></p></td>
+<td><p><img src="images/st_touches03.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>LINESTRING</code></p></td>
+</tr>
+<tr>
+<td><p><img src="images/st_touches04.svg" alt="image"></p>
+<p><code>LINESTRING</code> / <code>LINESTRING</code></p></td>
+<td><p><img src="images/st_touches05.svg" alt="image"></p>
+<p><code>LINESTRING</code> / <code>LINESTRING</code></p></td>
+<td><p><img src="images/st_touches06.svg" alt="image"></p>
+<p><code>POLYGON</code> / <code>POINT</code></p></td>
+</tr>
+</tbody>
+</table>
 
 
 ```sql
