@@ -174,7 +174,7 @@ SELECT degrees(ST_Azimuth( ST_Point(25, 45),  ST_Point(75, 100))) AS degA_B,
 ```
 
 
-| ![image](images/st_azimuth01.png)   Blue: origin Point(25,45); Green: target Point(75, 100); Yellow: Y axis or North; Red: azimuth angle. | ![image](images/st_azimuth02.png)   Blue: origin Point(75, 100); Green: target Point(25, 45); Yellow: Y axis or North; Red: azimuth angle. |
+| Blue: origin Point(25,45); Green: target Point(75, 100); Yellow: Y axis or North; Red: azimuth angle. | Blue: origin Point(75, 100); Green: target Point(25, 45); Yellow: Y axis or North; Red: azimuth angle. |
 
 
 ## See Also
@@ -303,9 +303,6 @@ Availability: 1.5.0
 ## Examples
 
 
-![image](images/st_closestpoint01.png)
-
-
 The closest point for a Point and a LineString is the point itself. The closest point for a LineString and a Point is a point on the line.
 
 
@@ -320,9 +317,6 @@ SELECT ST_AsText( ST_ClosestPoint(pt,line)) AS cp_pt_line,
 ----------------+------------------------------------------
  POINT(160 40)  | POINT(125.75342465753425 115.34246575342466)
 ```
-
-
-![image](images/st_closestpoint02.png)
 
 
 The closest point on polygon A to polygon B
@@ -810,9 +804,6 @@ Availability: 1.5.0
 ## Examples
 
 
-![image](images/st_hausdorffdistance01.png)
-
-
 Hausdorff distance (red) and distance (yellow) between two lines
 
 
@@ -1143,9 +1134,6 @@ Availability: 1.5.0
 ## Examples
 
 
-![image](images/st_longestline01.png)
-
-
 Longest line between a point and a line
 
 
@@ -1160,9 +1148,6 @@ LINESTRING(160 40,130 190)
 ```
 
 
-![image](images/st_longestline02.png)
-
-
 Longest line between two polygons
 
 
@@ -1175,9 +1160,6 @@ SELECT ST_AsText( ST_LongestLine(
 -----------------
 LINESTRING(20 10,105.3073372946034 186.95518130045156)
 ```
-
-
-![image](images/st_longestline03.png)
 
 
 Longest line across a single geometry. The length of the line is equal to the Maximum Distance. The endpoints of the line lie on the Minimum Bounding Circle.
@@ -1671,9 +1653,6 @@ Availability: 1.5.0
 ## Examples
 
 
-![image](images/st_shortestline01.png)
-
-
 Shortest line between Point and LineString
 
 
@@ -1686,9 +1665,6 @@ SELECT ST_AsText(  ST_ShortestLine(
 ---------------------------------------------------------
  LINESTRING(160 40,125.75342465753425 115.34246575342466)
 ```
-
-
-![image](images/st_shortestline02.png)
 
 
 Shortest line between Polygons

@@ -226,9 +226,6 @@ FROM
 ```
 
 
-![image](images/st_clusterkmeans02.png)
-
-
 Parcels color-coded by cluster number (cid)
 
 
