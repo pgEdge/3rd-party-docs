@@ -2163,23 +2163,13 @@ Availability: 2.0.0
 <table>
 <tbody>
 <tr>
-<td markdown="block">
-![image](images/st_snap01.svg)
-
-
-A multipolygon shown with a linestring (before any snapping)
-</td>
+<td><p><img src="../images/st_snap01.svg" alt="image"></p>
+<p>A multipolygon shown with a linestring (before any snapping)</p></td>
 </tr>
 <tr>
-<td markdown="block">
-![image](images/st_snap02.svg)
-
-
-A multipolygon snapped to linestring to tolerance: 1.01 of distance. The new multipolygon is shown with reference linestring
-
-
-```sql
-
+<td><p><img src="../images/st_snap02.svg" alt="image"></p>
+<p>A multipolygon snapped to linestring to tolerance: 1.01 of distance. The new multipolygon is shown with reference linestring</p>
+<pre><code class="language-sql">
 SELECT ST_AsText(ST_Snap(poly,line, ST_Distance(poly,line)*1.01)) AS polysnapped
 FROM (SELECT
    ST_GeomFromText('MULTIPOLYGON(
@@ -2193,18 +2183,10 @@ FROM (SELECT
 ---------------------------------------------------------------------
  MULTIPOLYGON(((26 125,26 200,126 200,126 125,101 100,26 125),
  (51 150,101 150,76 175,51 150)),((151 100,151 200,176 175,151 100)))
-
-```
-</td>
-<td markdown="block">
-![image](images/st_snap04.svg)
-
-
-A multipolygon snapped to linestring to tolerance: 1.25 of distance. The new multipolygon is shown with reference linestring
-
-
-```sql
-
+				</code></pre></td>
+<td><p><img src="../images/st_snap04.svg" alt="image"></p>
+<p>A multipolygon snapped to linestring to tolerance: 1.25 of distance. The new multipolygon is shown with reference linestring</p>
+<pre><code class="language-sql">
 SELECT ST_AsText(
     ST_Snap(poly,line, ST_Distance(poly,line)*1.25)
   ) AS polysnapped
@@ -2220,20 +2202,12 @@ FROM (SELECT
 ---------------------------------------------------------------------
 MULTIPOLYGON(((5 107,26 200,126 200,126 125,101 100,54 84,5 107),
 (51 150,101 150,76 175,51 150)),((151 100,151 200,176 175,151 100)))
-
-```
-</td>
+				</code></pre></td>
 </tr>
 <tr>
-<td markdown="block">
-![image](images/st_snap03.svg)
-
-
-The linestring snapped to the original multipolygon at tolerance 1.01 of distance. The new linestring is shown with reference multipolygon
-
-
-```sql
-
+<td><p><img src="../images/st_snap03.svg" alt="image"></p>
+<p>The linestring snapped to the original multipolygon at tolerance 1.01 of distance. The new linestring is shown with reference multipolygon</p>
+<pre><code class="language-sql">
 SELECT ST_AsText(
    ST_Snap(line, poly, ST_Distance(poly,line)*1.01)
   ) AS linesnapped
@@ -2248,18 +2222,10 @@ FROM (SELECT
               linesnapped
 ----------------------------------------
  LINESTRING(5 107,26 125,54 84,101 100)
-
-```
-</td>
-<td markdown="block">
-![image](images/st_snap05.svg)
-
-
-The linestring snapped to the original multipolygon at tolerance 1.25 of distance. The new linestring is shown with reference multipolygon
-
-
-```sql
-
+				</code></pre></td>
+<td><p><img src="../images/st_snap05.svg" alt="image"></p>
+<p>The linestring snapped to the original multipolygon at tolerance 1.25 of distance. The new linestring is shown with reference multipolygon</p>
+<pre><code class="language-sql">
 SELECT ST_AsText(
  ST_Snap(line, poly, ST_Distance(poly,line)*1.25)
   ) AS linesnapped
@@ -2273,9 +2239,7 @@ FROM (SELECT
               linesnapped
 ---------------------------------------
 LINESTRING(26 125,54 84,101 100)
-
-```
-</td>
+				</code></pre></td>
 </tr>
 </tbody>
 </table>

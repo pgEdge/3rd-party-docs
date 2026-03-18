@@ -127,53 +127,29 @@ Changed: 3.2.0 support for TIN, does not use geos, does not linearize curves
 <table>
 <tbody>
 <tr>
-<td markdown="block">
-![image](images/st_boundary01.svg)
-
-
-Linestring with boundary points overlaid
-
-
-```sql
-SELECT ST_Boundary(geom)
+<td><p><img src="../images/st_boundary01.svg" alt="image"></p>
+<p>Linestring with boundary points overlaid</p>
+<pre><code class="language-sql">SELECT ST_Boundary(geom)
 FROM (SELECT 'LINESTRING(100 150,50 60, 70 80, 160 170)'::geometry As geom) As f;
-
-```
-
-
-```
-
+				</code></pre>
+<pre><code>
 
 ST_AsText output
 
-MULTIPOINT((100 150),(160 170))
-```
-</td>
-<td markdown="block">
-![image](images/st_boundary02.svg)
-
-
-polygon holes with boundary multilinestring
-
-
-```sql
-SELECT ST_Boundary(geom)
+MULTIPOINT((100 150),(160 170))</code></pre></td>
+<td><p><img src="../images/st_boundary02.svg" alt="image"></p>
+<p>polygon holes with boundary multilinestring</p>
+<pre><code class="language-sql">SELECT ST_Boundary(geom)
 FROM (SELECT
 'POLYGON (( 10 130, 50 190, 110 190, 140 150, 150 80, 100 10, 20 40, 10 130 ),
 	( 70 40, 100 50, 120 80, 80 110, 50 90, 70 40 ))'::geometry As geom) As f;
-
-```
-
-
-```
-
+				</code></pre>
+<pre><code>
 
 ST_AsText output
 
 MULTILINESTRING((10 130,50 190,110 190,140 150,150 80,100 10,20 40,10 130),
-	(70 40,100 50,120 80,80 110,50 90,70 40))
-```
-</td>
+	(70 40,100 50,120 80,80 110,50 90,70 40))</code></pre></td>
 </tr>
 </tbody>
 </table>
