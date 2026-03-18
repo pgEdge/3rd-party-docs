@@ -3,6 +3,8 @@
 # Enabling OAUTH2 Authentication
 
 To enable OAUTH2 authentication for pgAdmin, you must configure the OAUTH2 settings in the *config_local.py* or *config_system.py* file (see the [config.py](deployment/config_py.md#config_py) documentation) on the system where pgAdmin is installed in Server mode. You can copy these settings from *config.py* file and modify the values for the following parameters:
+<a id="AzureAD"></a>
+<a id="GitLab"></a>
 
 | **Parameter** | **Description** |
 |---|---|
@@ -21,7 +23,7 @@ To enable OAUTH2 authentication for pgAdmin, you must configure the OAUTH2 setti
 | OAUTH2_BUTTON_COLOR | Oauth2 button color |
 | OAUTH2_USERNAME_CLAIM | The claim which is used for the username. If the value is empty  the email is used as username, but if a value is provided, the claim has to exist. Ex: *oid* (for AzureAD), *email* (for Github) |
 | OAUTH2_AUTO_CREATE_USER | Set the value to *True* if you want to automatically  create a pgAdmin user corresponding to a successfully authenticated Oauth2 user.  Please note that password is not stored in the pgAdmin database. |
-| OAUTH2_ADDITIONAL_CLAIMS | If a dictionary is provided, pgAdmin will check for a matching key and value on the userinfo endpoint   and in the Id Token. In case there is no match with the provided config, the user will receive an authorization error.  Useful for checking AzureAD_ *wids* or *groups*, GitLab_ *owner*, *maintainer* and *reporter* claims. |
+| OAUTH2_ADDITIONAL_CLAIMS | If a dictionary is provided, pgAdmin will check for a matching key and value on the userinfo endpoint   and in the Id Token. In case there is no match with the provided config, the user will receive an authorization error.  Useful for checking [AzureAD](https://learn.microsoft.com/en-us/security/zero-trust/develop/configure-tokens-group-claims-app-roles) *wids* or *groups*, [GitLab](https://docs.gitlab.com/ee/integration/openid_connect_provider.html#shared-information) *owner*, *maintainer* and *reporter* claims. |
 | OAUTH2_SSL_CERT_VERIFICATION | Set this variable to False to disable SSL certificate verification for OAuth2 provider.  This may need to set False, in case of self-signed certificates. |
 | OAUTH2_CHALLENGE_METHOD | Enable PKCE workflow. PKCE method name, only *S256* is supported |
 | OAUTH2_RESPONSE_TYPE | Enable PKCE workflow. Mandatory with OAUTH2_CHALLENGE_METHOD, must be set to *code* |
@@ -38,7 +40,7 @@ In the multi user mode, pgAdmin uses user's login password to encrypt/decrypt th
 
 After configuration, on restart, you can see the login page with the Oauth2 login button(s).
 
-![Oauth2 login](../images/oauth2_login.png)
+![Oauth2 login](images/oauth2_login.png)
 
 ## PKCE Workflow
 

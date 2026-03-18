@@ -37,7 +37,7 @@ The configuration files are as follows:
     |---|---|
     | Linux | /etc/pgadmin/config_system.py |
     | macOS | /Library/Preferences/pgadmin/config_system.py |
-    | Windows | %CommonProgramFiles%\\pgadmin\\config_system.py |
+    | Windows | %CommonProgramFiles%\pgadmin\config_system.py |
 
 !!! note
 

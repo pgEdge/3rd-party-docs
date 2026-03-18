@@ -2,7 +2,7 @@
 
 # Debugger
 
-![Debugger page](../images/debug_main.png)
+![Debugger page](images/debug_main.png)
 
 The debugger may be used to debug PL/pgSQL functions in PostgreSQL, as well as EDB-SPL functions, stored procedures and packages in EDB Postgres Advanced Server. The Debugger is available as an extension for your PostgreSQL installation, and is distributed as part of Advanced Server.  You must have superuser privileges to use the debugger.
 
@@ -18,17 +18,17 @@ The debugger may be used for either in-context debugging or direct debugging of 
 
 To set a breakpoint at the first line of a program, right-click the name of the object you would like to debug, and select *Set breakpoint* from the *Debugging* sub-menu.  The debugger window will open, waiting for another session to invoke the program.
 
-![Debugger set a breakpoint demo](../images/debug_set_breakpoint.png)
+![Debugger set a breakpoint demo](images/debug_set_breakpoint.png)
 
 When another session invokes the target, the debugger will display the code, allowing you to add break points, or step through line-by-line. The other session is suspended until the debugging completes; then control is returned to the session.
 
-![Debugger step-in demo](../images/debug_ic_step_in.png)
+![Debugger step-in demo](images/debug_ic_step_in.png)
 
 # Direct Debugging
 
 To use the debugger for direct debugging, right click on the name of the object that you wish to debug in the pgAdmin tree control and select *Debug* from the *Debugging* sub-menu.  The debugger window will open, prompting you for any values required by the program:
 
-![Debugger parameter dialog](../images/debug_params.png)
+![Debugger parameter dialog](images/debug_params.png)
 
 Use the fields on the *Debugger* dialog to provide a value for each parameter:
 
@@ -44,7 +44,7 @@ Use the fields on the *Debugger* dialog to provide a value for each parameter:
     the program.  When entering parameter values, type the value into the
     appropriate cell on the grid, or, leave the cell empty to represent NULL,
     enter '' (two single quotes) to represent an empty string, or to enter a
-    literal string consisting of just two single quotes, enter \'\'. PostgreSQL
+    literal string consisting of just two single quotes, enter ''. PostgreSQL
     8.4 and above supports variadic function parameters. These may be entered as
     a comma-delimited list of values, quoted and/or cast as required.
 
@@ -55,13 +55,13 @@ Use the fields on the *Debugger* dialog to provide a value for each parameter:
 
 Provide values required by the program, and click the *Debug* button to start stepping through the program. The values of the arguments provided here are saved. The values will be pre-filled next time the dialog opens. To clear the values, use the *Clear All* button.
 
-![Debugger step-in demo](../images/debug_step_in.png)
+![Debugger step-in demo](images/debug_step_in.png)
 
 # Using the Debugger
 
 The main debugger window consists of two panels and a context-sensitive toolbar. Use toolbar icons to manage breakpoints and step into or through code; hover over an icon for a tooltip that identifies the option associated with the icon. The toolbar options are:
 
-![Debugger navigation toolbar](../images/debug_toolbar.png)
+![Debugger navigation toolbar](images/debug_toolbar.png)
 
 | Option | Action | Shortcut |
 |---|---|---|
@@ -75,7 +75,7 @@ The main debugger window consists of two panels and a context-sensitive toolbar.
 
 The top panel of the debugger window displays the program body; click in the grey margin next to a line number to add a breakpoint.  The highlighted line in the top panel is the line that is about to execute.
 
-![Debugger main window](../images/debug_main.png)
+![Debugger main window](images/debug_main.png)
 
 The lower panel of the debugger window provides a set of tabs that allow you to review information about the program:
 
@@ -93,14 +93,14 @@ The lower panel of the debugger window provides a set of tabs that allow you to 
 
 As you step through a program, the *Local variables* tab displays the current value of each variable:
 
-![Debugger local variables tab](../images/debug_variables.png)
+![Debugger local variables tab](images/debug_variables.png)
 
 When you step into a subroutine, the *Stack* tab displays the call stack, including the name of each caller, the parameter values for each caller (if any), and the line number within each caller:
 
-![Debugger local stack tab](../images/debug_stack.png)
+![Debugger local stack tab](images/debug_stack.png)
 
 Select a caller to change focus to that stack frame and display the state of the caller in the upper panel.
 
 When the program completes, the *Results* tab displays the message returned by the server.  If the program encounters an error, the *Messages* tab displays details:
 
-![Debugger error message](../images/debug_error_message.png)
+![Debugger error message](images/debug_error_message.png)

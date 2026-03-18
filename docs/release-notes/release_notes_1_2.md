@@ -54,7 +54,7 @@ This release contains a number of features and fixes reported since the release 
 [Issue #1912](https://redmine.postgresql.org/issues/1912) - Properly format arguments passed by triggers to functions<br>
 [Issue #1919](https://redmine.postgresql.org/issues/1919) - Ensure all changes to rows are stored in the data editor<br>
 [Issue #1924](https://redmine.postgresql.org/issues/1924) - Ensure the check_option is only set when editing views when appropriate<br>
-[Issue #1936](https://redmine.postgresql.org/issues/1936) - Don't strip \r\n from "Download as CSV" batches of rows, as it leads to malformed data<br>
+[Issue #1936](https://redmine.postgresql.org/issues/1936) - Don't strip rn from "Download as CSV" batches of rows, as it leads to malformed data<br>
 [Issue #1937](https://redmine.postgresql.org/issues/1937) - Generate mSQL for new schemas correctly<br>
 [Issue #1938](https://redmine.postgresql.org/issues/1938) - Fix sorting of numerics in the statistics grids<br>
 [Issue #1939](https://redmine.postgresql.org/issues/1939) - Updated dynamic default for the window size (90% x 90%)<br>

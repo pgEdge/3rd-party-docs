@@ -6,7 +6,7 @@ Use the *Reassign/Drop Own* dialog to change the ownership of database objects o
 
 The *Reassign/Drop Own* dialog organizes the Reassign & Drop role through General tab.
 
-![Reassign/Drop Own dialog](../images/role_reassign_dialog.png)
+![Reassign/Drop Own dialog](images/role_reassign_dialog.png)
 
 - Use the *Operation* field to provide Reassign option.
 
@@ -19,11 +19,11 @@ The above example demonstrates reassigning *old_role* to *new_role*.
 
 Click the *SQL* tab to continue.
 
-![Reassign/Drop Own dialog sql](../images/role_reassign_dialog_sql.png)
+![Reassign/Drop Own dialog sql](images/role_reassign_dialog_sql.png)
 
 Removing database objects owned by a database role.
 
-![Reassign/Drop Own dialog](../images/role_drop_dialog.png)
+![Reassign/Drop Own dialog](images/role_drop_dialog.png)
 
 - Use the *Operation* field to provide Drop option.
 
@@ -33,7 +33,7 @@ Removing database objects owned by a database role.
 
 Click the *SQL* tab to continue.
 
-![Reassign/Drop Own dialog sql](../images/role_drop_dialog_sql.png)
+![Reassign/Drop Own dialog sql](images/role_drop_dialog_sql.png)
 
 The above examples demonstrates drop owned by *role*.
 

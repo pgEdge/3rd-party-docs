@@ -31,7 +31,7 @@ pgAdmin 4's desktop application includes an automated update system built using 
 
 The flow chart for the update process is as follows:
 
-![Auto-update Desktop App](../../../images/auto_update_desktop_app.png)
+![Auto-update Desktop App](images/auto_update_desktop_app.png)
 
 ## User Interface Components
 

@@ -4,7 +4,7 @@
 
 Use the *Backup Server* dialog to create a plain-text script that will recreate the selected server. You can use the pgAdmin *Query Tool* to play back a plain-text script, and recreate the server.
 
-![Backup server dialog](../images/backup_server_general.png)
+![Backup server dialog](images/backup_server_general.png)
 
 Use the fields in the *General* tab to specify the following:
 
@@ -22,7 +22,7 @@ Use the fields in the *General* tab to specify the following:
 
 Click the *Data Options* tab to continue. Use the fields in the *Data Options* tab to provide options related to data or pgAdmin objects that correspond to *pg_dumpall*.
 
-![Type of objects option on backup server dialog](../images/backup_server_objects.png)
+![Type of objects option on backup server dialog](images/backup_server_objects.png)
 
 - Move switches in the **Type of objects** field box to specify details about
     the type of objects that will be backed up.
@@ -38,7 +38,7 @@ Click the *Data Options* tab to continue. Use the fields in the *Data Options* t
 
 - Move the switch next to *Only roles* to limit the back up to roles only.
 
-![Do not save option on backup server dialog](../images/backup_server_do_not_save.png)
+![Do not save option on backup server dialog](images/backup_server_do_not_save.png)
 
 - Move switches in the **Do not save** field box to select the objects that will
     not be included in the backup.
@@ -79,7 +79,7 @@ Click the *Data Options* tab to continue. Use the fields in the *Data Options* t
     Table access methods. **Note:** This option is visible only for
     database server greater than or equal to 15.
 
-![Queries option on backup server dialog](../images/backup_server_queries.png)
+![Queries option on backup server dialog](images/backup_server_queries.png)
 
 Click the *Query Options* tab to continue. Use these additional fields to specify the type of statements that should be included in the backup.
 
@@ -107,7 +107,7 @@ Click the *Query Options* tab to continue. Use these additional fields to specif
     position to add an IF EXISTS clause to drop databases and other objects.
     This option is not valid unless *Include DROP DATABASE statement* is also set.
 
-![Backup dialog tables section](../images/backup_server_table.png)
+![Backup dialog tables section](images/backup_server_table.png)
 
 Click the *Table Options* tab to continue. Use the fields in the *Table Options* tab related to tables that should be included in the backup.
 
@@ -123,7 +123,7 @@ Click the *Table Options* tab to continue. Use the fields in the *Table Options*
 
 Click the *Options* tab to continue. Use the fields in the *Options* tab to provide other backup options.
 
-![Disable option on backup server dialog](../images/backup_server_disable.png)
+![Disable option on backup server dialog](images/backup_server_disable.png)
 
 - Move switches in the **Disable** field box to specify the type of statements
     that should be excluded from the backup.
@@ -136,7 +136,7 @@ Click the *Options* tab to continue. Use the fields in the *Options* tab to prov
     quoting within function bodies; if disabled, the function body will be
     quoted using SQL standard string syntax.
 
-![Miscellaneous option on backup server dialog](../images/backup_server_miscellaneous.png)
+![Miscellaneous option on backup server dialog](images/backup_server_miscellaneous.png)
 
 - Move switches in the **Miscellaneous** field box to specify miscellaneous
     backup options.

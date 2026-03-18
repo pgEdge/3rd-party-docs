@@ -6,7 +6,7 @@ Use The *Replica Node* dialog to view a standby instance being replicated using 
 
 The *Replica Node* dialog organizes the information through the following tabs: *General*, *Replication Slot*
 
-![Replica Node dialog general tab](../images/replica_nodes_general.png)
+![Replica Node dialog general tab](images/replica_nodes_general.png)
 
 - The *PID* field is the process ID of a WAL sender process.
 
@@ -27,7 +27,7 @@ The *Replica Node* dialog organizes the information through the following tabs: 
 
 Click the *Replication Slot* tab to continue.
 
-![Replica Node dialog replication slot tab](../images/replica_nodes_replication.png)
+![Replica Node dialog replication slot tab](images/replica_nodes_replication.png)
 
 - The *Slot Name* field is a unique, cluster-wide identifier for the replication slot.
 

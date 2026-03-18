@@ -6,7 +6,7 @@ Use The *Replication Server Node* dialog to view an element that run databases a
 
 The dialog organizes the information through the following tabs: *General*
 
-![Replication Server Node Dialog general tab](../../images/pgd_server_node_dialog.png)
+![Replication Server Node Dialog general tab](images/pgd_server_node_dialog.png)
 
 - The *Sequence ID* field is the identifier of the node used for generating unique sequence numbers.
 

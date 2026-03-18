@@ -2,11 +2,11 @@
 
 To deploy a PostgreSQL server on the Azure Database, follow the below steps.
 
-![Cloud Deployment](../../images/cloud_provider_for_postgresql.png)
+![Cloud Deployment](images/cloud_provider_for_postgresql.png)
 
 Once you launch the tool, select the Azure Database option. Click on the *Next* button to proceed further.
 
-![Cloud Deployment](../../images/cloud_azure_credentials.png)
+![Cloud Deployment](images/cloud_azure_credentials.png)
 
 In the Credentials dialog, select authentication method either interactive browser or Azure CLI. Azure CLI will use the currently logged in identity through the Azure CLI on the local machine. Interactive Browser will open a browser window to authenticate a user interactively.
 
@@ -16,7 +16,7 @@ Clicking the *Click here to authenticate yourself to Microsoft Azure* button, us
 
 Once authentication is completed, click on the next button to proceed.
 
-![Cloud Deployment](../../images/cloud_azure_instance.png)
+![Cloud Deployment](images/cloud_azure_instance.png)
 
 Use the fields from the Instance Specification tab to specify the Instance details.
 
@@ -44,7 +44,7 @@ Use the fields from the Instance Specification tab to specify the Instance detai
 
 - Use the *Storage size* option to specify the storage capacity.
 
-![Cloud Deployment](../../images/cloud_azure_network.png)
+![Cloud Deployment](images/cloud_azure_network.png)
 
 - Use the *Public IP* field to specify the List of IP Addresses or range of
     IP Addresses (start IP Address - end IP address) from which inbound traffic
@@ -56,7 +56,7 @@ Use the fields from the Instance Specification tab to specify the Instance detai
     different zone.
     The Burstable instance type does not support high availability.
 
-![Cloud Deployment](../../images/cloud_azure_database.png)
+![Cloud Deployment](images/cloud_azure_database.png)
 
 Use the fields from the Database Details tab to specify the PostgreSQL database details.
 
@@ -74,14 +74,14 @@ Use the fields from the Database Details tab to specify the PostgreSQL database 
 
 Click on the next button to proceed.
 
-![Cloud Deployment](../../images/cloud_azure_review.png)
+![Cloud Deployment](images/cloud_azure_review.png)
 
 At the end, review the instance details that you provided. Click on Finish button to deploy the instance on Azure Database.
 
 Once you click on the finish, one background process will start which will deploy the instance in the cloud and monitor the progress of the deployment. You can view all the background processes with their running status and logs on the [Processes](../../processes.md#processes) tab.
 
-![Cloud Deployment](../../images/cloud_azure_bg_process_watcher.png)
+![Cloud Deployment](images/cloud_azure_bg_process_watcher.png)
 
 The Server will be added to the tree with the cloud deployment icon. Once the deployment is done, the server details will be updated.
 
-![Cloud Deployment Provider](../../images/cloud_deployment_tree.png)
+![Cloud Deployment Provider](images/cloud_deployment_tree.png)

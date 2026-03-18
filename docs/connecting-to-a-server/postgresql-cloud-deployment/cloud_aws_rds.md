@@ -4,17 +4,17 @@
 
 To deploy a PostgreSQL server on the Amazon cloud, follow the below steps.
 
-![Cloud Deployment Provider](../../images/cloud_provider_for_postgresql.png)
+![Cloud Deployment Provider](images/cloud_provider_for_postgresql.png)
 
 Once you launch the tool, select the Amazon RDS option. Click on the *Next* button to proceed further.
 
-![Cloud Deployment Provider](../../images/cloud_aws_credentials.png)
+![Cloud Deployment Provider](images/cloud_aws_credentials.png)
 
 In the Credentials dialog, provide the region in which you want to deploy the instance along with the *AWS access key* and *AWS secret access key*. Provide *AWS session token* only if your AWS session is temporary.
 
 To proceed further, click on the next button. Before going further, pgAdmin will validate your credentials.
 
-![Cloud Deployment Provider](../../images/cloud_aws_instance.png)
+![Cloud Deployment Provider](images/cloud_aws_instance.png)
 
 Use the fields from the Instance Specification tab to specify the Instance details.
 
@@ -42,7 +42,7 @@ Use the fields from the Instance Specification tab to specify the Instance detai
 - Use the *High Availability* option to specify High Availability
     option. This option creates a standby in a different Availability Zone(AZ).
 
-![Cloud Deployment Provider](../../images/cloud_aws_database.png)
+![Cloud Deployment Provider](images/cloud_aws_database.png)
 
 Use the fields from the Database Details tab to specify the Instance details.
 
@@ -63,11 +63,11 @@ Use the fields from the Database Details tab to specify the Instance details.
 
 - Enter the listener port number of the server host in the *Port* field.
 
-![Cloud Deployment Provider](../../images/cloud_aws_review.png)
+![Cloud Deployment Provider](images/cloud_aws_review.png)
 
 At the end, review the Instance details that you provided. Click on Finish button to deploy the instance on Amazon RDS.
 
-![Cloud Deployment Provider](../../images/cloud_deployment_tree.png)
+![Cloud Deployment Provider](images/cloud_deployment_tree.png)
 
 Once you click on the finish, one background process will start which will deploy the instance in the cloud and monitor the progress of the deployment. You can view all the background processes with their running status and logs on the [Processes](../../processes.md#processes) tab.
 

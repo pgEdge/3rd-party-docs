@@ -18,7 +18,7 @@ The Entity-Relationship Diagram (ERD) tool is a database design tool that provid
 
 - Drag and drop tables from object explorer to the diagram.
 
-![ERD tool window](../images/erd_tool.png)
+![ERD tool window](images/erd_tool.png)
 
 You can open multiple copies of the ERD tool in individual tabs simultaneously. You can also generate an ERD from a database, schema or a table.
 
@@ -33,7 +33,7 @@ You can open multiple copies of the ERD tool in individual tabs simultaneously. 
 
 The *ERD Tool* toolbar uses context-sensitive icons that provide shortcuts to frequently performed tasks. The option is enabled for the highlighted icon and is disabled for the grayed-out icon.
 
-![ERD tool toolbar](../images/erd_tool_toolbar.png)
+![ERD tool toolbar](images/erd_tool_toolbar.png)
 
 Hover over an icon on Toolbar to display a tooltip that describes the icon's functionality.
 
@@ -96,7 +96,7 @@ Hover over an icon on Toolbar to display a tooltip that describes the icon's fun
 
 # Table Dialog
 
-![ERD tool table dialog](../images/erd_table_dialog.png)
+![ERD tool table dialog](images/erd_table_dialog.png)
 
 The table dialog allows you to:
 
@@ -108,7 +108,7 @@ The table dialog allows you to:
 
 # Table Node
 
-![ERD tool table node](../images/erd_table_node.png)
+![ERD tool table node](images/erd_table_node.png)
 
 The table node shows table details in a graphical representation:
 
@@ -126,7 +126,7 @@ The table node shows table details in a graphical representation:
 
 # The One to One Link Dialog
 
-![ERD tool 1-1 dialog](../images/erd_11_dialog.png)
+![ERD tool 1-1 dialog](images/erd_11_dialog.png)
 
 The one to one link dialog allows you to:
 
@@ -144,7 +144,7 @@ The one to one link dialog allows you to:
 
 # The One to Many Link Dialog
 
-![ERD tool 1M dialog](../images/erd_1m_dialog.png)
+![ERD tool 1M dialog](images/erd_1m_dialog.png)
 
 The one to many link dialog allows you to:
 
@@ -160,7 +160,7 @@ The one to many link dialog allows you to:
 
 # The Many to Many Link Dialog
 
-![ERD tool MM dialog](../images/erd_mm_dialog.png)
+![ERD tool MM dialog](images/erd_mm_dialog.png)
 
 The many to many link dialog allows you to:
 
@@ -178,7 +178,7 @@ The many to many link dialog allows you to:
 
 # The Table Link
 
-![ERD tool table link](../images/erd_table_link.png)
+![ERD tool table link](images/erd_table_link.png)
 
 The table link shows relationship between tables:
 
@@ -192,7 +192,7 @@ The table link shows relationship between tables:
 
 # The Table Notes
 
-![ERD tool table note](../images/erd_table_note.png)
+![ERD tool table note](images/erd_table_note.png)
 
 - You can use the notes popup to mark some notes while designing the database.
 

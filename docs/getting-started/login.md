@@ -4,7 +4,7 @@
 
 Use the *Login* page to log in to pgAdmin:
 
-![pgAdmin login page](../images/login.png)
+![pgAdmin login page](images/login.png)
 
 Use the fields in the *Login* page to authenticate your connection. There are two ways to authenticate your connection:
 
@@ -31,7 +31,7 @@ Please note that if the pgAdmin server is restarted, then you will be logged out
 
 If you cannot supply your password, click the *Forgotten your password?* button to launch a password recovery utility.
 
-![pgAdmin recover login password](../images/login_recover.png)
+![pgAdmin recover login password](images/login_recover.png)
 
 - Provide the email address associated with your account in the *Email Address*
     field.

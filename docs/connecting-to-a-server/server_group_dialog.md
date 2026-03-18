@@ -4,7 +4,7 @@
 
 Use the *Server Group* dialog to add a new server group. Assign servers to server groups to simplify management of multiple servers. Server groups are displayed as part of the *pgAdmin* tree control.
 
-![Server group dialog](../images/server_group.png)
+![Server group dialog](images/server_group.png)
 
 Use the *Name* field on the *Server Group* dialog to specify a name that will identify the server group in the *pgAdmin* tree control.
 

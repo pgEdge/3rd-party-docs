@@ -8,7 +8,7 @@ To create or manage a job, use the pgAdmin tree control to browse to the server 
 
 When the pgAgent dialog opens, use the tabs on the *pgAgent Job* dialog to define the steps and schedule that make up a pgAgent job.
 
-![pgAgent dialog general tab](../images/pgagent_general.png)
+![pgAgent dialog general tab](images/pgagent_general.png)
 
 Use the fields on the *General* tab to provide general information about a job:
 
@@ -33,11 +33,11 @@ Use the fields on the *General* tab to provide general information about a job:
 
 - Use the *Comment* field to store notes about the job.
 
-![pgAgent dialog steps tab](../images/pgagent_steps.png)
+![pgAgent dialog steps tab](images/pgagent_steps.png)
 
 Use the *Steps* tab to define and manage the steps that the job will perform. Click the Add icon (+) to add a new step; then click the compose icon (located at the left side of the header) to open the step definition dialog:
 
-![pgAgent dialog definition tab](../images/pgagent_step_definition.png)
+![pgAgent dialog definition tab](images/pgagent_step_definition.png)
 
 Use fields on the step definition dialog to define the step:
 
@@ -83,7 +83,7 @@ Use fields on the step definition dialog to define the step:
 
 - Use the *Comment* field to provide a comment about the step.
 
-![pgAgent dialog step definition code tab](../images/pgagent_step_definition_code.png)
+![pgAgent dialog step definition code tab](images/pgagent_step_definition_code.png)
 
 Use the context-sensitive field on the step definition dialog's *Code* tab to provide the SQL code or batch script that will be executed during the step:
 
@@ -97,11 +97,11 @@ Use the context-sensitive field on the step definition dialog's *Code* tab to pr
 
 When you've provided all of the information required by the step, click the compose icon to close the step definition dialog.  Click the add icon (+) to add each additional step, or select the *Schedules* tab to define the job schedule.
 
-![pgAgent dialog schedules tab](../images/pgagent_schedules.png)
+![pgAgent dialog schedules tab](images/pgagent_schedules.png)
 
 Click the Add icon (+) to add a schedule for the job; then click the compose icon (located at the left side of the header) to open the schedule definition dialog:
 
-![pgAgent dialog schedules definition tab](../images/pgagent_schedule_definition.png)
+![pgAgent dialog schedules definition tab](images/pgagent_schedule_definition.png)
 
 Use the fields on the schedule definition tab to specify the days and times at which the job will execute.
 
@@ -120,7 +120,7 @@ Use the fields on the schedule definition tab to specify the days and times at w
 
 Select the *Repeat* tab to define the days on which the schedule will execute.
 
-![pgAgent dialog schedule repeat tab](../images/pgagent_schedule_repeat.png)
+![pgAgent dialog schedule repeat tab](images/pgagent_schedule_repeat.png)
 
 Use the fields on the *Repeat* tab to specify the details about the schedule in a cron-style format.  The job will execute on each date or time element selected on the *Repeat* tab.
 
@@ -144,7 +144,7 @@ Use the fields within the *Times* box to specify the times at which the job will
 
 Select the *Exceptions* tab to specify any days on which the schedule will *not* execute.
 
-![pgAgent dialog schedule exceptions tab](../images/pgagent_schedule_exceptions.png)
+![pgAgent dialog schedule exceptions tab](images/pgagent_schedule_exceptions.png)
 
 Use the fields on the *Exceptions* tab to specify days on which you wish the job to not execute; for example, you may wish for jobs to not execute on national holidays.
 
@@ -160,12 +160,12 @@ Click the Add icon (+) to add a row to the exception table, then:
 
 When you've finished defining the schedule, you can use the *SQL* tab to review the code that will create or modify your job.
 
-![pgAgent dialog sql tab](../images/pgagent_sql.png)
+![pgAgent dialog sql tab](images/pgagent_sql.png)
 
 Click the *Save* button to save the job definition, or *Close* to exit the job without saving.  Use the *Reset* button to remove your unsaved entries from the dialog.
 
 After saving a job, the job will be listed under the *pgAgent Jobs* node of the pgAdmin tree control of the server on which it was defined.  The *Properties* tab in the main pgAdmin window will display a high-level overview of the selected job, and the *Statistics* tab will show the details of each run of the job.
 
-![pgAgent object properties](../images/pgagent_properties.png)
+![pgAgent object properties](images/pgagent_properties.png)
 
 To modify an existing job or to review detailed information about a job, right-click on a job name, and select *Properties* from the context menu.

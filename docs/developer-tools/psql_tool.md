@@ -9,7 +9,7 @@ The PSQL tool allows users to connect to PostgreSQL or EDB Advanced server using
 
 - PSQL will connect to the current connected database from the object explorer.
 
-![PSQL tool window](../images/psql_tool.png)
+![PSQL tool window](images/psql_tool.png)
 
 You can open multiple instances of the PSQL tool in individual tabs simultaneously. To close the PSQL tool, click the *X* in the upper-right hand corner of the tab bar.
 
@@ -25,7 +25,7 @@ The workspace layout offers a distraction-free, dedicated area for the PSQL Tool
 
 In the classic UI, users must connect to a database server and navigate to the database node before using the PSQL Tool. However, with the introduction of the Workspace layout and Welcome page, users can seamlessly connect to any ad-hoc server, even if it is not registered in the Object Explorer.
 
-![PSQL tool workspace](../images/psql_workspace.png)
+![PSQL tool workspace](images/psql_workspace.png)
 
 - Select *Existing Server* from the dropdown to connect to a server already
     listed in the Object Explorer. It is optional.

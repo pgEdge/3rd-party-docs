@@ -2,11 +2,11 @@
 
 To deploy a PostgreSQL server on the Google Cloud SQL, follow the below steps.
 
-![Cloud Deployment](../../images/cloud_provider_for_postgresql.png)
+![Cloud Deployment](images/cloud_provider_for_postgresql.png)
 
 Once you launch the tool, select the Google Cloud SQL option. Click on the *Next* button to proceed further.
 
-![Cloud Deployment](../../images/cloud_google_credentials.png)
+![Cloud Deployment](images/cloud_google_credentials.png)
 
 In the Credentials dialog, select client secret file to authenticate using google.You can download a client secret which is json formatted file from google cloud console once OAuth2 client ID is created.
 
@@ -18,7 +18,7 @@ Clicking the *Click here to authenticate yourself to Google* button, user will b
 
 Once authentication is completed, click on the next button to proceed.
 
-![Cloud Deployment](../../images/cloud_google_instance.png)
+![Cloud Deployment](images/cloud_google_instance.png)
 
 Use the fields from the Instance Specification tab to specify the Instance details.
 
@@ -45,7 +45,7 @@ Use the fields from the Instance Specification tab to specify the Instance detai
 
 - Use the *Storage capacity* option to specify the storage capacity.
 
-![Cloud Deployment](../../images/cloud_google_network.png)
+![Cloud Deployment](images/cloud_google_network.png)
 
 - Use the *Public IP* field to specify the list of IP address range
     for allowed inbound traffic, for example: 127.0.0.1/32. Add multiple
@@ -58,7 +58,7 @@ Use the fields from the Instance Specification tab to specify the Instance detai
 - Select the secondary availability zone for high availability
     from *Secondary Availability zone* options.
 
-![Cloud Deployment](../../images/cloud_google_database.png)
+![Cloud Deployment](images/cloud_google_database.png)
 
 Use the fields from the Database Details tab to specify the PostgreSQL database details.
 
@@ -76,7 +76,7 @@ Use the fields from the Database Details tab to specify the PostgreSQL database 
 
 Click on the next button to proceed.
 
-![Cloud Deployment](../../images/cloud_google_review.png)
+![Cloud Deployment](images/cloud_google_review.png)
 
 At the end, review the instance details that you provided. Click on Finish button to deploy the instance on Azure PostgreSQL.
 
@@ -84,4 +84,4 @@ Once you click on the finish, one background process will start which will deplo
 
 The Server will be added to the tree with the cloud deployment icon. Once the deployment is done, the server details will be updated.
 
-![Cloud Deployment Provider](../../images/cloud_google_deployment_tree.png)
+![Cloud Deployment Provider](images/cloud_google_deployment_tree.png)

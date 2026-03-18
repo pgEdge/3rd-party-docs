@@ -6,7 +6,7 @@ Use the *Import/Export data* dialog to copy data from a table to a file, or copy
 
 The *Import/Export data* dialog organizes the import/export of data through the *General*, *Options* and *Columns* tabs.
 
-![Import Export data dialog general tab](../images/import_export_general.png)
+![Import Export data dialog general tab](images/import_export_general.png)
 
 Use the fields in the *General* tab to specify import and export preferences:
 
@@ -40,7 +40,7 @@ Use the fields in the *General* tab to specify import and export preferences:
     used in Import only when ON_ERROR option is set to ignore. This option is
     available from PG/EPAS version 17 and above.
 
-![Import Export data dialog options tab](../images/import_export_options.png)
+![Import Export data dialog options tab](images/import_export_options.png)
 
 - Use the fields in the *Options* tab to specify additional information:
 
@@ -73,7 +73,7 @@ Use the fields in the *General* tab to specify import and export preferences:
 
 Click the *Columns* tab to continue.
 
-![Import Export data dialog columns tab](../images/import_export_columns.png)
+![Import Export data dialog columns tab](images/import_export_columns.png)
 
 Use the fields in the *Columns* tab to select the columns that will be imported or exported:
 
@@ -97,13 +97,13 @@ Use the fields in the *Columns* tab to select the columns that will be imported 
 
 After completing the *Import/Export data* dialog, click the *OK* button to perform the import or export. pgAdmin will notify you when the background process completes:
 
-![Import Export data completion notification](../images/import_export_complete.png)
+![Import Export data completion notification](images/import_export_complete.png)
 
 Use the *View Processes* button on the notification to open the *Process Watcher* and review detailed information about the execution of the command that performed the import or export:
 
 Use the **End Process** button to end the Import/Export process.
 
-![Import Export data process watcher](../images/import_export_pw.png)
+![Import Export data process watcher](images/import_export_pw.png)
 
 !!! note
 
