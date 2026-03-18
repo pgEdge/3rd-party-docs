@@ -1,0 +1,333 @@
+<a id="observability"></a>
+
+# Observability
+
+Observability allows measuring a system's current state based on the data it generates, such as logs, metrics, and traces.
+<a id="pgrst_logging"></a>
+
+## Logs
+
+PostgREST logs basic request information to `stdout`, including the authenticated user if available, the requesting IP address and user agent, the URL requested, the HTTP response status and the response body size in bytes if available.
+
+With [log-level](configuration.md#log-level) set to `info`, we get:
+
+```
+127.0.0.1 - user [26/Jul/2021:01:56:38 -0500] "GET /clients HTTP/1.1" 200 56 "" "curl/7.64.0"
+127.0.0.1 - anonymous [26/Jul/2021:01:56:48 -0500] "GET /unexistent HTTP/1.1" 404 162 "" "curl/7.64.0"
+```
+
+For diagnostic information about the server itself, PostgREST logs to `stderr`:
+
+- The full version of the connected PostgreSQL database.
+
+- [Schema Cache](schema_cache.md#schema_cache) statistics.
+
+- The messages received by the [Listener](listener.md#listener).
+
+```
+06/May/2024:08:16:11 -0500: Starting PostgREST 12.1...
+06/May/2024:08:16:11 -0500: Successfully connected to PostgreSQL 14.10 (Ubuntu 14.10-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0, 64-bit
+06/May/2024:08:16:11 -0500: Connection Pool initialized with a maximum size of 10 connections
+06/May/2024:08:16:11 -0500: API server listening on port 3000
+06/May/2024:08:16:11 -0500: Listening for database notifications on the "pgrst" channel
+06/May/2024:08:16:11 -0500: Config reloaded
+06/May/2024:08:16:11 -0500: Schema cache queried in 3.8 milliseconds
+06/May/2024:08:16:11 -0500: Schema cache loaded 15 Relations, 8 Relationships, 8 Functions, 0 Domain Representations, 4 Media Type Handlers
+06/May/2024:14:11:27 -0500: Received a config reload message on the "pgrst" channel
+06/May/2024:14:11:27 -0500: Config reloaded
+```
+
+!!! note
+
+
+Logs are based on the `log-level` setting. See [log-level](configuration.md#log-level).
+<a id="sql_query_logs"></a>
+
+### SQL Query Logs
+
+To log the SQL queries executed for a request, set the [log-query](configuration.md#log-query) to `true`. It will be logged based on the current [log-level](configuration.md#log-level) setting.
+
+```bash
+```
+
+log-level = "warn" log-query = "true"
+
+The SQL queries will only be logged on `400` HTTP errors and up. So, if the user requests a resource without sufficient privileges:
+
+```bash
+```
+
+curl "localhost:3000/protected_table"
+
+This will be logged by PostgREST:
+
+```
+```
+
+17/Feb/2025:17:28:15 -0500: WITH pgrst_source AS ( SELECT "public"."protected_table".* FROM "public"."protected_table"  )  SELECT null::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t), '[]') AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM ( SELECT * FROM pgrst_source ) _postgrest_t 127.0.0.1 - web_anon [17/Feb/2025:17:28:15 -0500] "GET /protected_table HTTP/1.1" 401 99 "" "curl/8.7.1"
+
+### Database Logs
+
+Additionally, to find all the SQL operations, you can watch the database logs. By default PostgreSQL does not keep these logs, so you'll need to make the configuration changes below.
+
+Find `postgresql.conf` inside your PostgreSQL data directory (to find that, issue the command `show data_directory;`). Either find the settings scattered throughout the file and change them to the following values, or append this block of code to the end of the configuration file.
+
+```sql
+```
+
+# send logs where the collector can access them log_destination = "stderr"
+
+# collect stderr output to log files logging_collector = on
+
+# save logs in pg_log/ under the pg data directory log_directory = "pg_log"
+
+# (optional) new log file per day log_filename = "postgresql-%Y-%m-%d.log"
+
+# log every kind of SQL statement log_statement = "all"
+
+Restart the database and watch the log file in real-time to understand how HTTP requests are being translated into SQL commands.
+
+!!! note
+
+
+On Docker you can enable the logs by using a custom `init.sh`:
+
+```bash
+ #!/bin/sh
+ echo "log_statement = 'all'" >> /var/lib/postgresql/data/postgresql.conf
+```
+
+After that you can start the container and check the logs with `docker logs`.
+
+```bash
+ docker run -v "$(pwd)/init.sh":"/docker-entrypoint-initdb.d/init.sh" -d postgres
+ docker logs -f <container-id>
+```
+<a id="metrics"></a>
+
+## Metrics
+
+The `metrics` endpoint on the [Admin Server](admin_server.md#admin_server) endpoint provides metrics in [Prometheus text format](https://prometheus.io/docs/instrumenting/exposition_formats/#prometheus-text-format).
+
+```bash
+```
+
+curl "http://localhost:3001/metrics"
+
+```http
+```
+
+HTTP/1.1 200 OK Content-Type: text/plain; charset=utf-8
+
+# HELP pgrst_schema_cache_query_time_seconds The query time in seconds of the last schema cache load # TYPE pgrst_schema_cache_query_time_seconds gauge pgrst_schema_cache_query_time_seconds 1.5937927e-2 # HELP pgrst_schema_cache_loads_total The total number of times the schema cache was loaded # TYPE pgrst_schema_cache_loads_total counter pgrst_schema_cache_loads_total 1.0 ...
+
+### Schema Cache Metrics
+
+Metrics related to the [Schema Cache](schema_cache.md#schema_cache).
+
+#### pgrst_schema_cache_query_time_seconds
+
+======== ======= **Type** Gauge ======== =======
+
+The query time in seconds of the last schema cache load.
+
+#### pgrst_schema_cache_loads_total
+
+========== ========================== **Type**   Counter **Labels** `status`: SUCCESS | FAIL ========== ==========================
+
+The total number of times the schema cache was loaded.
+
+### Connection Pool Metrics
+
+Metrics related to the [Connection Pool](connection_pool.md#connection_pool).
+
+#### pgrst_db_pool_timeouts_total
+
+======== ======= **Type** Counter ======== =======
+
+The total number of pool connection timeouts.
+
+#### pgrst_db_pool_available
+
+======== ======= **Type** Gauge ======== =======
+
+Available connections in the pool.
+
+#### pgrst_db_pool_waiting
+
+======== ======= **Type** Gauge ======== =======
+
+Requests waiting to acquire a pool connection
+
+#### pgrst_db_pool_max
+
+======== ======= **Type** Gauge ======== =======
+
+Max pool connections.
+<a id="jwt_cache_metrics"></a>
+
+### JWT Cache Metrics
+
+Metrics related to the [JWT Cache](auth.md#jwt_caching).
+
+#### pgrst_jwt_cache_requests_total
+
+======== ======= **Type** Counter ======== =======
+
+The total number of JWT cache lookups.
+
+#### pgrst_jwt_cache_hits_total
+
+======== ======= **Type** Counter ======== =======
+
+The total number of JWT cache hits.
+
+#### pgrst_jwt_cache_evictions_total
+
+======== ======= **Type** Counter ======== =======
+
+The total number of JWT cache evictions.
+
+## Traces
+
+### Server Version Header
+
+When debugging a problem it's important to verify the running PostgREST version. For this you can look at the `Server` HTTP response header that is returned on every request.
+
+```
+```
+
+HEAD /users HTTP/1.1
+
+Server: postgrest/11.0.1
+<a id="trace_header"></a>
+
+### Trace Header
+
+You can enable tracing HTTP requests by setting [server-trace-header](configuration.md#server-trace-header). Specify the set header in the request, and the server will include it in the response.
+
+```bash
+```
+
+server-trace-header = "X-Request-Id"
+
+```bash
+```
+
+curl "http://localhost:3000/users"  -H "X-Request-Id: 123"
+
+```
+```
+
+HTTP/1.1 200 OK X-Request-Id: 123
+
+### Proxy-Status Header
+
+See [Proxy-Status Header](errors.md#proxy-status_header).
+<a id="server-timing_header"></a>
+
+### Server-Timing Header
+
+You can enable the [Server-Timing](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Server-Timing) header by setting [server-timing-enabled](configuration.md#server-timing-enabled) on. This header communicates metrics of the different phases in the request-response cycle.
+
+```bash
+```
+
+curl "http://localhost:3000/users" -i
+
+```
+```
+
+HTTP/1.1 200 OK
+
+Server-Timing: jwt;dur=14.9, parse;dur=71.1, plan;dur=109.0, transaction;dur=353.2, response;dur=4.4
+
+- All the durations (`dur`) are in milliseconds.
+
+- The `jwt` stage is when [JWT Authentication](auth.md#jwt_auth) is done. This duration can be lowered with [JWT Cache](auth.md#jwt_caching).
+
+- On the `parse` stage, the url_grammar is parsed.
+
+- On the `plan` stage, the [Schema Cache](schema_cache.md#schema_cache) is used to generate the [Main query](transactions.md#main_query) of the transaction.
+
+- The `transaction` stage corresponds to the database transaction. See [Transactions](transactions.md#transactions).
+
+- The `response` stage is where the response status and headers are computed.
+
+!!! note
+
+
+We're working on lowering the duration of the `parse` and `plan` stages on https://github.com/PostgREST/postgrest/issues/2816.
+<a id="content-length_header"></a>
+
+### Content-Length Header
+
+You can verify the response body size in bytes in the [Content-Length header](https://httpwg.org/specs/rfc9110.html#field.content-length).
+
+```bash
+```
+
+curl -i 'localhost:3000/users'
+
+```http
+```
+
+HTTP/1.1 200 OK Content-Length: 104
+
+Note that this header won't be returned on `HEAD` requests for optimization purposes (see [GET and HEAD](../api/references/api/tables_views.md#head_req)). This is in line with [RFC 9110](https://httpwg.org/specs/rfc9110.html#field.content-length).
+
+The body size is also present in the [PostgREST logs](#pgrst_logging).
+<a id="explain_plan"></a>
+
+### Execution plan
+
+You can get the [EXPLAIN execution plan](https://www.postgresql.org/docs/current/sql-explain.html) of a request by adding the `Accept: application/vnd.pgrst.plan` header. This is enabled by [db-plan-enabled](configuration.md#db-plan-enabled) (false by default).
+
+```bash
+```
+
+curl "http://localhost:3000/users?select=name&order=id"  -H "Accept: application/vnd.pgrst.plan"
+
+```postgres
+```
+
+Aggregate  (cost=73.65..73.68 rows=1 width=112) ->  Index Scan using users_pkey on users  (cost=0.15..60.90 rows=850 width=36)
+
+The output of the plan is generated in `text` format by default but you can change it to JSON by using the `+json` suffix.
+
+```bash
+```
+
+curl "http://localhost:3000/users?select=name&order=id"  -H "Accept: application/vnd.pgrst.plan+json"
+
+```json
+```
+
+[ { "Plan": { "Node Type": "Aggregate", "Strategy": "Plain", "Partial Mode": "Simple", "Parallel Aware": false, "Async Capable": false, "Startup Cost": 73.65, "Total Cost": 73.68, "Plan Rows": 1, "Plan Width": 112, "Plans": [ { "Node Type": "Index Scan", "Parent Relationship": "Outer", "Parallel Aware": false, "Async Capable": false, "Scan Direction": "Forward", "Index Name": "users_pkey", "Relation Name": "users", "Alias": "users", "Startup Cost": 0.15, "Total Cost": 60.90, "Plan Rows": 850, "Plan Width": 36 } ] } } ]
+
+By default the plan is assumed to generate the JSON representation of a resource(`application/json`), but you can obtain the plan for the [different representations that PostgREST supports](../api/references/api/resource_representation.md#res_format) by adding them to the `for` parameter. For instance, to obtain the plan for a `text/xml`, you would use `Accept: application/vnd.pgrst.plan; for="text/xml`.
+
+The other available parameters are `analyze`, `verbose`, `settings`, `buffers` and `wal`, which correspond to the [EXPLAIN command options](https://www.postgresql.org/docs/current/sql-explain.html). To use the `analyze` and `wal` parameters for example, you would add them like `Accept: application/vnd.pgrst.plan; options=analyze|wal`.
+
+Note that akin to the EXPLAIN command, the changes will be committed when using the `analyze` option. To avoid this, you can use the [db-tx-end](configuration.md#db-tx-end) and the `Prefer: tx=rollback` header.
+
+#### Securing the Execution Plan
+
+It's recommended to only activate [db-plan-enabled](configuration.md#db-plan-enabled) on testing environments since it reveals internal database details. However, if you choose to use it in production you can add a [db-pre-request](configuration.md#db-pre-request) to filter the requests that can use this feature.
+
+For example, to only allow requests from an IP address to get the execution plans:
+
+```postgres
+```
+
+-- Assuming a proxy(Nginx, Cloudflare, etc) passes an "X-Forwarded-For" header(https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For) create or replace function filter_plan_requests() returns void as $$ declare headers   json := current_setting('request.headers', true)::json; client_ip text := coalesce(headers->>'x-forwarded-for', ''); accept    text := coalesce(headers->>'accept', ''); begin if accept like 'application/vnd.pgrst.plan%' and client_ip != '144.96.121.73' then raise insufficient_privilege using message = 'Not allowed to use application/vnd.pgrst.plan'; end if; end; $$ language plpgsql;
+
+-- set this function on your postgrest.conf -- db-pre-request = filter_plan_requests
+
+<script type="text/javascript"> let hash = window.location.hash;
+
+const redirects = { '#health_check': 'health_check.html', '#server-version': '#server-version-header', };
+
+let willRedirectTo = redirects[hash];
+
+if (willRedirectTo) { window.location.href = willRedirectTo; } </script>
