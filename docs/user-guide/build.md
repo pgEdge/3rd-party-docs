@@ -1,7 +1,7 @@
 # Build
 <a name="build"></a>
 
-Installing pgBackRest from a package is preferable to building from source. See [Installation](#/installation) for more information about packages.
+Installing pgBackRest from a package is preferable to building from source. See [Installation](user-guide/multi-stanza.md#installation) for more information about packages.
 
 When building from source it is best to use a build host rather than building on production. Many of the tools required for the build should generally not be installed in production. pgBackRest consists of a single executable so it is easy to copy to a new host once it is built.
 

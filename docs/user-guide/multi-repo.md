@@ -1,9 +1,9 @@
 # Multiple Repositories
 <a name="multi-repo"></a>
 
-Multiple repositories may be configured as demonstrated in [S3 Support](#/s3-support). A potential benefit is the ability to have a local repository for fast restores and a remote repository for redundancy.
+Multiple repositories may be configured as demonstrated in [S3 Support](user-guide/s3-support.md#s3-support). A potential benefit is the ability to have a local repository for fast restores and a remote repository for redundancy.
 
-Some commands, e.g. `stanza-create`/`stanza-upgrade`, will automatically work with all configured repositories while others, e.g. [stanza-delete](#/delete-stanza), will require a repository to be specified using the `repo` option. See the [command reference](command.html) for details on which commands require the repository to be specified.
+Some commands, e.g. `stanza-create`/`stanza-upgrade`, will automatically work with all configured repositories while others, e.g. [stanza-delete](user-guide/delete-stanza.md#delete-stanza), will require a repository to be specified using the `repo` option. See the [command reference](https://pgbackrest.org/command.html) for details on which commands require the repository to be specified.
 
 Note that the `repo` option is not required when only `repo1` is configured in order to maintain backward compatibility. However, the `repo` option *is* required when a single repo is configured as, e.g. `repo2`. This is to prevent command breakage if a new repository is added later.
 

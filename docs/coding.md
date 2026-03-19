@@ -185,7 +185,7 @@ Continuation characters should be aligned at column 132 (unlike the examples abo
 
 To avoid conflicts, variables in a macro will be named `[macro name]_[var name]`, e.g. `TEST_RESULT_resultExpected`. Variables that need to be accessed in wrapped code should be provided accessor macros.
 
-[Variadic functions](#/language-elements/variadic-functions) are an exception to the capitalization rule.
+[Variadic functions](coding.md#variadic-functions) are an exception to the capitalization rule.
 
 #### Begin / End
 <a name="begin-end"></a>

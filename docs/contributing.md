@@ -7,15 +7,15 @@ pgBackRest Contributing Guidelines.
 ## Table of Contents
 <a name="contents"></a>
 
-[Introduction](#/introduction)
+[Introduction](contributing.md#introduction)
 
-[Building a Development Environment](#/environment)
+[Building a Development Environment](contributing.md#environment)
 
-[Coding](#/coding)
+[Coding](contributing.md#coding)
 
-[Testing](#/testing)
+[Testing](contributing.md#testing)
 
-[Submitting a Pull Request](#/pr)
+[Submitting a Pull Request](contributing.md#pr)
 
 ## Introduction
 <a name="introduction"></a>
@@ -26,9 +26,9 @@ Code fixes or new features can be submitted via pull requests. Ideas for new fea
 
 Bug reports should be [submitted as issues](https://github.com/pgbackrest/pgbackrest/issues). Please provide as much information as possible to aid in determining the cause of the problem.
 
-You will always receive credit in the [release notes](backrest-page-release.md) for your contributions.
+You will always receive credit in the [release notes](release.md) for your contributions.
 
-Coding standards are defined in [CODING.md](https://github.com/pgbackrest/pgbackrest/blob/main/CODING.md) and some important coding details and an example are provided in the [Coding](#/coding) section below. At a minimum, unit tests must be written and run and the documentation generated before [submitting a Pull Request](#/pr); see the [Testing](#/testing) section below for details.
+Coding standards are defined in [CODING.md](https://github.com/pgbackrest/pgbackrest/blob/main/CODING.md) and some important coding details and an example are provided in the [Coding](contributing.md#coding) section below. At a minimum, unit tests must be written and run and the documentation generated before [submitting a Pull Request](contributing.md#pr); see the [Testing](contributing.md#testing) section below for details.
 
 ## Building a Development Environment
 <a name="environment"></a>
@@ -74,14 +74,14 @@ The following sections provide information on some important concepts needed for
 ### Memory Contexts
 <a name="memory-context"></a>
 
-Memory is allocated inside contexts and can be long lasting (for objects) or temporary (for functions). In general, use `OBJ_NEW_BEGIN(MyObj)` for objects and `MEM_CONTEXT_TEMP_BEGIN()` for functions. See [memContext.h](https://github.com/pgbackrest/pgbackrest/blob/main/src/common/memContext.h) for more details and the [Coding Example](#/coding/coding-example) below.
+Memory is allocated inside contexts and can be long lasting (for objects) or temporary (for functions). In general, use `OBJ_NEW_BEGIN(MyObj)` for objects and `MEM_CONTEXT_TEMP_BEGIN()` for functions. See [memContext.h](https://github.com/pgbackrest/pgbackrest/blob/main/src/common/memContext.h) for more details and the [Coding Example](contributing.md#coding-example) below.
 
 ### Logging
 <a name="message-logging"></a>
 
-Logging is used for debugging with the built-in macros `FUNCTION_LOG_*()` and `FUNCTION_TEST_*()` which are used to trace parameters passed to/returned from functions. `FUNCTION_LOG_*()` macros are used for production logging whereas `FUNCTION_TEST_*()` macros will be compiled out of production code. For functions where no parameter is valuable enough to justify the cost of debugging in production, use `FUNCTION_TEST_BEGIN()/FUNCTION_TEST_END()`, else use `FUNCTION_LOG_BEGIN(someLogLevel)/FUNCTION_LOG_END()`. See [debug.h](https://github.com/pgbackrest/pgbackrest/blob/main/src/common/debug.h) for more details and the [Coding Example](#/coding/coding-example) below.
+Logging is used for debugging with the built-in macros `FUNCTION_LOG_*()` and `FUNCTION_TEST_*()` which are used to trace parameters passed to/returned from functions. `FUNCTION_LOG_*()` macros are used for production logging whereas `FUNCTION_TEST_*()` macros will be compiled out of production code. For functions where no parameter is valuable enough to justify the cost of debugging in production, use `FUNCTION_TEST_BEGIN()/FUNCTION_TEST_END()`, else use `FUNCTION_LOG_BEGIN(someLogLevel)/FUNCTION_LOG_END()`. See [debug.h](https://github.com/pgbackrest/pgbackrest/blob/main/src/common/debug.h) for more details and the [Coding Example](contributing.md#coding-example) below.
 
-Logging is also used for providing information to the user via the `LOG_*()` macros, such as `LOG_INFO("some informational message")` and `LOG_WARN_FMT("no prior backup exists, %s backup has been changed to full", strZ(cfgOptionDisplay(cfgOptType)))` and also via `THROW_*()` macros for throwing an error. See [log.h](https://github.com/pgbackrest/pgbackrest/blob/main/src/common/log.h) and [error.h](https://github.com/pgbackrest/pgbackrest/blob/main/src/common/error/error.h) for more details and the [Coding Example](#/coding/coding-example) below.
+Logging is also used for providing information to the user via the `LOG_*()` macros, such as `LOG_INFO("some informational message")` and `LOG_WARN_FMT("no prior backup exists, %s backup has been changed to full", strZ(cfgOptionDisplay(cfgOptType)))` and also via `THROW_*()` macros for throwing an error. See [log.h](https://github.com/pgbackrest/pgbackrest/blob/main/src/common/log.h) and [error.h](https://github.com/pgbackrest/pgbackrest/blob/main/src/common/error/error.h) for more details and the [Coding Example](contributing.md#coding-example) below.
 
 ### Coding Example
 <a name="coding-example"></a>
@@ -603,10 +603,10 @@ Note that `section:` is not present thereby making this a command-line only opti
 ```
 
 - `repo-test-type` - the name of the option
-- `section` - the section of the configuration file where this option is valid (omitted for command line only options, see [Example 1](#/option/config-file/option-ex1) above)
+- `section` - the section of the configuration file where this option is valid (omitted for command line only options, see [Example 1](contributing.md#config-file/option-ex1) above)
 - `type` - the type of the option. Valid values for types are: `boolean`, `hash`, `integer`, `list`, `path`, `size`, `string`, and `time`
 - `group` - indicates that this option is part of the `repo` group of indexed options and therefore will follow the indexing rules e.g. `repo1-test-type`.
-- `default` - sets a default for the option if the option is not provided when the command is run. The default can be global (as it is here) or it can be specified for a specific command in the command section (as in [Example 1](#/option/config-file/option-ex1) above).
+- `default` - sets a default for the option if the option is not provided when the command is run. The default can be global (as it is here) or it can be specified for a specific command in the command section (as in [Example 1](contributing.md#config-file/option-ex1) above).
 - `allow-list` - lists the allowable values for the option for all commands for which the option is valid.
 - `command` - list each command for which the option is valid. If a command is not listed, then the option is not valid for the command and an error will be thrown if it is attempted to be used for that command. In this case the valid commands are `backup` and `restore`.
 - `command-role` - defines the processes for which the option is valid. `main` indicates the option will be used by the main process and not be passed on to other local/remote processes.
@@ -694,8 +694,8 @@ The resulting Docker containers can be listed with `docker ps` and the container
 Before submitting a Pull Request:
 
 - Does it meet the [coding standards](https://github.com/pgbackrest/pgbackrest/blob/main/CODING.md)?
-- Have [Unit Tests](#/testing/unit-test) been written and [run](#/testing/unit-test-run) with 100% coverage?
-- If your submission includes changes to the help or online documentation, have the [help](#/option/help-test) and [documentation](#/option/doc-test) tests been run?
+- Have [Unit Tests](contributing.md#unit-test) been written and [run](contributing.md#unit-test-run) with 100% coverage?
+- If your submission includes changes to the help or online documentation, have the [help](contributing.md#help-test) and [documentation](contributing.md#doc-test) tests been run?
 - Has it passed continuous integration testing? Simply renaming your branch with the appendix `-cig` and pushing it to your GitHub account will initiate GitHub Actions to run CI tests.
 
 When submitting a Pull Request:
