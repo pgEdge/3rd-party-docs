@@ -69,7 +69,7 @@ Files are concatenated as if they were one big file and each file must be valid 
 
     `--config`, `--config-include-path` and `--config-path` are command-line only options.
 
-pgBackRest can also be configured using environment variables as described in the [command reference](command.html).
+pgBackRest can also be configured using environment variables as described in the [command reference](https://pgbackrest.org/command.html).
 
 **Configure log-path using the environment**
 
@@ -114,7 +114,7 @@ The repository path must be configured so pgBackRest knows where to find it.
 repo1-path=/var/lib/pgbackrest
 ```
 
-Multiple repositories may also be configured. See [Multiple Repositories](#/multi-repo) for details.
+Multiple repositories may also be configured. See [Multiple Repositories](user-guide/multi-repo.md#multi-repo) for details.
 
 ## Azure-Compatible Object Store Support
 <a name="azure-support"></a>
@@ -295,7 +295,7 @@ pgBackRest expires backups based on retention options.
 repo1-retention-full=2
 ```
 
-More information about retention can be found in the [Retention](#/retention) section.
+More information about retention can be found in the [Retention](user-guide/retention.md#retention) section.
 
 ## Configure Repository Encryption
 <a name="configure-encryption"></a>
@@ -347,15 +347,15 @@ pgbackrest --stanza=demo --archive-timeout=.1 check
 
 pgBackRest has a number of performance options that are not enabled by default to maintain backward compatibility in the repository. However, when creating a new repository the following options are recommended. They can also be used on an existing repository with the caveat that older versions of pgBackRest will not be able to read the repository. This incompatibility depends on when the feature was introduced, as noted in the list below.
 
-- `compress-type` - determines the compression algorithm used by the `backup` and `archive-push` commands. The default is `gz` (Gzip) but `zst` (Zstandard) is recommended because it is much faster and provides compression similar to `gz`. `zst` has been supported by the `compress-type` option since [v2.27](release.html#2.27). See [Compress Type](configuration.md#/section-general/option-compress-type) for more details.
-- `repo-bundle` - combines small files during backup to save space and improve the speed of both the `backup` and `restore` commands, especially on object stores such as S3. The `repo-bundle` option was introduced in [v2.39](release.html#2.39). See [File Bundling](#/backup/bundle) for more details.
-- `repo-block` - stores only the portions of files that have changed rather than the entire file during `diff`/`incr``backup`. This saves space and increases the speed of the `backup`. The `repo-block` option was introduced in [v2.46](release.html#2.46) but at least [v2.52.1](release.html#2.52.1) is recommended. See [Block Incremental](#/backup/block) for more details.
+- `compress-type` - determines the compression algorithm used by the `backup` and `archive-push` commands. The default is `gz` (Gzip) but `zst` (Zstandard) is recommended because it is much faster and provides compression similar to `gz`. `zst` has been supported by the `compress-type` option since [v2.27](https://pgbackrest.org/release.html#2.27). See [Compress Type](https://pgbackrest.org/configuration.html#-section-general-option-compress-type) for more details.
+- `repo-bundle` - combines small files during backup to save space and improve the speed of both the `backup` and `restore` commands, especially on object stores such as S3. The `repo-bundle` option was introduced in [v2.39](https://pgbackrest.org/release.html#2.39). See [File Bundling](user-guide/backup.md#bundle) for more details.
+- `repo-block` - stores only the portions of files that have changed rather than the entire file during `diff`/`incr``backup`. This saves space and increases the speed of the `backup`. The `repo-block` option was introduced in [v2.46](https://pgbackrest.org/release.html#2.46) but at least [v2.52.1](https://pgbackrest.org/release.html#2.52.1) is recommended. See [Block Incremental](user-guide/backup.md#block) for more details.
 
 There are other performance options that are not enabled by default because they require additional configuration or because the default is safe (but not optimal). These options are available in all v2 versions of pgBackRest.
 
 - `process-max` - determines how many processes will be used for commands. The default is 1, which is almost never the appropriate value. Each command uses `process-max` differently so refer to each command's documentation for details on usage.
-- `archive-async` - archives WAL files to the repository in batch which greatly increases archiving speed. It is not enabled by default because it requires a spool path to be created. See [Asynchronous Archiving](#/async-archiving) for more details.
-- `backup-standby` - performs the backup on a standby rather than the primary to reduce load on the primary. It is not enabled by default because it requires additional configuration and the presence of one or more standby hosts. See [Backup from a Standby](#/standby-backup) for more details.
+- `archive-async` - archives WAL files to the repository in batch which greatly increases archiving speed. It is not enabled by default because it requires a spool path to be created. See [Asynchronous Archiving](user-guide/async-archiving.md#async-archiving) for more details.
+- `backup-standby` - performs the backup on a standby rather than the primary to reduce load on the primary. It is not enabled by default because it requires additional configuration and the presence of one or more standby hosts. See [Backup from a Standby](user-guide/standby-backup.md#standby-backup) for more details.
 
 ## Perform a Backup
 <a name="perform-backup"></a>
@@ -410,7 +410,7 @@ In the following example, two cron jobs are configured to run; full backups are 
             
 ```
 
-Once backups are scheduled it's important to configure retention so backups are expired on a regular schedule, see [Retention](#/retention).
+Once backups are scheduled it's important to configure retention so backups are expired on a regular schedule, see [Retention](user-guide/retention.md#retention).
 
 ## Backup Information
 <a name="backup-info"></a>
@@ -475,4 +475,4 @@ pg_ctlcluster 16 demo start
 
 This time the cluster started successfully since the restore replaced the missing `pg_control` file.
 
-More information about the `restore` command can be found in the [Restore](#/restore) section.
+More information about the `restore` command can be found in the [Restore](user-guide/stress.md#restore) section.

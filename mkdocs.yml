@@ -52,17 +52,13 @@ extra:
 repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
+  - pgBackRest: index.md
+  - pgBackRest: faq.md
+  - pgBackRest: metric.md
+  - pgBackRest: coding.md
   - pgBackRest: contributing.md
   - pgBackRest: documentation.md
   - pgBackRest Releases: release.md
-  - pgBackRest: index/index.md
-  - Index:
-    - Introduction: index/introduction.md
-    - Features: index/features.md
-    - Getting Started: index/getting-started.md
-    - Contributions: index/contributions.md
-    - Support: index/support.md
-    - Recognition: index/recognition.md
   - pgBackRest User Guide: user-guide/index.md
   - User Guide:
     - Introduction: user-guide/introduction.md
@@ -92,6 +88,3 @@ nav:
     - Backup from a Standby: user-guide/standby-backup.md
     - Stress Testing: user-guide/stress.md
     - Upgrading: user-guide/upgrade-stanza.md
-  - pgBackRest: faq.md
-  - pgBackRest: metric.md
-  - pgBackRest: coding.md

@@ -1,7 +1,7 @@
 # Dedicated Repository Host
 <a name="repo-host"></a>
 
-The configuration described in [Quickstart](#/quickstart) is suitable for simple installations but for enterprise configurations it is more typical to have a dedicated `repository` host where the backups and WAL archive files are stored. This separates the backups and WAL archive from the database server so `database` host failures have less impact. It is still a good idea to employ traditional backup software to backup the `repository` host.
+The configuration described in [Quickstart](user-guide/quickstart.md#quickstart) is suitable for simple installations but for enterprise configurations it is more typical to have a dedicated `repository` host where the backups and WAL archive files are stored. This separates the backups and WAL archive from the database server so `database` host failures have less impact. It is still a good idea to employ traditional backup software to backup the `repository` host.
 
 On PostgreSQL hosts, `pg1-path` is required to be the path of the local PostgreSQL cluster and no `pg1-host` should be configured. When configuring a repository host, the pgbackrest configuration file must have the `pg-host` option configured to connect to the primary and standby (if any) hosts. The repository host has the only pgbackrest configuration that should be aware of more than one PostgreSQL host. Order does not matter, e.g. pg1-path/pg1-host, pg2-path/pg2-host can be primary or standby.
 
@@ -81,7 +81,7 @@ chown <br-install-user>:<br-install-group> /var/lib/pgbackrest
 ## Setup Passwordless SSH
 <a name="setup-ssh"></a>
 
-pgBackRest can use passwordless SSH to enable communication between the hosts. It is also possible to use TLS, see [Setup TLS](user-guide-rhel.html#repo-host/config).
+pgBackRest can use passwordless SSH to enable communication between the hosts. It is also possible to use TLS, see [Setup TLS](https://pgbackrest.org/user-guide-rhel.html#repo-host/config).
 
 **Create repository host key pair**
 
@@ -146,7 +146,7 @@ ssh pgbackrest@repository
 ## Configuration
 <a name="config"></a>
 
-pgBackRest can use TLS with client certificates to enable communication between the hosts. It is also possible to use SSH, see [Setup SSH](user-guide.html#repo-host/setup-ssh).
+pgBackRest can use TLS with client certificates to enable communication between the hosts. It is also possible to use SSH, see [Setup SSH](https://pgbackrest.org/user-guide.html#repo-host/setup-ssh).
 
 pgBackRest expects client/server certificates to be generated in the same way as PostgreSQL. See [Secure TCP/IP Connections with TLS](https://www.postgresql.org/docs/current/ssl-tcp.html) for detailed instructions on generating certificates.
 
@@ -218,7 +218,7 @@ log-level-file=detail
 log-timestamp=n
 ```
 
-PostgreSQL configuration may be found in the [Configure Archiving](#/quickstart/configure-archiving) section.
+PostgreSQL configuration may be found in the [Configure Archiving](user-guide/quickstart.md#configure-archiving) section.
 
 Commands are run the same as on a single host configuration except that some commands such as `backup` and `expire` are run from the `repository` host instead of the `database` host.
 
@@ -396,7 +396,7 @@ Create the stanza in the new repository.
 pgbackrest --stanza=demo stanza-create
 ```
 
-Check that the configuration is correct on both the `database` and `repository` hosts. More information about the `check` command can be found in [Check the Configuration](#/quickstart/check-configuration).
+Check that the configuration is correct on both the `database` and `repository` hosts. More information about the `check` command can be found in [Check the Configuration](user-guide/quickstart.md#check-configuration).
 
 **Check the configuration**
 

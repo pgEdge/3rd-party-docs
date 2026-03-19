@@ -1,7 +1,7 @@
 # Retention
 <a name="retention"></a>
 
-Generally it is best to retain as many backups as possible to provide a greater window for [Point-in-Time Recovery](#/pitr), but practical concerns such as disk space must also be considered. Retention options remove older backups once they are no longer needed.
+Generally it is best to retain as many backups as possible to provide a greater window for [Point-in-Time Recovery](user-guide/pitr.md#pitr), but practical concerns such as disk space must also be considered. Retention options remove older backups once they are no longer needed.
 
 `expire`
 

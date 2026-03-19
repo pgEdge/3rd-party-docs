@@ -1,7 +1,7 @@
 # Introduction
 <a name="introduction"></a>
 
-This user guide is intended to be followed sequentially from beginning to end &mdash; each section depends on the last. For example, the [Restore](#/restore) section relies on setup that is performed in the [Quick Start](#/quickstart) section. Once pgBackRest is up and running then skipping around is possible but following the user guide in order is recommended the first time through.
+This user guide is intended to be followed sequentially from beginning to end &mdash; each section depends on the last. For example, the [Restore](user-guide/stress.md#restore) section relies on setup that is performed in the [Quick Start](user-guide/quickstart.md#quickstart) section. Once pgBackRest is up and running then skipping around is possible but following the user guide in order is recommended the first time through.
 
 Although the examples in this guide are targeted at Debian/Ubuntu and PostgreSQL 16, it should be fairly easy to apply the examples to any Unix distribution and PostgreSQL version. The only OS-specific commands are those to create, start, stop, and drop PostgreSQL clusters. The pgBackRest commands will be the same on any Unix system though the location of the executable may vary. While pgBackRest strives to operate consistently across versions of PostgreSQL, there are subtle differences between versions of PostgreSQL that may show up in this guide when illustrating certain examples, e.g. PostgreSQL path/file names and settings.
 

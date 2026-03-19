@@ -36,7 +36,7 @@ Commands are run exactly as if the repository were stored on a local disk.
 pgbackrest --stanza=demo --log-level-console=info stanza-create
 ```
 
-File creation time in Azure is relatively slow so `backup`/`restore` performance is improved by enabling [file bundling](#/backup/bundle).
+File creation time in Azure is relatively slow so `backup`/`restore` performance is improved by enabling [file bundling](user-guide/backup.md#bundle).
 
 **Backup the demo cluster**
 

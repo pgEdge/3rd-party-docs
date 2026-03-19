@@ -39,7 +39,7 @@ chown <br-install-user>:<br-install-group> /etc/pgbackrest/pgbackrest.conf
 ## Setup Passwordless SSH
 <a name="setup-ssh"></a>
 
-pgBackRest can use passwordless SSH to enable communication between the hosts. It is also possible to use TLS, see [Setup TLS](user-guide-rhel.html#repo-host/config).
+pgBackRest can use passwordless SSH to enable communication between the hosts. It is also possible to use TLS, see [Setup TLS](https://pgbackrest.org/user-guide-rhel.html#repo-host/config).
 
 **Create <setup-ssh-host> host key pair**
 

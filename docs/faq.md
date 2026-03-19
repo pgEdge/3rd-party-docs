@@ -84,7 +84,7 @@ If you really need a backup, the solution is to have more standbys or remove `ba
 
 No. When primary and standby databases are configured, the pgBackRest configuration files should be symmetric in order to seamlessly handle failovers. If they are not, the configurations will need to be changed on failover or further problems may result.
 
-See the [Dedicated Repository Host](user-guide.html#repo-host) section of the User Guide for more information.
+See the [Dedicated Repository Host](https://pgbackrest.org/user-guide.html#repo-host) section of the User Guide for more information.
 
 ## Time-based Point-in-Time Recovery does not appear to work, why?
 <a name="time-based-pitr"></a>
@@ -93,7 +93,7 @@ The most common mistake when using time-based Point-in-Time Recovery is forgetti
 
 To use the `--set` option, choose a backup set by running the `info` command and finding the backup with a timestamp stop that is before the target time. Then when running the restore, specify the option `--set=BACKUP_LABEL` where `BACKUP_LABEL` is the chosen backup set.
 
-See the [Point-in-Time Recovery](user-guide.html#pitr) section of the User Guide for more information.
+See the [Point-in-Time Recovery](https://pgbackrest.org/user-guide.html#pitr) section of the User Guide for more information.
 
 ## What does the WAL archive suffix mean?
 <a name="archive-suffix"></a>
