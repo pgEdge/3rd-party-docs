@@ -295,7 +295,7 @@ pgdoc-converter [flags]
 
 - [x] pg_vectorize (v0.26.0)
 - [x] pg_tokenizer (v0.1.1)
-- [ ] vchord_bm25
+- [x] vchord_bm25 (v0.3.0)
 - [ ] pg_cron
 - [ ] pgmq
 - [ ] pg_stat_monitor
