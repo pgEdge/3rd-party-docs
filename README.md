@@ -24,6 +24,7 @@ sources:
 - **pgmq** — MkDocs site (imported with upstream nav)
 - **pg_stat_monitor** — Markdown sources (split by section)
 - **pldebugger** — Markdown sources (split by section)
+- **system_stats** — Markdown sources (split by section)
 
 ## How It Works
 
@@ -85,6 +86,8 @@ This means:
 | `pgstatmonitormaster` | pg_stat_monitor dev | Markdown (`README.md`) |
 | `pldebugger19` | pldebugger v1.9 | Markdown (`README-pldebugger.md`) |
 | `pldebuggermaster` | pldebugger dev | Markdown (`README-pldebugger.md`) |
+| `systemstats321` | system_stats v3.2.1 | Markdown (`README.md`) |
+| `systemstatsmaster` | system_stats dev | Markdown (`README.md`) |
 
 ## Prerequisites
 
@@ -315,7 +318,7 @@ pgdoc-converter [flags]
 - [x] pgmq (v1.11.0)
 - [x] pg_stat_monitor (v2.3.1)
 - [x] pldebugger (v1.9)
-- [ ] system_stats
+- [x] system_stats (v3.2.1)
 
 ## Project Structure
 

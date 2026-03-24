@@ -364,3 +364,19 @@ branches:
     upstream: https://github.com/EnterpriseDB/pldebugger.git
     ref: master
     src_subdir: .
+
+  # --- system_stats (Markdown mode) ---
+
+  - branch: systemstats321
+    mode: md
+    version: "system_stats v3.2.1"
+    upstream: https://github.com/EnterpriseDB/system_stats.git
+    ref: v3.2.1
+    src_subdir: .
+
+  - branch: systemstatsmaster
+    mode: md
+    version: "system_stats dev"
+    upstream: https://github.com/EnterpriseDB/system_stats.git
+    ref: master
+    src_subdir: .
