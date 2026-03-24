@@ -53,14 +53,4 @@ repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
   - 'pgAudit <br/> Open Source PostgreSQL Audit Logging': index.md
-  - Introduction: introduction.md
-  - Why pgAudit?: why-pgaudit.md
-  - Usage Considerations: usage-considerations.md
-  - PostgreSQL Version Compatibility: postgresql-version-compatibility.md
-  - Compile and Install: compile-and-install.md
-  - Settings: settings.md
-  - Session Audit Logging: session-audit-logging.md
-  - Object Audit Logging: object-audit-logging.md
-  - Format: format.md
-  - Caveats: caveats.md
-  - Authors: authors.md
+  - Testing: test/index.md
