@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: pg_vectorize v0.26.0
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,6 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - index: index.md
