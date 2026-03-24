@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: vchord_bm25 v0.3.0
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,16 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - README: index.md
+  - Getting Started: getting-started.md
+  - Usage: usage.md
+  - More Examples: more-examples.md
+  - Tokenizer: tokenizer.md
+  - Tokenizer Options: tokenizer-options.md
+  - Installation: installation.md
+  - Comparison to other solution in Postgres: comparison-to-other-solution-in-postgres.md
+  - Limitation: limitation.md
+  - Reference: reference.md
+  - License: license.md
