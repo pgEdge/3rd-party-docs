@@ -52,7 +52,7 @@ extra:
 repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
-  - README: index.md
+  - pg_cron v1.6.7: index.md
   - What is pg_cron?: what-is-pg_cron.md
   - Installing pg_cron: installing-pg_cron.md
   - Setting up pg_cron: setting-up-pg_cron.md
