@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: pldebugger dev
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,12 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - PostgreSQL pl/pgsql Debugger API: index.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - Troubleshooting: troubleshooting.md
+  - Architecture: architecture.md
+  - Licence: licence.md
+  - Contact: contact.md

@@ -1,0 +1,8 @@
+# Licence
+
+The pl/pgsql debugger API is released under the 
+[Artistic Licence v2.0](https://opensource.org/licenses/artistic-license-2.0).
+
+Copyright (c) 2004-2024 EnterpriseDB Corporation. All Rights Reserved.
+
+
