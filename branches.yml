@@ -300,3 +300,19 @@ branches:
     upstream: https://github.com/tensorchord/VectorChord-bm25.git
     ref: main
     src_subdir: .
+
+  # --- pg_cron (Markdown mode) ---
+
+  - branch: pgcron167
+    mode: md
+    version: "pg_cron v1.6.7"
+    upstream: https://github.com/citusdata/pg_cron.git
+    ref: v1.6.7
+    src_subdir: .
+
+  - branch: pgcronmaster
+    mode: md
+    version: "pg_cron dev"
+    upstream: https://github.com/citusdata/pg_cron.git
+    ref: main
+    src_subdir: .

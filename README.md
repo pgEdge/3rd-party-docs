@@ -20,6 +20,7 @@ sources:
 - **pg_vectorize** — MkDocs site (imported with upstream nav)
 - **pg_tokenizer** — Markdown sources (multi-file copy)
 - **vchord_bm25** — Markdown sources (split by section)
+- **pg_cron** — Markdown sources (split by section)
 
 ## How It Works
 
@@ -73,6 +74,8 @@ This means:
 | `pgtokenizermaster` | pg_tokenizer dev | Markdown (`docs/`) |
 | `vchordbm25030` | vchord_bm25 v0.3.0 | Markdown (`README.md`) |
 | `vchordbm25master` | vchord_bm25 dev | Markdown (`README.md`) |
+| `pgcron167` | pg_cron v1.6.7 | Markdown (`README.md`) |
+| `pgcronmaster` | pg_cron dev | Markdown (`README.md`) |
 
 ## Prerequisites
 
@@ -299,7 +302,7 @@ pgdoc-converter [flags]
 - [x] pg_vectorize (v0.26.0)
 - [x] pg_tokenizer (v0.1.1)
 - [x] vchord_bm25 (v0.3.0)
-- [ ] pg_cron
+- [x] pg_cron (v1.6.7)
 - [ ] pgmq
 - [ ] pg_stat_monitor
 - [ ] pldebugger

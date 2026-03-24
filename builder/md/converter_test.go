@@ -222,6 +222,35 @@ func TestBuildAnchorMap(t *testing.T) {
 	}
 }
 
+func TestBuildAnchorMapH1InSection(t *testing.T) {
+	// When upstream uses inconsistent headings (mostly H1 with
+	// one H2 as split point), H1 headings inside sections must
+	// be captured so anchor links rewrite correctly.
+	sections := []section{
+		{
+			title: "Extension settings",
+			slug:  "extension-settings",
+			content: "## Extension settings\n\nSome settings.\n\n" +
+				"# Monitoring jobs\n\nMonitor stuff.\n\n" +
+				"# Code of Conduct\n\nBe nice.\n",
+		},
+	}
+	m := buildAnchorMap(sections)
+
+	if m["extension-settings"] != "extension-settings.md" {
+		t.Errorf("extension-settings = %q",
+			m["extension-settings"])
+	}
+	if m["monitoring-jobs"] !=
+		"extension-settings.md#monitoring-jobs" {
+		t.Errorf("monitoring-jobs = %q", m["monitoring-jobs"])
+	}
+	if m["code-of-conduct"] !=
+		"extension-settings.md#code-of-conduct" {
+		t.Errorf("code-of-conduct = %q", m["code-of-conduct"])
+	}
+}
+
 func TestConvertAlerts(t *testing.T) {
 	input := `Before.
 

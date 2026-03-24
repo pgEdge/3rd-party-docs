@@ -280,7 +280,10 @@ func buildAnchorMap(sections []section) map[string]string {
 		anchor := githubAnchor(s.title)
 		m[anchor] = s.slug + ".md"
 
-		// Scan for sub-headings (H3+) within the section
+		// Scan for all headings within the section content.
+		// H1 headings can appear inside a section when the
+		// upstream file uses inconsistent heading levels
+		// (e.g. mostly H1 with one H2 as the split point).
 		inCode := false
 		for _, line := range strings.Split(s.content, "\n") {
 			trimmed := strings.TrimSpace(line)
@@ -293,12 +296,19 @@ func buildAnchorMap(sections []section) map[string]string {
 				continue
 			}
 			sub := reATXHeading.FindStringSubmatch(line)
-			if sub != nil && len(sub[1]) >= 3 {
-				subAnchor := githubAnchor(
-					strings.TrimSpace(sub[2]))
-				// After promotion, the anchor stays the same
-				m[subAnchor] = s.slug + ".md#" + subAnchor
+			if sub == nil {
+				continue
 			}
+			level := len(sub[1])
+			subAnchor := githubAnchor(
+				strings.TrimSpace(sub[2]))
+			if level == 2 {
+				// Skip — already mapped above as the
+				// section title
+				continue
+			}
+			// After promotion, the anchor stays the same
+			m[subAnchor] = s.slug + ".md#" + subAnchor
 		}
 	}
 	return m
