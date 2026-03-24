@@ -423,3 +423,139 @@ func TestFindMarkdownFiles(t *testing.T) {
 		t.Fatalf("got %d files, want 2: %v", len(files), files)
 	}
 }
+
+func TestFindMarkdownFilesRecursive(t *testing.T) {
+	dir := t.TempDir()
+	os.WriteFile(filepath.Join(dir, "index.md"),
+		[]byte("# Home\n"), 0644)
+	sub := filepath.Join(dir, "api")
+	os.MkdirAll(sub, 0755)
+	os.WriteFile(filepath.Join(sub, "search.md"),
+		[]byte("# Search\n"), 0644)
+	os.WriteFile(filepath.Join(sub, "index.md"),
+		[]byte("# API\n"), 0644)
+	deep := filepath.Join(dir, "ext", "examples")
+	os.MkdirAll(deep, 0755)
+	os.WriteFile(filepath.Join(deep, "demo.md"),
+		[]byte("# Demo\n"), 0644)
+
+	files, err := findMarkdownFiles(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(files) != 4 {
+		t.Fatalf("got %d files, want 4: %v", len(files), files)
+	}
+
+	// Check that paths are relative
+	for _, f := range files {
+		if filepath.IsAbs(f) {
+			t.Errorf("expected relative path, got %q", f)
+		}
+	}
+}
+
+func TestResolveSnippets(t *testing.T) {
+	// Create a repo-like structure:
+	// repo/README.md
+	// repo/docs/index.md (contains snippet include)
+	dir := t.TempDir()
+	repoRoot := dir
+	docsDir := filepath.Join(dir, "docs")
+	os.MkdirAll(docsDir, 0755)
+
+	os.WriteFile(filepath.Join(repoRoot, "README.md"),
+		[]byte("# My Project\n\nWelcome.\n"), 0644)
+	os.WriteFile(filepath.Join(docsDir, "index.md"),
+		[]byte("--8<-- \"README.md\"\n"), 0644)
+
+	content := "--8<-- \"README.md\"\n"
+	filePath := filepath.Join(docsDir, "index.md")
+	got := resolveSnippets(content, filePath, repoRoot)
+
+	if !strings.Contains(got, "# My Project") {
+		t.Errorf("snippet not resolved, got: %q", got)
+	}
+	if strings.Contains(got, "--8<--") {
+		t.Error("snippet directive should be replaced")
+	}
+}
+
+func TestResolveSnippetsUnresolvable(t *testing.T) {
+	content := "--8<-- \"nonexistent.md\"\n"
+	got := resolveSnippets(content, "/tmp/fake.md", "/tmp")
+	if !strings.Contains(got, "--8<--") {
+		t.Error("unresolvable snippet should be left as-is")
+	}
+}
+
+func TestConverterRecursiveCopy(t *testing.T) {
+	srcDir := t.TempDir()
+	outDir := t.TempDir()
+
+	// Create nested doc structure
+	os.WriteFile(filepath.Join(srcDir, "index.md"),
+		[]byte("# Home\n\nWelcome.\n"), 0644)
+	apiDir := filepath.Join(srcDir, "api")
+	os.MkdirAll(apiDir, 0755)
+	os.WriteFile(filepath.Join(apiDir, "search.md"),
+		[]byte("# Search API\n\nSearch docs.\n"), 0644)
+	os.WriteFile(filepath.Join(apiDir, "index.md"),
+		[]byte("# API Reference\n\nAPI docs.\n"), 0644)
+
+	c := NewConverter(srcDir, outDir, "Test v1", false)
+	if err := c.Convert(); err != nil {
+		t.Fatal(err)
+	}
+
+	files := c.Files()
+	if len(files) != 3 {
+		t.Fatalf("got %d files, want 3: %v", len(files), files)
+	}
+
+	// Check nested files exist in output
+	if _, err := os.Stat(
+		filepath.Join(outDir, "api", "search.md")); err != nil {
+		t.Error("api/search.md not created")
+	}
+	if _, err := os.Stat(
+		filepath.Join(outDir, "api", "index.md")); err != nil {
+		t.Error("api/index.md not created")
+	}
+}
+
+func TestConverterSnippetResolution(t *testing.T) {
+	// Simulate pg_vectorize layout:
+	// repo/README.md
+	// repo/docs/index.md (--8<-- "README.md")
+	// repo/docs/guide.md
+	repoDir := t.TempDir()
+	srcDir := filepath.Join(repoDir, "docs")
+	outDir := t.TempDir()
+
+	os.MkdirAll(srcDir, 0755)
+	os.WriteFile(filepath.Join(repoDir, "README.md"),
+		[]byte("# My Project\n\nProject intro.\n\n"+
+			"## Installation\n\nInstall steps.\n"), 0644)
+	os.WriteFile(filepath.Join(srcDir, "index.md"),
+		[]byte("--8<-- \"README.md\"\n"), 0644)
+	os.WriteFile(filepath.Join(srcDir, "guide.md"),
+		[]byte("# Guide\n\nGuide content.\n"), 0644)
+
+	c := NewConverter(srcDir, outDir, "Test v1", false)
+	if err := c.Convert(); err != nil {
+		t.Fatal(err)
+	}
+
+	// index.md should have the resolved README content
+	data, err := os.ReadFile(filepath.Join(outDir, "index.md"))
+	if err != nil {
+		t.Fatal("index.md not created")
+	}
+	if !strings.Contains(string(data), "# My Project") {
+		t.Error("snippet should be resolved in index.md")
+	}
+	if strings.Contains(string(data), "--8<--") {
+		t.Error("snippet directive should be replaced")
+	}
+}

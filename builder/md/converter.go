@@ -81,33 +81,42 @@ func (c *Converter) Convert() error {
 	return c.copyFiles(docFiles)
 }
 
-// findMarkdownFiles returns .md filenames in the directory
-// (non-recursive).
+// findMarkdownFiles returns .md file paths relative to dir,
+// scanning recursively into subdirectories.
 func findMarkdownFiles(dir string) ([]string, error) {
-	entries, err := os.ReadDir(dir)
-	if err != nil {
-		return nil, err
-	}
 	var files []string
-	for _, e := range entries {
-		name := e.Name()
-		if !e.IsDir() &&
-			strings.HasSuffix(strings.ToLower(name), ".md") {
-			files = append(files, name)
-		}
-	}
-	return files, nil
+	err := filepath.WalkDir(dir,
+		func(path string, d os.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if d.IsDir() {
+				return nil
+			}
+			if strings.HasSuffix(strings.ToLower(d.Name()),
+				".md") {
+				rel, err := filepath.Rel(dir, path)
+				if err != nil {
+					return err
+				}
+				files = append(files, rel)
+			}
+			return nil
+		})
+	return files, err
 }
 
 // filterDocFiles removes non-documentation files.
+// Paths may be relative (e.g. "subdir/file.md"); filtering
+// is based on the base filename.
 func filterDocFiles(files []string) []string {
 	var result []string
 	for _, f := range files {
-		lower := strings.ToLower(f)
-		if strings.HasPrefix(lower, "frag-") {
+		base := strings.ToLower(filepath.Base(f))
+		if strings.HasPrefix(base, "frag-") {
 			continue
 		}
-		switch lower {
+		switch base {
 		case "changelog.md", "changes.md", "contributing.md",
 			"license.md", "code_of_conduct.md":
 			continue
@@ -134,6 +143,62 @@ type splitResult struct {
 }
 
 var reATXHeading = regexp.MustCompile(`^(#{1,6})\s+(.+?)(?:\s+#*)?$`)
+
+// reSnippet matches pymdownx.snippets include directives like
+// --8<-- "filename" (with optional leading whitespace).
+var reSnippet = regexp.MustCompile(
+	`^\s*--8<--\s+"([^"]+)"\s*$`)
+
+// resolveSnippets replaces pymdownx.snippets include lines with
+// the referenced file's content. It searches for the included
+// file relative to filePath's directory, then relative to
+// baseDir (typically the repo root / parent of src_subdir).
+func resolveSnippets(
+	content, filePath, baseDir string,
+) string {
+	lines := strings.Split(content, "\n")
+	var result []string
+	changed := false
+	for _, line := range lines {
+		m := reSnippet.FindStringSubmatch(line)
+		if m == nil {
+			result = append(result, line)
+			continue
+		}
+		ref := m[1]
+		// Try relative to the file's directory first
+		candidates := []string{
+			filepath.Join(filepath.Dir(filePath), ref),
+		}
+		// Then try relative to baseDir (repo root)
+		if baseDir != "" {
+			candidates = append(candidates,
+				filepath.Join(baseDir, ref))
+		}
+		var data []byte
+		for _, cand := range candidates {
+			var err error
+			data, err = os.ReadFile(cand)
+			if err == nil {
+				break
+			}
+		}
+		if data != nil {
+			// Insert file content (trim trailing newline to
+			// avoid double blank lines)
+			result = append(result,
+				strings.TrimRight(string(data), "\n"))
+			changed = true
+		} else {
+			// Leave the directive as-is if we can't resolve
+			result = append(result, line)
+		}
+	}
+	if !changed {
+		return content
+	}
+	return strings.Join(result, "\n")
+}
 
 // splitMarkdown splits markdown content by H2 headings.
 func splitMarkdown(content string) splitResult {
@@ -351,12 +416,16 @@ func convertAlerts(content string) string {
 // splitFile splits a single markdown file by H2 and writes
 // the resulting pages.
 func (c *Converter) splitFile(filename string) error {
-	data, err := os.ReadFile(filepath.Join(c.srcDir, filename))
+	srcPath := filepath.Join(c.srcDir, filename)
+	data, err := os.ReadFile(srcPath)
 	if err != nil {
 		return err
 	}
 
-	content := convertAlerts(string(data))
+	content := string(data)
+	baseDir := filepath.Dir(c.srcDir)
+	content = resolveSnippets(content, srcPath, baseDir)
+	content = convertAlerts(content)
 	res := splitMarkdown(content)
 
 	if len(res.sections) == 0 {
@@ -425,6 +494,7 @@ func (c *Converter) copyFiles(files []string) error {
 	hasIndex := false
 	for _, f := range files {
 		lower := strings.ToLower(f)
+		// Only top-level README/index counts as the site index
 		if lower == "readme.md" || lower == "index.md" {
 			hasIndex = true
 			break
@@ -437,12 +507,18 @@ func (c *Converter) copyFiles(files []string) error {
 			return err
 		}
 
-		content := convertAlerts(string(data))
+		content := string(data)
+		srcPath := filepath.Join(c.srcDir, f)
+		baseDir := filepath.Dir(c.srcDir)
+		content = resolveSnippets(content, srcPath, baseDir)
+		content = convertAlerts(content)
 
 		outName := f
-		lower := strings.ToLower(f)
+		lower := strings.ToLower(filepath.Base(f))
 		if lower == "readme.md" {
-			outName = "index.md"
+			// Rename README.md to index.md, preserving dir
+			outName = filepath.Join(
+				filepath.Dir(f), "index.md")
 		}
 
 		title := extractTitle(content, f)
@@ -487,7 +563,8 @@ func extractTitle(content, filename string) string {
 			return strings.TrimSpace(m[2])
 		}
 	}
-	return strings.TrimSuffix(filename, filepath.Ext(filename))
+	base := filepath.Base(filename)
+	return strings.TrimSuffix(base, filepath.Ext(base))
 }
 
 // generateIndex creates a simple index page linking to all

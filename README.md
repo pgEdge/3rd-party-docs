@@ -17,6 +17,7 @@ sources:
 - **PgBouncer** — Markdown sources (split/copied)
 - **pgvector** — Markdown sources (split by section)
 - **pgAudit** — Markdown sources (split by section)
+- **pg_vectorize** — Markdown sources (multi-file copy)
 
 ## How It Works
 
@@ -64,6 +65,8 @@ This means:
 | `pgvectormaster` | pgvector dev | Markdown (`README.md`) |
 | `pgaudit161` .. `pgaudit180` | pgAudit 16.1–18.0 | Markdown (`README.md`) |
 | `pgauditmaster` | pgAudit dev | Markdown (`README.md`) |
+| `pgvectorize0260` | pg_vectorize v0.26.0 | Markdown (`docs/`) |
+| `pgvectorizemaster` | pg_vectorize dev | Markdown (`docs/`) |
 
 ## Prerequisites
 
@@ -277,7 +280,7 @@ pgdoc-converter [flags]
 
 ### Remaining Extensions
 
-- [ ] pg_vectorize
+- [x] pg_vectorize (v0.26.0)
 - [ ] pg_tokenizer
 - [ ] vchord_bm25
 - [ ] pg_cron
