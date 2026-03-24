@@ -308,9 +308,6 @@ pgdoc-converter [flags]
 - [x] pgAudit (16.1–18.0)
 - [x] psycopg2 (2.9.10)
 - [x] PostgREST (14.5)
-
-### Remaining Extensions
-
 - [x] pg_vectorize (v0.26.0)
 - [x] pg_tokenizer (v0.1.1)
 - [x] vchord_bm25 (v0.3.0)
