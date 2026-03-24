@@ -348,3 +348,19 @@ branches:
     upstream: https://github.com/percona/pg_stat_monitor.git
     ref: main
     src_subdir: .
+
+  # --- pldebugger (Markdown mode) ---
+
+  - branch: pldebugger19
+    mode: md
+    version: "pldebugger v1.9"
+    upstream: https://github.com/EnterpriseDB/pldebugger.git
+    ref: v1.9
+    src_subdir: .
+
+  - branch: pldebuggermaster
+    mode: md
+    version: "pldebugger dev"
+    upstream: https://github.com/EnterpriseDB/pldebugger.git
+    ref: master
+    src_subdir: .

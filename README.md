@@ -23,6 +23,7 @@ sources:
 - **pg_cron** — Markdown sources (split by section)
 - **pgmq** — MkDocs site (imported with upstream nav)
 - **pg_stat_monitor** — Markdown sources (split by section)
+- **pldebugger** — Markdown sources (split by section)
 
 ## How It Works
 
@@ -82,6 +83,8 @@ This means:
 | `pgmqmaster` | pgmq dev | MkDocs (`docs/`) |
 | `pgstatmonitor231` | pg_stat_monitor v2.3.1 | Markdown (`README.md`) |
 | `pgstatmonitormaster` | pg_stat_monitor dev | Markdown (`README.md`) |
+| `pldebugger19` | pldebugger v1.9 | Markdown (`README-pldebugger.md`) |
+| `pldebuggermaster` | pldebugger dev | Markdown (`README-pldebugger.md`) |
 
 ## Prerequisites
 
@@ -311,7 +314,7 @@ pgdoc-converter [flags]
 - [x] pg_cron (v1.6.7)
 - [x] pgmq (v1.11.0)
 - [x] pg_stat_monitor (v2.3.1)
-- [ ] pldebugger
+- [x] pldebugger (v1.9)
 - [ ] system_stats
 
 ## Project Structure
