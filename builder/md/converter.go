@@ -106,9 +106,16 @@ func findMarkdownFiles(dir string) ([]string, error) {
 	return files, err
 }
 
+// skipDirs lists directory names that should be excluded from
+// doc file discovery (test infrastructure, CI, etc.).
+var skipDirs = map[string]bool{
+	"test": true, "tests": true, "testing": true,
+	".github": true, ".ci": true,
+}
+
 // filterDocFiles removes non-documentation files.
 // Paths may be relative (e.g. "subdir/file.md"); filtering
-// is based on the base filename.
+// is based on the base filename and parent directories.
 func filterDocFiles(files []string) []string {
 	var result []string
 	for _, f := range files {
@@ -121,9 +128,26 @@ func filterDocFiles(files []string) []string {
 			"license.md", "code_of_conduct.md":
 			continue
 		}
+		// Skip files inside non-doc directories
+		if inSkipDir(f) {
+			continue
+		}
 		result = append(result, f)
 	}
 	return result
+}
+
+// inSkipDir checks if any path component is a skipped directory.
+func inSkipDir(relPath string) bool {
+	dir := filepath.Dir(relPath)
+	for dir != "." && dir != "" {
+		base := strings.ToLower(filepath.Base(dir))
+		if skipDirs[base] {
+			return true
+		}
+		dir = filepath.Dir(dir)
+	}
+	return false
 }
 
 // ── Single-file splitting ────────────────────────────────────────

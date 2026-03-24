@@ -21,6 +21,9 @@ func TestFilterDocFiles(t *testing.T) {
 		"frag-config-man.md",
 		"frag-usage-man.md",
 		"changes.md",
+		"test/README.md",
+		"tests/guide.md",
+		".github/ISSUE_TEMPLATE.md",
 	}
 	got := filterDocFiles(input)
 	want := []string{"README.md", "config.md", "usage.md"}
