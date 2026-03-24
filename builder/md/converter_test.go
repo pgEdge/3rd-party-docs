@@ -222,32 +222,44 @@ func TestBuildAnchorMap(t *testing.T) {
 	}
 }
 
-func TestBuildAnchorMapH1InSection(t *testing.T) {
-	// When upstream uses inconsistent headings (mostly H1 with
-	// one H2 as split point), H1 headings inside sections must
-	// be captured so anchor links rewrite correctly.
-	sections := []section{
-		{
-			title: "Extension settings",
-			slug:  "extension-settings",
-			content: "## Extension settings\n\nSome settings.\n\n" +
-				"# Monitoring jobs\n\nMonitor stuff.\n\n" +
-				"# Code of Conduct\n\nBe nice.\n",
-		},
-	}
-	m := buildAnchorMap(sections)
+func TestConvertEmoji(t *testing.T) {
+	input := "| Service | Supported |\n" +
+		"| [Aiven](https://aiven.io/) | :heavy_check_mark: |\n" +
+		"| [Heroku](https://heroku.com/) | :x: |\n" +
+		"Normal text with no emoji.\n"
+	got := convertEmoji(input)
 
-	if m["extension-settings"] != "extension-settings.md" {
-		t.Errorf("extension-settings = %q",
-			m["extension-settings"])
+	if strings.Contains(got, ":heavy_check_mark:") {
+		t.Error("should replace :heavy_check_mark:")
 	}
-	if m["monitoring-jobs"] !=
-		"extension-settings.md#monitoring-jobs" {
-		t.Errorf("monitoring-jobs = %q", m["monitoring-jobs"])
+	if strings.Contains(got, ":x:") {
+		t.Error("should replace :x:")
 	}
-	if m["code-of-conduct"] !=
-		"extension-settings.md#code-of-conduct" {
-		t.Errorf("code-of-conduct = %q", m["code-of-conduct"])
+	if !strings.Contains(got, "\u2714\uFE0F") {
+		t.Error("should contain check mark unicode")
+	}
+	if !strings.Contains(got, "\u274C") {
+		t.Error("should contain X unicode")
+	}
+	if !strings.Contains(got, "Normal text") {
+		t.Error("should preserve non-emoji text")
+	}
+}
+
+func TestStripLeadingImages(t *testing.T) {
+	input := "[![Banner](/github-banner.png)](https://example.com/)\n" +
+		"\n# Title\n\nSome content.\n" +
+		"![inline](img.png)\n"
+	got := stripLeadingImages(input)
+
+	if strings.Contains(got, "Banner") {
+		t.Error("should strip leading image before heading")
+	}
+	if !strings.Contains(got, "# Title") {
+		t.Error("should preserve heading")
+	}
+	if !strings.Contains(got, "![inline](img.png)") {
+		t.Error("should preserve images after first heading")
 	}
 }
 

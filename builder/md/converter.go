@@ -335,6 +335,74 @@ func rewriteAnchors(
 		})
 }
 
+// githubEmoji maps commonly used GitHub emoji shortcodes to
+// their Unicode equivalents.
+var githubEmoji = map[string]string{
+	":heavy_check_mark:":         "\u2714\uFE0F",
+	":white_check_mark:":         "\u2705",
+	":x:":                        "\u274C",
+	":warning:":                  "\u26A0\uFE0F",
+	":information_source:":       "\u2139\uFE0F",
+	":bulb:":                     "\U0001F4A1",
+	":memo:":                     "\U0001F4DD",
+	":rocket:":                   "\U0001F680",
+	":star:":                     "\u2B50",
+	":thumbsup:":                 "\U0001F44D",
+	":thumbsdown:":               "\U0001F44E",
+	":tada:":                     "\U0001F389",
+	":construction:":             "\U0001F6A7",
+	":lock:":                     "\U0001F512",
+	":key:":                      "\U0001F511",
+	":hammer:":                   "\U0001F528",
+	":gear:":                     "\u2699\uFE0F",
+	":link:":                     "\U0001F517",
+	":book:":                     "\U0001F4D6",
+	":clipboard:":                "\U0001F4CB",
+	":chart_with_upwards_trend:": "\U0001F4C8",
+}
+
+var reEmoji = regexp.MustCompile(`:([a-z0-9_]+):`)
+
+// convertEmoji replaces GitHub emoji shortcodes like
+// :heavy_check_mark: with their Unicode equivalents.
+func convertEmoji(content string) string {
+	return reEmoji.ReplaceAllStringFunc(content,
+		func(match string) string {
+			if u, ok := githubEmoji[match]; ok {
+				return u
+			}
+			return match
+		})
+}
+
+// stripLeadingImages removes image-only lines (including
+// linked images) that appear before the first heading. These
+// are typically GitHub repo banners/badges that won't render
+// correctly in MkDocs because the image isn't copied to docs/.
+func stripLeadingImages(content string) string {
+	lines := strings.Split(content, "\n")
+	var result []string
+	pastPreamble := false
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		if !pastPreamble {
+			// Skip blank lines and image-only lines before
+			// the first heading or text content
+			if trimmed == "" {
+				result = append(result, line)
+				continue
+			}
+			if strings.HasPrefix(trimmed, "![") ||
+				strings.HasPrefix(trimmed, "[![") {
+				continue
+			}
+			pastPreamble = true
+		}
+		result = append(result, line)
+	}
+	return strings.Join(result, "\n")
+}
+
 // convertAlerts converts GitHub-flavored alerts to MkDocs
 // admonitions.
 //
@@ -404,6 +472,8 @@ func (c *Converter) splitFile(filename string) error {
 	baseDir := filepath.Dir(c.srcDir)
 	content = shared.ResolveSnippets(content, srcPath, baseDir)
 	content = convertAlerts(content)
+	content = convertEmoji(content)
+	content = stripLeadingImages(content)
 	res := splitMarkdown(content)
 
 	if len(res.sections) == 0 {
@@ -413,8 +483,12 @@ func (c *Converter) splitFile(filename string) error {
 		}
 		title := res.title
 		if title == "" {
-			title = strings.TrimSuffix(filename,
-				filepath.Ext(filename))
+			if c.version != "" {
+				title = c.version
+			} else {
+				title = strings.TrimSuffix(filename,
+					filepath.Ext(filename))
+			}
 		}
 		c.files = append(c.files, &shared.FileEntry{
 			Path:  "index.md",
@@ -428,13 +502,23 @@ func (c *Converter) splitFile(filename string) error {
 
 	// Write index.md (intro)
 	intro := rewriteAnchors(res.intro, anchorMap)
-	if err := c.writeFile("index.md", intro); err != nil {
-		return err
-	}
 	title := res.title
 	if title == "" {
-		title = strings.TrimSuffix(filename,
-			filepath.Ext(filename))
+		// Prefer version label over raw filename stem
+		if c.version != "" {
+			title = c.version
+		} else {
+			title = strings.TrimSuffix(filename,
+				filepath.Ext(filename))
+		}
+	}
+	// If intro is empty (e.g. only had a banner image that
+	// was stripped), generate a title heading
+	if strings.TrimSpace(intro) == "" {
+		intro = "# " + title + "\n"
+	}
+	if err := c.writeFile("index.md", intro); err != nil {
+		return err
 	}
 	c.files = append(c.files, &shared.FileEntry{
 		Path:  "index.md",
@@ -490,6 +574,8 @@ func (c *Converter) copyFiles(files []string) error {
 		baseDir := filepath.Dir(c.srcDir)
 		content = shared.ResolveSnippets(content, srcPath, baseDir)
 		content = convertAlerts(content)
+		content = convertEmoji(content)
+		content = stripLeadingImages(content)
 
 		outName := f
 		lower := strings.ToLower(filepath.Base(f))
