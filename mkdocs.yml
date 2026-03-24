@@ -52,4 +52,23 @@ extra:
 repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
-  - index: index.md
+  - 'runs Postgres, the embeddings server, and the management API': index.md
+  - index:
+    - extension/index.md
+    - PG Vectorize API Overview: extension/api/index.md
+    - Api:
+      - RAG: extension/api/rag.md
+      - Vector Search: extension/api/search.md
+      - Utilities: extension/api/utilities.md
+    - Configuring pg_vectorize: extension/configuration.md
+    - Examples:
+      - Vector Search with OpenAI: extension/examples/openai_embeddings.md
+      - Scheduling Embedding Updates: extension/examples/scheduling.md
+      - Sentence Transformers: extension/examples/sentence_transformers.md
+  - Extension:
+    - Supported Transformers and Generative Models: extension/models/index.md
+  - index:
+    - server/index.md
+    - Api:
+      - search: server/api/search.md
+      - table: server/api/table.md
