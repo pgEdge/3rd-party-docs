@@ -253,18 +253,18 @@ branches:
     ref: main
     src_subdir: doc
 
-  # --- pg_vectorize (Markdown mode) ---
+  # --- pg_vectorize (MkDocs import mode) ---
 
   - branch: pgvectorize0260
-    mode: md
+    mode: mkdocs
     version: "pg_vectorize v0.26.0"
-    upstream: https://github.com/tembo-io/pg_vectorize.git
+    upstream: https://github.com/ChuckHend/pg_vectorize.git
     ref: v0.26.0
     src_subdir: docs
 
   - branch: pgvectorizemaster
-    mode: md
+    mode: mkdocs
     version: "pg_vectorize dev"
-    upstream: https://github.com/tembo-io/pg_vectorize.git
+    upstream: https://github.com/ChuckHend/pg_vectorize.git
     ref: main
     src_subdir: docs

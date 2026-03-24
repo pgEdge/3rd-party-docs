@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/pgEdge/postgresql-docs/builder/shared"
 )
 
 func TestFilterDocFiles(t *testing.T) {
@@ -498,7 +500,7 @@ func TestResolveSnippets(t *testing.T) {
 
 	content := "--8<-- \"README.md\"\n"
 	filePath := filepath.Join(docsDir, "index.md")
-	got := resolveSnippets(content, filePath, repoRoot)
+	got := shared.ResolveSnippets(content, filePath, repoRoot)
 
 	if !strings.Contains(got, "# My Project") {
 		t.Errorf("snippet not resolved, got: %q", got)
@@ -510,7 +512,7 @@ func TestResolveSnippets(t *testing.T) {
 
 func TestResolveSnippetsUnresolvable(t *testing.T) {
 	content := "--8<-- \"nonexistent.md\"\n"
-	got := resolveSnippets(content, "/tmp/fake.md", "/tmp")
+	got := shared.ResolveSnippets(content, "/tmp/fake.md", "/tmp")
 	if !strings.Contains(got, "--8<--") {
 		t.Error("unresolvable snippet should be left as-is")
 	}

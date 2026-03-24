@@ -21,6 +21,7 @@ import (
 	"github.com/pgEdge/postgresql-docs/builder/backrest"
 	"github.com/pgEdge/postgresql-docs/builder/convert"
 	"github.com/pgEdge/postgresql-docs/builder/md"
+	"github.com/pgEdge/postgresql-docs/builder/mkdocsmode"
 	"github.com/pgEdge/postgresql-docs/builder/nav"
 	"github.com/pgEdge/postgresql-docs/builder/rst"
 	"github.com/pgEdge/postgresql-docs/builder/sgml"
@@ -28,7 +29,7 @@ import (
 )
 
 func main() {
-	mode := flag.String("mode", "sgml", "Conversion mode: sgml, xml, rst, md, or backrest")
+	mode := flag.String("mode", "sgml", "Conversion mode: sgml, xml, rst, md, mkdocs, or backrest")
 	srcDir := flag.String("src", "", "Path to source documentation directory")
 	outDir := flag.String("out", "./docs", "Output directory for .md files")
 	mkdocsFile := flag.String("mkdocs", "./mkdocs.yml", "Path to mkdocs.yml")
@@ -80,11 +81,14 @@ func main() {
 	case "md":
 		runMD(*srcDir, *outDir, *mkdocsFile, *version,
 			*doValidate, *verbose)
+	case "mkdocs":
+		runMkDocs(*srcDir, *outDir, *mkdocsFile, *version,
+			*doValidate, *verbose)
 	case "backrest":
 		runBackRest(*srcDir, *outDir, *mkdocsFile, *version,
 			*doValidate, *verbose)
 	default:
-		fmt.Fprintf(os.Stderr, "error: unknown mode %q (use sgml, xml, rst, md, or backrest)\n", *mode)
+		fmt.Fprintf(os.Stderr, "error: unknown mode %q (use sgml, xml, rst, md, mkdocs, or backrest)\n", *mode)
 		os.Exit(1)
 	}
 }
@@ -480,6 +484,66 @@ func runMD(
 			}
 		} else if verbose {
 			fmt.Printf("  %s not found, skipping nav update\n",
+				mkdocsFile)
+		}
+	}
+
+	// Validation
+	runValidation(doValidate, verbose, outDir, nil,
+		convWarnings, len(files))
+}
+
+// runMkDocs imports an existing MkDocs site from upstream.
+func runMkDocs(
+	srcDir, outDir, mkdocsFile, version string,
+	doValidate, verbose bool,
+) {
+	if verbose {
+		fmt.Println("Importing MkDocs site...")
+	}
+
+	converter := mkdocsmode.NewConverter(
+		srcDir, outDir, version, verbose)
+
+	if err := converter.Convert(); err != nil {
+		fmt.Fprintf(os.Stderr,
+			"error importing MkDocs site: %v\n", err)
+		os.Exit(1)
+	}
+
+	convWarnings := converter.Warnings()
+	if verbose && len(convWarnings) > 0 {
+		fmt.Printf("  Warnings: %d\n", len(convWarnings))
+		for _, w := range convWarnings {
+			fmt.Printf("    %s\n", w)
+		}
+	}
+
+	files := converter.Files()
+	if verbose {
+		fmt.Printf("  Imported %d files\n", len(files))
+	}
+
+	// Merge upstream config into skeleton mkdocs.yml
+	if mkdocsFile != "" {
+		if _, err := os.Stat(mkdocsFile); err == nil {
+			siteName := version
+			if err := mkdocsmode.MergeMkdocsYML(
+				mkdocsFile,
+				converter.NavYAML(),
+				siteName,
+				converter.Extensions(),
+				converter.Plugins(),
+			); err != nil {
+				fmt.Fprintf(os.Stderr,
+					"error updating mkdocs.yml: %v\n", err)
+				os.Exit(1)
+			}
+			if verbose {
+				fmt.Printf("  Updated %s\n", mkdocsFile)
+			}
+		} else if verbose {
+			fmt.Printf("  %s not found, skipping config merge\n",
 				mkdocsFile)
 		}
 	}
