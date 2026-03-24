@@ -284,3 +284,19 @@ branches:
     upstream: https://github.com/tensorchord/pg_tokenizer.rs.git
     ref: main
     src_subdir: docs
+
+  # --- VectorChord-bm25 (Markdown mode) ---
+
+  - branch: vchordbm25030
+    mode: md
+    version: "vchord_bm25 v0.3.0"
+    upstream: https://github.com/tensorchord/VectorChord-bm25.git
+    ref: "0.3.0"
+    src_subdir: .
+
+  - branch: vchordbm25master
+    mode: md
+    version: "vchord_bm25 dev"
+    upstream: https://github.com/tensorchord/VectorChord-bm25.git
+    ref: main
+    src_subdir: .

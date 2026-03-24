@@ -19,6 +19,7 @@ sources:
 - **pgAudit** — Markdown sources (split by section)
 - **pg_vectorize** — MkDocs site (imported with upstream nav)
 - **pg_tokenizer** — Markdown sources (multi-file copy)
+- **vchord_bm25** — Markdown sources (split by section)
 
 ## How It Works
 
@@ -70,6 +71,8 @@ This means:
 | `pgvectorizemaster` | pg_vectorize dev | MkDocs (`docs/`) |
 | `pgtokenizer011` | pg_tokenizer v0.1.1 | Markdown (`docs/`) |
 | `pgtokenizermaster` | pg_tokenizer dev | Markdown (`docs/`) |
+| `vchordbm25030` | vchord_bm25 v0.3.0 | Markdown (`README.md`) |
+| `vchordbm25master` | vchord_bm25 dev | Markdown (`README.md`) |
 
 ## Prerequisites
 
@@ -295,7 +298,7 @@ pgdoc-converter [flags]
 
 - [x] pg_vectorize (v0.26.0)
 - [x] pg_tokenizer (v0.1.1)
-- [ ] vchord_bm25
+- [x] vchord_bm25 (v0.3.0)
 - [ ] pg_cron
 - [ ] pgmq
 - [ ] pg_stat_monitor
