@@ -53,7 +53,7 @@ repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
   - 'runs Postgres, the embeddings server, and the management API': index.md
-  - index:
+  - 'pg_vectorize: a VectorDB for Postgres':
     - extension/index.md
     - PG Vectorize API Overview: extension/api/index.md
     - Api:
@@ -67,8 +67,8 @@ nav:
       - Sentence Transformers: extension/examples/sentence_transformers.md
   - Extension:
     - Supported Transformers and Generative Models: extension/models/index.md
-  - index:
+  - Server:
     - server/index.md
     - Api:
-      - search: server/api/search.md
-      - table: server/api/table.md
+      - Hybrid Search: server/api/search.md
+      - POST /api/v1/table: server/api/table.md
