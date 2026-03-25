@@ -16,8 +16,8 @@ A lightweight message queue. Like [AWS SQS](https://aws.amazon.com/sqs/) and [RS
 - Lightweight - No background worker or external dependencies, just Postgres SQL objects
 - Guaranteed "exactly once" delivery of messages to a consumer within a visibility timeout
 - API parity with [AWS SQS](https://aws.amazon.com/sqs/) and [RSMQ](https://github.com/smrchy/rsmq)
-- [FIFO](docs/fifo-queues.md#overview) (First-In-First-Out) queues with message group keys for ordered processing
-- [Topic-based](docs/topics.md#topic-based-routing) routing with wildcard patterns for publish-subscribe and content-based routing
+- [FIFO](fifo-queues.md#overview) (First-In-First-Out) queues with message group keys for ordered processing
+- [Topic-based](topics.md#topic-based-routing) routing with wildcard patterns for publish-subscribe and content-based routing
 - Messages stay in the queue until explicitly removed
 - Messages can be archived, instead of deleted, for long-term retention and replayability
 
@@ -81,7 +81,7 @@ psql -f pgmq-extension/sql/pgmq.sql postgres://postgres:postgres@localhost:5432/
 
 ### Updating
 
-To update PGMQ versions, follow the instructions in [UPDATING.md](pgmq-extension/UPDATING.md).
+To update PGMQ versions, follow the instructions in UPDATING.md.
 
 ## Client Libraries
 

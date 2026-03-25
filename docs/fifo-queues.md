@@ -335,4 +335,4 @@ SELECT * FROM pgmq.read_grouped_head('queue', 30, 2);
 
 ## Examples
 
-See [examples/fifo_example.sql](../examples/fifo_example.sql) for comprehensive usage examples.
+See examples/fifo_example.sql for comprehensive usage examples.
