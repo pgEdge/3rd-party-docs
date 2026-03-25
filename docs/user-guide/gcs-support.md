@@ -22,4 +22,4 @@ When running in GCE set `repo<gcs-setup-repo-id>-gcs-key-type=auto` to automatic
 
 Commands are run exactly as if the repository were stored on a local disk.
 
-File creation time in GCS is relatively slow so `backup`/`restore` performance is improved by enabling [file bundling](user-guide/backup.md#bundle).
+File creation time in GCS is relatively slow so `backup`/`restore` performance is improved by enabling [file bundling](backup.md#bundle).

@@ -3,7 +3,7 @@
 
 If a standby is promoted for testing, or a test cluster is restored from a production backup, then it is a good idea to prevent those clusters from writing to pgBackRest repositories. This can be accomplished with the `stop` command.
 
-The commands that write and are blocked by `stop` are: `archive-push`, `backup`, `expire`, `stanza-create`, and `stanza-upgrade`. Note that `stanza-delete` is an exception to this rule (see [Delete a Stanza](user-guide/delete-stanza.md#delete-stanza) for more details).
+The commands that write and are blocked by `stop` are: `archive-push`, `backup`, `expire`, `stanza-create`, and `stanza-upgrade`. Note that `stanza-delete` is an exception to this rule (see [Delete a Stanza](delete-stanza.md#delete-stanza) for more details).
 
 **Stop  write commands**
 
