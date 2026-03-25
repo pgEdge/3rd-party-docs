@@ -52,7 +52,7 @@ extra:
 repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
-  - README: index.md
+  - vchord_bm25 dev: index.md
   - Getting Started: getting-started.md
   - Usage: usage.md
   - More Examples: more-examples.md
