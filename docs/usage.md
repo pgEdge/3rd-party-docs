@@ -848,7 +848,7 @@ admin console. This command can be used to do zero-downtime rolling
 restart of two PgBouncer processes using the following procedure:
 
 1. Have two or more PgBouncer processes running on the same port using
-   `so_reuseport` ([configuring peering](/config.html#section-peers) is
+   `so_reuseport` ([configuring peering](config.md#section-peers) is
    recommended, but not required). To achieve zero downtime when
    restarting we'll restart these processes one-by-one, thus leaving the
    others running to accept connections while one is being restarted.
