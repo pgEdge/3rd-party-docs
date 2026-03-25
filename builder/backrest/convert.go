@@ -21,16 +21,17 @@ import (
 
 // Converter handles pgBackRest custom XML to Markdown conversion.
 type Converter struct {
-	srcDir   string
-	outDir   string
-	version  string
-	verbose  bool
-	vars     map[string]string
-	blocks   map[string]*sgml.Node
-	idMap    map[string]*shared.IDEntry
-	pageMap  map[string]string // source key → output path
-	files    []*shared.FileEntry
-	warnings []string
+	srcDir      string
+	outDir      string
+	version     string
+	verbose     bool
+	vars        map[string]string
+	blocks      map[string]*sgml.Node
+	idMap       map[string]*shared.IDEntry
+	pageMap     map[string]string // source key → output path
+	currentFile string            // path of file being written
+	files       []*shared.FileEntry
+	warnings    []string
 }
 
 // NewConverter creates a new pgBackRest converter.
@@ -276,6 +277,7 @@ func (c *Converter) convertDocument(key string, doc *sgml.Node) error {
 // convertSinglePage renders a document as a single Markdown file.
 func (c *Converter) convertSinglePage(key string, doc *sgml.Node) error {
 	outPath := c.pageMap[key]
+	c.currentFile = outPath
 	w := shared.NewMarkdownWriter()
 
 	title := doc.GetAttr("title")
@@ -336,6 +338,7 @@ func (c *Converter) convertMultiPage(key string, doc *sgml.Node) error {
 	}
 
 	indexPath := dirSlug + "/index.md"
+	c.currentFile = indexPath
 	if err := c.writeFile(indexPath, indexW.String()); err != nil {
 		return err
 	}
@@ -348,6 +351,7 @@ func (c *Converter) convertMultiPage(key string, doc *sgml.Node) error {
 		}
 		sectSlug := shared.Slugify(sectID)
 		sectPath := dirSlug + "/" + sectSlug + ".md"
+		c.currentFile = sectPath
 
 		sectW := shared.NewMarkdownWriter()
 		sectTitle := extractTitle(sect)
@@ -1214,6 +1218,26 @@ func (c *Converter) handleLink(
 	w.Write(text)
 }
 
+// relativeLink computes a relative link from the current file
+// to the target file path, appending the fragment if non-empty.
+func (c *Converter) relativeLink(target, fragment string) string {
+	if target == "" {
+		if fragment != "" {
+			return "#" + fragment
+		}
+		return ""
+	}
+	curDir := filepath.Dir(c.currentFile)
+	rel, err := filepath.Rel(curDir, target)
+	if err != nil {
+		rel = target
+	}
+	if fragment != "" {
+		return rel + "#" + fragment
+	}
+	return rel
+}
+
 // resolvePageLink resolves a page reference to an output path.
 func (c *Converter) resolvePageLink(page, section string) string {
 	target := c.pageMap[page]
@@ -1232,20 +1256,20 @@ func (c *Converter) resolvePageLink(page, section string) string {
 		if len(parts) == 2 {
 			// Look up the subsection ID in the idMap
 			if entry, ok := c.idMap[parts[1]]; ok {
-				return entry.File + "#" + parts[1]
+				return c.relativeLink(entry.File, parts[1])
 			}
 			if entry, ok := c.idMap[parts[0]]; ok {
-				return entry.File + "#" + parts[1]
+				return c.relativeLink(entry.File, parts[1])
 			}
 		}
 		// Try the full section as an anchor
 		flat := strings.ReplaceAll(section, "/", "-")
 		if entry, ok := c.idMap[flat]; ok {
-			return entry.File + "#" + flat
+			return c.relativeLink(entry.File, flat)
 		}
 		target += "#" + strings.ReplaceAll(section, "/", "-")
 	}
-	return target
+	return c.relativeLink(target, "")
 }
 
 // resolveSectionLink resolves a section-only link.
@@ -1257,7 +1281,7 @@ func (c *Converter) resolveSectionLink(section string) string {
 	// Try exact match first
 	if entry, ok := c.idMap[section]; ok {
 		if entry.File != "" {
-			return entry.File + "#" + section
+			return c.relativeLink(entry.File, section)
 		}
 		return "#" + section
 	}
@@ -1267,11 +1291,11 @@ func (c *Converter) resolveSectionLink(section string) string {
 	parts := strings.SplitN(section, "/", 2)
 	if len(parts) == 2 {
 		if entry, ok := c.idMap[parts[1]]; ok {
-			return entry.File + "#" + parts[1]
+			return c.relativeLink(entry.File, parts[1])
 		}
 		// Look up the parent section as a page
 		if entry, ok := c.idMap[parts[0]]; ok {
-			return entry.File + "#" + parts[1]
+			return c.relativeLink(entry.File, parts[1])
 		}
 	}
 

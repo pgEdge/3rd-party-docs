@@ -113,6 +113,11 @@ func (c *Converter) Convert() error {
 		return fmt.Errorf("resolving snippets: %w", err)
 	}
 
+	// Fix broken relative links
+	if err := shared.FixBrokenLinksInDir(c.outDir); err != nil {
+		return fmt.Errorf("fixing links: %w", err)
+	}
+
 	// Build file entries from nav paths
 	for i, p := range navPaths {
 		c.files = append(c.files, &shared.FileEntry{

@@ -76,9 +76,17 @@ func (c *Converter) Convert() error {
 	}
 
 	if len(docFiles) == 1 {
-		return c.splitFile(docFiles[0])
+		if err := c.splitFile(docFiles[0]); err != nil {
+			return err
+		}
+	} else {
+		if err := c.copyFiles(docFiles); err != nil {
+			return err
+		}
 	}
-	return c.copyFiles(docFiles)
+
+	// Post-process: fix broken relative links
+	return shared.FixBrokenLinksInDir(c.outDir)
 }
 
 // findMarkdownFiles returns .md file paths relative to dir,
