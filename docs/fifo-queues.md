@@ -274,4 +274,4 @@ SELECT * FROM pgmq.read_grouped('queue', 30, 3);
 
 ## Examples
 
-See [examples/fifo_example.sql](../examples/fifo_example.sql) for comprehensive usage examples.
+See examples/fifo_example.sql for comprehensive usage examples.

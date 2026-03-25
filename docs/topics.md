@@ -527,7 +527,7 @@ CREATE INDEX idx_topic_bindings_covering
 
 ## Examples
 
-See [examples/topics.sql](../examples/topics.sql) for comprehensive usage examples including:
+See examples/topics.sql for comprehensive usage examples including:
 
 - Wildcard differences (`*` vs `#`)
 - Topic-based routing
