@@ -22,7 +22,7 @@ pg_vectorize provides two ways to add semantic, full text, and hybrid search to 
 Modes at a glance:
 
 - HTTP server (recommended for managed DBs): run a standalone service that connects to Postgres and exposes a REST API (POST /api/v1/table, GET /api/v1/search).
-- Postgres extension (SQL): install the extension into Postgres and use SQL functions like `vectorize.table()` and `vectorize.search()` (requires filesystem access to Postgres; see [./extension/README.md](./extension/README.md)).
+- Postgres extension (SQL): install the extension into Postgres and use SQL functions like `vectorize.table()` and `vectorize.search()` (requires filesystem access to Postgres; see [./extension/README.md](extension/index.md)).
 
 ## Quick start — HTTP server
 
