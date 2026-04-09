@@ -88,6 +88,12 @@ func (c *Converter) Convert() error {
 		}
 	}
 
+	// Copy image assets referenced by documentation
+	if err := c.copyImages(); err != nil {
+		c.warnings = append(c.warnings,
+			fmt.Sprintf("copying images: %v", err))
+	}
+
 	// Post-process: fix broken relative links
 	return shared.FixBrokenLinksInDir(c.outDir)
 }
@@ -812,8 +818,15 @@ func (c *Converter) copyFiles(files []string) error {
 		entries = append(entries, entry)
 	}
 
-	// Sort by frontmatter position when available
-	if len(entries) > 0 && entries[0].hasOrder {
+	// Sort by frontmatter position when any entry has one
+	hasAnyOrder := false
+	for _, e := range entries {
+		if e.hasOrder {
+			hasAnyOrder = true
+			break
+		}
+	}
+	if hasAnyOrder {
 		sort.Slice(entries, func(i, j int) bool {
 			return entries[i].order < entries[j].order
 		})
@@ -947,4 +960,40 @@ func (c *Converter) writeFile(relPath, content string) error {
 		return err
 	}
 	return os.WriteFile(outPath, []byte(content), 0644)
+}
+
+// imageExts lists file extensions treated as image assets.
+var imageExts = map[string]bool{
+	".png": true, ".jpg": true, ".jpeg": true,
+	".gif": true, ".svg": true, ".webp": true,
+	".ico": true,
+}
+
+// copyImages copies image files from the source directory tree
+// into the output directory, preserving relative paths.
+func (c *Converter) copyImages() error {
+	return filepath.WalkDir(c.srcDir,
+		func(path string, d os.DirEntry, err error) error {
+			if err != nil || d.IsDir() {
+				return err
+			}
+			ext := strings.ToLower(filepath.Ext(d.Name()))
+			if !imageExts[ext] {
+				return nil
+			}
+			rel, err := filepath.Rel(c.srcDir, path)
+			if err != nil {
+				return err
+			}
+			outPath := filepath.Join(c.outDir, rel)
+			if err := os.MkdirAll(
+				filepath.Dir(outPath), 0755); err != nil {
+				return err
+			}
+			data, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+			return os.WriteFile(outPath, data, 0644)
+		})
 }

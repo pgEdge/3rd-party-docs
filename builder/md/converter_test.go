@@ -884,3 +884,81 @@ func TestConverterDocusaurusCopy(t *testing.T) {
 		t.Error("Docusaurus admonition syntax should be gone")
 	}
 }
+
+func TestConverterDocusaurusMixedOrdering(t *testing.T) {
+	srcDir := t.TempDir()
+	outDir := t.TempDir()
+
+	// Subdirectory file without sidebar_position (comes
+	// first alphabetically via WalkDir)
+	appDir := filepath.Join(srcDir, "appendixes")
+	os.MkdirAll(appDir, 0755)
+	os.WriteFile(filepath.Join(appDir, "backup.md"),
+		[]byte("---\ntitle: Appendix A\n---\n"+
+			"# Appendix A\n\nBackup details.\n"), 0644)
+
+	// Top-level files WITH sidebar_position
+	os.WriteFile(filepath.Join(srcDir, "quickstart.md"),
+		[]byte("---\nsidebar_position: 20\n"+
+			"title: Quickstart\n---\n# Quickstart\n"), 0644)
+	os.WriteFile(filepath.Join(srcDir, "architecture.md"),
+		[]byte("---\nsidebar_position: 10\n"+
+			"title: Architecture\n---\n# Architecture\n"), 0644)
+
+	c := NewConverter(srcDir, outDir, "Test v1", false)
+	if err := c.Convert(); err != nil {
+		t.Fatal(err)
+	}
+
+	files := c.Files()
+	// Find the top-level (non-subdir, non-index) file titles
+	var topTitles []string
+	for _, f := range files {
+		if f.Path == "index.md" {
+			continue
+		}
+		if !strings.Contains(f.Path, "/") {
+			topTitles = append(topTitles, f.Title)
+		}
+	}
+
+	// Architecture (pos 10) must come before Quickstart (20)
+	if len(topTitles) < 2 {
+		t.Fatalf("expected 2+ top-level files, got %v",
+			topTitles)
+	}
+	if topTitles[0] != "Architecture" ||
+		topTitles[1] != "Quickstart" {
+		t.Errorf("wrong order: got %v, want "+
+			"[Architecture Quickstart]", topTitles)
+	}
+}
+
+func TestConverterCopyImages(t *testing.T) {
+	srcDir := t.TempDir()
+	outDir := t.TempDir()
+
+	os.WriteFile(filepath.Join(srcDir, "index.md"),
+		[]byte("# Home\n\n![arch](images/arch.png)\n"), 0644)
+	imgDir := filepath.Join(srcDir, "images")
+	os.MkdirAll(imgDir, 0755)
+	os.WriteFile(filepath.Join(imgDir, "arch.png"),
+		[]byte("fake-png-data"), 0644)
+	os.WriteFile(filepath.Join(imgDir, "logo.svg"),
+		[]byte("<svg/>"), 0644)
+
+	c := NewConverter(srcDir, outDir, "Test v1", false)
+	if err := c.Convert(); err != nil {
+		t.Fatal(err)
+	}
+
+	// Images should be copied
+	if _, err := os.Stat(
+		filepath.Join(outDir, "images", "arch.png")); err != nil {
+		t.Error("arch.png not copied")
+	}
+	if _, err := os.Stat(
+		filepath.Join(outDir, "images", "logo.svg")); err != nil {
+		t.Error("logo.svg not copied")
+	}
+}
