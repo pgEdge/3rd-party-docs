@@ -14,10 +14,13 @@ package md
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/pgEdge/postgresql-docs/builder/shared"
@@ -468,6 +471,190 @@ func convertAlerts(content string) string {
 	return strings.Join(result, "\n")
 }
 
+// ── Docusaurus support ───────────────────────────────────────────
+
+// docFrontmatter holds parsed YAML frontmatter from Docusaurus
+// markdown files.
+type docFrontmatter struct {
+	Title           string
+	SidebarPosition int
+	HasPosition     bool
+}
+
+// parseFrontmatter extracts YAML frontmatter delimited by ---
+// lines and returns the parsed metadata plus the remaining
+// content with frontmatter stripped.
+func parseFrontmatter(content string) (docFrontmatter, string) {
+	var fm docFrontmatter
+	if !strings.HasPrefix(content, "---\n") {
+		return fm, content
+	}
+
+	end := strings.Index(content[4:], "\n---")
+	if end < 0 {
+		return fm, content
+	}
+
+	fmBlock := content[4 : 4+end]
+	// Skip past \n---\n
+	afterClose := 4 + end + 4 // past "---\n"
+	if afterClose > len(content) {
+		afterClose = len(content)
+	}
+	rest := content[afterClose:]
+	// Strip leading newline after frontmatter close
+	rest = strings.TrimPrefix(rest, "\n")
+
+	for _, line := range strings.Split(fmBlock, "\n") {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "title:") {
+			val := strings.TrimSpace(
+				strings.TrimPrefix(line, "title:"))
+			val = strings.Trim(val, "\"'")
+			fm.Title = val
+		}
+		if strings.HasPrefix(line, "sidebar_position:") {
+			val := strings.TrimSpace(
+				strings.TrimPrefix(line, "sidebar_position:"))
+			if n, err := strconv.Atoi(val); err == nil {
+				fm.SidebarPosition = n
+				fm.HasPosition = true
+			}
+		}
+	}
+
+	return fm, rest
+}
+
+// reDocusaurusAdmonition matches Docusaurus admonition openers.
+// Supports three title forms:
+//
+//	:::warning              (no title)
+//	:::info[Important]      (bracket title)
+//	:::note Auth Methods    (space title)
+var reDocusaurusAdmonition = regexp.MustCompile(
+	`^:::+(note|tip|warning|info|danger|caution|important)` +
+		`(?:\[(.+?)\]|\s+(.+?))?\s*$`)
+
+// reDocusaurusClose matches the closing ::: (3 or more colons).
+var reDocusaurusClose = regexp.MustCompile(`^:::+\s*$`)
+
+// convertDocusaurusAdmonitions converts Docusaurus :::type and
+// :::type[Title] fenced admonitions to MkDocs !!! admonitions.
+// Content that is not indented is auto-indented to 4 spaces.
+//
+// Input:
+//
+//	:::warning
+//	    Content here.
+//	:::
+//
+// Output:
+//
+//	!!! warning
+//	    Content here.
+func convertDocusaurusAdmonitions(content string) string {
+	lines := strings.Split(content, "\n")
+	var result []string
+	inAdmonition := false
+	inCodeBlock := false
+
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+
+		// Track fenced code blocks
+		if strings.HasPrefix(trimmed, "```") ||
+			strings.HasPrefix(trimmed, "~~~") {
+			inCodeBlock = !inCodeBlock
+		}
+
+		if inCodeBlock {
+			result = append(result, line)
+			continue
+		}
+
+		if inAdmonition {
+			if reDocusaurusClose.MatchString(trimmed) {
+				inAdmonition = false
+				result = append(result, "")
+				continue
+			}
+			// Ensure content is indented for MkDocs
+			if trimmed != "" && !strings.HasPrefix(line, "    ") {
+				line = "    " + line
+			}
+			result = append(result, line)
+			continue
+		}
+
+		m := reDocusaurusAdmonition.FindStringSubmatch(trimmed)
+		if m != nil {
+			admonType := m[1]
+			// Title from brackets [Title] or space Title
+			title := m[2]
+			if title == "" {
+				title = m[3]
+			}
+
+			result = append(result, "")
+			if title != "" {
+				result = append(result,
+					fmt.Sprintf("!!! %s \"%s\"",
+						admonType, title))
+			} else {
+				result = append(result, "!!! "+admonType)
+			}
+			inAdmonition = true
+			continue
+		}
+
+		result = append(result, line)
+	}
+
+	return strings.Join(result, "\n")
+}
+
+var reSPDX = regexp.MustCompile(
+	`(?m)^<!-- SPDX-License-Identifier: [^\n]+ -->\n?`)
+
+// stripSPDXComment removes SPDX license identifier HTML
+// comments that Docusaurus files include after the heading.
+func stripSPDXComment(content string) string {
+	return reSPDX.ReplaceAllString(content, "")
+}
+
+// categoryMeta holds parsed _category_.json data from
+// Docusaurus subdirectories.
+type categoryMeta struct {
+	Label    string `json:"label"`
+	Position int    `json:"position"`
+}
+
+// readCategoryJSON reads a _category_.json file from a
+// directory and returns its metadata, or nil if not found.
+func readCategoryJSON(dir string) *categoryMeta {
+	data, err := os.ReadFile(
+		filepath.Join(dir, "_category_.json"))
+	if err != nil {
+		return nil
+	}
+	var meta categoryMeta
+	if err := json.Unmarshal(data, &meta); err != nil {
+		return nil
+	}
+	return &meta
+}
+
+// docEntry holds intermediate state during multi-file
+// processing with frontmatter-based ordering.
+type docEntry struct {
+	relPath  string
+	content  string
+	title    string
+	order    int
+	hasOrder bool
+}
+
 // splitFile splits a single markdown file by H2 and writes
 // the resulting pages.
 func (c *Converter) splitFile(filename string) error {
@@ -478,8 +665,15 @@ func (c *Converter) splitFile(filename string) error {
 	}
 
 	content := string(data)
+	// Strip frontmatter if present (single-file mode
+	// doesn't use sidebar_position for ordering)
+	if _, stripped := parseFrontmatter(content); stripped != content {
+		content = stripped
+	}
+	content = stripSPDXComment(content)
 	baseDir := filepath.Dir(c.srcDir)
 	content = shared.ResolveSnippets(content, srcPath, baseDir)
+	content = convertDocusaurusAdmonitions(content)
 	content = convertAlerts(content)
 	content = convertEmoji(content)
 	content = stripLeadingImages(content)
@@ -560,7 +754,8 @@ func (c *Converter) splitFile(filename string) error {
 // ── Multi-file copying ───────────────────────────────────────────
 
 // copyFiles copies multiple markdown files, creating an index
-// if none exists.
+// if none exists. When files contain Docusaurus frontmatter
+// with sidebar_position, the nav order is derived from it.
 func (c *Converter) copyFiles(files []string) error {
 	hasIndex := false
 	for _, f := range files {
@@ -572,6 +767,8 @@ func (c *Converter) copyFiles(files []string) error {
 		}
 	}
 
+	// First pass: read files and parse frontmatter
+	entries := make([]docEntry, 0, len(files))
 	for i, f := range files {
 		data, err := os.ReadFile(filepath.Join(c.srcDir, f))
 		if err != nil {
@@ -579,29 +776,80 @@ func (c *Converter) copyFiles(files []string) error {
 		}
 
 		content := string(data)
+
+		// Parse and strip frontmatter
+		fm, stripped := parseFrontmatter(content)
+		if fm.Title != "" || fm.HasPosition {
+			content = stripped
+		}
+
+		// Strip SPDX license comments
+		content = stripSPDXComment(content)
+
 		srcPath := filepath.Join(c.srcDir, f)
 		baseDir := filepath.Dir(c.srcDir)
 		content = shared.ResolveSnippets(content, srcPath, baseDir)
+		content = convertDocusaurusAdmonitions(content)
 		content = convertAlerts(content)
 		content = convertEmoji(content)
 		content = stripLeadingImages(content)
 
-		outName := f
-		lower := strings.ToLower(filepath.Base(f))
-		if lower == "readme.md" {
-			// Rename README.md to index.md, preserving dir
-			outName = filepath.Join(
-				filepath.Dir(f), "index.md")
+		title := fm.Title
+		if title == "" {
+			title = extractTitle(content, f)
 		}
 
-		title := extractTitle(content, f)
+		entry := docEntry{
+			relPath: f,
+			content: content,
+			title:   title,
+			order:   i,
+		}
+		if fm.HasPosition {
+			entry.order = fm.SidebarPosition
+			entry.hasOrder = true
+		}
+		entries = append(entries, entry)
+	}
 
-		if err := c.writeFile(outName, content); err != nil {
+	// Sort by frontmatter position when available
+	if len(entries) > 0 && entries[0].hasOrder {
+		sort.Slice(entries, func(i, j int) bool {
+			return entries[i].order < entries[j].order
+		})
+	}
+
+	// Read _category_.json files for subdirectory labels
+	catLabels := make(map[string]string)
+	for _, e := range entries {
+		dir := filepath.Dir(e.relPath)
+		if dir == "." || dir == "" {
+			continue
+		}
+		if _, ok := catLabels[dir]; ok {
+			continue
+		}
+		srcSubdir := filepath.Join(c.srcDir, dir)
+		if meta := readCategoryJSON(srcSubdir); meta != nil {
+			catLabels[dir] = meta.Label
+		}
+	}
+
+	// Second pass: write files and build file entries
+	for i, e := range entries {
+		outName := e.relPath
+		lower := strings.ToLower(filepath.Base(e.relPath))
+		if lower == "readme.md" {
+			outName = filepath.Join(
+				filepath.Dir(e.relPath), "index.md")
+		}
+
+		if err := c.writeFile(outName, e.content); err != nil {
 			return err
 		}
 		c.files = append(c.files, &shared.FileEntry{
 			Path:  outName,
-			Title: title,
+			Title: e.title,
 			Order: i,
 		})
 	}

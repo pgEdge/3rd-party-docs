@@ -365,6 +365,29 @@ branches:
     ref: master
     src_subdir: .
 
+  # --- CloudNativePG (Markdown/Docusaurus mode) ---
+
+  - branch: cnpg128
+    mode: md
+    version: "CloudNativePG 1.28"
+    upstream: https://github.com/cloudnative-pg/cloudnative-pg.git
+    ref: v1.28.2
+    src_subdir: docs/src
+
+  - branch: cnpg129
+    mode: md
+    version: "CloudNativePG 1.29"
+    upstream: https://github.com/cloudnative-pg/cloudnative-pg.git
+    ref: v1.29.0
+    src_subdir: docs/src
+
+  - branch: cnpgmaster
+    mode: md
+    version: "CloudNativePG dev"
+    upstream: https://github.com/cloudnative-pg/cloudnative-pg.git
+    ref: main
+    src_subdir: docs/src
+
   # --- system_stats (Markdown mode) ---
 
   - branch: systemstats321

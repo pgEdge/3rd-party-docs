@@ -632,3 +632,255 @@ func TestConverterSnippetResolution(t *testing.T) {
 		t.Error("snippet directive should be replaced")
 	}
 }
+
+func TestParseFrontmatter(t *testing.T) {
+	tests := []struct {
+		name        string
+		input       string
+		wantTitle   string
+		wantPos     int
+		wantHasPos  bool
+		wantContent string
+	}{
+		{
+			name: "full frontmatter",
+			input: "---\nid: quickstart\nsidebar_position: 60\n" +
+				"title: Quickstart\n---\n# Quickstart\n\nBody.\n",
+			wantTitle:   "Quickstart",
+			wantPos:     60,
+			wantHasPos:  true,
+			wantContent: "# Quickstart\n\nBody.\n",
+		},
+		{
+			name:        "no frontmatter",
+			input:       "# Just a heading\n\nBody.\n",
+			wantTitle:   "",
+			wantPos:     0,
+			wantHasPos:  false,
+			wantContent: "# Just a heading\n\nBody.\n",
+		},
+		{
+			name: "frontmatter with quoted title",
+			input: "---\ntitle: \"My Title\"\n" +
+				"sidebar_position: 10\n---\nContent.\n",
+			wantTitle:   "My Title",
+			wantPos:     10,
+			wantHasPos:  true,
+			wantContent: "Content.\n",
+		},
+		{
+			name:        "only title",
+			input:       "---\ntitle: About\n---\nBody.\n",
+			wantTitle:   "About",
+			wantPos:     0,
+			wantHasPos:  false,
+			wantContent: "Body.\n",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fm, content := parseFrontmatter(tt.input)
+			if fm.Title != tt.wantTitle {
+				t.Errorf("Title = %q, want %q",
+					fm.Title, tt.wantTitle)
+			}
+			if fm.SidebarPosition != tt.wantPos {
+				t.Errorf("SidebarPosition = %d, want %d",
+					fm.SidebarPosition, tt.wantPos)
+			}
+			if fm.HasPosition != tt.wantHasPos {
+				t.Errorf("HasPosition = %v, want %v",
+					fm.HasPosition, tt.wantHasPos)
+			}
+			if content != tt.wantContent {
+				t.Errorf("content = %q, want %q",
+					content, tt.wantContent)
+			}
+		})
+	}
+}
+
+func TestConvertDocusaurusAdmonitions(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   string
+		want    []string
+		notWant []string
+	}{
+		{
+			name: "simple warning",
+			input: "Before.\n\n:::warning\n" +
+				"    Be careful.\n:::\n\nAfter.\n",
+			want:    []string{"!!! warning", "    Be careful."},
+			notWant: []string{":::warning", ":::"},
+		},
+		{
+			name: "titled admonition",
+			input: ":::info[Important]\n" +
+				"    Read this.\n:::\n",
+			want:    []string{"!!! info \"Important\""},
+			notWant: []string{":::info"},
+		},
+		{
+			name: "note with bracket title",
+			input: ":::note[See also]\n" +
+				"    Related page.\n:::\n",
+			want: []string{"!!! note \"See also\"",
+				"    Related page."},
+		},
+		{
+			name:  "no admonitions",
+			input: "Normal markdown.\n\nNo admonitions.\n",
+			want:  []string{"Normal markdown.", "No admonitions."},
+		},
+		{
+			name:  "code block not converted",
+			input: "```\n:::warning\n    inside code\n:::\n```\n",
+			want:  []string{":::warning"},
+		},
+		{
+			name: "space title",
+			input: ":::note Authentication Methods\n" +
+				"CNPG does not test all methods.\n:::\n",
+			want: []string{
+				"!!! note \"Authentication Methods\"",
+				"    CNPG does not test all methods.",
+			},
+			notWant: []string{":::note"},
+		},
+		{
+			name: "unindented content auto-indented",
+			input: ":::warning\n" +
+				"Be careful.\nSecond line.\n:::\n",
+			want: []string{
+				"!!! warning",
+				"    Be careful.",
+				"    Second line.",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := convertDocusaurusAdmonitions(tt.input)
+			for _, w := range tt.want {
+				if !strings.Contains(got, w) {
+					t.Errorf("missing %q in:\n%s", w, got)
+				}
+			}
+			for _, nw := range tt.notWant {
+				if strings.Contains(got, nw) {
+					t.Errorf("unexpected %q in:\n%s",
+						nw, got)
+				}
+			}
+		})
+	}
+}
+
+func TestStripSPDXComment(t *testing.T) {
+	input := "# Title\n<!-- SPDX-License-Identifier: CC-BY-4.0 -->\n\nBody.\n"
+	got := stripSPDXComment(input)
+	if strings.Contains(got, "SPDX") {
+		t.Error("SPDX comment should be stripped")
+	}
+	if !strings.Contains(got, "# Title") {
+		t.Error("title should be preserved")
+	}
+	if !strings.Contains(got, "Body.") {
+		t.Error("body should be preserved")
+	}
+}
+
+func TestStripSPDXCommentNoOp(t *testing.T) {
+	input := "# Title\n\nNo SPDX here.\n"
+	got := stripSPDXComment(input)
+	if got != input {
+		t.Errorf("should be no-op, got %q", got)
+	}
+}
+
+func TestReadCategoryJSON(t *testing.T) {
+	dir := t.TempDir()
+	data := `{"label": "Appendixes", "position": 600}`
+	os.WriteFile(filepath.Join(dir, "_category_.json"),
+		[]byte(data), 0644)
+
+	meta := readCategoryJSON(dir)
+	if meta == nil {
+		t.Fatal("expected non-nil meta")
+	}
+	if meta.Label != "Appendixes" {
+		t.Errorf("Label = %q, want Appendixes", meta.Label)
+	}
+	if meta.Position != 600 {
+		t.Errorf("Position = %d, want 600", meta.Position)
+	}
+}
+
+func TestReadCategoryJSONMissing(t *testing.T) {
+	dir := t.TempDir()
+	meta := readCategoryJSON(dir)
+	if meta != nil {
+		t.Error("expected nil for missing file")
+	}
+}
+
+func TestConverterDocusaurusCopy(t *testing.T) {
+	srcDir := t.TempDir()
+	outDir := t.TempDir()
+
+	// Create Docusaurus-style doc files
+	os.WriteFile(filepath.Join(srcDir, "quickstart.md"),
+		[]byte("---\nid: quickstart\nsidebar_position: 20\n"+
+			"title: Quickstart\n---\n# Quickstart\n"+
+			"<!-- SPDX-License-Identifier: CC-BY-4.0 -->\n\n"+
+			":::note\n    This is important.\n:::\n\n"+
+			"Get started here.\n"), 0644)
+	os.WriteFile(filepath.Join(srcDir, "architecture.md"),
+		[]byte("---\nid: architecture\nsidebar_position: 10\n"+
+			"title: Architecture\n---\n# Architecture\n\n"+
+			"Design overview.\n"), 0644)
+
+	c := NewConverter(srcDir, outDir, "CNPG v1.26", false)
+	if err := c.Convert(); err != nil {
+		t.Fatal(err)
+	}
+
+	files := c.Files()
+	// 2 docs + generated index = 3
+	if len(files) != 3 {
+		t.Fatalf("got %d files, want 3", len(files))
+	}
+
+	// Architecture (pos 10) should come before Quickstart
+	// (pos 20) — skip index at [0]
+	if files[1].Title != "Architecture" {
+		t.Errorf("files[1].Title = %q, want Architecture",
+			files[1].Title)
+	}
+	if files[2].Title != "Quickstart" {
+		t.Errorf("files[2].Title = %q, want Quickstart",
+			files[2].Title)
+	}
+
+	// Check that frontmatter is stripped and admonitions
+	// are converted
+	data, err := os.ReadFile(
+		filepath.Join(outDir, "quickstart.md"))
+	if err != nil {
+		t.Fatal("quickstart.md not created")
+	}
+	content := string(data)
+	if strings.Contains(content, "sidebar_position") {
+		t.Error("frontmatter should be stripped")
+	}
+	if strings.Contains(content, "SPDX") {
+		t.Error("SPDX comment should be stripped")
+	}
+	if !strings.Contains(content, "!!! note") {
+		t.Error("admonition should be converted")
+	}
+	if strings.Contains(content, ":::note") {
+		t.Error("Docusaurus admonition syntax should be gone")
+	}
+}
