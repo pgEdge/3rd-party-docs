@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: Patroni v4.1.1
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,32 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - 'Patroni: A Template for PostgreSQL HA with ZooKeeper, etcd or Consul': index.md
+  - Introduction: README.md
+  - Installation: installation.md
+  - Patroni configuration:
+    - patroni_configuration.md
+    - Dynamic Configuration Settings: patroni-configuration/dynamic_configuration.md
+    - YAML Configuration Settings: patroni-configuration/yaml_configuration.md
+    - Environment Configuration Settings: patroni-configuration/ENVIRONMENT.md
+  - Patroni REST API: rest_api.md
+  - patronictl: patronictl.md
+  - Replica imaging and bootstrap: replica_bootstrap.md
+  - Replication modes: replication_modes.md
+  - Standby cluster: standby_cluster.md
+  - Watchdog support: watchdog.md
+  - Pause/Resume mode for the cluster: pause.md
+  - DCS Failsafe Mode: dcs_failsafe_mode.md
+  - Using Patroni with Kubernetes: kubernetes.md
+  - Citus support: citus.md
+  - Convert a Standalone to a Patroni Cluster: existing_data.md
+  - Integration with other tools: tools_integration.md
+  - Security Considerations: security.md
+  - HA multi datacenter: ha_multi_dc.md
+  - FAQ: faq.md
+  - Release notes: releases.md
+  - Contributing:
+    - CONTRIBUTING.md
+    - Contributing guidelines: contributing/contributing_guidelines.md
