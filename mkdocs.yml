@@ -57,51 +57,13 @@ nav:
     - Appendix B - Backup on object stores: appendixes/backup_barmanobjectstore.md
     - Appendix A - Backup on volume snapshots: appendixes/backup_volumesnapshot.md
     - Appendix C - Common object stores for backups: appendixes/object_stores.md
-  - Connecting from an application: applications.md
-  - Architecture: architecture.md
-  - Backup: backup.md
   - Backup and Recovery: backup_recovery.md
-  - Before you start: before_you_start.md
-  - Benchmarking: benchmarking.md
-  - Bootstrap: bootstrap.md
-  - Certificates: certificates.md
-  - API Reference: cloudnative-pg.v1.md
-  - Instance Pod configuration: cluster_conf.md
   - Cncf Projects:
     - Cilium: cncf-projects/cilium.md
     - External Secrets: cncf-projects/external-secrets.md
-  - CNPG-I: cnpg_i.md
-  - Connection Pooling: connection_pooling.md
-  - Container Image Requirements: container_images.md
-  - Custom Pod Controller: controller.md
-  - Importing Postgres databases: database_import.md
-  - PostgreSQL Database management: declarative_database_management.md
-  - Declarative hibernation: declarative_hibernation.md
-  - PostgreSQL Role management: declarative_role_management.md
-  - End-to-End Tests: e2e.md
-  - Automated failover: failover.md
-  - Failure Modes: failure_modes.md
-  - Frequently Asked Questions (FAQ): faq.md
-  - Fencing: fencing.md
-  - Image Catalog: image_catalog.md
-  - Image Volume Extensions: imagevolume_extensions.md
-  - Installation and upgrades: installation_upgrade.md
-  - Postgres Instance Manager: instance_manager.md
-  - Kubectl Plugin: kubectl-plugin.md
-  - Kubernetes upgrade and maintenance: kubernetes_upgrade.md
-  - Labels and Annotations: labels_annotations.md
-  - Logging: logging.md
-  - Logical Replication: logical_replication.md
-  - Monitoring: monitoring.md
-  - Networking: networking.md
-  - Operator capability levels: operator_capability_levels.md
-  - Operator configuration: operator_conf.md
-  - PostGIS: postgis.md
-  - PostgreSQL upgrades: postgres_upgrades.md
-  - PostgreSQL Configuration: postgresql_conf.md
-  - Preview Versions: preview_version.md
-  - Quickstart: quickstart.md
-  - Recovery: recovery.md
+  - Before you start: before_you_start.md
+  - Use cases: use_cases.md
+  - Architecture: architecture.md
   - Release Notes:
     - EDB Cloud-Native PostgreSQL: release_notes/edb-cloud-native-postgresql.md
     - Old:
@@ -120,18 +82,56 @@ nav:
     - Release notes for CloudNativePG 1.27: release_notes/v1.27.md
     - Release notes for CloudNativePG 1.28: release_notes/v1.28.md
     - Release notes for CloudNativePG 1.29: release_notes/v1.29.md
-  - Release notes: release_notes.md
-  - Replica clusters: replica_cluster.md
-  - Replication: replication.md
-  - Resource management: resource_management.md
-  - Rolling updates: rolling_update.md
-  - Examples: samples.md
+  - Installation and upgrades: installation_upgrade.md
+  - Quickstart: quickstart.md
+  - Image Catalog: image_catalog.md
+  - Bootstrap: bootstrap.md
+  - Importing Postgres databases: database_import.md
+  - Postgres Instance Manager: instance_manager.md
   - Scheduling: scheduling.md
-  - Service management: service_management.md
-  - Client TLS/SSL connections: ssl_connections.md
-  - Storage: storage.md
-  - Supported releases: supported_releases.md
-  - Tablespaces: tablespaces.md
-  - Troubleshooting: troubleshooting.md
-  - Use cases: use_cases.md
+  - Resource management: resource_management.md
+  - Failure Modes: failure_modes.md
+  - Rolling updates: rolling_update.md
+  - Replication: replication.md
+  - Logical Replication: logical_replication.md
+  - Backup: backup.md
   - WAL archiving: wal_archiving.md
+  - Recovery: recovery.md
+  - Service management: service_management.md
+  - PostgreSQL Configuration: postgresql_conf.md
+  - PostgreSQL Role management: declarative_role_management.md
+  - PostgreSQL Database management: declarative_database_management.md
+  - Tablespaces: tablespaces.md
+  - Operator configuration: operator_conf.md
+  - Instance Pod configuration: cluster_conf.md
+  - Storage: storage.md
+  - Labels and Annotations: labels_annotations.md
+  - Monitoring: monitoring.md
+  - Logging: logging.md
+  - Certificates: certificates.md
+  - Client TLS/SSL connections: ssl_connections.md
+  - Connecting from an application: applications.md
+  - Connection Pooling: connection_pooling.md
+  - Replica clusters: replica_cluster.md
+  - Kubernetes upgrade and maintenance: kubernetes_upgrade.md
+  - PostgreSQL upgrades: postgres_upgrades.md
+  - Kubectl Plugin: kubectl-plugin.md
+  - Automated failover: failover.md
+  - Troubleshooting: troubleshooting.md
+  - Fencing: fencing.md
+  - Declarative hibernation: declarative_hibernation.md
+  - PostGIS: postgis.md
+  - End-to-End Tests: e2e.md
+  - Container Image Requirements: container_images.md
+  - Image Volume Extensions: imagevolume_extensions.md
+  - CNPG-I: cnpg_i.md
+  - Operator capability levels: operator_capability_levels.md
+  - Custom Pod Controller: controller.md
+  - Examples: samples.md
+  - Networking: networking.md
+  - Benchmarking: benchmarking.md
+  - Frequently Asked Questions (FAQ): faq.md
+  - API Reference: cloudnative-pg.v1.md
+  - Supported releases: supported_releases.md
+  - Preview Versions: preview_version.md
+  - Release notes: release_notes.md
