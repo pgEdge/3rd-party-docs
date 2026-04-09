@@ -53,34 +53,9 @@ repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
   - CloudNativePG: index.md
-  - Appendixes:
-    - Appendix B - Backup on object stores: appendixes/backup_barmanobjectstore.md
-    - Appendix A - Backup on volume snapshots: appendixes/backup_volumesnapshot.md
-    - Appendix C - Common object stores for backups: appendixes/object_stores.md
-  - Backup and Recovery: backup_recovery.md
-  - Cncf Projects:
-    - Cilium: cncf-projects/cilium.md
-    - External Secrets: cncf-projects/external-secrets.md
   - Before you start: before_you_start.md
   - Use cases: use_cases.md
   - Architecture: architecture.md
-  - Release Notes:
-    - EDB Cloud-Native PostgreSQL: release_notes/edb-cloud-native-postgresql.md
-    - Old:
-      - Release notes for CloudNativePG 1.15: release_notes/old/v1.15.md
-      - Release notes for CloudNativePG 1.16: release_notes/old/v1.16.md
-      - Release notes for CloudNativePG 1.17: release_notes/old/v1.17.md
-      - Release notes for CloudNativePG 1.18: release_notes/old/v1.18.md
-      - Release notes for CloudNativePG 1.19: release_notes/old/v1.19.md
-      - Release notes for CloudNativePG 1.20: release_notes/old/v1.20.md
-      - Release notes for CloudNativePG 1.21: release_notes/old/v1.21.md
-      - Release notes for CloudNativePG 1.22: release_notes/old/v1.22.md
-      - Release notes for CloudNativePG 1.23: release_notes/old/v1.23.md
-      - Release notes for CloudNativePG 1.24: release_notes/old/v1.24.md
-      - Release notes for CloudNativePG 1.25: release_notes/old/v1.25.md
-      - Release notes for CloudNativePG 1.26: release_notes/old/v1.26.md
-    - Release notes for CloudNativePG 1.27: release_notes/v1.27.md
-    - Release notes for CloudNativePG 1.28: release_notes/v1.28.md
   - Installation and upgrades: installation_upgrade.md
   - Quickstart: quickstart.md
   - Image Catalog: image_catalog.md
@@ -134,3 +109,28 @@ nav:
   - Supported releases: supported_releases.md
   - Preview Versions: preview_version.md
   - Release notes: release_notes.md
+  - Appendixes:
+    - Appendix B - Backup on object stores: appendixes/backup_barmanobjectstore.md
+    - Appendix A - Backup on volume snapshots: appendixes/backup_volumesnapshot.md
+    - Appendix C - Common object stores for backups: appendixes/object_stores.md
+  - Backup and Recovery: backup_recovery.md
+  - Cncf Projects:
+    - Cilium: cncf-projects/cilium.md
+    - External Secrets: cncf-projects/external-secrets.md
+  - Release Notes:
+    - EDB Cloud-Native PostgreSQL: release_notes/edb-cloud-native-postgresql.md
+    - Old:
+      - Release notes for CloudNativePG 1.15: release_notes/old/v1.15.md
+      - Release notes for CloudNativePG 1.16: release_notes/old/v1.16.md
+      - Release notes for CloudNativePG 1.17: release_notes/old/v1.17.md
+      - Release notes for CloudNativePG 1.18: release_notes/old/v1.18.md
+      - Release notes for CloudNativePG 1.19: release_notes/old/v1.19.md
+      - Release notes for CloudNativePG 1.20: release_notes/old/v1.20.md
+      - Release notes for CloudNativePG 1.21: release_notes/old/v1.21.md
+      - Release notes for CloudNativePG 1.22: release_notes/old/v1.22.md
+      - Release notes for CloudNativePG 1.23: release_notes/old/v1.23.md
+      - Release notes for CloudNativePG 1.24: release_notes/old/v1.24.md
+      - Release notes for CloudNativePG 1.25: release_notes/old/v1.25.md
+      - Release notes for CloudNativePG 1.26: release_notes/old/v1.26.md
+    - Release notes for CloudNativePG 1.27: release_notes/v1.27.md
+    - Release notes for CloudNativePG 1.28: release_notes/v1.28.md
