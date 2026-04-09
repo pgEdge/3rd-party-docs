@@ -107,6 +107,22 @@ branches:
     src_subdir: docs
     skip_sections: "Sponsors"
 
+  # --- Patroni (RST mode) ---
+
+  - branch: patroni411
+    mode: rst
+    version: "v4.1.1"
+    upstream: https://github.com/patroni/patroni.git
+    ref: v4.1.1
+    src_subdir: docs
+
+  - branch: patronimaster
+    mode: rst
+    version: "Patroni dev"
+    upstream: https://github.com/patroni/patroni.git
+    ref: master
+    src_subdir: docs
+
   # --- PostGIS (XML/DocBook mode) ---
 
   - branch: postgis355
