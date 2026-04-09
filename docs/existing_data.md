@@ -4,7 +4,7 @@
 
 This section describes the process for converting a standalone PostgreSQL instance into a Patroni cluster.
 
-To deploy a Patroni cluster without using a pre-existing PostgreSQL instance, see [Running and Configuring](README.md#running_configuring) instead.
+To deploy a Patroni cluster without using a pre-existing PostgreSQL instance, see [Running and Configuring](introduction.md#running_configuring) instead.
 
 ## Procedure
 

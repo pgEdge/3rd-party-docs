@@ -53,7 +53,7 @@ repo_url: https://github.com/pgEdge/postgresql-docs
 
 nav:
   - 'Patroni: A Template for PostgreSQL HA with ZooKeeper, etcd or Consul': index.md
-  - Introduction: README.md
+  - Introduction: introduction.md
   - Installation: installation.md
   - Patroni configuration:
     - patroni_configuration.md
