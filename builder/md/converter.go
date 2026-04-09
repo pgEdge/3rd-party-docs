@@ -818,7 +818,9 @@ func (c *Converter) copyFiles(files []string) error {
 		entries = append(entries, entry)
 	}
 
-	// Sort by frontmatter position when any entry has one
+	// Sort by frontmatter position when any entry has one.
+	// Files without a position get a high default order so
+	// they sort after positioned files.
 	hasAnyOrder := false
 	for _, e := range entries {
 		if e.hasOrder {
@@ -827,6 +829,11 @@ func (c *Converter) copyFiles(files []string) error {
 		}
 	}
 	if hasAnyOrder {
+		for i := range entries {
+			if !entries[i].hasOrder {
+				entries[i].order = 100000 + entries[i].order
+			}
+		}
 		sort.Slice(entries, func(i, j int) bool {
 			return entries[i].order < entries[j].order
 		})
