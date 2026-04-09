@@ -73,6 +73,15 @@ func ResolveToctree(
 		var outputPath string
 		if rstName == "index" {
 			outputPath = "index.md"
+		} else if strings.EqualFold(rstName, "readme") {
+			// MkDocs treats README.md as an alias for
+			// index.md, so rename to avoid conflicts.
+			if _, hasIndex := fileMap["index"]; hasIndex {
+				outputPath = filepath.Join(parentPath,
+					"introduction.md")
+			} else {
+				outputPath = "index.md"
+			}
 		} else {
 			outputPath = filepath.Join(parentPath, rstName+".md")
 		}
