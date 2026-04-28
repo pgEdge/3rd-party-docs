@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: system_stats v4.0
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,10 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - System Statistics: index.md
+  - Building and Installing: building-and-installing.md
+  - Functions: functions.md
+  - Detailed output of each function: detailed-output-of-each-function.md
+  - Test Suites: test-suites.md
