@@ -16,6 +16,10 @@ SHOW shared_buffers;
 
 Be sure to restart Postgres for changes to take effect.
 
+## Storing
+
+Use the `halfvec` type instead of `vector` for a smaller working set.
+
 ## Loading
 
 Use `COPY` for bulk loading data ([example](https://github.com/pgvector/pgvector-python/blob/master/examples/loading/example.py)).
@@ -29,6 +33,8 @@ Add any indexes *after* loading the initial data for best performance.
 ## Indexing
 
 See index build time for [HNSW](ivfflat.md#index-build-time) and [IVFFlat](#index-build-time-1).
+
+Use [binary quantization](binary-quantization.md) for smaller indexes and faster build times at scale.
 
 In production environments, create indexes concurrently to avoid blocking writes.
 
@@ -59,6 +65,8 @@ SELECT * FROM items ORDER BY embedding <#> '[3,1,2]' LIMIT 5;
 ```
 
 ### Approximate Search
+
+Use [binary quantization](binary-quantization.md) with re-ranking to keep indexes in-memory at scale.
 
 To speed up queries with an IVFFlat index, increase the number of inverted lists (at the expense of recall).
 

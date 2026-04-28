@@ -11,4 +11,6 @@ Store your vectors with the rest of your data. Supports:
 
 Plus [ACID](https://en.wikipedia.org/wiki/ACID) compliance, point-in-time recovery, JOINs, and all of the other [great features](https://www.postgresql.org/about/) of Postgres
 
+Have a lot of vectors? Use [quantization](scaling.md) to scale
+
 [![Build Status](https://github.com/pgvector/pgvector/actions/workflows/build.yml/badge.svg)](https://github.com/pgvector/pgvector/actions)

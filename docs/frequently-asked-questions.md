@@ -69,3 +69,5 @@ No, but like other index types, you’ll likely see better performance if they d
 SELECT pg_size_pretty(pg_relation_size('index_name'));
 ```
 
+Use [half-precision indexing](half-precision-indexing.md) or [binary quantization](binary-quantization.md) for smaller indexes.
+

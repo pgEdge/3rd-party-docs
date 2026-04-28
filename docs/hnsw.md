@@ -111,6 +111,8 @@ For a large number of workers, you may need to increase `max_parallel_workers` (
 
 The [index options](hnsw.md#index-options) also have a significant impact on build time (use the defaults unless seeing low recall)
 
+Use [binary quantization](binary-quantization.md) for faster build times at scale
+
 ## Indexing Progress
 
 Check [indexing progress](https://www.postgresql.org/docs/current/progress-reporting.html#CREATE-INDEX-PROGRESS-REPORTING)

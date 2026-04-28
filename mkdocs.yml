@@ -70,8 +70,8 @@ nav:
   - Hybrid Search: hybrid-search.md
   - Indexing Subvectors: indexing-subvectors.md
   - Performance: performance.md
-  - Monitoring: monitoring.md
   - Scaling: scaling.md
+  - Monitoring: monitoring.md
   - Languages: languages.md
   - Frequently Asked Questions: frequently-asked-questions.md
   - Troubleshooting: troubleshooting.md
