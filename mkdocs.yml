@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: Psycopg v2.9.11
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,22 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - Psycopg -- PostgreSQL database adapter for Python: index.md
+  - Installation: install.md
+  - Basic module usage: usage.md
+  - The psycopg2 module content: module.md
+  - The connection class: connection.md
+  - The cursor class: cursor.md
+  - More advanced topics: advanced.md
+  - psycopg2.extensions -- Extensions to the DB API: extensions.md
+  - psycopg2.extras -- Miscellaneous goodies for Psycopg 2: extras.md
+  - psycopg2.errors -- Exception classes mapping PostgreSQL errors: errors.md
+  - psycopg2.sql -- SQL string composition: sql.md
+  - psycopg2.tz --  tzinfo implementations for Psycopg 2: tz.md
+  - psycopg2.pool -- Connections pooling: pool.md
+  - psycopg2.errorcodes -- Error codes defined by PostgreSQL: errorcodes.md
+  - Frequently Asked Questions: faq.md
+  - Release notes: news.md
+  - License: license.md
