@@ -2,9 +2,17 @@
 
 # Schema Cache
 
-PostgREST requires metadata from the database schema to provide a REST API that abstracts SQL details. One example of this is the interface for [Resource Embedding](../api/references/api/resource_embedding.md#resource_embedding).
+PostgREST requires metadata from the database to provide a REST API that abstracts SQL details. One example of this is the interface for [Resource Embedding](../api/references/api/resource_embedding.md#resource_embedding).
 
 Getting this metadata requires expensive queries. To avoid repeating this work, PostgREST uses a schema cache.
+
+!!! note
+
+    - Schema cache queries have been optimized over time to stay fast, even on complex databases. You can see a summary of their execution time in [Logs](observability.md#pgrst_logging) and [Metrics](observability.md#metrics).
+
+    - If the schema cache queries are slow, the most likely cause is *system catalog bloat*, see [issue#3212](https://github.com/PostgREST/postgrest/issues/3212) for more details.
+
+    - You can turn the [log-level](configuration.md#log-level) to `debug` to see the time of each schema cache query.
 <a id="schema_reloading"></a>
 
 ## Schema Cache Reloading
@@ -45,6 +53,18 @@ To reload the schema cache from within the database, you can use the `NOTIFY` co
 ```postgres
 NOTIFY pgrst, 'reload schema'
 ```
+
+### Debouncing
+
+PostgREST does not reload the schema cache for each notification when several `NOTIFY pgrst` events are generated quickly after one another.
+
+There are two cases to consider: when notifications are sent within a single transaction and when they are sent across multiple transactions.
+
+In the first case, PostgreSQL deduplicates identical `NOTIFY` events within the same transaction. This means that even if multiple `NOTIFY pgrst` statements are executed before a `COMMIT`, only a single notification is delivered to PostgREST.
+
+In the second case, when notifications are sent from separate transactions in a short time span, PostgREST applies a debouncing mechanism to avoid excessive schema cache reloads.
+
+Instead of reloading the schema cache for each notification, events are grouped within a small time window of 100 milliseconds. The reload function is executed once immediately when the first notification is received and once more after the burst of events settles, resulting in at most two executions within that time window.
 <a id="auto_schema_reloading"></a>
 
 ## Automatic Schema Cache Reloading

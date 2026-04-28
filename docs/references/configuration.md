@@ -345,6 +345,13 @@ Function to override the OpenAPI response. See [Overriding Full OpenAPI Response
 *For backwards compatibility, this config parameter is also available in singular as "db-schema".*
 
 The list of database schemas to expose to clients. See [Schemas](../api/references/api/schemas.md#schemas).
+<a id="db-timezone-enabled"></a>
+
+### db-timezone-enabled
+
+=============== ================================= **Type**        Boolean **Default**     True **Reloadable**  Y **Environment** PGRST_DB_TIMEZONE_ENABLED **In-Database** pgrst.db_timezone_enabled =============== =================================
+
+Enables the use of [Timezone](../api/references/api/preferences.md#prefer_timezone) preference header. Disabled when set to `false`.
 <a id="db-tx-end"></a>
 
 ### db-tx-end

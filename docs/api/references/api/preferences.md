@@ -116,6 +116,10 @@ curl -i "http://localhost:3000/timestamps" \
 ```http
 HTTP/1.1 400 Bad Request
 ```
+
+!!! note
+
+    This feature requires querying [pg_timezone_names](https://www.postgresql.org/docs/current/view-pg-timezone-names.html) during [Schema Cache](../../../references/schema_cache.md#schema_cache) load. If this is not desired, you can disable the feature with [db-timezone-enabled](../../../references/configuration.md#db-timezone-enabled).
 <a id="prefer_return"></a>
 
 ## Return Representation

@@ -11,7 +11,7 @@ You can also use your OS package manager.
 
 ## Supported PostgreSQL versions
 
-=============== ================================= **Supported**   PostgreSQL >= 13 =============== =================================
+=============== ================================= **Supported**   PostgreSQL >= 14 =============== =================================
 
 PostgREST works with all PostgreSQL versions still [officially supported](https://www.postgresql.org/support/versioning/).
 

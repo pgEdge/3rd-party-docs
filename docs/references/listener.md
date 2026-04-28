@@ -40,7 +40,10 @@ This will cause the [Connection Pool](connection_pool.md#connection_pool) to con
 
 !!! note
 
-    Under the hood, PostgREST forces [target_session_attrs=read-write](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNECT-TARGET-SESSION-ATTRS) for the `LISTEN` session.
+    - Under the hood, PostgREST forces [target_session_attrs=read-write](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNECT-TARGET-SESSION-ATTRS) for the `LISTEN` session.
+        So if you specify `target_session_attrs=read-only` as mentioned above, PostgREST will override it for the `LISTEN`.
+
+    - `read-only` is only available on libpq >= 14, if you use a lower version you will get an error like `invalid target_session_attrs value: \"read-only\"`.
 <a id="listener_automatic_recovery"></a>
 
 ## Automatic Recovery
