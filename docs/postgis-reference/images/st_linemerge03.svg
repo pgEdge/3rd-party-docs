@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<rect width="200" height="200" fill="white"/>
+<polyline points="60.00,70.00 10.00,30.00" fill="none" stroke="#6495ED" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="60.00" cy="70.00" r="5" fill="#6495ED"/>
+<polygon points="10.00,30.00 20.93,32.34 14.69,40.15" fill="#6495ED" stroke="#6495ED" stroke-width="2"/>
+<polyline points="120.00,50.00 60.00,70.00" fill="none" stroke="#6495ED" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="120.00" cy="50.00" r="5" fill="#6495ED"/>
+<polygon points="60.00,70.00 67.91,62.09 71.07,71.58" fill="#6495ED" stroke="#6495ED" stroke-width="2"/>
+<polyline points="120.00,50.00 180.00,70.00" fill="none" stroke="#6495ED" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="120.00" cy="50.00" r="5" fill="#6495ED"/>
+<polygon points="180.00,70.00 168.93,71.58 172.09,62.09" fill="#6495ED" stroke="#6495ED" stroke-width="2"/>
+<polyline points="120.00,150.00 60.00,170.00 10.00,130.00" fill="none" stroke="#770000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="120.00" cy="150.00" r="5" fill="#770000"/>
+<polygon points="10.00,130.00 20.93,132.34 14.69,140.15" fill="#770000" stroke="#770000" stroke-width="2"/>
+<polyline points="120.00,150.00 180.00,170.00" fill="none" stroke="#770000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="120.00" cy="150.00" r="5" fill="#770000"/>
+<polygon points="180.00,170.00 168.93,171.58 172.09,162.09" fill="#770000" stroke="#770000" stroke-width="2"/>
+</svg>
