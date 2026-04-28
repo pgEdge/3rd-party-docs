@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: PostgREST v14.9
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,54 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - PostgREST Documentation: index.md
+  - Tutorials:
+    - Tutorial 0 - Get it Running: tutorials/tut0.md
+    - Tutorial 1 - The Golden Key: tutorials/tut1.md
+  - References:
+    - Authentication: references/auth.md
+    - API: references/api.md
+    - CLI: references/cli.md
+    - Transactions: references/transactions.md
+    - Connection Pool: references/connection_pool.md
+    - Schema Cache: references/schema_cache.md
+    - Errors: references/errors.md
+    - Configuration: references/configuration.md
+    - Observability: references/observability.md
+    - Admin Server: references/admin_server.md
+    - Listener: references/listener.md
+  - Api:
+    - References:
+      - Api:
+        - Tables and Views: api/references/api/tables_views.md
+        - Functions as RPC: api/references/api/functions.md
+        - Schemas: api/references/api/schemas.md
+        - Computed Fields: api/references/api/computed_fields.md
+        - Domain Representations: api/references/api/domain_representations.md
+        - Pagination and Count: api/references/api/pagination_count.md
+        - Resource Embedding: api/references/api/resource_embedding.md
+        - Resource Representation: api/references/api/resource_representation.md
+        - Media Type Handlers: api/references/api/media_type_handlers.md
+        - Aggregate Functions: api/references/api/aggregate_functions.md
+        - OpenAPI: api/references/api/openapi.md
+        - Prefer Header: api/references/api/preferences.md
+  - Explanations:
+    - Architecture: explanations/architecture.md
+    - Database Authorization: explanations/db_authz.md
+    - External Authentication: explanations/external_auth.md
+    - Installation: explanations/install.md
+    - Nginx: explanations/nginx.md
+    - Schema Isolation: explanations/schema_isolation.md
+  - How Tos:
+    - 'SQL User Management using postgres'' users and passwords': how-tos/sql-user-management-using-postgres-users-and-passwords.md
+    - SQL User Management: how-tos/sql-user-management.md
+    - Working with PostgreSQL data types: how-tos/working-with-postgresql-data-types.md
+    - Create a SOAP endpoint: how-tos/create-soap-endpoint.md
+    - Providing HTML Content Using Htmx: how-tos/providing-html-content-using-htmx.md
+    - 'Providing images for <img>': how-tos/providing-images-for-img.md
+  - Integrations:
+    - pg-safeupdate: integrations/pg-safeupdate.md
+    - systemd: integrations/systemd.md
+  - Community Tutorials: ecosystem.md
