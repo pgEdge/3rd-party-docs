@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<rect width="200" height="200" fill="white"/>
+<path d="M 156.0000,50.0000 L 83.0000,19.0000 L 89.0000,69.0000 L 148.0000,80.0000 L 156.0000,50.0000 Z" fill="#ff0000" fill-opacity="0.13" stroke="#770000" stroke-width="1"/>
+<path d="M 32.0000,41.0000 L 0.0000,155.0000 L 41.0000,114.0000 L 32.0000,41.0000 Z" fill="#ff0000" fill-opacity="0.13" stroke="#770000" stroke-width="1"/>
+<path d="M 45.0000,199.0000 L 177.0000,198.0000 L 67.0000,176.0000 L 45.0000,199.0000 Z" fill="#ff0000" fill-opacity="0.13" stroke="#770000" stroke-width="1"/>
+<path d="M 41.0000,114.0000 L 45.0000,199.0000 L 67.0000,176.0000 L 41.0000,114.0000 Z" fill="#ff0000" fill-opacity="0.13" stroke="#770000" stroke-width="1"/>
+<path d="M 107.0000,139.0000 L 32.0000,41.0000 L 41.0000,114.0000 L 67.0000,176.0000 L 109.0000,169.0000 L 107.0000,139.0000 Z" fill="#ff0000" fill-opacity="0.13" stroke="#770000" stroke-width="1"/>
+<path d="M 148.0000,80.0000 L 107.0000,139.0000 L 109.0000,169.0000 L 170.0000,140.0000 L 180.0000,90.0000 L 148.0000,80.0000 Z" fill="#ff0000" fill-opacity="0.13" stroke="#770000" stroke-width="1"/>
+<path d="M 156.0000,50.0000 L 148.0000,80.0000 L 180.0000,90.0000 L 156.0000,50.0000 Z" fill="#ff0000" fill-opacity="0.13" stroke="#770000" stroke-width="1"/>
+</svg>
