@@ -13,3 +13,4 @@
 - [Safely Designing a Validator Module](safely-designing-a-validator-module.md#oauth-validator-design)
 - [Initialization Functions](initialization-functions.md#oauth-validator-init)
 - [OAuth Validator Callbacks](oauth-validator-callbacks.md#oauth-validator-callbacks)
+- [Custom HBA Options](custom-hba-options.md#oauth-validator-hba)

@@ -88,6 +88,7 @@
 | `pg_stat_database` | One row per database, showing database-wide statistics. See [`pg_stat_database`](#monitoring-pg-stat-database-view) for details. |
 | `pg_stat_database_conflicts` | One row per database, showing database-wide statistics about query cancels due to conflict with recovery on standby servers. See [`pg_stat_database_conflicts`](#monitoring-pg-stat-database-conflicts-view) for details. |
 | `pg_stat_io` | One row for each combination of backend type, context, and target object containing cluster-wide I/O statistics. See [`pg_stat_io`](#monitoring-pg-stat-io-view) for details. |
+| `pg_stat_lock` | One row for each lock type, containing cluster-wide locks statistics. See [`pg_stat_lock`](#monitoring-pg-stat-lock-view) for details. |
 | `pg_stat_replication_slots` | One row per replication slot, showing statistics about the replication slot's usage. See [`pg_stat_replication_slots`](#monitoring-pg-stat-replication-slots-view) for details. |
 | `pg_stat_slru` | One row per SLRU, showing statistics of operations. See [`pg_stat_slru`](#monitoring-pg-stat-slru-view) for details. |
 | `pg_stat_subscription_stats` | One row per subscription, showing statistics about errors and conflicts. See [`pg_stat_subscription_stats`](#monitoring-pg-stat-subscription-stats) for details. |
@@ -98,6 +99,7 @@
 | `pg_stat_xact_all_tables` | Similar to `pg_stat_all_tables`, but counts actions taken so far within the current transaction (which are *not* yet included in `pg_stat_all_tables` and related views). The columns for numbers of live and dead rows and vacuum and analyze actions are not present in this view. |
 | `pg_stat_xact_sys_tables` | Same as `pg_stat_xact_all_tables`, except that only system tables are shown. |
 | `pg_stat_xact_user_tables` | Same as `pg_stat_xact_all_tables`, except that only user tables are shown. |
+| `pg_stat_autovacuum_scores` | One row for each table in the current database, showing the current autovacuum scores for that specific table. See [`pg_stat_autovacuum_scores`](#monitoring-pg-stat-autovacuum-scores-view) for details. |
 | `pg_stat_all_indexes` | One row for each index in the current database, showing statistics about accesses to that specific index. See [`pg_stat_all_indexes`](#monitoring-pg-stat-all-indexes-view) for details. |
 | `pg_stat_sys_indexes` | Same as `pg_stat_all_indexes`, except that only indexes on system tables are shown. |
 | `pg_stat_user_indexes` | Same as `pg_stat_all_indexes`, except that only indexes on user tables are shown. |
@@ -421,6 +423,8 @@
 | `CheckpointDelayStart` | Waiting for a backend that blocks a checkpoint from starting. |
 | `CheckpointDone` | Waiting for a checkpoint to complete. |
 | `CheckpointStart` | Waiting for a checkpoint to start. |
+| `ChecksumEnableStartcondition` | Waiting for data checksums enabling to start. |
+| `ChecksumEnableTemptableWait` | Waiting for temporary tables to be dropped for data checksums to be enabled. |
 | `ExecuteGather` | Waiting for activity from a child process while executing a `Gather` plan node. |
 | `HashBatchAllocate` | Waiting for an elected Parallel Hash participant to allocate a hash table. |
 | `HashBatchElect` | Waiting to elect a Parallel Hash participant to allocate a hash table. |
@@ -456,6 +460,7 @@
 | `RecoveryConflictTablespace` | Waiting for recovery conflict resolution for dropping a tablespace. |
 | `RecoveryEndCommand` | Waiting for [recovery_end_command](../server-configuration/write-ahead-log.md#guc-recovery-end-command) to complete. |
 | `RecoveryPause` | Waiting for recovery to be resumed. |
+| `RepackWorkerExport` | Waiting for decoding worker to export a new output file. |
 | `ReplicationOriginDrop` | Waiting for a replication origin to become inactive so it can be dropped. |
 | `ReplicationSlotDrop` | Waiting for a replication slot to become inactive so it can be dropped. |
 | `RestoreCommand` | Waiting for [restore_command](../server-configuration/write-ahead-log.md#guc-restore-command) to complete. |
@@ -491,6 +496,7 @@
 | --- | --- |
 | `AddinShmemInit` | Waiting to manage an extension's space allocation in shared memory. |
 | `AioUringCompletion` | Waiting for another process to complete IO via io_uring. |
+| `AioWorkerControl` | Waiting to update AIO worker information. |
 | `AioWorkerSubmissionQueue` | Waiting to access AIO worker submission queue. |
 | `AutoFile` | Waiting to update the `postgresql.auto.conf` file. |
 | `Autovacuum` | Waiting to read or update the current state of autovacuum workers. |
@@ -503,6 +509,7 @@
 | `CommitTsBuffer` | Waiting for I/O on a commit timestamp SLRU buffer. |
 | `CommitTsSLRU` | Waiting to access the commit timestamp SLRU cache. |
 | `ControlFile` | Waiting to read or update the `pg_control` file or create a new WAL file. |
+| `DataChecksumsWorker` | Waiting for data checksums worker. |
 | `DSMRegistry` | Waiting to read or update the dynamic shared memory registry. |
 | `DSMRegistryDSA` | Waiting to access dynamic shared memory registry's dynamic shared memory allocator. |
 | `DSMRegistryHash` | Waiting to access dynamic shared memory registry's shared hash table. |
@@ -1434,6 +1441,46 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 !!! note
 
     Columns tracking I/O wait time will only be non-zero when [track_io_timing](../server-configuration/run-time-statistics.md#guc-track-io-timing) is enabled. The user should be careful when referencing these columns in combination with their corresponding I/O operations in case `track_io_timing` was not enabled for the entire time since the last stats reset.
+  <a id="monitoring-pg-stat-lock-view"></a>
+
+### `pg_stat_lock`
+
+
+ The `pg_stat_lock` view will contain one row for each lock type, showing cluster-wide locks statistics.
+ <a id="pg-stat-lock-view"></a>
+
+**Table: `pg_stat_lock` View**
+
+<table>
+<thead>
+<tr>
+<th><p>Column Type</p>
+<p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p><code>locktype</code> <code>text</code></p>
+<p>Type of the lockable object. See <a href="../../internals/system-views/pg_locks.md#view-pg-locks"><code>pg_locks</code></a> for details.</p></td>
+</tr>
+<tr>
+<td><p><code>waits</code> <code>bigint</code></p>
+<p>Number of times a lock of this type had to wait because of a conflicting lock. Only incremented when the lock was successfully acquired after waiting longer than <a href="../server-configuration/lock-management.md#guc-deadlock-timeout">deadlock_timeout</a>.</p></td>
+</tr>
+<tr>
+<td><p><code>wait_time</code> <code>bigint</code></p>
+<p>Total time spent waiting for locks of this type, in milliseconds. Only incremented when the lock was successfully acquired after waiting longer than <a href="../server-configuration/lock-management.md#guc-deadlock-timeout">deadlock_timeout</a>.</p></td>
+</tr>
+<tr>
+<td><p><code>fastpath_exceeded</code> <code>bigint</code></p>
+<p>Number of times a lock of this type could not be acquired via fast path because the fast path slot limit was exceeded. Increasing <a href="../server-configuration/lock-management.md#guc-max-locks-per-transaction">max_locks_per_transaction</a> can reduce this number.</p></td>
+</tr>
+<tr>
+<td><p><code>stats_reset</code> <code>timestamp with time zone</code></p>
+<p>Time at which these statistics were last reset.</p></td>
+</tr>
+</tbody>
+</table>
   <a id="monitoring-pg-stat-bgwriter-view"></a>
 
 ### `pg_stat_bgwriter`
@@ -1665,11 +1712,11 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 <tr>
 <td><p><code>checksum_failures</code> <code>bigint</code></p>
-<p>Number of data page checksum failures detected in this database (or on a shared object), or NULL if data checksums are disabled.</p></td>
+<p>Number of data page checksum failures detected in this database (or on a shared object). Detected failures are not reset if the <a href="../server-configuration/preset-options.md#guc-data-checksums">data_checksums</a> setting changes. Clusters which are initialized without data checksums will show this as <code>0</code>. In PostgreSQL version 18 and earlier, this was set to <code>NULL</code> for clusters with data checksums disabled.</p></td>
 </tr>
 <tr>
 <td><p><code>checksum_last_failure</code> <code>timestamp with time zone</code></p>
-<p>Time at which the last data page checksum failure was detected in this database (or on a shared object), or NULL if data checksums are disabled.</p></td>
+<p>Time at which the last data page checksum failure was detected in this database (or on a shared object). Last failure is reported regardless of the <a href="../server-configuration/preset-options.md#guc-data-checksums">data_checksums</a> setting.</p></td>
 </tr>
 <tr>
 <td><p><code>blk_read_time</code> <code>double precision</code></p>
@@ -1918,6 +1965,77 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 <tr>
 <td><p><code>stats_reset</code> <code>timestamp with time zone</code></p>
 <p>Time at which these statistics were last reset</p></td>
+</tr>
+</tbody>
+</table>
+  <a id="monitoring-pg-stat-autovacuum-scores-view"></a>
+
+### `pg_stat_autovacuum_scores`
+
+
+ The `pg_stat_autovacuum_scores` view will contain one row for each table in the current database (including TOAST tables), showing the current autovacuum scores for that specific table. Autovacuum prioritizes tables deemed eligible for processing based on their `score`, with higher scores indicating higher priority. See [Autovacuum Prioritization](../routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum-priority) for more information.
+
+
+ While this view generates its results the same way that autovacuum workers do, it does so using the current source information, which might differ from the source information that an autovacuum worker sees when it gathers its list of tables to process. Therefore, this view is not a completely reliable indicator of which tables autovacuum will process and what order it will process them.
+ <a id="pg-stat-autovacuum-scores-view"></a>
+
+**Table: `pg_stat_autovacuum_scores` View**
+
+<table>
+<thead>
+<tr>
+<th><p>Column Type</p>
+<p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p><code>relid</code> <code>oid</code></p>
+<p>Oid of the table.</p></td>
+</tr>
+<tr>
+<td><p><code>schemaname</code> <code>name</code></p>
+<p>Name of the schema that the table is in.</p></td>
+</tr>
+<tr>
+<td><p><code>relname</code> <code>name</code></p>
+<p>Name of the table.</p></td>
+</tr>
+<tr>
+<td><p><code>score</code> <code>double precision</code></p>
+<p>Maximum value of all component scores. This is the value that autovacuum would use to sort the list of tables to process.</p></td>
+</tr>
+<tr>
+<td><p><code>xid_score</code> <code>double precision</code></p>
+<p>Transaction ID age component score. Scores greater than or equal to <a href="../server-configuration/vacuuming.md#guc-autovacuum-freeze-score-weight">autovacuum_freeze_score_weight</a> indicate that autovacuum would vacuum the table for transaction ID wraparound prevention.</p></td>
+</tr>
+<tr>
+<td><p><code>mxid_score</code> <code>double precision</code></p>
+<p>Multixact ID age component score. Scores greater than or equal to <a href="../server-configuration/vacuuming.md#guc-autovacuum-multixact-freeze-score-weight">autovacuum_multixact_freeze_score_weight</a> indicate that autovacuum would vacuum the table for multixact ID wraparound prevention.</p></td>
+</tr>
+<tr>
+<td><p><code>vacuum_score</code> <code>double precision</code></p>
+<p>Vacuum component score. Scores greater than or equal to <a href="../server-configuration/vacuuming.md#guc-autovacuum-vacuum-score-weight">autovacuum_vacuum_score_weight</a> indicate that autovacuum would vacuum the table (unless autovacuum is disabled).</p></td>
+</tr>
+<tr>
+<td><p><code>vacuum_insert_score</code> <code>double precision</code></p>
+<p>Vacuum insert component score. Scores greater than or equal to <a href="../server-configuration/vacuuming.md#guc-autovacuum-vacuum-insert-score-weight">autovacuum_vacuum_insert_score_weight</a> indicate that autovacuum would vacuum the table (unless autovacuum is disabled).</p></td>
+</tr>
+<tr>
+<td><p><code>analyze_score</code> <code>double precision</code></p>
+<p>Analyze component score. Scores greater than or equal to <a href="../server-configuration/vacuuming.md#guc-autovacuum-analyze-score-weight">autovacuum_analyze_score_weight</a> indicate that autovacuum would analyze the table (unless autovacuum is disabled).</p></td>
+</tr>
+<tr>
+<td><p><code>do_vacuum</code> <code>bool</code></p>
+<p>Whether autovacuum would vacuum the table. Note that even if the component scores indicate that autovacuum would vacuum the table, this may be <code>false</code> if autovacuum is disabled.</p></td>
+</tr>
+<tr>
+<td><p><code>do_analyze</code> <code>bool</code></p>
+<p>Whether autovacuum would analyze the table. Note that even if the component scores indicate that autovacuum would analyze the table, this may be <code>false</code> if autovacuum is disabled.</p></td>
+</tr>
+<tr>
+<td><p><code>for_wraparound</code> <code>bool</code></p>
+<p>Whether autovacuum would vacuum the table for wraparound prevention.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2349,6 +2467,7 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 -  <code>bgwriter</code>: Reset all the counters shown in the <code>pg_stat_bgwriter</code> view. <br>
 -  <code>checkpointer</code>: Reset all the counters shown in the <code>pg_stat_checkpointer</code> view. <br>
 -  <code>io</code>: Reset all the counters shown in the <code>pg_stat_io</code> view. <br>
+-  <code>lock</code>: Reset all the counters shown in the <code>pg_stat_lock</code> view. <br>
 -  <code>recovery_prefetch</code>: Reset all the counters shown in the <code>pg_stat_recovery_prefetch</code> view. <br>
 -  <code>slru</code>: Reset all the counters shown in the <code>pg_stat_slru</code> view. <br>
 -  <code>wal</code>: Reset all the counters shown in the <code>pg_stat_wal</code> view. <br>

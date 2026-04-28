@@ -26,11 +26,11 @@
 </tr>
 <tr>
 <td><p><code>prrelid</code> <code>oid</code> (references <a href="pg_class.md#catalog-pg-class"><code>pg_class</code></a>.<code>oid</code>)</p>
-<p>Reference to table or sequence</p></td>
+<p>Reference to table</p></td>
 </tr>
 <tr>
 <td><p><code>prexcept</code> <code>bool</code></p>
-<p>True if the table is excluded from the publication. See <a href="../../reference/sql-commands/create-publication.md#sql-createpublication-params-for-except-table"><code>EXCEPT TABLE</code></a>.</p></td>
+<p>True if the table is excluded from the publication. See <a href="../../reference/sql-commands/create-publication.md#sql-createpublication-params-for-except-table"><code>EXCEPT</code></a>.</p></td>
 </tr>
 <tr>
 <td><p><code>prqual</code> <code>pg_node_tree</code></p>

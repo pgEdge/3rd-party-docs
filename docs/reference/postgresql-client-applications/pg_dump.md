@@ -479,6 +479,9 @@ CREATE DATABASE foo WITH TEMPLATE template0;
  When a dump without schema is chosen and the option `--disable-triggers` is used, pg_dump emits commands to disable triggers on user tables before inserting the data, and then commands to re-enable them after the data has been inserted. If the restore is stopped in the middle, the system catalogs might be left in the wrong state.
 
 
+ When creating an archive (non-text) output file, it is advisable not to restrict the set of database objects dumped, but instead plan to apply any desired object filtering when reading the archive with pg_restore. This will preserve flexibility and possibly avoid problems at restore time; for details see the [app-pgrestore](pg_restore.md#app-pgrestore) documentation. In particular, dumping table data without the corresponding table definition (via `--no-schema` and related options) is not recommended.
+
+
  When `--statistics` is specified, `pg_dump` will include most optimizer statistics in the resulting dump file. This does not include all statistics, such as those created explicitly with [sql-createstatistics](../sql-commands/create-statistics.md#sql-createstatistics), custom statistics added by an extension, or statistics collected by the cumulative statistics system. Therefore, it may still be useful to run `ANALYZE` after restoring from a dump file to ensure optimal performance; see [Updating Planner Statistics](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-statistics) and [The Autovacuum Daemon](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) for more information.
 
 

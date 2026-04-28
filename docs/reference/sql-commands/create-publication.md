@@ -20,16 +20,20 @@ where PUBLICATION_OBJECT is one of:
 
 and PUBLICATION_ALL_OBJECT is one of:
 
-    ALL TABLES [ EXCEPT TABLE ( EXCEPT_TABLE_OBJECT [, ... ] ) ]
+    ALL TABLES [ EXCEPT ( EXCEPT_TABLE_OBJECT [, ... ] ) ]
     ALL SEQUENCES
 
 and TABLE_AND_COLUMNS is:
 
-    [ ONLY ] TABLE_NAME [ * ] [ ( COLUMN_NAME [, ... ] ) ] [ WHERE ( EXPRESSION ) ]
+    TABLE_OBJECT [ ( COLUMN_NAME [, ... ] ) ] [ WHERE ( EXPRESSION ) ]
 
 and EXCEPT_TABLE_OBJECT is:
 
-    [ ONLY ] TABLE_NAME [ * ]
+    TABLE TABLE_OBJECT [, ... ]
+
+and TABLE_OBJECT is:
+
+   [ ONLY ] TABLE_NAME [ * ]
 ```
 
 
@@ -80,11 +84,11 @@ and EXCEPT_TABLE_OBJECT is:
      Only persistent base tables and partitioned tables present in the schema will be included as part of the publication. Temporary tables, unlogged tables, foreign tables, materialized views, and regular views from the schema will not be part of the publication.
 
 
-     When a partitioned table is published via schema level publication, all of its existing and future partitions are implicitly considered to be part of the publication, regardless of whether they are from the publication schema or not. So, even operations that are performed directly on a partition are also published via publications that its ancestors are part of.
+     When a partitioned table is published via a schema-level publication, all of its existing and future partitions are implicitly considered to be part of the publication, regardless of whether they are from the publication schema or not. So, even operations that are performed directly on a partition are also published via publications that its ancestors are part of.
 <a id="sql-createpublication-params-for-all-tables"></a>
 
 `FOR ALL TABLES`
-:   Marks the publication as one that replicates changes for all tables in the database, including tables created in the future. Tables listed in EXCEPT TABLE are excluded from the publication.
+:   Marks the publication as one that replicates changes for all tables in the database, including tables created in the future. Tables listed in `EXCEPT` clause are excluded from the publication.
 <a id="sql-createpublication-params-for-all-sequences"></a>
 
 `FOR ALL SEQUENCES`
@@ -94,17 +98,17 @@ and EXCEPT_TABLE_OBJECT is:
      Only persistent sequences are included in the publication. Temporary sequences and unlogged sequences are excluded from the publication.
 <a id="sql-createpublication-params-for-except-table"></a>
 
-`EXCEPT TABLE`
+`EXCEPT`
 :   This clause specifies a list of tables to be excluded from the publication.
 
 
      For inherited tables, if `ONLY` is specified before the table name, only that table is excluded from the publication. If `ONLY` is not specified, the table and all its descendant tables (if any) are excluded. Optionally, `*` can be specified after the table name to explicitly indicate that descendant tables are excluded.
 
 
-     For partitioned tables, only the root partitioned table may be specified in `EXCEPT TABLE`. Doing so excludes the root table and all of its partitions from replication. The optional `ONLY` and `*` has no effect for partitioned tables.
+     For partitioned tables, only the root partitioned table may be specified in `EXCEPT`. Doing so excludes the root table and all of its partitions from replication. The optional `ONLY` and `*` has no effect for partitioned tables.
 
 
-     There can be a case where a subscription includes multiple publications. In such a case, a table or partition that is included in one publication and listed in the `EXCEPT TABLE` clause of another is considered included for replication.
+     There can be a case where a subscription includes multiple publications. In such a case, a table or partition that is included in one publication but excluded (explicitly or implicitly) by the `EXCEPT` clause of another is considered included for replication.
 <a id="sql-createpublication-params-with"></a>
 
 <code>WITH ( </code><em>publication_parameter</em><code> [= </code><em>value</em><code>] [, ... ] )</code>
@@ -113,7 +117,7 @@ and EXCEPT_TABLE_OBJECT is:
     <a id="sql-createpublication-params-with-publish"></a>
 
     `publish` (`string`)
-    :   This parameter determines which DML operations will be published by the new publication to the subscribers. The value is comma-separated list of operations. The allowed operations are `insert`, `update`, `delete`, and `truncate`. The default is to publish all actions, and so the default value for this option is `'insert, update, delete, truncate'`.
+    :   This parameter determines which DML operations will be published by the new publication to the subscribers. The value is a comma-separated list of operations. The allowed operations are `insert`, `update`, `delete`, and `truncate`. The default is to publish all actions, and so the default value for this option is `'insert, update, delete, truncate'`.
 
 
          This parameter only affects DML operations. In particular, the initial data synchronization (see [Initial Snapshot](../../server-administration/logical-replication/architecture.md#logical-replication-snapshot)) for logical replication does not take this parameter into account when copying existing table data.
@@ -131,7 +135,7 @@ and EXCEPT_TABLE_OBJECT is:
 
         !!! note
 
-            If the subscriber is from a release prior to 18, then initial table synchronization won't copy generated columns even if parameter `publish_generated_columns` is `stored` in the publisher.
+            If the subscriber is from a release prior to 18, then initial table synchronization won't copy generated columns even if the parameter `publish_generated_columns` is `stored` in the publisher.
 
 
          See [Generated Column Replication](../../server-administration/logical-replication/generated-column-replication.md#logical-replication-gencols) for more details about logical replication of generated columns.
@@ -190,6 +194,9 @@ and EXCEPT_TABLE_OBJECT is:
 
 
  For a `MERGE` command, the publication will publish an `INSERT`, `UPDATE`, or `DELETE` for each row inserted, updated, or deleted.
+
+
+ For an `UPDATE/DELETE ... FOR PORTION OF` command, the publication will publish an `UPDATE` or `DELETE`, followed by one `INSERT` for each temporal leftover row inserted.
 
 
  `ATTACH`ing a table into a partition tree whose root is published using a publication with `publish_via_partition_root` set to `true` does not result in the table's existing contents being replicated.
@@ -284,7 +291,7 @@ CREATE PUBLICATION all_tables_sequences FOR ALL TABLES, ALL SEQUENCES;
 
 ```sql
 
-CREATE PUBLICATION all_tables_except FOR ALL TABLES EXCEPT TABLE (users, departments);
+CREATE PUBLICATION all_tables_except FOR ALL TABLES EXCEPT (TABLE users, departments);
 ```
 
 
@@ -292,7 +299,7 @@ CREATE PUBLICATION all_tables_except FOR ALL TABLES EXCEPT TABLE (users, departm
 
 ```sql
 
-CREATE PUBLICATION all_sequences_tables_except FOR ALL SEQUENCES, ALL TABLES EXCEPT TABLE (users, departments);
+CREATE PUBLICATION all_sequences_tables_except FOR ALL SEQUENCES, ALL TABLES EXCEPT (TABLE users, departments);
 ```
 
 

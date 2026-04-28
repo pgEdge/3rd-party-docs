@@ -114,7 +114,7 @@
 </tr>
 <tr>
 <td><code>substring</code> ( <code>string</code> <code>text</code> <code>FROM</code> <code>pattern</code> <code>text</code> ) <code>text</code></td>
-<td>Extracts the first substring matching POSIX regular expression; see <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Extracts the first substring matching POSIX regular expression; see <a href="pattern-matching.md#functions-posix-substring"><code>substring</code></a>.</td>
 <td><code>substring('Thomas' FROM '...$')</code> <code>mas</code></td>
 </tr>
 <tr>
@@ -252,27 +252,27 @@
 </tr>
 <tr>
 <td><code>regexp_count</code> ( <code>string</code> <code>text</code>, <code>pattern</code> <code>text</code> [, <code>start</code> <code>integer</code> [, <code>flags</code> <code>text</code> ] ] ) <code>integer</code></td>
-<td>Returns the number of times the POSIX regular expression <code>pattern</code> matches in the <code>string</code>; see <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Returns the number of times the POSIX regular expression <code>pattern</code> matches in the <code>string</code>; see <a href="pattern-matching.md#functions-posix-regexp-count"><code>regexp_count</code></a>.</td>
 <td><code>regexp_count('123456789012', '\d\d\d', 2)</code> <code>3</code></td>
 </tr>
 <tr>
 <td><code>regexp_instr</code> ( <code>string</code> <code>text</code>, <code>pattern</code> <code>text</code> [, <code>start</code> <code>integer</code> [, <code>N</code> <code>integer</code> [, <code>endoption</code> <code>integer</code> [, <code>flags</code> <code>text</code> [, <code>subexpr</code> <code>integer</code> ] ] ] ] ] ) <code>integer</code></td>
-<td>Returns the position within <code>string</code> where the <code>N</code>'th match of the POSIX regular expression <code>pattern</code> occurs, or zero if there is no such match; see <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Returns the position within <code>string</code> where the <code>N</code>'th match of the POSIX regular expression <code>pattern</code> occurs, or zero if there is no such match; see <a href="pattern-matching.md#functions-posix-regexp-instr"><code>regexp_instr</code></a>.</td>
 <td><code>regexp_instr('ABCDEF', 'c(.)(..)', 1, 1, 0, 'i')</code> <code>3</code><br><code>regexp_instr('ABCDEF', 'c(.)(..)', 1, 1, 0, 'i', 2)</code> <code>5</code></td>
 </tr>
 <tr>
 <td><code>regexp_like</code> ( <code>string</code> <code>text</code>, <code>pattern</code> <code>text</code> [, <code>flags</code> <code>text</code> ] ) <code>boolean</code></td>
-<td>Checks whether a match of the POSIX regular expression <code>pattern</code> occurs within <code>string</code>; see <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Checks whether a match of the POSIX regular expression <code>pattern</code> occurs within <code>string</code>; see <a href="pattern-matching.md#functions-posix-regexp-like"><code>regexp_like</code></a>.</td>
 <td><code>regexp_like('Hello World', 'world$', 'i')</code> <code>t</code></td>
 </tr>
 <tr>
 <td><code>regexp_match</code> ( <code>string</code> <code>text</code>, <code>pattern</code> <code>text</code> [, <code>flags</code> <code>text</code> ] ) <code>text[]</code></td>
-<td>Returns substrings within the first match of the POSIX regular expression <code>pattern</code> to the <code>string</code>; see <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Returns substrings within the first match of the POSIX regular expression <code>pattern</code> to the <code>string</code>; see <a href="pattern-matching.md#functions-posix-regexp-match"><code>regexp_match</code></a>.</td>
 <td><code>regexp_match('foobarbequebaz', '(bar)(beque)')</code> <code>{bar,beque}</code></td>
 </tr>
 <tr>
 <td><code>regexp_matches</code> ( <code>string</code> <code>text</code>, <code>pattern</code> <code>text</code> [, <code>flags</code> <code>text</code> ] ) <code>setof text[]</code></td>
-<td>Returns substrings within the first match of the POSIX regular expression <code>pattern</code> to the <code>string</code>, or substrings within all such matches if the <code>g</code> flag is used; see <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Returns substrings within the first match of the POSIX regular expression <code>pattern</code> to the <code>string</code>, or substrings within all such matches if the <code>g</code> flag is used; see <a href="pattern-matching.md#functions-posix-regexp-matches"><code>regexp_matches</code></a>.</td>
 <td><p><code>regexp_matches('foobarbequebaz', 'ba.', 'g')</code></p>
 <pre><code>
  {bar}
@@ -280,22 +280,22 @@
 </tr>
 <tr>
 <td><code>regexp_replace</code> ( <code>string</code> <code>text</code>, <code>pattern</code> <code>text</code>, <code>replacement</code> <code>text</code> [, <code>flags</code> <code>text</code> ] ) <code>text</code></td>
-<td>Replaces the substring that is the first match to the POSIX regular expression <code>pattern</code>, or all such matches if the <code>g</code> flag is used; see <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Replaces the substring that is the first match to the POSIX regular expression <code>pattern</code>, or all such matches if the <code>g</code> flag is used; see <a href="pattern-matching.md#functions-posix-regexp-replace"><code>regexp_replace</code></a>.</td>
 <td><code>regexp_replace('Thomas', '.[mN]a.', 'M')</code> <code>ThM</code></td>
 </tr>
 <tr>
 <td><code>regexp_replace</code> ( <code>string</code> <code>text</code>, <code>pattern</code> <code>text</code>, <code>replacement</code> <code>text</code>, <code>start</code> <code>integer</code> [, <code>N</code> <code>integer</code> [, <code>flags</code> <code>text</code> ] ] ) <code>text</code></td>
-<td>Replaces the substring that is the <code>N</code>'th match to the POSIX regular expression <code>pattern</code>, or all such matches if <code>N</code> is zero, with the search beginning at the <code>start</code>'th character of <code>string</code>. If <code>N</code> is omitted, it defaults to 1. See <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Replaces the substring that is the <code>N</code>'th match to the POSIX regular expression <code>pattern</code>, or all such matches if <code>N</code> is zero, with the search beginning at the <code>start</code>'th character of <code>string</code>. If <code>N</code> is omitted, it defaults to 1. See <a href="pattern-matching.md#functions-posix-regexp-replace"><code>regexp_replace</code></a>.</td>
 <td><code>regexp_replace('Thomas', '.', 'X', 3, 2)</code> <code>ThoXas</code><br><code>regexp_replace(string=&gt;'hello world', pattern=&gt;'l', replacement=&gt;'XX', start=&gt;1, "N"=&gt;2)</code> <code>helXXo world</code></td>
 </tr>
 <tr>
 <td><code>regexp_split_to_array</code> ( <code>string</code> <code>text</code>, <code>pattern</code> <code>text</code> [, <code>flags</code> <code>text</code> ] ) <code>text[]</code></td>
-<td>Splits <code>string</code> using a POSIX regular expression as the delimiter, producing an array of results; see <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Splits <code>string</code> using a POSIX regular expression as the delimiter, producing an array of results; see <a href="pattern-matching.md#functions-posix-regexp-split-to-array"><code>regexp_split_to_array</code></a>.</td>
 <td><code>regexp_split_to_array('hello world', '\s+')</code> <code>{hello,world}</code></td>
 </tr>
 <tr>
 <td><code>regexp_split_to_table</code> ( <code>string</code> <code>text</code>, <code>pattern</code> <code>text</code> [, <code>flags</code> <code>text</code> ] ) <code>setof text</code></td>
-<td>Splits <code>string</code> using a POSIX regular expression as the delimiter, producing a set of results; see <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Splits <code>string</code> using a POSIX regular expression as the delimiter, producing a set of results; see <a href="pattern-matching.md#functions-posix-regexp-split-to-table"><code>regexp_split_to_table</code></a>.</td>
 <td><p><code>regexp_split_to_table('hello world', '\s+')</code></p>
 <pre><code>
  hello
@@ -303,7 +303,7 @@
 </tr>
 <tr>
 <td><code>regexp_substr</code> ( <code>string</code> <code>text</code>, <code>pattern</code> <code>text</code> [, <code>start</code> <code>integer</code> [, <code>N</code> <code>integer</code> [, <code>flags</code> <code>text</code> [, <code>subexpr</code> <code>integer</code> ] ] ] ] ) <code>text</code></td>
-<td>Returns the substring within <code>string</code> that matches the <code>N</code>'th occurrence of the POSIX regular expression <code>pattern</code>, or <code>NULL</code> if there is no such match; see <a href="pattern-matching.md#functions-posix-regexp">POSIX Regular Expressions</a>.</td>
+<td>Returns the substring within <code>string</code> that matches the <code>N</code>'th occurrence of the POSIX regular expression <code>pattern</code>, or <code>NULL</code> if there is no such match; see <a href="pattern-matching.md#functions-posix-regexp-substr"><code>regexp_substr</code></a>.</td>
 <td><code>regexp_substr('ABCDEF', 'c(.)(..)', 1, 1, 'i')</code> <code>CDEF</code><br><code>regexp_substr('ABCDEF', 'c(.)(..)', 1, 1, 'i', 2)</code> <code>EF</code></td>
 </tr>
 <tr>

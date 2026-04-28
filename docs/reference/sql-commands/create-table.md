@@ -9,8 +9,8 @@ define a new table
 
 ```
 
-CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] TABLE_NAME ( [
-  { COLUMN_NAME DATA_TYPE [ STORAGE { PLAIN | EXTERNAL | EXTENDED | MAIN | DEFAULT } ] [ COMPRESSION COMPRESSION_METHOD ] [ COLLATE COLLATION ] [ COLUMN_CONSTRAINT [ ... ] ]
+CREATE [ PERSISTENCE_MODE ] TABLE [ IF NOT EXISTS ] TABLE_NAME ( [
+  { COLUMN_NAME DATA_TYPE [ COLUMN_STORAGE ] [ COLUMN_COMPRESSION ] [ COLLATE COLLATION ] [ COLUMN_CONSTRAINT [ ... ] ]
     | TABLE_CONSTRAINT
     | LIKE SOURCE_TABLE [ LIKE_OPTION ... ] }
     [, ... ]
@@ -22,7 +22,7 @@ CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXI
 [ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
 [ TABLESPACE TABLESPACE_NAME ]
 
-CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] TABLE_NAME
+CREATE [ PERSISTENCE_MODE ] TABLE [ IF NOT EXISTS ] TABLE_NAME
     OF TYPE_NAME [ (
   { COLUMN_NAME [ WITH OPTIONS ] [ COLUMN_CONSTRAINT [ ... ] ]
     | TABLE_CONSTRAINT }
@@ -34,7 +34,7 @@ CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXI
 [ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
 [ TABLESPACE TABLESPACE_NAME ]
 
-CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] TABLE_NAME
+CREATE [ PERSISTENCE_MODE ] TABLE [ IF NOT EXISTS ] TABLE_NAME
     PARTITION OF PARENT_TABLE [ (
   { COLUMN_NAME [ WITH OPTIONS ] [ COLUMN_CONSTRAINT [ ... ] ]
     | TABLE_CONSTRAINT }
@@ -46,7 +46,19 @@ CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXI
 [ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
 [ TABLESPACE TABLESPACE_NAME ]
 
-where COLUMN_CONSTRAINT is:
+where PERSISTENCE_MODE is:
+
+{ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } } | UNLOGGED
+
+and COLUMN_STORAGE is:
+
+STORAGE { PLAIN | EXTERNAL | EXTENDED | MAIN | DEFAULT }
+
+and COLUMN_COMPRESSION is:
+
+COMPRESSION COMPRESSION_METHOD
+
+and COLUMN_CONSTRAINT is:
 
 [ CONSTRAINT CONSTRAINT_NAME ]
 { NOT NULL [ NO INHERIT ]  |
@@ -84,17 +96,17 @@ FROM ( { PARTITION_BOUND_EXPR | MINVALUE | MAXVALUE } [, ...] )
   TO ( { PARTITION_BOUND_EXPR | MINVALUE | MAXVALUE } [, ...] ) |
 WITH ( MODULUS NUMERIC_LITERAL, REMAINDER NUMERIC_LITERAL )
 
-INDEX_PARAMETERS in UNIQUE, PRIMARY KEY, and EXCLUDE constraints are:
+and INDEX_PARAMETERS in UNIQUE, PRIMARY KEY, and EXCLUDE constraints are:
 
 [ INCLUDE ( COLUMN_NAME [, ... ] ) ]
 [ WITH ( STORAGE_PARAMETER [= VALUE] [, ... ] ) ]
 [ USING INDEX TABLESPACE TABLESPACE_NAME ]
 
-EXCLUDE_ELEMENT in an EXCLUDE constraint is:
+and EXCLUDE_ELEMENT in an EXCLUDE constraint is:
 
 { COLUMN_NAME | ( EXPRESSION ) } [ COLLATE COLLATION ] [ OPCLASS [ ( OPCLASS_PARAMETER = VALUE [, ... ] ) ] ] [ ASC | DESC ] [ NULLS { FIRST | LAST } ]
 
-REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
+and REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 
 { NO ACTION | RESTRICT | CASCADE | SET NULL [ ( COLUMN_NAME [, ... ] ) ] | SET DEFAULT [ ( COLUMN_NAME [, ... ] ) ] }
 ```
@@ -104,6 +116,9 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 
 
  `CREATE TABLE` will create a new, initially empty table in the current database. The table will be owned by the user issuing the command.
+
+
+ The durability characteristics of a table are governed by its persistence mode. By default, the data will be persistent and crash-safe. For less stringent requirements and better performance, a table can be specified as [temporary](#sql-createtable-temporary) or [unlogged](#sql-createtable-unlogged).
 
 
  If a schema name is given (for example, `CREATE TABLE myschema.mytable ...`) then the table is created in the specified schema. Otherwise it is created in the current schema. Temporary tables exist in a special schema, so a schema name cannot be given when creating a temporary table. The name of the table must be distinct from the name of any other relation (table, sequence, index, view, materialized view, or foreign table) in the same schema.
@@ -174,7 +189,7 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 <a id="sql-createtable-parms-storage"></a>
 
 `STORAGE { PLAIN | EXTERNAL | EXTENDED | MAIN | DEFAULT }`
-:   This form sets the storage mode for the column. This controls whether this column is held inline or in a secondary TOAST table, and whether the data should be compressed or not. `PLAIN` must be used for fixed-length values such as `integer` and is inline, uncompressed. `MAIN` is for inline, compressible data. `EXTERNAL` is for external, uncompressed data, and `EXTENDED` is for external, compressed data. Writing `DEFAULT` sets the storage mode to the default mode for the column's data type. `EXTENDED` is the default for most data types that support non-`PLAIN` storage. Use of `EXTERNAL` will make substring operations on very large `text` and `bytea` values run faster, at the penalty of increased storage space. See [TOAST](../../internals/database-physical-storage/toast.md#storage-toast) for more information.
+:   This clause sets the storage mode for the column. This controls whether this column is held inline or in a secondary TOAST table, and whether the data should be compressed or not. `PLAIN` must be used for fixed-length values such as `integer` and is inline, uncompressed. `MAIN` is for inline, compressible data. `EXTERNAL` is for external, uncompressed data, and `EXTENDED` is for external, compressed data. Writing `DEFAULT` sets the storage mode to the default mode for the column's data type. `EXTENDED` is the default for most data types that support non-`PLAIN` storage. Use of `EXTERNAL` will make substring operations on very large `text` and `bytea` values run faster, at the penalty of increased storage space. See [TOAST](../../internals/database-physical-storage/toast.md#storage-toast) for more information.
 <a id="sql-createtable-parms-compression"></a>
 
 <code>COMPRESSION </code><em>compression_method</em>
@@ -591,6 +606,10 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 
 `vacuum_truncate`, `toast.vacuum_truncate` (`boolean`)
 :   Per-table value for [vacuum_truncate](../../server-administration/server-configuration/vacuuming.md#guc-vacuum-truncate) parameter. The `TRUNCATE` parameter of [`VACUUM`](vacuum.md#sql-vacuum), if specified, overrides the value of this option.
+<a id="reloption-autovacuum-parallel-workers"></a>
+
+`autovacuum_parallel_workers` (`integer`)
+:   Per-table value for [autovacuum_max_parallel_workers](../../server-administration/server-configuration/vacuuming.md#guc-autovacuum-max-parallel-workers) parameter. If -1 is specified, `autovacuum_max_parallel_workers` value will be used. If set to 0, parallel vacuum is disabled for this table. The default value is -1.
 <a id="reloption-autovacuum-vacuum-threshold"></a>
 
 `autovacuum_vacuum_threshold`, `toast.autovacuum_vacuum_threshold` (`integer`)

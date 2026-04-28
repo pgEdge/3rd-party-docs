@@ -16,6 +16,7 @@ where OPTION can be one of:
 
     VERBOSE [ BOOLEAN ]
     ANALYZE [ BOOLEAN ]
+    CONCURRENTLY [ BOOLEAN ]
 
 and TABLE_AND_COLUMNS is:
 
@@ -29,13 +30,13 @@ and TABLE_AND_COLUMNS is:
  `REPACK` reclaims storage occupied by dead tuples. Unlike `VACUUM`, it does so by rewriting the entire contents of the table specified by *table_name* into a new disk file with no extra space (except for the space guaranteed by the `fillfactor` storage parameter), allowing unused space to be returned to the operating system.
 
 
- Without a *table_name*, `REPACK` processes every table and materialized view in the current database that the current user has the `MAINTAIN` privilege on. This form of `REPACK` cannot be executed inside a transaction block.
+ Without a *table_name*, `REPACK` processes every table and materialized view in the current database that the current user has the `MAINTAIN` privilege on. This form of `REPACK` cannot be executed inside a transaction block. Also, this form is not allowed if the `CONCURRENTLY` option is used.
 
 
  If a `USING INDEX` clause is specified, the rows are physically reordered based on information from an index. Please see the notes on clustering below.
 
 
- When a table is being repacked, an `ACCESS EXCLUSIVE` lock is acquired on it. This prevents any other database operations (both reads and writes) from operating on the table until the `REPACK` is finished.
+ When a table is being repacked, an `ACCESS EXCLUSIVE` lock is acquired on it. This prevents any other database operations (both reads and writes) from operating on the table until the `REPACK` is finished. If you want to keep the table accessible during the repacking, consider using the `CONCURRENTLY` option.
  <a id="sql-repack-notes-on-clustering"></a>
 
 ### Notes on Clustering
@@ -83,6 +84,38 @@ and TABLE_AND_COLUMNS is:
 *index_name*
 :   The name of an index.
 
+`CONCURRENTLY`
+:   Allow other transactions to use the table while it is being repacked.
+
+
+     Internally, `REPACK` copies the contents of the table (ignoring dead tuples) into a new file, sorted by the specified index, and also creates a new file for each index. Then it swaps the old and new files for the table and all the indexes, and deletes the old files. The `ACCESS EXCLUSIVE` lock is needed to make sure that the old files do not change during the processing because the changes would get lost due to the swap.
+
+
+     With the `CONCURRENTLY` option, the `ACCESS EXCLUSIVE` lock is only acquired to swap the table and index files. The data changes that took place during the creation of the new table and index files are captured using logical decoding ([Logical Decoding](../../server-programming/logical-decoding/index.md#logicaldecoding)) and applied before the `ACCESS EXCLUSIVE` lock is requested. Thus the lock is typically held only for the time needed to swap the files, which should be pretty short. However, the time might still be noticeable if too many data changes have been done to the table while `REPACK` was waiting for the lock: those changes must be processed just before the files are swapped, while the `ACCESS EXCLUSIVE` lock is being held.
+
+
+     Note that `REPACK` with the `CONCURRENTLY` option does not try to order the rows inserted into the table after the repacking started. Also note `REPACK` might fail to complete due to DDL commands executed on the table by other transactions during the repacking.
+
+
+    !!! note
+
+        In addition to the temporary space requirements explained in [Notes on Resources](#sql-repack-notes-on-resources), the `CONCURRENTLY` option can add to the usage of temporary space a bit more. The reason is that other transactions can perform DML operations which cannot be applied to the new file until `REPACK` has copied all the existing tuples from the old file. Thus the tuples inserted into the old file during the copying are also stored separately in a temporary file, until they can be processed.
+
+
+     The `CONCURRENTLY` option cannot be used in the following cases:
+
+    -  The table is `UNLOGGED`.
+    -  The table is partitioned.
+    -  The table lacks a primary key and index-based replica identity.
+    -  The table is a system catalog or a TOAST table.
+    -  `REPACK` is executed inside a transaction block.
+    -  The [`max_repack_replication_slots`](../../server-administration/server-configuration/replication.md#guc-max-repack-replication-slots) configuration parameter does not allow for the creation of an additional replication slot.
+
+
+    !!! warning
+
+        `REPACK` with the `CONCURRENTLY` option is not MVCC-safe, see [Caveats](../../the-sql-language/concurrency-control/caveats.md#mvcc-caveats) for details.
+
 `VERBOSE`
 :   Prints a progress report as each table is repacked at `INFO` level.
 
@@ -119,11 +152,19 @@ REPACK employees;
 ```
 
 
- Repack the table `employees` on the basis of its index `employees_ind` (Since index is used here, this is effectively clustering):
+ Repack the table `employees` on the basis of its index `employees_ind` (since an index is specified, this is effectively clustering):
 
 ```
 
 REPACK employees USING INDEX employees_ind;
+```
+
+
+ Repack the `employees` table following the same index as was used before, in concurrent mode:
+
+```
+
+REPACK (CONCURRENTLY) employees USING INDEX;
 ```
 
 

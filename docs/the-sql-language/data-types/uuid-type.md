@@ -28,4 +28,13 @@ a0ee-bc99-9c0b-4ef8-bb6d-6bb9-bd38-0a11
  Output is always in the standard form.
 
 
+ It is possible to cast `uuid` values to and from type `bytea`. This is useful for using functions such as `encode()` and `decode()` with UUID values. For example:
+
+```
+
+encode('1ea3d64c-bc40-4cc3-84bb-6b11ee31e5c2'::uuid::bytea, 'base64')
+decode('HqPWTLxATMOEu2sR7jHlwg==', 'base64')::uuid
+```
+
+
  See [UUID Functions](../functions-and-operators/uuid-functions.md#functions-uuid) for how to generate a UUID in PostgreSQL.

@@ -50,7 +50,7 @@ ALTER PROPERTY GRAPH [ IF EXISTS ] NAME SET SCHEMA NEW_SCHEMA
 :   This form adds new vertex or edge tables to the property graph, using the same syntax as [`CREATE PROPERTY GRAPH`](create-property-graph.md#sql-create-property-graph).
 
 `DROP {VERTEX|NODE|EDGE|RELATIONSHIP} TABLES`
-:   This form removes vertex or edge tables from the property graph. (Only the association of the tables with the graph is removed. The tables themself are not dropped.)
+:   This form removes vertex or edge tables from the property graph. (Only the association of the tables with the graph is removed. The tables themselves are not dropped.)
 
 `ALTER {VERTEX|NODE|EDGE|RELATIONSHIP} TABLE ... ADD LABEL`
 :   This form adds a new label to an existing vertex or edge table, using the same syntax as [`CREATE PROPERTY GRAPH`](create-property-graph.md#sql-create-property-graph).

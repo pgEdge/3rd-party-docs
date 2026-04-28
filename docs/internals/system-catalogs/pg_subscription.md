@@ -87,8 +87,12 @@
 <p>The retention status of information (e.g., dead tuples, commit timestamps, and origins) useful for conflict detection. True if <a href="../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-with-retain-dead-tuples"><code>retain_dead_tuples</code></a> is enabled, and the retention duration has not exceeded <a href="../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-with-max-retention-duration"><code>max_retention_duration</code></a>, when defined.</p></td>
 </tr>
 <tr>
+<td><p><code>subserver</code> <code>oid</code> (references <a href="pg_foreign_server.md#catalog-pg-foreign-server"><code>pg_foreign_server</code></a>.<code>oid</code>)</p>
+<p>Foreign server to use for the connection string. Zero if <code>subconninfo</code> is nonnull.</p></td>
+</tr>
+<tr>
 <td><p><code>subconninfo</code> <code>text</code></p>
-<p>Connection string to the upstream database</p></td>
+<p>Connection string to the upstream database. <code>NULL</code> if <code>subserver</code> is nonzero.</p></td>
 </tr>
 <tr>
 <td><p><code>subslotname</code> <code>name</code></p>

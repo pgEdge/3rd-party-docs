@@ -591,7 +591,7 @@
 | `PLANS` | non-reserved |  |  |  |
 | `PLI` |  | non-reserved | non-reserved | non-reserved |
 | `POLICY` | non-reserved |  |  |  |
-| `PORTION` |  | reserved | reserved |  |
+| `PORTION` | non-reserved | reserved | reserved |  |
 | `POSITION` | non-reserved (cannot be function or type) | reserved | reserved | reserved |
 | `POSITION_REGEX` |  | reserved | reserved |  |
 | `POWER` |  | reserved | reserved |  |

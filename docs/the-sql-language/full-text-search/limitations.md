@@ -7,7 +7,6 @@
 
 - The length of each lexeme must be less than 2 kilobytes
 - The length of a `tsvector` (lexemes + positions) must be less than 1 megabyte
-- The number of lexemes must be less than 2<sup>64</sup>
 - Position values in `tsvector` must be greater than 0 and no more than 16,383
 - The match distance in a <code><</code><em>N</em><code>></code> (FOLLOWED BY) `tsquery` operator cannot be more than 16,384
 - No more than 256 positions per lexeme

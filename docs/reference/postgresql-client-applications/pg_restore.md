@@ -61,6 +61,9 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
 
      When this option is used, the database named with `-d` is used only to issue the initial `DROP DATABASE` and `CREATE DATABASE` commands. All data is restored into the database name that appears in the archive.
 
+
+     This option cannot be used together with `--single-transaction`.
+
 <code>-d </code><em>dbname</em>, <code>--dbname=</code><em>dbname</em>
 :   Connect to database *dbname* and restore directly into the database. The *dbname* can be a [connection string](../../client-interfaces/libpq-c-library/database-connection-control-functions.md#libpq-connstring). If so, connection string parameters will override any conflicting command line options.
 
@@ -174,7 +177,7 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
 :   Prevent restoration of access privileges (grant/revoke commands).
 
 `-1`, `--single-transaction`
-:   Execute the restore as a single transaction (that is, wrap the emitted commands in `BEGIN`/`COMMIT`). This ensures that either all the commands complete successfully, or no changes are applied. This option implies `--exit-on-error`.
+:   Execute the restore as a single transaction (that is, wrap the emitted commands in `BEGIN`/`COMMIT`). This ensures that either all the commands complete successfully, or no changes are applied. This option implies `--exit-on-error`. It cannot be used together with `--create`, nor with multiple jobs (`--jobs`).
 
 `--disable-triggers`
 :   This option is relevant only when performing a restore without schema. It instructs pg_restore to execute commands to temporarily disable triggers on the target tables while the data is restored. Use this if you have referential integrity checks or other triggers on the tables that you do not want to invoke during data restore.
@@ -350,9 +353,9 @@ CREATE DATABASE foo WITH TEMPLATE template0;
  The limitations of pg_restore are detailed below.
 
 -  When restoring data to a pre-existing table and the option `--disable-triggers` is used, pg_restore emits commands to disable triggers on user tables before inserting the data, then emits commands to re-enable them after the data has been inserted. If the restore is stopped in the middle, the system catalogs might be left in the wrong state.
+-  Parallel restore (`--jobs` greater than 1) requires applying dependency information from the archive file to ensure that an object is not restored before other objects it depends on. This information will be incomplete, leading to unexpected restore failures, if the archive does not include object definitions (the `pre-data` section). Therefore, avoid using pg_dump options such as `--no-schema`, `-a/--data-only`, or `--section` without `pre-data` when creating an archive you wish to restore in parallel. Instead, you may provide such options to pg_restore.
 - pg_restore cannot restore large objects selectively; for instance, only those for a specific table. If an archive contains large objects, then all large objects will be restored, or none of them if they are excluded via `-L`, `-t`, or other options.
--  When restoring from a non-plain-text archive made using pg_dumpall, the `--section` option may be used, but must include `pre-data`.
--  The following options cannot be used when restoring from a non-plain-text archive made using pg_dumpall: `-a/--data-only`, `-l/--list`, `-L/--use-list`, `--no-schema`, `--statistics-only`, and `--strict-names`.
+-  The following options cannot be used when restoring from a non-plain-text archive made using pg_dumpall: `-a/--data-only`, `-l/--list`, `-L/--use-list`, `--no-schema`, `--statistics-only`, and `--strict-names`. Also, if the `--section` option is used, it must include `pre-data`.
 
 
  See also the [app-pgdump](pg_dump.md#app-pgdump) documentation for details on limitations of pg_dump.

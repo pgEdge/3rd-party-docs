@@ -10,11 +10,18 @@ delete rows of a table
 ```
 
 [ WITH [ RECURSIVE ] WITH_QUERY [, ...] ]
-DELETE FROM [ ONLY ] TABLE_NAME [ * ] [ [ AS ] ALIAS ]
+DELETE FROM [ ONLY ] TABLE_NAME [ * ]
+    [ FOR PORTION OF RANGE_COLUMN_NAME FOR_PORTION_OF_TARGET ]
+    [ [ AS ] ALIAS ]
     [ USING FROM_ITEM [, ...] ]
     [ WHERE CONDITION | WHERE CURRENT OF CURSOR_NAME ]
     [ RETURNING [ WITH ( { OLD | NEW } AS OUTPUT_ALIAS [, ...] ) ]
                 { * | OUTPUT_EXPRESSION [ [ AS ] OUTPUT_NAME ] } [, ...] ]
+
+where FOR_PORTION_OF_TARGET is:
+
+{ FROM START_TIME TO END_TIME |
+  ( PORTION ) }
 ```
 
 
@@ -35,7 +42,10 @@ DELETE FROM [ ONLY ] TABLE_NAME [ * ] [ [ AS ] ALIAS ]
  The optional `RETURNING` clause causes `DELETE` to compute and return value(s) based on each row actually deleted. Any expression using the table's columns, and/or columns of other tables mentioned in `USING`, can be computed. The syntax of the `RETURNING` list is identical to that of the output list of `SELECT`.
 
 
- You must have the `DELETE` privilege on the table to delete from it, as well as the `SELECT` privilege for any table in the `USING` clause or whose values are read in the *condition*.
+ If the `FOR PORTION OF` clause is used, the delete will only affect rows that overlap the given portion. Furthermore, if a row's application time extends outside the `FOR PORTION OF` bounds, then the delete will only change the application time within those bounds. In effect, only the history targeted by `FOR PORTION OF` is deleted, and no moments outside. Furthermore, after a row is deleted, new *temporal leftovers* might be inserted: rows whose range or multirange receives the remaining application time outside the targeted bounds, with the original values in their other columns. For range columns, there will be zero to two inserted records, depending on whether the original application time was completely deleted, extended before/after the change, or both. Multiranges never require two temporal leftovers, because one value can always contain whatever application time remains.
+
+
+ You must have the `DELETE` privilege on the table to delete from it, as well as the `SELECT` privilege for any table in the `USING` clause or whose values are read in the *condition*. When `FOR PORTION OF` is used, the secondary inserts do not require `INSERT` privilege on the table. (This is because conceptually no new information is being added; the inserted rows only preserve existing data about the untargeted time period.)
 
 
 ## Parameters
@@ -49,6 +59,18 @@ DELETE FROM [ ONLY ] TABLE_NAME [ * ] [ [ AS ] ALIAS ]
 
 *alias*
 :   A substitute name for the target table. When an alias is provided, it completely hides the actual name of the table. For example, given `DELETE FROM foo AS f`, the remainder of the `DELETE` statement must refer to this table as `f` not `foo`.
+
+*range_column_name*
+:   The range or multirange column to use when performing a temporal delete.
+
+*for_portion_of_target*
+:   The portion to delete. If targeting a range column, this can be in the form `FROM` *start_time* `TO` *end_time*. Otherwise, it must be in the form `(`*portion*`)`, where *portion* is an expression that yields a value of the same type as *range_column_name*.
+
+*start_time*
+:   The earliest time (inclusive) to change in a temporal delete. This must be a value matching the base type of the range from *range_column_name*. A null value here indicates a delete whose beginning is unbounded (as with range types).
+
+*end_time*
+:   The latest time (exclusive) to change in a temporal delete. This must be a value matching the base type of the range from *range_column_name*. A null value here indicates a delete whose end is unbounded (as with range types).
 
 *from_item*
 :   A table expression allowing columns from other tables to appear in the `WHERE` condition. This uses the same syntax as the [`FROM`](select.md#sql-from) clause of a `SELECT` statement; for example, an alias for the table name can be specified. Do not repeat the target table as a *from_item* unless you wish to set up a self-join (in which case it must appear with an alias in the *from_item*).
@@ -87,10 +109,10 @@ DELETE FROM [ ONLY ] TABLE_NAME [ * ] [ [ AS ] ALIAS ]
 
 DELETE COUNT
 ```
- The *count* is the number of rows deleted. Note that the number may be less than the number of rows that matched the *condition* when deletes were suppressed by a `BEFORE DELETE` trigger. If *count* is 0, no rows were deleted by the query (this is not considered an error).
+ The *count* is the number of rows deleted. Note that the number may be less than the number of rows that matched the *condition* when deletes were suppressed by a `BEFORE DELETE` trigger. If *count* is 0, no rows were deleted by the query (this is not considered an error). If `FOR PORTION OF` was used, the *count* does not include *temporal leftovers* that were inserted.
 
 
- If the `DELETE` command contains a `RETURNING` clause, the result will be similar to that of a `SELECT` statement containing the columns and values defined in the `RETURNING` list, computed over the row(s) deleted by the command.
+ If the `DELETE` command contains a `RETURNING` clause, the result will be similar to that of a `SELECT` statement containing the columns and values defined in the `RETURNING` list, computed over the row(s) deleted by the command. If `FOR PORTION OF` was used, the `RETURNING` clause gives one result for each deleted row, but does not include inserted *temporal leftovers*. The value of the application-time column matches the old value of the deleted row(s). Note this will represent more application time than was actually erased, if temporal leftovers were inserted.
 
 
 ## Notes
@@ -111,6 +133,9 @@ DELETE FROM films
   WHERE producer_id IN (SELECT id FROM producers WHERE name = 'foo');
 ```
  In some cases the join style is easier to write or faster to execute than the sub-select style.
+
+
+ When `FOR PORTION OF` is used, this can result in users who don't have `INSERT` privileges firing `INSERT` triggers. This should be considered when using `SECURITY DEFINER` trigger functions.
 
 
 ## Examples
@@ -145,6 +170,16 @@ DELETE FROM tasks WHERE status = 'DONE' RETURNING *;
 ```sql
 
 DELETE FROM tasks WHERE CURRENT OF c_tasks;
+```
+
+
+ An example of a temporal delete:
+
+```sql
+
+DELETE FROM products
+  FOR PORTION OF valid_at FROM '2021-08-01' TO '2023-09-01'
+  WHERE product_no = 5;
 ```
 
 

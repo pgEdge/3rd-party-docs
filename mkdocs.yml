@@ -118,6 +118,7 @@ nav:
       - Inserting Data: the-sql-language/data-manipulation/inserting-data.md
       - Updating Data: the-sql-language/data-manipulation/updating-data.md
       - Deleting Data: the-sql-language/data-manipulation/deleting-data.md
+      - Updating and Deleting Temporal Data: the-sql-language/data-manipulation/updating-and-deleting-temporal-data.md
       - Returning Data from Modified Rows: the-sql-language/data-manipulation/returning-data-from-modified-rows.md
     - Queries:
       - the-sql-language/queries/index.md
@@ -168,6 +169,7 @@ nav:
       - Geometric Functions and Operators: the-sql-language/functions-and-operators/geometric-functions-and-operators.md
       - Network Address Functions and Operators: the-sql-language/functions-and-operators/network-address-functions-and-operators.md
       - Text Search Functions and Operators: the-sql-language/functions-and-operators/text-search-functions-and-operators.md
+      - TID Functions: the-sql-language/functions-and-operators/tid-functions.md
       - UUID Functions: the-sql-language/functions-and-operators/uuid-functions.md
       - XML Functions: the-sql-language/functions-and-operators/xml-functions.md
       - JSON Functions and Operators: the-sql-language/functions-and-operators/json-functions-and-operators.md
@@ -301,7 +303,6 @@ nav:
       - Ident Authentication: server-administration/client-authentication/ident-authentication.md
       - Peer Authentication: server-administration/client-authentication/peer-authentication.md
       - LDAP Authentication: server-administration/client-authentication/ldap-authentication.md
-      - RADIUS Authentication: server-administration/client-authentication/radius-authentication.md
       - Certificate Authentication: server-administration/client-authentication/certificate-authentication.md
       - PAM Authentication: server-administration/client-authentication/pam-authentication.md
       - BSD Authentication: server-administration/client-authentication/bsd-authentication.md
@@ -653,6 +654,7 @@ nav:
       - Safely Designing a Validator Module: server-programming/oauth-validator-modules/safely-designing-a-validator-module.md
       - Initialization Functions: server-programming/oauth-validator-modules/initialization-functions.md
       - OAuth Validator Callbacks: server-programming/oauth-validator-modules/oauth-validator-callbacks.md
+      - Custom HBA Options: server-programming/oauth-validator-modules/custom-hba-options.md
   - Reference:
     - reference/index.md
     - SQL Commands:
@@ -1162,6 +1164,7 @@ nav:
       - pg_plan_advice — help the planner get the right plan: appendixes/additional-supplied-modules-and-extensions/pg_plan_advice-help-the-planner-get-the-right-plan.md
       - pg_prewarm — preload relation data into buffer caches: appendixes/additional-supplied-modules-and-extensions/pg_prewarm-preload-relation-data-into-buffer-caches.md
       - 'pgrowlocks — show a table''s row locking information': appendixes/additional-supplied-modules-and-extensions/pgrowlocks-show-a-tables-row-locking-information.md
+      - pg_stash_advice — store and automatically apply plan advice: appendixes/additional-supplied-modules-and-extensions/pg_stash_advice-store-and-automatically-apply-plan-advice.md
       - pg_stat_statements — track statistics of SQL planning and execution: appendixes/additional-supplied-modules-and-extensions/pg_stat_statements-track-statistics-of-sql-planning-and-execution.md
       - pgstattuple — obtain tuple-level statistics: appendixes/additional-supplied-modules-and-extensions/pgstattuple-obtain-tuple-level-statistics.md
       - pg_surgery — perform low-level surgery on relation data: appendixes/additional-supplied-modules-and-extensions/pg_surgery-perform-low-level-surgery-on-relation-data.md
@@ -1216,4 +1219,5 @@ nav:
       - '`pg_xlogdump` renamed to `pg_waldump`': appendixes/obsolete-or-renamed-features/pg_xlogdump-renamed-to-pg_waldump.md
       - '`pg_resetxlog` renamed to `pg_resetwal`': appendixes/obsolete-or-renamed-features/pg_resetxlog-renamed-to-pg_resetwal.md
       - '`pg_receivexlog` renamed to `pg_receivewal`': appendixes/obsolete-or-renamed-features/pg_receivexlog-renamed-to-pg_receivewal.md
+      - RADIUS authentication removed: appendixes/obsolete-or-renamed-features/radius-authentication-removed.md
   - Bibliography: bibliography.md

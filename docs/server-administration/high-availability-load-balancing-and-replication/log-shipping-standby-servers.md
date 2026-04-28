@@ -272,7 +272,7 @@ primary_slot_name = 'node_a_slot'
  Setting `synchronous_commit` to `remote_apply` will cause each commit to wait until the current synchronous standbys report that they have replayed the transaction, making it visible to user queries. In simple cases, this allows for load balancing with causal consistency.
 
 
- Users will stop waiting if a fast shutdown is requested. However, as when using asynchronous replication, the server will not fully shutdown until all outstanding WAL records are transferred to the currently connected standby servers.
+ Users will stop waiting if a fast shutdown is requested. However, when using replication, the server will not fully shutdown until all outstanding WAL records are transferred to the currently connected standby servers, or [wal_sender_shutdown_timeout](../server-configuration/replication.md#guc-wal-sender-shutdown-timeout) (if set) expires, regardless of whether replication is synchronous or asynchronous.
   <a id="synchronous-replication-multiple-standbys"></a>
 
 #### Multiple Synchronous Standbys

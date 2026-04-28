@@ -25,6 +25,10 @@
 
 
      When running a standby server, you must set this parameter to the same or higher value than on the primary server. Otherwise, queries will not be allowed in the standby server.
+<a id="guc-max-repack-replication-slots"></a>
+
+`max_repack_replication_slots` (`integer`)
+:   Specifies the maximum number of replication slots for use of the `REPACK` command. The default is 5. This parameter can only be set at server start.
 <a id="guc-max-replication-slots"></a>
 
 `max_replication_slots` (`integer`)
@@ -57,6 +61,19 @@
 
 
      With a cluster distributed across multiple geographic locations, using different values per location brings more flexibility in the cluster management. A smaller value is useful for faster failure detection with a standby having a low-latency network connection, and a larger value helps in judging better the health of a standby if located on a remote location, with a high-latency network connection.
+<a id="guc-wal-sender-shutdown-timeout"></a>
+
+`wal_sender_shutdown_timeout` (`integer`)
+:   Specifies the maximum time the server waits during shutdown for all WAL data to be replicated to the receiver. If this value is specified without units, it is taken as milliseconds. A value of `-1` (the default) disables the timeout mechanism.
+
+
+     When replication is in use, the sending server normally waits until all WAL data has been transferred to the receiver before completing shutdown. This helps keep sender and receiver in sync after shutdown, which is especially important for physical replication switchovers, but it can delay shutdown.
+
+
+     If this parameter is set, the server stops waiting and completes shutdown when the timeout expires. This can shorten shutdown time, for example, when replication is slow on high-latency networks or when a logical replication apply worker is blocked waiting for locks. However, in this case the sender and receiver may be out of sync after shutdown.
+
+
+     This parameter can be set in `primary_conninfo` and in the `CONNECTION` clause of `CREATE SUBSCRIPTION` (for example, include `options=-cwal_sender_shutdown_timeout=10s` in the connection string), allowing different timeouts per replication connection. For example, when both physical and logical replication are used, it can be disabled for physical replication (e.g., for switchovers) while enabled for logical replication to limit shutdown time.
 <a id="guc-track-commit-timestamp"></a>
 
 `track_commit_timestamp` (`boolean`)

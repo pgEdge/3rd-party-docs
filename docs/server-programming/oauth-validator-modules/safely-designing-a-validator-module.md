@@ -61,7 +61,10 @@ Token Confidentiality
      Implementations that send tokens over the network (for example, to perform online token validation with a provider) must authenticate the peer and ensure that strong transport security is in use.
 
 Logging
-:   Modules may use the same [logging facilities](../../internals/postgresql-coding-conventions/reporting-errors-within-the-server.md#error-message-reporting) as standard extensions; however, the rules for emitting log entries to the client are subtly different during the authentication phase of the connection. Generally speaking, modules should log verification problems at the `COMMERROR` level and return normally, instead of using `ERROR`/`FATAL` to unwind the stack, to avoid leaking information to unauthenticated clients.
+:   To simply log the reason for a validation failure, modules may set the freeform `error_detail` field during the [validate callback](oauth-validator-callbacks.md#oauth-validator-callback-validate). ([Error Message Style Guide](../../internals/postgresql-coding-conventions/error-message-style-guide.md#error-style-guide) has guidelines for writing good `DETAIL` messages.) `error_detail` is printed only to the server log, as part of the final authentication failure message, and it is not shared with the client.
+
+
+     Modules may also use the same [logging facilities](../../internals/postgresql-coding-conventions/reporting-errors-within-the-server.md#error-message-reporting) as standard extensions; however, the rules for emitting log entries to the client are subtly different during the authentication phase of the connection. Generally speaking, modules should log problems at the `COMMERROR` level and return normally, instead of using `ERROR`/`FATAL` to unwind the stack, to avoid leaking information to unauthenticated clients.
 
 Interruptibility
 :   Modules must remain interruptible by signals so that the server can correctly handle authentication timeouts and shutdown signals from pg_ctl. For example, blocking calls on sockets should generally be replaced with code that handles both socket events and interrupts without races (see `WaitLatchOrSocket()`, `WaitEventSetWait()`, et al), and long-running loops should periodically call `CHECK_FOR_INTERRUPTS()`. Failure to follow this guidance may result in unresponsive backend sessions.
@@ -71,6 +74,9 @@ Testing
 
 Documentation
 :   Validator implementations should document the contents and format of the authenticated ID that is reported to the server for each end user, since DBAs may need to use this information to construct pg_ident maps. (For instance, is it an email address? an organizational ID number? a UUID?) They should also document whether or not it is safe to use the module in `delegate_ident_mapping=1` mode, and what additional configuration is required in order to do so.
+
+
+     If an implementation provides [custom HBA options](custom-hba-options.md#oauth-validator-hba), the names and syntax of those options should be documented as well.
   <a id="oauth-validator-design-usermap-delegation"></a>
 
 ### Authorizing Users (Usermap Delegation)

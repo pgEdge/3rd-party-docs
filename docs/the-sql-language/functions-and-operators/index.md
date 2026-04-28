@@ -33,6 +33,7 @@ repeat('Pg', 4) PgPgPgPg
 - [Geometric Functions and Operators](geometric-functions-and-operators.md#functions-geometry)
 - [Network Address Functions and Operators](network-address-functions-and-operators.md#functions-net)
 - [Text Search Functions and Operators](text-search-functions-and-operators.md#functions-textsearch)
+- [TID Functions](tid-functions.md#functions-tid)
 - [UUID Functions](uuid-functions.md#functions-uuid)
 - [XML Functions](xml-functions.md#functions-xml)
 - [JSON Functions and Operators](json-functions-and-operators.md#functions-json)

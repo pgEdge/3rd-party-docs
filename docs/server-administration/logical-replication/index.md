@@ -10,16 +10,16 @@
 
  The typical use-cases for logical replication are:
 
--  Sending incremental changes in a single database or a subset of a database to subscribers as they occur
--  Sending a subset of the database to multiple databases (i.e., broadcast)
+-  Sending incremental changes in a single database or a subset of a database to subscribers as they occur.
+-  Sending a subset of the database to multiple databases (i.e., broadcast).
 -  Consolidating multiple databases into a single one (e.g., for analytics).
--  Replicating between different major versions of PostgreSQL
--  Replicating between PostgreSQL instances on different platforms (for example Linux to Windows)
+-  Replicating between different major versions of PostgreSQL.
+-  Replicating between PostgreSQL instances on different platforms (for example Linux to Windows).
 -  Giving access to replicated data to different groups of users.
 -  Firing triggers for individual changes as they arrive on the subscriber.
 
 
- The subscriber database behaves in the same way as any other PostgreSQL instance and can be used as a publisher for other databases by defining its own publications. When the subscriber is treated as read-only by application, there will be no conflicts from a single subscription. On the other hand, if there are other writes done either by an application or by other subscribers to the same set of tables, conflicts can arise.
+ The subscriber database behaves in the same way as any other PostgreSQL instance and can be used as a publisher for other databases by defining its own publications. When the subscriber is treated as read-only by an application, there will be no conflicts from a single subscription. On the other hand, if there are other writes done either by an application or by other subscribers to the same set of tables, conflicts can arise.
 
 - [Publication](publication.md#logical-replication-publication)
 - [Subscription](subscription.md#logical-replication-subscription)

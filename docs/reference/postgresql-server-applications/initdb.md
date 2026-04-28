@@ -11,7 +11,7 @@ create a new PostgreSQL database cluster
 initdb [OPTION...] {
      --pgdata
      -D
-     |  DIRECTORY}
+     |  DATADIR}
 ```
  <a id="r1-app-initdb-1"></a>
 
@@ -77,7 +77,7 @@ initdb [OPTION...] {
 :   This option specifies the authentication method for local users via Unix-domain socket connections used in `pg_hba.conf` (`local` lines).
 <a id="app-initdb-option-pgdata"></a>
 
-<code>-D </code><em>directory</em>, <code>--pgdata=</code><em>directory</em>
+<code>-D </code><em>datadir</em>, <code>--pgdata=</code><em>datadir</em>
 :   This option specifies the directory where the database cluster should be stored. This is the only information required by `initdb`, but you can avoid writing it by setting the `PGDATA` environment variable, which can be convenient since the database server (`postgres`) can find the data directory later by the same variable.
 <a id="app-initdb-option-encoding"></a>
 

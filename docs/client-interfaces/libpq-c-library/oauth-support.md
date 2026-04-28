@@ -204,14 +204,52 @@ Visit https://example.com/device and enter the code: ABCD-EFGH
 ### Debugging and Developer Settings
 
 
- A "dangerous debugging mode" may be enabled by setting the environment variable `PGOAUTHDEBUG=UNSAFE`. This functionality is provided for ease of local development and testing only. It does several things that you will not want a production system to do:
+ While developing against a local authorization server, it may be helpful to make use of the [oauth_ca_file](database-connection-control-functions.md#libpq-connect-oauth-ca-file) connection parameter (or the equivalent `PGOAUTHCAFILE` environment variable) in the client application.
 
--  permits the use of unencrypted HTTP during the OAuth provider exchange
--  allows the system's trusted CA list to be completely replaced using the `PGOAUTHCAFILE` environment variable
--  prints HTTP traffic (containing several critical secrets) to standard error during the OAuth flow
--  permits the use of zero-second retry intervals, which can cause the client to busy-loop and pointlessly consume CPU
+
+ Debug features may be enabled by setting the `PGOAUTHDEBUG` environment variable. This functionality is provided for ease of local development and testing. The variable accepts a comma-separated list of debug options:
+
+```
+
+PGOAUTHDEBUG=option1,option2,...         for safe options only
+PGOAUTHDEBUG=UNSAFE:option1,option2,...  when using unsafe options
+PGOAUTHDEBUG=UNSAFE                      legacy format; enables all options
+
+```
+
+
+ Available debug options:
+
+`http` (unsafe)
+:   Permits the use of unencrypted HTTP during the OAuth provider exchange. This allows OAuth credentials to be transmitted over unencrypted connections, which is extremely dangerous and should only be used for local testing.
+
+`trace` (unsafe)
+:   Prints HTTP traffic to standard error during the OAuth flow. This output contains critical secrets including bearer tokens, client secrets, access tokens, and authorization codes. Never share this output with third parties.
+
+`dos-endpoint` (unsafe)
+:   Permits the use of zero-second retry intervals instead of the normal minimum of one second. This speeds up tests, but in normal operation it will cause the client to busy-loop, consuming CPU and network resources.
+
+`call-count` (safe)
+:   Prints the total number of calls to the flow plugin to standard error when the OAuth flow completes. This helps developers debug the async callback behavior.
+
+`plugin-errors` (safe)
+:   Prints plugin loading errors to standard error. This helps developers and package maintainers debug issues when the OAuth plugin fails to load.
+
+
+ Unsafe options (`http`, `trace`, `dos-endpoint`) require the `UNSAFE:` prefix. If unsafe options are specified without this prefix, or if an option name is unrecognized, a warning is printed to standard error and that option is ignored. Other valid options in the list continue to work. Safe options (`call-count`, `plugin-errors`) can be used without the prefix.
+
+
+ Examples:
+
+```
+
+PGOAUTHDEBUG=call-count              safe options only
+PGOAUTHDEBUG=UNSAFE:http,trace       enable HTTP and traffic logging
+PGOAUTHDEBUG=UNSAFE:http,call-count  mix of unsafe and safe
+
+```
 
 
 !!! warning
 
-    Do not share the output of the OAuth flow traffic with third parties. It contains secrets that can be used to attack your clients and servers.
+    Never use unsafe debug options in production environments. They expose secrets and behaviors that can be used to attack your clients and servers. Do not share `trace` output with third parties.

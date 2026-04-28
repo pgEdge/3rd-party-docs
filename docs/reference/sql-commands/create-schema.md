@@ -45,7 +45,7 @@ where ROLE_SPECIFICATION can be:
 :   The role name of the user who will own the new schema. If omitted, defaults to the user executing the command. To create a schema owned by another role, you must be able to `SET ROLE` to that role.
 
 *schema_element*
-:   An SQL statement defining an object to be created within the schema. Currently, only `CREATE TABLE`, `CREATE VIEW`, `CREATE INDEX`, `CREATE SEQUENCE`, `CREATE TRIGGER` and `GRANT` are accepted as clauses within `CREATE SCHEMA`. Other kinds of objects may be created in separate commands after the schema is created.
+:   An SQL statement defining an object to be created within the schema. Currently, only `CREATE AGGREGATE`, `CREATE COLLATION`, `CREATE DOMAIN`, `CREATE FUNCTION`, `CREATE INDEX`, `CREATE OPERATOR`, `CREATE PROCEDURE`, `CREATE SEQUENCE`, `CREATE TABLE`, `CREATE TEXT SEARCH CONFIGURATION`, `CREATE TEXT SEARCH DICTIONARY`, `CREATE TEXT SEARCH PARSER`, `CREATE TEXT SEARCH TEMPLATE`, `CREATE TRIGGER`, `CREATE TYPE`, `CREATE VIEW`, and `GRANT` are accepted as clauses within `CREATE SCHEMA`. Other kinds of objects may be created within the schema in separate commands after the schema is created.
 
 `IF NOT EXISTS`
 :   Do nothing (except issuing a notice) if a schema with the same name already exists. *schema_element* subcommands cannot be included when this option is used.
@@ -55,6 +55,9 @@ where ROLE_SPECIFICATION can be:
 
 
  To create a schema, the invoking user must have the `CREATE` privilege for the current database. (Of course, superusers bypass this check.)
+
+
+ The *schema_element* subcommands, if any, are executed in the order they are written. An exception is that foreign key constraint clauses in `CREATE TABLE` subcommands are postponed and added at the end. This allows circular foreign key references, which are sometimes useful.
 
 
 ## Examples
@@ -113,7 +116,7 @@ CREATE VIEW hollywood.winners AS
  The SQL standard allows a `DEFAULT CHARACTER SET` clause in `CREATE SCHEMA`, as well as more subcommand types than are presently accepted by PostgreSQL.
 
 
- The SQL standard specifies that the subcommands in `CREATE SCHEMA` can appear in any order. The present PostgreSQL implementation does not handle all cases of forward references in subcommands; it might sometimes be necessary to reorder the subcommands in order to avoid forward references.
+ Some other SQL implementations attempt to allow more kinds of forward references to objects defined in later *schema_element* subcommands than just foreign key constraints. This is difficult or impossible to do correctly in general, and it is not clear that the SQL standard requires any such behavior except for foreign keys.
 
 
  According to the SQL standard, the owner of a schema always owns all objects within it. PostgreSQL allows schemas to contain objects owned by users other than the schema owner. This can happen only if the schema owner grants the `CREATE` privilege on their schema to someone else, or a superuser chooses to create objects in it.

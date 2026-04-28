@@ -87,6 +87,30 @@
 
 `autovacuum_vacuum_cost_limit` (`integer`)
 :   Specifies the cost limit value that will be used in automatic `VACUUM` operations. If `-1` is specified (which is the default), the regular [vacuum_cost_limit](#guc-vacuum-cost-limit) value will be used. Note that the value is distributed proportionally among the running autovacuum workers, if there is more than one, so that the sum of the limits for each worker does not exceed the value of this variable. This parameter can only be set in the `postgresql.conf` file or on the server command line; but the setting can be overridden for individual tables by changing table storage parameters.
+<a id="guc-autovacuum-freeze-score-weight"></a>
+
+`autovacuum_freeze_score_weight` (`floating point`)
+:   Specifies the scaling factor of the transaction ID age component of the score used by autovacuum for prioritization purposes. The default is `1.0`. This parameter can only be set in the `postgresql.conf` file or on the server command line. See [Autovacuum Prioritization](../routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum-priority) for more information.
+<a id="guc-autovacuum-multixact-freeze-score-weight"></a>
+
+`autovacuum_multixact_freeze_score_weight` (`floating point`)
+:   Specifies the scaling factor of the multixact ID age component of the score used by autovacuum for prioritization purposes. The default is `1.0`. This parameter can only be set in the `postgresql.conf` file or on the server command line. See [Autovacuum Prioritization](../routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum-priority) for more information.
+<a id="guc-autovacuum-vacuum-score-weight"></a>
+
+`autovacuum_vacuum_score_weight` (`floating point`)
+:   Specifies the scaling factor of the vacuum threshold component of the score used by autovacuum for prioritization purposes. The default is `1.0`. This parameter can only be set in the `postgresql.conf` file or on the server command line. See [Autovacuum Prioritization](../routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum-priority) for more information.
+<a id="guc-autovacuum-vacuum-insert-score-weight"></a>
+
+`autovacuum_vacuum_insert_score_weight` (`floating point`)
+:   Specifies the scaling factor of the vacuum insert threshold component of the score used by autovacuum for prioritization purposes. The default is `1.0`. This parameter can only be set in the `postgresql.conf` file or on the server command line. See [Autovacuum Prioritization](../routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum-priority) for more information.
+<a id="guc-autovacuum-analyze-score-weight"></a>
+
+`autovacuum_analyze_score_weight` (`floating point`)
+:   Specifies the scaling factor of the analyze threshold component of the score used by autovacuum for prioritization purposes. The default is `1.0`. This parameter can only be set in the `postgresql.conf` file or on the server command line. See [Autovacuum Prioritization](../routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum-priority) for more information.
+<a id="guc-autovacuum-max-parallel-workers"></a>
+
+`autovacuum_max_parallel_workers` (`integer`)
+:   Sets the maximum number of parallel workers that can be used by a single autovacuum worker to process indexes. This limit applies specifically to the index vacuuming and index cleanup phases (for the details of each autovacuum phase, please refer to [VACUUM Phases](../monitoring-database-activity/progress-reporting.md#vacuum-phases)). The actual number of parallel workers is further limited by [max_parallel_workers](resource-consumption.md#guc-max-parallel-workers). This is the per-autovacuum worker equivalent of the `PARALLEL` option of the [`VACUUM`](../../reference/sql-commands/vacuum.md#sql-vacuum) command. Setting this value to 0 disables parallel vacuum during autovacuum. The default is 0.
   <a id="runtime-config-resource-vacuum-cost"></a>
 
 ### Cost-based Vacuum Delay

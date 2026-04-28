@@ -396,8 +396,16 @@
 <p>Number of heap tuples scanned. This counter only advances when the phase is <code>seq scanning heap</code>, <code>index scanning heap</code> or <code>writing new heap</code>.</p></td>
 </tr>
 <tr>
-<td><p><code>heap_tuples_written</code> <code>bigint</code></p>
-<p>Number of heap tuples written. This counter only advances when the phase is <code>seq scanning heap</code>, <code>index scanning heap</code> or <code>writing new heap</code>.</p></td>
+<td><p><code>heap_tuples_inserted</code> <code>bigint</code></p>
+<p>Number of heap tuples inserted. This counter only advances when the phase is <code>seq scanning heap</code>, <code>index scanning heap</code>, <code>writing new heap</code> or <code>catch-up</code>.</p></td>
+</tr>
+<tr>
+<td><p><code>heap_tuples_updated</code> <code>bigint</code></p>
+<p>Number of heap tuples updated. This counter only advances when the phase is <code>catch-up</code>.</p></td>
+</tr>
+<tr>
+<td><p><code>heap_tuples_deleted</code> <code>bigint</code></p>
+<p>Number of heap tuples deleted. This counter only advances when the phase is <code>catch-up</code>.</p></td>
 </tr>
 <tr>
 <td><p><code>heap_blks_total</code> <code>bigint</code></p>
@@ -424,6 +432,7 @@
 | `index scanning heap` | `REPACK` is currently scanning the table using an index scan. |
 | `sorting tuples` | `REPACK` is currently sorting tuples. |
 | `writing new heap` | `REPACK` is currently writing the new heap. |
+| `catch-up` | `REPACK CONCURRENTLY` is currently processing the DML commands that other transactions executed during any of the preceding phases. |
 | `swapping relation files` | The command is currently swapping newly-built files into place. |
 | `rebuilding index` | The command is currently rebuilding an index. |
 | `performing final cleanup` | The command is performing final cleanup. When this phase is completed, `REPACK` will end. |
@@ -594,3 +603,74 @@
 | `streaming database files` | The WAL sender process is currently streaming database files as a base backup. |
 | `waiting for wal archiving to finish` | The WAL sender process is currently performing `pg_backup_stop` to finish the backup, and waiting for all the WAL files required for the base backup to be successfully archived. If either `--wal-method=none` or `--wal-method=stream` is specified in pg_basebackup, the backup will end when this phase is completed. |
 | `transferring wal files` | The WAL sender process is currently transferring all WAL logs generated during the backup. This phase occurs after `waiting for wal archiving to finish` phase if `--wal-method=fetch` is specified in pg_basebackup. The backup will end when this phase is completed. |
+  <a id="data-checksum-progress-reporting"></a>
+
+### Data Checksum Progress Reporting
+
+
+ When data checksums are being enabled on a running cluster, the `pg_stat_progress_data_checksums` view will contain a row for the launcher process, and one row for each worker process which is currently calculating and writing checksums for the data pages in a database. The launcher provides overview of the overall progress (how many databases have been processed, how many remain), while the workers track progress for currently processed databases.
+ <a id="pg-stat-progress-data-checksums-view"></a>
+
+**Table: `pg_stat_progress_data_checksums` View**
+
+<table>
+<thead>
+<tr>
+<th><p>Column Type</p>
+<p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p><code>pid</code> <code>integer</code></p>
+<p>Process ID of the data checksum process, launcher or worker.</p></td>
+</tr>
+<tr>
+<td><p><code>datid</code> <code>oid</code></p>
+<p>OID of this database, or <code>0</code> for the launcher process.</p></td>
+</tr>
+<tr>
+<td><p><code>datname</code> <code>name</code></p>
+<p>Name of this database, or <code>NULL</code> for the launcher process.</p></td>
+</tr>
+<tr>
+<td><p><code>phase</code> <code>text</code></p>
+<p>Current processing phase, see <a href="#datachecksum-phases">Data Checksum Phases</a> for description of the phases.</p></td>
+</tr>
+<tr>
+<td><p><code>databases_total</code> <code>integer</code></p>
+<p>The total number of databases which will be processed. Only the launcher process has this value set, the worker processes have this set to <code>NULL</code>.</p></td>
+</tr>
+<tr>
+<td><p><code>databases_done</code> <code>integer</code></p>
+<p>The number of databases which have been processed. Only the launcher process has this value set, the worker processes have this set to <code>NULL</code>.</p></td>
+</tr>
+<tr>
+<td><p><code>relations_total</code> <code>integer</code></p>
+<p>The total number of relations which will be processed, or <code>NULL</code> if the worker process hasn't calculated the number of relations yet. The launcher process has this set to <code>NULL</code> since it isn't responsible for processing relations, only launching worker processes.</p></td>
+</tr>
+<tr>
+<td><p><code>relations_done</code> <code>integer</code></p>
+<p>The number of relations which have been processed. The launcher process has this set to <code>NULL</code>.</p></td>
+</tr>
+<tr>
+<td><p><code>blocks_total</code> <code>integer</code></p>
+<p>The number of blocks in the current relation which will be processed, or <code>NULL</code> if the worker process hasn't calculated the number of blocks yet. The launcher process has this set to <code>NULL</code>.</p></td>
+</tr>
+<tr>
+<td><p><code>blocks_done</code> <code>integer</code></p>
+<p>The number of blocks in the current relation which have been processed. The launcher process has this set to <code>NULL</code>.</p></td>
+</tr>
+</tbody>
+</table>
+ <a id="datachecksum-phases"></a>
+
+**Table: Data Checksum Phases**
+
+| Phase | Description |
+| --- | --- |
+| `enabling` | The command is currently enabling data checksums on the cluster. |
+| `disabling` | The command is currently disabling data checksums on the cluster. |
+| `done` | The command is done and the data checksum state in the cluster has changed. |
+| `waiting on barrier` | The command is currently waiting for the current active backends to acknowledge the change in data checksum state. |
+| `waiting on temporary tables` | The command is currently waiting for all temporary tables which existed at the time the command was started to be removed. |

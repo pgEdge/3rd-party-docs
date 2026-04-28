@@ -14,18 +14,18 @@
 
 `xmin`
 :   The identity (transaction ID) of the inserting transaction for this row version. (A row version is an individual state of a row; each update of a row creates a new row version for the same logical row.)
-<a id="ddl-system-columns-cmin"></a>
-
-`cmin`
-:   The command identifier (starting at zero) within the inserting transaction.
 <a id="ddl-system-columns-xmax"></a>
 
 `xmax`
 :   The identity (transaction ID) of the deleting transaction, or zero for an undeleted row version. It is possible for this column to be nonzero in a visible row version. That usually indicates that the deleting transaction hasn't committed yet, or that an attempted deletion was rolled back.
+<a id="ddl-system-columns-cmin"></a>
+
+`cmin`
+:   Originally, `cmin` and `cmax` were separate fields. `cmin` was the inserting command's command identifier (starting at zero) within the inserting transaction, while `cmax` was the deleting command's command identifier within the deleting transaction, or zero if no delete attempt had occurred yet. Nowadays these columns refer to the same field and will always read as the same value. That might be the inserting command's command identifier, or the deleting command's command identifier, or a “combocid” that reflects both actions when those happened in the same transaction.
 <a id="ddl-system-columns-cmax"></a>
 
 `cmax`
-:   The command identifier within the deleting transaction, or zero.
+:   See `cmin`.
 <a id="ddl-system-columns-ctid"></a>
 
 `ctid`

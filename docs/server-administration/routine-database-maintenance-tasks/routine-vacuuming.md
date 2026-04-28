@@ -164,11 +164,12 @@ SELECT datname, age(datfrozenxid) FROM pg_database;
  While `VACUUM` scans mostly pages that have been modified since the last vacuum, it may also eagerly scan some all-visible but not all-frozen pages in an attempt to freeze them, but the `relfrozenxid` will only be advanced when every page of the table that might contain unfrozen XIDs is scanned. This happens when `relfrozenxid` is more than `vacuum_freeze_table_age` transactions old, when `VACUUM`'s `FREEZE` option is used, or when all pages that are not already all-frozen happen to require vacuuming to remove dead row versions. When `VACUUM` scans every page in the table that is not already all-frozen, it should set `age(relfrozenxid)` to a value just a little more than the `vacuum_freeze_min_age` setting that was used (more by the number of transactions started since the `VACUUM` started). `VACUUM` will set `relfrozenxid` to the oldest XID that remains in the table, so it's possible that the final value will be much more recent than strictly required. If no `relfrozenxid`-advancing `VACUUM` is issued on the table until `autovacuum_freeze_max_age` is reached, an autovacuum will soon be forced for the table.
 
 
- If for some reason autovacuum fails to clear old XIDs from a table, the system will begin to emit warning messages like this when the database's oldest XIDs reach forty million transactions from the wraparound point:
+ If for some reason autovacuum fails to clear old XIDs from a table, the system will begin to emit warning messages like this when the database's oldest XIDs reach one hundred million transactions from the wraparound point:
 
 ```
 
-WARNING:  database "mydb" must be vacuumed within 39985967 transactions
+WARNING:  database "mydb" must be vacuumed within 99985967 transactions
+DETAIL:  Approximately 4.66% of transaction IDs are available for use.
 HINT:  To avoid XID assignment failures, execute a database-wide VACUUM in that database.
 ```
  (A manual `VACUUM` should fix the problem, as suggested by the hint; but note that the `VACUUM` should be performed by a superuser, else it will fail to process system catalogs, which prevent it from being able to advance the database's `datfrozenxid`.) If these warnings are ignored, the system will refuse to assign new XIDs once there are fewer than three million transactions left until wraparound:
@@ -222,7 +223,7 @@ HINT:  Execute a database-wide VACUUM in that database.
  This output shows a system with significant multixact activity: about 312 million multixact IDs and about 2.8 billion member entries consuming 13 GB of storage space. A spike in `num_mxids` might indicate multiple sessions running `UPDATE` statements with foreign key checks, concurrent `SELECT FOR SHARE` operations, or frequent use of savepoints causing lock contention. If `oldest_multixact` value remains unchanged while `num_members` grows, it could indicate that long-running transactions are preventing cleanup, or autovacuum is not keeping up with the workload.
 
 
- Similar to the XID case, if autovacuum fails to clear old MXIDs from a table, the system will begin to emit warning messages when the database's oldest MXIDs reach forty million transactions from the wraparound point. And, just as in the XID case, if these warnings are ignored, the system will refuse to generate new MXIDs once there are fewer than three million left until wraparound.
+ Similar to the XID case, if autovacuum fails to clear old MXIDs from a table, the system will begin to emit warning messages when the database's oldest MXIDs reach one hundred million transactions from the wraparound point. And, just as in the XID case, if these warnings are ignored, the system will refuse to generate new MXIDs once there are fewer than three million left until wraparound.
 
 
  Normal operation when MXIDs are exhausted can be restored in much the same way as when XIDs are exhausted. Follow the same steps in the previous section, but with the following differences:
@@ -281,7 +282,7 @@ analyze threshold = analyze base threshold + analyze scale factor * number of tu
  The default thresholds and scale factors are taken from `postgresql.conf`, but it is possible to override them (and many other autovacuum control parameters) on a per-table basis; see [Storage Parameters](../../reference/sql-commands/create-table.md#sql-createtable-storage-parameters) for more information. If a setting has been changed via a table's storage parameters, that value is used when processing that table; otherwise the global settings are used. See [Automatic Vacuuming](../server-configuration/vacuuming.md#runtime-config-autovacuum) for more details on the global settings.
 
 
- When multiple workers are running, the autovacuum cost delay parameters (see [Cost-based Vacuum Delay](../server-configuration/vacuuming.md#runtime-config-resource-vacuum-cost)) are “balanced” among all the running workers, so that the total I/O impact on the system is the same regardless of the number of workers actually running. However, any workers processing tables whose per-table `autovacuum_vacuum_cost_delay` or `autovacuum_vacuum_cost_limit` storage parameters have been set are not considered in the balancing algorithm.
+ When multiple workers are running, the autovacuum cost delay parameters (see [Cost-based Vacuum Delay](../server-configuration/vacuuming.md#runtime-config-resource-vacuum-cost)) are “balanced” among all the running workers, so that the total I/O impact on the system is the same regardless of the number of workers actually running. However, any workers processing tables whose per-table `autovacuum_vacuum_cost_delay` or `autovacuum_vacuum_cost_limit` storage parameters have been set are not considered in the balancing algorithm. Parallel workers launched for [Parallel Vacuum](#parallel-vacuum) are using the same cost delay parameters as the leader worker. If any of these parameters are changed in the leader worker, it will propagate the new parameter values to all of its parallel workers.
 
 
  Autovacuum workers generally don't block other commands. If a process attempts to acquire a lock that conflicts with the `SHARE UPDATE EXCLUSIVE` lock held by autovacuum, lock acquisition will interrupt the autovacuum. For conflicting lock modes, see [Conflicting Lock Modes](../../the-sql-language/concurrency-control/explicit-locking.md#table-lock-compatibility). However, if the autovacuum is running to prevent transaction ID wraparound (i.e., the autovacuum query name in the `pg_stat_activity` view ends with `(to prevent wraparound)` or the `started_by` column in the `pg_stat_progress_vacuum` view shows `autovacuum_wraparound` value), the autovacuum is not automatically interrupted.
@@ -290,3 +291,34 @@ analyze threshold = analyze base threshold + analyze scale factor * number of tu
 !!! warning
 
     Regularly running commands that acquire locks conflicting with a `SHARE UPDATE EXCLUSIVE` lock (e.g., ANALYZE) can effectively prevent autovacuums from ever completing.
+ <a id="autovacuum-priority"></a>
+
+#### Autovacuum Prioritization
+
+
+ Autovacuum decides what to process in two steps: first it chooses a database, then it chooses the tables within that database. The autovacuum launcher process prioritizes databases at risk of transaction ID or multixact ID wraparound, else it chooses the database processed least recently. As an exception, it skips databases with no connections or no activity since the last statistics reset, unless at risk of wraparound.
+
+
+ Within a database, the autovacuum worker process builds a list of tables that require vacuum or analyze and sorts them using a scoring system. It scores each table by taking the maximum value of several component scores representing various criteria important to vacuum or analyze. Those components are as follows:
+
+
+-  The *transaction ID* component measures the age in transactions of the table's `pg_class`.`relfrozenxid` field as compared to [autovacuum_freeze_max_age](../server-configuration/vacuuming.md#guc-autovacuum-freeze-max-age). Furthermore, this component increases greatly once the age surpasses [vacuum_failsafe_age](../server-configuration/vacuuming.md#guc-vacuum-failsafe-age). The final value for this component can be adjusted via [autovacuum_freeze_score_weight](../server-configuration/vacuuming.md#guc-autovacuum-freeze-score-weight). Note that increasing this parameter's value also lowers the age at which this component begins scaling aggressively, i.e., the scaling age is divided by its value if greater than `1.0`.
+-  The *multixact ID* component measures the age in multixacts of the table's `pg_class`.`relminmxid` field as compared to [autovacuum_multixact_freeze_max_age](../server-configuration/vacuuming.md#guc-autovacuum-multixact-freeze-max-age). Furthermore, this component increases greatly once the age surpasses [vacuum_multixact_failsafe_age](../server-configuration/vacuuming.md#guc-vacuum-multixact-failsafe-age). The final value for this component can be adjusted via [autovacuum_multixact_freeze_score_weight](../server-configuration/vacuuming.md#guc-autovacuum-multixact-freeze-score-weight). Note that increasing this parameter's value also lowers the age at which this component begins scaling aggressively, i.e., the scaling age is divided by its value if greater than `1.0`.
+-  The *vacuum* component measures the number of updated or deleted tuples as compared to the threshold calculated with [autovacuum_vacuum_threshold](../server-configuration/vacuuming.md#guc-autovacuum-vacuum-threshold), [autovacuum_vacuum_scale_factor](../server-configuration/vacuuming.md#guc-autovacuum-vacuum-scale-factor), and [autovacuum_vacuum_max_threshold](../server-configuration/vacuuming.md#guc-autovacuum-vacuum-max-threshold). The final value for this component can be adjusted via [autovacuum_vacuum_score_weight](../server-configuration/vacuuming.md#guc-autovacuum-vacuum-score-weight).
+-  The *vacuum insert* component measures the number of inserted tuples as compared to the threshold calculated with [autovacuum_vacuum_insert_threshold](../server-configuration/vacuuming.md#guc-autovacuum-vacuum-insert-threshold) and [autovacuum_vacuum_insert_scale_factor](../server-configuration/vacuuming.md#guc-autovacuum-vacuum-insert-scale-factor). The final value for this component can be adjusted via [autovacuum_vacuum_insert_score_weight](../server-configuration/vacuuming.md#guc-autovacuum-vacuum-insert-score-weight).
+-  The *analyze* component measures the number of inserted, updated, or deleted tuples as compared to the threshold calculated with [autovacuum_analyze_threshold](../server-configuration/vacuuming.md#guc-autovacuum-analyze-threshold) and [autovacuum_analyze_scale_factor](../server-configuration/vacuuming.md#guc-autovacuum-analyze-scale-factor). The final value for this component can be adjusted via [autovacuum_analyze_score_weight](../server-configuration/vacuuming.md#guc-autovacuum-analyze-score-weight).
+
+
+ To revert to the prioritization strategy used before PostgreSQL 19 (i.e., the order the tables are listed in the `pg_class` system catalog), set all of the aforementioned "weight" parameters to `0.0`. Otherwise, these "weight" parameters are multiplied to their respective component scores. For example, raising [autovacuum_analyze_score_weight](../server-configuration/vacuuming.md#guc-autovacuum-analyze-score-weight) to `2.0` effectively doubles the *analyze* component score.
+
+
+ The [`pg_stat_autovacuum_scores`](../monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-autovacuum-scores-view) view shows the current scores of all tables in the current database.
+   <a id="parallel-vacuum"></a>
+
+### Parallel Vacuum
+
+
+ `VACUUM` can perform index vacuuming and index cleanup phases in parallel using background workers (for the details of each vacuum phase, please refer to [VACUUM Phases](../monitoring-database-activity/progress-reporting.md#vacuum-phases)). The degree of parallelism is determined by the number of indexes on the relation that support parallel vacuum. For manual `VACUUM`, this is limited by the `PARALLEL` option if specified, which is further capped by [max_parallel_maintenance_workers](../server-configuration/resource-consumption.md#guc-max-parallel-maintenance-workers). For autovacuum, it is limited by the table's [autovacuum_parallel_workers](../../reference/sql-commands/create-table.md#reloption-autovacuum-parallel-workers) if specified, which is further capped by [autovacuum_max_parallel_workers](../server-configuration/vacuuming.md#guc-autovacuum-max-parallel-workers) parameter. Please note that it is not guaranteed that the number of parallel workers that was calculated will be used during execution. It is possible for a vacuum to run with fewer workers than specified, or even with no workers at all.
+
+
+ An index can participate in parallel vacuum if and only if the size of the index is more than [min_parallel_index_scan_size](../server-configuration/query-planning.md#guc-min-parallel-index-scan-size). Only one worker can be used per index. So parallel workers are launched only when there are at least `2` indexes in the table. Workers for vacuum are launched before the start of each phase and exit at the end of the phase. These behaviors might change in a future release.

@@ -9,14 +9,18 @@ define a new table from the results of a query
 
 ```
 
-CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] TABLE_NAME
-    [ (COLUMN_NAME [, ...] ) ]
+CREATE [ PERSISTENCE_MODE ] TABLE [ IF NOT EXISTS ] TABLE_NAME
+    [ ( COLUMN_NAME [, ...] ) ]
     [ USING METHOD ]
     [ WITH ( STORAGE_PARAMETER [= VALUE] [, ... ] ) | WITHOUT OIDS ]
     [ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
     [ TABLESPACE TABLESPACE_NAME ]
     AS QUERY
     [ WITH [ NO ] DATA ]
+
+where PERSISTENCE_MODE is:
+
+{ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } } | UNLOGGED
 ```
 
 

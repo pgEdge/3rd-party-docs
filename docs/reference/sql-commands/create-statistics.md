@@ -10,7 +10,7 @@ define extended statistics
 ```
 
 CREATE STATISTICS [ [ IF NOT EXISTS ] STATISTICS_NAME ]
-    ON ( EXPRESSION )
+    ON { COLUMN_NAME | ( EXPRESSION ) }
     FROM TABLE_NAME
 
 CREATE STATISTICS [ [ IF NOT EXISTS ] STATISTICS_NAME ]
@@ -26,7 +26,7 @@ CREATE STATISTICS [ [ IF NOT EXISTS ] STATISTICS_NAME ]
  `CREATE STATISTICS` will create a new extended statistics object tracking data about the specified table, foreign table or materialized view. The statistics object will be created in the current database and will be owned by the user issuing the command.
 
 
- The `CREATE STATISTICS` command has two basic forms. The first form allows univariate statistics for a single expression to be collected, providing benefits similar to an expression index without the overhead of index maintenance. This form does not allow the statistics kind to be specified, since the various statistics kinds refer only to multivariate statistics. The second form of the command allows multivariate statistics on multiple columns and/or expressions to be collected, optionally specifying which statistics kinds to include. This form will also automatically cause univariate statistics to be collected on any expressions included in the list.
+ The `CREATE STATISTICS` command has two basic forms. The first form allows univariate statistics for a single expression or virtual generated column to be collected, providing benefits similar to an expression index without the overhead of index maintenance. This form does not allow the statistics kind to be specified, since the various statistics kinds refer only to multivariate statistics. The second form of the command allows multivariate statistics on multiple columns and/or expressions to be collected, optionally specifying which statistics kinds to include. This form will also automatically cause univariate statistics to be collected on any expressions and virtual generated columns included in the list.
 
 
  If a schema name is given (for example, `CREATE STATISTICS myschema.mystat ...`) then the statistics object is created in the specified schema. Otherwise it is created in the current schema. If given, the name of the statistics object must be distinct from the name of any other statistics object in the same schema.
@@ -42,13 +42,16 @@ CREATE STATISTICS [ [ IF NOT EXISTS ] STATISTICS_NAME ]
 :   The name (optionally schema-qualified) of the statistics object to be created. If the name is omitted, PostgreSQL chooses a suitable name based on the parent table's name and the defined column name(s) and/or expression(s).
 
 *statistics_kind*
-:   A multivariate statistics kind to be computed in this statistics object. Currently supported kinds are `ndistinct`, which enables n-distinct statistics, `dependencies`, which enables functional dependency statistics, and `mcv` which enables most-common values lists. If this clause is omitted, all supported statistics kinds are included in the statistics object. Univariate expression statistics are built automatically if the statistics definition includes any complex expressions rather than just simple column references. For more information, see [Extended Statistics](../../the-sql-language/performance-tips/statistics-used-by-the-planner.md#planner-stats-extended) and [Multivariate Statistics Examples](../../internals/how-the-planner-uses-statistics/multivariate-statistics-examples.md#multivariate-statistics-examples).
+:   A multivariate statistics kind to be computed in this statistics object. Currently supported kinds are `ndistinct`, which enables n-distinct statistics, `dependencies`, which enables functional dependency statistics, and `mcv` which enables most-common values lists. If this clause is omitted, all supported statistics kinds are included in the statistics object. Univariate expression statistics are built automatically if the statistics definition includes any complex expressions or references to virtual generated columns rather than just simple column references. For more information, see [Extended Statistics](../../the-sql-language/performance-tips/statistics-used-by-the-planner.md#planner-stats-extended) and [Multivariate Statistics Examples](../../internals/how-the-planner-uses-statistics/multivariate-statistics-examples.md#multivariate-statistics-examples).
 
 *column_name*
-:   The name of a table column to be covered by the computed statistics. This is only allowed when building multivariate statistics. At least two column names or expressions must be specified, and their order is not significant.
+:   The name of a table column to be covered by the computed statistics. This may be used to build univariate statistics on a single virtual generated column, or as part of a list of multiple columns (virtual or non-virtual) and/or expressions to build multivariate statistics. In the latter case, separate univariate statistics are built automatically for each expression and virtual generated column in the list.
+
+
+     Defining extended statistics on a single *non-virtual* column is not supported or necessary, because statistics are built automatically on such columns without defining extended statistics.
 
 *expression*
-:   An expression to be covered by the computed statistics. This may be used to build univariate statistics on a single expression, or as part of a list of multiple column names and/or expressions to build multivariate statistics. In the latter case, separate univariate statistics are built automatically for each expression in the list.
+:   An expression to be covered by the computed statistics. This may be used to build univariate statistics on a single expression, or as part of a list of multiple column names and/or expressions to build multivariate statistics. In the latter case, separate univariate statistics are built automatically for each expression and virtual generated column in the list.
 
 *table_name*
 :   The name (optionally schema-qualified) of the table containing the column(s) the statistics are computed on; see [sql-analyze](analyze.md#sql-analyze) for an explanation of the handling of inheritance and partitions.
@@ -60,7 +63,7 @@ CREATE STATISTICS [ [ IF NOT EXISTS ] STATISTICS_NAME ]
  You must be the owner of a table to create a statistics object reading it. Once created, however, the ownership of the statistics object is independent of the underlying table(s).
 
 
- Expression statistics are per-expression and are similar to creating an index on the expression, except that they avoid the overhead of index maintenance. Expression statistics are built automatically for each expression in the statistics object definition.
+ Expression statistics are per-expression and are similar to creating an index on the expression, except that they avoid the overhead of index maintenance. Expression statistics are built automatically for each expression in the statistics object definition. Extended statistics on a virtual generated column behave the same as expression statistics on the column's generation expression.
 
 
  Extended statistics are not currently used by the planner for selectivity estimations made for table joins. This limitation will likely be removed in a future version of PostgreSQL.

@@ -215,7 +215,7 @@
 <tr>
 <td><a id="function-encode"></a>
  `encode` ( `bytes` `bytea`, `format` `text` ) `text`</td>
-<td>Encodes binary data into a textual representation; supported <code>format</code> values are: <a href="#encode-format-base64"><code>base64</code></a>, <a href="#encode-format-base64url"><code>base64url</code></a>, <a href="#encode-format-escape"><code>escape</code></a>, <a href="#encode-format-hex"><code>hex</code></a>.</td>
+<td>Encodes binary data into a textual representation; supported <code>format</code> values are: <a href="#encode-format-base32hex"><code>base32hex</code></a>, <a href="#encode-format-base64"><code>base64</code></a>, <a href="#encode-format-base64url"><code>base64url</code></a>, <a href="#encode-format-escape"><code>escape</code></a>, <a href="#encode-format-hex"><code>hex</code></a>.</td>
 <td><code>encode('123\000\001', 'base64')</code> <code>MTIzAAE=</code></td>
 </tr>
 <tr>
@@ -230,6 +230,18 @@
 
  The `encode` and `decode` functions support the following textual formats:
 
+<a id="encode-format-base32hex"></a>
+
+base32hex
+:   The `base32hex` format is that of [RFC 4648 Section 7](https://datatracker.ietf.org/doc/html/rfc4648#section-7). It uses the extended hex alphabet (`0`-`9` and `A`-`V`) which preserves the sort order of the encoded data when compared byte-wise. The `encode` function produces output padded with `'='`, while `decode` accepts both padded and unpadded input. Decoding is case-insensitive and ignores whitespace characters.
+
+
+     This format is useful for encoding UUIDs in a compact, byte-wise sortable format: `rtrim(encode(uuid_value::bytea, 'base32hex'), '=')` produces a 26-character string compared to the standard 36-character UUID representation.
+
+
+    !!! note
+
+        To maintain the lexicographical sort order of the encoded data, ensure that the text is sorted using the C collation (e.g., using `COLLATE "C"`). Natural language collations may sort characters differently and break the ordering.
 <a id="encode-format-base64"></a>
 
 base64

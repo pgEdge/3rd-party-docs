@@ -148,6 +148,7 @@
     - `bgworker`
     - `bgwriter`
     - `checkpointer`
+    - `checksums`
     - `ioworker`
     - `postmaster`
     - `slotsyncworker`

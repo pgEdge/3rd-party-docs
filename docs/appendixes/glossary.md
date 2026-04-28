@@ -74,7 +74,7 @@
  <a id="glossary-auxiliary-proc"></a>
 
 **Auxiliary process**
-:   A process within an *instance* that is in charge of some specific background task for the instance. The auxiliary processes consist of   the *autovacuum launcher* (but not the autovacuum workers), the *background writer*, the *checkpointer*, the *logger*, the *startup process*, the *WAL archiver*, the *WAL receiver* (but not the *WAL senders*), the *WAL summarizer*, and the *WAL writer*.
+:   A process within an *instance* that is in charge of some specific background task for the instance. The auxiliary processes consist of   the *autovacuum launcher* (but not the autovacuum workers), the *background writer*, the *checkpointer*, the *data checksums worker*, the *data checksums worker launcher*, the *logger*, the *startup process*, the *WAL archiver*, the *WAL receiver* (but not the *WAL senders*), the *WAL summarizer*, and the *WAL writer*.
  <a id="glossary-backend"></a>
 
 **Backend (process)**
@@ -221,6 +221,14 @@
 
 **Data area**
     *See: *
+ <a id="glossary-data-checksums-worker"></a>
+
+**Data Checksums Worker**
+:   A *background worker* which enables data checksums in a specific database.
+ <a id="glossary-data-checksums-worker-launcher"></a>
+
+**Data Checksums Worker Launcher**
+:   A *background worker* which starts * data checksum worker* processes for enabling data checksums in each database, or disables data checksums cluster-wide.
  <a id="glossary-database"></a>
 
 **Database**
@@ -741,6 +749,10 @@
 
 
      For more information, see [Tablespaces](../server-administration/managing-databases/tablespaces.md#manage-ag-tablespaces).
+ <a id="glossary-temporal-leftovers"></a>
+
+**Temporal leftovers**
+:   After a temporal update or delete, the portion of history that was not updated/deleted. When using ranges to track application time, there may be zero, one, or two stretches of history that were not updated/deleted (before and/or after the portion that was updated/deleted). New rows are automatically inserted into the table to preserve that history. A single multirange can accommodate the untouched history before and after the update/delete, so there will be only zero or one leftover.
  <a id="glossary-temporal-table"></a>
 
 **Temporal table**

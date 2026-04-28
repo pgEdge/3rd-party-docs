@@ -11,8 +11,8 @@ synchronize a PostgreSQL data directory with another data directory that was for
 pg_rewind [OPTION...] {
      -D
      --target-pgdata
-     |  DIRECTORY |
-     --source-pgdata=DIRECTORY
+     |  DATADIR |
+     --source-pgdata=DATADIR
      --source-server=CONNSTR
     }
 ```
@@ -60,10 +60,10 @@ pg_rewind [OPTION...] {
 
  pg_rewind accepts the following command-line arguments:
 
-<code>-D </code><em>directory</em>, <code>--target-pgdata=</code><em>directory</em>
+<code>-D </code><em>datadir</em>, <code>--target-pgdata=</code><em>datadir</em>
 :   This option specifies the target data directory that is synchronized with the source. The target server must be shut down cleanly before running pg_rewind
 
-<code>--source-pgdata=</code><em>directory</em>
+<code>--source-pgdata=</code><em>datadir</em>
 :   Specifies the file system path to the data directory of the source server to synchronize the target with. This option requires the source server to be cleanly shut down.
 
 <code>--source-server=</code><em>connstr</em>

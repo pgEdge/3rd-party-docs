@@ -101,6 +101,7 @@ CREATE EXTENSION EXTENSION_NAME;
 - [pg_plan_advice — help the planner get the right plan](pg_plan_advice-help-the-planner-get-the-right-plan.md#pgplanadvice)
 - [pg_prewarm — preload relation data into buffer caches](pg_prewarm-preload-relation-data-into-buffer-caches.md#pgprewarm)
 - [pgrowlocks — show a table's row locking information](pgrowlocks-show-a-tables-row-locking-information.md#pgrowlocks)
+- [pg_stash_advice — store and automatically apply plan advice](pg_stash_advice-store-and-automatically-apply-plan-advice.md#pgstashadvice)
 - [pg_stat_statements — track statistics of SQL planning and execution](pg_stat_statements-track-statistics-of-sql-planning-and-execution.md#pgstatstatements)
 - [pgstattuple — obtain tuple-level statistics](pgstattuple-obtain-tuple-level-statistics.md#pgstattuple)
 - [pg_surgery — perform low-level surgery on relation data](pg_surgery-perform-low-level-surgery-on-relation-data.md#pgsurgery)

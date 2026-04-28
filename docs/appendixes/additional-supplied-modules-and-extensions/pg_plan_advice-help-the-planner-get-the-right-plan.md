@@ -128,8 +128,9 @@ SEQ_SCAN(TARGET [ ... ])
 TID_SCAN(TARGET [ ... ])
 INDEX_SCAN(TARGET INDEX_NAME [ ... ])
 INDEX_ONLY_SCAN(TARGET INDEX_NAME [ ... ])
-FOREIGN_SCAN((TARGET [ ... ]) [ ... ])
+FOREIGN_JOIN((TARGET [ ... ]) [ ... ])
 BITMAP_HEAP_SCAN(TARGET [ ... ])
+DO_NOT_SCAN(TARGET [ ... ])
 ```
 
 
@@ -139,7 +140,10 @@ BITMAP_HEAP_SCAN(TARGET [ ... ])
  `INDEX_SCAN` specifies that each target should be scanned using an `Index Scan` on the given index name. `INDEX_ONLY_SCAN` is similar, but specifies the use of an `Index Only Scan`. In either case, the index name can be, but does not have to be, schema-qualified.
 
 
- `FOREIGN_SCAN` specifies that a join between two or more foreign tables should be pushed down to a remote server so that it can be implemented as a single `Foreign Scan`. Specifying `FOREIGN_SCAN` for a single foreign table is neither necessary nor permissible: a `Foreign Scan` will need to be used regardless. If you want to prevent a join from being pushed down, consider using the `JOIN_ORDER` tag for that purpose.
+ `FOREIGN_JOIN` specifies that a join between two or more foreign tables should be pushed down to a remote server so that it can be implemented as a single `Foreign Scan`. Specifying `FOREIGN_JOIN` for a single foreign table is neither necessary nor permissible: a `Foreign Scan` will need to be used regardless. If you want to prevent a join from being pushed down, consider using the `JOIN_ORDER` tag for that purpose.
+
+
+ `DO_NOT_SCAN` specifies that a particular target should not appear in the final plan at all. In most cases, this is impossible, and will simply cause the scan of the target relation to be marked disabled. However, in certain cases, the planner considers optimizations where a portion of the plan tree is copied and mutated, and then considered as an alternative to the original. In those cases, `DO_NOT_SCAN` can be used to exclude the non-preferred alternative.
 
 
  The planner supports many types of scans other than those listed here; however, in most of those cases, there is no meaningful decision to be made, and hence no need for advice. For example, the output of a set-returning function that appears in the `FROM` clause can only ever be scanned using a `Function Scan`, so there is no opportunity for advice to change anything.
@@ -196,7 +200,7 @@ join_method_name(JOIN_METHOD_ITEM [ ... ])
 
 where JOIN_METHOD_NAME is:
 
-{ MERGE_JOIN_MATERIALIZE | MERGE_JOIN_PLAIN | NESTED_LOOP_MATERIALIZE | NESTED_LOOP_PLAIN | HASH_JOIN }
+{ MERGE_JOIN_MATERIALIZE | MERGE_JOIN_PLAIN | NESTED_LOOP_MATERIALIZE | NESTED_LOOP_MEMOIZE | NESTED_LOOP_PLAIN | HASH_JOIN }
 
 and JOIN_METHOD_ITEM is:
 

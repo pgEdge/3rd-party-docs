@@ -20,7 +20,7 @@ where OPTION can be one of:
 ## Description
 
 
- The `CLUSTER` command is equivalent to [sql-repack](repack.md#sql-repack) with an `USING INDEX` clause. See there for more details.
+ The `CLUSTER` command is equivalent to [sql-repack](repack.md#sql-repack) with a `USING INDEX` clause. See there for more details.
 
 
 ## Parameters

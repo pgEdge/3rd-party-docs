@@ -1012,3 +1012,36 @@ SELECT convert_from(pg_read_binary_file('file_in_utf8.txt'), 'UTF8');</code></pr
 </tr>
 </tbody>
 </table>
+  <a id="functions-admin-checksum"></a>
+
+### Data Checksum Functions
+
+
+ The functions shown in [Data Checksum Functions](#functions-checksums-table) can be used to enable or disable data checksums in a running cluster.
+
+
+ Changing data checksums can be done in a cluster with concurrent activity without blocking queries, but overall system performance will be affected. See [Data Checksums](../../server-administration/reliability-and-the-write-ahead-log/data-checksums.md#checksums) for further details on how changing the data checksums state can affect a system and possible mitigations for how to reduce the impact.
+ <a id="functions-checksums-table"></a>
+
+**Table: Data Checksum Functions**
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pg_enable_data_checksums</code> ( [<code>cost_delay</code> <code>int</code>, <code>cost_limit</code> <code>int</code>] ) <code>void</code></td>
+<td>Initiates the process of enabling data checksums for the cluster. This will set the data checksums state to <code>inprogress-on</code> as well as start a background worker that will process all pages in all databases and enable data checksums on them. When all pages have been processed, the cluster will automatically set data checksums state to <code>on</code>. This operation is WAL logged and replicated to all standby nodes.</td>
+<td>If <code>cost_delay</code> and <code>cost_limit</code> are specified, the process is throttled using the same principles as <a href="../../server-administration/server-configuration/vacuuming.md#runtime-config-resource-vacuum-cost">Cost-based Vacuum Delay</a>.</td>
+</tr>
+<tr>
+<td><code>pg_disable_data_checksums</code> () <code>void</code></td>
+<td>Disables data checksum calculation and validation for the cluster. This will set the data checksum state to <code>inprogress-off</code> while data checksums are being disabled. When all active backends have stopped validating data checksums, the data checksum state will be set to <code>off</code>.</td>
+<td></td>
+</tr>
+</tbody>
+</table>

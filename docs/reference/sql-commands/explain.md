@@ -24,6 +24,7 @@ where OPTION can be one of:
     TIMING [ BOOLEAN ]
     SUMMARY [ BOOLEAN ]
     MEMORY [ BOOLEAN ]
+    IO [ BOOLEAN ]
     FORMAT { TEXT | XML | JSON | YAML }
 ```
 
@@ -71,7 +72,7 @@ where OPTION can be one of:
 :   Allow the statement to contain parameter placeholders like `$1`, and generate a generic plan that does not depend on the values of those parameters. See [`PREPARE`](prepare.md#sql-prepare) for details about generic plans and the types of statement that support parameters. This parameter cannot be used together with `ANALYZE`. It defaults to `FALSE`.
 
 `BUFFERS`
-:   Include information on buffer usage. Specifically, include the number of shared blocks hit, read, dirtied, and written, the number of local blocks hit, read, dirtied, and written, the number of temp blocks read and written, and the time spent reading and writing data file blocks, local blocks and temporary file blocks (in milliseconds) if [track_io_timing](../../server-administration/server-configuration/run-time-statistics.md#guc-track-io-timing) is enabled. A *hit* means that a read was avoided because the block was found already in cache when needed. Shared blocks contain data from regular tables and indexes; local blocks contain data from temporary tables and indexes; while temporary blocks contain short-term working data used in sorts, hashes, Materialize plan nodes, and similar cases. The number of blocks *dirtied* indicates the number of previously unmodified blocks that were changed by this query; while the number of blocks *written* indicates the number of previously-dirtied blocks evicted from cache by this backend during query processing. The number of blocks shown for an upper-level node includes those used by all its child nodes. In text format, only non-zero values are printed. Buffers information is automatically included when `ANALYZE` is used.
+:   Include information on buffer usage. Specifically, include the number of shared blocks hit, read, dirtied, and written, the number of local blocks hit, read, dirtied, and written, the number of temp blocks read and written, and the time spent reading and writing data file blocks, local blocks and temporary file blocks (in milliseconds) if [track_io_timing](../../server-administration/server-configuration/run-time-statistics.md#guc-track-io-timing) is enabled. A *hit* means that a read was avoided because the block was found already in cache when needed. Shared blocks contain data from regular tables and indexes; local blocks contain data from temporary tables and indexes; while temporary blocks contain short-term working data used in sorts, hashes, Materialize plan nodes, and similar cases. The number of blocks *dirtied* indicates the number of previously unmodified blocks that were changed by this query; while the number of blocks *written* indicates the number of previously-dirtied blocks evicted from cache by this backend during query processing. The number of blocks shown for an upper-level node includes those used by all its child nodes. In text format, only non-zero values are printed. Buffers information is included by default when `ANALYZE` is used but otherwise is not included by default. When this parameter is `TRUE` without `ANALYZE`, only buffer usage during the query planning phase is reported.
 
 `SERIALIZE`
 :   Include information on the cost of *serializing* the query's output data, that is converting it to text or binary format to send to the client. This can be a significant part of the time required for regular execution of the query, if the datatype output functions are expensive or if TOASTed values must be fetched from out-of-line storage. `EXPLAIN`'s default behavior, `SERIALIZE NONE`, does not perform these conversions. If `SERIALIZE TEXT` or `SERIALIZE BINARY` is specified, the appropriate conversions are performed, and the time spent doing so is measured (unless `TIMING OFF` is specified). If the `BUFFERS` option is also specified, then any buffer accesses involved in the conversions are counted too. In no case, however, will `EXPLAIN` actually send the resulting data to the client; hence network transmission costs cannot be investigated this way. Serialization may only be enabled when `ANALYZE` is also enabled. If `SERIALIZE` is written without an argument, `TEXT` is assumed.
@@ -87,6 +88,9 @@ where OPTION can be one of:
 
 `MEMORY`
 :   Include information on memory consumption by the query planning phase. Specifically, include the precise amount of storage used by planner in-memory structures, as well as total memory considering allocation overhead. This parameter defaults to `FALSE`.
+
+`IO`
+:   Include information on I/O performed by scan nodes proving such information. This parameter may only be used when `ANALYZE` is also enabled. It defaults to `FALSE`.
 
 `FORMAT`
 :   Specify the output format, which can be TEXT, XML, JSON, or YAML. Non-text output contains the same information as the text output format, but is easier for programs to parse. This parameter defaults to `TEXT`.

@@ -1239,3 +1239,38 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 </tr>
 </tbody>
 </table>
+  <a id="functions-get-object-ddl"></a>
+
+### Get Object DDL Functions
+
+
+ The functions shown in [Get Object DDL Functions](#functions-get-object-ddl-table) reconstruct DDL statements for various global database objects. Each function returns a set of text rows, one SQL statement per row. (This is a decompiled reconstruction, not the original text of the command.) Functions that accept `VARIADIC` options take alternating name/value text pairs; values are parsed as boolean, integer or text.
+ <a id="functions-get-object-ddl-table"></a>
+
+**Table: Get Object DDL Functions**
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pg_get_role_ddl</code> ( <code>role</code> <code>regrole</code> [, <code>VARIADIC</code> <code>options</code> <code>text</code> ] ) <code>setof text</code></td>
+<td>Reconstructs the <code>CREATE ROLE</code> statement and any <code>ALTER ROLE ... SET</code> statements for the given role. Each statement is returned as a separate row. Password information is never included in the output. The following options are supported: <code>pretty</code> (boolean) for pretty-printed output and <code>memberships</code> (boolean, default true) to include <code>GRANT</code> statements for role memberships and their options.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>pg_get_tablespace_ddl</code> ( <code>tablespace</code> <code>oid</code> [, <code>VARIADIC</code> <code>options</code> <code>text</code> ] ) <code>setof text</code></td>
+<td><code>pg_get_tablespace_ddl</code> ( <code>tablespace</code> <code>name</code> [, <code>VARIADIC</code> <code>options</code> <code>text</code> ] ) <code>setof text</code></td>
+<td>Reconstructs the <code>CREATE TABLESPACE</code> statement for the specified tablespace (by OID or name). If the tablespace has options set, an <code>ALTER TABLESPACE ... SET</code> statement is also returned. Each statement is returned as a separate row. The following options are supported: <code>pretty</code> (boolean) for formatted output and <code>owner</code> (boolean) to include <code>OWNER</code>.</td>
+</tr>
+<tr>
+<td><code>pg_get_database_ddl</code> ( <code>database</code> <code>regdatabase</code> [, <code>VARIADIC</code> <code>options</code> <code>text</code> ] ) <code>setof text</code></td>
+<td>Reconstructs the <code>CREATE DATABASE</code> statement for the specified database, followed by <code>ALTER DATABASE</code> statements for connection limit, template status, and configuration settings. Each statement is returned as a separate row. The following options are supported: <code>pretty</code> (boolean) for formatted output, <code>owner</code> (boolean) to include <code>OWNER</code>, and <code>tablespace</code> (boolean) to include <code>TABLESPACE</code>.</td>
+<td></td>
+</tr>
+</tbody>
+</table>

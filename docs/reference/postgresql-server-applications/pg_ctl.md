@@ -120,7 +120,7 @@ pg_ctlunregister [-N SERVICENAME]
 :   Specifies the file system location of the database configuration files. If this option is omitted, the environment variable `PGDATA` is used.
 
 <code>-l </code><em>filename</em>, <code>--log=</code><em>filename</em>
-:   Append the server log output to *filename*. If the file does not exist, it is created. The `umask` is set to 077, so access to the log file is disallowed to other users by default.
+:   Append the server log output to *filename*. If the file does not exist, it is created. By default, only the cluster owner can access the log file. If group access is enabled in the cluster, users in the same group as the cluster owner can also read it.
 
 <code>-m </code><em>mode</em>, <code>--mode=</code><em>mode</em>
 :   Specifies the shutdown mode. *mode* can be `smart`, `fast`, or `immediate`, or the first letter of one of these three. If this option is omitted, `fast` is the default.

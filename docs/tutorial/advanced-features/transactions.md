@@ -3,7 +3,7 @@
 ## Transactions
 
 
- *Transactions* are a fundamental concept of all database systems. The essential point of a transaction is that it bundles multiple steps into a single, all-or-nothing operation. The intermediate states between the steps are not visible to other concurrent transactions, and if some failure occurs that prevents the transaction from completing, then none of the steps affect the database at all.
+ *Transactions* are a fundamental concept of all database systems. The essential point of a transaction is that it bundles multiple steps into a single, all-or-nothing operation. The intermediate states between the steps are not visible to other concurrent transactions, and if an error occurs that prevents the transaction from completing, then none of the steps affect the database at all.
 
 
  For example, consider a bank database that contains balances for various customer accounts, as well as total deposit balances for branches. Suppose that we want to record a payment of $100.00 from Alice's account to Bob's account. Simplifying outrageously, the SQL commands for this might look like:
@@ -30,7 +30,7 @@ UPDATE branches SET balance = balance + 100.00
  Another important property of transactional databases is closely related to the notion of atomic updates: when multiple transactions are running concurrently, each one should not be able to see the incomplete changes made by others. For example, if one transaction is busy totalling all the branch balances, it would not do for it to include the debit from Alice's branch but not the credit to Bob's branch, nor vice versa. So transactions must be all-or-nothing not only in terms of their permanent effect on the database, but also in terms of their visibility as they happen. The updates made so far by an open transaction are invisible to other transactions until the transaction completes, whereupon all the updates become visible simultaneously.
 
 
- In PostgreSQL, a transaction is set up by surrounding the SQL commands of the transaction with `BEGIN` and `COMMIT` commands. So our banking transaction would actually look like:
+ In PostgreSQL, a transaction is set up by surrounding the SQL commands of the transaction with [sql-begin](../../reference/sql-commands/begin.md#sql-begin) and [sql-commit](../../reference/sql-commands/commit.md#sql-commit) commands. So our banking transaction would actually look like:
 
 ```sql
 
@@ -42,7 +42,7 @@ COMMIT;
 ```
 
 
- If, partway through the transaction, we decide we do not want to commit (perhaps we just noticed that Alice's balance went negative), we can issue the command `ROLLBACK` instead of `COMMIT`, and all our updates so far will be canceled.
+ If, partway through the transaction, we decide we do not want to commit (perhaps we just noticed that Alice's balance went negative), we can issue the command [sql-rollback](../../reference/sql-commands/rollback.md#sql-rollback) instead of `COMMIT`, and all our updates so far will be canceled.
 
 
  PostgreSQL actually treats every SQL statement as being executed within a transaction. If you do not issue a `BEGIN` command, then each individual statement has an implicit `BEGIN` and (if successful) `COMMIT` wrapped around it. A group of statements surrounded by `BEGIN` and `COMMIT` is sometimes called a *transaction block*.
@@ -51,6 +51,9 @@ COMMIT;
 !!! note
 
     Some client libraries issue `BEGIN` and `COMMIT` commands automatically, so that you might get the effect of transaction blocks without asking. Check the documentation for the interface you are using.
+
+
+ When an error occurs within a transaction block the transaction is not ended, but instead goes into an aborted state. While in this state all commands except [sql-commit](../../reference/sql-commands/commit.md#sql-commit) and [sql-rollback](../../reference/sql-commands/rollback.md#sql-rollback) are rejected. Importantly, both those commands will behave identically — they roll back and close the failed transaction, returning the session to a state where new commands can be issued. They will also automatically begin a new transaction if executed with the `AND CHAIN` option.
 
 
  It's possible to control the statements in a transaction in a more granular fashion through the use of *savepoints*. Savepoints allow you to selectively discard parts of the transaction, while committing the rest. After defining a savepoint with `SAVEPOINT`, you can if needed roll back to the savepoint with `ROLLBACK TO`. All the transaction's database changes between defining the savepoint and rolling back to it are discarded, but changes earlier than the savepoint are kept.

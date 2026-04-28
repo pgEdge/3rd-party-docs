@@ -244,11 +244,26 @@ substring('foobar' SIMILAR '#"o_b#"%' ESCAPE '#')    NULL
 ```
 
 
- The POSIX pattern language is described in much greater detail below.
+ The POSIX pattern language is described in much greater detail in [POSIX Regular Expression Details](#posix-syntax-details).
+ <a id="functions-posix-list"></a>
+
+#### POSIX Regular Expression Functions
 
 
- The `substring` function with two parameters, <code>substring(</code><em>string</em><code> from
-     </code><em>pattern</em><code>)</code>, provides extraction of a substring that matches a POSIX regular expression pattern. It returns null if there is no match, otherwise the first portion of the text that matched the pattern. But if the pattern contains any parentheses, the portion of the text that matched the first parenthesized subexpression (the one whose left parenthesis comes first) is returned. You can put parentheses around the whole expression if you want to use parentheses within it without triggering this exception. If you need parentheses in the pattern before the subexpression you want to extract, see the non-capturing parentheses described below.
+ This section describes the available functions for pattern matching using POSIX regular expressions.
+ <a id="functions-posix-substring"></a>
+
+##### `substring`
+
+
+ The `substring` function with two parameters provides extraction of a substring that matches a POSIX regular expression pattern. It has the syntax:
+
+```
+
+substring(STRING from PATTERN) text
+substring(STRING, PATTERN) text
+```
+ (The syntax with `from` is SQL-standard, but PostgreSQL also accepts a comma.) It returns null if there is no match, otherwise the first portion of the text that matched the pattern. But if the pattern contains any parentheses, the portion of the text that matched the first parenthesized subexpression (the one whose left parenthesis comes first) is returned. You can put parentheses around the whole expression if you want to use parentheses within it without triggering this exception. If you need parentheses in the pattern before the subexpression you want to extract, see the non-capturing parentheses described in [Regular Expression Atoms](#posix-atoms-table).
 
 
  Some examples:
@@ -259,8 +274,18 @@ substring('foobar' FROM 'o.b')     oob
 substring('foobar' FROM 'o(.)b')   o
 ```
 
+  <a id="functions-posix-regexp-count"></a>
 
- The `regexp_count` function counts the number of places where a POSIX regular expression pattern matches a string. It has the syntax `regexp_count`(*string*, *pattern* [, *start* [, *flags* ]]). *pattern* is searched for in *string*, normally from the beginning of the string, but if the *start* parameter is provided then beginning from that character index. The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. For example, including `i` in *flags* specifies case-insensitive matching. Supported flags are described in [ARE Embedded-Option Letters](#posix-embedded-options-table).
+##### `regexp_count`
+
+
+ The `regexp_count` function counts the number of places where a POSIX regular expression pattern matches a string. It has the syntax:
+
+```
+
+regexp_count(STRING, PATTERN [, START [, FLAGS ]]) integer
+```
+ *pattern* is searched for in *string*, normally from the beginning of the string, but if the *start* parameter is provided then beginning from that character index. The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. For example, including `i` in *flags* specifies case-insensitive matching. Supported flags are described in [ARE Embedded-Option Letters](#posix-embedded-options-table).
 
 
  Some examples:
@@ -271,8 +296,18 @@ regexp_count('ABCABCAXYaxy', 'A.')          3
 regexp_count('ABCABCAXYaxy', 'A.', 1, 'i')  4
 ```
 
+  <a id="functions-posix-regexp-instr"></a>
 
- The `regexp_instr` function returns the starting or ending position of the *N*'th match of a POSIX regular expression pattern to a string, or zero if there is no such match. It has the syntax `regexp_instr`(*string*, *pattern* [, *start* [, *N* [, *endoption* [, *flags* [, *subexpr* ]]]]]). *pattern* is searched for in *string*, normally from the beginning of the string, but if the *start* parameter is provided then beginning from that character index. If *N* is specified then the *N*'th match of the pattern is located, otherwise the first match is located. If the *endoption* parameter is omitted or specified as zero, the function returns the position of the first character of the match. Otherwise, *endoption* must be one, and the function returns the position of the character following the match. The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. Supported flags are described in [ARE Embedded-Option Letters](#posix-embedded-options-table). For a pattern containing parenthesized subexpressions, *subexpr* is an integer indicating which subexpression is of interest: the result identifies the position of the substring matching that subexpression. Subexpressions are numbered in the order of their leading parentheses. When *subexpr* is omitted or zero, the result identifies the position of the whole match regardless of parenthesized subexpressions.
+##### `regexp_instr`
+
+
+ The `regexp_instr` function returns the starting or ending position of the *N*'th match of a POSIX regular expression pattern to a string, or zero if there is no such match. It has the syntax:
+
+```
+
+regexp_instr(STRING, PATTERN [, START [, N [, ENDOPTION [, FLAGS [, SUBEXPR ]]]]]) integer
+```
+ *pattern* is searched for in *string*, normally from the beginning of the string, but if the *start* parameter is provided then beginning from that character index. If *N* is specified then the *N*'th match of the pattern is located, otherwise the first match is located. If the *endoption* parameter is omitted or specified as zero, the function returns the position of the first character of the match. Otherwise, *endoption* must be one, and the function returns the position of the character following the match. The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. Supported flags are described in [ARE Embedded-Option Letters](#posix-embedded-options-table). For a pattern containing parenthesized subexpressions, *subexpr* is an integer indicating which subexpression is of interest: the result identifies the position of the substring matching that subexpression. Subexpressions are numbered in the order of their leading parentheses. When *subexpr* is omitted or zero, the result identifies the position of the whole match regardless of parenthesized subexpressions.
 
 
  Some examples:
@@ -285,8 +320,18 @@ regexp_instr(string=>'ABCDEFGHI', pattern=>'(c..)(...)', start=>1, "N"=>1, endop
                                    6
 ```
 
+  <a id="functions-posix-regexp-like"></a>
 
- The `regexp_like` function checks whether a match of a POSIX regular expression pattern occurs within a string, returning boolean true or false. It has the syntax `regexp_like`(*string*, *pattern* [, *flags* ]). The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. Supported flags are described in [ARE Embedded-Option Letters](#posix-embedded-options-table). This function has the same results as the `~` operator if no flags are specified. If only the `i` flag is specified, it has the same results as the `~*` operator.
+##### `regexp_like`
+
+
+ The `regexp_like` function checks whether a match of a POSIX regular expression pattern occurs within a string, returning boolean true or false. It has the syntax:
+
+```
+
+regexp_like(STRING, PATTERN [, FLAGS ]) boolean
+```
+ The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. Supported flags are described in [ARE Embedded-Option Letters](#posix-embedded-options-table). This function has the same results as the `~` operator if no flags are specified. If only the `i` flag is specified, it has the same results as the `~*` operator.
 
 
  Some examples:
@@ -297,8 +342,18 @@ regexp_like('Hello World', 'world')       false
 regexp_like('Hello World', 'world', 'i')  true
 ```
 
+  <a id="functions-posix-regexp-match"></a>
 
- The `regexp_match` function returns a text array of matching substring(s) within the first match of a POSIX regular expression pattern to a string. It has the syntax `regexp_match`(*string*, *pattern* [, *flags* ]). If there is no match, the result is `NULL`. If a match is found, and the *pattern* contains no parenthesized subexpressions, then the result is a single-element text array containing the substring matching the whole pattern. If a match is found, and the *pattern* contains parenthesized subexpressions, then the result is a text array whose *n*'th element is the substring matching the *n*'th parenthesized subexpression of the *pattern* (not counting “non-capturing” parentheses; see below for details). The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. Supported flags are described in [ARE Embedded-Option Letters](#posix-embedded-options-table).
+##### `regexp_match`
+
+
+ The `regexp_match` function returns a text array of matching substring(s) within the first match of a POSIX regular expression pattern to a string. It has the syntax:
+
+```
+
+regexp_match(STRING, PATTERN [, FLAGS ]) text[]
+```
+ If there is no match, the result is `NULL`. If a match is found, and the *pattern* contains no parenthesized subexpressions, then the result is a single-element text array containing the substring matching the whole pattern. If a match is found, and the *pattern* contains parenthesized subexpressions, then the result is a text array whose *n*'th element is the substring matching the *n*'th parenthesized subexpression of the *pattern* (not counting “non-capturing” parentheses; see [Regular Expression Atoms](#posix-atoms-table) for details). The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. Supported flags are described in [ARE Embedded-Option Letters](#posix-embedded-options-table).
 
 
  Some examples:
@@ -331,9 +386,18 @@ SELECT regexp_match('foobarbequebaz', '(bar)(beque)');
      barbeque
     (1 row)
     ```
+  <a id="functions-posix-regexp-matches"></a>
+
+##### `regexp_matches`
 
 
- The `regexp_matches` function returns a set of text arrays of matching substring(s) within matches of a POSIX regular expression pattern to a string. It has the same syntax as `regexp_match`. This function returns no rows if there is no match, one row if there is a match and the `g` flag is not given, or *N* rows if there are *N* matches and the `g` flag is given. Each returned row is a text array containing the whole matched substring or the substrings matching parenthesized subexpressions of the *pattern*, just as described above for `regexp_match`. `regexp_matches` accepts all the flags shown in [ARE Embedded-Option Letters](#posix-embedded-options-table), plus the `g` flag which commands it to return all matches, not just the first one.
+ The `regexp_matches` function returns a set of text arrays of matching substring(s) within matches of a POSIX regular expression pattern to a string. It has the syntax:
+
+```
+
+regexp_matches(STRING, PATTERN [, FLAGS ]) setof text[]
+```
+ The parameters are the same as for [regexp_match](#functions-posix-regexp-match). This function returns no rows if there is no match, one row if there is a match and the `g` flag is not given, or *N* rows if there are *N* matches and the `g` flag is given. Each returned row is a text array containing the whole matched substring or the substrings matching parenthesized subexpressions of the *pattern*, just as described above for `regexp_match`. `regexp_matches` accepts all the flags shown in [ARE Embedded-Option Letters](#posix-embedded-options-table), plus the `g` flag which commands it to return all matches, not just the first one.
 
 
  Some examples:
@@ -363,9 +427,19 @@ SELECT regexp_matches('foobarbequebazilbarfbonk', '(b[^b]+)(b[^b]+)', 'g');
     SELECT col1, (SELECT regexp_matches(col2, '(bar)(beque)')) FROM tab;
     ```
      This produces a text array if there's a match, or `NULL` if not, the same as `regexp_match()` would do. Without the sub-select, this query would produce no output at all for table rows without a match, which is typically not the desired behavior.
+  <a id="functions-posix-regexp-replace"></a>
+
+##### `regexp_replace`
 
 
- The `regexp_replace` function provides substitution of new text for substrings that match POSIX regular expression patterns. It has the syntax `regexp_replace`(*string*, *pattern*, *replacement* [, *flags* ]) or `regexp_replace`(*string*, *pattern*, *replacement*, *start* [, *N* [, *flags* ]]). The source *string* is returned unchanged if there is no match to the *pattern*. If there is a match, the *string* is returned with the *replacement* string substituted for the matching substring. The *replacement* string can contain `\`*n*, where *n* is 1 through 9, to indicate that the source substring matching the *n*'th parenthesized subexpression of the pattern should be inserted, and it can contain `\&` to indicate that the substring matching the entire pattern should be inserted. Write `\\` if you need to put a literal backslash in the replacement text. *pattern* is searched for in *string*, normally from the beginning of the string, but if the *start* parameter is provided then beginning from that character index. By default, only the first match of the pattern is replaced. If *N* is specified and is greater than zero, then the *N*'th match of the pattern is replaced. If the `g` flag is given, or if *N* is specified and is zero, then all matches at or after the *start* position are replaced. (The `g` flag is ignored when *N* is specified.) The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. Supported flags (though not `g`) are described in [ARE Embedded-Option Letters](#posix-embedded-options-table).
+ The `regexp_replace` function provides substitution of new text for substrings that match POSIX regular expression patterns. It has the syntax:
+
+```
+
+regexp_replace(STRING, PATTERN, REPLACEMENT [, FLAGS ]) text
+regexp_replace(STRING, PATTERN, REPLACEMENT, START [, N [, FLAGS ]]) text
+```
+ The source *string* is returned unchanged if there is no match to the *pattern*. If there is a match, the *string* is returned with the *replacement* string substituted for the matching substring. The *replacement* string can contain `\`*n*, where *n* is 1 through 9, to indicate that the source substring matching the *n*'th parenthesized subexpression of the pattern should be inserted, and it can contain `\&` to indicate that the substring matching the entire pattern should be inserted. Write `\\` if you need to put a literal backslash in the replacement text. *pattern* is searched for in *string*, normally from the beginning of the string, but if the *start* parameter is provided then beginning from that character index. By default, only the first match of the pattern is replaced. If *N* is specified and is greater than zero, then the *N*'th match of the pattern is replaced. If the `g` flag is given, or if *N* is specified and is zero, then all matches at or after the *start* position are replaced. (The `g` flag is ignored when *N* is specified.) The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. Supported flags (though not `g`) are described in [ARE Embedded-Option Letters](#posix-embedded-options-table).
 
 
  Some examples:
@@ -384,11 +458,18 @@ regexp_replace(string=>'A PostgreSQL function', pattern=>'a|e|i|o|u', replacemen
                                    A PostgrXSQL function
 ```
 
+  <a id="functions-posix-regexp-split-to-table"></a>
 
- The `regexp_split_to_table` function splits a string using a POSIX regular expression pattern as a delimiter. It has the syntax `regexp_split_to_table`(*string*, *pattern* [, *flags* ]). If there is no match to the *pattern*, the function returns the *string*. If there is at least one match, for each match it returns the text from the end of the last match (or the beginning of the string) to the beginning of the match. When there are no more matches, it returns the text from the end of the last match to the end of the string. The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. `regexp_split_to_table` supports the flags described in [ARE Embedded-Option Letters](#posix-embedded-options-table).
+##### `regexp_split_to_table`
 
 
- The `regexp_split_to_array` function behaves the same as `regexp_split_to_table`, except that `regexp_split_to_array` returns its result as an array of `text`. It has the syntax `regexp_split_to_array`(*string*, *pattern* [, *flags* ]). The parameters are the same as for `regexp_split_to_table`.
+ The `regexp_split_to_table` function splits a string using a POSIX regular expression pattern as a delimiter. It has the syntax:
+
+```
+
+regexp_split_to_table(STRING, PATTERN [, FLAGS ]) setof text
+```
+ If there is no match to the *pattern*, the function returns the *string*. If there is at least one match, for each match it returns the text from the end of the last match (or the beginning of the string) to the beginning of the match. When there are no more matches, it returns the text from the end of the last match to the end of the string. The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. `regexp_split_to_table` supports the flags described in [ARE Embedded-Option Letters](#posix-embedded-options-table).
 
 
  Some examples:
@@ -408,12 +489,6 @@ SELECT foo FROM regexp_split_to_table('the quick brown fox jumps over the lazy d
  lazy
  dog
 (9 rows)
-
-SELECT regexp_split_to_array('the quick brown fox jumps over the lazy dog', '\s+');
-              regexp_split_to_array
------------------------------------------------
- {the,quick,brown,fox,jumps,over,the,lazy,dog}
-(1 row)
 
 SELECT foo FROM regexp_split_to_table('the quick brown fox', '\s*') AS foo;
  foo
@@ -438,10 +513,44 @@ SELECT foo FROM regexp_split_to_table('the quick brown fox', '\s*') AS foo;
 ```
 
 
- As the last example demonstrates, the regexp split functions ignore zero-length matches that occur at the start or end of the string or immediately after a previous match. This is contrary to the strict definition of regexp matching that is implemented by the other regexp functions, but is usually the most convenient behavior in practice. Other software systems such as Perl use similar definitions.
+ As the last example demonstrates, `regexp_split_to_table` ignores zero-length matches that occur at the start or end of the string or immediately after a previous match. This is contrary to the strict definition of regexp matching that is implemented by the other regexp functions, but is usually the most convenient behavior in practice. Other software systems such as Perl use similar definitions.
+  <a id="functions-posix-regexp-split-to-array"></a>
+
+##### `regexp_split_to_array`
 
 
- The `regexp_substr` function returns the substring that matches a POSIX regular expression pattern, or `NULL` if there is no match. It has the syntax `regexp_substr`(*string*, *pattern* [, *start* [, *N* [, *flags* [, *subexpr* ]]]]). *pattern* is searched for in *string*, normally from the beginning of the string, but if the *start* parameter is provided then beginning from that character index. If *N* is specified then the *N*'th match of the pattern is returned, otherwise the first match is returned. The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. Supported flags are described in [ARE Embedded-Option Letters](#posix-embedded-options-table). For a pattern containing parenthesized subexpressions, *subexpr* is an integer indicating which subexpression is of interest: the result is the substring matching that subexpression. Subexpressions are numbered in the order of their leading parentheses. When *subexpr* is omitted or zero, the result is the whole match regardless of parenthesized subexpressions.
+ The `regexp_split_to_array` function behaves the same as [regexp_split_to_table](#functions-posix-regexp-split-to-table), except that `regexp_split_to_array` returns its result as an array of `text` rather than a set. It has the syntax:
+
+```
+
+regexp_split_to_array(STRING, PATTERN [, FLAGS ]) text[]
+```
+ The parameters are the same as for `regexp_split_to_table`.
+
+
+ An example:
+
+```sql
+
+SELECT regexp_split_to_array('the quick brown fox jumps over the lazy dog', '\s+');
+              regexp_split_to_array
+-----------------------------------------------
+ {the,quick,brown,fox,jumps,over,the,lazy,dog}
+(1 row)
+```
+
+  <a id="functions-posix-regexp-substr"></a>
+
+##### `regexp_substr`
+
+
+ The `regexp_substr` function returns the substring that matches a POSIX regular expression pattern, or `NULL` if there is no match. It has the syntax:
+
+```
+
+regexp_substr(STRING, PATTERN [, START [, N [, FLAGS [, SUBEXPR ]]]]) text
+```
+ *pattern* is searched for in *string*, normally from the beginning of the string, but if the *start* parameter is provided then beginning from that character index. If *N* is specified then the *N*'th match of the pattern is returned, otherwise the first match is returned. The *flags* parameter is an optional text string containing zero or more single-letter flags that change the function's behavior. Supported flags are described in [ARE Embedded-Option Letters](#posix-embedded-options-table). For a pattern containing parenthesized subexpressions, *subexpr* is an integer indicating which subexpression is of interest: the result is the substring matching that subexpression. Subexpressions are numbered in the order of their leading parentheses. When *subexpr* is omitted or zero, the result is the whole match regardless of parenthesized subexpressions.
 
 
  Some examples:
@@ -454,9 +563,9 @@ regexp_substr('ABCDEFGHI', '(c..)(...)', 1, 1, 'i', 2)
                                    FGH
 ```
 
-  <a id="posix-syntax-details"></a>
+    <a id="posix-syntax-details"></a>
 
-#### Regular Expression Details
+#### POSIX Regular Expression Details
 
 
  PostgreSQL's regular expressions are implemented using a software package written by Henry Spencer. Much of the description of regular expressions below is copied verbatim from his manual.

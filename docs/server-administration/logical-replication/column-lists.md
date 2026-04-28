@@ -93,7 +93,7 @@ Tables:
  e      | text    |           |          |
 Indexes:
     "t1_pkey" PRIMARY KEY, btree (id)
-Publications:
+Included in publications:
     "p1" (id, a, b, d)
 ```
 

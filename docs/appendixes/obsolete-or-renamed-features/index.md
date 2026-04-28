@@ -9,3 +9,4 @@
 - [`pg_xlogdump` renamed to `pg_waldump`](pg_xlogdump-renamed-to-pg_waldump.md#pgxlogdump)
 - [`pg_resetxlog` renamed to `pg_resetwal`](pg_resetxlog-renamed-to-pg_resetwal.md#app-pgresetxlog)
 - [`pg_receivexlog` renamed to `pg_receivewal`](pg_receivexlog-renamed-to-pg_receivewal.md#app-pgreceivexlog)
+- [RADIUS authentication removed](radius-authentication-removed.md#auth-radius)

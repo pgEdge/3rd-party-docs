@@ -85,6 +85,7 @@
 | [ssl_key_file](../server-configuration/connections-and-authentication.md#guc-ssl-key-file) (`$PGDATA/server.key`) | server private key | proves server certificate was sent by the owner; does not indicate certificate owner is trustworthy |
 | [ssl_ca_file](../server-configuration/connections-and-authentication.md#guc-ssl-ca-file) | trusted certificate authorities | checks that client certificate is signed by a trusted certificate authority |
 | [ssl_crl_file](../server-configuration/connections-and-authentication.md#guc-ssl-crl-file) | certificates revoked by certificate authorities | client certificate must not be on this list |
+| `$PGDATA/pg_hosts.conf` | SNI configuration | defines which certificates to use for which server hostname |
 
 
  The server reads these files at server start and whenever the server configuration is reloaded. On `Windows` systems, they are also re-read whenever a new backend process is spawned for a new client connection.
@@ -176,3 +177,41 @@ openssl x509 -req -in server.csr -text -days 365 \
   -out server.crt
 ```
  `server.crt` and `intermediate.crt` should be concatenated into a certificate file bundle and stored on the server. `server.key` should also be stored on the server. `root.crt` should be stored on the client so the client can verify that the server's leaf certificate was signed by a chain of certificates linked to its trusted root certificate. `root.key` and `intermediate.key` should be stored offline for use in creating future certificates.
+  <a id="ssl-sni"></a>
+
+### SNI Configuration
+
+
+ PostgreSQL can be configured for Server Name Indication, SNI, using the [ssl_sni](../server-configuration/connections-and-authentication.md#guc-ssl-sni) configuration parameter. PostgreSQL inspects the TLS hostname extension in the SSL connection handshake, and selects the right certificate, key and CA certificate to use for the connection based on entries in the [hosts_file](../server-configuration/file-locations.md#guc-hosts-file) configuration file.
+
+
+ The [hosts_file](../server-configuration/file-locations.md#guc-hosts-file) configuration file contains lines of these general forms:
+
+```
+
+HOSTNAME SSL_CERTIFICATE SSL_KEY [ SSL_CA_CERTIFICATE [ SSL_PASSPHRASE_CMD [ SSL_PASSPHRASE_CMD_RELOAD ] ] ]
+include FILE
+include_if_exists FILE
+include_dir DIRECTORY
+```
+ Comments, whitespace, line continuations, and inclusion directives are handled in the same way as in [hba_file](../server-configuration/file-locations.md#guc-hba-file). *hostname* is matched case-insensitively against the `hostname` TLS extension in the SSL handshake. *SSL_certificate*, *SSL_key*, *SSL_CA_certificate*, *SSL_passphrase_cmd*, and *SSL_passphrase_cmd_reload* are treated like [ssl_cert_file](../server-configuration/connections-and-authentication.md#guc-ssl-cert-file), [ssl_key_file](../server-configuration/connections-and-authentication.md#guc-ssl-key-file), [ssl_ca_file](../server-configuration/connections-and-authentication.md#guc-ssl-ca-file), [ssl_passphrase_command](../server-configuration/connections-and-authentication.md#guc-ssl-passphrase-command), and [ssl_passphrase_command_supports_reload](../server-configuration/connections-and-authentication.md#guc-ssl-passphrase-command-supports-reload) respectively. All fields except *SSL_CA_certificate*, *SSL_passphrase_cmd*, and *SSL_passphrase_cmd_reload* are required. If *SSL_passphrase_cmd* is provided but not *SSL_passphrase_cmd_reload*, then the default value for *SSL_passphrase_cmd_reload* is `off`.
+
+
+ *hostname* can be either the literal hostname for the connection, `/no_sni/`, or `*`. [Hostname field values](#hostname-values) contains details on how these values are used. <a id="hostname-values"></a>
+
+**Table: Hostname field values**
+
+| Host Entry | Hostname extension | Description |
+| --- | --- | --- |
+| *hostname* | Required | Certificate and key to use for connections to the host specified in the connection. Multiple hostnames can be defined by using a comma separated list. The certificate and key will be used for connections to all hosts in the list. |
+| `/no_sni/` | Not allowed | Certificate and key to use for connections with no `sslsni` defined. |
+| `*` | Not required | Default host, matches all connections. |
+
+
+ If [hosts_file](../server-configuration/file-locations.md#guc-hosts-file) is empty or missing, then the SSL configuration in `postgresql.conf` will be used for all connections. If [hosts_file](../server-configuration/file-locations.md#guc-hosts-file) is non-empty then it will take precedence over certificate and key settings in `postgresql.conf`.
+
+
+ It is currently not possible to set different `clientname` values for the different certificates. Any `clientname` setting in [hba_file](../server-configuration/file-locations.md#guc-hba-file) will be applied during authentication regardless of which set of certificates have been loaded via an SNI enabled connection.
+
+
+ The CRL configuration in `postgresql.conf` is applied to all connections regardless of whether they use SNI or not.

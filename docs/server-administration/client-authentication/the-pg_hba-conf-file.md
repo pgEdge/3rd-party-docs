@@ -80,7 +80,7 @@ include_dir         DIRECTORY
 :   Specifies which database name(s) this record matches. The value `all` specifies that it matches all databases. The value `sameuser` specifies that the record matches if the requested database has the same name as the requested user. The value `samerole` specifies that the requested user must be a member of the role with the same name as the requested database. (`samegroup` is an obsolete but still accepted spelling of `samerole`.) Superusers are not considered to be members of a role for the purposes of `samerole` unless they are explicitly members of the role, directly or indirectly, and not just by virtue of being a superuser. The value `replication` specifies that the record matches if a physical replication connection is requested, however, it doesn't match with logical replication connections. Note that physical replication connections do not specify any particular database whereas logical replication connections do specify it. Otherwise, this is the name of a specific PostgreSQL database or a regular expression. Multiple database names and/or regular expressions can be supplied by separating them with commas.
 
 
-     If the database name starts with a slash (`/`), the remainder of the name is treated as a regular expression. (See [Regular Expression Details](../../the-sql-language/functions-and-operators/pattern-matching.md#posix-syntax-details) for details of PostgreSQL's regular expression syntax.)
+     If the database name starts with a slash (`/`), the remainder of the name is treated as a regular expression. (See [POSIX Regular Expression Details](../../the-sql-language/functions-and-operators/pattern-matching.md#posix-syntax-details) for details of PostgreSQL's regular expression syntax.)
 
 
      A separate file containing database names and/or regular expressions can be specified by preceding the file name with `@`.
@@ -89,7 +89,7 @@ include_dir         DIRECTORY
 :   Specifies which database user name(s) this record matches. The value `all` specifies that it matches all users. Otherwise, this is either the name of a specific database user, a regular expression when starting with a slash (`/`), or a group name preceded by `+`. (Recall that there is no real distinction between users and groups in PostgreSQL; a `+` mark really means “match any of the roles that are directly or indirectly members of this role”, while a name without a `+` mark matches only that specific role.) For this purpose, a superuser is only considered to be a member of a role if they are explicitly a member of the role, directly or indirectly, and not just by virtue of being a superuser. Multiple user names and/or regular expressions can be supplied by separating them with commas.
 
 
-     If the user name starts with a slash (`/`), the remainder of the name is treated as a regular expression. (See [Regular Expression Details](../../the-sql-language/functions-and-operators/pattern-matching.md#posix-syntax-details) for details of PostgreSQL's regular expression syntax.)
+     If the user name starts with a slash (`/`), the remainder of the name is treated as a regular expression. (See [POSIX Regular Expression Details](../../the-sql-language/functions-and-operators/pattern-matching.md#posix-syntax-details) for details of PostgreSQL's regular expression syntax.)
 
 
      A separate file containing user names and/or regular expressions can be specified by preceding the file name with `@`.
@@ -175,9 +175,6 @@ include_dir         DIRECTORY
 
     `ldap`
     :   Authenticate using an LDAP server. See [LDAP Authentication](ldap-authentication.md#auth-ldap) for details.
-
-    `radius`
-    :   Authenticate using a RADIUS server. See [RADIUS Authentication](radius-authentication.md#auth-radius) for details.
 
     `cert`
     :   Authenticate using SSL client certificates. See [Certificate Authentication](certificate-authentication.md#auth-cert) for details.

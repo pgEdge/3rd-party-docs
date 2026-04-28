@@ -42,6 +42,10 @@ LOAD 'auto_explain';
 
 `auto_explain.log_buffers` (`boolean`)
 :   `auto_explain.log_buffers` controls whether buffer usage statistics are printed when an execution plan is logged; it's equivalent to the `BUFFERS` option of `EXPLAIN`. This parameter has no effect unless `auto_explain.log_analyze` is enabled. This parameter is off by default. Only superusers can change this setting.
+<a id="auto-explain-configuration-parameters-log-io"></a>
+
+`auto_explain.log_io` (`boolean`)
+:   `auto_explain.log_io` controls whether I/O usage statistics are printed when an execution plan is logged; it's equivalent to the `IO` option of `EXPLAIN`. This parameter has no effect unless `auto_explain.log_analyze` is enabled. This parameter is off by default. Only superusers can change this setting.
 <a id="auto-explain-configuration-parameters-log-wal"></a>
 
 `auto_explain.log_wal` (`boolean`)
@@ -66,6 +70,10 @@ LOAD 'auto_explain';
 
 `auto_explain.log_format` (`enum`)
 :   `auto_explain.log_format` selects the `EXPLAIN` output format to be used. The allowed values are `text`, `xml`, `json`, and `yaml`. The default is text. Only superusers can change this setting.
+<a id="auto-explain-configuration-parameters-log-extension-options"></a>
+
+`auto_explain.log_extension_options` (`string`)
+:   Loadable modules can extend the `EXPLAIN` command with additional options that affect the output format. Such options can also be specified here. The value of this parameter is a comma-separated list of options, each of which is an option name followed optionally by an associated value. The module that provides the `EXPLAIN` option, such as [`pg_plan_advice`](pg_plan_advice-help-the-planner-get-the-right-plan.md#pgplanadvice) or [`pg_overexplain`](pg_overexplain-allow-explain-to-dump-even-more-details.md#pgoverexplain), should be loaded before this parameter is set. Only superusers can change this setting.
 <a id="auto-explain-configuration-parameters-log-level"></a>
 
 `auto_explain.log_level` (`enum`)

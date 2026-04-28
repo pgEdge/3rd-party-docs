@@ -1074,47 +1074,91 @@ CREATE FUNCTION make_array(anyelement) RETURNS anyarray
 #### Requesting Shared Memory at Startup
 
 
- Add-ins can reserve shared memory on server startup. To do so, the add-in's shared library must be preloaded by specifying it in [shared_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-shared-preload-libraries). The shared library should also register a `shmem_request_hook` in its `_PG_init` function. This `shmem_request_hook` can reserve shared memory by calling:
+ Add-ins can reserve shared memory on server startup. To do so, the add-in's shared library must be preloaded by specifying it in [shared_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-shared-preload-libraries). The shared library should register callbacks in its `_PG_init` function, which then get called at the right stages of the system startup to initialize the shared memory. Here is an example:
 
 ```
 
-void RequestAddinShmemSpace(Size size)
-```
- Each backend should obtain a pointer to the reserved shared memory by calling:
+typedef struct MyShmemData {
+    LWLock      lock;    /* protects the fields below */
 
-```
+    ... shared memory contents ...
+} MyShmemData;
 
-void *ShmemInitStruct(const char *name, Size size, bool *foundPtr)
-```
- If this function sets `foundPtr` to `false`, the caller should proceed to initialize the contents of the reserved shared memory. If `foundPtr` is set to `true`, the shared memory was already initialized by another backend, and the caller need not initialize further.
+static MyShmemData *MyShmem;    /* pointer to the struct in shared memory */
 
+static void my_shmem_request(void *arg);
+static void my_shmem_init(void *arg);
 
- To avoid race conditions, each backend should use the LWLock `AddinShmemInitLock` when initializing its allocation of shared memory, as shown here:
+const ShmemCallbacks my_shmem_callbacks = {
+    .request_fn = my_shmem_request,
+    .init_fn = my_shmem_init,
+};
 
-```
-
-static mystruct *ptr = NULL;
-bool        found;
-
-LWLockAcquire(AddinShmemInitLock, LW_EXCLUSIVE);
-ptr = ShmemInitStruct("my struct name", size, &found);
-if (!found)
+/*
+ * Module load callback
+ */
+void
+_PG_init(void)
 {
-    ... initialize contents of shared memory ...
-    ptr->locks = GetNamedLWLockTranche("my tranche name");
+    /*
+     * In order to create our shared memory area, we have to be loaded via
+     * shared_preload_libraries.
+     */
+    if (!process_shared_preload_libraries_in_progress)
+        return;
+
+    /* Register our shared memory needs */
+    RegisterShmemCallbacks(&my_shmem_callbacks);
 }
-LWLockRelease(AddinShmemInitLock);
+
+/* callback to request shmem space */
+static void
+my_shmem_request(void *arg)
+{
+    ShmemRequestStruct(.name = "My shmem area",
+                       .size = sizeof(MyShmemData),
+                       .ptr = (void **) &MyShmem,
+        );
+}
+
+/* callback to initialize the contents of the MyShmem area at startup */
+static void
+my_shmem_init(void *arg)
+{
+    int         tranche_id;
+
+    /* Initialize the lock */
+    tranche_id = LWLockNewTrancheId("my tranche name");
+    LWLockInitialize(&MyShmem->lock, tranche_id);
+
+    ... initialize the rest of MyShmem fields ...
+}
 ```
- `shmem_startup_hook` provides a convenient place for the initialization code, but it is not strictly required that all such code be placed in this hook. On Windows (and anywhere else where `EXEC_BACKEND` is defined), each backend executes the registered `shmem_startup_hook` shortly after it attaches to shared memory, so add-ins should still acquire `AddinShmemInitLock` within this hook, as shown in the example above. On other platforms, only the postmaster process executes the `shmem_startup_hook`, and each backend automatically inherits the pointers to shared memory.
+ The `request_fn` callback is called during system startup, before the shared memory has been allocated. It should call `ShmemRequestStruct()` to register the add-in's shared memory needs. Note that `ShmemRequestStruct()` doesn't immediately allocate or initialize the memory, it merely registers the space to be allocated later in the startup sequence. When the memory is allocated, it is initialized to zero. For any more complex initialization, set the `init_fn()` callback, which will be called after the memory has been allocated and initialized to zero, but before any other processes are running, and thus no locking is required.
 
 
- An example of a `shmem_request_hook` and `shmem_startup_hook` can be found in `contrib/pg_stat_statements/pg_stat_statements.c` in the PostgreSQL source tree.
+ On Windows, the `attach_fn` callback, if any, is additionally called at every backend startup. It can be used to initialize additional per-backend state related to the shared memory area that is inherited via `fork()` on other systems.
+
+
+ An example of allocating shared memory can be found in `contrib/pg_stat_statements/pg_stat_statements.c` in the PostgreSQL source tree.
   <a id="xfunc-shared-addin-after-startup"></a>
 
-#### Requesting Shared Memory After Startup
+#### Requesting Shared Memory After Startup with `ShmemRequestStruct`
 
 
- There is another, more flexible method of reserving shared memory that can be done after server startup and outside a `shmem_request_hook`. To do so, each backend that will use the shared memory should obtain a pointer to it by calling:
+ The `ShmemRequestStruct()` can also be called after system startup, which is useful to allow small allocations in add-in libraries that are not specified in [shared_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-shared-preload-libraries). However, after startup the allocation can fail if there is not enough shared memory available. The system reserves some memory for allocations after startup, but that reservation is small.
+
+
+ By default, `RegisterShmemCallbacks()` fails with an error if called after system startup. To use it after startup, you must set the `SHMEM_CALLBACKS_ALLOW_AFTER_STARTUP` flag in the argument `ShmemCallbacks` struct to acknowledge the risk.
+
+
+ When `RegisterShmemCallbacks()` is called after startup, it will immediately call the appropriate callbacks, depending on whether the requested memory areas were already initialized by another backend. The callbacks will be called while holding an internal lock, which prevents concurrent two backends from initializing the memory area concurrently.
+  <a id="xfunc-shared-addin-dynamic"></a>
+
+#### Allocating Dynamic Shared Memory After Startup
+
+
+ There is another, more flexible method of reserving shared memory that can be done after server startup. To do so, each backend that will use the shared memory should obtain a pointer to it by calling:
 
 ```
 
@@ -1125,7 +1169,7 @@ void *GetNamedDSMSegment(const char *name, size_t size,
  If a dynamic shared memory segment with the given name does not yet exist, this function will allocate it and initialize it with the provided `init_callback` callback function. If the segment has already been allocated and initialized by another backend, this function simply attaches the existing dynamic shared memory segment to the current backend. In the former case, `GetNamedDSMSegment` passes the `void *arg` argument to the `init_callback`. This is particularly useful for reusing an initialization callback function for multiple DSM segments.
 
 
- Unlike shared memory reserved at server startup, there is no need to acquire `AddinShmemInitLock` or otherwise take action to avoid race conditions when reserving shared memory with `GetNamedDSMSegment`. This function ensures that only one backend allocates and initializes the segment and that all other backends receive a pointer to the fully allocated and initialized segment.
+ `GetNamedDSMSegment` ensures that only one backend allocates and initializes the segment and that all other backends receive a pointer to the fully allocated and initialized segment.
 
 
  A complete usage example of `GetNamedDSMSegment` can be found in `src/test/modules/test_dsm_registry/test_dsm_registry.c` in the PostgreSQL source tree.

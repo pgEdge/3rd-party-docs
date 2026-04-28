@@ -10,7 +10,9 @@ update rows of a table
 ```
 
 [ WITH [ RECURSIVE ] WITH_QUERY [, ...] ]
-UPDATE [ ONLY ] TABLE_NAME [ * ] [ [ AS ] ALIAS ]
+UPDATE [ ONLY ] TABLE_NAME [ * ]
+    [ FOR PORTION OF RANGE_COLUMN_NAME FOR_PORTION_OF_TARGET ]
+    [ [ AS ] ALIAS ]
     SET { COLUMN_NAME = { EXPRESSION | DEFAULT } |
           ( COLUMN_NAME [, ...] ) = [ ROW ] ( { EXPRESSION | DEFAULT } [, ...] ) |
           ( COLUMN_NAME [, ...] ) = ( SUB-SELECT )
@@ -19,6 +21,11 @@ UPDATE [ ONLY ] TABLE_NAME [ * ] [ [ AS ] ALIAS ]
     [ WHERE CONDITION | WHERE CURRENT OF CURSOR_NAME ]
     [ RETURNING [ WITH ( { OLD | NEW } AS OUTPUT_ALIAS [, ...] ) ]
                 { * | OUTPUT_EXPRESSION [ [ AS ] OUTPUT_NAME ] } [, ...] ]
+
+where FOR_PORTION_OF_TARGET is:
+
+{ FROM START_TIME TO END_TIME |
+  ( PORTION ) }
 ```
 
 
@@ -34,7 +41,10 @@ UPDATE [ ONLY ] TABLE_NAME [ * ] [ [ AS ] ALIAS ]
  The optional `RETURNING` clause causes `UPDATE` to compute and return value(s) based on each row actually updated. Any expression using the table's columns, and/or columns of other tables mentioned in `FROM`, can be computed. By default, the new (post-update) values of the table's columns are used, but it is also possible to request the old (pre-update) values. The syntax of the `RETURNING` list is identical to that of the output list of `SELECT`.
 
 
- You must have the `UPDATE` privilege on the table, or at least on the column(s) that are listed to be updated. You must also have the `SELECT` privilege on any column whose values are read in the *expressions* or *condition*.
+ If the `FOR PORTION OF` clause is used, the update will only affect rows that overlap the given portion. Furthermore, if a row's application time extends outside the `FOR PORTION OF` bounds, then the update will only change the application time within those bounds. In effect, only the history targeted by `FOR PORTION OF` is updated, and no moments outside. Furthermore, after a row is updated, the range or multirange is first shrunk so that its application time no longer extends beyond the targeted `FOR PORTION OF` bounds. Then, new *temporal leftovers* might be inserted: rows whose range or multirange receives the remaining application time outside the targeted `FROM`/`TO` bounds, with the original values in their other columns. For range columns, there will be zero to two inserted records, depending on whether the original application time was completely updated, extended before/after the change, or both. Multiranges never require two temporal leftovers, because one value can always contain whatever application time remains.
+
+
+ You must have the `UPDATE` privilege on the table, or at least on the column(s) that are listed to be updated. You must also have the `SELECT` privilege on any column whose values are read in the *expressions* or *condition*. When `FOR PORTION OF` is used, the secondary inserts do not require `INSERT` privilege on the table. (This is because conceptually no new information is being added; the inserted rows only preserve existing data about the untargeted time period.)
 
 
 ## Parameters
@@ -48,6 +58,18 @@ UPDATE [ ONLY ] TABLE_NAME [ * ] [ [ AS ] ALIAS ]
 
 *alias*
 :   A substitute name for the target table. When an alias is provided, it completely hides the actual name of the table. For example, given `UPDATE foo AS f`, the remainder of the `UPDATE` statement must refer to this table as `f` not `foo`.
+
+*range_column_name*
+:   The range or multirange column to use when performing a temporal update.
+
+*for_portion_of_target*
+:   The portion to update. If targeting a range column, this can be in the form `FROM` *start_time* `TO` *end_time*. Otherwise, it must be in the form `(`*portion*`)` where *portion* is an expression that yields a value of the same type as *range_column_name*.
+
+*start_time*
+:   The earliest time (inclusive) to change in a temporal update. This must be a value matching the base type of the range from *range_column_name*. A null value here indicates an update whose beginning is unbounded (as with range types).
+
+*end_time*
+:   The latest time (exclusive) to change in a temporal update. This must be a value matching the base type of the range from *range_column_name*. A null value here indicates an update whose end is unbounded (as with range types).
 
 *column_name*
 :   The name of a column in the table named by *table_name*. The column name can be qualified with a subfield name or array subscript, if needed. Do not include the table's name in the specification of a target column — for example, `UPDATE table_name SET table_name.col = 1` is invalid.
@@ -95,10 +117,10 @@ UPDATE [ ONLY ] TABLE_NAME [ * ] [ [ AS ] ALIAS ]
 
 UPDATE COUNT
 ```
- The *count* is the number of rows updated, including matched rows whose values did not change. Note that the number may be less than the number of rows that matched the *condition* when updates were suppressed by a `BEFORE UPDATE` trigger. If *count* is 0, no rows were updated by the query (this is not considered an error).
+ The *count* is the number of rows updated, including matched rows whose values did not change. Note that the number may be less than the number of rows that matched the *condition* when updates were suppressed by a `BEFORE UPDATE` trigger. If *count* is 0, no rows were updated by the query (this is not considered an error). If `FOR PORTION OF` was used, the *count* does not include *temporal leftovers* that were inserted.
 
 
- If the `UPDATE` command contains a `RETURNING` clause, the result will be similar to that of a `SELECT` statement containing the columns and values defined in the `RETURNING` list, computed over the row(s) updated by the command.
+ If the `UPDATE` command contains a `RETURNING` clause, the result will be similar to that of a `SELECT` statement containing the columns and values defined in the `RETURNING` list, computed over the row(s) updated by the command. If `FOR PORTION OF` was used, the `RETURNING` clause gives one result for each updated row, but does not include inserted *temporal leftovers*. The value of the application-time column matches the new value of the updated row(s).
 
 
 ## Notes
@@ -120,6 +142,9 @@ UPDATE COUNT
 
 
  An attempt of moving a row from one partition to another will fail if a foreign key is found to directly reference an ancestor of the source partition that is not the same as the ancestor that's mentioned in the `UPDATE` query.
+
+
+ When `FOR PORTION OF` is used, this can result in users who don't have `INSERT` privileges firing `INSERT` triggers. This should be considered when using `SECURITY DEFINER` trigger functions.
 
 
 ## Examples
@@ -231,6 +256,17 @@ COMMIT;
 ```sql
 
 UPDATE films SET kind = 'Dramatic' WHERE CURRENT OF c_films;
+```
+
+
+ An example of a temporal update:
+
+```sql
+
+UPDATE products
+  FOR PORTION OF valid_at FROM '2023-09-01' TO '2025-03-01'
+  SET price = 12.00
+  WHERE product_no = 5;
 ```
 
  <a id="update-limit"></a>

@@ -45,6 +45,9 @@
  While running a `MERGE` command, statement-level `BEFORE` and `AFTER` triggers are fired for events specified in the actions of the `MERGE` command, irrespective of whether or not the action is ultimately performed. This is the same as an `UPDATE` statement that updates no rows, yet statement-level triggers are fired. The row-level triggers are fired only when a row is actually updated, inserted or deleted. So it's perfectly legal that while statement-level triggers are fired for certain types of action, no row-level triggers are fired for the same kind of action.
 
 
+ If an `UPDATE` or `DELETE` uses `FOR PORTION OF`, causing new rows to be inserted to preserve the leftover untargeted part of modified records, then `INSERT` triggers are fired for each inserted row. Each row is inserted separately, so they fire their own statement triggers, and they have their own transition tables. (The `BEFORE DELETE/UPDATE` triggers are fired first, then `BEFORE INSERT`, then `AFTER INSERT`, then `AFTER DELETE/UPDATE`.)
+
+
  Trigger functions invoked by per-statement triggers should always return `NULL`. Trigger functions invoked by per-row triggers can return a table row (a value of type `HeapTuple`) to the calling executor, if they choose. A row-level trigger fired before an operation has the following choices:
 
 -  It can return `NULL` to skip the operation for the current row. This instructs the executor to not perform the row-level operation that invoked the trigger (the insertion, modification, or deletion of a particular table row).

@@ -122,7 +122,7 @@ where ROLE_SPECIFICATION can be:
  If `WITH GRANT OPTION` is specified, the recipient of the privilege can in turn grant it to others. Without a grant option, the recipient cannot do that. Grant options cannot be granted to `PUBLIC`.
 
 
- If `GRANTED BY` is specified, the specified grantor must be the current user. This clause is currently present in this form only for SQL compatibility.
+ If `GRANTED BY` is specified, the grant is recorded as having been done by the specified role. A role can only attribute a grant to another role if it inherits the privileges of that role.
 
 
  There is no need to grant privileges to the owner of an object (usually the user that created it), as the owner has all privileges by default. (The owner could, however, choose to revoke some of their own privileges for safety.)
@@ -170,7 +170,7 @@ where ROLE_SPECIFICATION can be:
  To create an object owned by another role or give ownership of an existing object to another role, you must have the ability to `SET ROLE` to that role; otherwise, commands such as `ALTER ... OWNER TO` or `CREATE DATABASE ... OWNER` will fail. However, a user who inherits the privileges of a role but does not have the ability to `SET ROLE` to that role may be able to obtain full access to the role by manipulating existing objects owned by that role (e.g. they could redefine an existing function to act as a Trojan horse). Therefore, if a role's privileges are to be inherited but should not be accessible via `SET ROLE`, it should not own any SQL objects.
 
 
- If `GRANTED BY` is specified, the grant is recorded as having been done by the specified role. A user can only attribute a grant to another role if they possess the privileges of that role. The role recorded as the grantor must have `ADMIN OPTION` on the target role, unless it is the bootstrap superuser. When a grant is recorded as having a grantor other than the bootstrap superuser, it depends on the grantor continuing to possess `ADMIN OPTION` on the role; so, if `ADMIN OPTION` is revoked, dependent grants must be revoked as well.
+ If `GRANTED BY` is specified, the grant is recorded as having been done by the specified role. A user can only attribute a grant to another role if it inherits the privileges of that role. The role recorded as the grantor must have `ADMIN OPTION` on the target role, unless it is the bootstrap superuser. When a grant is recorded as having a grantor other than the bootstrap superuser, it depends on the grantor continuing to possess `ADMIN OPTION` on the role; so, if `ADMIN OPTION` is revoked, dependent grants must be revoked as well.
 
 
  Unlike the case with privileges, membership in a role cannot be granted to `PUBLIC`. Note also that this form of the command does not allow the noise word `GROUP` in *role_specification*.

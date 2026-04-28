@@ -22,8 +22,8 @@
 -  The new cluster must have [`max_replication_slots`](../server-configuration/replication.md#guc-max-replication-slots) configured to a value greater than or equal to the number of slots present in the old cluster.
 -  The output plugins referenced by the slots on the old cluster must be installed in the new PostgreSQL executable directory.
 -  The old cluster has replicated all the transactions and logical decoding messages to subscribers.
--  All slots on the old cluster must be usable, i.e., there are no slots whose [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`conflicting` is not `true`.
--  The new cluster must not have permanent logical slots, i.e., there must be no slots where [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`temporary` is `false`.
+-  All slots on the old cluster must be usable, i.e., their [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`conflicting` is `false`.
+-  The new cluster must not have any permanent logical slots; i.e., any existing logical slots must have [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`temporary` set to `true`.
   <a id="prepare-subscriber-upgrades"></a>
 
 ### Prepare for Subscriber Upgrades

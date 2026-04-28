@@ -42,6 +42,7 @@
 -   `PGLOADBALANCEHOSTS` behaves the same as the [load_balance_hosts](database-connection-control-functions.md#libpq-connect-load-balance-hosts) connection parameter.
 -   `PGMINPROTOCOLVERSION` behaves the same as the [min_protocol_version](database-connection-control-functions.md#libpq-connect-min-protocol-version) connection parameter.
 -   `PGMAXPROTOCOLVERSION` behaves the same as the [max_protocol_version](database-connection-control-functions.md#libpq-connect-max-protocol-version) connection parameter.
+-   `PGOAUTHCAFILE` behaves the same as the [oauth_ca_file](database-connection-control-functions.md#libpq-connect-oauth-ca-file) connection parameter.
 
 
  The following environment variables can be used to specify default behavior for each PostgreSQL session. (See also the [sql-alterrole](../../reference/sql-commands/alter-role.md#sql-alterrole) and [sql-alterdatabase](../../reference/sql-commands/alter-database.md#sql-alterdatabase) commands for ways to set default behavior on a per-user or per-database basis.)

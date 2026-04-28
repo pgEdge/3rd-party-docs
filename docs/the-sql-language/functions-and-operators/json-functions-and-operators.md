@@ -990,6 +990,46 @@ ERROR:  jsonpath member accessor can only be applied to an object
 <td>The object's key-value pairs, represented as an array of objects containing three fields: <code>"key"</code>, <code>"value"</code>, and <code>"id"</code>; <code>"id"</code> is a unique identifier of the object the key-value pair belongs to</td>
 <td><code>jsonb_path_query_array('{"x": "20", "y": 32}', '$.keyvalue()')</code> <code>[{"id": 0, "key": "x", "value": "20"}, {"id": 0, "key": "y", "value": 32}]</code></td>
 </tr>
+<tr>
+<td><em>string</em> <code>.</code> <code>lower()</code> <em>string</em></td>
+<td>String converted to all lower case according to the rules of the database's locale.</td>
+<td><code>jsonb_path_query('"TOM"', '$.lower()')</code> <code>"tom"</code></td>
+</tr>
+<tr>
+<td><em>string</em> <code>.</code> <code>upper()</code> <em>string</em></td>
+<td>String converted to all upper case according to the rules of the database's locale.</td>
+<td><code>jsonb_path_query('"tom"', '$.upper()')</code> <code>"TOM"</code></td>
+</tr>
+<tr>
+<td><em>string</em> <code>.</code> <code>initcap()</code> <em>string</em></td>
+<td>String with the first letter of each word converted to upper case according to the rules of the database's locale. Words are sequences of alphanumeric characters separated by non-alphanumeric characters.</td>
+<td><code>jsonb_path_query('"hi THOMAS"', '$.initcap()')</code> <code>"Hi Thomas"</code></td>
+</tr>
+<tr>
+<td><em>string</em> <code>.</code> <code>replace(</code><em>from</em><code>, </code><em>to</em><code>)</code> <em>string</em></td>
+<td>String with all occurrences of substring from replaced with substring to.</td>
+<td><code>jsonb_path_query('"abcdefabcdef"', '$.replace("cd", "XX")')</code> <code>"abXXefabXXef"</code></td>
+</tr>
+<tr>
+<td><em>string</em> <code>.</code> <code>split_part(</code><em>delimiter</em><code>, </code><em>n</em><code>)</code> <em>string</em></td>
+<td>String split at occurrences of <em>delimiter</em> and returns the <em>n</em>'th field (counting from one) or, when <em>n</em> is negative, returns the |<em>n</em>|'th-from-last field.</td>
+<td><code>jsonb_path_query('"abc~@~def~@~ghi"', '$.split_part("~@~", 2)')</code> <code>"def"</code><br><code>jsonb_path_query('"abc,def,ghi,jkl"', '$.split_part(",", 3)')</code> <code>"ghi"</code></td>
+</tr>
+<tr>
+<td><em>string</em> <code>.</code> <code>ltrim([ </code><em>characters</em><code> ])</code> <em>string</em></td>
+<td>String with the longest string containing only spaces or the characters in <em>characters</em> removed from the start of <em>string</em></td>
+<td><code> jsonb_path_query('" hello"', '$.ltrim()')</code> <code>"hello"</code><br><code>jsonb_path_query('"zzzytest"', '$.ltrim("xyz")')</code> <code>"test"</code></td>
+</tr>
+<tr>
+<td><em>string</em> <code>.</code> <code>rtrim([ </code><em>characters</em><code> ])</code> <em>string</em></td>
+<td>String with the longest string containing only spaces or the characters in <em>characters</em> removed from the end of <em>string</em></td>
+<td><code>jsonb_path_query('"hello "', '$.rtrim()')</code> <code>"hello"</code><br><code>jsonb_path_query('"testxxzx"', '$.rtrim("xyz")')</code> <code>"test"</code></td>
+</tr>
+<tr>
+<td><em>string</em> <code>.</code> <code>btrim([ </code><em>characters</em><code> ])</code> <em>string</em></td>
+<td>String with the longest string containing only spaces or the characters in <em>characters</em> removed from the start and end of <em>string</em></td>
+<td><code>jsonb_path_query('" hello "', '$.btrim()')</code> <code>"hello"</code><br><code>jsonb_path_query('"xyxtrimyyx"', '$.btrim("xyz")')</code> <code>"trim"</code></td>
+</tr>
 </tbody>
 </table>
 
@@ -1123,7 +1163,7 @@ $[*] ? (@ like_regex "^[aeiou]" flag "i")
  The optional `flag` string may include one or more of the characters `i` for case-insensitive match, `m` to allow `^` and `$` to match at newlines, `s` to allow `.` to match a newline, and `q` to quote the whole pattern (reducing the behavior to a simple substring match).
 
 
- The SQL/JSON standard borrows its definition for regular expressions from the `LIKE_REGEX` operator, which in turn uses the XQuery standard. PostgreSQL does not currently support the `LIKE_REGEX` operator. Therefore, the `like_regex` filter is implemented using the POSIX regular expression engine described in [POSIX Regular Expressions](pattern-matching.md#functions-posix-regexp). This leads to various minor discrepancies from standard SQL/JSON behavior, which are cataloged in [Differences from SQL Standard and XQuery](pattern-matching.md#posix-vs-xquery). Note, however, that the flag-letter incompatibilities described there do not apply to SQL/JSON, as it translates the XQuery flag letters to match what the POSIX engine expects.
+ The SQL/JSON standard borrows its definition for regular expressions from the `LIKE_REGEX` operator, which in turn uses the XQuery standard. PostgreSQL does not currently support the `LIKE_REGEX` operator. Therefore, the `like_regex` filter is implemented using the POSIX regular expression engine described in [POSIX Regular Expression Details](pattern-matching.md#posix-syntax-details). This leads to various minor discrepancies from standard SQL/JSON behavior, which are cataloged in [Differences from SQL Standard and XQuery](pattern-matching.md#posix-vs-xquery). Note, however, that the flag-letter incompatibilities described there do not apply to SQL/JSON, as it translates the XQuery flag letters to match what the POSIX engine expects.
 
 
  Keep in mind that the pattern argument of `like_regex` is a JSON path string literal, written according to the rules given in [jsonpath Type](../data-types/json-types.md#datatype-jsonpath). This means in particular that any backslashes you want to use in the regular expression must be doubled. For example, to match string values of the root document that contain only digits:

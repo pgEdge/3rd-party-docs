@@ -9,7 +9,7 @@
 ### Startup Callback
 
 
- The `startup_cb` callback is executed directly after loading the module. This callback can be used to set up local state and perform additional initialization if required. If the validator module has state it can use `state->private_data` to store it.
+ The `startup_cb` callback is executed directly after loading the module. This callback can be used to set up local state, define [custom HBA options](custom-hba-options.md#oauth-validator-hba), and perform additional initialization if required. If the validator module has state it can use `state->private_data` to store it.
 
 ```
 
@@ -37,12 +37,16 @@ typedef struct ValidatorModuleResult
 {
     bool        authorized;
     char       *authn_id;
+    char       *error_detail;
 } ValidatorModuleResult;
 ```
  The connection will only proceed if the module sets `result->authorized` to `true`. To authenticate the user, the authenticated user name (as determined using the token) shall be palloc'd and returned in the `result->authn_id` field. Alternatively, `result->authn_id` may be set to NULL if the token is valid but the associated user identity cannot be determined.
 
 
  A validator may return `false` to signal an internal error, in which case any result parameters are ignored and the connection fails. Otherwise the validator should return `true` to indicate that it has processed the token and made an authorization decision.
+
+
+ In either failure case (validation error or internal error) the module may store a user-readable reason for the failure in `result->error_detail`. This will be printed to the server logs (not sent to the client) as a `DETAIL` entry for the authentication failure. The memory pointed to by `error_detail` may be either palloc'd or of static duration. `error_detail` is ignored on success.
 
 
  The behavior after `validate_cb` returns depends on the specific HBA setup. Normally, the `result->authn_id` user name must exactly match the role that the user is logging in as. (This behavior may be modified with a usermap.) But when authenticating against an HBA rule with `delegate_ident_mapping` turned on, PostgreSQL will not perform any checks on the value of `result->authn_id` at all; in this case it is up to the validator to ensure that the token carries enough privileges for the user to log in under the indicated *role*.

@@ -122,6 +122,9 @@ make check-world PG_TEST_EXTRA='kerberos ldap ssl load_balance libpq_encryption'
 ```
  The following values are currently supported:
 
+`checksum`, `checksum_extended`
+:   Runs additional tests for enabling data checksums which inject faults to cause re-tries in the processing, as well as tests that run pgbench concurrently and randomly restarts the cluster. Some of these test suites require injection points enabled in the installation. `checksum_extended` is an extended version with longer runtime, injected random delays and larger datasets.
+
 `kerberos`
 :   Runs the test suite under `src/test/kerberos`. This requires an MIT Kerberos installation and opens TCP/IP listen sockets.
 
@@ -139,6 +142,9 @@ make check-world PG_TEST_EXTRA='kerberos ldap ssl load_balance libpq_encryption'
 
 `regress_dump_restore`
 :   Runs an additional test suite in `src/bin/pg_upgrade/t/002_pg_upgrade.pl` which cycles the regression database through `pg_dump`/ `pg_restore`. Not enabled by default because it is resource-intensive.
+
+`saslprep`
+:   Runs the TAP test suite under `src/test/modules/test_saslprep`. Not enabled by default because it is resource-intensive.
 
 `sepgsql`
 :   Runs the test suite under `contrib/sepgsql`. This requires an SELinux environment that is set up in a specific way; see [Regression Tests](../../appendixes/additional-supplied-modules-and-extensions/sepgsql-selinux-label-based-mandatory-access-control-mac-security-module.md#sepgsql-regression).

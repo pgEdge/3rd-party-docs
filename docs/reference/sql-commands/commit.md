@@ -19,6 +19,15 @@ COMMIT [ WORK | TRANSACTION ] [ AND [ NO ] CHAIN ]
  `COMMIT` commits the current transaction. All changes made by the transaction become visible to others and are guaranteed to be durable if a crash occurs.
 
 
+ If the transaction is in an aborted state then no changes will be made and the effect of the `COMMIT` will be identical to that of `ROLLBACK`, including the command tag output.
+
+
+ In either case, if the `AND CHAIN` parameter is specified then a new, identically configured, transaction is started.
+
+
+ For more information regarding transactions see [Transactions](../../tutorial/advanced-features/transactions.md#tutorial-transactions).
+
+
 ## Parameters
 
 
@@ -30,6 +39,25 @@ COMMIT [ WORK | TRANSACTION ] [ AND [ NO ] CHAIN ]
 
 `AND CHAIN`
 :   If `AND CHAIN` is specified, a new transaction is immediately started with the same transaction characteristics (see [sql-set-transaction](set-transaction.md#sql-set-transaction)) as the just finished one. Otherwise, no new transaction is started.
+
+
+## Outputs
+
+
+ On successful completion of a non-aborted transaction, a `COMMIT` command returns a command tag of the form
+
+```
+
+COMMIT
+```
+
+
+ However, in an aborted transaction, a `COMMIT` command returns a command tag of the form
+
+```
+
+ROLLBACK
+```
 
 
 ## Notes
@@ -55,8 +83,11 @@ COMMIT;
 ## Compatibility
 
 
- The command `COMMIT` conforms to the SQL standard. The form `COMMIT TRANSACTION` is a PostgreSQL extension.
+ The command `COMMIT` conforms to the SQL standard, except that no exception condition is raised in the case where the transaction was already aborted.
+
+
+ The form `COMMIT TRANSACTION` is a PostgreSQL extension.
 
 
 ## See Also
-  [sql-begin](begin.md#sql-begin), [sql-rollback](rollback.md#sql-rollback)
+  [sql-begin](begin.md#sql-begin), [sql-rollback](rollback.md#sql-rollback), [Transactions](../../tutorial/advanced-features/transactions.md#tutorial-transactions)

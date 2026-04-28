@@ -158,7 +158,7 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 :   This form changes the type of a column of a table. Indexes and simple table constraints involving the column will be automatically converted to use the new column type by reparsing the originally supplied expression. The optional `COLLATE` clause specifies a collation for the new column; if omitted, the collation is the default for the new column type. The optional `USING` clause specifies how to compute the new column value from the old; if omitted, the default conversion is the same as an assignment cast from old data type to new. A `USING` clause must be provided if there is no implicit or assignment cast from old to new type.
 
 
-     When this form is used, the column's statistics are removed, so running [`ANALYZE`](analyze.md#sql-analyze) on the table afterwards is recommended. For a virtual generated column, `ANALYZE` is not necessary because such columns never have statistics.
+     When this form is used, the column's statistics are removed, so running [`ANALYZE`](analyze.md#sql-analyze) on the table afterwards is recommended. For a virtual generated column, `ANALYZE` is not necessary unless extended statistics are defined on it, since such columns do not have statistics by default.
 <a id="sql-altertable-desc-set-drop-default"></a>
 
 `SET`/`DROP DEFAULT`
@@ -176,10 +176,10 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 <a id="sql-altertable-desc-set-expression"></a>
 
 `SET EXPRESSION AS`
-:   This form replaces the expression of a generated column. Existing data in a stored generated column is rewritten and all the future changes will apply the new generation expression. Replacing the expression of a virtual generated column do not require a table rewrite, but if the column is used in a constraint, the table will be scanned to check that existing rows meet the constraint.
+:   This form replaces the expression of a generated column. Existing data in a stored generated column is rewritten and all the future changes will apply the new generation expression. Replacing the expression of a virtual generated column does not require a table rewrite, but if the column is used in a constraint, the table will be scanned to check that existing rows meet the constraint.
 
 
-     When this form is used on a stored generated column, its statistics are removed, so running [`ANALYZE`](analyze.md#sql-analyze) on the table afterwards is recommended. For a virtual generated column, `ANALYZE` is not necessary because such columns never have statistics.
+     When this form is used on a stored generated column, its statistics are removed, so running [`ANALYZE`](analyze.md#sql-analyze) on the table afterwards is recommended. For a virtual generated column, `ANALYZE` is not necessary unless extended statistics are defined on it, since such columns do not have statistics by default.
 <a id="sql-altertable-desc-drop-expression"></a>
 
 `DROP EXPRESSION [ IF EXISTS ]`
@@ -205,6 +205,9 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 
 `SET STATISTICS`
 :   This form sets the per-column statistics-gathering target for subsequent [`ANALYZE`](analyze.md#sql-analyze) operations. The target can be set in the range 0 to 10000. Set it to `DEFAULT` to revert to using the system default statistics target ([default_statistics_target](../../server-administration/server-configuration/query-planning.md#guc-default-statistics-target)). (Setting to a value of -1 is an obsolete way spelling to get the same outcome.) For more information on the use of statistics by the PostgreSQL query planner, refer to [Statistics Used by the Planner](../../the-sql-language/performance-tips/statistics-used-by-the-planner.md#planner-stats).
+
+
+     This form is not supported on virtual generated columns, since such columns do not have statistics by default. If extended statistics are defined on such columns, the statistics-gathering target may be set on the extended statistics object using [sql-alterstatistics](alter-statistics.md#sql-alterstatistics).
 
 
      `SET STATISTICS` acquires a `SHARE UPDATE EXCLUSIVE` lock.
@@ -474,6 +477,9 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
      When partitions are merged, any objects depending on this partition, such as constraints, triggers, extended statistics, etc, will be dropped. Eventually, we will drop all the merged partitions (using `RESTRICT` mode) too; therefore, if any objects are still dependent on them, `ALTER TABLE MERGE PARTITION` would fail. (see [Dependency Tracking](../../the-sql-language/data-definition/dependency-tracking.md#ddl-depend)).
 
 
+     Extension dependencies on partition indexes (created via [`ALTER INDEX ... DEPENDS ON EXTENSION`](alter-index.md#sql-alterindex)) are preserved during merge operations. All source partition indexes must have the same extension dependencies; if they differ, an error is raised. This ensures that extension dependencies are not silently lost during merge.
+
+
     !!! note
 
         Merging partitions acquires an `ACCESS EXCLUSIVE` lock on the parent table, in addition to the `ACCESS EXCLUSIVE` locks on the tables being merged and on the default partition (if any).
@@ -507,6 +513,9 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 
 
      When a partition is split, any objects that depend on this partition, such as constraints, triggers, extended statistics, etc, will be dropped. This occurs because `ALTER TABLE SPLIT PARTITION` uses the partitioned table itself as the template to reconstruct these objects later. Eventually, we will drop the split partition (using `RESTRICT` mode) too; therefore, if any objects are still dependent on it, `ALTER TABLE SPLIT PARTITION` would fail (see [Dependency Tracking](../../the-sql-language/data-definition/dependency-tracking.md#ddl-depend)).
+
+
+     Extension dependencies on partition indexes (created via [`ALTER INDEX ... DEPENDS ON EXTENSION`](alter-index.md#sql-alterindex)) are preserved during split operations. The new partitions' indexes will inherit the extension dependencies from the source partition's indexes.
 
 
     !!! note

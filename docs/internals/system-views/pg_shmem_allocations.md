@@ -39,7 +39,7 @@
 </table>
 
 
- Anonymous allocations are allocations that have been made with `ShmemAlloc()` directly, rather than via `ShmemInitStruct()` or `ShmemInitHash()`.
+ Anonymous allocations are allocations that have been made with `ShmemAlloc()` directly, rather than via `ShmemRequestStruct()` or `ShmemRequestHash()`.
 
 
  By default, the `pg_shmem_allocations` view can be read only by superusers or roles with privileges of the `pg_read_all_stats` role.

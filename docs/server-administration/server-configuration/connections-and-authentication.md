@@ -318,3 +318,10 @@
 
 
      This parameter can only be set in the `postgresql.conf` file or on the server command line.
+<a id="guc-ssl-sni"></a>
+
+`ssl_sni` (`boolean`)
+:   Enables SNI configuration for SSL connections. When set to `on` host configuration from [hosts_file](file-locations.md#guc-hosts-file) is used, see [SNI Configuration](../server-setup-and-operation/secure-tcp-ip-connections-with-ssl.md#ssl-sni) for more details.
+
+
+     This parameter can only be set in the `postgresql.conf` file or on the server command line. The default is `off`.

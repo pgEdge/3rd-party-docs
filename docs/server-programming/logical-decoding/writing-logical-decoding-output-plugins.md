@@ -101,9 +101,10 @@ typedef struct OutputPluginOptions
 {
     OutputPluginOutputType output_type;
     bool        receive_rewrites;
+    bool        need_shared_catalogs;
 } OutputPluginOptions;
 ```
- `output_type` has to either be set to `OUTPUT_PLUGIN_TEXTUAL_OUTPUT` or `OUTPUT_PLUGIN_BINARY_OUTPUT`. See also [Output Modes](#logicaldecoding-output-mode). If `receive_rewrites` is true, the output plugin will also be called for changes made by heap rewrites during certain DDL operations. These are of interest to plugins that handle DDL replication, but they require special handling.
+ `output_type` has to either be set to `OUTPUT_PLUGIN_TEXTUAL_OUTPUT` or `OUTPUT_PLUGIN_BINARY_OUTPUT`. See also [Output Modes](#logicaldecoding-output-mode). If `receive_rewrites` is true, the output plugin will also be called for changes made by heap rewrites during certain DDL operations. These are of interest to plugins that handle DDL replication, but they require special handling. `need_shared_catalogs` can be set to false if you are certain the plugin functions do not access shared system catalogs. Doing so can speed up creation of replication slots that use this plugin.
 
 
  The startup callback should validate the options present in `ctx->output_plugin_options`. If the output plugin needs to have a state, it can use `ctx->output_plugin_private` to store it.

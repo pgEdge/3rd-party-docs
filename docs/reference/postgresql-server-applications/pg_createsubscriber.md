@@ -44,8 +44,15 @@ pg_createsubscriber [OPTION...] {
 <code>-d </code><em>dbname</em>, <code>--database=</code><em>dbname</em>
 :   The name of the database in which to create a subscription. Multiple databases can be selected by writing multiple `-d` switches. This option cannot be used together with `-a`. If `-d` option is not provided, the database name will be obtained from `-P` option. If the database name is not specified in either the `-d` option, or the `-P` option, and `-a` option is not specified, an error will be reported.
 
-<code>-D </code><em>directory</em>, <code>--pgdata=</code><em>directory</em>
+<code>-D </code><em>datadir</em>, <code>--pgdata=</code><em>datadir</em>
 :   The target directory that contains a cluster directory from a physical replica.
+
+<code>-l </code><em>directory</em>, <code>--logdir=</code><em>directory</em>
+:   Specify the name of the log directory. A new directory is created with this name if it does not exist. A subdirectory with a timestamp indicating the time at which pg_createsubscriber was run will be created. The following two log files will be created in the subdirectory.
+
+    -  `pg_createsubscriber_server.log` which captures logs related to stopping and starting the standby server,
+    -  `pg_createsubscriber_internal.log` which captures internal diagnostic output (validations, checks, etc.)
+     By default, the `umask` is set to 077 so that the log files are only readable by the user running the command. However, if the target data directory is configured to allow group-read access, pg_createsubscriber will adjust the log file permissions to match. This ensures that the log file security remains consistent with the database cluster itself.
 
 `-n`, `--dry-run`
 :   Do everything except actually modifying the target directory.

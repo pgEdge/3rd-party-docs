@@ -971,3 +971,10 @@ postgresql://%2Fvar%2Flib%2Fpostgresql/dbname
 
 
      The meaning of an empty scope list is provider-dependent. An OAuth authorization server may choose to issue a token with "default scope", whatever that happens to be, or it may reject the token request entirely.
+<a id="libpq-connect-oauth-ca-file"></a>
+
+`oauth_ca_file`
+:   The name of a file containing one or more SSL certificate authority (CA) certificates, which will be used to verify the identity of the authorization server and its endpoints. By default, the Curl system certificate bundle is used.
+
+
+     This parameter does not affect verification of the PostgreSQL server certificate; see [sslrootcert](#libpq-connect-sslrootcert) instead.

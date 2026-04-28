@@ -277,7 +277,7 @@
 <a id="guc-jit"></a>
 
 `jit` (`boolean`)
-:   Determines whether JIT compilation may be used by PostgreSQL, if available (see [Just-in-Time Compilation (JIT)](../just-in-time-compilation-jit/index.md#jit)). The default is `on`.
+:   Determines whether JIT compilation may be used by PostgreSQL, if available (see [Just-in-Time Compilation (JIT)](../just-in-time-compilation-jit/index.md#jit)). The default is `off`.
 <a id="guc-join-collapse-limit"></a>
 
 `join_collapse_limit` (`integer`)

@@ -7,4 +7,5 @@
 - [Inserting Data](inserting-data.md#dml-insert)
 - [Updating Data](updating-data.md#dml-update)
 - [Deleting Data](deleting-data.md#dml-delete)
+- [Updating and Deleting Temporal Data](updating-and-deleting-temporal-data.md#dml-application-time-update-delete)
 - [Returning Data from Modified Rows](returning-data-from-modified-rows.md#dml-returning)

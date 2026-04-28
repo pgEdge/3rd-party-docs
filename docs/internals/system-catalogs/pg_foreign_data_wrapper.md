@@ -37,6 +37,10 @@
 <p>References a validator function that is responsible for checking the validity of the options given to the foreign-data wrapper, as well as options for foreign servers and user mappings using the foreign-data wrapper. Zero if no validator is provided</p></td>
 </tr>
 <tr>
+<td><p><code>fdwconnection</code> <code>oid</code> (references <a href="pg_proc.md#catalog-pg-proc"><code>pg_proc</code></a>.<code>oid</code>)</p>
+<p>References a connection function that is responsible for creating a connection string for a subscription when the subscription uses a server based on this foreign-data wrapper. Zero if this foreign-data wrapper does not support subscription connections.</p></td>
+</tr>
+<tr>
 <td><p><code>fdwacl</code> <code>aclitem[]</code></p>
 <p>Access privileges; see <a href="../../the-sql-language/data-definition/privileges.md#ddl-priv">Privileges</a> for details</p></td>
 </tr>

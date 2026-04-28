@@ -51,7 +51,10 @@ pg_waldump [OPTION...] [STARTSEG [ENDSEG]]
 :   Display the specified number of records, then stop.
 
 <code>-p </code><em>path</em>, <code>--path=</code><em>path</em>
-:   Specifies a directory to search for WAL segment files or a directory with a `pg_wal` subdirectory that contains such files. The default is to search in the current directory, the `pg_wal` subdirectory of the current directory, and the `pg_wal` subdirectory of `PGDATA`.
+:   Specifies a tar archive or a directory to search for WAL segment files or a directory with a `pg_wal` subdirectory that contains such files. The default is to search in the current directory, the `pg_wal` subdirectory of the current directory, and the `pg_wal` subdirectory of `PGDATA`.
+
+
+     If a tar archive is provided and its WAL segment files are not in sequential order, those files will be written to a temporary directory named starting with `waldump_tmp`. This directory will be created inside the directory specified by the `TMPDIR` environment variable if it is set; otherwise, it will be created within the same directory as the tar archive.
 
 `-q`, `--quiet`
 :   Do not print any output, except for errors. This option can be useful when you want to know whether a range of WAL records can be successfully parsed but don't care about the record contents.
@@ -114,6 +117,9 @@ pg_waldump [OPTION...] [STARTSEG [ENDSEG]]
 
 `PG_COLOR`
 :   Specifies whether to use color in diagnostic messages. Possible values are `always`, `auto` and `never`.
+
+`TMPDIR`
+:   Directory in which to create temporary files when reading WAL from a tar archive with out-of-order segment files. If not set, the temporary directory is created within the same directory as the tar archive.
 
 
 ## Notes

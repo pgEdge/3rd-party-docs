@@ -3,7 +3,7 @@
 ## File Locations
 
 
- In addition to the `postgresql.conf` file already mentioned, PostgreSQL uses two other manually-edited configuration files, which control client authentication (their use is discussed in [Client Authentication](../client-authentication/index.md#client-authentication)). By default, all three configuration files are stored in the database cluster's data directory. The parameters described in this section allow the configuration files to be placed elsewhere. (Doing so can ease administration. In particular it is often easier to ensure that the configuration files are properly backed-up when they are kept separate.)
+ In addition to the `postgresql.conf` file already mentioned, PostgreSQL uses three other manually-edited configuration files, which control client authentication (their use is discussed in [Client Authentication](../client-authentication/index.md#client-authentication)) and SSL host configuration. By default, all four configuration files are stored in the database cluster's data directory. The parameters described in this section allow the configuration files to be placed elsewhere. (Doing so can ease administration. In particular it is often easier to ensure that the configuration files are properly backed-up when they are kept separate.)
 
 
 <a id="guc-data-directory"></a>
@@ -22,6 +22,10 @@
 
 `ident_file` (`string`)
 :   Specifies the configuration file for user name mapping (customarily called `pg_ident.conf`). This parameter can only be set at server start. See also [User Name Maps](../client-authentication/user-name-maps.md#auth-username-maps).
+<a id="guc-hosts-file"></a>
+
+`hosts_file` (`string`)
+:   Specifies the configuration file for host-based SSL configuration (customarily called `pg_hosts.conf`). This parameter can only be set at server start. See also [SNI Configuration](../server-setup-and-operation/secure-tcp-ip-connections-with-ssl.md#ssl-sni).
 <a id="guc-external-pid-file"></a>
 
 `external_pid_file` (`string`)
@@ -34,7 +38,7 @@
  If you wish to keep the configuration files elsewhere than the data directory, the `postgres` `-D` command-line option or `PGDATA` environment variable must point to the directory containing the configuration files, and the `data_directory` parameter must be set in `postgresql.conf` (or on the command line) to show where the data directory is actually located. Notice that `data_directory` overrides `-D` and `PGDATA` for the location of the data directory, but not for the location of the configuration files.
 
 
- If you wish, you can specify the configuration file names and locations individually using the parameters `config_file`, `hba_file` and/or `ident_file`. `config_file` can only be specified on the `postgres` command line, but the others can be set within the main configuration file. If all three parameters plus `data_directory` are explicitly set, then it is not necessary to specify `-D` or `PGDATA`.
+ If you wish, you can specify the configuration file names and locations individually using the parameters `config_file`, `hba_file`, `ident_file` and/or `hosts_file`. `config_file` can only be specified on the `postgres` command line, but the others can be set within the main configuration file. If all four parameters plus `data_directory` are explicitly set, then it is not necessary to specify `-D` or `PGDATA`.
 
 
  When setting any of these parameters, a relative path will be interpreted with respect to the directory in which `postgres` is started.

@@ -15,16 +15,16 @@ pg_dumpall [CONNECTION-OPTION...] [OPTION...]
 ## Description
 
 
- pg_dumpall is a utility for writing out (“dumping”) all PostgreSQL databases of a cluster into an SQL script file or an archive. The output contains SQL commands that can be used as input to [app-psql](psql.md#app-psql) to restore the databases. It does this by calling [app-pgdump](pg_dump.md#app-pgdump) for each database in the cluster. pg_dumpall also dumps global objects that are common to all databases, namely database roles, tablespaces, and privilege grants for configuration parameters. (pg_dump does not save these objects.)
+ pg_dumpall is a utility for writing out (“dumping”) all PostgreSQL databases of a cluster into an SQL script file or an archive. It does this by calling [app-pgdump](pg_dump.md#app-pgdump) for each database in the cluster. The output contains SQL commands that can be used as input to [app-psql](psql.md#app-psql) or [app-pgrestore](pg_restore.md#app-pgrestore) to restore the databases. pg_dumpall also dumps global objects that are common to all databases, namely database roles, tablespaces, and privilege grants for configuration parameters. (pg_dump does not save these objects.) The only parts of a database cluster's state that are *not* included in the default output of pg_dumpall are the configuration files and any database parameter setting changes made with [sql-altersystem](../sql-commands/alter-system.md#sql-altersystem).
+
+
+ If the output format is a plain text SQL script, it will be written to the standard output. Use the `-f`/`--file` option or shell operators to redirect it into a file.
+
+
+ If another output format is selected, the archive will be placed in a directory named using the `-f`/`--file` option, which is required in this case.
 
 
  Since pg_dumpall reads tables from all databases you will most likely have to connect as a database superuser in order to produce a complete dump. Also you will need superuser privileges to execute the saved script in order to be allowed to add roles and create databases.
-
-
- Plain text SQL scripts will be written to the standard output. Use the `-f`/`--file` option or shell operators to redirect it into a file.
-
-
- Archives in other formats will be placed in a directory named using the `-f`/`--file`, which is required in this case.
 
 
  pg_dumpall needs to connect several times to the PostgreSQL server (once per database). If you use password authentication it will ask for a password each time. It is convenient to have a `~/.pgpass` file in such cases. See [The Password File](../../client-interfaces/libpq-c-library/the-password-file.md#libpq-pgpass) for more information.

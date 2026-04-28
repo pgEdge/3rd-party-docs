@@ -12,7 +12,6 @@
 -  [Ident authentication](ident-authentication.md#auth-ident), which relies on an “Identification Protocol” ([RFC 1413](https://datatracker.ietf.org/doc/html/rfc1413)) service on the client's machine. (On local Unix-socket connections, this is treated as peer authentication.)
 -  [Peer authentication](peer-authentication.md#auth-peer), which relies on operating system facilities to identify the process at the other end of a local connection. This is not supported for remote connections.
 -  [LDAP authentication](ldap-authentication.md#auth-ldap), which relies on an LDAP authentication server.
--  [RADIUS authentication](radius-authentication.md#auth-radius), which relies on a RADIUS authentication server.
 -  [Certificate authentication](certificate-authentication.md#auth-cert), which requires an SSL connection and authenticates users by checking the SSL certificate they send.
 -  [PAM authentication](pam-authentication.md#auth-pam), which relies on a PAM (Pluggable Authentication Modules) library.
 -  [BSD authentication](bsd-authentication.md#auth-bsd), which relies on the BSD Authentication framework (currently available only on OpenBSD).

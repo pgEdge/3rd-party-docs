@@ -24,7 +24,6 @@
 - [Ident Authentication](ident-authentication.md#auth-ident)
 - [Peer Authentication](peer-authentication.md#auth-peer)
 - [LDAP Authentication](ldap-authentication.md#auth-ldap)
-- [RADIUS Authentication](radius-authentication.md#auth-radius)
 - [Certificate Authentication](certificate-authentication.md#auth-cert)
 - [PAM Authentication](pam-authentication.md#auth-pam)
 - [BSD Authentication](bsd-authentication.md#auth-bsd)

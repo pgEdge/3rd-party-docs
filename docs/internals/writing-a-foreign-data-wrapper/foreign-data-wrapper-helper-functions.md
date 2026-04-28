@@ -9,7 +9,7 @@
 ```
 
 ForeignDataWrapper *
-GetForeignDataWrapperExtended(Oid fdwid, bits16 flags);
+GetForeignDataWrapperExtended(Oid fdwid, uint16 flags);
 ```
  This function returns a `ForeignDataWrapper` object for the foreign-data wrapper with the given OID. A `ForeignDataWrapper` object contains properties of the FDW (see `foreign/foreign.h` for details). `flags` is a bitwise-or'd bit mask indicating an extra set of options. It can take the value `FDW_MISSING_OK`, in which case a `NULL` result is returned to the caller instead of an error for an undefined object.
 
@@ -25,7 +25,7 @@ GetForeignDataWrapper(Oid fdwid);
 ```
 
 ForeignServer *
-GetForeignServerExtended(Oid serverid, bits16 flags);
+GetForeignServerExtended(Oid serverid, uint16 flags);
 ```
  This function returns a `ForeignServer` object for the foreign server with the given OID. A `ForeignServer` object contains properties of the server (see `foreign/foreign.h` for details). `flags` is a bitwise-or'd bit mask indicating an extra set of options. It can take the value `FSV_MISSING_OK`, in which case a `NULL` result is returned to the caller instead of an error for an undefined object.
 

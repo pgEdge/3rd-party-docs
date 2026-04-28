@@ -68,7 +68,7 @@
 
 !!! note
 
-    If the subscriber is in a release prior to 15, copy pre-existing data doesn't use row filters even if they are defined in the publication. This is because old releases can only copy the entire table data.
+    If the subscriber is in a release prior to 15, copying pre-existing data doesn't use row filters even if they are defined in the publication. This is because old releases can only copy the entire table data.
   <a id="logical-replication-row-filter-combining"></a>
 
 ### Combining Multiple Row Filters
@@ -147,7 +147,7 @@ Tables:
  c      | text    |           | not null |
 Indexes:
     "t1_pkey" PRIMARY KEY, btree (a, c)
-Publications:
+Included in publications:
     "p1" WHERE ((a > 5) AND (c = 'NSW'::text))
     "p2"
 
@@ -160,7 +160,7 @@ Publications:
  f      | integer |           |          |
 Indexes:
     "t2_pkey" PRIMARY KEY, btree (d)
-Publications:
+Included in publications:
     "p2" WHERE (e = 99)
     "p3" WHERE (d = 10)
 
@@ -173,7 +173,7 @@ Publications:
  i      | integer |           |          |
 Indexes:
     "t3_pkey" PRIMARY KEY, btree (g)
-Publications:
+Included in publications:
     "p3" WHERE (g = 10)
 ```
 

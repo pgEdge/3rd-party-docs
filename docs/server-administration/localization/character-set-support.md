@@ -3,7 +3,7 @@
 ## Character Set Support
 
 
- The character set support in PostgreSQL allows you to store text in a variety of character sets (also called encodings), including single-byte character sets such as the ISO 8859 series and multiple-byte character sets such as EUC (Extended Unix Code), UTF-8, and Mule internal code. All supported character sets can be used transparently by clients, but a few are not supported for use within the server (that is, as a server-side encoding). The default character set is selected while initializing your PostgreSQL database cluster using `initdb`. It can be overridden when you create a database, so you can have multiple databases each with a different character set.
+ The character set support in PostgreSQL allows you to store text in a variety of character sets (also called encodings), including single-byte character sets such as the ISO 8859 series and multiple-byte character sets such as EUC (Extended Unix Code) and UTF-8. All supported character sets can be used transparently by clients, but a few are not supported for use within the server (that is, as a server-side encoding). The default character set is selected while initializing your PostgreSQL database cluster using `initdb`. It can be overridden when you create a database, so you can have multiple databases each with a different character set.
 
 
  An important restriction, however, is that each database's character set must be compatible with the database's `LC_CTYPE` (character classification) and `LC_COLLATE` (string sort order) locale settings. For `C` or `POSIX` locale, any character set is allowed, but for other libc-provided locales there is only one character set that will work correctly. (On Windows, however, UTF-8 encoding can be used with any locale.) If you have ICU support configured, ICU-provided locales can be used with most but not all server-side encodings.
@@ -44,7 +44,6 @@
 | `LATIN8` | ISO 8859-14 | Celtic | Yes | Yes | 1 | `ISO885914` |
 | `LATIN9` | ISO 8859-15 | LATIN1 with Euro and accents | Yes | Yes | 1 | `ISO885915` |
 | `LATIN10` | ISO 8859-16, ASRO SR 14111 | Romanian | Yes | No | 1 | `ISO885916` |
-| `MULE_INTERNAL` | Mule internal code | Multilingual Emacs | Yes | No | 1–4 |  |
 | `SJIS` | Shift JIS | Japanese | No | No | 1–2 | `Mskanji`, `ShiftJIS`, `WIN932`, `Windows932` |
 | `SHIFT_JIS_2004` | Shift JIS, JIS X 0213 | Japanese | No | No | 1–2 |  |
 | `SQL_ASCII` | unspecified (see text) | *any* | Yes | No | 1 |  |
@@ -63,7 +62,7 @@
 | `WIN1258` | Windows CP1258 | Vietnamese | Yes | Yes | 1 | `ABC`, `TCVN`, `TCVN5712`, `VSCII` |
 
 
- Not all client APIs support all the listed character sets. For example, the PostgreSQL JDBC driver does not support `MULE_INTERNAL`, `LATIN6`, `LATIN8`, and `LATIN10`.
+ Not all client APIs support all the listed character sets. For example, the PostgreSQL JDBC driver does not support `LATIN6`, `LATIN8`, and `LATIN10`.
 
 
  The `SQL_ASCII` setting behaves considerably differently from the other settings. When the server character set is `SQL_ASCII`, the server interprets byte values 0–127 according to the ASCII standard, while byte values 128–255 are taken as uninterpreted characters. No encoding conversion will be done when the setting is `SQL_ASCII`. Thus, this setting is not so much a declaration that a specific encoding is in use, as a declaration of ignorance about the encoding. In most cases, if you are working with any non-ASCII data, it is unwise to use the `SQL_ASCII` setting because PostgreSQL will be unable to help you by converting or validating non-ASCII characters.
@@ -185,40 +184,39 @@ RESET client_encoding;
 | Server Character Set | Available Client Character Sets |
 | --- | --- |
 | `BIG5` | *not supported as a server encoding* |
-| `EUC_CN` | *EUC_CN*, `MULE_INTERNAL`, `UTF8` |
-| `EUC_JP` | *EUC_JP*, `MULE_INTERNAL`, `SJIS`, `UTF8` |
+| `EUC_CN` | *EUC_CN*, `UTF8` |
+| `EUC_JP` | *EUC_JP*, `SJIS`, `UTF8` |
 | `EUC_JIS_2004` | *EUC_JIS_2004*, `SHIFT_JIS_2004`, `UTF8` |
-| `EUC_KR` | *EUC_KR*, `MULE_INTERNAL`, `UTF8` |
-| `EUC_TW` | *EUC_TW*, `BIG5`, `MULE_INTERNAL`, `UTF8` |
+| `EUC_KR` | *EUC_KR*, `UTF8` |
+| `EUC_TW` | *EUC_TW*, `BIG5`, `UTF8` |
 | `GB18030` | *not supported as a server encoding* |
 | `GBK` | *not supported as a server encoding* |
-| `ISO_8859_5` | *ISO_8859_5*, `KOI8R`, `MULE_INTERNAL`, `UTF8`, `WIN866`, `WIN1251` |
+| `ISO_8859_5` | *ISO_8859_5*, `KOI8R`, `UTF8`, `WIN866`, `WIN1251` |
 | `ISO_8859_6` | *ISO_8859_6*, `UTF8` |
 | `ISO_8859_7` | *ISO_8859_7*, `UTF8` |
 | `ISO_8859_8` | *ISO_8859_8*, `UTF8` |
 | `JOHAB` | *not supported as a server encoding* |
-| `KOI8R` | *KOI8R*, `ISO_8859_5`, `MULE_INTERNAL`, `UTF8`, `WIN866`, `WIN1251` |
+| `KOI8R` | *KOI8R*, `ISO_8859_5`, `UTF8`, `WIN866`, `WIN1251` |
 | `KOI8U` | *KOI8U*, `UTF8` |
-| `LATIN1` | *LATIN1*, `MULE_INTERNAL`, `UTF8` |
-| `LATIN2` | *LATIN2*, `MULE_INTERNAL`, `UTF8`, `WIN1250` |
-| `LATIN3` | *LATIN3*, `MULE_INTERNAL`, `UTF8` |
-| `LATIN4` | *LATIN4*, `MULE_INTERNAL`, `UTF8` |
+| `LATIN1` | *LATIN1*, `UTF8` |
+| `LATIN2` | *LATIN2*, `UTF8`, `WIN1250` |
+| `LATIN3` | *LATIN3*, `UTF8` |
+| `LATIN4` | *LATIN4*, `UTF8` |
 | `LATIN5` | *LATIN5*, `UTF8` |
 | `LATIN6` | *LATIN6*, `UTF8` |
 | `LATIN7` | *LATIN7*, `UTF8` |
 | `LATIN8` | *LATIN8*, `UTF8` |
 | `LATIN9` | *LATIN9*, `UTF8` |
 | `LATIN10` | *LATIN10*, `UTF8` |
-| `MULE_INTERNAL` | *MULE_INTERNAL*, `BIG5`, `EUC_CN`, `EUC_JP`, `EUC_KR`, `EUC_TW`, `ISO_8859_5`, `KOI8R`, `LATIN1` to `LATIN4`, `SJIS`, `WIN866`, `WIN1250`, `WIN1251` |
 | `SJIS` | *not supported as a server encoding* |
 | `SHIFT_JIS_2004` | *not supported as a server encoding* |
 | `SQL_ASCII` | *any (no conversion will be performed)* |
 | `UHC` | *not supported as a server encoding* |
 | `UTF8` | *all supported encodings* |
-| `WIN866` | *WIN866*, `ISO_8859_5`, `KOI8R`, `MULE_INTERNAL`, `UTF8`, `WIN1251` |
+| `WIN866` | *WIN866*, `ISO_8859_5`, `KOI8R`, `UTF8`, `WIN1251` |
 | `WIN874` | *WIN874*, `UTF8` |
-| `WIN1250` | *WIN1250*, `LATIN2`, `MULE_INTERNAL`, `UTF8` |
-| `WIN1251` | *WIN1251*, `ISO_8859_5`, `KOI8R`, `MULE_INTERNAL`, `UTF8`, `WIN866` |
+| `WIN1250` | *WIN1250*, `LATIN2`, `UTF8` |
+| `WIN1251` | *WIN1251*, `ISO_8859_5`, `KOI8R`, `UTF8`, `WIN866` |
 | `WIN1252` | *WIN1252*, `UTF8` |
 | `WIN1253` | *WIN1253*, `UTF8` |
 | `WIN1254` | *WIN1254*, `UTF8` |
@@ -233,17 +231,12 @@ RESET client_encoding;
 | Conversion Name  (The conversion names follow a standard naming scheme: The official name of the source encoding with all non-alphanumeric characters replaced by underscores, followed by `_to_`, followed by the similarly processed destination encoding name. Therefore, these names sometimes deviate from the customary encoding names shown in [PostgreSQL Character Sets](#charset-table).) | Source Encoding | Destination Encoding |
 | --- | --- | --- |
 | `big5_to_euc_tw` | `BIG5` | `EUC_TW` |
-| `big5_to_mic` | `BIG5` | `MULE_INTERNAL` |
 | `big5_to_utf8` | `BIG5` | `UTF8` |
-| `euc_cn_to_mic` | `EUC_CN` | `MULE_INTERNAL` |
 | `euc_cn_to_utf8` | `EUC_CN` | `UTF8` |
-| `euc_jp_to_mic` | `EUC_JP` | `MULE_INTERNAL` |
 | `euc_jp_to_sjis` | `EUC_JP` | `SJIS` |
 | `euc_jp_to_utf8` | `EUC_JP` | `UTF8` |
-| `euc_kr_to_mic` | `EUC_KR` | `MULE_INTERNAL` |
 | `euc_kr_to_utf8` | `EUC_KR` | `UTF8` |
 | `euc_tw_to_big5` | `EUC_TW` | `BIG5` |
-| `euc_tw_to_mic` | `EUC_TW` | `MULE_INTERNAL` |
 | `euc_tw_to_utf8` | `EUC_TW` | `UTF8` |
 | `gb18030_to_utf8` | `GB18030` | `UTF8` |
 | `gbk_to_utf8` | `GBK` | `UTF8` |
@@ -252,17 +245,12 @@ RESET client_encoding;
 | `iso_8859_14_to_utf8` | `LATIN8` | `UTF8` |
 | `iso_8859_15_to_utf8` | `LATIN9` | `UTF8` |
 | `iso_8859_16_to_utf8` | `LATIN10` | `UTF8` |
-| `iso_8859_1_to_mic` | `LATIN1` | `MULE_INTERNAL` |
 | `iso_8859_1_to_utf8` | `LATIN1` | `UTF8` |
-| `iso_8859_2_to_mic` | `LATIN2` | `MULE_INTERNAL` |
 | `iso_8859_2_to_utf8` | `LATIN2` | `UTF8` |
 | `iso_8859_2_to_windows_1250` | `LATIN2` | `WIN1250` |
-| `iso_8859_3_to_mic` | `LATIN3` | `MULE_INTERNAL` |
 | `iso_8859_3_to_utf8` | `LATIN3` | `UTF8` |
-| `iso_8859_4_to_mic` | `LATIN4` | `MULE_INTERNAL` |
 | `iso_8859_4_to_utf8` | `LATIN4` | `UTF8` |
 | `iso_8859_5_to_koi8_r` | `ISO_8859_5` | `KOI8R` |
-| `iso_8859_5_to_mic` | `ISO_8859_5` | `MULE_INTERNAL` |
 | `iso_8859_5_to_utf8` | `ISO_8859_5` | `UTF8` |
 | `iso_8859_5_to_windows_1251` | `ISO_8859_5` | `WIN1251` |
 | `iso_8859_5_to_windows_866` | `ISO_8859_5` | `WIN866` |
@@ -272,28 +260,11 @@ RESET client_encoding;
 | `iso_8859_9_to_utf8` | `LATIN5` | `UTF8` |
 | `johab_to_utf8` | `JOHAB` | `UTF8` |
 | `koi8_r_to_iso_8859_5` | `KOI8R` | `ISO_8859_5` |
-| `koi8_r_to_mic` | `KOI8R` | `MULE_INTERNAL` |
 | `koi8_r_to_utf8` | `KOI8R` | `UTF8` |
 | `koi8_r_to_windows_1251` | `KOI8R` | `WIN1251` |
 | `koi8_r_to_windows_866` | `KOI8R` | `WIN866` |
 | `koi8_u_to_utf8` | `KOI8U` | `UTF8` |
-| `mic_to_big5` | `MULE_INTERNAL` | `BIG5` |
-| `mic_to_euc_cn` | `MULE_INTERNAL` | `EUC_CN` |
-| `mic_to_euc_jp` | `MULE_INTERNAL` | `EUC_JP` |
-| `mic_to_euc_kr` | `MULE_INTERNAL` | `EUC_KR` |
-| `mic_to_euc_tw` | `MULE_INTERNAL` | `EUC_TW` |
-| `mic_to_iso_8859_1` | `MULE_INTERNAL` | `LATIN1` |
-| `mic_to_iso_8859_2` | `MULE_INTERNAL` | `LATIN2` |
-| `mic_to_iso_8859_3` | `MULE_INTERNAL` | `LATIN3` |
-| `mic_to_iso_8859_4` | `MULE_INTERNAL` | `LATIN4` |
-| `mic_to_iso_8859_5` | `MULE_INTERNAL` | `ISO_8859_5` |
-| `mic_to_koi8_r` | `MULE_INTERNAL` | `KOI8R` |
-| `mic_to_sjis` | `MULE_INTERNAL` | `SJIS` |
-| `mic_to_windows_1250` | `MULE_INTERNAL` | `WIN1250` |
-| `mic_to_windows_1251` | `MULE_INTERNAL` | `WIN1251` |
-| `mic_to_windows_866` | `MULE_INTERNAL` | `WIN866` |
 | `sjis_to_euc_jp` | `SJIS` | `EUC_JP` |
-| `sjis_to_mic` | `SJIS` | `MULE_INTERNAL` |
 | `sjis_to_utf8` | `SJIS` | `UTF8` |
 | `windows_1258_to_utf8` | `WIN1258` | `UTF8` |
 | `uhc_to_utf8` | `UHC` | `UTF8` |
@@ -335,18 +306,15 @@ RESET client_encoding;
 | `utf8_to_windows_866` | `UTF8` | `WIN866` |
 | `utf8_to_windows_874` | `UTF8` | `WIN874` |
 | `windows_1250_to_iso_8859_2` | `WIN1250` | `LATIN2` |
-| `windows_1250_to_mic` | `WIN1250` | `MULE_INTERNAL` |
 | `windows_1250_to_utf8` | `WIN1250` | `UTF8` |
 | `windows_1251_to_iso_8859_5` | `WIN1251` | `ISO_8859_5` |
 | `windows_1251_to_koi8_r` | `WIN1251` | `KOI8R` |
-| `windows_1251_to_mic` | `WIN1251` | `MULE_INTERNAL` |
 | `windows_1251_to_utf8` | `WIN1251` | `UTF8` |
 | `windows_1251_to_windows_866` | `WIN1251` | `WIN866` |
 | `windows_1252_to_utf8` | `WIN1252` | `UTF8` |
 | `windows_1256_to_utf8` | `WIN1256` | `UTF8` |
 | `windows_866_to_iso_8859_5` | `WIN866` | `ISO_8859_5` |
 | `windows_866_to_koi8_r` | `WIN866` | `KOI8R` |
-| `windows_866_to_mic` | `WIN866` | `MULE_INTERNAL` |
 | `windows_866_to_utf8` | `WIN866` | `UTF8` |
 | `windows_866_to_windows_1251` | `WIN866` | `WIN` |
 | `windows_874_to_utf8` | `WIN874` | `UTF8` |

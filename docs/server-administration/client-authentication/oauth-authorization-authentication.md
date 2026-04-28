@@ -58,6 +58,28 @@ Issuer
 `validator`
 :   The library to use for validating bearer tokens. If given, the name must exactly match one of the libraries listed in [oauth_validator_libraries](../server-configuration/connections-and-authentication.md#guc-oauth-validator-libraries). This parameter is optional unless `oauth_validator_libraries` contains more than one library, in which case it is required.
 
+<a id="auth-oauth-validator-option"></a>
+<code>validator.</code><em>option</em>
+:   Validator modules may [define](../../server-programming/oauth-validator-modules/custom-hba-options.md#oauth-validator-hba) additional configuration options for `oauth` HBA entries. These validator-specific options are accessible via the `validator.*` "namespace". For example, a module may register the `validator.foo` and `validator.bar` options and define their effects on authentication.
+
+
+     The name, syntax, and behavior of each *option* are not determined by PostgreSQL; consult the documentation for the validator module in use.
+
+
+    !!! warning
+
+        A limitation of the current implementation is that unrecognized *option* names will not be caught until connection time. A `pg_ctl reload` will succeed, but matching connections will fail:
+
+        ```
+
+        LOG:  connection received: host=[local]
+        WARNING:  unrecognized authentication option name: "validator.bad"
+        DETAIL:  The installed validator module ("my_validator") did not define an option named "bad".
+        HINT:  All OAuth connections matching this line will fail. Correct the option and reload the server configuration.
+        CONTEXT:  line 2 of configuration file "data/pg_hba.conf"
+        ```
+         Use caution when making changes to validator-specific HBA options in production systems.
+
 `map`
 :   Allows for mapping between OAuth identity provider and database user names. See [User Name Maps](user-name-maps.md#auth-username-maps) for details. If a map is not specified, the user name associated with the token (as determined by the OAuth validator) must exactly match the role name being requested. This parameter is optional.
 

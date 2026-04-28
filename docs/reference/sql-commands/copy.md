@@ -28,6 +28,7 @@ where OPTION can be one of:
     HEADER [ BOOLEAN | INTEGER | MATCH ]
     QUOTE 'QUOTE_CHARACTER'
     ESCAPE 'ESCAPE_CHARACTER'
+    FORCE_ARRAY [ BOOLEAN ]
     FORCE_QUOTE { ( COLUMN_NAME [, ...] ) | * }
     FORCE_NOT_NULL { ( COLUMN_NAME [, ...] ) | * }
     FORCE_NULL { ( COLUMN_NAME [, ...] ) | * }
@@ -104,7 +105,23 @@ where OPTION can be one of:
 <a id="sql-copy-params-format"></a>
 
 `FORMAT`
-:   Selects the data format to be read or written: `text`, `csv` (Comma Separated Values), or `binary`. The default is `text`. See [File Formats](#sql-copy-file-formats) below for details.
+:   Selects the data format to be read or written: `text`, `csv` (Comma Separated Values), `json` (JavaScript Object Notation), or `binary`. The default is `text`. See [File Formats](#sql-copy-file-formats) below for details.
+
+
+     The `json` option is allowed only in `COPY TO`.
+
+
+    !!! note
+
+        In JSON format, SQL `NULL` values are output as JSON `null`. However, a JSON or JSONB column whose value is the JSON literal `null` is also output as `null`, making the two cases indistinguishable in the `COPY` output. For example:
+
+        ```
+
+        COPY (SELECT j FROM (VALUES ('null'::json), (NULL::json)) v(j))
+             TO stdout (FORMAT JSON);
+        {"j":null}
+        {"j":null}
+        ```
 <a id="sql-copy-params-freeze"></a>
 
 `FREEZE`
@@ -115,11 +132,11 @@ where OPTION can be one of:
 <a id="sql-copy-params-delimiter"></a>
 
 `DELIMITER`
-:   Specifies the character that separates columns within each row (line) of the file. The default is a tab character in text format, a comma in `CSV` format. This must be a single one-byte character. This option is not allowed when using `binary` format.
+:   Specifies the character that separates columns within each row (line) of the file. The default is a tab character in text format, a comma in `CSV` format. This must be a single one-byte character. This option is not allowed when using `binary` or `json` format.
 <a id="sql-copy-params-null"></a>
 
 `NULL`
-:   Specifies the string that represents a null value. The default is `\N` (backslash-N) in text format, and an unquoted empty string in `CSV` format. You might prefer an empty string even in text format for cases where you don't want to distinguish nulls from empty strings. This option is not allowed when using `binary` format.
+:   Specifies the string that represents a null value. The default is `\N` (backslash-N) in text format, and an unquoted empty string in `CSV` format. You might prefer an empty string even in text format for cases where you don't want to distinguish nulls from empty strings. This option is not allowed when using `binary` or `json` format.
 
 
     !!! note
@@ -128,7 +145,7 @@ where OPTION can be one of:
 <a id="sql-copy-params-default"></a>
 
 `DEFAULT`
-:   Specifies the string that represents a default value. Each time the string is found in the input file, the default value of the corresponding column will be used. This option is allowed only in `COPY FROM`, and only when not using `binary` format.
+:   Specifies the string that represents a default value. Each time the string is found in the input file, the default value of the corresponding column will be used. This option is allowed only in `COPY FROM`, and only when not using `binary` or `json` format.
 <a id="sql-copy-params-header"></a>
 
 `HEADER`
@@ -138,7 +155,7 @@ where OPTION can be one of:
      On input, if this option is set to `true` (or an equivalent Boolean value), the first line of the input is discarded. If set to a non-negative integer, that number of lines are discarded. If set to `MATCH`, the first line is discarded, and it must contain column names that exactly match the table's columns, in both number and order; otherwise, an error is raised. The `MATCH` value is only valid for `COPY FROM` commands.
 
 
-     This option is not allowed when using `binary` format.
+     This option is not allowed when using `binary` or `json` format.
 <a id="sql-copy-params-quote"></a>
 
 `QUOTE`
@@ -147,6 +164,10 @@ where OPTION can be one of:
 
 `ESCAPE`
 :   Specifies the character that should appear before a data character that matches the `QUOTE` value. The default is the same as the `QUOTE` value (so that the quoting character is doubled if it appears in the data). This must be a single one-byte character. This option is allowed only when using `CSV` format.
+<a id="sql-copy-params-force-array"></a>
+
+`FORCE_ARRAY`
+:   Force output of square brackets as array decorations at the beginning and end of output, and commas between the rows. It is allowed only in `COPY TO`, and only when using `json` format. The default is `false`.
 <a id="sql-copy-params-force-quote"></a>
 
 `FORCE_QUOTE`
@@ -419,6 +440,23 @@ Header extension area length
 ```
 
 COPY country TO STDOUT (DELIMITER '|');
+```
+
+
+ When the `FORCE_ARRAY` option is enabled, the entire output is wrapped in a single JSON array with rows separated by commas:
+
+```
+
+COPY (SELECT * FROM (VALUES(1),(2)) val(id)) TO STDOUT  (FORMAT JSON, FORCE_ARRAY);
+```
+ The output is as follows:
+
+```
+
+[
+ {"id":1}
+,{"id":2}
+]
 ```
 
 
