@@ -118,8 +118,6 @@ pgBackRest strives to be easy to configure and operate:
 - [Command reference](https://pgbackrest.org/command.html) for command-line operations.
 - [Configuration reference](https://pgbackrest.org/configuration.html) for creating pgBackRest configurations.
 
-Documentation for v1 can be found [here](http://www.pgbackrest.org/1). No further releases are planned for v1 because v2 is backward-compatible with v1 options and repositories.
-
 ## Contributions
 <a name="contributions"></a>
 

@@ -4,6 +4,10 @@
 
 ### Core Improvements
 
+- Add per-repo backup progress to `info` command output. 
+
+- Add `backup.info` checks to `verify` command. 
+
 - Improve seek performance during block incremental delta restore. 
 
 - Suppress `unused parameter` errors in meson compiler probes. 
