@@ -54,7 +54,7 @@ INSERT INTO documents (passage) VALUES
 
 CREATE INDEX documents_embedding_bm25 ON documents USING bm25 (embedding bm25_ops);
 
-SELECT id, passage, embedding <&> to_bm25query('documents_embedding_bm25', tokenize('PostgreSQL', 'tokenizer1')) AS rank
+SELECT id, passage, embedding <&> bm25query('documents_embedding_bm25', tokenize('PostgreSQL', 'tokenizer1')) AS rank
 FROM documents
 ORDER BY rank
 LIMIT 10;
@@ -108,7 +108,7 @@ INSERT INTO documents (passage) VALUES
 
 CREATE INDEX documents_embedding_bm25 ON documents USING bm25 (embedding bm25_ops);
 
-SELECT id, passage, embedding <&> to_bm25query('documents_embedding_bm25', tokenize('人', 'tokenizer1')) AS rank
+SELECT id, passage, embedding <&> bm25query('documents_embedding_bm25', tokenize('人', 'tokenizer1')) AS rank
 FROM documents
 ORDER BY rank
 LIMIT 10;
@@ -226,7 +226,7 @@ UPDATE documents SET embedding = tokenize(passage, 'lindera_ipadic');
 
 CREATE INDEX documents_embedding_bm25 ON documents USING bm25 (embedding bm25_ops);
 
-SELECT id, passage, embedding <&> to_bm25query('documents_embedding_bm25', tokenize('書生', 'lindera_ipadic')) AS rank
+SELECT id, passage, embedding <&> bm25query('documents_embedding_bm25', tokenize('書生', 'lindera_ipadic')) AS rank
 FROM documents
 ORDER BY rank
 LIMIT 10;

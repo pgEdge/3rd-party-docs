@@ -7,7 +7,7 @@
 
 ## Functions
 
-- `to_bm25query(index_name regclass, query_vector bm25vector) RETURNS bm25query`: Convert the input text into a BM25 query.
+- `bm25query(regclass, bm25vector) RETURNS bm25query`: Convert the input text into a BM25 query.
 
 ## Operators
 
