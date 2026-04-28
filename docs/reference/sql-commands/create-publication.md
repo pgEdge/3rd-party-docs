@@ -76,7 +76,7 @@ and TABLE_AND_COLUMNS is:
      Only persistent base tables and partitioned tables present in the schema will be included as part of the publication. Temporary tables, unlogged tables, foreign tables, materialized views, and regular views from the schema will not be part of the publication.
 
 
-     When a partitioned table is published via schema level publication, all of its existing and future partitions are implicitly considered to be part of the publication, regardless of whether they are from the publication schema or not. So, even operations that are performed directly on a partition are also published via publications that its ancestors are part of.
+     When a partitioned table is published via a schema-level publication, all of its existing and future partitions are implicitly considered to be part of the publication, regardless of whether they are from the publication schema or not. So, even operations that are performed directly on a partition are also published via publications that its ancestors are part of.
 <a id="sql-createpublication-params-with"></a>
 
 <code>WITH ( </code><em>publication_parameter</em><code> [= </code><em>value</em><code>] [, ... ] )</code>
@@ -85,7 +85,7 @@ and TABLE_AND_COLUMNS is:
     <a id="sql-createpublication-params-with-publish"></a>
 
     `publish` (`string`)
-    :   This parameter determines which DML operations will be published by the new publication to the subscribers. The value is comma-separated list of operations. The allowed operations are `insert`, `update`, `delete`, and `truncate`. The default is to publish all actions, and so the default value for this option is `'insert, update, delete, truncate'`.
+    :   This parameter determines which DML operations will be published by the new publication to the subscribers. The value is a comma-separated list of operations. The allowed operations are `insert`, `update`, `delete`, and `truncate`. The default is to publish all actions, and so the default value for this option is `'insert, update, delete, truncate'`.
 
 
          This parameter only affects DML operations. In particular, the initial data synchronization (see [Initial Snapshot](../../server-administration/logical-replication/architecture.md#logical-replication-snapshot)) for logical replication does not take this parameter into account when copying existing table data.

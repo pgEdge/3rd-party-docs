@@ -28,6 +28,9 @@ DROP SUBSCRIPTION [ IF EXISTS ] NAME [ CASCADE | RESTRICT ]
 ## Parameters
 
 
+`IF EXISTS`
+:   Do not throw an error if the subscription does not exist. A notice is issued in this case.
+
 *name*
 :   The name of a subscription to be dropped.
 

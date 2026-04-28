@@ -14,12 +14,12 @@
 -  Firing triggers for individual changes as they arrive on the subscriber.
 -  Consolidating multiple databases into a single one (for example for analytical purposes).
 -  Replicating between different major versions of PostgreSQL.
--  Replicating between PostgreSQL instances on different platforms (for example Linux to Windows)
+-  Replicating between PostgreSQL instances on different platforms (for example Linux to Windows).
 -  Giving access to replicated data to different groups of users.
 -  Sharing a subset of the database between multiple databases.
 
 
- The subscriber database behaves in the same way as any other PostgreSQL instance and can be used as a publisher for other databases by defining its own publications. When the subscriber is treated as read-only by application, there will be no conflicts from a single subscription. On the other hand, if there are other writes done either by an application or by other subscribers to the same set of tables, conflicts can arise.
+ The subscriber database behaves in the same way as any other PostgreSQL instance and can be used as a publisher for other databases by defining its own publications. When the subscriber is treated as read-only by an application, there will be no conflicts from a single subscription. On the other hand, if there are other writes done either by an application or by other subscribers to the same set of tables, conflicts can arise.
 
 - [Publication](publication.md#logical-replication-publication)
 - [Subscription](subscription.md#logical-replication-subscription)
