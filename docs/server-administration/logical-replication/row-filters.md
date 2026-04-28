@@ -68,7 +68,7 @@
 
 !!! note
 
-    If the subscriber is in a release prior to 15, copy pre-existing data doesn't use row filters even if they are defined in the publication. This is because old releases can only copy the entire table data.
+    If the subscriber is in a release prior to 15, copying pre-existing data doesn't use row filters even if they are defined in the publication. This is because old releases can only copy the entire table data.
   <a id="logical-replication-row-filter-combining"></a>
 
 ### Combining Multiple Row Filters
