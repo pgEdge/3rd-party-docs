@@ -12,7 +12,7 @@ This release contains a number of bug fixes and new features since the release o
 
 # Bundled PostgreSQL Utilities
 
-**psql**, **pg_dump**, **pg_dumpall**, **pg_restore**: 18.0
+**psql**, **pg_dump**, **pg_dumpall**, **pg_restore**: 18.2
 
 # New features
 
@@ -29,7 +29,10 @@ This release contains a number of bug fixes and new features since the release o
 [Issue #9279](https://github.com/pgadmin-org/pgadmin4/issues/9279) -  Fixed an issue where OAuth2 authentication fails with 'object has no attribute' if OAUTH2_AUTO_CREATE_USER is False.<br>
 [Issue #9392](https://github.com/pgadmin-org/pgadmin4/issues/9392) -  Ensure that the Geometry Viewer refreshes when re-running queries or switching geometry columns, preventing stale data from being displayed.<br>
 [Issue #9457](https://github.com/pgadmin-org/pgadmin4/issues/9457) -  Fixed Process Watcher garbled text on Windows with non-UTF-8 locales.<br>
+[Issue #9570](https://github.com/pgadmin-org/pgadmin4/issues/9570) -  Fixed an issue where ALT+F5 for executing a query in the Query Tool shows a crosshair cursor icon for rectangular selection.<br>
+[Issue #9648](https://github.com/pgadmin-org/pgadmin4/issues/9648) -  Fixed an issue where the default fillfactor value for B-tree indexes was incorrect.<br>
 [Issue #9694](https://github.com/pgadmin-org/pgadmin4/issues/9694) -  Fixed an issue where AI Reports are grayed out after setting an API key by auto-selecting the default provider.<br>
+[Issue #9696](https://github.com/pgadmin-org/pgadmin4/issues/9696) -  Fixed an issue where AI Assistant does not notify that No API Key or Provider is Set.<br>
 [Issue #9702](https://github.com/pgadmin-org/pgadmin4/issues/9702) -  Fixed misleading AI activity messages that could be mistaken for actual database operations.<br>
 [Issue #9719](https://github.com/pgadmin-org/pgadmin4/issues/9719) -  Fixed an issue where AI Reports fail with OpenAI models that do not support the temperature parameter.<br>
 [Issue #9721](https://github.com/pgadmin-org/pgadmin4/issues/9721) -  Fixed an issue where permissions page is not completely accessible on full scroll.<br>
@@ -39,3 +42,5 @@ This release contains a number of bug fixes and new features since the release o
 [Issue #9736](https://github.com/pgadmin-org/pgadmin4/issues/9736) -  Fix an issue where the AI Assistant was not retaining conversation context between messages, with chat history compaction to manage token budgets.<br>
 [Issue #9740](https://github.com/pgadmin-org/pgadmin4/issues/9740) -  Fixed an issue where the AI Assistant input textbox sometimes swallows the first character of input.<br>
 [Issue #9758](https://github.com/pgadmin-org/pgadmin4/issues/9758) -  Clarify where the LLM API key files should be.<br>
+[Issue #9789](https://github.com/pgadmin-org/pgadmin4/issues/9789) -  Fixed an issue where the Query tool kept prompting for a password when using a shared server.<br>
+[Issue #9795](https://github.com/pgadmin-org/pgadmin4/issues/9795) -  Support /v1/responses for OpenAI models.<br>
