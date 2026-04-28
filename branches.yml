@@ -80,6 +80,15 @@ branches:
     pgadmin_src: "yes"
     copyright: "Copyright (C) pgAdmin Development Team"
 
+  - branch: pgadmin914
+    mode: rst
+    version: "pgAdmin 4 v9.14"
+    upstream: https://github.com/pgadmin-org/pgadmin4.git
+    ref: REL-9_14
+    src_subdir: docs/en_US
+    pgadmin_src: "yes"
+    copyright: "Copyright (C) pgAdmin Development Team"
+
   - branch: pgadminmaster
     mode: rst
     version: "pgAdmin 4 dev"
@@ -96,6 +105,46 @@ branches:
     version: "v14.5"
     upstream: https://github.com/PostgREST/postgrest.git
     ref: v14.5
+    src_subdir: docs
+    skip_sections: "Sponsors"
+
+  - branch: postgrest146
+    mode: rst
+    version: "v14.6"
+    upstream: https://github.com/PostgREST/postgrest.git
+    ref: v14.6
+    src_subdir: docs
+    skip_sections: "Sponsors"
+
+  - branch: postgrest147
+    mode: rst
+    version: "v14.7"
+    upstream: https://github.com/PostgREST/postgrest.git
+    ref: v14.7
+    src_subdir: docs
+    skip_sections: "Sponsors"
+
+  - branch: postgrest148
+    mode: rst
+    version: "v14.8"
+    upstream: https://github.com/PostgREST/postgrest.git
+    ref: v14.8
+    src_subdir: docs
+    skip_sections: "Sponsors"
+
+  - branch: postgrest149
+    mode: rst
+    version: "v14.9"
+    upstream: https://github.com/PostgREST/postgrest.git
+    ref: v14.9
+    src_subdir: docs
+    skip_sections: "Sponsors"
+
+  - branch: postgrest1410
+    mode: rst
+    version: "v14.10"
+    upstream: https://github.com/PostgREST/postgrest.git
+    ref: v14.10
     src_subdir: docs
     skip_sections: "Sponsors"
 
@@ -116,6 +165,13 @@ branches:
     ref: v4.1.1
     src_subdir: docs
 
+  - branch: patroni412
+    mode: rst
+    version: "v4.1.2"
+    upstream: https://github.com/patroni/patroni.git
+    ref: v4.1.2
+    src_subdir: docs
+
   - branch: patronimaster
     mode: rst
     version: "Patroni dev"
@@ -134,11 +190,29 @@ branches:
     site_prefix: "PostGIS"
     img_symlink: html/images/static
 
+  - branch: postgis356
+    mode: xml
+    version: "3.5.6"
+    upstream: https://github.com/postgis/postgis.git
+    ref: "3.5.6"
+    src_subdir: doc
+    site_prefix: "PostGIS"
+    img_symlink: html/images/static
+
   - branch: postgis362
     mode: xml
     version: "3.6.2"
     upstream: https://github.com/postgis/postgis.git
     ref: "3.6.2"
+    src_subdir: doc
+    site_prefix: "PostGIS"
+    img_symlink: html/images/static
+
+  - branch: postgis363
+    mode: xml
+    version: "3.6.3"
+    upstream: https://github.com/postgis/postgis.git
+    ref: "3.6.3"
     src_subdir: doc
     site_prefix: "PostGIS"
     img_symlink: html/images/static
@@ -162,6 +236,22 @@ branches:
     src_subdir: doc/src
     skip_sections: "Contents"
 
+  - branch: psycopg2911
+    mode: rst
+    version: "v2.9.11"
+    upstream: https://github.com/psycopg/psycopg2.git
+    ref: "2.9.11"
+    src_subdir: doc/src
+    skip_sections: "Contents"
+
+  - branch: psycopg2912
+    mode: rst
+    version: "v2.9.12"
+    upstream: https://github.com/psycopg/psycopg2.git
+    ref: "2.9.12"
+    src_subdir: doc/src
+    skip_sections: "Contents"
+
   - branch: psycopg2master
     mode: rst
     version: dev
@@ -177,6 +267,13 @@ branches:
     version: "PgBouncer 1.24"
     upstream: https://github.com/pgbouncer/pgbouncer.git
     ref: pgbouncer_1_24_0
+    src_subdir: doc
+
+  - branch: pgbouncer1241
+    mode: md
+    version: "PgBouncer 1.24.1"
+    upstream: https://github.com/pgbouncer/pgbouncer.git
+    ref: pgbouncer_1_24_1
     src_subdir: doc
 
   - branch: pgbouncer125
@@ -207,6 +304,13 @@ branches:
     version: "pgvector v0.8.1"
     upstream: https://github.com/pgvector/pgvector.git
     ref: v0.8.1
+    src_subdir: .
+
+  - branch: pgvector082
+    mode: md
+    version: "pgvector v0.8.2"
+    upstream: https://github.com/pgvector/pgvector.git
+    ref: v0.8.2
     src_subdir: .
 
   - branch: pgvectormaster
@@ -278,6 +382,20 @@ branches:
     ref: v0.26.0
     src_subdir: docs
 
+  - branch: pgvectorize0261
+    mode: mkdocs
+    version: "pg_vectorize v0.26.1"
+    upstream: https://github.com/ChuckHend/pg_vectorize.git
+    ref: v0.26.1
+    src_subdir: docs
+
+  - branch: pgvectorize0262
+    mode: mkdocs
+    version: "pg_vectorize v0.26.2"
+    upstream: https://github.com/ChuckHend/pg_vectorize.git
+    ref: v0.26.2
+    src_subdir: docs
+
   - branch: pgvectorizemaster
     mode: mkdocs
     version: "pg_vectorize dev"
@@ -340,6 +458,13 @@ branches:
     version: "pgmq v1.11.0"
     upstream: https://github.com/pgmq/pgmq.git
     ref: v1.11.0
+    src_subdir: docs
+
+  - branch: pgmq1111
+    mode: mkdocs
+    version: "pgmq v1.11.1"
+    upstream: https://github.com/pgmq/pgmq.git
+    ref: v1.11.1
     src_subdir: docs
 
   - branch: pgmqmaster
@@ -411,6 +536,13 @@ branches:
     version: "system_stats v3.2.1"
     upstream: https://github.com/EnterpriseDB/system_stats.git
     ref: v3.2.1
+    src_subdir: .
+
+  - branch: systemstats400
+    mode: md
+    version: "system_stats v4.0"
+    upstream: https://github.com/EnterpriseDB/system_stats.git
+    ref: v4.0
     src_subdir: .
 
   - branch: systemstatsmaster
