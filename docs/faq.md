@@ -100,7 +100,7 @@ Psycopg automatically converts PostgreSQL `json` data into Python objects. How c
 psycopg2.extras.register_default_json(loads=lambda x: x)
 ```
 
-See [JSON_ adaptation](extras.md#adapt-json) for further details.
+See [[JSON](https://www.json.org/) adaptation](extras.md#adapt-json) for further details.
 <a id="faq-jsonb-adapt"></a>
 
 Psycopg converts `json` values into Python objects but `jsonb` values are returned as strings. Can `jsonb` be converted automatically? Automatic conversion of `jsonb` values is supported from Psycopg release 2.5.4. For previous versions you can register the `json` typecaster on the `jsonb` oids (which are known and not supposed to change in future PostgreSQL versions):
@@ -109,7 +109,7 @@ Psycopg converts `json` values into Python objects but `jsonb` values are return
 psycopg2.extras.register_json(oid=3802, array_oid=3807, globally=True)
 ```
 
-See [JSON_ adaptation](extras.md#adapt-json) for further details.
+See [[JSON](https://www.json.org/) adaptation](extras.md#adapt-json) for further details.
 <a id="faq-identifier"></a>
 
 How can I pass field/table names to a query? The arguments in the `execute()` methods can only represent data to pass to the query: they cannot represent a table or field name:
