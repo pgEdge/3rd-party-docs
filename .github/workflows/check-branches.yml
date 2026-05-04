@@ -1,0 +1,309 @@
+name: Check branches.yml Against SSOT
+
+# Runs daily (or manually) to detect drift between branches.yml
+# and the canonical sources.yaml in pgEdge/pgedge-doc-sources.
+# If actionable drift is found (missing entries or SSH URLs), opens or updates
+# a dedicated fix PR on auto/sync-branches. Never comments on developer PRs.
+# EXTRA and policy-excluded entries are reported but never auto-removed.
+#
+# Known reconciliation: PostgreSQL entries in SSOT use github.com/postgres/postgres.git
+# with pinned tags, while branches.yml uses git.postgresql.org with branch refs.
+# These will appear as MISSING/EXTRA until that discrepancy is resolved in one repo.
+
+on:
+  #schedule:
+  #  - cron: '0 6 * * *'   # daily at 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  check-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch SSOT
+        env:
+          SSOT_TOKEN: ${{ secrets.PGEDGE_BUILDER_TOKEN }}
+        run: |
+          if [ -z "${SSOT_TOKEN}" ]; then
+            echo "::error::PGEDGE_BUILDER_TOKEN secret is not set"
+            exit 1
+          fi
+          curl -sSf \
+            -H "Authorization: token ${SSOT_TOKEN}" \
+            https://raw.githubusercontent.com/pgEdge/pgedge-doc-sources/main/sources.yaml \
+            -o /tmp/sources.yaml
+          pip install pyyaml -q
+
+      - name: Detect drift and generate fixes
+        id: drift
+        run: |
+          python3 << 'PYEOF'
+          import os, re, yaml
+
+          CONSUMER_TYPE = "3rd-party-docs"
+          CONSUMER_FILE = "branches.yml"
+          GLOBAL_MAX_VERSIONS = 3
+
+          def normalize_url(url):
+              """Normalize for key comparison only — lowercased."""
+              url = re.sub(r"^git@github\.com:", "https://github.com/", url)
+              url = url.rstrip("/")
+              if not url.endswith(".git"):
+                  url += ".git"
+              return url.lower()
+
+          def normalize_path(p):
+              """Treat empty and '.' as equivalent."""
+              return (p or ".").rstrip("/") or "."
+
+          def for_consumer(entry):
+              tools = entry.get("tools")
+              return tools is None or CONSUMER_TYPE in tools
+
+          def ssot_key(entry):
+              url = normalize_url(entry.get("upstream_git_source", ""))
+              ref = entry.get("upstream_tag") or entry.get("upstream_branch", "")
+              doc_path = normalize_path(entry.get("upstream_doc_path", ""))
+              return (url, ref, doc_path)
+
+          def version_key(v):
+              parts = re.split(r"[.\-_]", str(v))
+              return [(0, int(p)) if p.isdigit() else (1, p.lower()) for p in parts]
+
+          def id_to_branch(id_str):
+              """Convert SSOT id to a branch name: remove hyphens and dots."""
+              return re.sub(r"[-.]", "", id_str.lower())
+
+          with open("/tmp/sources.yaml") as f:
+              ssot = yaml.safe_load(f)
+          with open(CONSUMER_FILE) as f:
+              consumer_text = f.read()
+              consumer = yaml.safe_load(consumer_text)
+
+          global_max = ssot.get("defaults", {}).get("max_versions", GLOBAL_MAX_VERSIONS)
+
+          # Group SSOT entries by component, apply max_versions cutoff
+          groups = {}
+          for e in ssot["sources"]:
+              if not for_consumer(e):
+                  continue
+              gk = (e.get("name", ""), normalize_url(e.get("upstream_git_source", "")))
+              groups.setdefault(gk, []).append(e)
+
+          ssot_map, excluded = {}, {}
+          for entries in groups.values():
+              versioned = sorted(
+                  [e for e in entries if e.get("version", "")],
+                  key=lambda entry: version_key(entry.get("version", "")),
+                  reverse=True,
+              )
+              for e in entries:
+                  if not e.get("version", ""):
+                      ssot_map[ssot_key(e)] = e
+              for i, e in enumerate(versioned):
+                  key = ssot_key(e)
+                  (ssot_map if i < e.get("max_versions", global_max) else excluded)[key] = e
+
+          # Build consumer map from branches.yml
+          consumer_map, url_issues = {}, []
+          for b in consumer.get("branches", []):
+              raw_url = b.get("upstream", "")
+              if raw_url.startswith("git@"):
+                  url_issues.append((b.get("branch", "?"), raw_url))
+              url = normalize_url(raw_url)
+              ref = b.get("ref", "")
+              src = normalize_path(b.get("src_subdir", ""))
+              key = (url, ref, src)
+              consumer_map[key] = b
+
+          missing_entries = {k: e for k, e in ssot_map.items() if k not in consumer_map}
+          extra_entries   = {k: b for k, b in consumer_map.items() if k not in ssot_map and k not in excluded}
+          policy_entries  = {k: b for k, b in consumer_map.items() if k in excluded}
+
+          # ── Build drift report ──────────────────────────────────────────
+          lines = ["## Sources Drift Report — 3rd-party-docs\n"]
+          clean = not missing_entries and not extra_entries and not url_issues
+
+          url_lines = [
+              f"  - **URL** `{name}` — SSH `{raw}`, should be HTTPS"
+              for name, raw in url_issues
+          ]
+          missing_lines = [
+              f"  - **MISSING** `{e.get('id','?')}` ({e.get('name','?')} {e.get('version','')}) — "
+              f"upstream `{k[0]}`, ref `{k[1]}`, src_subdir `{k[2]}`"
+              for k, e in missing_entries.items()
+          ]
+          extra_lines = [
+              f"  - **EXTRA** branch `{b.get('branch','?')}` — "
+              f"upstream `{k[0]}`, ref `{k[1]}`, src_subdir `{k[2]}` (not in SSOT, left as-is)"
+              for k, b in extra_entries.items()
+          ]
+          policy_lines = [
+              f"  - **POLICY-EXCLUDED** branch `{b.get('branch','?')}` "
+              f"({b.get('version', b.get('branch','?'))}) — beyond max_versions cutoff in SSOT"
+              for k, b in policy_entries.items()
+          ]
+
+          actionable = bool(missing_entries or url_issues)
+
+          if clean:
+              lines.append("**No drift detected.** `branches.yml` is in sync with SSOT.")
+          else:
+              if url_lines:
+                  lines += ["### URL Issues (SSH → HTTPS)\n"] + url_lines + [""]
+              if missing_lines:
+                  lines += ["### Missing from branches.yml (in SSOT, absent here)\n"] + missing_lines + [""]
+              if extra_lines:
+                  lines += ["### Extra in branches.yml (not in SSOT — left as-is)\n"] + extra_lines + [""]
+
+          if policy_lines:
+              lines += ["### Policy-excluded versions present in branches.yml (informational)\n"] + policy_lines + [""]
+
+          if not clean:
+              lines += ["---",
+                        f"*{len(missing_entries)} missing, {len(extra_entries)} extra, "
+                        f"{len(url_issues)} URL issue(s)*"]
+
+          report = "\n".join(lines) + "\n"
+          with open("/tmp/drift-report.md", "w") as f:
+              f.write(report)
+          print(report)
+
+          # ── Generate fixed branches.yml ─────────────────────────────────
+          if actionable:
+              fixed = consumer_text
+
+              # Fix SSH URLs in-place (any org)
+              fixed = re.sub(r'git@github\.com:([^/]+)/', r'https://github.com/\1/', fixed)
+
+              # Append missing entries grouped by component
+              if missing_entries:
+                  new_entries = []
+                  seen_components = {}
+                  for k, e in missing_entries.items():
+                      url      = e.get("upstream_git_source", "")
+                      ref      = e.get("upstream_tag") or e.get("upstream_branch", "")
+                      src      = e.get("upstream_doc_path", "")
+                      mode     = e.get("mode", "md")
+                      version  = e.get("version", "")
+                      name     = e.get("name", "")
+                      branch_name = id_to_branch(e.get("id", f"{name}-{version}"))
+
+                      if name not in seen_components:
+                          seen_components[name] = True
+                          new_entries.append(f"\n  # {name} — added by auto/sync-branches")
+
+                      block = (
+                          f"\n  - branch: {branch_name}"
+                          f"\n    mode: {mode}"
+                          f"\n    version: \"{version}\""
+                          f"\n    upstream: {url}"
+                          f"\n    ref: {ref}"
+                          f"\n    src_subdir: {src if src else '.'}"
+                      )
+                      # Optional 3rd-party-docs fields
+                      for field in ("skip_sections", "pgadmin_src", "site_prefix", "img_symlink"):
+                          val = e.get(field)
+                          if val:
+                              block += f"\n    {field}: \"{val}\""
+
+                      new_entries.append(block)
+
+                  fixed = fixed.rstrip() + "\n" + "\n".join(new_entries) + "\n"
+
+              with open(CONSUMER_FILE, "w") as f:
+                  f.write(fixed)
+
+          # ── Write outputs ───────────────────────────────────────────────
+          env_file = os.environ.get("GITHUB_OUTPUT", "/tmp/github_output")
+          with open(env_file, "a") as f:
+              f.write(f"actionable={'true' if actionable else 'false'}\n")
+          PYEOF
+
+      - name: Push fix branch
+        if: steps.drift.outputs.actionable == 'true'
+        id: push
+        env:
+          GH_TOKEN: ${{ secrets.PGEDGE_BUILDER_TOKEN }}
+        run: |
+          FIX_BRANCH="auto/sync-branches"
+          BASE_BRANCH="${{ github.event.repository.default_branch || 'main' }}"
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          gh auth setup-git
+
+          # Stash the Python-generated changes before switching branches
+          git stash
+          STASHED=$(git stash list | head -1)
+
+          # Ensure base branch and fix branch refs are current
+          git fetch origin "$BASE_BRANCH"
+          git fetch origin "$FIX_BRANCH" 2>/dev/null || true
+
+          # Create or force-reset fix branch to tip of base branch
+          git checkout -B "$FIX_BRANCH" "origin/$BASE_BRANCH"
+
+          # Restore the fixes onto the fix branch (only if something was stashed)
+          if [ -n "$STASHED" ]; then
+            git stash pop
+          fi
+
+          git add branches.yml
+          if git diff --cached --quiet; then
+            echo "No file changes after applying fixes — drift already resolved, skipping PR."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "sync: fix branches.yml drift against SSOT sources.yaml"
+          git push --force-with-lease origin "$FIX_BRANCH"
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+          echo "fix_branch=$FIX_BRANCH" >> "$GITHUB_OUTPUT"
+          echo "base_branch=$BASE_BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Create or update fix PR
+        if: steps.push.outputs.pushed == 'true'
+        uses: actions/github-script@v7
+        env:
+          FIX_BRANCH: ${{ steps.push.outputs.fix_branch }}
+          BASE_BRANCH: ${{ steps.push.outputs.base_branch }}
+        with:
+          github-token: ${{ secrets.PGEDGE_BUILDER_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('/tmp/drift-report.md', 'utf8');
+            const fixBranch = process.env.FIX_BRANCH;
+            const baseBranch = process.env.BASE_BRANCH;
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+
+            const { data: prs } = await github.rest.pulls.list({
+              owner, repo,
+              head: `${owner}:${fixBranch}`,
+              state: 'open',
+            });
+
+            if (prs.length > 0) {
+              const prNumber = prs[0].number;
+              console.log(`Updating existing PR #${prNumber}`);
+              await github.rest.issues.createComment({
+                owner, repo,
+                issue_number: prNumber,
+                body,
+              });
+            } else {
+              console.log('Creating new fix PR');
+              await github.rest.pulls.create({
+                owner, repo,
+                title: 'sync: fix branches.yml drift against SSOT',
+                head: fixBranch,
+                base: baseBranch,
+                body,
+              });
+            }
