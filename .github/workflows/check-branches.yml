@@ -54,6 +54,9 @@ jobs:
           def normalize_url(url):
               """Normalize for key comparison only — lowercased."""
               url = re.sub(r"^git@github\.com:", "https://github.com/", url)
+              # postgresql.org mirror aliases github.com/postgres/postgres
+              url = re.sub(r"https?://git\.postgresql\.org/git/postgresql\.git",
+                           "https://github.com/postgres/postgres.git", url)
               url = url.rstrip("/")
               if not url.endswith(".git"):
                   url += ".git"
@@ -123,17 +126,117 @@ jobs:
               key = (url, ref, src)
               consumer_map[key] = b
 
-          missing_entries = {k: e for k, e in ssot_map.items() if k not in consumer_map}
+          raw_missing     = {k: e for k, e in ssot_map.items() if k not in consumer_map}
           extra_entries   = {k: b for k, b in consumer_map.items() if k not in ssot_map and k not in excluded}
           policy_entries  = {k: b for k, b in consumer_map.items() if k in excluded}
 
+          # Detect entries that need in-place updates rather than new appends.
+          #
+          # Priority 1 — Non-github URL alias + major ref prefix match.
+          #   Handles sources like PostgreSQL where branches.yml uses
+          #   git.postgresql.org + stable branch refs (REL_16_STABLE) but
+          #   the SSOT uses github.com + pinned tags (REL_16_13).
+          #   Restricted to non-github consumer URLs to prevent accidental
+          #   semver matching (e.g. v1.5.4 vs v1.5.5 share the same prefix).
+          #
+          # Priority 2 — Same pinned tag + src, upstream URL changed.
+          #   Handles sources where the upstream host moved (e.g. EnterpriseDB
+          #   → pgEdge fork). Not applied to branch refs (master/main/stable)
+          #   because those are ambiguous across multiple sources.
+
+          def ref_major(ref):
+              """First two underscore/dot segments — used for PG major matching."""
+              return "_".join(re.split(r"[_.]", ref)[:2])
+
+          def is_branch_ref(ref):
+              return bool(re.match(
+                  r"^(master|main|develop|development|\S+-STABLE|\S+-stable)$",
+                  ref, re.I
+              ))
+
+          url_alias_updates = []
+          missing_entries   = {}
+          handled_extras    = set()
+
+          for k, e in raw_missing.items():
+              ssot_url, ssot_ref, ssot_src = k
+              candidate_key = None
+
+              # Priority 1: non-github consumer URL that normalises to SSOT URL,
+              # refs share a major-version prefix (safe for PG, avoids semver FP).
+              ssot_prefix = ref_major(ssot_ref)
+              for ck, cb in extra_entries.items():
+                  raw_upstream = cb.get("upstream", "")
+                  if (ck not in handled_extras
+                          and not raw_upstream.lower().startswith("https://github.com/")
+                          and ck[0] == ssot_url
+                          and ck[2] == ssot_src
+                          and ref_major(ck[1]) == ssot_prefix):
+                      candidate_key = ck
+                      break
+
+              # Priority 2: exact pinned-tag + src match, upstream URL changed.
+              if not candidate_key and not is_branch_ref(ssot_ref):
+                  for ck in extra_entries:
+                      if (ck not in handled_extras
+                              and ck[1] == ssot_ref
+                              and ck[2] == ssot_src):
+                          candidate_key = ck
+                          break
+
+              if candidate_key:
+                  url_alias_updates.append((extra_entries[candidate_key], e,
+                                            candidate_key[1], ssot_ref))
+                  handled_extras.add(candidate_key)
+              else:
+                  missing_entries[k] = e
+
+          # Remove aliased extras — handled as in-place updates, not new entries
+          extra_entries = {k: v for k, v in extra_entries.items()
+                           if k not in handled_extras}
+
+          # Detect version drift on matched branch-ref entries (e.g. pg19 → pg20
+          # when postgresql-dev version changes from "19devel" to "20devel").
+          # Only checked for branch refs (master/main/stable) — pinned tag entries
+          # don't need this since their version is fixed.
+          version_updates = []
+          for k, e in ssot_map.items():
+              if k not in consumer_map or not is_branch_ref(k[1]):
+                  continue
+              b = consumer_map[k]
+              ssot_ver = str(e.get("version", ""))
+              cons_ver = str(b.get("version", ""))
+              if not ssot_ver or not cons_ver or ssot_ver == cons_ver:
+                  continue
+              old_branch = b.get("branch", "")
+              new_branch = old_branch
+              old_major = re.search(r'\d+', cons_ver)
+              new_major = re.search(r'\d+', ssot_ver)
+              if old_major and new_major and old_major.group() in old_branch:
+                  new_branch = old_branch.replace(old_major.group(), new_major.group(), 1)
+              # Only track if the branch name actually changes — version-string format
+              # differences (e.g. "pgAdmin 4 dev" vs "dev") are display-label noise.
+              if old_branch != new_branch:
+                  version_updates.append((b, e, cons_ver, ssot_ver, old_branch, new_branch))
+
           # ── Build drift report ──────────────────────────────────────────
           lines = ["## Sources Drift Report — 3rd-party-docs\n"]
-          clean = not missing_entries and not extra_entries and not url_issues
+          clean = (not missing_entries and not extra_entries and not url_issues
+                   and not url_alias_updates and not version_updates)
 
           url_lines = [
               f"  - **URL** `{name}` — SSH `{raw}`, should be HTTPS"
               for name, raw in url_issues
+          ]
+          update_lines = [
+              f"  - **UPDATE** branch `{cb.get('branch','?')}` ({e.get('name','?')} {e.get('version','')}) — "
+              f"ref `{old_ref}` → `{new_ref}`, upstream → `{e.get('upstream_git_source','')}`"
+              for cb, e, old_ref, new_ref in url_alias_updates
+          ]
+          version_lines = [
+              f"  - **RENAME** branch `{old_branch}` → `{new_branch}` "
+              f"({e.get('name','?')} version `{old_ver}` → `{new_ver}`)"
+              for b, e, old_ver, new_ver, old_branch, new_branch in version_updates
           ]
           missing_lines = [
               f"  - **MISSING** `{e.get('id','?')}` ({e.get('name','?')} {e.get('version','')}) — "
@@ -151,13 +254,17 @@ jobs:
               for k, b in policy_entries.items()
           ]
 
-          actionable = bool(missing_entries or url_issues)
+          actionable = bool(missing_entries or url_issues or url_alias_updates or version_updates)
 
           if clean:
               lines.append("**No drift detected.** `branches.yml` is in sync with SSOT.")
           else:
               if url_lines:
                   lines += ["### URL Issues (SSH → HTTPS)\n"] + url_lines + [""]
+              if update_lines:
+                  lines += ["### Upstream Updates (ref/URL corrected in-place)\n"] + update_lines + [""]
+              if version_lines:
+                  lines += ["### Branch Renames (version drift on dev branches)\n"] + version_lines + [""]
               if missing_lines:
                   lines += ["### Missing from branches.yml (in SSOT, absent here)\n"] + missing_lines + [""]
               if extra_lines:
@@ -168,7 +275,8 @@ jobs:
 
           if not clean:
               lines += ["---",
-                        f"*{len(missing_entries)} missing, {len(extra_entries)} extra, "
+                        f"*{len(url_alias_updates)} updated, {len(version_updates)} renamed, "
+                        f"{len(missing_entries)} missing, {len(extra_entries)} extra, "
                         f"{len(url_issues)} URL issue(s)*"]
 
           report = "\n".join(lines) + "\n"
@@ -182,6 +290,40 @@ jobs:
 
               # Fix SSH URLs in-place (any org)
               fixed = re.sub(r'git@github\.com:([^/]+)/', r'https://github.com/\1/', fixed)
+
+              # Apply in-place URL + ref updates for aliased entries
+              for consumer_b, ssot_e, old_ref, new_ref in url_alias_updates:
+                  branch_name = consumer_b.get('branch', '')
+                  old_url = consumer_b.get('upstream', '')
+                  new_url = ssot_e.get('upstream_git_source', '')
+                  # Replace upstream URL scoped to this branch block
+                  fixed = re.sub(
+                      rf'(- branch: {re.escape(branch_name)}\b.*?upstream: ){re.escape(old_url)}',
+                      rf'\g<1>{new_url}',
+                      fixed, flags=re.DOTALL
+                  )
+                  # Replace ref scoped to this branch block
+                  fixed = re.sub(
+                      rf'(- branch: {re.escape(branch_name)}\b.*?ref: ){re.escape(old_ref)}',
+                      rf'\g<1>{new_ref}',
+                      fixed, flags=re.DOTALL
+                  )
+
+              # Apply version field + branch-name renames for dev branch version drift
+              for b, e, old_ver, new_ver, old_branch, new_branch in version_updates:
+                  # Update version field scoped to this branch block
+                  fixed = re.sub(
+                      rf'(- branch: {re.escape(old_branch)}\b.*?version: )["\']?{re.escape(old_ver)}["\']?',
+                      rf'\g<1>"{new_ver}"',
+                      fixed, flags=re.DOTALL
+                  )
+                  # Rename the branch field itself if the derived name changed
+                  if old_branch != new_branch:
+                      fixed = re.sub(
+                          rf'(- branch: ){re.escape(old_branch)}\b',
+                          rf'\g<1>{new_branch}',
+                          fixed
+                      )
 
               # Append missing entries grouped by component
               if missing_entries:
@@ -240,21 +382,34 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           gh auth setup-git
 
+          # Save generated content before stashing so we can compare later
+          cp branches.yml /tmp/branches_generated.yml
+
           # Stash the Python-generated changes before switching branches
           git stash
-          STASHED=$(git stash list | head -1)
 
-          # Ensure base branch and fix branch refs are current
+          # Fetch both branches so we can compare and reset
           git fetch origin "$BASE_BRANCH"
           git fetch origin "$FIX_BRANCH" 2>/dev/null || true
+
+          # If the fix branch already exists, skip the push when the generated
+          # content is identical to what's already on it — this preserves any
+          # open PR approvals and avoids spurious force-pushes.
+          if git rev-parse --verify "origin/$FIX_BRANCH" &>/dev/null; then
+            EXISTING=$(git show "origin/$FIX_BRANCH:branches.yml" 2>/dev/null || echo "")
+            GENERATED=$(cat /tmp/branches_generated.yml)
+            if [ "$EXISTING" = "$GENERATED" ]; then
+              echo "Fix branch already contains identical changes — skipping push to preserve PR approvals."
+              echo "pushed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
 
           # Create or force-reset fix branch to tip of base branch
           git checkout -B "$FIX_BRANCH" "origin/$BASE_BRANCH"
 
-          # Restore the fixes onto the fix branch (only if something was stashed)
-          if [ -n "$STASHED" ]; then
-            git stash pop
-          fi
+          # Restore the fixes onto the fix branch
+          git stash pop
 
           git add branches.yml
           if git diff --cached --quiet; then
