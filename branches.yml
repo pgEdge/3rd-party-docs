@@ -551,3 +551,49 @@ branches:
     upstream: https://github.com/EnterpriseDB/system_stats.git
     ref: master
     src_subdir: .
+
+  # PostgreSQL — added by auto/sync-branches
+
+  - branch: postgresqldev
+    mode: sgml
+    version: "19devel"
+    upstream: https://github.com/postgres/postgres.git
+    ref: master
+    src_subdir: doc/src/sgml
+
+  - branch: postgresql18
+    mode: sgml
+    version: "18"
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_18_3
+    src_subdir: doc/src/sgml
+
+  - branch: postgresql17
+    mode: sgml
+    version: "17"
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_17_9
+    src_subdir: doc/src/sgml
+
+  - branch: postgresql16
+    mode: sgml
+    version: "16"
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_16_13
+    src_subdir: doc/src/sgml
+
+  # pgEdge System Stats — added by auto/sync-branches
+
+  - branch: pgedgesystemstatsdev
+    mode: md
+    version: "dev"
+    upstream: https://github.com/pgEdge/pgedge_system_stats.git
+    ref: master
+    src_subdir: .
+
+  - branch: pgedgesystemstats321
+    mode: md
+    version: "3.2.1"
+    upstream: https://github.com/pgEdge/pgedge_system_stats.git
+    ref: v3.2.1
+    src_subdir: .
