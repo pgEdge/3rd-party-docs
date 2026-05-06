@@ -26,22 +26,22 @@ branches:
   - branch: pg16
     mode: sgml
     version: "16.13"
-    upstream: https://git.postgresql.org/git/postgresql.git
-    ref: REL_16_STABLE
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_16_13
     src_subdir: doc/src/sgml
 
   - branch: pg17
     mode: sgml
     version: "17.9"
-    upstream: https://git.postgresql.org/git/postgresql.git
-    ref: REL_17_STABLE
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_17_9
     src_subdir: doc/src/sgml
 
   - branch: pg18
     mode: sgml
     version: "18.3"
-    upstream: https://git.postgresql.org/git/postgresql.git
-    ref: REL_18_STABLE
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_18_3
     src_subdir: doc/src/sgml
 
   - branch: pg19
@@ -534,7 +534,7 @@ branches:
   - branch: systemstats321
     mode: md
     version: "system_stats v3.2.1"
-    upstream: https://github.com/EnterpriseDB/system_stats.git
+    upstream: https://github.com/pgEdge/pgedge_system_stats.git
     ref: v3.2.1
     src_subdir: .
 
@@ -549,5 +549,14 @@ branches:
     mode: md
     version: "system_stats dev"
     upstream: https://github.com/EnterpriseDB/system_stats.git
+    ref: master
+    src_subdir: .
+
+  # pgEdge System Stats — added by auto/sync-branches
+
+  - branch: pgedgesystemstatsdev
+    mode: md
+    version: "dev"
+    upstream: https://github.com/pgEdge/pgedge_system_stats.git
     ref: master
     src_subdir: .
