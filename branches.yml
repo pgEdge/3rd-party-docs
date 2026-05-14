@@ -569,3 +569,26 @@ branches:
     upstream: https://github.com/patroni/patroni.git
     ref: v4.1.3
     src_subdir: docs
+
+  # PostgreSQL — added by auto/sync-branches
+
+  - branch: postgresql18
+    mode: sgml
+    version: "18"
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_18_4
+    src_subdir: doc/src/sgml
+
+  - branch: postgresql17
+    mode: sgml
+    version: "17"
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_17_10
+    src_subdir: doc/src/sgml
+
+  - branch: postgresql16
+    mode: sgml
+    version: "16"
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_16_14
+    src_subdir: doc/src/sgml
