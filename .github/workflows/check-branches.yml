@@ -154,6 +154,10 @@ jobs:
                   ref, re.I
               ))
 
+          def ref_digits(ref):
+              """Extract all digits from a ref string, e.g. REL_16_13 → '1613'."""
+              return re.sub(r'[^0-9]', '', ref)
+
           url_alias_updates = []
           missing_entries   = {}
           handled_extras    = set()
@@ -162,18 +166,37 @@ jobs:
               ssot_url, ssot_ref, ssot_src = k
               candidate_key = None
 
+              # Priority 0: point-release bump — same URL (any host), same src,
+              # same major ref prefix, both pinned tags, and the consumer branch
+              # name does NOT encode the old ref's version digits (which would
+              # indicate a versioned snapshot like patroni412 rather than a
+              # rolling branch like pg16).
+              if not is_branch_ref(ssot_ref):
+                  ssot_prefix = ref_major(ssot_ref)
+                  for ck, cb in extra_entries.items():
+                      digits = ref_digits(ck[1])
+                      if (ck not in handled_extras
+                              and ck[0] == ssot_url
+                              and ck[2] == ssot_src
+                              and not is_branch_ref(ck[1])
+                              and ref_major(ck[1]) == ssot_prefix
+                              and digits and digits not in cb.get("branch", "")):
+                          candidate_key = ck
+                          break
+
               # Priority 1: non-github consumer URL that normalises to SSOT URL,
               # refs share a major-version prefix (safe for PG, avoids semver FP).
-              ssot_prefix = ref_major(ssot_ref)
-              for ck, cb in extra_entries.items():
-                  raw_upstream = cb.get("upstream", "")
-                  if (ck not in handled_extras
-                          and not raw_upstream.lower().startswith("https://github.com/")
-                          and ck[0] == ssot_url
-                          and ck[2] == ssot_src
-                          and ref_major(ck[1]) == ssot_prefix):
-                      candidate_key = ck
-                      break
+              if not candidate_key:
+                  ssot_prefix = ref_major(ssot_ref)
+                  for ck, cb in extra_entries.items():
+                      raw_upstream = cb.get("upstream", "")
+                      if (ck not in handled_extras
+                              and not raw_upstream.lower().startswith("https://github.com/")
+                              and ck[0] == ssot_url
+                              and ck[2] == ssot_src
+                              and ref_major(ck[1]) == ssot_prefix):
+                          candidate_key = ck
+                          break
 
               # Priority 2: exact pinned-tag + src match, upstream URL changed.
               if not candidate_key and not is_branch_ref(ssot_ref):
@@ -308,6 +331,18 @@ jobs:
                       rf'\g<1>{new_ref}',
                       fixed, flags=re.DOTALL
                   )
+                  # For point-release bumps (URL unchanged), derive and update
+                  # the version field from the new ref (e.g. REL_16_14 → "16.14")
+                  if normalize_url(old_url) == normalize_url(new_url):
+                      old_ver = consumer_b.get('version', '')
+                      ver_m = re.match(r'^REL_(\d+)_(\d+)$', new_ref)
+                      new_ver = f"{ver_m.group(1)}.{ver_m.group(2)}" if ver_m else new_ref.lstrip('v')
+                      if old_ver and old_ver != new_ver:
+                          fixed = re.sub(
+                              rf'(- branch: {re.escape(branch_name)}\b.*?version: )["\']?{re.escape(old_ver)}["\']?',
+                              rf'\g<1>"{new_ver}"',
+                              fixed, flags=re.DOTALL
+                          )
 
               # Apply version field + branch-name renames for dev branch version drift
               for b, e, old_ver, new_ver, old_branch, new_branch in version_updates:
