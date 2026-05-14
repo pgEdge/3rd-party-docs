@@ -25,23 +25,23 @@ branches:
 
   - branch: pg16
     mode: sgml
-    version: "16.13"
+    version: "16.14"
     upstream: https://github.com/postgres/postgres.git
-    ref: REL_16_13
+    ref: REL_16_14
     src_subdir: doc/src/sgml
 
   - branch: pg17
     mode: sgml
-    version: "17.9"
+    version: "17.10"
     upstream: https://github.com/postgres/postgres.git
-    ref: REL_17_9
+    ref: REL_17_10
     src_subdir: doc/src/sgml
 
   - branch: pg18
     mode: sgml
-    version: "18.3"
+    version: "18.4"
     upstream: https://github.com/postgres/postgres.git
-    ref: REL_18_3
+    ref: REL_18_4
     src_subdir: doc/src/sgml
 
   - branch: pg19
