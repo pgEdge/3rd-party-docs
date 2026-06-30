@@ -569,3 +569,12 @@ branches:
     upstream: https://github.com/patroni/patroni.git
     ref: v4.1.3
     src_subdir: docs
+
+  # --- supautils (Markdown mode) ---
+
+  - branch: supautils322
+    mode: md
+    version: "supautils v3.2.2"
+    upstream: https://github.com/supabase/supautils.git
+    ref: v3.2.2
+    src_subdir: .
