@@ -578,3 +578,10 @@ branches:
     upstream: https://github.com/supabase/supautils.git
     ref: v3.2.2
     src_subdir: .
+
+  - branch: supautilsmaster
+    mode: md
+    version: "supautils dev"
+    upstream: https://github.com/supabase/supautils.git
+    ref: master
+    src_subdir: .
