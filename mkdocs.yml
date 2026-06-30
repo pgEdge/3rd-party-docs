@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: supautils v3.2.2
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,9 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - supautils: index.md
+  - Installation: installation.md
+  - Features: features.md
+  - Development: development.md
