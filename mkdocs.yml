@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: Barman Cloud Plugin dev
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,22 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - Barman Cloud Plugin dev: index.md
+  - Barman Cloud Plugin: intro.md
+  - Main Concepts: concepts.md
+  - Installation: installation.md
+  - Upgrades: upgrades.md
+  - Using the Barman Cloud Plugin: usage.md
+  - Migrating from Built-in CloudNativePG Backup: migration.md
+  - Object Store Providers: object_stores.md
+  - Observability: observability.md
+  - Retention Policies: retention.md
+  - Compression: compression.md
+  - Resource name migration guide: resource-name-migration.md
+  - Troubleshooting: troubleshooting.md
+  - Miscellaneous: misc.md
+  - Container Images: images.md
+  - Parameters: parameters.md
+  - API Reference: plugin-barman-cloud.v1.md
