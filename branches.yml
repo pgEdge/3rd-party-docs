@@ -529,6 +529,31 @@ branches:
     ref: main
     src_subdir: docs/src
 
+  # --- Barman Cloud Plugin (Docusaurus/Markdown mode) ---
+  # Released docs live under web/versioned_docs/version-X.Y.Z; the
+  # dev docs under web/docs.
+
+  - branch: barmancloud013
+    mode: md
+    version: "Barman Cloud Plugin 0.13.0"
+    upstream: https://github.com/cloudnative-pg/plugin-barman-cloud.git
+    ref: v0.13.0
+    src_subdir: web/versioned_docs/version-0.13.0
+
+  - branch: barmancloud012
+    mode: md
+    version: "Barman Cloud Plugin 0.12.0"
+    upstream: https://github.com/cloudnative-pg/plugin-barman-cloud.git
+    ref: v0.12.0
+    src_subdir: web/versioned_docs/version-0.12.0
+
+  - branch: barmancloudmaster
+    mode: md
+    version: "Barman Cloud Plugin dev"
+    upstream: https://github.com/cloudnative-pg/plugin-barman-cloud.git
+    ref: main
+    src_subdir: web/docs
+
   # --- system_stats (Markdown mode) ---
 
   - branch: systemstats321
