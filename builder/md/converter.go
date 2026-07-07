@@ -521,11 +521,13 @@ var reSemver = regexp.MustCompile(`\d+\.\d+\.\d+`)
 // Docusaurus .mdx pages so the content is valid MkDocs Markdown:
 //
 //   - ES module import lines are dropped.
-//   - The known <InstallationSnippet /> component is replaced with
-//     the deterministic `kubectl apply` command it renders. The
-//     manifest version is taken from the converter's version string
-//     (e.g. "Barman Cloud Plugin 0.13.0"); when no semver is present
-//     (dev builds) the upstream "latest" release URL is used.
+//   - The known <InstallationSnippet /> component is replaced with an
+//     equivalent `kubectl apply` command. The manifest version is taken
+//     from the converter's version string (e.g. "Barman Cloud Plugin
+//     0.13.0"), so each versioned page installs its own release; when no
+//     semver is present (dev builds) the upstream "latest" release URL is
+//     used. (The upstream component always renders the latest released
+//     version regardless of page; we intentionally version-match instead.)
 //   - Any other standalone self-closing JSX component is dropped and
 //     recorded as a warning, so unexpected components stay visible.
 //
