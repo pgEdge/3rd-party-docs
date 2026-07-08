@@ -610,3 +610,12 @@ branches:
     upstream: https://github.com/supabase/supautils.git
     ref: master
     src_subdir: .
+
+  # CloudNativePG — added by auto/sync-branches
+
+  - branch: cnpg130
+    mode: md
+    version: "1.30"
+    upstream: https://github.com/cloudnative-pg/cloudnative-pg.git
+    ref: v1.30.0
+    src_subdir: docs/src
