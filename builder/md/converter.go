@@ -98,8 +98,10 @@ func (c *Converter) Convert() error {
 	return shared.FixBrokenLinksInDir(c.outDir)
 }
 
-// findMarkdownFiles returns .md file paths relative to dir,
-// scanning recursively into subdirectories.
+// findMarkdownFiles returns .md and .mdx file paths relative to
+// dir, scanning recursively into subdirectories. Docusaurus
+// sources use .mdx for pages that embed JSX components; those are
+// normalized to .md on output (see normalizeOutName).
 func findMarkdownFiles(dir string) ([]string, error) {
 	var files []string
 	err := filepath.WalkDir(dir,
@@ -110,8 +112,9 @@ func findMarkdownFiles(dir string) ([]string, error) {
 			if d.IsDir() {
 				return nil
 			}
-			if strings.HasSuffix(strings.ToLower(d.Name()),
-				".md") {
+			name := strings.ToLower(d.Name())
+			if strings.HasSuffix(name, ".md") ||
+				strings.HasSuffix(name, ".mdx") {
 				rel, err := filepath.Rel(dir, path)
 				if err != nil {
 					return err
@@ -479,6 +482,113 @@ func convertAlerts(content string) string {
 
 // ── Docusaurus support ───────────────────────────────────────────
 
+// normalizeOutName maps a .mdx source path to a .md output path.
+// MkDocs and intra-doc links use .md, so MDX pages are renamed on
+// write. Non-.mdx paths are returned unchanged.
+func normalizeOutName(rel string) string {
+	if strings.HasSuffix(strings.ToLower(rel), ".mdx") {
+		return rel[:len(rel)-len(".mdx")] + ".md"
+	}
+	return rel
+}
+
+// barmanManifestBase is the upstream release URL for the Barman
+// Cloud plugin install manifest, used to reconstruct the command
+// rendered by the upstream <InstallationSnippet /> React component.
+const barmanManifestBase = "https://github.com/cloudnative-pg/" +
+	"plugin-barman-cloud/releases"
+
+// reESImport matches an MDX ES module import statement, e.g.
+//
+//	import { InstallationSnippet } from '@site/src/components/...';
+var reESImport = regexp.MustCompile(
+	`^\s*import\s+.+\s+from\s+['"][^'"]+['"];?\s*$`)
+
+// reInstallationSnippet matches the upstream Barman Cloud
+// <InstallationSnippet /> component (alone on its line).
+var reInstallationSnippet = regexp.MustCompile(
+	`^<InstallationSnippet\s*/>$`)
+
+// reJSXSelfClosing matches a standalone self-closing JSX component
+// tag (capitalized name) alone on its line, e.g. <Tabs foo="bar" />.
+var reJSXSelfClosing = regexp.MustCompile(
+	`^<([A-Z][A-Za-z0-9]*)\b[^>]*/>$`)
+
+// reSemver matches a semantic version anywhere in a string.
+var reSemver = regexp.MustCompile(`\d+\.\d+\.\d+`)
+
+// stripDocusaurusJSX removes JSX constructs that appear in
+// Docusaurus .mdx pages so the content is valid MkDocs Markdown:
+//
+//   - ES module import lines are dropped.
+//   - The known <InstallationSnippet /> component is replaced with an
+//     equivalent `kubectl apply` command. The manifest version is taken
+//     from the converter's version string (e.g. "Barman Cloud Plugin
+//     0.13.0"), so each versioned page installs its own release; when no
+//     semver is present (dev builds) the upstream "latest" release URL is
+//     used. (The upstream component always renders the latest released
+//     version regardless of page; we intentionally version-match instead.)
+//   - Any other standalone self-closing JSX component is dropped and
+//     recorded as a warning, so unexpected components stay visible.
+//
+// Code fences are preserved verbatim, so JS/TS examples that happen
+// to contain import statements are not altered.
+func (c *Converter) stripDocusaurusJSX(content string) string {
+	lines := strings.Split(content, "\n")
+	out := make([]string, 0, len(lines))
+	inCode := false
+
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+
+		if strings.HasPrefix(trimmed, "```") ||
+			strings.HasPrefix(trimmed, "~~~") {
+			inCode = !inCode
+			out = append(out, line)
+			continue
+		}
+		if inCode {
+			out = append(out, line)
+			continue
+		}
+
+		if reESImport.MatchString(line) {
+			continue
+		}
+		if reInstallationSnippet.MatchString(trimmed) {
+			out = append(out, c.installationSnippet()...)
+			continue
+		}
+		if m := reJSXSelfClosing.FindStringSubmatch(trimmed); m != nil {
+			c.warnings = append(c.warnings, fmt.Sprintf(
+				"md: dropped unhandled JSX component <%s/> "+
+					"(version %q)", m[1], c.version))
+			continue
+		}
+
+		out = append(out, line)
+	}
+
+	return strings.Join(out, "\n")
+}
+
+// installationSnippet returns the Markdown code block equivalent to
+// the upstream <InstallationSnippet /> component for this converter's
+// version.
+func (c *Converter) installationSnippet() []string {
+	url := barmanManifestBase + "/latest/download/manifest.yaml"
+	if v := reSemver.FindString(c.version); v != "" {
+		url = barmanManifestBase + "/download/v" + v +
+			"/manifest.yaml"
+	}
+	return []string{
+		"```sh",
+		"kubectl apply -f \\",
+		"    " + url,
+		"```",
+	}
+}
+
 // docFrontmatter holds parsed YAML frontmatter from Docusaurus
 // markdown files.
 type docFrontmatter struct {
@@ -677,6 +787,7 @@ func (c *Converter) splitFile(filename string) error {
 		content = stripped
 	}
 	content = stripSPDXComment(content)
+	content = c.stripDocusaurusJSX(content)
 	baseDir := filepath.Dir(c.srcDir)
 	content = shared.ResolveSnippets(content, srcPath, baseDir)
 	content = convertDocusaurusAdmonitions(content)
@@ -765,7 +876,7 @@ func (c *Converter) splitFile(filename string) error {
 func (c *Converter) copyFiles(files []string) error {
 	hasIndex := false
 	for _, f := range files {
-		lower := strings.ToLower(f)
+		lower := strings.ToLower(normalizeOutName(f))
 		// Only top-level README/index counts as the site index
 		if lower == "readme.md" || lower == "index.md" {
 			hasIndex = true
@@ -791,6 +902,9 @@ func (c *Converter) copyFiles(files []string) error {
 
 		// Strip SPDX license comments
 		content = stripSPDXComment(content)
+
+		// Convert Docusaurus MDX JSX to Markdown
+		content = c.stripDocusaurusJSX(content)
 
 		srcPath := filepath.Join(c.srcDir, f)
 		baseDir := filepath.Dir(c.srcDir)
@@ -857,11 +971,11 @@ func (c *Converter) copyFiles(files []string) error {
 
 	// Second pass: write files and build file entries
 	for i, e := range entries {
-		outName := e.relPath
-		lower := strings.ToLower(filepath.Base(e.relPath))
+		outName := normalizeOutName(e.relPath)
+		lower := strings.ToLower(filepath.Base(outName))
 		if lower == "readme.md" {
 			outName = filepath.Join(
-				filepath.Dir(e.relPath), "index.md")
+				filepath.Dir(outName), "index.md")
 		}
 
 		if err := c.writeFile(outName, e.content); err != nil {

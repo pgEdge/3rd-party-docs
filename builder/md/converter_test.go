@@ -934,6 +934,122 @@ func TestConverterDocusaurusMixedOrdering(t *testing.T) {
 	}
 }
 
+func TestFindMarkdownFilesMDX(t *testing.T) {
+	dir := t.TempDir()
+	os.WriteFile(filepath.Join(dir, "intro.md"),
+		[]byte("# Intro\n"), 0644)
+	os.WriteFile(filepath.Join(dir, "installation.mdx"),
+		[]byte("# Install\n"), 0644)
+	os.WriteFile(filepath.Join(dir, "UPGRADES.MDX"),
+		[]byte("# Upgrades\n"), 0644)
+	os.WriteFile(filepath.Join(dir, "notes.txt"),
+		[]byte("nope\n"), 0644)
+
+	files, err := findMarkdownFiles(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(files) != 3 {
+		t.Fatalf("got %d files, want 3 (.md + .mdx): %v",
+			len(files), files)
+	}
+}
+
+func TestStripDocusaurusJSXInstallation(t *testing.T) {
+	c := NewConverter("", "", "Barman Cloud Plugin 0.13.0", false)
+	input := "# Installation\n\n" +
+		"import { InstallationSnippet } " +
+		"from '@site/src/components/Installation';\n\n" +
+		"Run this:\n\n<InstallationSnippet />\n\nDone.\n"
+	got := c.stripDocusaurusJSX(input)
+
+	if strings.Contains(got, "import {") ||
+		strings.Contains(got, "@site/src") {
+		t.Errorf("import line should be stripped:\n%s", got)
+	}
+	if strings.Contains(got, "<InstallationSnippet") {
+		t.Errorf("JSX component should be replaced:\n%s", got)
+	}
+	if !strings.Contains(got,
+		"releases/download/v0.13.0/manifest.yaml") {
+		t.Errorf("expected versioned kubectl URL:\n%s", got)
+	}
+	if !strings.Contains(got, "kubectl apply -f") {
+		t.Errorf("expected kubectl command:\n%s", got)
+	}
+	if !strings.Contains(got, "# Installation") ||
+		!strings.Contains(got, "Done.") {
+		t.Errorf("surrounding content should survive:\n%s", got)
+	}
+}
+
+func TestStripDocusaurusJSXDevFallback(t *testing.T) {
+	c := NewConverter("", "", "Barman Cloud Plugin dev", false)
+	got := c.stripDocusaurusJSX("<InstallationSnippet />\n")
+	if !strings.Contains(got, "releases/latest/download") {
+		t.Errorf("dev build should use latest URL:\n%s", got)
+	}
+}
+
+func TestStripDocusaurusJSXUnknownComponent(t *testing.T) {
+	c := NewConverter("", "", "Test v1", false)
+	got := c.stripDocusaurusJSX("Before\n\n<Tabs foo=\"bar\" />\n\nAfter\n")
+	if strings.Contains(got, "<Tabs") {
+		t.Errorf("unknown component should be dropped:\n%s", got)
+	}
+	if !strings.Contains(got, "Before") ||
+		!strings.Contains(got, "After") {
+		t.Errorf("surrounding content should survive:\n%s", got)
+	}
+	if len(c.Warnings()) == 0 {
+		t.Error("dropping unknown component should record a warning")
+	}
+}
+
+func TestStripDocusaurusJSXCodeBlockUntouched(t *testing.T) {
+	c := NewConverter("", "", "Test v1", false)
+	input := "```js\nimport x from 'y';\n```\n"
+	got := c.stripDocusaurusJSX(input)
+	if !strings.Contains(got, "import x from 'y';") {
+		t.Errorf("imports inside code blocks must survive:\n%s", got)
+	}
+}
+
+func TestConverterMDXCopy(t *testing.T) {
+	srcDir := t.TempDir()
+	outDir := t.TempDir()
+
+	os.WriteFile(filepath.Join(srcDir, "intro.md"),
+		[]byte("---\nsidebar_position: 10\ntitle: Intro\n---\n"+
+			"# Intro\n\nWelcome.\n"), 0644)
+	os.WriteFile(filepath.Join(srcDir, "installation.mdx"),
+		[]byte("---\nsidebar_position: 20\ntitle: Installation\n---\n"+
+			"# Installation\n\n"+
+			"import { InstallationSnippet } "+
+			"from '@site/src/components/Installation';\n\n"+
+			"<InstallationSnippet />\n"), 0644)
+
+	c := NewConverter(srcDir, outDir, "Barman Cloud Plugin 0.13.0", false)
+	if err := c.Convert(); err != nil {
+		t.Fatal(err)
+	}
+
+	// .mdx must be written as .md
+	data, err := os.ReadFile(filepath.Join(outDir, "installation.md"))
+	if err != nil {
+		t.Fatalf("installation.md not created (mdx->md): %v", err)
+	}
+	content := string(data)
+	if !strings.Contains(content,
+		"releases/download/v0.13.0/manifest.yaml") {
+		t.Errorf("install command missing from page:\n%s", content)
+	}
+	if _, err := os.Stat(
+		filepath.Join(outDir, "installation.mdx")); err == nil {
+		t.Error("output should not contain a .mdx file")
+	}
+}
+
 func TestConverterCopyImages(t *testing.T) {
 	srcDir := t.TempDir()
 	outDir := t.TempDir()
