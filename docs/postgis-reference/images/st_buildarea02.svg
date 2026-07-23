@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<rect width="200" height="200" fill="white"/>
+<polyline points="180.00,160.00 30.00,180.00 20.00,110.00" fill="none" stroke="#6495ED" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="180.00" cy="160.00" r="5" fill="#6495ED"/>
+<circle cx="20.00" cy="110.00" r="5" fill="#6495ED"/>
+<polyline points="180.00,160.00 160.00,40.00" fill="none" stroke="#6495ED" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="180.00" cy="160.00" r="5" fill="#6495ED"/>
+<circle cx="160.00" cy="40.00" r="5" fill="#6495ED"/>
+<polyline points="160.00,40.00 80.00,10.00 80.00,80.00 20.00,110.00" fill="none" stroke="#6495ED" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="160.00" cy="40.00" r="5" fill="#6495ED"/>
+<circle cx="20.00" cy="110.00" r="5" fill="#6495ED"/>
+<polyline points="80.00,140.00 120.00,70.00 150.00,120.00" fill="none" stroke="#6495ED" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="80.00" cy="140.00" r="5" fill="#6495ED"/>
+<circle cx="150.00" cy="120.00" r="5" fill="#6495ED"/>
+<polyline points="80.00,140.00 150.00,120.00" fill="none" stroke="#6495ED" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="80.00" cy="140.00" r="5" fill="#6495ED"/>
+<circle cx="150.00" cy="120.00" r="5" fill="#6495ED"/>
+</svg>
