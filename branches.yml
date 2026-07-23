@@ -619,3 +619,14 @@ branches:
     upstream: https://github.com/cloudnative-pg/cloudnative-pg.git
     ref: v1.30.0
     src_subdir: docs/src
+
+  # PostGIS — added by auto/sync-branches
+
+  - branch: postgis364
+    mode: xml
+    version: "3.6.4"
+    upstream: https://github.com/postgis/postgis.git
+    ref: 3.6.4
+    src_subdir: doc
+    site_prefix: "PostGIS"
+    img_symlink: "html/images/static"
