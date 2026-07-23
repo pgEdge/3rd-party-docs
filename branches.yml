@@ -190,6 +190,15 @@ branches:
     site_prefix: "PostGIS"
     img_symlink: html/images/static
 
+  - branch: postgis357
+    mode: xml
+    version: "3.5.7"
+    upstream: https://github.com/postgis/postgis.git
+    ref: "3.5.7"
+    src_subdir: doc
+    site_prefix: "PostGIS"
+    img_symlink: html/images/static
+
   - branch: postgis356
     mode: xml
     version: "3.5.6"
