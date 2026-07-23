@@ -1,0 +1,1763 @@
+<a id="Operators"></a>
+
+## Operators
+  <a id="operators-bbox"></a>
+
+## Bounding Box Operators
+  <a id="geometry_overlaps"></a>
+
+# &&
+
+Returns `TRUE` if A's 2D bounding box intersects B's 2D bounding box.
+
+## Synopsis
+
+
+```sql
+boolean &&(geometry
+
+				  A, geometry
+
+				  B)
+boolean &&(geography
+
+				  A, geography
+
+				  B)
+```
+
+
+## Description
+
+
+The `&&` operator returns `TRUE` if the 2D bounding box of geometry A intersects the 2D bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+Enhanced: 2.0.0 support for Polyhedral surfaces was introduced.
+
+
+Availability: 1.5.0 support for geography was introduced.
+
+
+## Examples
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 && tbl2.column2 AS overlaps
+FROM ( VALUES
+	(1, 'LINESTRING(0 0, 3 3)'::geometry),
+	(2, 'LINESTRING(0 1, 0 5)'::geometry)) AS tbl1,
+( VALUES
+	(3, 'LINESTRING(1 2, 4 6)'::geometry)) AS tbl2;
+
+ column1 | column1 | overlaps
+---------+---------+----------
+	   1 |       3 | t
+	   2 |       3 | f
+(2 rows)
+```
+
+
+## See Also
+
+
+ [ST_Intersects](spatial-relationships.md#ST_Intersects), [ST_Extent](bounding-box-functions.md#ST_Extent), [ST_Geometry_Overabove](#ST_Geometry_Overabove), [ST_Geometry_Overright](#ST_Geometry_Overright), [ST_Geometry_Overbelow](#ST_Geometry_Overbelow), [ST_Geometry_Overleft](#ST_Geometry_Overleft), [ST_Geometry_Contain](#ST_Geometry_Contain), [ST_Geometry_Contained](#ST_Geometry_Contained)
+  <a id="overlaps_geometry_box2df"></a>
+
+# &&(geometry,box2df)
+
+Returns `TRUE` if a geometry's (cached) 2D bounding box intersects a 2D float precision bounding box (BOX2DF).
+
+## Synopsis
+
+
+```sql
+boolean &&(geometry
+
+				  A, box2df
+
+				  B)
+```
+
+
+## Description
+
+
+The `&&` operator returns `TRUE` if the cached 2D bounding box of geometry A intersects the 2D bounding box B, using float precision. This means that if B is a (double precision) box2d, it will be internally converted to a float precision 2D bounding box (BOX2DF)
+
+
+!!! note
+
+    This operand is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+
+SELECT ST_Point(1,1) && ST_MakeBox2D(ST_Point(0,0), ST_Point(2,2)) AS overlaps;
+
+ overlaps
+----------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_box2df_geometry](#overlaps_box2df_geometry), [overlaps_box2df_box2df](#overlaps_box2df_box2df), [contains_geometry_box2df](#contains_geometry_box2df), [contains_box2df_geometry](#contains_box2df_geometry), [contains_box2df_box2df](#contains_box2df_box2df), [is_contained_geometry_box2df](#is_contained_geometry_box2df), [is_contained_box2df_geometry](#is_contained_box2df_geometry), [is_contained_box2df_box2df](#is_contained_box2df_box2df)
+  <a id="overlaps_box2df_geometry"></a>
+
+# &&(box2df,geometry)
+
+Returns `TRUE` if a 2D float precision bounding box (BOX2DF) intersects a geometry's (cached) 2D bounding box.
+
+## Synopsis
+
+
+```sql
+boolean &&(box2df
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `&&` operator returns `TRUE` if the 2D bounding box A intersects the cached 2D bounding box of geometry B, using float precision. This means that if A is a (double precision) box2d, it will be internally converted to a float precision 2D bounding box (BOX2DF)
+
+
+!!! note
+
+    This operand is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+
+SELECT ST_MakeBox2D(ST_Point(0,0), ST_Point(2,2)) && ST_Point(1,1) AS overlaps;
+
+ overlaps
+----------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_geometry_box2df](#overlaps_geometry_box2df), [overlaps_box2df_box2df](#overlaps_box2df_box2df), [contains_geometry_box2df](#contains_geometry_box2df), [contains_box2df_geometry](#contains_box2df_geometry), [contains_box2df_box2df](#contains_box2df_box2df), [is_contained_geometry_box2df](#is_contained_geometry_box2df), [is_contained_box2df_geometry](#is_contained_box2df_geometry), [is_contained_box2df_box2df](#is_contained_box2df_box2df)
+  <a id="overlaps_box2df_box2df"></a>
+
+# &&(box2df,box2df)
+
+Returns `TRUE` if two 2D float precision bounding boxes (BOX2DF) intersect each other.
+
+## Synopsis
+
+
+```sql
+boolean &&(box2df
+
+				  A, box2df
+
+				  B)
+```
+
+
+## Description
+
+
+The `&&` operator returns `TRUE` if two 2D bounding boxes A and B intersect each other, using float precision. This means that if A (or B) is a (double precision) box2d, it will be internally converted to a float precision 2D bounding box (BOX2DF)
+
+
+!!! note
+
+    This operator is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+
+SELECT ST_MakeBox2D(ST_Point(0,0), ST_Point(2,2)) && ST_MakeBox2D(ST_Point(1,1), ST_Point(3,3)) AS overlaps;
+
+ overlaps
+----------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_geometry_box2df](#overlaps_geometry_box2df), [overlaps_box2df_geometry](#overlaps_box2df_geometry), [contains_geometry_box2df](#contains_geometry_box2df), [contains_box2df_geometry](#contains_box2df_geometry), [contains_box2df_box2df](#contains_box2df_box2df), [is_contained_geometry_box2df](#is_contained_geometry_box2df), [is_contained_box2df_geometry](#is_contained_box2df_geometry), [is_contained_box2df_box2df](#is_contained_box2df_box2df)
+  <a id="geometry_overlaps_nd"></a>
+
+# &&&
+
+Returns `TRUE` if A's n-D bounding box intersects B's n-D bounding box.
+
+## Synopsis
+
+
+```sql
+boolean &&&(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `&&&` operator returns `TRUE` if the n-D bounding box of geometry A intersects the n-D bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+Availability: 2.0.0
+
+
+## Examples: 3D LineStrings
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 &&& tbl2.column2 AS overlaps_3d,
+			            tbl1.column2 && tbl2.column2 AS overlaps_2d
+FROM ( VALUES
+	(1, 'LINESTRING Z(0 0 1, 3 3 2)'::geometry),
+	(2, 'LINESTRING Z(1 2 0, 0 5 -1)'::geometry)) AS tbl1,
+( VALUES
+	(3, 'LINESTRING Z(1 2 1, 4 6 1)'::geometry)) AS tbl2;
+
+ column1 | column1 | overlaps_3d | overlaps_2d
+---------+---------+-------------+-------------
+       1 |       3 | t           | t
+       2 |       3 | f           | t
+```
+
+
+## Examples: 3M LineStrings
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 &&& tbl2.column2 AS overlaps_3zm,
+			            tbl1.column2 && tbl2.column2 AS overlaps_2d
+FROM ( VALUES
+	(1, 'LINESTRING M(0 0 1, 3 3 2)'::geometry),
+	(2, 'LINESTRING M(1 2 0, 0 5 -1)'::geometry)) AS tbl1,
+( VALUES
+	(3, 'LINESTRING M(1 2 1, 4 6 1)'::geometry)) AS tbl2;
+
+ column1 | column1 | overlaps_3zm | overlaps_2d
+---------+---------+-------------+-------------
+       1 |       3 | t           | t
+       2 |       3 | f           | t
+```
+
+
+## See Also
+
+
+[geometry_overlaps](#geometry_overlaps)
+  <a id="overlaps_nd_geometry_gidx"></a>
+
+# &&&(geometry,gidx)
+
+Returns `TRUE` if a geometry's (cached) n-D bounding box intersects a n-D float precision bounding box (GIDX).
+
+## Synopsis
+
+
+```sql
+boolean &&&(geometry
+
+				  A, gidx
+
+				  B)
+```
+
+
+## Description
+
+
+The `&&&` operator returns `TRUE` if the cached n-D bounding box of geometry A intersects the n-D bounding box B, using float precision. This means that if B is a (double precision) box3d, it will be internally converted to a float precision 3D bounding box (GIDX)
+
+
+!!! note
+
+    This operator is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+
+SELECT ST_MakePoint(1,1,1) &&& ST_3DMakeBox(ST_MakePoint(0,0,0), ST_MakePoint(2,2,2)) AS overlaps;
+
+ overlaps
+----------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_nd_gidx_geometry](#overlaps_nd_gidx_geometry), [overlaps_nd_gidx_gidx](#overlaps_nd_gidx_gidx)
+  <a id="overlaps_nd_gidx_geometry"></a>
+
+# &&&(gidx,geometry)
+
+Returns `TRUE` if a n-D float precision bounding box (GIDX) intersects a geometry's (cached) n-D bounding box.
+
+## Synopsis
+
+
+```sql
+boolean &&&(gidx
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `&&&` operator returns `TRUE` if the n-D bounding box A intersects the cached n-D bounding box of geometry B, using float precision. This means that if A is a (double precision) box3d, it will be internally converted to a float precision 3D bounding box (GIDX)
+
+
+!!! note
+
+    This operator is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+
+SELECT ST_3DMakeBox(ST_MakePoint(0,0,0), ST_MakePoint(2,2,2)) &&& ST_MakePoint(1,1,1) AS overlaps;
+
+ overlaps
+----------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_nd_geometry_gidx](#overlaps_nd_geometry_gidx), [overlaps_nd_gidx_gidx](#overlaps_nd_gidx_gidx)
+  <a id="overlaps_nd_gidx_gidx"></a>
+
+# &&&(gidx,gidx)
+
+Returns `TRUE` if two n-D float precision bounding boxes (GIDX) intersect each other.
+
+## Synopsis
+
+
+```sql
+boolean &&&(gidx
+
+				  A, gidx
+
+				  B)
+```
+
+
+## Description
+
+
+The `&&&` operator returns `TRUE` if two n-D bounding boxes A and B intersect each other, using float precision. This means that if A (or B) is a (double precision) box3d, it will be internally converted to a float precision 3D bounding box (GIDX)
+
+
+!!! note
+
+    This operator is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+
+SELECT ST_3DMakeBox(ST_MakePoint(0,0,0), ST_MakePoint(2,2,2)) &&& ST_3DMakeBox(ST_MakePoint(1,1,1), ST_MakePoint(3,3,3)) AS overlaps;
+
+ overlaps
+----------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_nd_geometry_gidx](#overlaps_nd_geometry_gidx), [overlaps_nd_gidx_geometry](#overlaps_nd_gidx_geometry)
+  <a id="ST_Geometry_Overleft"></a>
+
+# &<
+
+Returns `TRUE` if A's bounding box overlaps or is to the left of B's.
+
+## Synopsis
+
+
+```sql
+boolean &<(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `&<` operator returns `TRUE` if the bounding box of geometry A overlaps or is to the left of the bounding box of geometry B, or more accurately, overlaps or is NOT to the right of the bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+## Examples
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 &< tbl2.column2 AS overleft
+FROM
+  ( VALUES
+	(1, 'LINESTRING(1 2, 4 6)'::geometry)) AS tbl1,
+  ( VALUES
+	(2, 'LINESTRING(0 0, 3 3)'::geometry),
+	(3, 'LINESTRING(0 1, 0 5)'::geometry),
+	(4, 'LINESTRING(6 0, 6 1)'::geometry)) AS tbl2;
+
+ column1 | column1 | overleft
+---------+---------+----------
+	   1 |       2 | f
+	   1 |       3 | f
+	   1 |       4 | t
+(3 rows)
+```
+
+
+## See Also
+
+
+ [geometry_overlaps](#geometry_overlaps), [ST_Geometry_Overabove](#ST_Geometry_Overabove), [ST_Geometry_Overright](#ST_Geometry_Overright), [ST_Geometry_Overbelow](#ST_Geometry_Overbelow)
+  <a id="ST_Geometry_Overbelow"></a>
+
+# &<|
+
+Returns `TRUE` if A's bounding box overlaps or is below B's.
+
+## Synopsis
+
+
+```sql
+boolean &<|(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `&<|` operator returns `TRUE` if the bounding box of geometry A overlaps or is below of the bounding box of geometry B, or more accurately, overlaps or is NOT above the bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+## Examples
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 &<| tbl2.column2 AS overbelow
+FROM
+  ( VALUES
+	(1, 'LINESTRING(6 0, 6 4)'::geometry)) AS tbl1,
+  ( VALUES
+	(2, 'LINESTRING(0 0, 3 3)'::geometry),
+	(3, 'LINESTRING(0 1, 0 5)'::geometry),
+	(4, 'LINESTRING(1 2, 4 6)'::geometry)) AS tbl2;
+
+ column1 | column1 | overbelow
+---------+---------+-----------
+	   1 |       2 | f
+	   1 |       3 | t
+	   1 |       4 | t
+(3 rows)
+```
+
+
+## See Also
+
+
+ [geometry_overlaps](#geometry_overlaps), [ST_Geometry_Overabove](#ST_Geometry_Overabove), [ST_Geometry_Overright](#ST_Geometry_Overright), [ST_Geometry_Overleft](#ST_Geometry_Overleft)
+  <a id="ST_Geometry_Overright"></a>
+
+# &>
+
+Returns `TRUE` if A' bounding box overlaps or is to the right of B's.
+
+## Synopsis
+
+
+```sql
+boolean &>(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `&>` operator returns `TRUE` if the bounding box of geometry A overlaps or is to the right of the bounding box of geometry B, or more accurately, overlaps or is NOT to the left of the bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+## Examples
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 &> tbl2.column2 AS overright
+FROM
+  ( VALUES
+	(1, 'LINESTRING(1 2, 4 6)'::geometry)) AS tbl1,
+  ( VALUES
+	(2, 'LINESTRING(0 0, 3 3)'::geometry),
+	(3, 'LINESTRING(0 1, 0 5)'::geometry),
+	(4, 'LINESTRING(6 0, 6 1)'::geometry)) AS tbl2;
+
+ column1 | column1 | overright
+---------+---------+-----------
+	   1 |       2 | t
+	   1 |       3 | t
+	   1 |       4 | f
+(3 rows)
+```
+
+
+## See Also
+
+
+ [geometry_overlaps](#geometry_overlaps), [ST_Geometry_Overabove](#ST_Geometry_Overabove), [ST_Geometry_Overbelow](#ST_Geometry_Overbelow), [ST_Geometry_Overleft](#ST_Geometry_Overleft)
+  <a id="ST_Geometry_Left"></a>
+
+# <<
+
+Returns `TRUE` if A's bounding box is strictly to the left of B's.
+
+## Synopsis
+
+
+```sql
+boolean <<(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `<<` operator returns `TRUE` if the bounding box of geometry A is strictly to the left of the bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+## Examples
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 << tbl2.column2 AS left
+FROM
+  ( VALUES
+	(1, 'LINESTRING (1 2, 1 5)'::geometry)) AS tbl1,
+  ( VALUES
+	(2, 'LINESTRING (0 0, 4 3)'::geometry),
+	(3, 'LINESTRING (6 0, 6 5)'::geometry),
+	(4, 'LINESTRING (2 2, 5 6)'::geometry)) AS tbl2;
+
+ column1 | column1 | left
+---------+---------+------
+	   1 |       2 | f
+	   1 |       3 | t
+	   1 |       4 | t
+(3 rows)
+```
+
+
+## See Also
+
+
+[ST_Geometry_Right](#ST_Geometry_Right), [ST_Geometry_Above](#ST_Geometry_Above), [ST_Geometry_Below](#ST_Geometry_Below)
+  <a id="ST_Geometry_Below"></a>
+
+# <<|
+
+Returns `TRUE` if A's bounding box is strictly below B's.
+
+## Synopsis
+
+
+```sql
+boolean <<|(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `<<|` operator returns `TRUE` if the bounding box of geometry A is strictly below the bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+## Examples
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 <<| tbl2.column2 AS below
+FROM
+  ( VALUES
+	(1, 'LINESTRING (0 0, 4 3)'::geometry)) AS tbl1,
+  ( VALUES
+	(2, 'LINESTRING (1 4, 1 7)'::geometry),
+	(3, 'LINESTRING (6 1, 6 5)'::geometry),
+	(4, 'LINESTRING (2 3, 5 6)'::geometry)) AS tbl2;
+
+ column1 | column1 | below
+---------+---------+-------
+	   1 |       2 | t
+	   1 |       3 | f
+	   1 |       4 | f
+(3 rows)
+```
+
+
+## See Also
+
+
+[ST_Geometry_Left](#ST_Geometry_Left), [ST_Geometry_Right](#ST_Geometry_Right), [ST_Geometry_Above](#ST_Geometry_Above)
+  <a id="ST_Geometry_EQ"></a>
+
+# =
+
+Returns `TRUE` if the coordinates and coordinate order geometry/geography A are the same as the coordinates and coordinate order of geometry/geography B.
+
+## Synopsis
+
+
+```sql
+boolean =(geometry
+
+				  A, geometry
+
+				  B)
+boolean =(geography
+
+					  A, geography
+
+					  B)
+```
+
+
+## Description
+
+
+The `=` operator returns `TRUE` if the coordinates and coordinate order geometry/geography A are the same as the coordinates and coordinate order of geometry/geography B. PostgreSQL uses the =, <, and > operators defined for geometries to perform internal orderings and comparison of geometries (ie. in a GROUP BY or ORDER BY clause).
+
+
+!!! note
+
+    Only geometry/geography that are exactly equal in all respects, with the same coordinates, in the same order, are considered equal by this operator. For "spatial equality", that ignores things like coordinate order, and can detect features that cover the same spatial area with different representations, use [ST_OrderingEquals](spatial-relationships.md#ST_OrderingEquals) or [ST_Equals](spatial-relationships.md#ST_Equals)
+
+
+!!! caution
+
+    This operand will NOT make use of any indexes that may be available on the geometries. For an index assisted exact equality test, combine = with &&.
+
+
+Changed: 2.4.0, in prior versions this was bounding box equality not a geometric equality. If you need bounding box equality, use [ST_Geometry_Same](#ST_Geometry_Same) instead.
+
+
+## Examples
+
+
+```sql
+
+SELECT 'LINESTRING(0 0, 0 1, 1 0)'::geometry = 'LINESTRING(1 1, 0 0)'::geometry;
+ ?column?
+----------
+ f
+(1 row)
+
+SELECT ST_AsText(column1)
+FROM ( VALUES
+	('LINESTRING(0 0, 1 1)'::geometry),
+	('LINESTRING(1 1, 0 0)'::geometry)) AS foo;
+	  st_astext
+---------------------
+ LINESTRING(0 0,1 1)
+ LINESTRING(1 1,0 0)
+(2 rows)
+
+-- Note: the GROUP BY uses the "=" to compare for geometry equivalency.
+SELECT ST_AsText(column1)
+FROM ( VALUES
+	('LINESTRING(0 0, 1 1)'::geometry),
+	('LINESTRING(1 1, 0 0)'::geometry)) AS foo
+GROUP BY column1;
+      st_astext
+---------------------
+ LINESTRING(0 0,1 1)
+ LINESTRING(1 1,0 0)
+(2 rows)
+
+-- In versions prior to 2.0, this used to return true --
+ SELECT ST_GeomFromText('POINT(1707296.37 4820536.77)') =
+	ST_GeomFromText('POINT(1707296.27 4820536.87)') As pt_intersect;
+
+--pt_intersect --
+f
+```
+
+
+## See Also
+
+
+[ST_Equals](spatial-relationships.md#ST_Equals), [ST_OrderingEquals](spatial-relationships.md#ST_OrderingEquals), [ST_Geometry_Same](#ST_Geometry_Same)
+  <a id="ST_Geometry_Right"></a>
+
+# >>
+
+Returns `TRUE` if A's bounding box is strictly to the right of B's.
+
+## Synopsis
+
+
+```sql
+boolean >>(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `>>` operator returns `TRUE` if the bounding box of geometry A is strictly to the right of the bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+## Examples
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 >> tbl2.column2 AS right
+FROM
+  ( VALUES
+	(1, 'LINESTRING (2 3, 5 6)'::geometry)) AS tbl1,
+  ( VALUES
+	(2, 'LINESTRING (1 4, 1 7)'::geometry),
+	(3, 'LINESTRING (6 1, 6 5)'::geometry),
+	(4, 'LINESTRING (0 0, 4 3)'::geometry)) AS tbl2;
+
+ column1 | column1 | right
+---------+---------+-------
+	   1 |       2 | t
+	   1 |       3 | f
+	   1 |       4 | f
+(3 rows)
+```
+
+
+## See Also
+
+
+[ST_Geometry_Left](#ST_Geometry_Left), [ST_Geometry_Above](#ST_Geometry_Above), [ST_Geometry_Below](#ST_Geometry_Below)
+  <a id="ST_Geometry_Contained"></a>
+
+# @
+
+Returns `TRUE` if A's bounding box is contained by B's.
+
+## Synopsis
+
+
+```sql
+boolean @(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `@` operator returns `TRUE` if the bounding box of geometry A is completely contained by the bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+## Examples
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 @ tbl2.column2 AS contained
+FROM
+  ( VALUES
+	(1, 'LINESTRING (1 1, 3 3)'::geometry)) AS tbl1,
+  ( VALUES
+	(2, 'LINESTRING (0 0, 4 4)'::geometry),
+	(3, 'LINESTRING (2 2, 4 4)'::geometry),
+	(4, 'LINESTRING (1 1, 3 3)'::geometry)) AS tbl2;
+
+ column1 | column1 | contained
+---------+---------+-----------
+	   1 |       2 | t
+	   1 |       3 | f
+	   1 |       4 | t
+(3 rows)
+```
+
+
+## See Also
+
+
+[ST_Geometry_Contain](#ST_Geometry_Contain), [geometry_overlaps](#geometry_overlaps)
+  <a id="is_contained_geometry_box2df"></a>
+
+# @(geometry,box2df)
+
+Returns `TRUE` if a geometry's 2D bounding box is contained into a 2D float precision bounding box (BOX2DF).
+
+## Synopsis
+
+
+```sql
+boolean @(geometry
+
+				  A, box2df
+
+				  B)
+```
+
+
+## Description
+
+
+The `@` operator returns `TRUE` if the A geometry's 2D bounding box is contained the 2D bounding box B, using float precision. This means that if B is a (double precision) box2d, it will be internally converted to a float precision 2D bounding box (BOX2DF)
+
+
+!!! note
+
+    This operand is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+SELECT ST_Buffer(ST_GeomFromText('POINT(2 2)'), 1) @ ST_MakeBox2D(ST_Point(0,0), ST_Point(5,5)) AS is_contained;
+
+ is_contained
+--------------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_geometry_box2df](#overlaps_geometry_box2df), [overlaps_box2df_geometry](#overlaps_box2df_geometry), [overlaps_box2df_box2df](#overlaps_box2df_box2df), [contains_geometry_box2df](#contains_geometry_box2df), [contains_box2df_geometry](#contains_box2df_geometry), [contains_box2df_box2df](#contains_box2df_box2df), [is_contained_box2df_geometry](#is_contained_box2df_geometry), [is_contained_box2df_box2df](#is_contained_box2df_box2df)
+  <a id="is_contained_box2df_geometry"></a>
+
+# @(box2df,geometry)
+
+Returns `TRUE` if a 2D float precision bounding box (BOX2DF) is contained into a geometry's 2D bounding box.
+
+## Synopsis
+
+
+```sql
+boolean @(box2df
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `@` operator returns `TRUE` if the 2D bounding box A is contained into the B geometry's 2D bounding box, using float precision. This means that if B is a (double precision) box2d, it will be internally converted to a float precision 2D bounding box (BOX2DF)
+
+
+!!! note
+
+    This operand is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+SELECT ST_MakeBox2D(ST_Point(2,2), ST_Point(3,3)) @ ST_Buffer(ST_GeomFromText('POINT(1 1)'), 10) AS is_contained;
+
+ is_contained
+--------------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_geometry_box2df](#overlaps_geometry_box2df), [overlaps_box2df_geometry](#overlaps_box2df_geometry), [overlaps_box2df_box2df](#overlaps_box2df_box2df), [contains_geometry_box2df](#contains_geometry_box2df), [contains_box2df_geometry](#contains_box2df_geometry), [contains_box2df_box2df](#contains_box2df_box2df), [is_contained_geometry_box2df](#is_contained_geometry_box2df), [is_contained_box2df_box2df](#is_contained_box2df_box2df)
+  <a id="is_contained_box2df_box2df"></a>
+
+# @(box2df,box2df)
+
+Returns `TRUE` if a 2D float precision bounding box (BOX2DF) is contained into another 2D float precision bounding box.
+
+## Synopsis
+
+
+```sql
+boolean @(box2df
+
+				  A, box2df
+
+				  B)
+```
+
+
+## Description
+
+
+The `@` operator returns `TRUE` if the 2D bounding box A is contained into the 2D bounding box B, using float precision. This means that if A (or B) is a (double precision) box2d, it will be internally converted to a float precision 2D bounding box (BOX2DF)
+
+
+!!! note
+
+    This operand is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+SELECT ST_MakeBox2D(ST_Point(2,2), ST_Point(3,3)) @ ST_MakeBox2D(ST_Point(0,0), ST_Point(5,5)) AS is_contained;
+
+ is_contained
+--------------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_geometry_box2df](#overlaps_geometry_box2df), [overlaps_box2df_geometry](#overlaps_box2df_geometry), [overlaps_box2df_box2df](#overlaps_box2df_box2df), [contains_geometry_box2df](#contains_geometry_box2df), [contains_box2df_geometry](#contains_box2df_geometry), [contains_box2df_box2df](#contains_box2df_box2df), [is_contained_geometry_box2df](#is_contained_geometry_box2df), [is_contained_box2df_geometry](#is_contained_box2df_geometry)
+  <a id="ST_Geometry_Overabove"></a>
+
+# |&>
+
+Returns `TRUE` if A's bounding box overlaps or is above B's.
+
+## Synopsis
+
+
+```sql
+boolean |&>(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `|&>` operator returns `TRUE` if the bounding box of geometry A overlaps or is above the bounding box of geometry B, or more accurately, overlaps or is NOT below the bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+## Examples
+
+
+```sql
+
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 |&> tbl2.column2 AS overabove
+FROM
+  ( VALUES
+	(1, 'LINESTRING(6 0, 6 4)'::geometry)) AS tbl1,
+  ( VALUES
+	(2, 'LINESTRING(0 0, 3 3)'::geometry),
+	(3, 'LINESTRING(0 1, 0 5)'::geometry),
+	(4, 'LINESTRING(1 2, 4 6)'::geometry)) AS tbl2;
+
+ column1 | column1 | overabove
+---------+---------+-----------
+	   1 |       2 | t
+	   1 |       3 | f
+	   1 |       4 | f
+(3 rows)
+```
+
+
+## See Also
+
+
+ [geometry_overlaps](#geometry_overlaps), [ST_Geometry_Overright](#ST_Geometry_Overright), [ST_Geometry_Overbelow](#ST_Geometry_Overbelow), [ST_Geometry_Overleft](#ST_Geometry_Overleft)
+  <a id="ST_Geometry_Above"></a>
+
+# |>>
+
+Returns `TRUE` if A's bounding box is strictly above B's.
+
+## Synopsis
+
+
+```sql
+boolean |>>(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `|>>` operator returns `TRUE` if the bounding box of geometry A is strictly above the bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+## Examples
+
+
+```sql
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 |>> tbl2.column2 AS above
+FROM
+  ( VALUES
+	(1, 'LINESTRING (1 4, 1 7)'::geometry)) AS tbl1,
+  ( VALUES
+	(2, 'LINESTRING (0 0, 4 2)'::geometry),
+	(3, 'LINESTRING (6 1, 6 5)'::geometry),
+	(4, 'LINESTRING (2 3, 5 6)'::geometry)) AS tbl2;
+
+ column1 | column1 | above
+---------+---------+-------
+	   1 |       2 | t
+	   1 |       3 | f
+	   1 |       4 | f
+(3 rows)
+```
+
+
+## See Also
+
+
+[ST_Geometry_Left](#ST_Geometry_Left), [ST_Geometry_Right](#ST_Geometry_Right), [ST_Geometry_Below](#ST_Geometry_Below)
+  <a id="ST_Geometry_Contain"></a>
+
+# ~
+
+Returns `TRUE` if A's bounding box contains B's.
+
+## Synopsis
+
+
+```sql
+boolean ~(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `~` operator returns `TRUE` if the bounding box of geometry A completely contains the bounding box of geometry B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+## Examples
+
+
+```sql
+SELECT tbl1.column1, tbl2.column1, tbl1.column2 ~ tbl2.column2 AS contains
+FROM
+  ( VALUES
+	(1, 'LINESTRING (0 0, 3 3)'::geometry)) AS tbl1,
+  ( VALUES
+	(2, 'LINESTRING (0 0, 4 4)'::geometry),
+	(3, 'LINESTRING (1 1, 2 2)'::geometry),
+	(4, 'LINESTRING (0 0, 3 3)'::geometry)) AS tbl2;
+
+ column1 | column1 | contains
+---------+---------+----------
+	   1 |       2 | f
+	   1 |       3 | t
+	   1 |       4 | t
+(3 rows)
+```
+
+
+## See Also
+
+
+[ST_Geometry_Contained](#ST_Geometry_Contained), [geometry_overlaps](#geometry_overlaps)
+  <a id="contains_geometry_box2df"></a>
+
+# ~(geometry,box2df)
+
+Returns `TRUE` if a geometry's 2D bonding box contains a 2D float precision bounding box (GIDX).
+
+## Synopsis
+
+
+```sql
+boolean ~(geometry
+
+				  A, box2df
+
+				  B)
+```
+
+
+## Description
+
+
+The `~` operator returns `TRUE` if the 2D bounding box of a geometry A contains the 2D bounding box B, using float precision. This means that if B is a (double precision) box2d, it will be internally converted to a float precision 2D bounding box (BOX2DF)
+
+
+!!! note
+
+    This operand is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+SELECT ST_Buffer(ST_GeomFromText('POINT(1 1)'), 10) ~ ST_MakeBox2D(ST_Point(0,0), ST_Point(2,2)) AS contains;
+
+ contains
+----------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_geometry_box2df](#overlaps_geometry_box2df), [overlaps_box2df_geometry](#overlaps_box2df_geometry), [overlaps_box2df_box2df](#overlaps_box2df_box2df), [contains_box2df_geometry](#contains_box2df_geometry), [contains_box2df_box2df](#contains_box2df_box2df), [is_contained_geometry_box2df](#is_contained_geometry_box2df), [is_contained_box2df_geometry](#is_contained_box2df_geometry), [is_contained_box2df_box2df](#is_contained_box2df_box2df)
+  <a id="contains_box2df_geometry"></a>
+
+# ~(box2df,geometry)
+
+Returns `TRUE` if a 2D float precision bounding box (BOX2DF) contains a geometry's 2D bonding box.
+
+## Synopsis
+
+
+```sql
+boolean ~(box2df
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `~` operator returns `TRUE` if the 2D bounding box A contains the B geometry's bounding box, using float precision. This means that if A is a (double precision) box2d, it will be internally converted to a float precision 2D bounding box (BOX2DF)
+
+
+!!! note
+
+    This operand is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+SELECT ST_MakeBox2D(ST_Point(0,0), ST_Point(5,5)) ~ ST_Buffer(ST_GeomFromText('POINT(2 2)'), 1) AS contains;
+
+ contains
+----------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_geometry_box2df](#overlaps_geometry_box2df), [overlaps_box2df_geometry](#overlaps_box2df_geometry), [overlaps_box2df_box2df](#overlaps_box2df_box2df), [contains_geometry_box2df](#contains_geometry_box2df), [contains_box2df_box2df](#contains_box2df_box2df), [is_contained_geometry_box2df](#is_contained_geometry_box2df), [is_contained_box2df_geometry](#is_contained_box2df_geometry), [is_contained_box2df_box2df](#is_contained_box2df_box2df)
+  <a id="contains_box2df_box2df"></a>
+
+# ~(box2df,box2df)
+
+Returns `TRUE` if a 2D float precision bounding box (BOX2DF) contains another 2D float precision bounding box (BOX2DF).
+
+## Synopsis
+
+
+```sql
+boolean ~(box2df
+
+				  A, box2df
+
+				  B)
+```
+
+
+## Description
+
+
+The `~` operator returns `TRUE` if the 2D bounding box A contains the 2D bounding box B, using float precision. This means that if A is a (double precision) box2d, it will be internally converted to a float precision 2D bounding box (BOX2DF)
+
+
+!!! note
+
+    This operand is intended to be used internally by BRIN indexes, more than by users.
+
+
+Availability: 2.3.0 support for Block Range INdexes (BRIN) was introduced. Requires PostgreSQL 9.5+.
+
+
+## Examples
+
+
+```sql
+SELECT ST_MakeBox2D(ST_Point(0,0), ST_Point(5,5)) ~ ST_MakeBox2D(ST_Point(2,2), ST_Point(3,3)) AS contains;
+
+ contains
+----------
+ t
+(1 row)
+```
+
+
+## See Also
+
+
+ [overlaps_geometry_box2df](#overlaps_geometry_box2df), [overlaps_box2df_geometry](#overlaps_box2df_geometry), [overlaps_box2df_box2df](#overlaps_box2df_box2df), [contains_geometry_box2df](#contains_geometry_box2df), [contains_box2df_geometry](#contains_box2df_geometry), [is_contained_geometry_box2df](#is_contained_geometry_box2df), [is_contained_box2df_geometry](#is_contained_box2df_geometry), [is_contained_box2df_box2df](#is_contained_box2df_box2df)
+  <a id="ST_Geometry_Same"></a>
+
+# ~=
+
+Returns `TRUE` if A's bounding box is the same as B's.
+
+## Synopsis
+
+
+```sql
+boolean ~=(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `~=` operator returns `TRUE` if the bounding box of geometry/geography A is the same as the bounding box of geometry/geography B.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries.
+
+
+Availability: 1.5.0 changed behavior
+
+
+!!! warning
+
+    This operator has changed behavior in PostGIS 1.5 from testing for actual geometric equality to only checking for bounding box equality. To complicate things it also depends on if you have done a hard or soft upgrade which behavior your database has. To find out which behavior your database has you can run the query below. To check for true equality use [ST_OrderingEquals](spatial-relationships.md#ST_OrderingEquals) or [ST_Equals](spatial-relationships.md#ST_Equals).
+
+
+## Examples
+
+
+```
+
+
+select 'LINESTRING(0 0, 1 1)'::geometry ~= 'LINESTRING(0 1, 1 0)'::geometry as equality;
+ equality   |
+-----------------+
+          t    |
+
+```
+
+
+## See Also
+
+
+[ST_Equals](spatial-relationships.md#ST_Equals), [ST_OrderingEquals](spatial-relationships.md#ST_OrderingEquals), [ST_Geometry_EQ](#ST_Geometry_EQ)
+    <a id="operators-distance"></a>
+
+## Distance Operators
+  <a id="geometry_distance_knn"></a>
+
+# <->
+
+Returns the 2D distance between A and B.
+
+## Synopsis
+
+
+```sql
+double precision <->(geometry
+
+				  A, geometry
+
+				  B)
+double precision <->(geography
+
+				  A, geography
+
+				  B)
+```
+
+
+## Description
+
+
+ The `<->` operator returns the 2D distance between two geometries. Used in the "ORDER BY" clause provides index-assisted nearest-neighbor result sets. For PostgreSQL below 9.5 only gives centroid distance of bounding boxes and for PostgreSQL 9.5+, does true KNN distance search giving true distance between geometries, and distance sphere for geographies.
+
+
+!!! note
+
+    This operand will make use of 2D GiST indexes that may be available on the geometries. It is different from other operators that use spatial indexes in that the spatial index is only used when the operator is in the ORDER BY clause.
+
+
+!!! note
+
+    Index only kicks in if one of the geometries is a constant (not in a subquery/cte). e.g. 'SRID=3005;POINT(1011102 450541)'::geometry instead of a.geom
+
+
+Refer to [PostGIS workshop: Nearest-Neighbor Searching](https://postgis.net/workshops/postgis-intro/knn.html) for a detailed example.
+
+
+Enhanced: 2.2.0 -- True KNN ("K nearest neighbor") behavior for geometry and geography for PostgreSQL 9.5+. Note for geography KNN is based on sphere rather than spheroid. For PostgreSQL 9.4 and below, geography support is new but only supports centroid box.
+
+
+Changed: 2.2.0 -- For PostgreSQL 9.5 users, old Hybrid syntax may be slower, so you'll want to get rid of that hack if you are running your code only on PostGIS 2.2+ 9.5+. See examples below.
+
+
+Availability: 2.0.0 -- Weak KNN provides nearest neighbors based on geometry centroid distances instead of true distances. Exact results for points, inexact for all other types. Available for PostgreSQL 9.1+
+
+
+## Examples
+
+
+```sql
+SELECT ST_Distance(geom, 'SRID=3005;POINT(1011102 450541)'::geometry) as d,edabbr, vaabbr
+FROM va2005
+ORDER BY d limit 10;
+
+        d         | edabbr | vaabbr
+------------------+--------+--------
+                0 | ALQ    | 128
+ 5541.57712511724 | ALQ    | 129A
+ 5579.67450712005 | ALQ    | 001
+  6083.4207708641 | ALQ    | 131
+  7691.2205404848 | ALQ    | 003
+ 7900.75451037313 | ALQ    | 122
+ 8694.20710669982 | ALQ    | 129B
+ 9564.24289057111 | ALQ    | 130
+  12089.665931705 | ALQ    | 127
+ 18472.5531479404 | ALQ    | 002
+(10 rows)
+```
+
+
+ Then the KNN raw answer:
+
+
+```sql
+
+SELECT st_distance(geom, 'SRID=3005;POINT(1011102 450541)'::geometry) as d,edabbr, vaabbr
+FROM va2005
+ORDER BY geom <-> 'SRID=3005;POINT(1011102 450541)'::geometry limit 10;
+
+        d         | edabbr | vaabbr
+------------------+--------+--------
+                0 | ALQ    | 128
+ 5541.57712511724 | ALQ    | 129A
+ 5579.67450712005 | ALQ    | 001
+  6083.4207708641 | ALQ    | 131
+  7691.2205404848 | ALQ    | 003
+ 7900.75451037313 | ALQ    | 122
+ 8694.20710669982 | ALQ    | 129B
+ 9564.24289057111 | ALQ    | 130
+  12089.665931705 | ALQ    | 127
+ 18472.5531479404 | ALQ    | 002
+(10 rows)
+```
+
+
+ If you run "EXPLAIN ANALYZE" on the two queries you would see a performance improvement for the second.
+
+
+ For users running with PostgreSQL < 9.5, use a hybrid query to find the true nearest neighbors. First a CTE query using the index-assisted KNN, then an exact query to get correct ordering:
+
+
+```sql
+
+WITH index_query AS (
+  SELECT ST_Distance(geom, 'SRID=3005;POINT(1011102 450541)'::geometry) as d,edabbr, vaabbr
+	FROM va2005
+  ORDER BY geom <-> 'SRID=3005;POINT(1011102 450541)'::geometry LIMIT 100)
+  SELECT *
+	FROM index_query
+  ORDER BY d limit 10;
+
+        d         | edabbr | vaabbr
+------------------+--------+--------
+                0 | ALQ    | 128
+ 5541.57712511724 | ALQ    | 129A
+ 5579.67450712005 | ALQ    | 001
+  6083.4207708641 | ALQ    | 131
+  7691.2205404848 | ALQ    | 003
+ 7900.75451037313 | ALQ    | 122
+ 8694.20710669982 | ALQ    | 129B
+ 9564.24289057111 | ALQ    | 130
+  12089.665931705 | ALQ    | 127
+ 18472.5531479404 | ALQ    | 002
+(10 rows)
+```
+
+
+## See Also
+
+
+[ST_DWithin](spatial-relationships.md#ST_DWithin), [ST_Distance](measurement-functions.md#ST_Distance), [geometry_distance_box](#geometry_distance_box)
+  <a id="geometry_distance_cpa"></a>
+
+# |=|
+
+Returns the distance between A and B trajectories at their closest point of approach.
+
+## Synopsis
+
+
+```sql
+double precision |=|(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+ The `|=|` operator returns the 3D distance between two trajectories (See [ST_IsValidTrajectory](trajectory-functions.md#ST_IsValidTrajectory)). This is the same as [ST_DistanceCPA](trajectory-functions.md#ST_DistanceCPA) but as an operator it can be used for doing nearest neighbor searches using an N-dimensional index (requires PostgreSQL 9.5.0 or higher).
+
+
+!!! note
+
+    This operand will make use of ND GiST indexes that may be available on the geometries. It is different from other operators that use spatial indexes in that the spatial index is only used when the operator is in the ORDER BY clause.
+
+
+!!! note
+
+    Index only kicks in if one of the geometries is a constant (not in a subquery/cte). e.g. 'SRID=3005;LINESTRINGM(0 0 0,0 0 1)'::geometry instead of a.geom
+
+
+Availability: 2.2.0. Index-supported only available for PostgreSQL 9.5+
+
+
+## Examples
+
+
+```
+
+-- Save a literal query trajectory in a psql variable...
+\set qt 'ST_AddMeasure(ST_MakeLine(ST_MakePointM(-350,300,0),ST_MakePointM(-410,490,0)),10,20)'
+-- Run the query !
+SELECT track_id, dist FROM (
+  SELECT track_id, ST_DistanceCPA(tr,:qt) dist
+  FROM trajectories
+  ORDER BY tr |=| :qt
+  LIMIT 5
+) foo;
+ track_id        dist
+----------+-------------------
+      395 | 0.576496831518066
+      380 |  5.06797130410151
+      390 |  7.72262293958322
+      385 |   9.8004461358071
+      405 |  10.9534397988433
+(5 rows)
+```
+
+
+## See Also
+
+
+ [ST_DistanceCPA](trajectory-functions.md#ST_DistanceCPA), [ST_ClosestPointOfApproach](trajectory-functions.md#ST_ClosestPointOfApproach), [ST_IsValidTrajectory](trajectory-functions.md#ST_IsValidTrajectory)
+  <a id="geometry_distance_box"></a>
+
+# <#>
+
+Returns the 2D distance between A and B bounding boxes.
+
+## Synopsis
+
+
+```sql
+double precision <#>(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+The `<#>` operator returns distance between two floating point bounding boxes, possibly reading them from a spatial index (PostgreSQL 9.1+ required). Useful for doing nearest neighbor **approximate** distance ordering.
+
+
+!!! note
+
+    This operand will make use of any indexes that may be available on the geometries. It is different from other operators that use spatial indexes in that the spatial index is only used when the operator is in the ORDER BY clause.
+
+
+!!! note
+
+    Index only kicks in if one of the geometries is a constant e.g. ORDER BY (ST_GeomFromText('POINT(1 2)') <#> geom) instead of g1.geom <#>.
+
+
+Availability: 2.0.0 -- KNN only available for PostgreSQL 9.1+
+
+
+## Examples
+
+
+```sql
+
+SELECT *
+FROM (
+SELECT b.tlid, b.mtfcc,
+	b.geom <#> ST_GeomFromText('LINESTRING(746149 2948672,745954 2948576,
+		745787 2948499,745740 2948468,745712 2948438,
+		745690 2948384,745677 2948319)',2249) As b_dist,
+		ST_Distance(b.geom, ST_GeomFromText('LINESTRING(746149 2948672,745954 2948576,
+		745787 2948499,745740 2948468,745712 2948438,
+		745690 2948384,745677 2948319)',2249)) As act_dist
+    FROM bos_roads As b
+    ORDER BY b_dist, b.tlid
+    LIMIT 100) As foo
+    ORDER BY act_dist, tlid LIMIT 10;
+
+   tlid    | mtfcc |      b_dist      |     act_dist
+-----------+-------+------------------+------------------
+  85732027 | S1400 |                0 |                0
+  85732029 | S1400 |                0 |                0
+  85732031 | S1400 |                0 |                0
+  85734335 | S1400 |                0 |                0
+  85736037 | S1400 |                0 |                0
+ 624683742 | S1400 |                0 | 128.528874268666
+  85719343 | S1400 | 260.839270432962 | 260.839270432962
+  85741826 | S1400 | 164.759294123275 | 260.839270432962
+  85732032 | S1400 |           277.75 | 311.830282365264
+  85735592 | S1400 |           222.25 | 311.830282365264
+(10 rows)
+```
+
+
+## See Also
+
+
+[ST_DWithin](spatial-relationships.md#ST_DWithin), [ST_Distance](measurement-functions.md#ST_Distance), [geometry_distance_knn](#geometry_distance_knn)
+  <a id="geometry_distance_centroid_nd"></a>
+
+# <<->>
+
+Returns the n-D distance between the A and B geometries or bounding boxes
+
+## Synopsis
+
+
+```sql
+double precision <<->>(geometry
+
+				  A, geometry
+
+				  B)
+```
+
+
+## Description
+
+
+ The `<<->>` operator returns the n-D (euclidean) distance between the centroids of the bounding boxes of two geometries. Useful for doing nearest neighbor **approximate** distance ordering.
+
+
+!!! note
+
+    This operand will make use of n-D GiST indexes that may be available on the geometries. It is different from other operators that use spatial indexes in that the spatial index is only used when the operator is in the ORDER BY clause.
+
+
+!!! note
+
+    Index only kicks in if one of the geometries is a constant (not in a subquery/cte). e.g. 'SRID=3005;POINT(1011102 450541)'::geometry instead of a.geom
+
+
+Availability: 2.2.0 -- KNN only available for PostgreSQL 9.1+
+
+
+## See Also
+
+
+ [geometry_distance_knn](#geometry_distance_knn)

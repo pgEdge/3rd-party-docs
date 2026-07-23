@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<rect width="200" height="200" fill="white"/>
+<path d="M 40.0000,20.0000 L 110.0000,40.0000 L 180.0000,20.0000 L 180.0000,80.0000 L 140.0000,110.0000 L 160.0000,160.0000 L 80.0000,190.0000 L 70.0000,160.0000 L 20.0000,150.0000 L 40.0000,20.0000 ZM 60.0000,60.0000 L 99.0000,122.5000 L 90.0000,60.0000 L 60.0000,60.0000 Z" fill="#C0D0F0" fill-opacity="0.50" stroke="#6495ED" stroke-width="2"/>
+<polyline points="20.00,150.00 180.00,20.00" fill="none" stroke="#770000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
