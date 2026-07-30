@@ -639,3 +639,12 @@ branches:
     src_subdir: doc
     site_prefix: "PostGIS"
     img_symlink: "html/images/static"
+
+  # pgvector — added by auto/sync-branches
+
+  - branch: pgvector085
+    mode: md
+    version: "0.8.5"
+    upstream: https://github.com/pgvector/pgvector.git
+    ref: v0.8.5
+    src_subdir: .
