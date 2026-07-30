@@ -648,3 +648,12 @@ branches:
     upstream: https://github.com/pgvector/pgvector.git
     ref: v0.8.5
     src_subdir: .
+
+  # PostgreSQL — added by auto/sync-branches
+
+  - branch: postgresql19beta2
+    mode: sgml
+    version: "19beta2"
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_19_BETA2
+    src_subdir: doc/src/sgml
