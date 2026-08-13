@@ -331,12 +331,20 @@ jobs:
                       rf'\g<1>{new_ref}',
                       fixed, flags=re.DOTALL
                   )
-                  # For point-release bumps (URL unchanged), derive and update
-                  # the version field from the new ref (e.g. REL_16_14 → "16.14")
+                  # For point-release bumps (URL unchanged), update the version
+                  # field. A REL_x_y tag carries the full point release, which
+                  # is more precise than SSOT's major-only version (SSOT says
+                  # "16" where branches.yml wants "16.15"), so derive from the
+                  # ref first. Anything else (REL_19_BETA3, release/2.59.0)
+                  # isn't a version string at all — take SSOT's version there
+                  # (e.g. "19beta3") rather than pasting the raw tag.
                   if normalize_url(old_url) == normalize_url(new_url):
                       old_ver = consumer_b.get('version', '')
                       ver_m = re.match(r'^REL_(\d+)_(\d+)$', new_ref)
-                      new_ver = f"{ver_m.group(1)}.{ver_m.group(2)}" if ver_m else new_ref.lstrip('v')
+                      if ver_m:
+                          new_ver = f"{ver_m.group(1)}.{ver_m.group(2)}"
+                      else:
+                          new_ver = str(ssot_e.get('version', '')) or new_ref.lstrip('v')
                       if old_ver and old_ver != new_ver:
                           fixed = re.sub(
                               rf'(- branch: {re.escape(branch_name)}\b.*?version: )["\']?{re.escape(old_ver)}["\']?',
