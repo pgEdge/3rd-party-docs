@@ -675,3 +675,12 @@ branches:
     upstream: https://github.com/pgmq/pgmq.git
     ref: v1.12.0
     src_subdir: docs
+
+  # pgAudit — added by auto/sync-branches
+
+  - branch: pgaudit19beta3
+    mode: md
+    version: "19beta3"
+    upstream: https://github.com/pgaudit/pgaudit.git
+    ref: 19beta3
+    src_subdir: .
