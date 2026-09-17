@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: 1.6.8
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,8 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - What is pg_cron?: index.md
+  - Windows: windows.md
+  - Extension settings: extension-settings.md
