@@ -684,3 +684,50 @@ branches:
     upstream: https://github.com/pgaudit/pgaudit.git
     ref: 19beta3
     src_subdir: .
+
+  # pgAdmin 4 — added by auto/sync-branches
+
+  - branch: pgadmin917
+    mode: rst
+    version: "9.17"
+    upstream: https://github.com/pgadmin-org/pgadmin4.git
+    ref: REL-9_17
+    src_subdir: docs/en_US
+    pgadmin_src: "yes"
+
+  # PostgREST — added by auto/sync-branches
+
+  - branch: postgrest1418
+    mode: rst
+    version: "14.18"
+    upstream: https://github.com/PostgREST/postgrest.git
+    ref: v14.18
+    src_subdir: docs
+    skip_sections: "Sponsors"
+
+  # pg_cron — added by auto/sync-branches
+
+  - branch: pgcron168
+    mode: md
+    version: "1.6.8"
+    upstream: https://github.com/citusdata/pg_cron.git
+    ref: v1.6.8
+    src_subdir: .
+
+  # pgmq — added by auto/sync-branches
+
+  - branch: pgmq1130
+    mode: mkdocs
+    version: "1.13.0"
+    upstream: https://github.com/pgmq/pgmq.git
+    ref: v1.13.0
+    src_subdir: docs
+
+  # pg_stat_monitor — added by auto/sync-branches
+
+  - branch: pgstatmonitor240
+    mode: md
+    version: "2.4.0"
+    upstream: https://github.com/percona/pg_stat_monitor.git
+    ref: 2.4.0
+    src_subdir: .
