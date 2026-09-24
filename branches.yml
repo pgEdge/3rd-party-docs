@@ -651,7 +651,7 @@ branches:
 
   # PostgreSQL — added by auto/sync-branches
 
-  - branch: postgresql19beta2
+  - branch: postgresql19beta4
     mode: sgml
     version: "19beta4"
     upstream: https://github.com/postgres/postgres.git
