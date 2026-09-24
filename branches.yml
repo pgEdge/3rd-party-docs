@@ -653,9 +653,9 @@ branches:
 
   - branch: postgresql19beta2
     mode: sgml
-    version: "19beta3"
+    version: "19beta4"
     upstream: https://github.com/postgres/postgres.git
-    ref: REL_19_BETA3
+    ref: REL_19_BETA4
     src_subdir: doc/src/sgml
 
   # pgBackRest — added by auto/sync-branches
@@ -731,3 +731,12 @@ branches:
     upstream: https://github.com/percona/pg_stat_monitor.git
     ref: 2.4.0
     src_subdir: .
+
+  # pg_vectorize — added by auto/sync-branches
+
+  - branch: pgvectorize0271
+    mode: mkdocs
+    version: "0.27.1"
+    upstream: https://github.com/ChuckHend/pg_vectorize.git
+    ref: v0.27.1
+    src_subdir: docs
