@@ -651,11 +651,18 @@ branches:
 
   # PostgreSQL — added by auto/sync-branches
 
-  - branch: postgresql19beta2
+  - branch: postgresql19beta4
     mode: sgml
     version: "19beta4"
     upstream: https://github.com/postgres/postgres.git
     ref: REL_19_BETA4
+    src_subdir: doc/src/sgml
+
+  - branch: postgresql19beta2
+    mode: sgml
+    version: "19beta2"
+    upstream: https://github.com/postgres/postgres.git
+    ref: REL_19_BETA2
     src_subdir: doc/src/sgml
 
   # pgBackRest — added by auto/sync-branches
