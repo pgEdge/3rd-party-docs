@@ -84,6 +84,14 @@ jobs:
               """Convert SSOT id to a branch name: remove hyphens and dots."""
               return re.sub(r"[-.]", "", id_str.lower())
 
+          THIS_REPO = normalize_url("https://github.com/pgEdge/3rd-party-docs.git")
+
+          def expected_branch(entry):
+              """Branch name SSOT expects in this repo: kb_branch when it points here."""
+              if normalize_url(entry.get("kb_git_source", "")) == THIS_REPO:
+                  return entry.get("kb_branch") or None
+              return None
+
           with open("/tmp/sources.yaml") as f:
               ssot = yaml.safe_load(f)
           with open(CONSUMER_FILE) as f:
@@ -242,6 +250,20 @@ jobs:
               if old_branch != new_branch:
                   version_updates.append((b, e, cons_ver, ssot_ver, old_branch, new_branch))
 
+          # Detect branch-name drift against SSOT kb_branch (e.g. postgresql19beta2
+          # rebuilt from REL_19_BETA4 must become postgresql19beta4). Covers entries
+          # already matched by key and entries bumped in place above.
+          renamed = {b.get("branch", "") for b, *_ in version_updates}
+          rename_candidates = [(consumer_map[k], e) for k, e in ssot_map.items() if k in consumer_map]
+          rename_candidates += [(cb, e) for cb, e, _, _ in url_alias_updates]
+          for b, e in rename_candidates:
+              old_branch = b.get("branch", "")
+              new_branch = expected_branch(e)
+              if new_branch and new_branch != old_branch and old_branch not in renamed:
+                  ver = str(e.get("version", ""))
+                  version_updates.append((b, e, ver, ver, old_branch, new_branch))
+                  renamed.add(old_branch)
+
           # ── Build drift report ──────────────────────────────────────────
           lines = ["## Sources Drift Report — 3rd-party-docs\n"]
           clean = (not missing_entries and not extra_entries and not url_issues
@@ -287,7 +309,7 @@ jobs:
               if update_lines:
                   lines += ["### Upstream Updates (ref/URL corrected in-place)\n"] + update_lines + [""]
               if version_lines:
-                  lines += ["### Branch Renames (version drift on dev branches)\n"] + version_lines + [""]
+                  lines += ["### Branch Renames (version drift or kb_branch mismatch)\n"] + version_lines + [""]
               if missing_lines:
                   lines += ["### Missing from branches.yml (in SSOT, absent here)\n"] + missing_lines + [""]
               if extra_lines:
@@ -379,7 +401,7 @@ jobs:
                       mode     = e.get("mode", "md")
                       version  = e.get("version", "")
                       name     = e.get("name", "")
-                      branch_name = id_to_branch(e.get("id", f"{name}-{version}"))
+                      branch_name = expected_branch(e) or id_to_branch(e.get("id", f"{name}-{version}"))
 
                       if name not in seen_components:
                           seen_components[name] = True
