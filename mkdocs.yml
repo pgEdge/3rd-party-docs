@@ -1,4 +1,4 @@
-site_name: Documentation
+site_name: 1.26.0
 
 extra_css:
   - stylesheets/extra.css
@@ -50,3 +50,9 @@ extra:
   generator: false
 
 repo_url: https://github.com/pgEdge/postgresql-docs
+
+nav:
+  - 1.26.0: index.md
+  - pgbouncer.ini: config.md
+  - todo: todo.md
+  - pgbouncer: usage.md
