@@ -759,3 +759,30 @@ branches:
     upstream: https://github.com/pgbouncer/pgbouncer.git
     ref: pgbouncer_1_26_0
     src_subdir: doc
+
+  # pgBackRest — added by auto/sync-branches
+
+  - branch: pgbackrest2593
+    mode: backrest
+    version: "2.59.3"
+    upstream: https://github.com/pgbackrest/pgbackrest.git
+    ref: release/2.59.3
+    src_subdir: doc
+
+  # pgvector — added by auto/sync-branches
+
+  - branch: pgvector087
+    mode: md
+    version: "0.8.7"
+    upstream: https://github.com/pgvector/pgvector.git
+    ref: v0.8.7
+    src_subdir: .
+
+  # supautils — added by auto/sync-branches
+
+  - branch: supautils344
+    mode: md
+    version: "3.4.4"
+    upstream: https://github.com/supabase/supautils.git
+    ref: v3.4.4
+    src_subdir: .
