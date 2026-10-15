@@ -651,11 +651,11 @@ branches:
 
   # PostgreSQL — added by auto/sync-branches
 
-  - branch: postgresql19beta4
+  - branch: postgresql19rc1
     mode: sgml
-    version: "19beta4"
+    version: "19rc1"
     upstream: https://github.com/postgres/postgres.git
-    ref: REL_19_BETA4
+    ref: REL_19_RC1
     src_subdir: doc/src/sgml
 
   # pgBackRest — added by auto/sync-branches
@@ -785,4 +785,22 @@ branches:
     version: "3.4.4"
     upstream: https://github.com/supabase/supautils.git
     ref: v3.4.4
+    src_subdir: .
+
+  # PgBouncer — added by auto/sync-branches
+
+  - branch: pgbouncer1261
+    mode: md
+    version: "1.26.1"
+    upstream: https://github.com/pgbouncer/pgbouncer.git
+    ref: pgbouncer_1_26_1
+    src_subdir: doc
+
+  # system_stats — added by auto/sync-branches
+
+  - branch: systemstats41
+    mode: md
+    version: "4.1"
+    upstream: https://github.com/EnterpriseDB/system_stats.git
+    ref: v4.1
     src_subdir: .
