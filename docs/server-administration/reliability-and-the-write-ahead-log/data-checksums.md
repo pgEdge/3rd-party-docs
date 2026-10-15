@@ -1,0 +1,21 @@
+<a id="checksums"></a>
+
+## Data Checksums
+
+
+ By default, data pages are protected by checksums, but this can optionally be disabled for a cluster. When enabled, each data page includes a checksum that is updated when the page is written and verified each time the page is read. Only data pages are protected by checksums; internal data structures and temporary files are not.
+
+
+ Checksums can be disabled when the cluster is initialized using [initdb](../../reference/postgresql-server-applications/initdb.md#app-initdb-data-checksums). They can also be enabled or disabled at a later time as an offline operation. Data checksums are enabled or disabled at the full cluster level, and cannot be specified individually for databases, tables or replicated cluster members.
+
+
+ The current state of checksums in the cluster can be verified by viewing the value of the read-only configuration variable [data_checksums](../server-configuration/preset-options.md#guc-data-checksums) by issuing the command `SHOW data_checksums`. [`pg_control_init`](../../the-sql-language/functions-and-operators/system-information-functions-and-operators.md#functions-pg-control-init) can also be used for inspecting the data checksum state at cluster initialization.
+
+
+ When attempting to recover from page corruptions, it may be necessary to bypass the checksum protection. To do this, temporarily set the configuration parameter [ignore_checksum_failure](../server-configuration/developer-options.md#guc-ignore-checksum-failure).
+ <a id="checksums-offline-enable-disable"></a>
+
+### Offline Enabling of Checksums
+
+
+ The [pg_checksums](../../reference/postgresql-server-applications/pg_checksums.md#app-pgchecksums) application can be used to enable or disable data checksums, as well as verify checksums, on an offline cluster. The same operation must be executed on every node in a replicated cluster before the cluster is restarted.
