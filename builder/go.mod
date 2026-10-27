@@ -1,3 +1,3 @@
 module github.com/pgEdge/postgresql-docs/builder
 
-go 1.25.3
+go 1.26.10
