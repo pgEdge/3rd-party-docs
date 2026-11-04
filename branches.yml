@@ -804,3 +804,12 @@ branches:
     upstream: https://github.com/EnterpriseDB/system_stats.git
     ref: v4.1
     src_subdir: .
+
+  # pgBackRest — added by auto/sync-branches
+
+  - branch: pgbackrest2600
+    mode: backrest
+    version: "2.60.0"
+    upstream: https://github.com/pgbackrest/pgbackrest.git
+    ref: release/2.60.0
+    src_subdir: doc
