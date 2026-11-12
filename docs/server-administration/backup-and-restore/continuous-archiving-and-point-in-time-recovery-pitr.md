@@ -116,6 +116,9 @@ test ! -f /mnt/server/archivedir/00000001000000A900000065 && cp pg_wal/000000010
  You can use [app-pgbasebackup](../../reference/postgresql-client-applications/pg_basebackup.md#app-pgbasebackup) to take an incremental backup by specifying the `--incremental` option. You must supply, as an argument to `--incremental`, the backup manifest to an earlier backup from the same server. In the resulting backup, non-relation files will be included in their entirety, but some relation files may be replaced by smaller incremental files which contain only the blocks which have been changed since the earlier backup and enough metadata to reconstruct the current version of the file.
 
 
+ The prior backup may be on an earlier timeline in the server's history, but must not require WAL beyond the point where the server switched away from that timeline. Otherwise, choose another prior backup or take a new full backup.
+
+
  To figure out which blocks need to be backed up, the server uses WAL summaries, which are stored in the data directory, inside the directory `pg_wal/summaries`. If the required summary files are not present, an attempt to take an incremental backup will fail. The summaries present in this directory must cover all LSNs from the start LSN of the prior backup to the start LSN of the current backup. Since the server looks for WAL summaries just after establishing the start LSN of the current backup, the necessary summary files probably won't be instantly present on disk, but the server will wait for any missing files to show up. This also helps if the WAL summarization process has fallen behind. However, if the necessary files have already been removed, or if the WAL summarizer doesn't catch up quickly enough, the incremental backup will fail.
 
 

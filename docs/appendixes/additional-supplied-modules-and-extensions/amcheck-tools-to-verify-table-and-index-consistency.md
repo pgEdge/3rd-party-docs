@@ -155,7 +155,7 @@
 ### Using `amcheck` Effectively
 
 
- `amcheck` can be effective at detecting various types of failure modes that [data checksums](../../reference/postgresql-server-applications/initdb.md#app-initdb-data-checksums) will fail to catch. These include:
+ `amcheck` can be effective at detecting various types of failure modes that [data checksums](../../server-administration/reliability-and-the-write-ahead-log/data-checksums.md#checksums) will fail to catch. These include:
 
 -  Structural inconsistencies caused by incorrect operator class implementations.
 

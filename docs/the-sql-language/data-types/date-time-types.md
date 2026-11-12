@@ -427,4 +427,4 @@ SELECT '2 years 15 months 100 weeks 99 hours 123456789 milliseconds'::interval;
 | `sql_standard` | 1-2 | 3 4:05:06 | -1-2 +3 -4:05:06 |
 | `postgres` | 1 year 2 mons | 3 days 04:05:06 | -1 year -2 mons +3 days -04:05:06 |
 | `postgres_verbose` | @ 1 year 2 mons | @ 3 days 4 hours 5 mins 6 secs | @ 1 year 2 mons -3 days 4 hours 5 mins 6 secs ago |
-| `iso_8601` | P1Y2M | P3DT4H5M6S | P-1Y-2M3D​T-4H-5M-6S |
+| `iso_8601` | P1Y2M | P3DT4H5M6S | P-1Y-2M3DT​-4H-5M-6S |

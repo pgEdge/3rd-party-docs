@@ -72,11 +72,11 @@ REVOKE ALL ON accounts FROM PUBLIC;
 <a id="ddl-priv-references"></a>
 
 `REFERENCES`
-:   Allows creation of a foreign key constraint referencing a table, or specific column(s) of a table.
+:   Allows creation of a foreign key constraint referencing a table, or specific column(s) of a table. Great care should be taken when granting this privilege, since a user who creates a foreign key can arrange for enforcement of that foreign key to call an arbitrary function, such as a cast function, and such functions will be called with the privileges of the table owner.
 <a id="ddl-priv-trigger"></a>
 
 `TRIGGER`
-:   Allows creation of a trigger on a table, view, etc.
+:   Allows creation of a trigger on a table, view, etc. Great care should be taken when granting this privilege, since any triggers added to a table or view will be executed with the privileges of users who modify it.
 <a id="ddl-priv-create"></a>
 
 `CREATE`

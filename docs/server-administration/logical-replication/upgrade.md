@@ -20,7 +20,7 @@
 
 -  The new cluster must have [`wal_level`](../server-configuration/write-ahead-log.md#guc-wal-level) as `logical`.
 -  The new cluster must have [`max_replication_slots`](../server-configuration/replication.md#guc-max-replication-slots) configured to a value greater than or equal to the number of slots present in the old cluster.
--  The output plugins referenced by the slots on the old cluster must be installed in the new PostgreSQL executable directory.
+-  The output plugins referenced by the slots in the old cluster must be installed in the new PostgreSQL executable directory. They must also be included in the new cluster's [output_plugin_libraries](../server-configuration/replication.md#guc-output-plugin-libraries); see that parameter's documentation for safety information.
 -  The old cluster has replicated all the transactions and logical decoding messages to subscribers.
 -  All slots on the old cluster must be usable, i.e., there are no slots whose [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`conflicting` is not `true`.
 -  The new cluster must not have permanent logical slots, i.e., there must be no slots where [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`temporary` is `false`.

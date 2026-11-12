@@ -58,6 +58,7 @@
 -  Execute `AFTER` [triggers](../../server-programming/triggers/index.md#triggers) as the role that was active when trigger events were queued (Laurenz Albe) [&sect;](https://postgr.es/c/01463e1cc)
 
    Previously such triggers were run as the role that was active at trigger execution time (e.g., at [sql-commit](../../reference/sql-commands/commit.md#sql-commit)). This is significant for cases where the role is changed between queue time and transaction commit.
+-  Report `RESTRICT` [foreign key](../../reference/sql-commands/create-table.md#sql-createtable-parms-references) violations with [`SQLSTATE`](../postgresql-error-codes.md#errcodes-appendix) `23001` (`restrict_violation`) instead of `23503` (`foreign_key_violation`) (Peter Eisentraut) [&sect;](https://postgr.es/c/086c84b23)
 -  Remove non-functional support for rule privileges in [sql-grant](../../reference/sql-commands/grant.md#sql-grant)/[sql-revoke](../../reference/sql-commands/revoke.md#sql-revoke) (Fujii Masao) [&sect;](https://postgr.es/c/fefa76f70)
 
    These have been non-functional since PostgreSQL 8.2.
@@ -152,7 +153,7 @@
 
    This server variable was previously only boolean, which is still supported.
 -  Add `log_connections` option to report the duration of connection stages (Melanie Plageman) [&sect;](https://postgr.es/c/18cd15e70)
--  Add [log_line_prefix](../../server-administration/server-configuration/error-reporting-and-logging.md#guc-log-line-prefix) escape `%L` to output the client IP address (Greg Sabino Mullane) [&sect;](https://postgr.es/c/3516ea768)
+-  Add [log_line_prefix](../../server-administration/server-configuration/error-reporting-and-logging.md#guc-log-line-prefix) escape `%L` to output the local IP address on the server that the client connected to (Greg Sabino Mullane) [&sect;](https://postgr.es/c/3516ea768)
 -  Add server variable [log_lock_failures](../../server-administration/server-configuration/error-reporting-and-logging.md#guc-log-lock-failures) to log lock acquisition failures (Yuki Seino, Fujii Masao) [&sect;](https://postgr.es/c/6d376c3b0) [&sect;](https://postgr.es/c/73bdcfab3)
 
    Specifically it reports [`SELECT ... NOWAIT`](../../reference/sql-commands/select.md#sql-for-update-share) lock failures.
@@ -301,7 +302,7 @@
 -  Allow [`CHECK`](../../reference/sql-commands/create-table.md#sql-createtable-parms-check) and [foreign key](../../reference/sql-commands/create-table.md#sql-createtable-parms-references) constraints to be specified as `NOT ENFORCED` (Amul Sul) [&sect;](https://postgr.es/c/ca87c415e) [&sect;](https://postgr.es/c/eec0040c4)
 
    This also adds column [`pg_constraint`](../../internals/system-catalogs/pg_constraint.md#catalog-pg-constraint).`conenforced`.
--  Require [primary/foreign key](../../reference/sql-commands/create-table.md#sql-createtable-parms-references) relationships to use either deterministic collations or the the same nondeterministic collations (Peter Eisentraut) [&sect;](https://postgr.es/c/9321d2fdf)
+-  Require [primary/foreign key](../../reference/sql-commands/create-table.md#sql-createtable-parms-references) relationships to use either deterministic collations or the same nondeterministic collations (Peter Eisentraut) [&sect;](https://postgr.es/c/9321d2fdf)
 
    The restore of a [app-pgdump](../../reference/postgresql-client-applications/pg_dump.md#app-pgdump), also used by [pgupgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade), will fail if these requirements are not met; schema changes must be made for these upgrade methods to succeed.
 -  Store column [`NOT NULL`](../../reference/sql-commands/create-table.md#sql-createtable-parms-not-null) specifications in [`pg_constraint`](../../internals/system-catalogs/pg_constraint.md#catalog-pg-constraint) (Álvaro Herrera, Bernd Helmle) [&sect;](https://postgr.es/c/14e87ffa5) [&sect;](https://postgr.es/c/81ce602d4)

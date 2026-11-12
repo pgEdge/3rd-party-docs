@@ -21,7 +21,7 @@ $ psql mydb
 
 ```
 
-psql (18.3)
+psql (18.7)
 Type "help" for help.
 
 mydb=>
@@ -45,7 +45,7 @@ mydb=#
 mydb=> SELECT version();
                                          version
 -------------------------------------------------------------------​-----------------------
- PostgreSQL 18.3 on x86_64-pc-linux-gnu, compiled by gcc (Debian 4.9.2-10) 4.9.2, 64-bit
+ PostgreSQL 18.7 on x86_64-pc-linux-gnu, compiled by gcc (Debian 4.9.2-10) 4.9.2, 64-bit
 (1 row)
 
 mydb=> SELECT current_date;

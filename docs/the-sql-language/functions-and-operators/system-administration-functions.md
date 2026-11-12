@@ -488,9 +488,9 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <td></td>
 </tr>
 <tr id="pg-logical-emit-message">
-<td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>content</code> <code>text</code> [, <code>flush</code> <code>boolean</code> <code>DEFAULT</code> <code>false</code>] ) <code>pg_lsn</code></td>
-<td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>content</code> <code>bytea</code> [, <code>flush</code> <code>boolean</code> <code>DEFAULT</code> <code>false</code>] ) <code>pg_lsn</code></td>
-<td>Emits a logical decoding message. This can be used to pass generic messages to logical decoding plugins through WAL. The <code>transactional</code> parameter specifies if the message should be part of the current transaction, or if it should be written immediately and decoded as soon as the logical decoder reads the record. The <code>prefix</code> parameter is a textual prefix that can be used by logical decoding plugins to easily recognize messages that are interesting for them. The <code>content</code> parameter is the content of the message, given either in text or binary form. The <code>flush</code> parameter (default set to <code>false</code>) controls if the message is immediately flushed to WAL or not. <code>flush</code> has no effect with <code>transactional</code>, as the message's WAL record is flushed along with its transaction.</td>
+<td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>message</code> <code>text</code> [, <code>flush</code> <code>boolean</code> <code>DEFAULT</code> <code>false</code>] ) <code>pg_lsn</code></td>
+<td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>message</code> <code>bytea</code> [, <code>flush</code> <code>boolean</code> <code>DEFAULT</code> <code>false</code>] ) <code>pg_lsn</code></td>
+<td>Emits a logical decoding message. This can be used to pass generic messages to logical decoding plugins through WAL. The <code>transactional</code> parameter specifies if the message should be part of the current transaction, or if it should be written immediately and decoded as soon as the logical decoder reads the record. The <code>prefix</code> parameter is a textual prefix that can be used by logical decoding plugins to easily recognize messages that are interesting for them. The <code>message</code> parameter is the content of the message, given either in text or binary form. The <code>flush</code> parameter (default set to <code>false</code>) controls if the message is immediately flushed to WAL or not. <code>flush</code> has no effect with <code>transactional</code>, as the message's WAL record is flushed along with its transaction.</td>
 </tr>
 <tr id="pg-sync-replication-slots">
 <td><code>pg_sync_replication_slots</code> () <code>void</code></td>
@@ -504,7 +504,7 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 ### Database Object Management Functions
 
 
- The functions shown in [Database Object Size Functions](#functions-admin-dbsize) calculate the disk space usage of database objects, or assist in presentation or understanding of usage results. `bigint` results are measured in bytes. If an OID that does not represent an existing object is passed to one of these functions, `NULL` is returned.
+ The functions shown in [Database Object Size Functions](#functions-admin-dbsize) calculate the disk space usage of database objects, or assist in presentation or understanding of usage results. `bigint` results are measured in bytes. If an OID that does not represent an existing object is passed to one of these functions, `NULL` is returned, except for `pg_database_size` and `pg_tablespace_size`, which raise an error.
  <a id="functions-admin-dbsize"></a>
 
 **Table: Database Object Size Functions**
@@ -535,7 +535,7 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <tr>
 <td><code>pg_database_size</code> ( <code>name</code> ) <code>bigint</code></td>
 <td><code>pg_database_size</code> ( <code>oid</code> ) <code>bigint</code></td>
-<td>Computes the total disk space used by the database with the specified name or OID. To use this function, you must have <code>CONNECT</code> privilege on the specified database (which is granted by default) or have privileges of the <code>pg_read_all_stats</code> role.</td>
+<td>Computes the total disk space used by the database with the specified name or OID. To use this function, you must have <code>CONNECT</code> privilege on the specified database (which is granted by default) or have privileges of the <code>pg_read_all_stats</code> role. Throws an error if the database does not exist.</td>
 </tr>
 <tr>
 <td><code>pg_indexes_size</code> ( <code>regclass</code> ) <code>bigint</code></td>
@@ -569,7 +569,7 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <tr>
 <td><code>pg_tablespace_size</code> ( <code>name</code> ) <code>bigint</code></td>
 <td><code>pg_tablespace_size</code> ( <code>oid</code> ) <code>bigint</code></td>
-<td>Computes the total disk space used in the tablespace with the specified name or OID. To use this function, you must have <code>CREATE</code> privilege on the specified tablespace or have privileges of the <code>pg_read_all_stats</code> role, unless it is the default tablespace for the current database.</td>
+<td>Computes the total disk space used in the tablespace with the specified name or OID. To use this function, you must have <code>CREATE</code> privilege on the specified tablespace or have privileges of the <code>pg_read_all_stats</code> role, unless it is the default tablespace for the current database. Throws an error if the tablespace does not exist.</td>
 </tr>
 <tr>
 <td><code>pg_total_relation_size</code> ( <code>regclass</code> ) <code>bigint</code></td>

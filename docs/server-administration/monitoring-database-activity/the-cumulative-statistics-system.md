@@ -452,6 +452,7 @@
 | `SafeSnapshot` | Waiting to obtain a valid snapshot for a `READ ONLY DEFERRABLE` transaction. |
 | `SyncRep` | Waiting for confirmation from a remote server during synchronous replication. |
 | `WalReceiverExit` | Waiting for the WAL receiver to exit. |
+| `WalReceiverUpstreamCatchup` | Waiting for upstream server WAL flush position to catch up to requested start point. |
 | `WalReceiverWaitStart` | Waiting for startup process to send initial data for streaming replication. |
 | `WalSummaryReady` | Waiting for a new WAL summary to be generated. |
 | `XactGroupUpdate` | Waiting for the group leader to update transaction status at transaction end. |
@@ -2327,7 +2328,7 @@ FROM pg_stat_get_backend_idset() AS backendid;
 </tr>
 <tr>
 <td><code>pg_stat_get_backend_subxact</code> ( <code>integer</code> ) <code>record</code></td>
-<td>Returns a record of information about the subtransactions of the backend with the specified ID. The fields returned are <code>subxact_count</code>, which is the number of subtransactions in the backend's subtransaction cache, and <code>subxact_overflow</code>, which indicates whether the backend's subtransaction cache is overflowed or not.</td>
+<td>Returns a record of information about the subtransactions of the backend with the specified ID. The fields returned are <code>subxact_count</code>, which is the number of subtransactions in the backend's subtransaction cache, and <code>subxact_overflowed</code>, which indicates whether the backend's subtransaction cache is overflowed or not.</td>
 <td></td>
 </tr>
 <tr>

@@ -238,7 +238,7 @@ OPTIONS (ADD password_required 'false');
 <a id="postgres-fdw-option-use-scram-passthrough"></a>
 
 `use_scram_passthrough` (`boolean`)
-:   This option controls whether `postgres_fdw` will use the SCRAM pass-through authentication to connect to the foreign server. With SCRAM pass-through authentication, `postgres_fdw` uses SCRAM-hashed secrets instead of plain-text user passwords to connect to the remote server. This avoids storing plain-text user passwords in PostgreSQL system catalogs.
+:   This option controls whether `postgres_fdw` will use the SCRAM pass-through authentication to connect to the foreign server. It can be specified for a foreign server or a user mapping. A user mapping setting overrides the foreign server setting. With SCRAM pass-through authentication, `postgres_fdw` uses SCRAM-hashed secrets instead of plain-text user passwords to connect to the remote server. This avoids storing plain-text user passwords in PostgreSQL system catalogs.
 
 
      To use SCRAM pass-through authentication:

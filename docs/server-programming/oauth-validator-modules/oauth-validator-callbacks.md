@@ -51,7 +51,7 @@ typedef struct ValidatorModuleResult
 ### Shutdown Callback
 
 
- The `shutdown_cb` callback is executed when the backend process associated with the connection exits. If the validator module has any allocated state, this callback should free it to avoid resource leaks.
+ The `shutdown_cb` callback is executed when the server backend has finished validating tokens for the connection. If the validator module has any allocated state, this callback should free it to avoid resource leaks.
 
 ```
 

@@ -147,6 +147,11 @@
 
 `scram_iterations` (`integer`)
 :   The number of computational iterations to be performed when encrypting a password using SCRAM-SHA-256. The default is `4096`. A higher number of iterations provides additional protection against brute-force attacks on stored passwords, but makes authentication slower. Changing the value has no effect on existing passwords encrypted with SCRAM-SHA-256 as the iteration count is fixed at the time of encryption. In order to make use of a changed value, a new password must be set.
+
+
+    !!! note
+
+        If a role password was created with a different iteration count than the value of `scram_iterations` specified in the `postgresql.conf` file or on the server command line, an unauthenticated user can discern the existence of the role by observing discrepancies in the server's responses to connection attempts. If you find this concerning, ensure that all role passwords are created with `scram_iterations` set to the value specified in the `postgresql.conf` file or on the server command line.
 <a id="guc-md5-password-warnings"></a>
 
 `md5_password_warnings` (`boolean`)
@@ -255,10 +260,10 @@
 <a id="guc-ssl-groups"></a>
 
 `ssl_groups` (`string`)
-:   Specifies the name of the curve to use in ECDH key exchange. It needs to be supported by all clients that connect. Multiple curves can be specified by using a colon-separated list. It does not need to be the same curve used by the server's Elliptic Curve key. This parameter can only be set in the `postgresql.conf` file or on the server command line. The default is `X25519:prime256v1`.
+:   Specifies the named group to use for TLS key exchange. It needs to be supported by all clients that connect. Multiple groups can be specified by using a colon-separated list. It does not need to match the key type used by the server certificate. This parameter can only be set in the `postgresql.conf` file or on the server command line. The default is `X25519:prime256v1`.
 
 
-     OpenSSL names for the most common curves are: `prime256v1` (NIST P-256), `secp384r1` (NIST P-384), `secp521r1` (NIST P-521). An incomplete list of available groups can be shown with the command `openssl ecparam -list_curves`. Not all of them are usable with TLS though, and many supported group names and aliases are omitted.
+     OpenSSL names for the most common groups are: `prime256v1` (NIST P-256), `secp384r1` (NIST P-384), `secp521r1` (NIST P-521). An incomplete list of available groups can be shown with the command `openssl ecparam -list_curves`. Not all of them are usable with TLS though, and many supported group names and aliases are omitted.
 
 
      In PostgreSQL versions before 18.0 this setting was named `ssl_ecdh_curve` and only accepted a single value.

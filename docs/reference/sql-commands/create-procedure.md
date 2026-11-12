@@ -73,7 +73,7 @@ CREATE [ OR REPLACE ] PROCEDURE
 *lang_name*
 :   The name of the language that the procedure is implemented in. It can be `sql`, `c`, `internal`, or the name of a user-defined procedural language, e.g., `plpgsql`. The default is `sql` if *sql_body* is specified. Enclosing the name in single quotes is deprecated and requires matching case.
 
-<code>TRANSFORM { FOR TYPE </code><em>type_name</em><code> } [, ... ] }</code>
+<code>TRANSFORM { FOR TYPE </code><em>type_name</em><code> } [, ... ]</code>
 :   Lists which transforms a call to the procedure should apply. Transforms convert between SQL types and language-specific data types; see [sql-createtransform](create-transform.md#sql-createtransform). Procedural language implementations usually have hardcoded knowledge of the built-in types, so those don't need to be listed here. If a procedural language implementation does not know how to handle a type and no transform is supplied, it will fall back to a default behavior for converting data types, but this depends on the implementation.
 
 `[EXTERNAL] SECURITY INVOKER`, `[EXTERNAL] SECURITY DEFINER`

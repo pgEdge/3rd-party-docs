@@ -54,7 +54,10 @@
 
     !!! note
 
-        The logging collector is designed to never lose messages. This means that in case of extremely high load, server processes could be blocked while trying to send additional log messages when the collector has fallen behind. In contrast, syslog prefers to drop messages if it cannot write them, which means it may fail to log some messages in such cases but it will not block the rest of the system.
+        The logging collector is designed to avoid dropping messages. This means that in case of extremely high load, server processes could be blocked while trying to send additional log messages when the collector has fallen behind. In contrast, syslog prefers to drop messages if it cannot write them, which means it may fail to log some messages in such cases but it will not block the rest of the system.
+
+
+         The logging collector does not guarantee that log messages have reached durable storage. It can still lose messages due to a system crash, power loss, or an error while writing the log file.
 <a id="guc-log-directory"></a>
 
 `log_directory` (`string`)
@@ -293,7 +296,7 @@
 <a id="guc-log-line-prefix"></a>
 
 `log_line_prefix` (`string`)
-:   This is a `printf`-style string that is output at the beginning of each log line. `%` characters begin “escape sequences” that are replaced with status information as outlined below. Unrecognized escapes are ignored. Other characters are copied straight to the log line. Some escapes are only recognized by session processes, and will be treated as empty by background processes such as the main server process. Status information may be aligned either left or right by specifying a numeric literal after the % and before the option. A negative value will cause the status information to be padded on the right with spaces to give it a minimum width, whereas a positive value will pad on the left. Padding can be useful to aid human readability in log files.
+:   This is a `printf`-style string that is output at the beginning of each log entry that is sent to `stderr`, `syslog`, or `eventlog`. `%` characters begin “escape sequences” that are replaced with status information as outlined below. Unrecognized escapes are ignored. Other characters are copied straight to the log line. Some escapes are only recognized by session processes, and will be treated as empty by background processes such as the main server process. Status information may be aligned either left or right by specifying a numeric literal after the % and before the option. A negative value will cause the status information to be padded on the right with spaces to give it a minimum width, whereas a positive value will pad on the left. Padding can be useful to aid human readability in log files.
 
 
      This parameter can only be set in the `postgresql.conf` file or on the server command line. The default is `'%m [%p] '` which logs a time stamp and the process ID.
@@ -382,7 +385,7 @@
 :   If greater than zero, each bind parameter value logged with a non-error statement-logging message is trimmed to this many bytes. Zero disables logging of bind parameters for non-error statement logs. `-1` (the default) allows bind parameters to be logged in full. If this value is specified without units, it is taken as bytes. Only superusers and users with the appropriate `SET` privilege can change this setting.
 
 
-     This setting only affects log messages printed as a result of [log_statement](#guc-log-statement), [log_duration](#guc-log-duration), and related settings. Non-zero values of this setting add some overhead, particularly if parameters are sent in binary form, since then conversion to text is required.
+     This setting only affects log messages printed as a result of [log_statement](#guc-log-statement), [log_min_duration_statement](#guc-log-min-duration-statement), and related settings. Non-zero values of this setting add some overhead, particularly if parameters are sent in binary form, since then conversion to text is required.
 <a id="guc-log-parameter-max-length-on-error"></a>
 
 `log_parameter_max_length_on_error` (`integer`)

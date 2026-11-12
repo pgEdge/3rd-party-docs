@@ -305,7 +305,7 @@ psql "dbname=postgres replication=database" -c "IDENTIFY_SYSTEM;"
          Currently, this option can only be used when the backup target is `server`. It specifies the server directory to which the backup should be written.
 
     <code>PROGRESS [ </code><em>boolean</em><code> ]</code>
-    :   If set to true, request information required to generate a progress report. This will send back an approximate size in the header of each tablespace, which can be used to calculate how far along the stream is done. This is calculated by enumerating all the file sizes once before the transfer is even started, and might as such have a negative impact on the performance. In particular, it might take longer before the first data is streamed. Since the database files can change during the backup, the size is only approximate and might both grow and shrink between the time of approximation and the sending of the actual files. The default is false.
+    :   If set to true, request information required to generate a progress report. This will send back an approximate size in the header of each tablespace, which can be used to calculate how far along the stream is done. This is calculated by enumerating all the file sizes once before the transfer is even started, and might as such have a negative impact on the performance. In particular, it might take longer before the first data is streamed. For an incremental backup, each file is counted at the size it will occupy in the archive rather than its size on disk. Since the database files can change during the backup, the size is only approximate and might both grow and shrink between the time of approximation and the sending of the actual files. The default is false.
 
     `CHECKPOINT { 'fast' | 'spread' }`
     :   Sets the type of checkpoint to be performed at the beginning of the base backup. The default is `spread`.
@@ -365,7 +365,7 @@ psql "dbname=postgres replication=database" -c "IDENTIFY_SYSTEM;"
     :   The full path of the tablespace directory, or null if it's the base directory.
 
     `size` (`int8`)
-    :   The approximate size of the tablespace, in kilobytes (1024 bytes), if progress report has been requested; otherwise it's null.
+    :   The approximate size of the archive that will be generated for the tablespace, in kilobytes (1024 bytes), if progress report has been requested; otherwise it's null. This size is measured before any server-side compression. For an incremental backup this can be much smaller than the size of the tablespace, since a relation file that has not changed since the prior backup, or has changed only in part, can be replaced by a smaller incremental file containing just the blocks that have changed.
 
 
      After the second regular result set, a CopyOutResponse will be sent. The payload of each CopyData message will contain a message in one of the following formats:
@@ -397,7 +397,7 @@ psql "dbname=postgres replication=database" -c "IDENTIFY_SYSTEM;"
         :   Identifies the message as a progress report.
 
         Int64
-        :   The number of bytes from the current tablespace for which processing has been completed.
+        :   The cumulative number of bytes processed across all tablespaces since the backup began. This counts archive data before any server-side compression.
 
 
      After the CopyOutResponse, or all such responses, have been sent, a final ordinary result set will be sent, containing the WAL end position of the backup, in the same format as the start position.

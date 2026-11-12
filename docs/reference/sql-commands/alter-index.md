@@ -39,6 +39,9 @@ ALTER INDEX ALL IN TABLESPACE NAME [ OWNED BY ROLE_NAME [, ... ] ]
 <code>ATTACH PARTITION </code><em>index_name</em>
 :   Causes the named index (possibly schema-qualified) to become attached to the altered index. The named index must be on a partition of the table containing the index being altered, and have an equivalent definition. An attached index cannot be dropped by itself, and will automatically be dropped if its parent index is dropped.
 
+
+     If the named index is already attached to the altered index, the command will attempt to validate the parent index if the parent is currently invalid.
+
 <code>DEPENDS ON EXTENSION </code><em>extension_name</em>, <code>NO DEPENDS ON EXTENSION </code><em>extension_name</em>
 :   This form marks the index as dependent on the extension, or no longer dependent on that extension if `NO` is specified. An index that's marked as dependent on an extension is automatically dropped when the extension is dropped.
 

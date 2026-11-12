@@ -189,7 +189,7 @@ include_dir         DIRECTORY
     :   Authenticate using the BSD Authentication service provided by the operating system. See [BSD Authentication](bsd-authentication.md#auth-bsd) for details.
 
     `oauth`
-    :   Authorize and optionally authenticate using a third-party OAuth 2.0 identity provider. See [OAuth Authorization/Authentication](oauth-authorization-authentication.md#auth-oauth) for details.
+    :   Authorize and optionally authenticate using a third-party OAuth 2.0 identity provider. Since the bearer token is sent in clear text over the network, this should not be used on untrusted networks. See [OAuth Authorization/Authentication](oauth-authorization-authentication.md#auth-oauth) for details.
 
 *auth-options*
 :   After the *auth-method* field, there can be field(s) of the form *name*`=`*value* that specify options for the authentication method. Details about which options are available for which authentication methods appear below.

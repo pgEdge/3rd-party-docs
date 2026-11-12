@@ -107,6 +107,7 @@ pg_recvlogical [OPTION...]
 <code>-o </code><em>name</em><code>[=</code><em>value</em><code>]</code>, <code>--option=</code><em>name</em><code>[=</code><em>value</em><code>]</code>
 :   Pass the option *name* to the output plugin with, if specified, the option value *value*. Which options exist and their effects depends on the used output plugin.
 
+<a id="app-pgrecvlogical-option-plugin"></a>
 <code>-P </code><em>plugin</em>, <code>--plugin=</code><em>plugin</em>
 :   When creating a slot, use the specified logical decoding output plugin. See [Logical Decoding](../../server-programming/logical-decoding/index.md#logicaldecoding). This option has no effect if the slot already exists.
 
@@ -180,7 +181,7 @@ pg_recvlogical [OPTION...]
 ## Notes
 
 
- pg_recvlogical will preserve group permissions on the received WAL files if group permissions are enabled on the source cluster.
+ pg_recvlogical will preserve group permissions on the output files if group permissions are enabled on the source cluster.
 
 
 ## Examples

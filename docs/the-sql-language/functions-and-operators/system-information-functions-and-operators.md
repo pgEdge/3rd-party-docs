@@ -83,7 +83,7 @@
 <tr>
 <td><code>pg_blocking_pids</code> ( <code>integer</code> ) <code>integer[]</code></td>
 <td>Returns an array of the process ID(s) of the sessions that are blocking the server process with the specified process ID from acquiring a lock, or an empty array if there is no such server process or it is not blocked.</td>
-<td>One server process blocks another if it either holds a lock that conflicts with the blocked process's lock request (hard block), or is waiting for a lock that would conflict with the blocked process's lock request and is ahead of it in the wait queue (soft block). When using parallel queries the result always lists client-visible process IDs (that is, <code>pg_backend_pid</code> results) even if the actual lock is held or awaited by a child worker process. As a result of that, there may be duplicated PIDs in the result. Also note that when a prepared transaction holds a conflicting lock, it will be represented by a zero process ID.<br>Frequent calls to this function could have some impact on database performance, because it needs exclusive access to the lock manager's shared state for a short time.</td>
+<td>One server process blocks another if it either holds a lock that conflicts with the blocked process's lock request (hard block), or is waiting for a lock that would conflict with the blocked process's lock request and is ahead of it in the wait queue (soft block). A prepared transaction that holds a conflicting lock is represented by a zero process ID.<br>When using parallel queries the result always lists client-visible process IDs (that is, <code>pg_backend_pid</code> results) even if the actual lock is held or awaited by a child worker process. As a result of that, there may be duplicated PIDs in the result. Note that the processes of a parallel query can block each other on relation extension locks (lock type <code>extend</code> in <a href="../../internals/system-views/pg_locks.md#view-pg-locks"><code>pg_locks</code></a>), in which case the result contains the blocked session's own process ID.<br>Frequent calls to this function could have some impact on database performance, because it needs exclusive access to the lock manager's shared state for a short time.</td>
 </tr>
 <tr>
 <td><code>pg_conf_load_time</code> () <code>timestamp with time zone</code></td>
@@ -304,11 +304,6 @@ SELECT has_function_privilege('joeuser', 'myfunc(int, text)', 'execute');</code>
 <td><code>aclitem[]</code> <code>@&gt;</code> <code>aclitem</code> <code>boolean</code></td>
 <td>Does array contain the specified privileges? (This is true if there is an array entry that matches the <code>aclitem</code>'s grantee and grantor, and has at least the specified set of privileges.)</td>
 <td><code>'{calvin=r<em>w/hobbes,hobbes=r</em>w<em>/postgres}'::aclitem[] @&gt; 'calvin=r</em>/hobbes'::aclitem</code> <code>t</code></td>
-</tr>
-<tr>
-<td><code>aclitem[]</code> <code>~</code> <code>aclitem</code> <code>boolean</code></td>
-<td>This is a deprecated alias for <code>@&gt;</code>.</td>
-<td><code>'{calvin=r<em>w/hobbes,hobbes=r</em>w<em>/postgres}'::aclitem[] ~ 'calvin=r</em>/hobbes'::aclitem</code> <code>t</code></td>
 </tr>
 </tbody>
 </table>
@@ -862,8 +857,8 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 <td>This function will only work as desired if the data type's input function has been updated to report invalid input as a “soft” error. Otherwise, invalid input will abort the transaction, just as if the string had been cast to the type directly.<br><code>pg_input_is_valid('42', 'integer')</code> <code>t</code><br><code>pg_input_is_valid('42000000000', 'integer')</code> <code>f</code><br><code>pg_input_is_valid('1234.567', 'numeric(7,4)')</code> <code>f</code></td>
 </tr>
 <tr>
-<td><code>pg_input_error_info</code> ( <code>string</code> <code>text</code>, <code>type</code> <code>text</code> ) <code>record</code> ( <code>message</code> <code>text</code>, <code>detail</code> <code>text</code>, <code>hint</code> <code>text</code>, <code>sql_error_code</code> <code>text</code> )</td>
-<td>Tests whether the given <code>string</code> is valid input for the specified data type; if not, return the details of the error that would have been thrown. If the input is valid, the results are NULL. The inputs are the same as for <code>pg_input_is_valid</code>.</td>
+<td><code>pg_input_error_info</code> ( <code>value</code> <code>text</code>, <code>type_name</code> <code>text</code> ) <code>record</code> ( <code>message</code> <code>text</code>, <code>detail</code> <code>text</code>, <code>hint</code> <code>text</code>, <code>sql_error_code</code> <code>text</code> )</td>
+<td>Tests whether the given <code>value</code> is valid input for the specified data type; if not, return the details of the error that would have been thrown. If the input is valid, the results are NULL. The inputs are the same as for <code>pg_input_is_valid</code>.</td>
 <td>This function will only work as desired if the data type's input function has been updated to report invalid input as a “soft” error. Otherwise, invalid input will abort the transaction, just as if the string had been cast to the type directly.<br><p><code>SELECT * FROM pg_input_error_info('42000000000', 'integer')</code></p>
 <pre><code>
                        message                        | detail | hint | sql_error_code

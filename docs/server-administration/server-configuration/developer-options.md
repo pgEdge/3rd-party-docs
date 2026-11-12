@@ -178,10 +178,17 @@
 <a id="guc-ignore-checksum-failure"></a>
 
 `ignore_checksum_failure` (`boolean`)
-:   Only has effect if [-k](../../reference/postgresql-server-applications/initdb.md#app-initdb-data-checksums) are enabled.
+:   Only has effect if [data checksums](../reliability-and-the-write-ahead-log/data-checksums.md#checksums) are enabled.
 
 
      Detection of a checksum failure during a read normally causes PostgreSQL to report an error, aborting the current transaction. Setting `ignore_checksum_failure` to on causes the system to ignore the failure (but still report a warning), and continue processing. This behavior may *cause crashes, propagate or hide corruption, or other serious problems*. However, it may allow you to get past the error and retrieve undamaged tuples that might still be present in the table if the block header is still sane. If the header is corrupt an error will be reported even if this option is enabled. The default setting is `off`. Only superusers and users with the appropriate `SET` privilege can change this setting.
+<a id="guc-composite-type-mismatch"></a>
+
+`composite_type_mismatch` (`enum`)
+:   Reading a composite value whose row type was altered in an incompatible way after the value was created normally causes PostgreSQL to report an error. This parameter controls that behavior. With the default, `error`, an error is reported, aborting the current transaction. With `warn`, the system warns about mismatches but allows execution to continue. With `disabled`, the check is not performed at all.
+
+
+     Settings other than `error` may *cause crashes, wrong results, or other serious problems*. Only superusers and users with the appropriate `SET` privilege can change this setting.
 <a id="guc-zero-damaged-pages"></a>
 
 `zero_damaged_pages` (`boolean`)

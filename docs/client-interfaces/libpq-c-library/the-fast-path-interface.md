@@ -6,9 +6,9 @@
  PostgreSQL provides a fast-path interface to send simple function calls to the server.
 
 
-!!! tip
+!!! warning
 
-    This interface is somewhat obsolete, as one can achieve similar performance and greater functionality by setting up a prepared statement to define the function call. Then, executing the statement with binary transmission of parameters and results substitutes for a fast-path function call.
+    This interface is unsafe and should not be used. When `result_is_int` is set to `0`, `PQfn` may write data beyond the end of `result_buf`, regardless of whether the buffer has enough space for the requested number of bytes. Furthermore, it is obsolete, as one can achieve similar performance and greater functionality by setting up a prepared statement to define the function call. Then, executing the statement with binary transmission of parameters and results substitutes for a fast-path function call.
 
 
  The function <a id="libpq-PQfn"></a>
