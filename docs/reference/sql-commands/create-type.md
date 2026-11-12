@@ -96,6 +96,9 @@ CREATE TYPE NAME
  The optional *multirange_type_name* parameter specifies the name of the corresponding multirange type. If not specified, this name is chosen automatically as follows. If the range type name contains the substring `range`, then the multirange type name is formed by replacement of the `range` substring with `multirange` in the range type name. Otherwise, the multirange type name is formed by appending a `_multirange` suffix to the range type name.
 
 
+ To be able to create a range type, you must have `USAGE` privilege on the subtype.
+
+
 ### Base Types
 
 

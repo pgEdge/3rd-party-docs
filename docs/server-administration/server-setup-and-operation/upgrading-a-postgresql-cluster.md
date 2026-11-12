@@ -59,7 +59,7 @@ pg_dumpall > OUTPUTFILE
 ```
 
 
-    To make the backup, you can use the pg_dumpall command from the version you are currently running; see [Using pg_dumpall](../backup-and-restore/sql-dump.md#backup-dump-all) for more details. For best results, however, try to use the pg_dumpall command from PostgreSQL 17.9, since this version contains bug fixes and improvements over older versions. While this advice might seem idiosyncratic since you haven't installed the new version yet, it is advisable to follow it if you plan to install the new version in parallel with the old version. In that case you can complete the installation normally and transfer the data later. This will also decrease the downtime.
+    To make the backup, you can use the pg_dumpall command from the version you are currently running; see [Using pg_dumpall](../backup-and-restore/sql-dump.md#backup-dump-all) for more details. For best results, however, try to use the pg_dumpall command from PostgreSQL 17.12, since this version contains bug fixes and improvements over older versions. While this advice might seem idiosyncratic since you haven't installed the new version yet, it is advisable to follow it if you plan to install the new version in parallel with the old version. In that case you can complete the installation normally and transfer the data later. This will also decrease the downtime.
 2.  Shut down the old server:
 
 ```

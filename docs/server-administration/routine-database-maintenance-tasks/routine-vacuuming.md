@@ -169,15 +169,15 @@ HINT:  To avoid XID assignment failures, execute a database-wide VACUUM in that 
 
 ```
 
-ERROR:  database is not accepting commands that assign new XIDs to avoid wraparound data loss in database "mydb"
+ERROR:  database is not accepting commands that assign new transaction IDs to avoid wraparound data loss in database "mydb"
 HINT:  Execute a database-wide VACUUM in that database.
 ```
  In this condition any transactions already in progress can continue, but only read-only transactions can be started. Operations that modify database records or truncate relations will fail. The `VACUUM` command can still be run normally. Note that, contrary to what was sometimes recommended in earlier releases, it is not necessary or desirable to stop the postmaster or enter single user-mode in order to restore normal operation. Instead, follow these steps:
 
-1. Resolve old prepared transactions. You can find these by checking [pg_prepared_xacts](../../internals/system-views/pg_prepared_xacts.md#view-pg-prepared-xacts) for rows where `age(transactionid)` is large. Such transactions should be committed or rolled back.
-2. End long-running open transactions. You can find these by checking [pg_stat_activity](../monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-activity-view) for rows where `age(backend_xid)` or `age(backend_xmin)` is large. Such transactions should be committed or rolled back, or the session can be terminated using `pg_terminate_backend`.
-3. Drop any old replication slots. Use [pg_stat_replication](../monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-replication-view) to find slots where `age(xmin)` or `age(catalog_xmin)` is large. In many cases, such slots were created for replication to servers that no longer exist, or that have been down for a long time. If you drop a slot for a server that still exists and might still try to connect to that slot, that replica may need to be rebuilt.
-4. Execute `VACUUM` in the target database. A database-wide `VACUUM` is simplest; to reduce the time required, it as also possible to issue manual `VACUUM` commands on the tables where `relminxid` is oldest. Do not use `VACUUM FULL` in this scenario, because it requires an XID and will therefore fail, except in super-user mode, where it will instead consume an XID and thus increase the risk of transaction ID wraparound. Do not use `VACUUM FREEZE` either, because it will do more than the minimum amount of work required to restore normal operation.
+1. Resolve old prepared transactions. You can find these by checking [`pg_prepared_xacts`](../../internals/system-views/pg_prepared_xacts.md#view-pg-prepared-xacts) for rows where `age(transactionid)` is large. Such transactions should be committed or rolled back.
+2. End long-running open transactions. You can find these by checking [`pg_stat_activity`](../monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-activity-view) for rows where `age(backend_xid)` or `age(backend_xmin)` is large. Such transactions should be committed or rolled back, or the session can be terminated using `pg_terminate_backend`.
+3. Drop any old replication slots. Use [`pg_replication_slots`](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots) to find slots where `age(xmin)` or `age(catalog_xmin)` is large. In many cases, such slots were created for replication to servers that no longer exist, or that have been down for a long time. If you drop a slot for a server that still exists and might still try to connect to that slot, that replica may need to be rebuilt.
+4. Execute `VACUUM` in the target database. A database-wide `VACUUM` is simplest; to reduce the time required, it is also possible to issue manual `VACUUM` commands on the tables where `relminxid` is oldest. Do not use `VACUUM FULL` in this scenario, because it requires an XID and will therefore fail, except in super-user mode, where it will instead consume an XID and thus increase the risk of transaction ID wraparound. Do not use `VACUUM FREEZE` either, because it will do more than the minimum amount of work required to restore normal operation.
 5. Once normal operation is restored, ensure that autovacuum is properly configured in the target database in order to avoid future problems.
 
 
@@ -207,8 +207,9 @@ HINT:  Execute a database-wide VACUUM in that database.
  Normal operation when MXIDs are exhausted can be restored in much the same way as when XIDs are exhausted. Follow the same steps in the previous section, but with the following differences:
 
 1. Running transactions and prepared transactions can be ignored if there is no chance that they might appear in a multixact.
-2. MXID information is not directly visible in system views such as `pg_stat_activity`; however, looking for old XIDs is still a good way of determining which transactions are causing MXID wraparound problems.
-3. XID exhaustion will block all write transactions, but MXID exhaustion will only block a subset of write transactions, specifically those that involve row locks that require an MXID.
+2. Unlike transaction ID wraparound, replication slots do not directly hold back multixact cleanup. Dropping stale replication slots is therefore not usually relevant to resolving multixact ID wraparound problems.
+3. MXID information is not directly visible in system views such as `pg_stat_activity`; however, looking for old XIDs is still a good way of determining which transactions are causing MXID wraparound problems.
+4. XID exhaustion will block all write transactions, but MXID exhaustion will only block a subset of write transactions, specifically those that involve row locks that require an MXID.
 
    <a id="autovacuum"></a>
 

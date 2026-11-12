@@ -135,14 +135,14 @@ FROM ts_debug('public.english', 'The Brightest supernovaes');
 
 ```
 
-ts_parse(PARSER_NAME text, DOCUMENT text,
+ts_parse(PARSER_NAME text, TXT text,
          OUT TOKID integer, OUT TOKEN text) returns setof record
-ts_parse(PARSER_OID oid, DOCUMENT text,
+ts_parse(PARSER_OID oid, TXT text,
          OUT TOKID integer, OUT TOKEN text) returns setof record
 ```
 
 
- `ts_parse` parses the given *document* and returns a series of records, one for each token produced by parsing. Each record includes a `tokid` showing the assigned token type and a `token` which is the text of the token. For example:
+ `ts_parse` parses the document *txt* and returns a series of records, one for each token produced by parsing. Each record includes a `tokid` showing the assigned token type and a `token` which is the text of the token. For example:
 
 ```
 

@@ -1,4 +1,4 @@
-site_name: PostgreSQL 17.9
+site_name: PostgreSQL 17.12
 
 extra_css:
   - stylesheets/extra.css
@@ -1088,6 +1088,9 @@ nav:
       - XML Limits and Conformance to SQL/XML: appendixes/sql-conformance/xml-limits-and-conformance-to-sql-xml.md
     - Release Notes:
       - appendixes/release-notes/index.md
+      - Release 17.12: appendixes/release-notes/release-17-12.md
+      - Release 17.11: appendixes/release-notes/release-17-11.md
+      - Release 17.10: appendixes/release-notes/release-17-10.md
       - Release 17.9: appendixes/release-notes/release-17-9.md
       - Release 17.8: appendixes/release-notes/release-17-8.md
       - Release 17.7: appendixes/release-notes/release-17-7.md

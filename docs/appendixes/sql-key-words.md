@@ -3,7 +3,7 @@
 # SQL Key Words
 
 
- [SQL Key Words](#keywords-table) lists all tokens that are key words in the SQL standard and in PostgreSQL 17.9. Background information can be found in [Identifiers and Key Words](../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-identifiers). (For space reasons, only the latest two versions of the SQL standard, and SQL-92 for historical comparison, are included. The differences between those and the other intermediate standard versions are small.)
+ [SQL Key Words](#keywords-table) lists all tokens that are key words in the SQL standard and in PostgreSQL 17.12. Background information can be found in [Identifiers and Key Words](../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-identifiers). (For space reasons, only the latest two versions of the SQL standard, and SQL-92 for historical comparison, are included. The differences between those and the other intermediate standard versions are small.)
 
 
  SQL distinguishes between *reserved* and *non-reserved* key words. According to the standard, reserved key words are the only real key words; they are never allowed as identifiers. Non-reserved key words only have a special meaning in particular contexts and can be used as identifiers in other contexts. Most non-reserved key words are actually the names of built-in tables and functions specified by SQL. The concept of non-reserved key words essentially only exists to declare that some predefined meaning is attached to a word in some contexts.

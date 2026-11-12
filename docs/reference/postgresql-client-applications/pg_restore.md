@@ -79,7 +79,7 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
      The first keyword specifies whether the objects matched by the pattern are to be included or excluded. The second keyword specifies the type of object to be filtered using the pattern:
 
     -  `function`: functions, works like the `-P`/`--function` option. This keyword can only be used with the `include` keyword.
-    -  `index`: indexes, works like the `-I`/`--indexes` option. This keyword can only be used with the `include` keyword.
+    -  `index`: indexes, works like the `-I`/`--index` option. This keyword can only be used with the `include` keyword.
     -  `schema`: schemas, works like the `-n`/`--schema` and `-N`/`--exclude-schema` options.
     -  `table`: tables, works like the `-t`/`--table` option. This keyword can only be used with the `include` keyword.
     -  `trigger`: triggers, works like the `-T`/`--trigger` option. This keyword can only be used with the `include` keyword.

@@ -972,6 +972,9 @@ Portal SPI_cursor_open(const char * name, SPIPlanPtr plan,
  The passed-in parameter data will be copied into the cursor's portal, so it can be freed while the cursor still exists.
 
 
+ In most cases, a cursor remains until it is explicitly closed, even after the function returns. As an exception, if ephemeral named relations or transition tables are registered on the SPI connection with `SPI_register_relation` or `SPI_register_trigger_data`, all cursors are automatically closed when the function exits.
+
+
 ## Arguments
 
 

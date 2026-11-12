@@ -1,6 +1,6 @@
 <a id="postgres"></a>
 
-# PostgreSQL 17.9 Documentation
+# PostgreSQL 17.12 Documentation
 
 *The PostgreSQL Global Development Group*
 
