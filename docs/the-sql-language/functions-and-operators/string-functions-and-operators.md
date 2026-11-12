@@ -204,8 +204,8 @@
 <td><code>md5('abc')</code> <code>900150983cd24fb0​d6963f7d28e17f72</code></td>
 </tr>
 <tr>
-<td><code>parse_ident</code> ( <code>qualified_identifier</code> <code>text</code> [, <code>strict_mode</code> <code>boolean</code> <code>DEFAULT</code> <code>true</code> ] ) <code>text[]</code></td>
-<td>Splits <code>qualified_identifier</code> into an array of identifiers, removing any quoting of individual identifiers. By default, extra characters after the last identifier are considered an error; but if the second parameter is <code>false</code>, then such extra characters are ignored. (This behavior is useful for parsing names for objects like functions.) Note that this function does not truncate over-length identifiers. If you want truncation you can cast the result to <code>name[]</code>.</td>
+<td><code>parse_ident</code> ( <code>str</code> <code>text</code> [, <code>strict</code> <code>boolean</code> <code>DEFAULT</code> <code>true</code> ] ) <code>text[]</code></td>
+<td>Splits the qualified identifier <code>str</code> into an array of identifiers, removing any quoting of individual identifiers. By default, extra characters after the last identifier are considered an error; but if the second parameter is <code>false</code>, then such extra characters are ignored. (This behavior is useful for parsing names for objects like functions.) Note that this function does not truncate over-length identifiers. If you want truncation you can cast the result to <code>name[]</code>.</td>
 <td><code>parse_ident('"SomeSchema".someTable')</code> <code>{SomeSchema,sometable}</code></td>
 </tr>
 <tr>
@@ -437,7 +437,7 @@ SELECT format('INSERT INTO %I VALUES(%L)', 'Foo bar', E'O\'Reilly');
 Result: INSERT INTO "Foo bar" VALUES('O''Reilly')
 
 SELECT format('INSERT INTO %I VALUES(%L)', 'locations', 'C:\Program Files');
-Result: INSERT INTO locations VALUES('C:\Program Files')
+Result: INSERT INTO locations VALUES(E'C:\\Program Files')
 ```
 
 

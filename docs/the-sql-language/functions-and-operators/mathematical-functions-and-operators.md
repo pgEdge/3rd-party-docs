@@ -7,6 +7,9 @@
 
 
  [Mathematical Operators](#functions-math-op-table) shows the mathematical operators that are available for the standard numeric types. Unless otherwise noted, operators shown as accepting *numeric_type* are available for all the types `smallint`, `integer`, `bigint`, `numeric`, `real`, and `double precision`. Operators shown as accepting *integral_type* are available for the types `smallint`, `integer`, and `bigint`. Except where noted, each form of an operator returns the same data type as its argument(s). Calls involving multiple argument data types, such as `integer` `+` `numeric`, are resolved by using the type appearing later in these lists.
+
+
+ The behavior of bitwise shifting, both left and right, has platform-dependent behavior both in cases of left shifting that results in a signed overflow and in cases of the results of shifting by more bits than exist in the type or from shifting by a negative value.
  <a id="functions-math-op-table"></a>
 
 **Table: Mathematical Operators**

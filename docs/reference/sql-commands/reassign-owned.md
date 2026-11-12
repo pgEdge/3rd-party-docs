@@ -36,7 +36,7 @@ REASSIGN OWNED BY { OLD_ROLE | CURRENT_ROLE | CURRENT_USER | SESSION_USER } [, .
  `REASSIGN OWNED` is often used to prepare for the removal of one or more roles. Because `REASSIGN OWNED` does not affect objects within other databases, it is usually necessary to execute this command in each database that contains objects owned by a role that is to be removed.
 
 
- `REASSIGN OWNED` requires membership on both the source role(s) and the target role.
+ You must have every privilege that an individual `ALTER ... OWNER TO` would require you to have. Unlike `ALTER TABLE ... OWNER TO`, `ALTER TYPE ... OWNER TO`, and other relation and type ownership changes, this does not require the target role to have `CREATE` privilege on the containing schema.
 
 
  The [`DROP OWNED`](drop-owned.md#sql-drop-owned) command is an alternative that simply drops all the database objects owned by one or more roles.

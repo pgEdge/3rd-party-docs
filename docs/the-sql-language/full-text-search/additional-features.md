@@ -259,13 +259,13 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
 
 ```
 
-ts_stat(SQLQUERY text, [ WEIGHTS text, ]
+ts_stat(QUERY text, [ WEIGHTS text, ]
         OUT WORD text, OUT NDOC integer,
         OUT NENTRY integer) returns setof record
 ```
 
 
- *sqlquery* is a text value containing an SQL query which must return a single `tsvector` column. `ts_stat` executes the query and returns statistics about each distinct lexeme (word) contained in the `tsvector` data. The columns returned are
+ *query* is a text value containing an SQL query which must return a single `tsvector` column. `ts_stat` executes the query and returns statistics about each distinct lexeme (word) contained in the `tsvector` data. The columns returned are
 
 -  *word* `text` — the value of a lexeme
 -  *ndoc* `integer` — number of documents (`tsvector`s) the word occurred in

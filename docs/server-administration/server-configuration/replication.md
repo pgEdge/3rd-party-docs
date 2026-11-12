@@ -32,6 +32,45 @@
 
 
      Note that this parameter also applies on the subscriber side, but with a different meaning.
+<a id="guc-output-plugin-libraries"></a>
+
+`output_plugin_libraries` (`string`)
+:   Lists the libraries installed in [dynamic_library_path](client-connection-defaults.md#guc-dynamic-library-path) that are also trusted for use as logical output plugins by replication clients. Any [logical decoding](../../server-programming/logical-decoding/logical-decoding-examples.md#logicaldecoding-example) or [replication](../../internals/frontend-backend-protocol/streaming-replication-protocol.md#protocol-replication) requests for other libraries will be refused. All users are subject to this restriction. The default is `'pgoutput, test_decoding'`, which are the two logical output plugins included in the standard PostgreSQL distribution. ([Plugins Allowed by Default](#guc-output-plugin-libraries-builtins) documents the behavior of the system if they are removed from this list.)
+
+
+     The format is a comma-separated list of library names, where each name is interpreted as for the [`LOAD`](../../reference/sql-commands/load.md#sql-load) command (but logical decoding clients must specify a plugin name that *exactly* matches an entry in the list, without variations in case or path structure). Whitespace between entries is ignored; surround a library name with double quotes if you need to include whitespace or commas in the name.
+
+
+     It is the responsibility of the server administrator to ensure that libraries added to this list do not unintentionally give additional privileges to non-superusers when they are loaded into the server.
+
+
+    !!! note
+
+        When updating the server from a version that does not have the `output_plugin_libraries` parameter, the following query can help construct the list of plugins that are required by all persistent logical replication slots:
+
+        ```sql
+
+        SELECT DISTINCT plugin FROM pg_replication_slots WHERE plugin IS NOT NULL;
+        ```
+         Review the list carefully for safety before adjusting `output_plugin_libraries`.
+
+
+         The above query can only display plugins which were successfully added to replication slots at some point in the past. Newly refused requests will appear in the logs with a message similar to
+
+        ```
+
+        ERROR:  library "..." may not be used as an output plugin
+        DETAIL:  The configuration parameter "output_plugin_libraries" (currently 'pgoutput, test_decoding') does not name this library as a trusted output plugin.
+        HINT:  If it is safe for all REPLICATION users to use this library as an output plugin, add it to "output_plugin_libraries" and reload the server configuration.
+        ```
+     <a id="guc-output-plugin-libraries-builtins"></a>
+
+    **Table: Plugins Allowed by Default**
+
+    | Plugin | Description |
+    | --- | --- |
+    | [pgoutput](../../internals/frontend-backend-protocol/logical-streaming-replication-protocol.md#protocol-logical-replication) | Core plugin for logical replication. Removing `pgoutput` from `output_plugin_libraries` will cause future subscription connections, and maintenance of the replication slots for subscriptions, to fail with an error. (Beware that existing replication tools may not degrade gracefully if the server is configured in this way.) |
+    | [test_decoding](../../appendixes/additional-supplied-modules-and-extensions/test_decoding-sql-based-test-example-module-for-wal-logical-decoding.md#test-decoding) | Decodes the WAL stream into a human-readable text representation. [app-pgrecvlogical](../../reference/postgresql-client-applications/pg_recvlogical.md#app-pgrecvlogical) uses this plugin by default, so removing it from `output_plugin_libraries` will prevent the use of that utility unless a replacement plugin is installed and explicitly selected with [`--plugin`](../../reference/postgresql-client-applications/pg_recvlogical.md#app-pgrecvlogical-option-plugin). |
 <a id="guc-wal-keep-size"></a>
 
 `wal_keep_size` (`integer`)

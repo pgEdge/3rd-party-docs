@@ -436,11 +436,11 @@
 </tr>
 <tr>
 <td><p><code>backup_total</code> <code>bigint</code></p>
-<p>Total amount of data that will be streamed. This is estimated and reported as of the beginning of <code>streaming database files</code> phase. Note that this is only an approximation since the database may change during <code>streaming database files</code> phase and WAL log may be included in the backup later. This is always the same value as <code>backup_streamed</code> once the amount of data streamed exceeds the estimated total size. If the estimation is disabled in pg_basebackup (i.e., <code>--no-estimate-size</code> option is specified), this is <code>NULL</code>.</p></td>
+<p>Total amount of data that will be streamed. This counts archive data before any server-side compression. The estimate is reported as of the beginning of the <code>streaming database files</code> phase. Note that this is only an approximation since the database may change during <code>streaming database files</code> phase and WAL log may be included in the backup later. This is always the same value as <code>backup_streamed</code> once the amount of data streamed exceeds the estimated total size. If the estimation is disabled in pg_basebackup (i.e., <code>--no-estimate-size</code> option is specified), this is <code>NULL</code>.</p></td>
 </tr>
 <tr>
 <td><p><code>backup_streamed</code> <code>bigint</code></p>
-<p>Amount of data streamed. This counter only advances when the phase is <code>streaming database files</code> or <code>transferring wal files</code>.</p></td>
+<p>Amount of data streamed. This counts archive data before any server-side compression. This counter only advances when the phase is <code>streaming database files</code> or <code>transferring wal files</code>.</p></td>
 </tr>
 <tr>
 <td><p><code>tablespaces_total</code> <code>bigint</code></p>

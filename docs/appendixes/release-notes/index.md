@@ -11,6 +11,9 @@
 
  Section markers (&sect;) in the release notes link to [gitweb](https://git.postgresql.org/gitweb/?p=postgresql.git) pages which show the primary git commit messages and source tree changes responsible for the release note item. There might be additional git commits which are not shown.
 
+- [Release 16.16](release-16-16.md#release-16-16)
+- [Release 16.15](release-16-15.md#release-16-15)
+- [Release 16.14](release-16-14.md#release-16-14)
 - [Release 16.13](release-16-13.md#release-16-13)
 - [Release 16.12](release-16-12.md#release-16-12)
 - [Release 16.11](release-16-11.md#release-16-11)

@@ -41,7 +41,7 @@
 <p>Name of the function (might be duplicated in case of overloading)</p></td>
 </tr>
 <tr>
-<td><p><code>schema_catalog</code> <code>sql_identifier</code></p>
+<td><p><code>sequence_catalog</code> <code>sql_identifier</code></p>
 <p>Name of the database that contains the sequence that is used by the function (always the current database)</p></td>
 </tr>
 <tr>

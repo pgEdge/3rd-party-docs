@@ -9,7 +9,7 @@
  According to the standard, the first two characters of an error code denote a class of errors, while the last three characters indicate a specific condition within that class. Thus, an application that does not recognize the specific error code might still be able to infer what to do from the error class.
 
 
- [PostgreSQL Error Codes](#errcodes-table) lists all the error codes defined in PostgreSQL 16.13. (Some are not actually used at present, but are defined by the SQL standard.) The error classes are also shown. For each error class there is a “standard” error code having the last three characters `000`. This code is used only for error conditions that fall within the class but do not have any more-specific code assigned.
+ [PostgreSQL Error Codes](#errcodes-table) lists all the error codes defined in PostgreSQL 16.16. (Some are not actually used at present, but are defined by the SQL standard.) The error classes are also shown. For each error class there is a “standard” error code having the last three characters `000`. This code is used only for error conditions that fall within the class but do not have any more-specific code assigned.
 
 
  The symbol shown in the column “Condition Name” is the condition name to use in PL/pgSQL. Condition names can be written in either upper or lower case. (Note that PL/pgSQL does not recognize warning, as opposed to error, condition names; those are classes 00, 01, and 02.)
@@ -380,6 +380,10 @@
 <tr>
 <td><code>22P05</code></td>
 <td><code>untranslatable_character</code></td>
+</tr>
+<tr>
+<td><code>22P07</code></td>
+<td><code>datum_version_mismatch</code></td>
 </tr>
 <tr>
 <td><code>2200L</code></td>

@@ -2148,7 +2148,7 @@ FROM pg_stat_get_backend_idset() AS backendid;
 </tr>
 <tr>
 <td><code>pg_stat_get_backend_subxact</code> ( <code>integer</code> ) <code>record</code></td>
-<td>Returns a record of information about the subtransactions of the backend with the specified ID. The fields returned are <code>subxact_count</code>, which is the number of subtransactions in the backend's subtransaction cache, and <code>subxact_overflow</code>, which indicates whether the backend's subtransaction cache is overflowed or not.</td>
+<td>Returns a record of information about the subtransactions of the backend with the specified ID. The fields returned are <code>subxact_count</code>, which is the number of subtransactions in the backend's subtransaction cache, and <code>subxact_overflowed</code>, which indicates whether the backend's subtransaction cache is overflowed or not.</td>
 <td></td>
 </tr>
 <tr>

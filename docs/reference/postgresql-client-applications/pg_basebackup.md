@@ -197,7 +197,7 @@ pg_basebackup [OPTION...]
 :   Prevents the server from estimating the total amount of backup data that will be streamed, resulting in the `backup_total` column in the `pg_stat_progress_basebackup` view always being `NULL`.
 
 
-     Without this option, the backup will start by enumerating the size of the entire database, and then go back and send the actual contents. This may make the backup take slightly longer, and in particular it will take longer before the first data is sent. This option is useful to avoid such estimation time if it's too long.
+     Without this option, the backup will start by estimating the total amount of data that will be streamed, and then go back and send the actual contents. This may make the backup take slightly longer, and in particular it will take longer before the first data is sent. This option is useful to avoid such estimation time if it's too long.
 
 
      This option is not allowed when using `--progress`.

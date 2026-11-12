@@ -113,7 +113,7 @@
 </tr>
 <tr>
 <td><p><code>attoptions</code> <code>text[]</code></p>
-<p>Attribute-level options, as “keyword=value” strings</p></td>
+<p>Attribute-level options, as “keyword=value” strings. Can also contain some internal options prefixed with <code>pg_</code>, which cannot be set via DDL. Currently the only internal option is <code>pg_attver</code>.</p></td>
 </tr>
 <tr>
 <td><p><code>attfdwoptions</code> <code>text[]</code></p>

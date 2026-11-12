@@ -336,7 +336,7 @@ psql "dbname=postgres replication=database" -c "IDENTIFY_SYSTEM;"
     :   The full path of the tablespace directory, or null if it's the base directory.
 
     `size` (`int8`)
-    :   The approximate size of the tablespace, in kilobytes (1024 bytes), if progress report has been requested; otherwise it's null.
+    :   The approximate size of the archive that will be generated for the tablespace, in kilobytes (1024 bytes), if progress report has been requested; otherwise it's null. This size is measured before any server-side compression.
 
 
      After the second regular result set, a CopyOutResponse will be sent. The payload of each CopyData message will contain a message in one of the following formats:
@@ -368,7 +368,7 @@ psql "dbname=postgres replication=database" -c "IDENTIFY_SYSTEM;"
         :   Identifies the message as a progress report.
 
         Int64
-        :   The number of bytes from the current tablespace for which processing has been completed.
+        :   The cumulative number of bytes processed across all tablespaces since the backup began. This counts archive data before any server-side compression.
 
 
      After the CopyOutResponse, or all such responses, have been sent, a final ordinary result set will be sent, containing the WAL end position of the backup, in the same format as the start position.

@@ -1,4 +1,4 @@
-site_name: PostgreSQL 16.13
+site_name: PostgreSQL 16.16
 
 extra_css:
   - stylesheets/extra.css
@@ -1114,6 +1114,9 @@ nav:
       - XML Limits and Conformance to SQL/XML: appendixes/sql-conformance/xml-limits-and-conformance-to-sql-xml.md
     - Release Notes:
       - appendixes/release-notes/index.md
+      - Release 16.16: appendixes/release-notes/release-16-16.md
+      - Release 16.15: appendixes/release-notes/release-16-15.md
+      - Release 16.14: appendixes/release-notes/release-16-14.md
       - Release 16.13: appendixes/release-notes/release-16-13.md
       - Release 16.12: appendixes/release-notes/release-16-12.md
       - Release 16.11: appendixes/release-notes/release-16-11.md

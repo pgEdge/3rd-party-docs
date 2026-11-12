@@ -12,13 +12,54 @@
 ### refint — Functions for Implementing Referential Integrity
 
 
- `check_primary_key()` and `check_foreign_key()` are used to check foreign key constraints. (This functionality is long since superseded by the built-in foreign key mechanism, of course, but the module is still useful as an example.)
+ `check_primary_key()` and `check_foreign_key()` are used to check foreign key constraints. (This functionality is long since superseded by the built-in foreign key mechanism, of course, but the module is still useful as an example. This module will be removed in PostgreSQL 20.)
+
+
+!!! note
+
+    `refint` requires a [secure schema usage pattern](../../the-sql-language/data-definition/schemas.md#ddl-schemas-patterns) and data types where the equality operator is named `=`.
 
 
  `check_primary_key()` checks the referencing table. To use, create a `BEFORE INSERT OR UPDATE` trigger using this function on a table referencing another table. Specify as the trigger arguments: the referencing table's column name(s) which form the foreign key, the referenced table name, and the column names in the referenced table which form the primary/unique key. To handle multiple foreign keys, create a trigger for each reference.
 
 
- `check_foreign_key()` checks the referenced table. To use, create a `BEFORE DELETE OR UPDATE` trigger using this function on a table referenced by other table(s). Specify as the trigger arguments: the number of referencing tables for which the function has to perform checking, the action if a referencing key is found (`cascade` — to delete the referencing row, `restrict` — to abort transaction if referencing keys exist, `setnull` — to set referencing key fields to null), the triggered table's column names which form the primary/unique key, then the referencing table name and column names (repeated for as many referencing tables as were specified by first argument). Note that the primary/unique key columns should be marked NOT NULL and should have a unique index.
+!!! note
+
+    The *referenced* table name and column name arguments to `check_primary_key()` are copied as-is into internally generated SQL statements and therefore must be double-quoted by the user as necessary in the `CREATE TRIGGER` command. See [Identifiers and Key Words](../../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-identifiers) for more information about quoting SQL identifiers. Conversely, the *referencing* table column name arguments should not be double quoted. See the following mock example of proper use of `check_primary_key()`:
+
+    ```sql
+
+    CREATE TRIGGER mytrigger
+    BEFORE INSERT OR UPDATE ON referencing_table
+    FOR EACH ROW EXECUTE PROCEDURE
+    check_primary_key (
+        'column A', 'column B',         -- referencing table columns
+        'myschema."referenced table"',  -- referenced table
+        '"column A"', '"column B"'      -- referenced table columns
+    );
+    ```
+
+
+ `check_foreign_key()` checks the referenced table. To use, create a `BEFORE DELETE OR UPDATE` trigger using this function on a table referenced by other table(s). Specify as the trigger arguments: the number of referencing tables for which the function has to perform checking, the action if a referencing key is found (`cascade` — to delete the referencing row, `restrict` — to abort transaction if referencing keys exist, `setnull` — to set referencing key fields to null), the referenced table's column names which form the primary/unique key, then the referencing table name and column names (repeated for as many referencing tables as were specified by first argument). Note that the primary/unique key columns should be marked NOT NULL and should have a unique index.
+
+
+!!! note
+
+    The *referencing* table name and column name arguments to `check_foreign_key()` are copied as-is into internally generated SQL statements and therefore must be double-quoted by the user as necessary in the `CREATE TRIGGER` command. See [Identifiers and Key Words](../../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-identifiers) for more information about quoting SQL identifiers. Conversely, the *referenced* table column name arguments should not be double quoted. See the following mock example of proper use of `check_foreign_key()`:
+
+    ```sql
+
+    CREATE TRIGGER mytrigger
+    BEFORE DELETE OR UPDATE ON referenced_table
+    FOR EACH ROW EXECUTE PROCEDURE
+    check_foreign_key (
+        1,                              -- number of referencing tables
+        'cascade',                      -- action
+        'column A', 'column B',         -- referenced table columns
+        'myschema."referencing table"', -- referencing table
+        '"column A"', '"column B"'      -- referencing table columns
+    );
+    ```
 
 
  There are examples in `refint.example`.

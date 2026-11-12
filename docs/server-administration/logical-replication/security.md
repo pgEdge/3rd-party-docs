@@ -6,6 +6,9 @@
  The role used for the replication connection must have the `REPLICATION` attribute (or be a superuser). If the role lacks `SUPERUSER` and `BYPASSRLS`, publisher row security policies can execute. If the role does not trust all table owners, include `options=-crow_security=off` in the connection string; if a table owner then adds a row security policy, that setting will cause replication to halt rather than execute the policy. Access for the role must be configured in `pg_hba.conf` and it must have the `LOGIN` attribute.
 
 
+ The name of the output plugin used by the replication connection must be included in the server's [output_plugin_libraries](../server-configuration/replication.md#guc-output-plugin-libraries). (For subscriptions, the plugin name that is used is `pgoutput`.) Superusers may modify the trusted list per-connection, by including `options=-coutput_plugin_libraries=...` in the connection string.
+
+
  In order to be able to copy the initial table data, the role used for the replication connection must have the `SELECT` privilege on a published table (or be a superuser).
 
 

@@ -245,7 +245,7 @@ default:\
 ### Linux Memory Overcommit
 
 
- The default virtual memory behavior on Linux is not optimal for PostgreSQL. Because of the way that the kernel implements memory overcommit, the kernel might terminate the PostgreSQL postmaster (the supervisor server process) if the memory demands of either PostgreSQL or another process cause the system to run out of virtual memory.
+ The default virtual memory behavior on Linux is not optimal for PostgreSQL. Because of the way that the kernel implements memory overcommit, the kernel might terminate a PostgreSQL server process, including the postmaster (the supervisor server process), if the memory demands of either PostgreSQL or another process cause the system to run out of virtual memory.
 
 
  If this happens, you will see a kernel message that looks like this (consult your system documentation and configuration on where to look for such a message):
@@ -254,7 +254,7 @@ default:\
 
 Out of Memory: Killed process 12345 (postgres).
 ```
- This indicates that the `postgres` process has been terminated due to memory pressure. Although existing database connections will continue to function normally, no new connections will be accepted. To recover, PostgreSQL will need to be restarted.
+ This indicates that the `postgres` process has been terminated due to memory pressure. If the postmaster is terminated, all connections will eventually be terminated. To recover, PostgreSQL will need to be restarted. If a child process is terminated, PostgreSQL will typically terminate all remaining connections and either recover automatically, if [`restart_after_crash`](../server-configuration/error-handling.md#guc-restart-after-crash) is enabled, or shut down. If PostgreSQL shuts down, it will need to be restarted to recover.
 
 
  One way to avoid this problem is to run PostgreSQL on a machine where you can be sure that other processes will not run the machine out of memory. If memory is tight, increasing the swap space of the operating system can help avoid the problem, because the out-of-memory (OOM) killer is invoked only when physical memory and swap space are exhausted.

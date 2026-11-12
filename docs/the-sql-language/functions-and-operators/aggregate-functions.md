@@ -118,13 +118,13 @@
 <tr>
 <td><code>json_object_agg</code> ( <code>key</code> <code>"any"</code>, <code>value</code> <code>"any"</code> ) <code>json</code></td>
 <td><code>jsonb_object_agg</code> ( <code>key</code> <code>"any"</code>, <code>value</code> <code>"any"</code> ) <code>jsonb</code></td>
-<td>Collects all the key/value pairs into a JSON object. Key arguments are coerced to text; value arguments are converted as per <code>to_json</code> or <code>to_jsonb</code>. Values can be null, but keys cannot.</td>
+<td>Collects all the key/value pairs into a JSON object. Key arguments are coerced to text; value arguments are converted as per <code>to_json</code> or <code>to_jsonb</code>. Values can be null, but keys cannot. If a key appears more than once, the <code>json</code> result keeps every pair, while the <code>jsonb</code> result keeps only the last value for that key.</td>
 <td></td>
 </tr>
 <tr>
 <td><code>json_object_agg_strict</code> ( <code>key</code> <code>"any"</code>, <code>value</code> <code>"any"</code> ) <code>json</code></td>
 <td><code>jsonb_object_agg_strict</code> ( <code>key</code> <code>"any"</code>, <code>value</code> <code>"any"</code> ) <code>jsonb</code></td>
-<td>Collects all the key/value pairs into a JSON object. Key arguments are coerced to text; value arguments are converted as per <code>to_json</code> or <code>to_jsonb</code>. The <code>key</code> can not be null. If the <code>value</code> is null then the entry is skipped,</td>
+<td>Collects all the key/value pairs into a JSON object. Key arguments are coerced to text; value arguments are converted as per <code>to_json</code> or <code>to_jsonb</code>. The <code>key</code> cannot be null. If the <code>value</code> is null then the pair is skipped. Duplicate keys are handled as for <code>json_object_agg</code> and <code>jsonb_object_agg</code>, after removing any pairs with null values.</td>
 <td></td>
 </tr>
 <tr>
@@ -136,7 +136,7 @@
 <tr>
 <td><code>json_object_agg_unique_strict</code> ( <code>key</code> <code>"any"</code>, <code>value</code> <code>"any"</code> ) <code>json</code></td>
 <td><code>jsonb_object_agg_unique_strict</code> ( <code>key</code> <code>"any"</code>, <code>value</code> <code>"any"</code> ) <code>jsonb</code></td>
-<td>Collects all the key/value pairs into a JSON object. Key arguments are coerced to text; value arguments are converted as per <code>to_json</code> or <code>to_jsonb</code>. The <code>key</code> can not be null. If the <code>value</code> is null then the entry is skipped. If there is a duplicate key an error is thrown.</td>
+<td>Collects all the key/value pairs into a JSON object. Key arguments are coerced to text; value arguments are converted as per <code>to_json</code> or <code>to_jsonb</code>. The <code>key</code> cannot be null. If the <code>value</code> is null then the pair is skipped. If there is a duplicate key (including pairs with null values) an error is thrown.</td>
 <td></td>
 </tr>
 <tr>

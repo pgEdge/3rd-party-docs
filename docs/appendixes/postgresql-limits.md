@@ -16,6 +16,7 @@
 | relation size | 32 TB | with the default `BLCKSZ` of 8192 bytes |
 | rows per table | limited by the number of tuples that can fit onto 4,294,967,295 pages |  |
 | columns per table | 1,600 | further limited by tuple size fitting on a single page; see note below |
+| `CHECK` constraints per table | 32,767 | constrained by the size of pg_class.relchecks |
 | columns in a result set | 1,664 |  |
 | field size | 1 GB |  |
 | indexes per table | unlimited | constrained by maximum relations per database |

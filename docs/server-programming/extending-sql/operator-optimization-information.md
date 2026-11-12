@@ -6,7 +6,7 @@
  A PostgreSQL operator definition can include several optional clauses that tell the system useful things about how the operator behaves. These clauses should be provided whenever appropriate, because they can make for considerable speedups in execution of queries that use the operator. But if you provide them, you must be sure that they are right! Incorrect use of an optimization clause can result in slow queries, subtly wrong output, or other Bad Things. You can always leave out an optimization clause if you are not sure about it; the only consequence is that queries might run slower than they need to.
 
 
- Additional optimization clauses might be added in future versions of PostgreSQL. The ones described here are all the ones that release 16.13 understands.
+ Additional optimization clauses might be added in future versions of PostgreSQL. The ones described here are all the ones that release 16.16 understands.
 
 
  It is also possible to attach a planner support function to the function that underlies an operator, providing another way of telling the system about the behavior of the operator. See [Function Optimization Information](function-optimization-information.md#xfunc-optimization) for more information.

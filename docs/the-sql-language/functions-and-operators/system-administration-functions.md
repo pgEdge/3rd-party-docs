@@ -490,7 +490,7 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <tr id="pg-logical-emit-message">
 <td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>content</code> <code>text</code> ) <code>pg_lsn</code></td>
 <td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>content</code> <code>bytea</code> ) <code>pg_lsn</code></td>
-<td>Emits a logical decoding message. This can be used to pass generic messages to logical decoding plugins through WAL. The <code>transactional</code> parameter specifies if the message should be part of the current transaction, or if it should be written immediately and decoded as soon as the logical decoder reads the record. The <code>prefix</code> parameter is a textual prefix that can be used by logical decoding plugins to easily recognize messages that are interesting for them. The <code>content</code> parameter is the content of the message, given either in text or binary form.</td>
+<td>Emits a logical decoding message. This can be used to pass generic messages to logical decoding plugins through WAL. The <code>transactional</code> parameter specifies if the message should be part of the current transaction, or if it should be written immediately and decoded as soon as the logical decoder reads the record. The <code>prefix</code> parameter is a textual prefix that can be used by logical decoding plugins to easily recognize messages that are interesting for them. The <code>message</code> parameter is the content of the message, given either in text or binary form.</td>
 </tr>
 </tbody>
 </table>
