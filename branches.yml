@@ -25,23 +25,23 @@ branches:
 
   - branch: pg16
     mode: sgml
-    version: "16.15"
+    version: "16.16"
     upstream: https://github.com/postgres/postgres.git
-    ref: REL_16_15
+    ref: REL_16_16
     src_subdir: doc/src/sgml
 
   - branch: pg17
     mode: sgml
-    version: "17.11"
+    version: "17.12"
     upstream: https://github.com/postgres/postgres.git
-    ref: REL_17_11
+    ref: REL_17_12
     src_subdir: doc/src/sgml
 
   - branch: pg18
     mode: sgml
-    version: "18.6"
+    version: "18.7"
     upstream: https://github.com/postgres/postgres.git
-    ref: REL_18_6
+    ref: REL_18_7
     src_subdir: doc/src/sgml
 
   - branch: pg19
@@ -651,11 +651,11 @@ branches:
 
   # PostgreSQL — added by auto/sync-branches
 
-  - branch: postgresql19rc1
+  - branch: postgresql19rc2
     mode: sgml
-    version: "19rc1"
+    version: "19rc2"
     upstream: https://github.com/postgres/postgres.git
-    ref: REL_19_RC1
+    ref: REL_19_RC2
     src_subdir: doc/src/sgml
 
   # pgBackRest — added by auto/sync-branches
@@ -813,3 +813,49 @@ branches:
     upstream: https://github.com/pgbackrest/pgbackrest.git
     ref: release/2.60.0
     src_subdir: doc
+
+  # pgAdmin 4 — added by auto/sync-branches
+
+  - branch: pgadmin919
+    mode: rst
+    version: "9.19"
+    upstream: https://github.com/pgadmin-org/pgadmin4.git
+    ref: REL-9_19
+    src_subdir: docs/en_US
+    pgadmin_src: "yes"
+
+  # pgAudit — added by auto/sync-branches
+
+  - branch: pgaudit19rc1
+    mode: md
+    version: "19rc1"
+    upstream: https://github.com/pgaudit/pgaudit.git
+    ref: 19rc1
+    src_subdir: .
+
+  # supautils — added by auto/sync-branches
+
+  - branch: supautils400
+    mode: md
+    version: "4.0.0"
+    upstream: https://github.com/supabase/supautils.git
+    ref: v4.0.0
+    src_subdir: .
+
+  # pgmq — added by auto/sync-branches
+
+  - branch: pgmq1131
+    mode: mkdocs
+    version: "1.13.1"
+    upstream: https://github.com/pgmq/pgmq.git
+    ref: v1.13.1
+    src_subdir: docs
+
+  # pldebugger — added by auto/sync-branches
+
+  - branch: pldebugger110
+    mode: md
+    version: "1.10"
+    upstream: https://github.com/EnterpriseDB/pldebugger.git
+    ref: v1.10
+    src_subdir: .
