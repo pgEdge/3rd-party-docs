@@ -1,0 +1,25 @@
+# Code owners under the Code Review and Commit Policy v2.0.
+# 3rd-party-docs is Tier 2. The last matching line wins.
+
+# Workflows, release, packaging and signing: a code owner or build-packaging.
+/.github/workflows/  @dpage @maqeel75 @pgEdge/build-packaging
+/.github/actions/  @dpage @maqeel75 @pgEdge/build-packaging
+action.yml  @dpage @maqeel75 @pgEdge/build-packaging
+action.yaml  @dpage @maqeel75 @pgEdge/build-packaging
+.goreleaser*.yml  @dpage @maqeel75 @pgEdge/build-packaging
+.goreleaser*.yaml  @dpage @maqeel75 @pgEdge/build-packaging
+*.spec  @dpage @maqeel75 @pgEdge/build-packaging
+debian/  @dpage @maqeel75 @pgEdge/build-packaging
+rpm/  @dpage @maqeel75 @pgEdge/build-packaging
+packaging/  @dpage @maqeel75 @pgEdge/build-packaging
+release*.sh  @dpage @maqeel75 @pgEdge/build-packaging
+sign*.sh  @dpage @maqeel75 @pgEdge/build-packaging
+sign*.py  @dpage @maqeel75 @pgEdge/build-packaging
+Dockerfile*  @dpage @maqeel75 @pgEdge/build-packaging
+
+# Ownership and AI review configuration: code owners only.
+/CODEOWNERS  @dpage @maqeel75
+/.github/CODEOWNERS  @dpage @maqeel75
+/docs/CODEOWNERS  @dpage @maqeel75
+/REVIEW.md  @dpage @maqeel75
+/.coderabbit.yaml  @dpage @maqeel75
