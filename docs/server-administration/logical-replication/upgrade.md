@@ -20,9 +20,9 @@
 
 -  The new cluster must have [`wal_level`](../server-configuration/write-ahead-log.md#guc-wal-level) as `replica` or `logical`.
 -  The new cluster must have [`max_replication_slots`](../server-configuration/replication.md#guc-max-replication-slots) configured to a value greater than or equal to the number of slots present in the old cluster.
--  The output plugins referenced by the slots on the old cluster must be installed in the new PostgreSQL executable directory.
+-  The output plugins referenced by the slots in the old cluster must be installed in the new PostgreSQL executable directory. They must also be included in the new cluster's [output_plugin_libraries](../server-configuration/replication.md#guc-output-plugin-libraries); see that parameter's documentation for safety information.
 -  The old cluster has replicated all the transactions and logical decoding messages to subscribers.
--  All slots on the old cluster must be usable, i.e., their [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`conflicting` is `false`.
+-  All slots in the old cluster must be usable, i.e., their [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`conflicting` is `false`.
 -  The new cluster must not have any permanent logical slots; i.e., any existing logical slots must have [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).`temporary` set to `true`.
   <a id="prepare-subscriber-upgrades"></a>
 
@@ -43,7 +43,7 @@
 -  All the subscription tables in the old subscriber should be in state `i` (initialize) or `r` (ready). This can be verified by checking [pg_subscription_rel](../../internals/system-catalogs/pg_subscription_rel.md#catalog-pg-subscription-rel).`srsubstate`.
 -  The replication origin entry corresponding to each of the subscriptions should exist in the old cluster. This can be found by checking [pg_subscription](../../internals/system-catalogs/pg_subscription.md#catalog-pg-subscription) and [pg_replication_origin](../../internals/system-catalogs/pg_replication_origin.md#catalog-pg-replication-origin) system tables.
 -  The new cluster must have [`max_active_replication_origins`](../server-configuration/replication.md#guc-max-active-replication-origins) configured to a value greater than or equal to the number of subscriptions present in the old cluster.
--  If there are subscriptions with retain_dead_tuples enabled, the reserved replication slot “`pg_conflict_detection`” must not exist on the new cluster. Additionally, the [`wal_level`](../server-configuration/write-ahead-log.md#guc-wal-level) on the new cluster must be set to `replica` or `logical`.
+-  If there are subscriptions with retain_dead_tuples enabled, the reserved replication slot “`pg_conflict_detection`” must not exist in the new cluster. Additionally, the [`wal_level`](../server-configuration/write-ahead-log.md#guc-wal-level) on the new cluster must be set to `replica` or `logical`.
   <a id="upgrading-logical-replication-clusters"></a>
 
 ### Upgrading Logical Replication Clusters

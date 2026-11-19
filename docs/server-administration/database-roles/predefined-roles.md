@@ -33,7 +33,7 @@ GRANT pg_signal_backend TO admin_user;
 <a id="predefined-role-pg-maintain"></a>
 
 `pg_maintain`
-:   `pg_maintain` allows executing [`VACUUM`](../../reference/sql-commands/vacuum.md#sql-vacuum), [`ANALYZE`](../../reference/sql-commands/analyze.md#sql-analyze), [`CLUSTER`](../../reference/sql-commands/cluster.md#sql-cluster), [`REFRESH MATERIALIZED VIEW`](../../reference/sql-commands/refresh-materialized-view.md#sql-refreshmaterializedview), [`REINDEX`](../../reference/sql-commands/reindex.md#sql-reindex), and [`LOCK TABLE`](../../reference/sql-commands/lock.md#sql-lock) on all relations, as if having `MAINTAIN` rights on those objects.
+:   `pg_maintain` allows executing [`VACUUM`](../../reference/sql-commands/vacuum.md#sql-vacuum), [`ANALYZE`](../../reference/sql-commands/analyze.md#sql-analyze), [`CLUSTER`](../../reference/sql-commands/cluster.md#sql-cluster), [`REPACK`](../../reference/sql-commands/repack.md#sql-repack), [`REFRESH MATERIALIZED VIEW`](../../reference/sql-commands/refresh-materialized-view.md#sql-refreshmaterializedview), [`REINDEX`](../../reference/sql-commands/reindex.md#sql-reindex), and [`LOCK TABLE`](../../reference/sql-commands/lock.md#sql-lock) on all relations, as if having `MAINTAIN` rights on those objects.
 <a id="predefined-role-pg-monitor"></a>
 
 `pg_monitor`, `pg_read_all_settings`, `pg_read_all_stats`, `pg_stat_scan_tables`

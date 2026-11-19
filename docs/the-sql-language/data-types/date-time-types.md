@@ -10,8 +10,8 @@
 
 | Name | Storage Size | Description | Low Value | High Value | Resolution |
 | --- | --- | --- | --- | --- | --- |
-| <code>timestamp [ (</code><em>p</em><code>) ] [ without time zone ]</code> | 8 bytes | both date and time (no time zone) | 4713 BC | 294276 AD | 1 microsecond |
-| <code>timestamp [ (</code><em>p</em><code>) ] with time zone</code> | 8 bytes | both date and time, with time zone | 4713 BC | 294276 AD | 1 microsecond |
+| <code>timestamp [ (</code><em>p</em><code>) ] [ without time zone ]</code> | 8 bytes | both date and time (no time zone conversion) | 4713 BC | 294276 AD | 1 microsecond |
+| <code>timestamp [ (</code><em>p</em><code>) ] with time zone</code> | 8 bytes | both date and time, with time zone conversion | 4713 BC | 294276 AD | 1 microsecond |
 | `date` | 4 bytes | date (no time of day) | 4713 BC | 5874897 AD | 1 day |
 | <code>time [ (</code><em>p</em><code>) ] [ without time zone ]</code> | 8 bytes | time of day (no date) | 00:00:00 | 24:00:00 | 1 microsecond |
 | <code>time [ (</code><em>p</em><code>) ] with time zone</code> | 12 bytes | time of day (no date), with time zone | 00:00:00+1559 | 24:00:00-1559 | 1 microsecond |
@@ -53,7 +53,7 @@ MINUTE TO SECOND
 ### Date/Time Input
 
 
- Date and time input is accepted in almost any reasonable format, including ISO 8601, SQL-compatible, traditional POSTGRES, and others. For some formats, ordering of day, month, and year in date input is ambiguous and there is support for specifying the expected ordering of these fields. Set the [DateStyle](../../server-administration/server-configuration/client-connection-defaults.md#guc-datestyle) parameter to `MDY` to select month-day-year interpretation, `DMY` to select day-month-year interpretation, or `YMD` to select year-month-day interpretation.
+ Date and time input is accepted in almost any reasonable format, including ISO 8601, SQL-compatible, traditional POSTGRES, and others. (PostgreSQL does not support ISO 8601-optional signed years.) For some formats, ordering of day, month, and year in date input is ambiguous and there is support for specifying the expected ordering of these fields. Set the [DateStyle](../../server-administration/server-configuration/client-connection-defaults.md#guc-datestyle) parameter to `MDY` to select month-day-year interpretation, `DMY` to select day-month-year interpretation, or `YMD` to select year-month-day interpretation.
 
 
  PostgreSQL is more flexible in handling date/time input than the SQL standard requires. See [Date/Time Support](../../appendixes/date-time-support/index.md#datetime-appendix) for the exact parsing rules of date/time input and for the recognized text fields including months, days of the week, and time zones.
@@ -192,7 +192,7 @@ TIMESTAMP WITH TIME ZONE '2004-10-19 10:23:54+02'
  In a value that has been determined to be `timestamp without time zone`, PostgreSQL will silently ignore any time zone indication. That is, the resulting value is derived from the date/time fields in the input string, and is not adjusted for time zone.
 
 
- For `timestamp with time zone` values, an input string that includes an explicit time zone will be converted to UTC (*Universal Coordinated Time*) using the appropriate offset for that time zone. If no time zone is stated in the input string, then it is assumed to be in the time zone indicated by the system's [TimeZone](../../server-administration/server-configuration/client-connection-defaults.md#guc-timezone) parameter, and is converted to UTC using the offset for the `timezone` zone. In either case, the value is stored internally as UTC, and the originally stated or assumed time zone is not retained.
+ For `timestamp with time zone` values, an input string that includes an explicit time zone will be converted to UTC (*Universal Coordinated Time*) using the appropriate offset for that time zone. If no time zone is stated in the input string, then it is assumed to be in the time zone indicated by the system's [TimeZone](../../server-administration/server-configuration/client-connection-defaults.md#guc-timezone) parameter, and is converted to UTC using the offset for the `timezone` zone. In either case, the value is stored internally as UTC. The originally stated or assumed time zone is not retained and *cannot* be retrieved later.
 
 
  When a `timestamp with time zone` value is output, it is always converted from UTC to the current `timezone` zone, and displayed as local time in that zone. To see the time in another time zone, either change `timezone` or use the `AT TIME ZONE` construct (see [`AT TIME ZONE` and `AT LOCAL`](../functions-and-operators/date-time-functions-and-operators.md#functions-datetime-zoneconvert)).
@@ -427,4 +427,4 @@ SELECT '2 years 15 months 100 weeks 99 hours 123456789 milliseconds'::interval;
 | `sql_standard` | 1-2 | 3 4:05:06 | -1-2 +3 -4:05:06 |
 | `postgres` | 1 year 2 mons | 3 days 04:05:06 | -1 year -2 mons +3 days -04:05:06 |
 | `postgres_verbose` | @ 1 year 2 mons | @ 3 days 4 hours 5 mins 6 secs | @ 1 year 2 mons -3 days 4 hours 5 mins 6 secs ago |
-| `iso_8601` | P1Y2M | P3DT4H5M6S | P-1Y-2M3D​T-4H-5M-6S |
+| `iso_8601` | P1Y2M | P3DT4H5M6S | P-1Y-2M3DT-4H-5M-6S |

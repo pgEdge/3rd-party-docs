@@ -8,16 +8,16 @@ convert a physical replica into a new logical replica
 
 
 ```
-pg_createsubscriber [OPTION...] {
-     -d
-     --database
-     | DBNAME |
-     -D
-     --pgdata
-     | DATADIR |
-     -P
-     --publisher-server
-     | CONNSTR}
+pg_createsubscriber [OPTION...]
+     {-d | --database}
+    DBNAME
+
+     {-D | --pgdata}
+    DATADIR
+
+     {-P | --publisher-server}
+    CONNSTR
+
 ```
 
 

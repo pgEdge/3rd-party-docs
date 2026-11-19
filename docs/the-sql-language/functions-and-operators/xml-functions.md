@@ -685,7 +685,7 @@ SELECT xmltable.*
 
 ```
 
-table_to_xml ( table regclass, nulls boolean,
+table_to_xml ( tbl regclass, nulls boolean,
                tableforest boolean, targetns text ) xml
 query_to_xml ( query text, nulls boolean,
                tableforest boolean, targetns text ) xml
@@ -694,7 +694,7 @@ cursor_to_xml ( cursor refcursor, count integer, nulls boolean,
 ```
 
 
- `table_to_xml` maps the content of the named table, passed as parameter `table`. The `regclass` type accepts strings identifying tables using the usual notation, including optional schema qualification and double quotes (see [Object Identifier Types](../data-types/object-identifier-types.md#datatype-oid) for details). `query_to_xml` executes the query whose text is passed as parameter `query` and maps the result set. `cursor_to_xml` fetches the indicated number of rows from the cursor specified by the parameter `cursor`. This variant is recommended if large tables have to be mapped, because the result value is built up in memory by each function.
+ `table_to_xml` maps the content of the named table, passed as parameter `tbl`. The `regclass` type accepts strings identifying tables using the usual notation, including optional schema qualification and double quotes (see [Object Identifier Types](../data-types/object-identifier-types.md#datatype-oid) for details). `query_to_xml` executes the query whose text is passed as parameter `query` and maps the result set. `cursor_to_xml` fetches the indicated number of rows from the cursor specified by the parameter `cursor`. This variant is recommended if large tables have to be mapped, because the result value is built up in memory by each function.
 
 
  If `tableforest` is false, then the resulting XML document looks like this:
@@ -754,7 +754,7 @@ cursor_to_xml ( cursor refcursor, count integer, nulls boolean,
 
 ```
 
-table_to_xmlschema ( table regclass, nulls boolean,
+table_to_xmlschema ( tbl regclass, nulls boolean,
                      tableforest boolean, targetns text ) xml
 query_to_xmlschema ( query text, nulls boolean,
                      tableforest boolean, targetns text ) xml
@@ -768,7 +768,7 @@ cursor_to_xmlschema ( cursor refcursor, nulls boolean,
 
 ```
 
-table_to_xml_and_xmlschema ( table regclass, nulls boolean,
+table_to_xml_and_xmlschema ( tbl regclass, nulls boolean,
                              tableforest boolean, targetns text ) xml
 query_to_xml_and_xmlschema ( query text, nulls boolean,
                              tableforest boolean, targetns text ) xml

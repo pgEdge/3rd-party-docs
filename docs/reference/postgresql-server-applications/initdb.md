@@ -8,10 +8,10 @@ create a new PostgreSQL database cluster
 
 
 ```
-initdb [OPTION...] {
-     --pgdata
-     -D
-     |  DATADIR}
+initdb [OPTION...]
+     [--pgdata | -D]
+    DATADIR
+
 ```
  <a id="r1-app-initdb-1"></a>
 

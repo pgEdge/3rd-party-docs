@@ -69,7 +69,7 @@ CREATE DATABASE NAME
 <a id="create-database-locale"></a>
 
 *locale*
-:   Sets the default collation order and character classification in the new database. Collation affects the sort order applied to strings, e.g., in queries with `ORDER BY`, as well as the order used in indexes on text columns. Character classification affects the categorization of characters, e.g., lower, upper, and digit. Also sets the `LC_CTYPE` aspect of the operating system environment. The default is the same setting as the template database. See [libc Collations](../../server-administration/localization/collation-support.md#collation-managing-create-libc) and [ICU Collations](../../server-administration/localization/collation-support.md#collation-managing-create-icu) for details.
+:   Sets the default collation order and character classification in the new database. Collation affects the sort order applied to strings, e.g., in queries with `ORDER BY`, as well as the order used in indexes on text columns. Character classification affects the categorization of characters, e.g., lower, upper, and digit. Also sets the associated aspects of the operating system environment, `LC_COLLATE` and `LC_CTYPE`. The default is the same setting as the template database. See [libc Collations](../../server-administration/localization/collation-support.md#collation-managing-create-libc) and [ICU Collations](../../server-administration/localization/collation-support.md#collation-managing-create-icu) for details.
 
 
      Can be overridden by setting [lc_collate](#create-database-lc-collate), [lc_ctype](#create-database-lc-ctype), [builtin_locale](#create-database-builtin-locale), or [icu_locale](#create-database-icu-locale) individually.
@@ -84,20 +84,17 @@ CREATE DATABASE NAME
 <a id="create-database-lc-collate"></a>
 
 *lc_collate*
-:   If [locale_provider](#create-database-locale-provider) is `libc`, sets the default collation order to use in the new database, overriding the setting [locale](#create-database-locale). Otherwise, this setting is ignored.
+:   Sets `LC_COLLATE` in the database server's operating system environment. The default is the setting of [locale](#create-database-locale) if specified, otherwise the same setting as the template database. See below for additional restrictions.
 
 
-     The default is the setting of [locale](#create-database-locale) if specified, otherwise the same setting as the template database. See below for additional restrictions.
+     If [locale_provider](#create-database-locale-provider) is `libc`, also sets the default collation order to use in the new database, overriding the setting [locale](#create-database-locale).
 <a id="create-database-lc-ctype"></a>
 
 *lc_ctype*
-:   Sets `LC_CTYPE` in the database server's operating system environment.
+:   Sets `LC_CTYPE` in the database server's operating system environment. The default is the setting of [locale](#create-database-locale) if specified, otherwise the same setting as the template database. See below for additional restrictions.
 
 
-     If [locale_provider](#create-database-locale-provider) is `libc`, sets the default character classification to use in the new database, overriding the setting [locale](#create-database-locale).
-
-
-     The default is the setting of [locale](#create-database-locale) if specified, otherwise the same setting as the template database. See below for additional restrictions.
+     If [locale_provider](#create-database-locale-provider) is `libc`, also sets the default character classification to use in the new database, overriding the setting [locale](#create-database-locale).
 <a id="create-database-builtin-locale"></a>
 
 *builtin_locale*

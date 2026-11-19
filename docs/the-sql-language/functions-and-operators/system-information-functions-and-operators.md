@@ -83,7 +83,7 @@
 <tr>
 <td><code>pg_blocking_pids</code> ( <code>integer</code> ) <code>integer[]</code></td>
 <td>Returns an array of the process ID(s) of the sessions that are blocking the server process with the specified process ID from acquiring a lock, or an empty array if there is no such server process or it is not blocked.</td>
-<td>One server process blocks another if it either holds a lock that conflicts with the blocked process's lock request (hard block), or is waiting for a lock that would conflict with the blocked process's lock request and is ahead of it in the wait queue (soft block). When using parallel queries the result always lists client-visible process IDs (that is, <code>pg_backend_pid</code> results) even if the actual lock is held or awaited by a child worker process. As a result of that, there may be duplicated PIDs in the result. Also note that when a prepared transaction holds a conflicting lock, it will be represented by a zero process ID.<br>Frequent calls to this function could have some impact on database performance, because it needs exclusive access to the lock manager's shared state for a short time.</td>
+<td>One server process blocks another if it either holds a lock that conflicts with the blocked process's lock request (hard block), or is waiting for a lock that would conflict with the blocked process's lock request and is ahead of it in the wait queue (soft block). A prepared transaction that holds a conflicting lock is represented by a zero process ID.<br>When using parallel queries the result always lists client-visible process IDs (that is, <code>pg_backend_pid</code> results) even if the actual lock is held or awaited by a child worker process. As a result of that, there may be duplicated PIDs in the result. Note that the processes of a parallel query can block each other on relation extension locks (lock type <code>extend</code> in <a href="../../internals/system-views/pg_locks.md#view-pg-locks"><code>pg_locks</code></a>), in which case the result contains the blocked session's own process ID.<br>Frequent calls to this function could have some impact on database performance, because it needs exclusive access to the lock manager's shared state for a short time.</td>
 </tr>
 <tr>
 <td><code>pg_conf_load_time</code> () <code>timestamp with time zone</code></td>
@@ -304,11 +304,6 @@ SELECT has_function_privilege('joeuser', 'myfunc(int, text)', 'execute');</code>
 <td><code>aclitem[]</code> <code>@&gt;</code> <code>aclitem</code> <code>boolean</code></td>
 <td>Does array contain the specified privileges? (This is true if there is an array entry that matches the <code>aclitem</code>'s grantee and grantor, and has at least the specified set of privileges.)</td>
 <td><code>'{calvin=r<em>w/hobbes,hobbes=r</em>w<em>/postgres}'::aclitem[] @&gt; 'calvin=r</em>/hobbes'::aclitem</code> <code>t</code></td>
-</tr>
-<tr>
-<td><code>aclitem[]</code> <code>~</code> <code>aclitem</code> <code>boolean</code></td>
-<td>This is a deprecated alias for <code>@&gt;</code>.</td>
-<td><code>'{calvin=r<em>w/hobbes,hobbes=r</em>w<em>/postgres}'::aclitem[] ~ 'calvin=r</em>/hobbes'::aclitem</code> <code>t</code></td>
 </tr>
 </tbody>
 </table>
@@ -535,11 +530,6 @@ SELECT pg_type_is_visible('myschema.widget'::regtype);
 <tr>
 <td><code>pg_get_partkeydef</code> ( <code>table</code> <code>oid</code> ) <code>text</code></td>
 <td>Reconstructs the definition of a partitioned table's partition key, in the form it would have in the <code>PARTITION BY</code> clause of <code>CREATE TABLE</code>. (This is a decompiled reconstruction, not the original text of the command.)</td>
-<td></td>
-</tr>
-<tr>
-<td><code>pg_get_propgraphdef</code> ( <code>propgraph</code> <code>oid</code> ) <code>text</code></td>
-<td>Reconstructs the creating command for a property graph. (This is a decompiled reconstruction, not the original text of the command.)</td>
 <td></td>
 </tr>
 <tr>
@@ -872,8 +862,8 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 <td>This function will only work as desired if the data type's input function has been updated to report invalid input as a “soft” error. Otherwise, invalid input will abort the transaction, just as if the string had been cast to the type directly.<br><code>pg_input_is_valid('42', 'integer')</code> <code>t</code><br><code>pg_input_is_valid('42000000000', 'integer')</code> <code>f</code><br><code>pg_input_is_valid('1234.567', 'numeric(7,4)')</code> <code>f</code></td>
 </tr>
 <tr>
-<td><code>pg_input_error_info</code> ( <code>string</code> <code>text</code>, <code>type</code> <code>text</code> ) <code>record</code> ( <code>message</code> <code>text</code>, <code>detail</code> <code>text</code>, <code>hint</code> <code>text</code>, <code>sql_error_code</code> <code>text</code> )</td>
-<td>Tests whether the given <code>string</code> is valid input for the specified data type; if not, return the details of the error that would have been thrown. If the input is valid, the results are NULL. The inputs are the same as for <code>pg_input_is_valid</code>.</td>
+<td><code>pg_input_error_info</code> ( <code>value</code> <code>text</code>, <code>type_name</code> <code>text</code> ) <code>record</code> ( <code>message</code> <code>text</code>, <code>detail</code> <code>text</code>, <code>hint</code> <code>text</code>, <code>sql_error_code</code> <code>text</code> )</td>
+<td>Tests whether the given <code>value</code> is valid input for the specified data type; if not, return the details of the error that would have been thrown. If the input is valid, the results are NULL. The inputs are the same as for <code>pg_input_is_valid</code>.</td>
 <td>This function will only work as desired if the data type's input function has been updated to report invalid input as a “soft” error. Otherwise, invalid input will abort the transaction, just as if the string had been cast to the type directly.<br><p><code>SELECT * FROM pg_input_error_info('42000000000', 'integer')</code></p>
 <pre><code>
                        message                        | detail | hint | sql_error_code
@@ -956,15 +946,15 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 <td></td>
 </tr>
 <tr>
-<td><code>pg_get_multixact_stats</code> () <code>record</code> ( <code>num_mxids</code> <code>integer</code>, <code>num_members</code> <code>bigint</code>, <code>members_size</code> <code>bigint</code>, <code>oldest_multixact</code> <code>xid</code> )</td>
+<td><code>pg_get_multixact_stats</code> () <code>record</code> ( <code>num_mxids</code> <code>bigint</code>, <code>num_members</code> <code>bigint</code>, <code>members_size</code> <code>bigint</code>, <code>oldest_multixact</code> <code>xid</code> )</td>
 <td>Returns statistics about current multixact usage: <code>num_mxids</code> is the total number of multixact IDs currently present in the system, <code>num_members</code> is the total number of multixact member entries currently present in the system, <code>members_size</code> is the storage occupied by <code>num_members</code> in the <code>pg_multixact/members</code> directory, <code>oldest_multixact</code> is the oldest multixact ID still in use.</td>
-<td>The function reports statistics at the time it is invoked. Values may vary between calls, even within a single transaction.<br>To use this function, you must have privileges of the <code>pg_read_all_stats</code> role.</td>
+<td>The function reports statistics at the time it is invoked. Values may vary between calls, even within a single transaction.<br>By default, all columns are shown as <code>NULL</code> unless the user has privileges of the <code>pg_read_all_stats</code> role.</td>
 </tr>
 </tbody>
 </table>
 
 
- The internal transaction ID type `xid` is 32 bits wide and wraps around every 4 billion transactions. However, the functions shown in [Transaction ID and Snapshot Information Functions](#functions-pg-snapshot), except `age`, `mxid_age`, and `pg_get_multixact_members`, use a 64-bit type `xid8` that does not wrap around during the life of an installation and can be converted to `xid` by casting if required; see [Transactions and Identifiers](../../internals/transaction-processing/transactions-and-identifiers.md#transaction-id) for details. The data type `pg_snapshot` stores information about transaction ID visibility at a particular moment in time. Its components are described in [Snapshot Components](#functions-pg-snapshot-parts). `pg_snapshot`'s textual representation is <em>xmin</em><code>:</code><em>xmax</em><code>:</code><em>xip_list</em>. For example `10:20:10,14,15` means `xmin=10, xmax=20, xip_list=10, 14, 15`.
+ The internal transaction ID type `xid` is 32 bits wide and wraps around every 4 billion transactions. However, the functions shown in [Transaction ID and Snapshot Information Functions](#functions-pg-snapshot), except `age`, `mxid_age`, `pg_get_multixact_members`, and `pg_get_multixact_stats`, use a 64-bit type `xid8` that does not wrap around during the life of an installation and can be converted to `xid` by casting if required; see [Transactions and Identifiers](../../internals/transaction-processing/transactions-and-identifiers.md#transaction-id) for details. The data type `pg_snapshot` stores information about transaction ID visibility at a particular moment in time. Its components are described in [Snapshot Components](#functions-pg-snapshot-parts). `pg_snapshot`'s textual representation is <em>xmin</em><code>:</code><em>xmax</em><code>:</code><em>xip_list</em>. For example `10:20:10,14,15` means `xmin=10, xmax=20, xip_list=10, 14, 15`.
  <a id="functions-pg-snapshot-parts"></a>
 
 **Table: Snapshot Components**
@@ -1118,10 +1108,11 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 | `timeline_id` | `integer` |
 | `prev_timeline_id` | `integer` |
 | `full_page_writes` | `boolean` |
+| `logical_decoding` | `boolean` |
 | `next_xid` | `text` |
 | `next_oid` | `oid` |
 | `next_multixact_id` | `xid` |
-| `next_multi_offset` | `xid` |
+| `next_multi_offset` | `bigint` |
 | `oldest_xid` | `xid` |
 | `oldest_xid_dbid` | `oid` |
 | `oldest_active_xid` | `xid` |
@@ -1236,41 +1227,6 @@ acl      | {postgres=arwdDxtm/postgres,foo=r/postgres}
 <td><code>pg_get_wal_summarizer_state</code> () <code>record</code> ( <code>summarized_tli</code> <code>bigint</code>, <code>summarized_lsn</code> <code>pg_lsn</code>, <code>pending_lsn</code> <code>pg_lsn</code>, <code>summarizer_pid</code> <code>int</code> )</td>
 <td>Returns information about the progress of the WAL summarizer. If the WAL summarizer has never run since the instance was started, then <code>summarized_tli</code> and <code>summarized_lsn</code> will be <code>0</code> and <code>0/00000000</code> respectively; otherwise, they will be the TLI and ending LSN of the last WAL summary file written to disk. If the WAL summarizer is currently running, <code>pending_lsn</code> will be the ending LSN of the last record that it has consumed, which must always be greater than or equal to <code>summarized_lsn</code>; if the WAL summarizer is not running, it will be equal to <code>summarized_lsn</code>. <code>summarizer_pid</code> is the PID of the WAL summarizer process, if it is running, and otherwise NULL.</td>
 <td>As a special exception, the WAL summarizer will refuse to generate WAL summary files if run on WAL generated under <code>wal_level=minimal</code>, since such summaries would be unsafe to use as the basis for an incremental backup. In this case, the fields above will continue to advance as if summaries were being generated, but nothing will be written to disk. Once the summarizer reaches WAL generated while <code>wal_level</code> was set to <code>replica</code> or higher, it will resume writing summaries to disk.</td>
-</tr>
-</tbody>
-</table>
-  <a id="functions-get-object-ddl"></a>
-
-### Get Object DDL Functions
-
-
- The functions shown in [Get Object DDL Functions](#functions-get-object-ddl-table) reconstruct DDL statements for various global database objects. Each function returns a set of text rows, one SQL statement per row. (This is a decompiled reconstruction, not the original text of the command.) Functions that accept `VARIADIC` options take alternating name/value text pairs; values are parsed as boolean, integer or text.
- <a id="functions-get-object-ddl-table"></a>
-
-**Table: Get Object DDL Functions**
-
-<table>
-<thead>
-<tr>
-<th>Function</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>pg_get_role_ddl</code> ( <code>role</code> <code>regrole</code> [, <code>VARIADIC</code> <code>options</code> <code>text</code> ] ) <code>setof text</code></td>
-<td>Reconstructs the <code>CREATE ROLE</code> statement and any <code>ALTER ROLE ... SET</code> statements for the given role. Each statement is returned as a separate row. Password information is never included in the output. The following options are supported: <code>pretty</code> (boolean) for pretty-printed output and <code>memberships</code> (boolean, default true) to include <code>GRANT</code> statements for role memberships and their options.</td>
-<td></td>
-</tr>
-<tr>
-<td><code>pg_get_tablespace_ddl</code> ( <code>tablespace</code> <code>oid</code> [, <code>VARIADIC</code> <code>options</code> <code>text</code> ] ) <code>setof text</code></td>
-<td><code>pg_get_tablespace_ddl</code> ( <code>tablespace</code> <code>name</code> [, <code>VARIADIC</code> <code>options</code> <code>text</code> ] ) <code>setof text</code></td>
-<td>Reconstructs the <code>CREATE TABLESPACE</code> statement for the specified tablespace (by OID or name). If the tablespace has options set, an <code>ALTER TABLESPACE ... SET</code> statement is also returned. Each statement is returned as a separate row. The following options are supported: <code>pretty</code> (boolean) for formatted output and <code>owner</code> (boolean) to include <code>OWNER</code>.</td>
-</tr>
-<tr>
-<td><code>pg_get_database_ddl</code> ( <code>database</code> <code>regdatabase</code> [, <code>VARIADIC</code> <code>options</code> <code>text</code> ] ) <code>setof text</code></td>
-<td>Reconstructs the <code>CREATE DATABASE</code> statement for the specified database, followed by <code>ALTER DATABASE</code> statements for connection limit, template status, and configuration settings. Each statement is returned as a separate row. The following options are supported: <code>pretty</code> (boolean) for formatted output, <code>owner</code> (boolean) to include <code>OWNER</code>, and <code>tablespace</code> (boolean) to include <code>TABLESPACE</code>.</td>
-<td></td>
 </tr>
 </tbody>
 </table>

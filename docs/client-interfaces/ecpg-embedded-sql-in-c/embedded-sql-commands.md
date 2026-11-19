@@ -578,7 +578,7 @@ get information from an SQL descriptor area
 
 ```
 
-GET DESCRIPTOR DESCRIPTOR_NAME :CVARIABLE = DESCRIPTOR_HEADER_ITEM [, ... ]
+GET DESCRIPTOR DESCRIPTOR_NAME :CVARIABLE = DESCRIPTOR_HEADER_ITEM
 GET DESCRIPTOR DESCRIPTOR_NAME VALUE COLUMN_NUMBER :CVARIABLE = DESCRIPTOR_ITEM [, ... ]
 ```
 
@@ -589,7 +589,7 @@ GET DESCRIPTOR DESCRIPTOR_NAME VALUE COLUMN_NUMBER :CVARIABLE = DESCRIPTOR_ITEM 
  `GET DESCRIPTOR` retrieves information about a query result set from an SQL descriptor area and stores it into host variables. A descriptor area is typically populated using `FETCH` or `SELECT` before using this command to transfer the information into host language variables.
 
 
- This command has two forms: The first form retrieves descriptor “header” items, which apply to the result set in its entirety. One example is the row count. The second form, which requires the column number as additional parameter, retrieves information about a particular column. Examples are the column name and the actual column value.
+ This command has two forms: The first form retrieves descriptor “header” item, which applies to the result set in its entirety. One example is the row count. The second form, which requires the column number as additional parameter, retrieves information about a particular column. Examples are the column name and the actual column value.
 
 
 ## Parameters
@@ -915,7 +915,7 @@ set information in an SQL descriptor area
 
 ```
 
-SET DESCRIPTOR DESCRIPTOR_NAME DESCRIPTOR_HEADER_ITEM = VALUE [, ... ]
+SET DESCRIPTOR DESCRIPTOR_NAME DESCRIPTOR_HEADER_ITEM = VALUE
 SET DESCRIPTOR DESCRIPTOR_NAME VALUE NUMBER DESCRIPTOR_ITEM = VALUE [, ...]
 ```
 

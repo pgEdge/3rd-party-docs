@@ -260,13 +260,13 @@
 <td><code>ts_lexize('english_stem', 'stars')</code> <code>{star}</code></td>
 </tr>
 <tr>
-<td><code>ts_parse</code> ( <code>parser_name</code> <code>text</code>, <code>document</code> <code>text</code> ) <code>setof record</code> ( <code>tokid</code> <code>integer</code>, <code>token</code> <code>text</code> )</td>
-<td>Extracts tokens from the <code>document</code> using the named parser. See <a href="../full-text-search/testing-and-debugging-text-search.md#textsearch-parser-testing">Parser Testing</a> for details.</td>
+<td><code>ts_parse</code> ( <code>parser_name</code> <code>text</code>, <code>txt</code> <code>text</code> ) <code>setof record</code> ( <code>tokid</code> <code>integer</code>, <code>token</code> <code>text</code> )</td>
+<td>Extracts tokens from the document <code>txt</code> using the named parser. See <a href="../full-text-search/testing-and-debugging-text-search.md#textsearch-parser-testing">Parser Testing</a> for details.</td>
 <td><code>ts_parse('default', 'foo - bar')</code> <code>(1,foo) ...</code></td>
 </tr>
 <tr>
-<td><code>ts_parse</code> ( <code>parser_oid</code> <code>oid</code>, <code>document</code> <code>text</code> ) <code>setof record</code> ( <code>tokid</code> <code>integer</code>, <code>token</code> <code>text</code> )</td>
-<td>Extracts tokens from the <code>document</code> using a parser specified by OID. See <a href="../full-text-search/testing-and-debugging-text-search.md#textsearch-parser-testing">Parser Testing</a> for details.</td>
+<td><code>ts_parse</code> ( <code>parser_oid</code> <code>oid</code>, <code>txt</code> <code>text</code> ) <code>setof record</code> ( <code>tokid</code> <code>integer</code>, <code>token</code> <code>text</code> )</td>
+<td>Extracts tokens from the document <code>txt</code> using a parser specified by OID. See <a href="../full-text-search/testing-and-debugging-text-search.md#textsearch-parser-testing">Parser Testing</a> for details.</td>
 <td><code>ts_parse(3722, 'foo - bar')</code> <code>(1,foo) ...</code></td>
 </tr>
 <tr>
@@ -280,8 +280,8 @@
 <td><code>ts_token_type(3722)</code> <code>(1,asciiword,"Word, all ASCII") ...</code></td>
 </tr>
 <tr>
-<td><code>ts_stat</code> ( <code>sqlquery</code> <code>text</code> [, <code>weights</code> <code>text</code> ] ) <code>setof record</code> ( <code>word</code> <code>text</code>, <code>ndoc</code> <code>integer</code>, <code>nentry</code> <code>integer</code> )</td>
-<td>Executes the <code>sqlquery</code>, which must return a single <code>tsvector</code> column, and returns statistics about each distinct lexeme contained in the data. See <a href="../full-text-search/additional-features.md#textsearch-statistics">Gathering Document Statistics</a> for details.</td>
+<td><code>ts_stat</code> ( <code>query</code> <code>text</code> [, <code>weights</code> <code>text</code> ] ) <code>setof record</code> ( <code>word</code> <code>text</code>, <code>ndoc</code> <code>integer</code>, <code>nentry</code> <code>integer</code> )</td>
+<td>Executes the <code>query</code>, which must return a single <code>tsvector</code> column, and returns statistics about each distinct lexeme contained in the data. See <a href="../full-text-search/additional-features.md#textsearch-statistics">Gathering Document Statistics</a> for details.</td>
 <td><code>ts_stat('SELECT vector FROM apod')</code> <code>(foo,10,15) ...</code></td>
 </tr>
 </tbody>

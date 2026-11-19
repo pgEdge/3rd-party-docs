@@ -857,15 +857,7 @@ postgresql://%2Fvar%2Flib%2Fpostgresql/dbname
 <a id="libpq-connect-max-protocol-version"></a>
 
 `max_protocol_version`
-:   !!! note
-
-        During the PostgreSQL 19 beta period, libpq connections that do not specify a `max_protocol_version` will "grease" the handshake by sending unsupported startup parameters, including version `3.9999`, in order to identify software that does not correctly negotiate the connection. This replaces the default behavior described below.
-
-
-         If you know that a server doesn't properly implement protocol version negotiation, you can set `max_protocol_version=3.0` to revert to the standard behavior (preferably after notifying the server's maintainers that their software needs to be fixed).
-
-
-     Specifies the protocol version to request from the server. The default is to use version `3.0` of the PostgreSQL protocol, unless the connection string specifies a feature that relies on a higher protocol version, in which case the latest version supported by libpq is used. If the server does not support the protocol version requested by the client, the connection is automatically downgraded to a lower minor protocol version that the server supports. After the connection attempt has completed you can use [PQfullProtocolVersion](connection-status-functions.md#libpq-PQfullProtocolVersion) to find out which exact protocol version was negotiated.
+:   Specifies the protocol version to request from the server. The default is to use version `3.0` of the PostgreSQL protocol, unless the connection string specifies a feature that relies on a higher protocol version, in which case the latest version supported by libpq is used. If the server does not support the protocol version requested by the client, the connection is automatically downgraded to a lower minor protocol version that the server supports. After the connection attempt has completed you can use [PQfullProtocolVersion](connection-status-functions.md#libpq-PQfullProtocolVersion) to find out which exact protocol version was negotiated.
 
 
      The current supported values are `3.0`, `3.2`, and `latest`. The `latest` value is equivalent to the latest protocol version supported by the libpq version being used, which is currently `3.2`.
@@ -893,10 +885,6 @@ postgresql://%2Fvar%2Flib%2Fpostgresql/dbname
 
 `service`
 :   Service name to use for additional parameters. It specifies a service name in `pg_service.conf` that holds additional connection parameters. This allows applications to specify only a service name so connection parameters can be centrally maintained. See [The Connection Service File](the-connection-service-file.md#libpq-pgservice).
-<a id="libpq-connect-servicefile"></a>
-
-`servicefile`
-:   This option specifies the name of the per-user connection service file (see [The Connection Service File](the-connection-service-file.md#libpq-pgservice)). Defaults to `~/.pg_service.conf`, or `%APPDATA%\postgresql\.pg_service.conf` on Microsoft Windows.
 <a id="libpq-connect-target-session-attrs"></a>
 
 `target_session_attrs`

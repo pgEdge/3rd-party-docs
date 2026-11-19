@@ -122,9 +122,6 @@ make check-world PG_TEST_EXTRA='kerberos ldap ssl load_balance libpq_encryption'
 ```
  The following values are currently supported:
 
-`checksum`, `checksum_extended`
-:   Runs additional tests for enabling data checksums which inject faults to cause re-tries in the processing, as well as tests that run pgbench concurrently and randomly restarts the cluster. Some of these test suites require injection points enabled in the installation. `checksum_extended` is an extended version with longer runtime, injected random delays and larger datasets.
-
 `kerberos`
 :   Runs the test suite under `src/test/kerberos`. This requires an MIT Kerberos installation and opens TCP/IP listen sockets.
 

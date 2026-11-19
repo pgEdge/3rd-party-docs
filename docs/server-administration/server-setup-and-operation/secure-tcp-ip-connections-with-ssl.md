@@ -197,11 +197,14 @@ include_dir DIRECTORY
  Comments, whitespace, line continuations, and inclusion directives are handled in the same way as in [hba_file](../server-configuration/file-locations.md#guc-hba-file). *hostname* is matched case-insensitively against the `hostname` TLS extension in the SSL handshake. *SSL_certificate*, *SSL_key*, *SSL_CA_certificate*, *SSL_passphrase_cmd*, and *SSL_passphrase_cmd_reload* are treated like [ssl_cert_file](../server-configuration/connections-and-authentication.md#guc-ssl-cert-file), [ssl_key_file](../server-configuration/connections-and-authentication.md#guc-ssl-key-file), [ssl_ca_file](../server-configuration/connections-and-authentication.md#guc-ssl-ca-file), [ssl_passphrase_command](../server-configuration/connections-and-authentication.md#guc-ssl-passphrase-command), and [ssl_passphrase_command_supports_reload](../server-configuration/connections-and-authentication.md#guc-ssl-passphrase-command-supports-reload) respectively. All fields except *SSL_CA_certificate*, *SSL_passphrase_cmd*, and *SSL_passphrase_cmd_reload* are required. If *SSL_passphrase_cmd* is provided but not *SSL_passphrase_cmd_reload*, then the default value for *SSL_passphrase_cmd_reload* is `off`.
 
 
- *hostname* can be either the literal hostname for the connection, `/no_sni/`, or `*`. [Hostname field values](#hostname-values) contains details on how these values are used. <a id="hostname-values"></a>
+ On `Windows`, all connections will perform a configuration reload due to the different process model of that platform, so *SSL_passphrase_cmd_reload* must be set to `on` for every entry which has an *SSL_passphrase_cmd*. If an entry fails to load at backend start, SSL connections for the hosts of that entry will fail, while the other entries remain usable.
 
-**Table: Hostname field values**
 
-| Host Entry | Hostname extension | Description |
+ *hostname* can be either the literal hostname for the connection, `/no_sni/`, or `*`. [Hostname Field Values](#hostname-values) contains details on how these values are used. <a id="hostname-values"></a>
+
+**Table: Hostname Field Values**
+
+| Host entry | Hostname extension | Description |
 | --- | --- | --- |
 | *hostname* | Required | Certificate and key to use for connections to the host specified in the connection. Multiple hostnames can be defined by using a comma separated list. The certificate and key will be used for connections to all hosts in the list. |
 | `/no_sni/` | Not allowed | Certificate and key to use for connections with no `sslsni` defined. |

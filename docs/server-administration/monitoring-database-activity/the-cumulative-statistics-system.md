@@ -64,7 +64,7 @@
 | `pg_stat_activity` | One row per server process, showing information related to the current activity of that process, such as state and current query. See [`pg_stat_activity`](#monitoring-pg-stat-activity-view) for details. |
 | `pg_stat_replication` | One row per WAL sender process, showing statistics about replication to that sender's connected standby server. See [`pg_stat_replication`](#monitoring-pg-stat-replication-view) for details. |
 | `pg_stat_wal_receiver` | Only one row, showing statistics about the WAL receiver from that receiver's connected server. See [`pg_stat_wal_receiver`](#monitoring-pg-stat-wal-receiver-view) for details. |
-| `pg_stat_recovery` | Only one row, showing statistics about the state of recovery. See [`pg_stat_recovery`](#monitoring-pg-stat-recovery-view) for details. |
+| `pg_stat_recovery` | At most one row, showing statistics about the recovery state. See [`pg_stat_recovery`](#monitoring-pg-stat-recovery-view) for details. |
 | `pg_stat_recovery_prefetch` | Only one row, showing statistics about blocks prefetched during recovery. See [`pg_stat_recovery_prefetch`](#monitoring-pg-stat-recovery-prefetch) for details. |
 | `pg_stat_subscription` | At least one row per subscription, showing information about the subscription workers. See [`pg_stat_subscription`](#monitoring-pg-stat-subscription) for details. |
 | `pg_stat_ssl` | One row per connection (regular and replication), showing information about SSL used on this connection. See [`pg_stat_ssl`](#monitoring-pg-stat-ssl-view) for details. |
@@ -73,7 +73,7 @@
 | `pg_stat_progress_create_index` | One row for each backend running `CREATE INDEX` or `REINDEX`, showing current progress. See [CREATE INDEX Progress Reporting](progress-reporting.md#create-index-progress-reporting). |
 | `pg_stat_progress_vacuum` | One row for each backend (including autovacuum worker processes) running `VACUUM`, showing current progress. See [VACUUM Progress Reporting](progress-reporting.md#vacuum-progress-reporting). |
 | `pg_stat_progress_cluster` | One row for each backend running `REPACK`, `CLUSTER` or `VACUUM FULL`, showing current progress. See [CLUSTER Progress Reporting](progress-reporting.md#cluster-progress-reporting). |
-| `pg_stat_progress_repack` | One row for each backend running `REPACK`, `CLUSTER` or `VACUUM FULL`, showing current progress. [REPACK Progress Reporting](progress-reporting.md#repack-progress-reporting). |
+| `pg_stat_progress_repack` | One row for each backend running `REPACK`, `CLUSTER` or `VACUUM FULL`, showing current progress. See [REPACK Progress Reporting](progress-reporting.md#repack-progress-reporting). |
 | `pg_stat_progress_basebackup` | One row for each WAL sender process streaming a base backup, showing current progress. See [Base Backup Progress Reporting](progress-reporting.md#basebackup-progress-reporting). |
 | `pg_stat_progress_copy` | One row for each backend running `COPY`, showing current progress. See [COPY Progress Reporting](progress-reporting.md#copy-progress-reporting). |
  <a id="monitoring-stats-views-table"></a>
@@ -287,7 +287,7 @@
 | `Buffer` Wait Event | Description |
 | --- | --- |
 | `BufferCleanup` | Waiting to acquire an exclusive pin on a buffer. Buffer pin waits can be protracted if another process holds an open cursor that last read data from the buffer in question. |
-| `BufferExclusive` | Waiting to acquire a exclusive lock on a buffer. |
+| `BufferExclusive` | Waiting to acquire an exclusive lock on a buffer. |
 | `BufferShared` | Waiting to acquire a shared lock on a buffer. |
 | `BufferShareExclusive` | Waiting to acquire a share exclusive lock on a buffer. |
  <a id="wait-event-client-table"></a>
@@ -303,9 +303,6 @@
 | `LibpqwalreceiverReceive` | Waiting in WAL receiver to receive data from remote server. |
 | `SslOpenServer` | Waiting for SSL while attempting connection. |
 | `WaitForStandbyConfirmation` | Waiting for WAL to be received and flushed by the physical standby. |
-| `WaitForWalFlush` | Waiting for WAL flush to reach a target LSN on a primary or standby. |
-| `WaitForWalReplay` | Waiting for WAL replay to reach a target LSN on a standby. |
-| `WaitForWalWrite` | Waiting for WAL write to reach a target LSN on a standby. |
 | `WalSenderWaitForWal` | Waiting for WAL to be flushed in WAL sender process. |
 | `WalSenderWriteData` | Waiting for any activity when processing replies from WAL receiver in WAL sender process. |
  <a id="wait-event-extension-table"></a>
@@ -423,8 +420,6 @@
 | `CheckpointDelayStart` | Waiting for a backend that blocks a checkpoint from starting. |
 | `CheckpointDone` | Waiting for a checkpoint to complete. |
 | `CheckpointStart` | Waiting for a checkpoint to start. |
-| `ChecksumEnableStartcondition` | Waiting for data checksums enabling to start. |
-| `ChecksumEnableTemptableWait` | Waiting for temporary tables to be dropped for data checksums to be enabled. |
 | `ExecuteGather` | Waiting for activity from a child process while executing a `Gather` plan node. |
 | `HashBatchAllocate` | Waiting for an elected Parallel Hash participant to allocate a hash table. |
 | `HashBatchElect` | Waiting to elect a Parallel Hash participant to allocate a hash table. |
@@ -466,7 +461,11 @@
 | `RestoreCommand` | Waiting for [restore_command](../server-configuration/write-ahead-log.md#guc-restore-command) to complete. |
 | `SafeSnapshot` | Waiting to obtain a valid snapshot for a `READ ONLY DEFERRABLE` transaction. |
 | `SyncRep` | Waiting for confirmation from a remote server during synchronous replication. |
+| `WaitForWalFlush` | Waiting for WAL flush to reach a target LSN on a primary or standby. |
+| `WaitForWalReplay` | Waiting for WAL replay to reach a target LSN on a standby. |
+| `WaitForWalWrite` | Waiting for WAL write to reach a target LSN on a standby. |
 | `WalReceiverExit` | Waiting for the WAL receiver to exit. |
+| `WalReceiverUpstreamCatchup` | Waiting for upstream server WAL flush position to catch up to requested start point. |
 | `WalReceiverWaitStart` | Waiting for startup process to send initial data for streaming replication. |
 | `WalSummaryReady` | Waiting for a new WAL summary to be generated. |
 | `XactGroupUpdate` | Waiting for the group leader to update transaction status at transaction end. |
@@ -509,7 +508,6 @@
 | `CommitTsBuffer` | Waiting for I/O on a commit timestamp SLRU buffer. |
 | `CommitTsSLRU` | Waiting to access the commit timestamp SLRU cache. |
 | `ControlFile` | Waiting to read or update the `pg_control` file or create a new WAL file. |
-| `DataChecksumsWorker` | Waiting for data checksums worker. |
 | `DSMRegistry` | Waiting to read or update the dynamic shared memory registry. |
 | `DSMRegistryDSA` | Waiting to access dynamic shared memory registry's dynamic shared memory allocator. |
 | `DSMRegistryHash` | Waiting to access dynamic shared memory registry's shared hash table. |
@@ -630,7 +628,7 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 
 !!! note
 
-    Extensions can add `Extension`, `InjectionPoint`, and `LWLock` events to the lists shown in [Wait Events of Type `Extension`](#wait-event-extension-table) and [Wait Events of Type `Lwlock`](#wait-event-lwlock-table). In some cases, the name of an `LWLock` assigned by an extension will not be available in all server processes. It might be reported as just “`extension`” rather than the extension-assigned name.
+    Extensions can add `Extension`, `InjectionPoint`, and `LWLock` events to the lists shown in [Wait Events of Type `Extension`](#wait-event-extension-table) and [Wait Events of Type `Lwlock`](#wait-event-lwlock-table).
   <a id="monitoring-pg-stat-replication-view"></a>
 
 ### `pg_stat_replication`
@@ -914,7 +912,7 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 ### `pg_stat_recovery`
 
 
- The `pg_stat_recovery` view will contain only one row, showing statistics about the recovery state of the startup process. This view returns no row when the server is not in recovery.
+ The `pg_stat_recovery` view will contain at most one row, showing statistics about the recovery state of the startup process. This view returns no rows when the server is not in recovery or the user does not have privileges of the `pg_read_all_stats` role.
  <a id="pg-stat-recovery-view"></a>
 
 **Table: `pg_stat_recovery` View**
@@ -937,7 +935,7 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 <tr>
 <td><p><code>last_replayed_end_lsn</code> <code>pg_lsn</code></p>
-<p>End write-ahead log location of the last successfully replayed WAL record.</p></td>
+<p>End write-ahead log location, plus one, of the last successfully replayed WAL record.</p></td>
 </tr>
 <tr>
 <td><p><code>last_replayed_tli</code> <code>integer</code></p>
@@ -949,15 +947,15 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 <tr>
 <td><p><code>replay_end_tli</code> <code>integer</code></p>
-<p>Timeline of the WAL record currently being replayed.</p></td>
+<p>Timeline of the WAL record currently being replayed. When no record is being actively replayed, equals <code>last_replayed_tli</code>.</p></td>
 </tr>
 <tr>
 <td><p><code>recovery_last_xact_time</code> <code>timestamp with time zone</code></p>
-<p>Timestamp of the last transaction commit or abort replayed during recovery. This is the time at which the commit or abort WAL record for that transaction was generated on the primary.</p></td>
+<p>Timestamp of the last transaction commit or abort record replayed during recovery. This is the time at which the commit or abort WAL record for that transaction was generated on the primary.</p></td>
 </tr>
 <tr>
 <td><p><code>current_chunk_start_time</code> <code>timestamp with time zone</code></p>
-<p>Time when the startup process observed that replay had caught up with the latest received WAL chunk. Used in recovery-conflict timing and replay/apply-lag diagnostics. NULL if not yet available.</p></td>
+<p>Time when the startup process observed that replay had caught up with the latest WAL chunk received from streaming replication. Used in recovery-conflict timing and replay/apply-lag diagnostics. NULL if streaming WAL has not yet been received or the time is not available.</p></td>
 </tr>
 <tr>
 <td><p><code>pause_state</code> <code>text</code></p>
@@ -1061,31 +1059,31 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 <tr>
 <td><p><code>leader_pid</code> <code>integer</code></p>
-<p>Process ID of the leader apply worker if this process is a parallel apply worker; NULL if this process is a leader apply worker or a table synchronization worker</p></td>
+<p>Process ID of the leader apply worker if this process is a parallel apply worker; NULL if this process is a leader apply worker, a table synchronization worker or a sequence synchronization worker</p></td>
 </tr>
 <tr>
 <td><p><code>relid</code> <code>oid</code></p>
-<p>OID of the relation that the worker is synchronizing; NULL for the leader apply worker and parallel apply workers</p></td>
+<p>OID of the relation that the worker is synchronizing; NULL for the leader apply worker, parallel apply workers and the sequence synchronization worker</p></td>
 </tr>
 <tr>
 <td><p><code>received_lsn</code> <code>pg_lsn</code></p>
-<p>Last write-ahead log location received, the initial value of this field being 0; NULL for parallel apply workers</p></td>
+<p>Last write-ahead log location received, the initial value of this field being 0; NULL for parallel apply workers and the sequence synchronization worker</p></td>
 </tr>
 <tr>
 <td><p><code>last_msg_send_time</code> <code>timestamp with time zone</code></p>
-<p>Send time of last message received from origin WAL sender; NULL for parallel apply workers</p></td>
+<p>Send time of last message received from origin WAL sender; NULL for parallel apply workers and the sequence synchronization worker</p></td>
 </tr>
 <tr>
 <td><p><code>last_msg_receipt_time</code> <code>timestamp with time zone</code></p>
-<p>Receipt time of last message received from origin WAL sender; NULL for parallel apply workers</p></td>
+<p>Receipt time of last message received from origin WAL sender; NULL for parallel apply workers and the sequence synchronization worker</p></td>
 </tr>
 <tr>
 <td><p><code>latest_end_lsn</code> <code>pg_lsn</code></p>
-<p>Last write-ahead log location reported to origin WAL sender; NULL for parallel apply workers</p></td>
+<p>Last write-ahead log location reported to origin WAL sender; NULL for parallel apply workers and the sequence synchronization worker</p></td>
 </tr>
 <tr>
 <td><p><code>latest_end_time</code> <code>timestamp with time zone</code></p>
-<p>Time of last write-ahead log location reported to origin WAL sender; NULL for parallel apply workers</p></td>
+<p>Time of last write-ahead log location reported to origin WAL sender; NULL for parallel apply workers and the sequence synchronization worker</p></td>
 </tr>
 </tbody>
 </table>
@@ -1359,7 +1357,7 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 <tr>
 <td><p><code>read_time</code> <code>double precision</code></p>
-<p>Time spent waiting for read operations in milliseconds (if <a href="../server-configuration/run-time-statistics.md#guc-track-io-timing">track_io_timing</a> is enabled and <code>object</code> is not <code>wal</code>, or if <a href="../server-configuration/run-time-statistics.md#guc-track-wal-io-timing">track_wal_io_timing</a> is enabled and <code>object</code> is <code>wal</code>, otherwise zero)</p></td>
+<p>Time spent waiting for read operations in milliseconds (if <a href="../server-configuration/run-time-statistics.md#guc-track-io-timing">track_io_timing</a> is enabled and <code>object</code> is not <code>wal</code>, or if <a href="../server-configuration/run-time-statistics.md#guc-track-wal-io-timing">track_wal_io_timing</a> is enabled and <code>object</code> is <code>wal</code>, otherwise zero). This may include time spent waiting for a read started by another backend. In that case <code>reads</code> may still be zero.</p></td>
 </tr>
 <tr>
 <td><p><code>writes</code> <code>bigint</code></p>
@@ -1468,7 +1466,7 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 <p>Number of times a lock of this type had to wait because of a conflicting lock. Only incremented when the lock was successfully acquired after waiting longer than <a href="../server-configuration/lock-management.md#guc-deadlock-timeout">deadlock_timeout</a>.</p></td>
 </tr>
 <tr>
-<td><p><code>wait_time</code> <code>bigint</code></p>
+<td><p><code>wait_time</code> <code>double precision</code></p>
 <p>Total time spent waiting for locks of this type, in milliseconds. Only incremented when the lock was successfully acquired after waiting longer than <a href="../server-configuration/lock-management.md#guc-deadlock-timeout">deadlock_timeout</a>.</p></td>
 </tr>
 <tr>
@@ -1712,11 +1710,11 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 <tr>
 <td><p><code>checksum_failures</code> <code>bigint</code></p>
-<p>Number of data page checksum failures detected in this database (or on a shared object). Detected failures are not reset if the <a href="../server-configuration/preset-options.md#guc-data-checksums">data_checksums</a> setting changes. Clusters which are initialized without data checksums will show this as <code>0</code>. In PostgreSQL version 18 and earlier, this was set to <code>NULL</code> for clusters with data checksums disabled.</p></td>
+<p>Number of data page checksum failures detected in this database (or on a shared object), or NULL if data checksums are disabled.</p></td>
 </tr>
 <tr>
 <td><p><code>checksum_last_failure</code> <code>timestamp with time zone</code></p>
-<p>Time at which the last data page checksum failure was detected in this database (or on a shared object). Last failure is reported regardless of the <a href="../server-configuration/preset-options.md#guc-data-checksums">data_checksums</a> setting.</p></td>
+<p>Time at which the last data page checksum failure was detected in this database (or on a shared object), or NULL if data checksums are disabled.</p></td>
 </tr>
 <tr>
 <td><p><code>blk_read_time</code> <code>double precision</code></p>
@@ -2007,23 +2005,23 @@ description | Waiting for a newly initialized WAL file to reach durable storage
 </tr>
 <tr>
 <td><p><code>xid_score</code> <code>double precision</code></p>
-<p>Transaction ID age component score. Scores greater than or equal to <a href="../server-configuration/vacuuming.md#guc-autovacuum-freeze-score-weight">autovacuum_freeze_score_weight</a> indicate that autovacuum would vacuum the table for transaction ID wraparound prevention.</p></td>
+<p>Transaction ID age component score. Scores greater than <a href="../server-configuration/vacuuming.md#guc-autovacuum-freeze-score-weight">autovacuum_freeze_score_weight</a> indicate that autovacuum would vacuum the table for transaction ID wraparound prevention.</p></td>
 </tr>
 <tr>
 <td><p><code>mxid_score</code> <code>double precision</code></p>
-<p>Multixact ID age component score. Scores greater than or equal to <a href="../server-configuration/vacuuming.md#guc-autovacuum-multixact-freeze-score-weight">autovacuum_multixact_freeze_score_weight</a> indicate that autovacuum would vacuum the table for multixact ID wraparound prevention.</p></td>
+<p>Multixact ID age component score. Scores greater than <a href="../server-configuration/vacuuming.md#guc-autovacuum-multixact-freeze-score-weight">autovacuum_multixact_freeze_score_weight</a> indicate that autovacuum would vacuum the table for multixact ID wraparound prevention.</p></td>
 </tr>
 <tr>
 <td><p><code>vacuum_score</code> <code>double precision</code></p>
-<p>Vacuum component score. Scores greater than or equal to <a href="../server-configuration/vacuuming.md#guc-autovacuum-vacuum-score-weight">autovacuum_vacuum_score_weight</a> indicate that autovacuum would vacuum the table (unless autovacuum is disabled).</p></td>
+<p>Vacuum component score. Scores greater than <a href="../server-configuration/vacuuming.md#guc-autovacuum-vacuum-score-weight">autovacuum_vacuum_score_weight</a> indicate that autovacuum would vacuum the table (unless autovacuum is disabled).</p></td>
 </tr>
 <tr>
 <td><p><code>vacuum_insert_score</code> <code>double precision</code></p>
-<p>Vacuum insert component score. Scores greater than or equal to <a href="../server-configuration/vacuuming.md#guc-autovacuum-vacuum-insert-score-weight">autovacuum_vacuum_insert_score_weight</a> indicate that autovacuum would vacuum the table (unless autovacuum is disabled).</p></td>
+<p>Vacuum insert component score. Scores greater than <a href="../server-configuration/vacuuming.md#guc-autovacuum-vacuum-insert-score-weight">autovacuum_vacuum_insert_score_weight</a> indicate that autovacuum would vacuum the table (unless autovacuum is disabled).</p></td>
 </tr>
 <tr>
 <td><p><code>analyze_score</code> <code>double precision</code></p>
-<p>Analyze component score. Scores greater than or equal to <a href="../server-configuration/vacuuming.md#guc-autovacuum-analyze-score-weight">autovacuum_analyze_score_weight</a> indicate that autovacuum would analyze the table (unless autovacuum is disabled).</p></td>
+<p>Analyze component score. Scores greater than <a href="../server-configuration/vacuuming.md#guc-autovacuum-analyze-score-weight">autovacuum_analyze_score_weight</a> indicate that autovacuum would analyze the table (unless autovacuum is disabled).</p></td>
 </tr>
 <tr>
 <td><p><code>do_vacuum</code> <code>bool</code></p>
@@ -2576,7 +2574,7 @@ FROM pg_stat_get_backend_idset() AS backendid;
 </tr>
 <tr>
 <td><code>pg_stat_get_backend_subxact</code> ( <code>integer</code> ) <code>record</code></td>
-<td>Returns a record of information about the subtransactions of the backend with the specified ID. The fields returned are <code>subxact_count</code>, which is the number of subtransactions in the backend's subtransaction cache, and <code>subxact_overflow</code>, which indicates whether the backend's subtransaction cache is overflowed or not.</td>
+<td>Returns a record of information about the subtransactions of the backend with the specified ID. The fields returned are <code>subxact_count</code>, which is the number of subtransactions in the backend's subtransaction cache, and <code>subxact_overflowed</code>, which indicates whether the backend's subtransaction cache is overflowed or not.</td>
 <td></td>
 </tr>
 <tr>

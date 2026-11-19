@@ -106,7 +106,7 @@ UPDATE employees SET salary = salary * v.increase
   FROM (VALUES(1, 200000, 1.2), (2, 400000, 1.4)) AS v (depno, target, increase)
   WHERE employees.depno = v.depno AND employees.sales >= v.target;
 ```
- Note that an `AS` clause is required when `VALUES` is used in a `FROM` clause, just as is true for `SELECT`. It is not required that the `AS` clause specify names for all the columns, but it's good practice to do so. (The default column names for `VALUES` are `column1`, `column2`, etc. in PostgreSQL, but these names might be different in other database systems.)
+ Note that if `VALUES` is used in a `FROM` clause, a table alias is optional. Assigning alias names to the columns of the `VALUES` list is optional, but is good practice. (The default column names for `VALUES` are `column1`, `column2`, etc. in PostgreSQL, but these names might be different in other database systems.)
 
 
  When `VALUES` is used in `INSERT`, the values are all automatically coerced to the data type of the corresponding destination column. When it's used in other contexts, it might be necessary to specify the correct data type. If the entries are all quoted literal constants, coercing the first is sufficient to determine the assumed type for all:

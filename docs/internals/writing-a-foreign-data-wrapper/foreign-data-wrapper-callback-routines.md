@@ -627,10 +627,10 @@ ImportForeignStatistics(Relation relation,
                         List *va_cols,
                         int elevel);
 ```
- This function is called before the `AnalyzeForeignTable` callback function when [sql-analyze](../../reference/sql-commands/analyze.md#sql-analyze) is executed on a foreign table, and is used to import remotely-calculated statistics (both table-level and column-level) for the foreign table directly to the local server. `relation` is the `Relation` struct describing the target foreign table. `va_cols`, if not NIL, contains the columns specified in the `ANALYZE` command. `elevel` contains a flag indicating a logging level to use. If the function imports the statistics successfully, it should return `true`. Otherwise, return `false`, in which case `AnalyzeForeignTable` callback function is called on the foreign table to collect statistics locally, if supported.
+ This function is called before the `AnalyzeForeignTable` callback function when [sql-analyze](../../reference/sql-commands/analyze.md#sql-analyze) is executed on a foreign table, and is used to import remotely-calculated statistics (both table-level and column-level) for the foreign table directly to the local server. `relation` is the `Relation` struct describing the target foreign table. `va_cols`, if not NIL, contains the columns specified in the `ANALYZE` command. `elevel` contains a flag indicating a logging level to use. If the function imports the statistics successfully, it should return `true`. Otherwise, return `false`, in which case `AnalyzeForeignTable` callback function is called on the foreign table to generate statistics locally, if supported.
 
 
- For reference, the logic for calculating statistics in PostgreSQL is found in `src/backend/command/analyze.c`. It's recommended to import table-level and column-level statistics for the foreign table using `pg_restore_relation_stats` and `pg_restore_attribute_stats`, respectively.
+ For reference, the logic for calculating statistics in PostgreSQL is found in `src/backend/command/analyze.c`. It's recommended to import table-level and column-level statistics for the foreign table using `import_relation_statistics`, `import_attribute_statistics`, and `delete_attribute_statistics`.
 
 
  If the FDW does not support importing remotely-calculated statistics for any tables, the `ImportForeignStatistics` pointer can be set to `NULL`.

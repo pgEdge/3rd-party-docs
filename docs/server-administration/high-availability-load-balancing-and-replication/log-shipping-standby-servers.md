@@ -155,7 +155,7 @@ primary_conninfo = 'host=192.168.1.50 port=5432 user=foo password=foopass'
  You can retrieve a list of WAL sender processes via the [` pg_stat_replication`](../monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-replication-view) view. Large differences between `pg_current_wal_lsn` and the view's `sent_lsn` field might indicate that the primary server is under heavy load, while differences between `sent_lsn` and `pg_last_wal_receive_lsn` on the standby might indicate network delay, or that the standby is under heavy load.
 
 
- On a hot standby, the status of the WAL receiver process can be retrieved via the [`pg_stat_wal_receiver`](../monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-wal-receiver-view) view. A large difference between `pg_last_wal_replay_lsn` and the view's `flushed_lsn` indicates that WAL is being received faster than it can be replayed.
+ On a hot standby, the status of the WAL receiver process can be retrieved via the [`pg_stat_wal_receiver`](../monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-wal-receiver-view) view. A large difference between `pg_last_wal_replay_lsn` and the view's `flushed_lsn` indicates that WAL is being received faster than it can be replayed. Recovery state and replay progress can also be monitored via the [`pg_stat_recovery`](../monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-recovery-view) view.
    <a id="streaming-replication-slots"></a>
 
 ### Replication Slots
@@ -365,31 +365,29 @@ synchronous_standby_names = 'ANY 2 (s1, s2, s3)'
  To address this, PostgreSQL offers a mechanism for read-your-writes consistency. The key idea is to ensure that a client sees its own writes by synchronizing the WAL replay on the standby with the known point of change on the primary.
 
 
- This is achieved by the following steps. After performing write operations, the application retrieves the current WAL location using a function call like this.
+ This is achieved by the following steps. Once the write transaction has committed, the application retrieves a WAL location from the primary using a function call like this.
 
 ```
 
 postgres=# SELECT pg_current_wal_insert_lsn();
-pg_current_wal_insert_lsn
---------------------
-0/306EE20
+ pg_current_wal_insert_lsn
+---------------------------
+ 0/306EE20
 (1 row)
-
 ```
 
 
- The LSN obtained from the primary is then communicated to the standby server. This can be managed at the application level or via the connection pooler. On the standby, the application issues the [sql-wait-for](../../reference/sql-commands/wait-for.md#sql-wait-for) command to block further processing until the standby's WAL replay process reaches (or exceeds) the specified LSN.
+ The LSN obtained from the primary is then communicated to the standby server. This can be managed at the application level or via the connection pooler. On the standby, the application issues the [sql-wait](../../reference/sql-commands/wait.md#sql-wait) command to block further processing until the standby's WAL replay process reaches (or exceeds) the specified LSN.
 
 ```
 
 postgres=# WAIT FOR LSN '0/306EE20';
  status
---------
+---------
  success
 (1 row)
-
 ```
- Once the command returns a status of success, it guarantees that all changes up to the provided LSN have been applied, ensuring that subsequent read queries will reflect the latest updates.
+ Once the command returns a status of success, it guarantees that all changes up to the provided LSN have been applied. Therefore, if that LSN was retrieved from the primary after the commit, subsequent read queries will reflect those updates.
   <a id="continuous-archiving-in-standby"></a>
 
 ### Continuous Archiving in Standby

@@ -206,7 +206,18 @@ AGGREGATE_NAME ( [ EXPRESSION [ , ... ] ] ) WITHIN GROUP ( ORDER_BY_CLAUSE ) [ F
  Most aggregate functions ignore null inputs, so that rows in which one or more of the expression(s) yield null are discarded. This can be assumed to be true, unless otherwise specified, for all built-in aggregates.
 
 
- For example, `count(*)` yields the total number of input rows; `count(f1)` yields the number of input rows in which `f1` is non-null, since `count` ignores nulls; and `count(distinct f1)` yields the number of distinct non-null values of `f1`.
+ For example, in this query:
+
+```sql
+
+WITH vals (f1) AS ( VALUES (1),(3),(4),(3),(2),(null) )
+SELECT count(*) AS total, count(f1) AS non_null, COUNT(DISTINCT f1) AS distinct
+FROM vals;
+ total | non_null | distinct
+-------+----------+----------
+     6 |        5 |        4
+```
+ `total` yields the total number of input rows; `non_null` yields the number of input rows in which `f1` is non-null, since `count` ignores nulls; and `distinct` yields the number of distinct non-null values of `f1`.
 
 
  Ordinarily, the input rows are fed to the aggregate function in an unspecified order. In many cases this does not matter; for example, `min` produces the same result no matter what order it receives the inputs in. However, some aggregate functions (such as `array_agg` and `string_agg`) produce results that depend on the ordering of the input rows. When using such an aggregate, the optional *order_by_clause* can be used to specify the desired ordering. The *order_by_clause* has the same syntax as for a query-level `ORDER BY` clause, as described in [Sorting Rows (`ORDER BY`)](../queries/sorting-rows-order-by.md#queries-order), except that its expressions are always just expressions and cannot be output-column names or numbers. For example:

@@ -74,7 +74,7 @@ pg_verifybackup [OPTION...]
 `-s`, `--skip-checksums`
 :   Do not verify data file checksums. The presence or absence of files and the sizes of those files will still be checked. This is much faster, because the files themselves do not need to be read.
 
-<code>-w </code><em>path</em>, <code>--wal-path=</code><em>path</em>
+<code>-w </code><em>path</em>, <code>--wal-path=</code><em>path</em>, <code>--wal-directory=</code><em>path</em> (deprecated)
 :   Try to parse WAL files stored in the specified directory or tar archive, rather than in `pg_wal`. This may be useful if the backup is stored in a separate location from the WAL archive.
 
 

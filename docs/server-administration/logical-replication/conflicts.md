@@ -23,7 +23,7 @@
 <a id="conflict-update-deleted"></a>
 
 `update_deleted`
-:   The tuple to be updated was concurrently deleted by another origin. The update will simply be skipped in this scenario. Note that this conflict can only be detected when [`track_commit_timestamp`](../server-configuration/replication.md#guc-track-commit-timestamp) and [`retain_dead_tuples`](../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-with-retain-dead-tuples) are enabled. Note that if a tuple cannot be found due to the table being truncated, only a `update_missing` conflict will arise. Additionally, if the tuple was deleted by the same origin, an `update_missing` conflict will arise.
+:   The tuple to be updated was concurrently deleted by another origin. The update will simply be skipped in this scenario. Note that this conflict can only be detected when [`track_commit_timestamp`](../server-configuration/replication.md#guc-track-commit-timestamp) and [`retain_dead_tuples`](../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-with-retain-dead-tuples) are enabled. Note that if a tuple cannot be found due to the table being truncated, only an `update_missing` conflict will arise. Additionally, if the tuple was deleted by the same origin, an `update_missing` conflict will arise.
 <a id="conflict-update-missing"></a>
 
 `update_missing`

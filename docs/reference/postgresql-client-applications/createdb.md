@@ -49,7 +49,7 @@ createdb [CONNECTION-OPTION...] [OPTION...] [DBNAME
 :   Specifies the locale to be used in this database. This is equivalent to specifying `--lc-collate`, `--lc-ctype`, and `--icu-locale` to the same value. Some locales are only valid for ICU and must be set with `--icu-locale`.
 
 <code>--lc-collate=</code><em>locale</em>
-:   Specifies the LC_COLLATE setting to be used in this database (ignored unless the locale provider is `libc`).
+:   Specifies the LC_COLLATE setting to be used in this database.
 
 <code>--lc-ctype=</code><em>locale</em>
 :   Specifies the LC_CTYPE setting to be used in this database.

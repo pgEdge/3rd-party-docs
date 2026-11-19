@@ -8,10 +8,14 @@ reset the write-ahead log and other control information of a PostgreSQL database
 
 
 ```
-pg_resetwal [-f | --force] [-n | --dry-run] [OPTION...] {
-     -D
-     --pgdata
-     | DATADIR}
+pg_resetwal [
+     {-f | --force}
+   ] [
+     {-n | --dry-run}
+   ] [OPTION...]
+     [-D | --pgdata]
+    DATADIR
+
 ```
  <a id="r1-app-pgresetwal-1"></a>
 

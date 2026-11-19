@@ -24,7 +24,7 @@ FROM TABLE_REFERENCE [, TABLE_REFERENCE [, ...]]
  When a table reference names a table that is the parent of a table inheritance hierarchy, the table reference produces rows of not only that table but all of its descendant tables, unless the key word `ONLY` precedes the table name. However, the reference produces only the columns that appear in the named table — any columns added in subtables are ignored.
 
 
- Instead of writing `ONLY` before the table name, you can write `*` after the table name to explicitly specify that descendant tables are included. There is no real reason to use this syntax any more, because searching descendant tables is now always the default behavior. However, it is supported for compatibility with older releases.
+ You can write `*` after the table name to explicitly specify that descendant tables are included, which is the opposite of `ONLY`. There is no real reason to write `*` any more, because searching descendant tables has been the default behavior since PostgreSQL version 10. However, it remains supported for compatibility with older releases.
  <a id="queries-join"></a>
 
 #### Joined Tables
@@ -453,9 +453,6 @@ ORDER BY p;
  Table functions appearing in `FROM` can also be preceded by the key word `LATERAL`, but for functions the key word is optional; the function's arguments can contain references to columns provided by preceding `FROM` items in any case.
 
 
- A `GRAPH_TABLE` `FROM` item can also always contain lateral references.
-
-
  A `LATERAL` item can appear at the top level in the `FROM` list, or within a `JOIN` tree. In the latter case it can also refer to any items that are on the left-hand side of a `JOIN` that it is on the right-hand side of.
 
 
@@ -640,28 +637,6 @@ SELECT product_id, p.name, (sum(s.units) * p.price) AS sales
 
 
  In strict SQL, `GROUP BY` can only group by columns of the source table, but PostgreSQL extends this to also allow `GROUP BY` to group by columns in the select list. Grouping by value expressions instead of simple column names is also allowed (but `GROUP BY` expressions cannot contain aggregate functions or window functions).
-
-
- PostgreSQL also supports the syntax `GROUP BY ALL`, which is equivalent to explicitly writing all select-list entries that do not contain either an aggregate function or a window function. This can greatly simplify ad-hoc exploration of data. As an example, these queries are equivalent:
-
-```
-
-=> SELECT a, b, a + b, sum(c) FROM test1 GROUP BY ALL;
- a | b | ?column? | sum
----+---+----------+----
- 1 | 4 |        5 |  9
- 2 | 5 |        7 | 12
- 3 | 6 |        9 | 15
-(3 rows)
-
-=> SELECT a, b, a + b, sum(c) FROM test1 GROUP BY a, b, a + b;
- a | b | ?column? | sum
----+---+----------+----
- 1 | 4 |        5 |  9
- 2 | 5 |        7 | 12
- 3 | 6 |        9 | 15
-(3 rows)
-```
 
 
  If a table has been grouped using `GROUP BY`, but only certain groups are of interest, the `HAVING` clause can be used, much like a `WHERE` clause, to eliminate groups from the result. The syntax is:

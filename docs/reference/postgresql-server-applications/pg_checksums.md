@@ -9,19 +9,16 @@ enable, disable or check data checksums in a PostgreSQL database cluster
 
 ```
 pg_checksums [OPTION...] [
-     -D
-     --pgdata
-     | DATADIR]
+     [-D | --pgdata]
+    DATADIR
+   ]
 ```
  <a id="r1-app-pgchecksums-1"></a>
 
 ## Description
 
 
- pg_checksums checks, enables or disables data checksums in a PostgreSQL cluster. The server must be shut down cleanly before running pg_checksums. When verifying checksums, the exit status is zero if there are no checksum errors, and nonzero if at least one checksum failure is detected. When enabling or disabling checksums, the exit status is nonzero if the operation failed.
-
-
- When enabling checksums, if checksums were in the process of being enabled when the cluster was shut down, pg_checksums will still process all relations regardless of the online processing.
+ pg_checksums checks, enables or disables data checksums in a PostgreSQL cluster. The server must be shut down cleanly before running pg_checksums. See [Data Checksums](../../server-administration/reliability-and-the-write-ahead-log/data-checksums.md#checksums) for further details on data checksums. When verifying checksums, the exit status is zero if there are no checksum errors, and nonzero if at least one checksum failure is detected. When enabling or disabling checksums, the exit status is nonzero if the operation failed.
 
 
  When verifying checksums, every file in the cluster is scanned. When enabling checksums, each relation file block with a changed checksum is rewritten in-place. Disabling checksums only updates the file `pg_control`.

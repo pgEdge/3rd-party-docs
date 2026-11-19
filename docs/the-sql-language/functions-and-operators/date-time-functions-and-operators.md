@@ -281,12 +281,12 @@
 <td><code>make_time(8, 15, 23.5)</code> <code>08:15:23.5</code></td>
 </tr>
 <tr>
-<td><code>make_timestamp</code> ( <code>year</code> <code>int</code>, <code>month</code> <code>int</code>, <code>day</code> <code>int</code>, <code>hour</code> <code>int</code>, <code>min</code> <code>int</code>, <code>sec</code> <code>double precision</code> ) <code>timestamp</code></td>
+<td><code>make_timestamp</code> ( <code>year</code> <code>int</code>, <code>month</code> <code>int</code>, <code>mday</code> <code>int</code>, <code>hour</code> <code>int</code>, <code>min</code> <code>int</code>, <code>sec</code> <code>double precision</code> ) <code>timestamp</code></td>
 <td>Create timestamp from year, month, day, hour, minute and seconds fields (negative years signify BC)</td>
 <td><code>make_timestamp(2013, 7, 15, 8, 15, 23.5)</code> <code>2013-07-15 08:15:23.5</code></td>
 </tr>
 <tr>
-<td><code>make_timestamptz</code> ( <code>year</code> <code>int</code>, <code>month</code> <code>int</code>, <code>day</code> <code>int</code>, <code>hour</code> <code>int</code>, <code>min</code> <code>int</code>, <code>sec</code> <code>double precision</code> [, <code>timezone</code> <code>text</code> ] ) <code>timestamp with time zone</code></td>
+<td><code>make_timestamptz</code> ( <code>year</code> <code>int</code>, <code>month</code> <code>int</code>, <code>mday</code> <code>int</code>, <code>hour</code> <code>int</code>, <code>min</code> <code>int</code>, <code>sec</code> <code>double precision</code> [, <code>timezone</code> <code>text</code> ] ) <code>timestamp with time zone</code></td>
 <td>Create timestamp with time zone from year, month, day, hour, minute and seconds fields (negative years signify BC). If <code>timezone</code> is not specified, the current time zone is used; the examples assume the session time zone is <code>Europe/London</code></td>
 <td><code>make_timestamptz(2013, 7, 15, 8, 15, 23.5)</code> <code>2013-07-15 08:15:23.5+01</code><br><code>make_timestamptz(2013, 7, 15, 8, 15, 23.5, 'America/New_York')</code> <code>2013-07-15 13:15:23.5+01</code></td>
 </tr>

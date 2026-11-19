@@ -305,7 +305,7 @@ psql --username=postgres --file=script.sql postgres
     In general it is unsafe to access tables referenced in rebuild scripts until the rebuild scripts have run to completion; doing so could yield incorrect results or poor performance. Tables not referenced in rebuild scripts can be accessed immediately.
 15.
 
-     Unless the `--no-statistics` option is specified, `pg_upgrade` will transfer most optimizer statistics from the old cluster to the new cluster. This does not transfer all statistics, such as those created explicitly with [sql-createstatistics](../sql-commands/create-statistics.md#sql-createstatistics), custom statistics added by an extension, or statistics collected by the cumulative statistics system.
+     Unless the `--no-statistics` option is specified, `pg_upgrade` will transfer most optimizer statistics from the old cluster to the new cluster. This does not transfer all statistics, such as custom statistics added by an extension, or statistics collected by the cumulative statistics system.
 
      Because not all statistics are transferred by `pg_upgrade`, you will be instructed to run commands to regenerate that information at the end of the upgrade. You might need to set connection parameters to match your new cluster.
 

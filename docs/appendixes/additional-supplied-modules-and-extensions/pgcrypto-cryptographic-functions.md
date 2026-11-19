@@ -515,6 +515,23 @@ Values: 0, 1
 Default: 0
 Applies to: pgp_sym_encrypt, pgp_pub_encrypt
 </pre>
+  <a id="pgcrypto-pgp-enc-funcs-opts-ignore-cipher-failure"></a>
+
+##### ignore-cipher-failure
+
+
+ Dangerous! Instructs pgcrypto to use an incorrect decryption algorithm matching the historical behavior prior to the fix for CVE-2026-14663, by completely ignoring failures from the OpenSSL cipher in use. This is intended only for users who need to recover incorrectly-encrypted messages created when the `cipher-algo` was unavailable under the OpenSSL configuration in use. Such faulty messages do not require the correct decryption key when `ignore-cipher-failure` is enabled, so there is no guarantee that the decrypted plaintext actually originated from a holder of the key.
+
+
+ Contrast the case of a message which was correctly encrypted, but the cipher that produced it is unavailable under the current OpenSSL configuration. Recovering such plaintext via `pgcrypto` requires making the actual cipher available to OpenSSL by, for example, enabling the appropriate provider. `ignore-cipher-failure` is not necessary or helpful for that scenario. If “decryption” of a correctly encrypted message with this option happens to pass PGP integrity checks, that result is coincidental and does not make the recovered plaintext trustworthy.
+
+
+<pre>
+
+Values: 0, 1
+Default: 0
+Applies to: pgp_sym_decrypt, pgp_pub_decrypt
+</pre>
    <a id="pgcrypto-pgp-enc-funcs-gnupg"></a>
 
 #### Generating PGP Keys with GnuPG
@@ -673,6 +690,9 @@ fips_mode() returns boolean
 
 `pgcrypto.builtin_crypto_enabled` (`enum`)
 :   `pgcrypto.builtin_crypto_enabled` determines if the built in crypto functions `gen_salt()`, and `crypt()` are available for use. Setting this to `off` disables these functions. `on` (the default) enables these functions to work normally. `fips` disables these functions if OpenSSL is detected to operate in FIPS mode.
+
+
+     `pgp_sym_encrypt()` and `pgp_pub_encrypt()` do not use built in crypto so they are not affected.
 
 
  In ordinary usage, this parameter is set in `postgresql.conf`, although superusers can alter it on-the-fly within their own sessions.

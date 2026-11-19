@@ -54,7 +54,10 @@
 
     !!! note
 
-        The logging collector is designed to never lose messages. This means that in case of extremely high load, server processes could be blocked while trying to send additional log messages when the collector has fallen behind. In contrast, syslog prefers to drop messages if it cannot write them, which means it may fail to log some messages in such cases but it will not block the rest of the system.
+        The logging collector is designed to avoid dropping messages. This means that in case of extremely high load, server processes could be blocked while trying to send additional log messages when the collector has fallen behind. In contrast, syslog prefers to drop messages if it cannot write them, which means it may fail to log some messages in such cases but it will not block the rest of the system.
+
+
+         The logging collector does not guarantee that log messages have reached durable storage. It can still lose messages due to a system crash, power loss, or an error while writing the log file.
 <a id="guc-log-directory"></a>
 
 `log_directory` (`string`)
@@ -148,7 +151,6 @@
     - `bgworker`
     - `bgwriter`
     - `checkpointer`
-    - `checksums`
     - `ioworker`
     - `postmaster`
     - `slotsyncworker`
@@ -242,7 +244,7 @@
 
 `application_name` (`string`)
 :   The `application_name` can be any string of less than `NAMEDATALEN` characters (64 characters in a standard build). It is typically set by an application upon connection to the server. The name will be displayed in the `pg_stat_activity` view and included in CSV log entries. It can also be included in regular log entries via the [log_line_prefix](#guc-log-line-prefix) parameter. Only printable ASCII characters may be used in the `application_name` value. Other characters are replaced with [C-style hexadecimal escapes](../../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-strings-escape).
-<a id="guc-debug-print-parse"></a>
+<a id="guc-debug-print-raw-parse"></a>
 
 `debug_print_raw_parse` (`boolean`), `debug_print_parse` (`boolean`), `debug_print_rewritten` (`boolean`), `debug_print_plan` (`boolean`)
 :   These parameters enable various debugging output to be emitted. When set, they print the resulting raw parse tree, the parse tree, the query rewriter output, or the execution plan for each executed query. These messages are emitted at `LOG` message level, so by default they will appear in the server log but will not be sent to the client. You can change that by adjusting [client_min_messages](client-connection-defaults.md#guc-client-min-messages) and/or [log_min_messages](#guc-log-min-messages). These parameters are off by default.
@@ -318,7 +320,7 @@
 <a id="guc-log-line-prefix"></a>
 
 `log_line_prefix` (`string`)
-:   This is a `printf`-style string that is output at the beginning of each log line. `%` characters begin “escape sequences” that are replaced with status information as outlined below. Unrecognized escapes are ignored. Other characters are copied straight to the log line. Some escapes are only recognized by session processes, and will be treated as empty by background processes such as the main server process. Status information may be aligned either left or right by specifying a numeric literal after the % and before the option. A negative value will cause the status information to be padded on the right with spaces to give it a minimum width, whereas a positive value will pad on the left. Padding can be useful to aid human readability in log files.
+:   This is a `printf`-style string that is output at the beginning of each log entry that is sent to `stderr`, `syslog`, or `eventlog`. `%` characters begin “escape sequences” that are replaced with status information as outlined below. Unrecognized escapes are ignored. Other characters are copied straight to the log line. Some escapes are only recognized by session processes, and will be treated as empty by background processes such as the main server process. Status information may be aligned either left or right by specifying a numeric literal after the % and before the option. A negative value will cause the status information to be padded on the right with spaces to give it a minimum width, whereas a positive value will pad on the left. Padding can be useful to aid human readability in log files.
 
 
      This parameter can only be set in the `postgresql.conf` file or on the server command line. The default is `'%m [%p] '` which logs a time stamp and the process ID.
@@ -407,7 +409,7 @@
 :   If greater than zero, each bind parameter value logged with a non-error statement-logging message is trimmed to this many bytes. Zero disables logging of bind parameters for non-error statement logs. `-1` (the default) allows bind parameters to be logged in full. If this value is specified without units, it is taken as bytes. Only superusers and users with the appropriate `SET` privilege can change this setting.
 
 
-     This setting only affects log messages printed as a result of [log_statement](#guc-log-statement), [log_duration](#guc-log-duration), and related settings. Non-zero values of this setting add some overhead, particularly if parameters are sent in binary form, since then conversion to text is required.
+     This setting only affects log messages printed as a result of [log_statement](#guc-log-statement), [log_min_duration_statement](#guc-log-min-duration-statement), and related settings. Non-zero values of this setting add some overhead, particularly if parameters are sent in binary form, since then conversion to text is required.
 <a id="guc-log-parameter-max-length-on-error"></a>
 
 `log_parameter_max_length_on_error` (`integer`)

@@ -35,7 +35,7 @@
 </tr>
 <tr>
 <td><p><code>srsublsn</code> <code>pg_lsn</code></p>
-<p>Remote LSN of the state change used for synchronization coordination when in <code>s</code> or <code>r</code> states, otherwise null</p></td>
+<p>Remote LSN of the state change used for synchronization coordination when in <code>s</code> or <code>r</code> states, otherwise null. For sequences, this instead holds the publisher sequence's page LSN as of the last synchronization, which does not track replication progress the way it does for tables; see <a href="../../server-administration/logical-replication/replicating-sequences.md#sequences-out-of-sync">Refreshing Out-of-Sync Sequences</a> for how it is used to detect out-of-sync sequences.</p></td>
 </tr>
 </tbody>
 </table>

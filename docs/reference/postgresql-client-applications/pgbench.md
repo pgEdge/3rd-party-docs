@@ -307,7 +307,7 @@ pgbench [ OPTIONS ] DBNAME
 :   Allows clients to continue running even if an SQL statement fails due to errors other than serialization or deadlock. By default, clients abort after such errors, but with this option enabled, they proceed to the next transaction instead. Note that clients still abort even with this option if an error causes the connection to fail. See [Failures and Serialization/Deadlock Retries](#failures-and-retries) for more information.
 
 
-     This option is useful when your custom script may raise errors such as unique constraint violations, but you want the benchmark to continue and measure performance including those failures.
+     This option is useful when your custom script may raise errors such as unique constraint violations, but you want the benchmark to continue despite individual statement failures. Failed transactions are reported separately, but are not counted as transactions actually processed; time spent on failed transactions remains part of the benchmark duration, so such failures can lower the reported TPS.
 <a id="pgbench-option-exit-on-abort"></a>
 
 `--exit-on-abort`
@@ -1208,7 +1208,7 @@ statement latencies in milliseconds, failures and retries:
      Be careful when repeating transactions with shell commands. Unlike the results of SQL commands, the results of shell commands are not rolled back, except for the variable value of the `\setshell` command.
 
 
- The latency of a successful transaction includes the entire time of transaction execution with rollbacks and retries. The latency is measured only for successful transactions and commands but not for failed transactions or commands.
+ The latency of a successful transaction includes the entire time of transaction execution with rollbacks and retries. In the main report, when neither `--progress`, `--rate`, nor `--latency-limit` is specified, the `latency average` is computed from the total benchmark duration divided by both successful and failed transactions, and therefore includes failed transactions. Otherwise, the `latency average` and `latency stddev` shown in the main report are measured only for successful transactions. Detailed latency statistics, including the per-script and per-command reports, are also measured only for successful transactions and commands, not for failed transactions or commands.
 
 
  The main report contains the number of failed transactions. If the `--max-tries` option is not equal to 1, the main report also contains statistics related to retries: the total number of retried transactions and total number of retries. The per-script report inherits all these fields from the main report. The per-statement report displays retry statistics only if the `--max-tries` option is not equal to 1.

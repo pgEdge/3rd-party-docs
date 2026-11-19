@@ -10,7 +10,7 @@ define a new subscription
 ```
 
 CREATE SUBSCRIPTION SUBSCRIPTION_NAME
-    { SERVER SERVERNAME | CONNECTION 'CONNINFO' }
+    { SERVER SERVER_NAME | CONNECTION 'CONNINFO' }
     PUBLICATION PUBLICATION_NAME [, ...]
     [ WITH ( SUBSCRIPTION_PARAMETER [= VALUE] [, ... ] ) ]
 ```
@@ -43,8 +43,8 @@ CREATE SUBSCRIPTION SUBSCRIPTION_NAME
 :   The name of the new subscription.
 <a id="sql-createsubscription-params-server"></a>
 
-<code>SERVER </code><em>servername</em>
-:   A foreign server to use for the connection. The server's foreign data wrapper must have a *connection_function* registered, and a user mapping for the subscription owner on the server must exist. Additionally, the subscription owner must have `USAGE` privileges on *servername*.
+<code>SERVER </code><em>server_name</em>
+:   A foreign server to use for the connection. The server's foreign data wrapper must have a *connection_function* registered, and a user mapping for the subscription owner on the server must exist. Additionally, the subscription owner must have `USAGE` privileges on *server_name*.
 <a id="sql-createsubscription-params-connection"></a>
 
 <code>CONNECTION '</code><em>conninfo</em><code>'</code>
@@ -185,7 +185,7 @@ CREATE SUBSCRIPTION SUBSCRIPTION_NAME
 
         !!! caution
 
-            Note that the information for conflict detection cannot be purged if the subscription is disabled; thus, the information will accumulate until the subscription is enabled. To prevent excessive accumulation, it is recommended to disable `retain_dead_tuples` if the subscription will be inactive for an extended period.
+            Note that the information for conflict detection cannot be purged if the subscription is disabled; thus, the information will accumulate until the subscription is enabled. To prevent excessive accumulation, it is recommended to disable `retain_dead_tuples` if the subscription will be inactive for an extended period. The same applies while the subscription is enabled but its apply worker is not running, for example because the worker repeatedly fails to apply a change. The oldest information being retained can be seen as the `xmin` of the “`pg_conflict_detection`” slot in [pg_replication_slots](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots).
 
 
              Additionally when enabling `retain_dead_tuples` for conflict detection in logical replication, it is important to design the replication topology to balance data retention requirements with overall system performance. This option provides minimal performance overhead when applied appropriately. The following scenarios illustrate effective usage patterns when enabling this option.
@@ -204,6 +204,9 @@ CREATE SUBSCRIPTION SUBSCRIPTION_NAME
 
 
          Enabling this option ensures retention of information useful for conflict detection solely for changes occurring locally on the publisher. For the changes originating from different origins, reliable conflict detection cannot be guaranteed.
+
+
+         Detection of [update_deleted](../../server-administration/logical-replication/conflicts.md#conflict-update-deleted) also requires [`track_commit_timestamp`](../../server-administration/server-configuration/replication.md#guc-track-commit-timestamp) to be enabled on the subscriber, and a warning is issued if `retain_dead_tuples` is enabled while it is not. If `track_commit_timestamp` is disabled afterwards, the information for conflict detection continues to be retained, but the conflict is reported as [update_missing](../../server-administration/logical-replication/conflicts.md#conflict-update-missing) instead, so the retention no longer serves its purpose.
     <a id="sql-createsubscription-params-with-max-retention-duration"></a>
 
     `max_retention_duration` (`integer`)
@@ -217,6 +220,11 @@ CREATE SUBSCRIPTION SUBSCRIPTION_NAME
 
 
          This option is effective only when `retain_dead_tuples` is enabled and the apply worker associated with the subscription is active.
+
+
+        !!! caution
+
+            Note that the retention duration is not evaluated while the subscription is disabled or its apply worker is not running. Thus, the information retained for conflict detection will continue to accumulate regardless of this setting until the subscription is enabled or its apply worker resumes. To prevent excessive accumulation, consider disabling `retain_dead_tuples` if the subscription will be inactive for an extended period.
 
 
         !!! warning

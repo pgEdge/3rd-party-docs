@@ -259,7 +259,7 @@ $ psql postgresql://dbmaster:5433/mydb?sslmode=require
 ```
 
 $ psql testdb
-psql (19devel)
+psql (19.0)
 Type "help" for help.
 
 testdb=>
@@ -468,7 +468,7 @@ testdb=>
 <a id="app-psql-meta-command-d"></a>
 
 <code>\d[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>
-:   For each relation (table, view, materialized view, index, property graph, sequence, or foreign table) or composite type matching the *pattern*, show all columns, their types, the tablespace (if not the default) and any special attributes such as `NOT NULL` or defaults. Associated objects, such as indexes, constraints, rules, triggers, and publications, are also shown. For foreign tables, the associated foreign server is shown as well. (“Matching the pattern” is defined in [Patterns](#app-psql-patterns) below.)
+:   For each relation (table, view, materialized view, index, sequence, or foreign table) or composite type matching the *pattern*, show all columns, their types, the tablespace (if not the default) and any special attributes such as `NOT NULL` or defaults. Associated objects, such as indexes, constraints, rules, triggers, and publications, are also shown. For foreign tables, the associated foreign server is shown as well. (“Matching the pattern” is defined in [Patterns](#app-psql-patterns) below.)
 
 
      For some types of relation, `\d` shows additional information for each column: column values for sequences, indexed expressions for indexes, and foreign data wrapper options for foreign tables.
@@ -482,10 +482,10 @@ testdb=>
 
     !!! note
 
-        If `\d` is used without a *pattern* argument, it is equivalent to `\dtvmsEG` which will show a list of all visible tables, views, materialized views, sequences, foreign tables, and property graphs. This is purely a convenience measure.
+        If `\d` is used without a *pattern* argument, it is equivalent to `\dtvmsE` which will show a list of all visible tables, views, materialized views, sequences and foreign tables. This is purely a convenience measure.
 
 
-         As with many other commands, if `x` is appended to the command name, the results are displayed in expanded mode, but note that this only applies when `\d` is used without a *pattern* argument, and the `x` modifier cannot appear immediately after the `\d` (because `\dx` is a different command); the `x` modifier may only appear after an `S` or `+` modifier. For example, `\d+x` is equivalent to `\dtvmsE+x` and will show a list of all relations in expanded mode.
+         As with many other commands, if `x` is appended to the command name, the results are displayed in expanded mode for this command only, but note that this only applies when `\d` is used without a *pattern* argument or to describe a sequence. The same limitation on expanded output applies to `\x on` and `\x auto`. The `x` modifier cannot appear immediately after the `\d` (because `\dx` is a different command); the `x` modifier may only appear after an `S` or `+` modifier. For example, `\d+x` is equivalent to `\dtvmsE+x` and will show a list of all relations in expanded mode.
 <a id="app-psql-meta-command-da-lc"></a>
 
 <code>\da[Sx] [ [*pattern*](#app-psql-patterns) ]</code>
@@ -561,8 +561,8 @@ testdb=>
      The [`ALTER DEFAULT PRIVILEGES`](../sql-commands/alter-default-privileges.md#sql-alterdefaultprivileges) command is used to set default access privileges. The meaning of the privilege display is explained in [Privileges](../../the-sql-language/data-definition/privileges.md#ddl-priv).
 <a id="app-psql-meta-command-de"></a>
 
-<code>\dE[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dG[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\di[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dm[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\ds[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dt[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dv[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>
-:   In this group of commands, the letters `E`, `G`, `i`, `m`, `s`, `t`, and `v` stand for foreign table, index, property graph, materialized view, sequence, table, and view, respectively. You can specify any or all of these letters, in any order, to obtain a listing of objects of these types. For example, `\dti` lists tables and indexes. If `x` is appended to the command name, the results are displayed in expanded mode. If `+` is appended to the command name, each object is listed with its persistence status (permanent, temporary, or unlogged), physical size on disk, and associated description if any. If *pattern* is specified, only objects whose names match the pattern are listed. By default, only user-created objects are shown; supply a pattern or the `S` modifier to include system objects.
+<code>\dE[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\di[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dm[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\ds[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dt[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>, <code>\dv[Sx+] [ [*pattern*](#app-psql-patterns) ]</code>
+:   In this group of commands, the letters `E`, `i`, `m`, `s`, `t`, and `v` stand for foreign table, index, materialized view, sequence, table, and view, respectively. You can specify any or all of these letters, in any order, to obtain a listing of objects of these types. For example, `\dti` lists tables and indexes. If `x` is appended to the command name, the results are displayed in expanded mode. If `+` is appended to the command name, each object is listed with its persistence status (permanent, temporary, or unlogged), physical size on disk, and associated description if any. If *pattern* is specified, only objects whose names match the pattern are listed. By default, only user-created objects are shown; supply a pattern or the `S` modifier to include system objects.
 <a id="app-psql-meta-command-des"></a>
 
 <code>\des[x+] [ [*pattern*](#app-psql-patterns) ]</code>
@@ -943,7 +943,7 @@ testdb=>
 <a id="app-psql-meta-command-list"></a>
 
 `\l[x+]` or <code>\list[x+] [ [*pattern*](#app-psql-patterns) ]</code>
-:   List the databases in the server and show their names, owners, character set encodings, and access privileges. If *pattern* is specified, only databases whose names match the pattern are listed. If `x` is appended to the command name, the results are displayed in expanded mode. If `+` is appended to the command name, database sizes, default tablespaces, and descriptions are also displayed. (Size information is only available for databases that the current user can connect to.)
+:   List the databases in the server and show their names, owners, character set encodings, and access privileges. If *pattern* is specified, only databases whose names match the pattern are listed. If `x` is appended to the command name, the results are displayed in expanded mode. If `+` is appended to the command name, database sizes, default tablespaces, and descriptions are also displayed. Size information is available for databases on which the current user has `CONNECT` privilege, or if the current user is a superuser or has privileges of the `pg_read_all_stats` role.
 <a id="app-psql-meta-command-lo-export"></a>
 
 <code>\lo_export </code><em>loid</em><code> </code><em>filename</em>
@@ -1314,6 +1314,9 @@ testdb=>
 
 
      This command is primarily intended for use in plain-text dumps generated by pg_dump, pg_dumpall, and pg_restore, but it may be useful elsewhere.
+
+
+     Unlike most other meta-commands, the entire remainder of the line is always taken to be the argument of `\unrestrict`, and neither variable interpolation nor backquote expansion are performed.
 <a id="app-psql-meta-command-unset"></a>
 
 <code>\unset </code><em>name</em>
@@ -1599,10 +1602,6 @@ bar
 
 `SERVICE`
 :   The service name, if applicable.
-<a id="app-psql-variables-servicefile"></a>
-
-`SERVICEFILE`
-:   The service file name, if applicable.
 <a id="app-psql-variables-shell-error"></a>
 
 `SHELL_ERROR`
@@ -1894,7 +1893,7 @@ $endif
      The user's personal startup file is named `.psqlrc` and is sought in the invoking user's home directory. On Windows the personal startup file is instead named `%APPDATA%\postgresql\psqlrc.conf`. In either case, this default file path can be overridden by setting the `PSQLRC` environment variable.
 
 
-     Both the system-wide startup file and the user's personal startup file can be made psql-version-specific by appending a dash and the PostgreSQL major or minor release identifier to the file name, for example `~/.psqlrc-19` or `~/.psqlrc-19devel`. The most specific version-matching file will be read in preference to a non-version-specific file. These version suffixes are added after determining the file path as explained above.
+     Both the system-wide startup file and the user's personal startup file can be made psql-version-specific by appending a dash and the PostgreSQL major or minor release identifier to the file name, for example `~/.psqlrc-19` or `~/.psqlrc-19.0`. The most specific version-matching file will be read in preference to a non-version-specific file. These version suffixes are added after determining the file path as explained above.
 <a id="app-psql-files-psql-history"></a>
 
 `.psql_history`

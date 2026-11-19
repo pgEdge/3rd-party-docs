@@ -102,6 +102,9 @@ and TABLE_OBJECT is:
 :   This clause specifies a list of tables to be excluded from the publication.
 
 
+     Once a table is excluded, the exclusion applies to that table regardless of its name or schema. Renaming the table or moving it to another schema using `ALTER TABLE ... SET SCHEMA` does not remove the exclusion.
+
+
      For inherited tables, if `ONLY` is specified before the table name, only that table is excluded from the publication. If `ONLY` is not specified, the table and all its descendant tables (if any) are excluded. Optionally, `*` can be specified after the table name to explicitly indicate that descendant tables are excluded.
 
 
@@ -194,9 +197,6 @@ and TABLE_OBJECT is:
 
 
  For a `MERGE` command, the publication will publish an `INSERT`, `UPDATE`, or `DELETE` for each row inserted, updated, or deleted.
-
-
- For an `UPDATE/DELETE ... FOR PORTION OF` command, the publication will publish an `UPDATE` or `DELETE`, followed by one `INSERT` for each temporal leftover row inserted.
 
 
  `ATTACH`ing a table into a partition tree whose root is published using a publication with `publish_via_partition_root` set to `true` does not result in the table's existing contents being replicated.

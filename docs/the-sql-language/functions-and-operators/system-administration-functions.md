@@ -488,9 +488,9 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <td></td>
 </tr>
 <tr id="pg-logical-emit-message">
-<td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>content</code> <code>text</code> [, <code>flush</code> <code>boolean</code> <code>DEFAULT</code> <code>false</code>] ) <code>pg_lsn</code></td>
-<td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>content</code> <code>bytea</code> [, <code>flush</code> <code>boolean</code> <code>DEFAULT</code> <code>false</code>] ) <code>pg_lsn</code></td>
-<td>Emits a logical decoding message. This can be used to pass generic messages to logical decoding plugins through WAL. The <code>transactional</code> parameter specifies if the message should be part of the current transaction, or if it should be written immediately and decoded as soon as the logical decoder reads the record. The <code>prefix</code> parameter is a textual prefix that can be used by logical decoding plugins to easily recognize messages that are interesting for them. The <code>content</code> parameter is the content of the message, given either in text or binary form. The <code>flush</code> parameter (default set to <code>false</code>) controls if the message is immediately flushed to WAL or not. <code>flush</code> has no effect with <code>transactional</code>, as the message's WAL record is flushed along with its transaction.</td>
+<td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>message</code> <code>text</code> [, <code>flush</code> <code>boolean</code> <code>DEFAULT</code> <code>false</code>] ) <code>pg_lsn</code></td>
+<td><code>pg_logical_emit_message</code> ( <code>transactional</code> <code>boolean</code>, <code>prefix</code> <code>text</code>, <code>message</code> <code>bytea</code> [, <code>flush</code> <code>boolean</code> <code>DEFAULT</code> <code>false</code>] ) <code>pg_lsn</code></td>
+<td>Emits a logical decoding message. This can be used to pass generic messages to logical decoding plugins through WAL. The <code>transactional</code> parameter specifies if the message should be part of the current transaction, or if it should be written immediately and decoded as soon as the logical decoder reads the record. The <code>prefix</code> parameter is a textual prefix that can be used by logical decoding plugins to easily recognize messages that are interesting for them. The <code>message</code> parameter is the content of the message, given either in text or binary form. The <code>flush</code> parameter (default set to <code>false</code>) controls if the message is immediately flushed to WAL or not. <code>flush</code> has no effect with <code>transactional</code>, as the message's WAL record is flushed along with its transaction.</td>
 </tr>
 <tr id="pg-sync-replication-slots">
 <td><code>pg_sync_replication_slots</code> () <code>void</code></td>
@@ -504,7 +504,7 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 ### Database Object Management Functions
 
 
- The functions shown in [Database Object Size Functions](#functions-admin-dbsize) calculate the disk space usage of database objects, or assist in presentation or understanding of usage results. `bigint` results are measured in bytes. If an OID that does not represent an existing object is passed to one of these functions, `NULL` is returned.
+ The functions shown in [Database Object Size Functions](#functions-admin-dbsize) calculate the disk space usage of database objects, or assist in presentation or understanding of usage results. `bigint` results are measured in bytes. If an OID that does not represent an existing object is passed to one of these functions, `NULL` is returned, except for `pg_database_size` and `pg_tablespace_size`, which raise an error.
  <a id="functions-admin-dbsize"></a>
 
 **Table: Database Object Size Functions**
@@ -535,7 +535,7 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <tr>
 <td><code>pg_database_size</code> ( <code>name</code> ) <code>bigint</code></td>
 <td><code>pg_database_size</code> ( <code>oid</code> ) <code>bigint</code></td>
-<td>Computes the total disk space used by the database with the specified name or OID. To use this function, you must have <code>CONNECT</code> privilege on the specified database (which is granted by default) or have privileges of the <code>pg_read_all_stats</code> role.</td>
+<td>Computes the total disk space used by the database with the specified name or OID. To use this function, you must have <code>CONNECT</code> privilege on the specified database (which is granted by default) or have privileges of the <code>pg_read_all_stats</code> role. Throws an error if the database does not exist.</td>
 </tr>
 <tr>
 <td><code>pg_indexes_size</code> ( <code>regclass</code> ) <code>bigint</code></td>
@@ -569,7 +569,7 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
 <tr>
 <td><code>pg_tablespace_size</code> ( <code>name</code> ) <code>bigint</code></td>
 <td><code>pg_tablespace_size</code> ( <code>oid</code> ) <code>bigint</code></td>
-<td>Computes the total disk space used in the tablespace with the specified name or OID. To use this function, you must have <code>CREATE</code> privilege on the specified tablespace or have privileges of the <code>pg_read_all_stats</code> role, unless it is the default tablespace for the current database.</td>
+<td>Computes the total disk space used in the tablespace with the specified name or OID. To use this function, you must have <code>CREATE</code> privilege on the specified tablespace or have privileges of the <code>pg_read_all_stats</code> role, unless it is the default tablespace for the current database. Throws an error if the tablespace does not exist.</td>
 </tr>
 <tr>
 <td><code>pg_total_relation_size</code> ( <code>regclass</code> ) <code>bigint</code></td>
@@ -714,18 +714,18 @@ SELECT pg_restore_attribute_stats(
 <td>Creates or updates statistics for statistics objects. Ordinarily, these statistics are collected automatically or updated as a part of <a href="../../reference/sql-commands/vacuum.md#sql-vacuum">sql-vacuum</a> or <a href="../../reference/sql-commands/analyze.md#sql-analyze">sql-analyze</a>, so it's not necessary to call this function. However, it is useful after a restore to enable the optimizer to choose better plans if <code>ANALYZE</code> has not been run yet.</td>
 <td><p>The tracked statistics may change from version to version, so arguments are passed as pairs of <em>argname</em> and <em>argvalue</em> in the form:</p>
 <pre><code class="language-sql">
- SELECT pg_restore_extended_stats(
+SELECT pg_restore_extended_stats(
     'ARG1NAME', 'ARG1VALUE'::ARG1TYPE,
     'ARG2NAME', 'ARG2VALUE'::ARG2TYPE,
     'ARG3NAME', 'ARG3VALUE'::ARG3TYPE);</code></pre><br><p>For example, to set some values for the statistics object <code>myschema.mystatsobj</code>:</p>
 <pre><code class="language-sql">
- SELECT pg_restore_extended_stats(
+SELECT pg_restore_extended_stats(
     'schemaname',            'tab_schema',
     'relname',               'tab_name',
     'statistics_schemaname', 'stats_schema',
     'statistics_name',       'stats_name',
     'inherited',             false,
-    'n_distinct',            '[{"attributes" : [2,3], "ndistinct" : 4}]'::pg_ndistinct);
+    'n_distinct',            '[{"attributes" : [2,3], "ndistinct" : 4}]'::pg_ndistinct,
     'dependencies',          '{"2 =&gt; 1": 1.000000, "2 =&gt; -1": 1.000000, "2 =&gt; -2": 1.000000}'::pg_dependencies,
     'exprs',                 '[
                                {
@@ -752,7 +752,7 @@ SELECT pg_restore_attribute_stats(
                                    "elem_count_histogram": null,
                                    "most_common_elem_freqs": null
                                }
-                              ]'::jsonb);</code></pre><br>The required arguments are <code>schemaname</code> with a value of type <code>name</code>, for the schema of the table to which the statistics are related to, <code>relname</code> with a value of type <code>name</code>, for the table to which the statistics are related to, <code>statistics_schemaname</code> with a value of type <code>name</code>, which specifies the statistics object's schema, <code>statistics_name</code> with a value of type <code>name</code>, which specifies the name of the statistics object and <code>inherited</code>, which specifies whether the statistics include values from child tables.<br>Other arguments are the names and values of statistics corresponding to columns in <a href="../../internals/system-views/pg_stats_ext.md#view-pg-stats-ext"><code>pg_stats_ext</code></a>. This function currently supports <code>n_distinct</code>, <code>dependencies</code>, <code>most_common_vals</code>, <code>most_common_freqs</code>, and <code>most_common_base_freqs</code>. To accept statistics for any expressions in the extended statistics object, the parameter <code>exprs</code> with a type <code>jsonb</code> is available. This should be an one-dimension array with a number of expressions matching the definition of the extended statistics object, made of json elements for each of the statistical columns in <a href="../../internals/system-views/pg_stats_ext_exprs.md#view-pg-stats-ext-exprs"><code>pg_stats_ext_exprs</code></a>.<br>Additionally, this function accepts argument name <code>version</code> of type <code>integer</code>, which specifies the server version from which the statistics originated. This is anticipated to be helpful in porting statistics from older versions of PostgreSQL.<br>Minor errors are reported as a <code>WARNING</code> and ignored, and remaining statistics will still be restored. If all specified statistics are successfully restored, returns <code>true</code>, otherwise <code>false</code>.<br>The caller must have the <code>MAINTAIN</code> privilege on the table or be the owner of the database.</td>
+                              ]'::jsonb);</code></pre><br>The required arguments are <code>schemaname</code> with a value of type <code>name</code>, for the schema of the table to which the statistics are related to, <code>relname</code> with a value of type <code>name</code>, for the table to which the statistics are related to, <code>statistics_schemaname</code> with a value of type <code>name</code>, which specifies the statistics object's schema, <code>statistics_name</code> with a value of type <code>name</code>, which specifies the name of the statistics object and <code>inherited</code>, which specifies whether the statistics include values from child tables.<br>Other arguments are the names and values of statistics corresponding to columns in <a href="../../internals/system-views/pg_stats_ext.md#view-pg-stats-ext"><code>pg_stats_ext</code></a>. This function currently supports <code>n_distinct</code>, <code>dependencies</code>, <code>most_common_vals</code>, <code>most_common_freqs</code>, and <code>most_common_base_freqs</code>. To accept statistics for any expressions in the extended statistics object, the parameter <code>exprs</code> with a type <code>jsonb</code> is available. This should be a one-dimensional array with a number of expressions matching the definition of the extended statistics object, made of json elements for each of the statistical columns in <a href="../../internals/system-views/pg_stats_ext_exprs.md#view-pg-stats-ext-exprs"><code>pg_stats_ext_exprs</code></a>.<br>Additionally, this function accepts argument name <code>version</code> of type <code>integer</code>, which specifies the server version from which the statistics originated. This is anticipated to be helpful in porting statistics from older versions of PostgreSQL.<br>Minor errors are reported as a <code>WARNING</code> and ignored, and remaining statistics will still be restored. If all specified statistics are successfully restored, returns <code>true</code>, otherwise <code>false</code>.<br>The caller must have the <code>MAINTAIN</code> privilege on the table or be the owner of the database.</td>
 </tr>
 <tr>
 <td><code>pg_clear_extended_stats</code> ( <code>schemaname</code> <code>name</code>, <code>relname</code> <code>name</code>, <code>statistics_schemaname</code> <code>name</code>, <code>statistics_name</code> <code>name</code>, <code>inherited</code> <code>boolean</code> ) <code>void</code></td>
@@ -1009,39 +1009,6 @@ SELECT convert_from(pg_read_binary_file('file_in_utf8.txt'), 'UTF8');</code></pr
 <td><code>pg_try_advisory_xact_lock_shared</code> ( <code>key</code> <code>bigint</code> ) <code>boolean</code></td>
 <td><code>pg_try_advisory_xact_lock_shared</code> ( <code>key1</code> <code>integer</code>, <code>key2</code> <code>integer</code> ) <code>boolean</code></td>
 <td>Obtains a shared transaction-level advisory lock if available. This will either obtain the lock immediately and return <code>true</code>, or return <code>false</code> without waiting if the lock cannot be acquired immediately.</td>
-</tr>
-</tbody>
-</table>
-  <a id="functions-admin-checksum"></a>
-
-### Data Checksum Functions
-
-
- The functions shown in [Data Checksum Functions](#functions-checksums-table) can be used to enable or disable data checksums in a running cluster.
-
-
- Changing data checksums can be done in a cluster with concurrent activity without blocking queries, but overall system performance will be affected. See [Data Checksums](../../server-administration/reliability-and-the-write-ahead-log/data-checksums.md#checksums) for further details on how changing the data checksums state can affect a system and possible mitigations for how to reduce the impact.
- <a id="functions-checksums-table"></a>
-
-**Table: Data Checksum Functions**
-
-<table>
-<thead>
-<tr>
-<th>Function</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>pg_enable_data_checksums</code> ( [<code>cost_delay</code> <code>int</code>, <code>cost_limit</code> <code>int</code>] ) <code>void</code></td>
-<td>Initiates the process of enabling data checksums for the cluster. This will set the data checksums state to <code>inprogress-on</code> as well as start a background worker that will process all pages in all databases and enable data checksums on them. When all pages have been processed, the cluster will automatically set data checksums state to <code>on</code>. This operation is WAL logged and replicated to all standby nodes.</td>
-<td>If <code>cost_delay</code> and <code>cost_limit</code> are specified, the process is throttled using the same principles as <a href="../../server-administration/server-configuration/vacuuming.md#runtime-config-resource-vacuum-cost">Cost-based Vacuum Delay</a>.</td>
-</tr>
-<tr>
-<td><code>pg_disable_data_checksums</code> () <code>void</code></td>
-<td>Disables data checksum calculation and validation for the cluster. This will set the data checksum state to <code>inprogress-off</code> while data checksums are being disabled. When all active backends have stopped validating data checksums, the data checksum state will be set to <code>off</code>.</td>
-<td></td>
 </tr>
 </tbody>
 </table>

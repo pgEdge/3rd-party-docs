@@ -123,7 +123,7 @@
 | `tz` | lower case time-zone abbreviation |
 | `TZH` | time-zone hours |
 | `TZM` | time-zone minutes |
-| `OF` | time-zone offset from UTC (*HH* or *HH*`:`*MM*) |
+| `OF` | time-zone offset from UTC (*hh* or *hh*`:`*mi*) |
 
 
  Modifiers can be applied to any template pattern to alter its behavior. For example, `FMMonth` is the `Month` pattern with the `FM` modifier. [Template Pattern Modifiers for Date/Time Formatting](#functions-formatting-datetimemod-table) shows the modifier patterns for date/time formatting.
@@ -262,7 +262,7 @@
 | `to_char(-485, '999MI')` | `'485-'` |
 | `to_char(485, '999MI')` | `'485 '` |
 | `to_char(485, 'FM999MI')` | `'485'` |
-| `to_char(485, 'PL999')` | `'+485'` |
+| `to_char(485, 'PL999')` | `'+ 485'` |
 | `to_char(485, 'SG999')` | `'+485'` |
 | `to_char(-485, 'SG999')` | `'-485'` |
 | `to_char(-485, '9SG99')` | `'4-85'` |

@@ -60,11 +60,6 @@
  The current, latest version of the protocol is version 3.2. However, for backwards compatibility with old server versions and middleware that don't support the version negotiation yet, libpq still uses protocol version 3.0 by default.
 
 
-!!! note
-
-    During the PostgreSQL 19 beta period, libpq will instead default to requesting protocol version 3.9999, to test that servers and middleware properly implement protocol version negotiation. Servers that support negotiation will automatically downgrade to version 3.2 or 3.0. Users can bypass this beta-only behavior by explicitly setting `max_protocol_version=3.0` in their connection string.
-
-
  A single server can support multiple protocol versions. The initial startup-request message tells the server which protocol version the client is attempting to use. If the major version requested by the client is not supported by the server, the connection will be rejected (for example, this would occur if the client requested protocol version 4.0, which does not exist as of this writing). If the minor version requested by the client is not supported by the server (e.g., the client requests version 3.2, but the server supports only 3.0), the server may either reject the connection or may respond with a NegotiateProtocolVersion message containing the highest minor protocol version which it supports. The client may then choose either to continue with the connection using the specified protocol version or to abort the connection.
 
 

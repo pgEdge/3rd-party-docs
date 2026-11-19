@@ -16,7 +16,7 @@
 -   `PGREQUIREAUTH` behaves the same as the [require_auth](database-connection-control-functions.md#libpq-connect-require-auth) connection parameter.
 -   `PGCHANNELBINDING` behaves the same as the [channel_binding](database-connection-control-functions.md#libpq-connect-channel-binding) connection parameter.
 -   `PGSERVICE` behaves the same as the [service](database-connection-control-functions.md#libpq-connect-service) connection parameter.
--   `PGSERVICEFILE` behaves the same as the [servicefile](database-connection-control-functions.md#libpq-connect-servicefile) connection parameter.
+-   `PGSERVICEFILE` specifies the name of the per-user connection service file (see [The Connection Service File](the-connection-service-file.md#libpq-pgservice)). Defaults to `~/.pg_service.conf`, or `%APPDATA%\postgresql\.pg_service.conf` on Microsoft Windows.
 -   `PGOPTIONS` behaves the same as the [options](database-connection-control-functions.md#libpq-connect-options) connection parameter.
 -   `PGAPPNAME` behaves the same as the [application_name](database-connection-control-functions.md#libpq-connect-application-name) connection parameter.
 -   `PGSSLMODE` behaves the same as the [sslmode](database-connection-control-functions.md#libpq-connect-sslmode) connection parameter.

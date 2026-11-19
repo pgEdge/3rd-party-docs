@@ -25,12 +25,6 @@ ALTER TABLE [ IF EXISTS ] NAME
     ATTACH PARTITION PARTITION_NAME { FOR VALUES PARTITION_BOUND_SPEC | DEFAULT }
 ALTER TABLE [ IF EXISTS ] NAME
     DETACH PARTITION PARTITION_NAME [ CONCURRENTLY | FINALIZE ]
-ALTER TABLE [ IF EXISTS ] NAME
-    MERGE PARTITIONS (PARTITION_NAME1, PARTITION_NAME2 [, ...]) INTO PARTITION_NAME
-ALTER TABLE [ IF EXISTS ] NAME
-    SPLIT PARTITION PARTITION_NAME INTO
-        (PARTITION PARTITION_NAME1 { FOR VALUES PARTITION_BOUND_SPEC | DEFAULT },
-         PARTITION PARTITION_NAME2 { FOR VALUES PARTITION_BOUND_SPEC | DEFAULT } [, ...])
 
 where ACTION is one of:
 
@@ -267,7 +261,10 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 <a id="sql-altertable-desc-alter-constraint"></a>
 
 `ALTER CONSTRAINT`
-:   This form alters the attributes of a constraint that was previously created. Currently `FOREIGN KEY` and `CHECK` constraints may be altered in this fashion, but see below.
+:   This form alters the attributes of a constraint that was previously created. Currently, the deferrability attributes can be altered only for `FOREIGN KEY` constraints. The enforceability attribute can be altered for `FOREIGN KEY` and `CHECK` constraints.
+
+
+     Setting a constraint to `NOT ENFORCED` causes the database system to stop checking it for new or updated rows. Setting a constraint to `ENFORCED` causes the database system to verify that existing rows satisfy the constraint and to check it for new or updated rows.
 <a id="sql-altertable-desc-alter-constraint-inherit"></a>
 
 `ALTER CONSTRAINT ... INHERIT`, `ALTER CONSTRAINT ... NO INHERIT`
@@ -422,7 +419,7 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 <a id="sql-altertable-attach-partition"></a>
 
 <code>ATTACH PARTITION </code><em>partition_name</em><code> { FOR VALUES </code><em>partition_bound_spec</em><code> | DEFAULT }</code>
-:   This form attaches an existing table (which might itself be partitioned) as a partition of the target table. The table can be attached as a partition for specific values using `FOR VALUES` or as a default partition by using `DEFAULT`. For each index in the target table, a corresponding one will be created in the attached table; or, if an equivalent index already exists, it will be attached to the target table's index, as if `ALTER INDEX ATTACH PARTITION` had been executed. Note that if the existing table is a foreign table, it is currently not allowed to attach the table as a partition of the target table if there are `UNIQUE` indexes on the target table. (See also [sql-createforeigntable](create-foreign-table.md#sql-createforeigntable).) For each user-defined row-level trigger that exists in the target table, a corresponding one is created in the attached table.
+:   This form attaches an existing table (which might itself be partitioned) as a partition of the target table. The table can be attached as a partition for specific values using `FOR VALUES` or as a default partition by using `DEFAULT`. For each index in the target table, if a valid equivalent index already exists in the partition, it will be attached to the target table's index, as if ALTER INDEX ATTACH PARTITION had been executed; otherwise, a new corresponding index will be created. Invalid indexes on the partition are skipped. Note that if the existing table is a foreign table, it is currently not allowed to attach the table as a partition of the target table if there are `UNIQUE` indexes on the target table. (See also [sql-createforeigntable](create-foreign-table.md#sql-createforeigntable).) For each user-defined row-level trigger that exists in the target table, a corresponding one is created in the attached table.
 
 
      A partition using `FOR VALUES` uses same syntax for *partition_bound_spec* as [`CREATE TABLE`](create-table.md#sql-createtable). The partition bound specification must correspond to the partitioning strategy and partition key of the target table. The table to be attached must have all the same columns as the target table and no more; moreover, the column types must also match. Also, it must have all the `NOT NULL` and `CHECK` constraints of the target table, not marked `NO INHERIT`. Currently `FOREIGN KEY` constraints are not considered. `UNIQUE` and `PRIMARY KEY` constraints from the parent table will be created in the partition, if they don't already exist.
@@ -447,88 +444,13 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 :   This form detaches the specified partition of the target table. The detached partition continues to exist as a standalone table, but no longer has any ties to the table from which it was detached. Any indexes that were attached to the target table's indexes are detached. Any triggers that were created as clones of those in the target table are removed. `SHARE` lock is obtained on any tables that reference this partitioned table in foreign key constraints.
 
 
-     If `CONCURRENTLY` is specified, it runs using a reduced lock level to avoid blocking other sessions that might be accessing the partitioned table. In this mode, two transactions are used internally. During the first transaction, a `SHARE UPDATE EXCLUSIVE` lock is taken on both parent table and partition, and the partition is marked as undergoing detach; at that point, the transaction is committed and all other transactions using the partitioned table are waited for. Once all those transactions have completed, the second transaction acquires `SHARE UPDATE EXCLUSIVE` on the partitioned table and `ACCESS EXCLUSIVE` on the partition, and the detach process completes. A `CHECK` constraint that duplicates the partition constraint is added to the partition. `CONCURRENTLY` cannot be run in a transaction block and is not allowed if the partitioned table contains a default partition.
+     If `CONCURRENTLY` is specified, it runs using a reduced lock level to avoid blocking other sessions that might be accessing the partitioned table. In this mode, two transactions are used internally. During the first transaction, a `SHARE UPDATE EXCLUSIVE` lock is taken on both parent table and partition, and the partition is marked as undergoing detach; at that point, the transaction is committed and all other transactions using the partitioned table are waited for. Once all those transactions have completed, the second transaction acquires `SHARE UPDATE EXCLUSIVE` on the partitioned table and `ACCESS EXCLUSIVE` on the partition, and the detach process completes. `CONCURRENTLY` cannot be run in a transaction block and is not allowed if the partitioned table contains a default partition.
 
 
      If `FINALIZE` is specified, a previous `DETACH CONCURRENTLY` invocation that was canceled or interrupted is completed. At most one partition in a partitioned table can be pending detach at a time.
-<a id="sql-altertable-merge-partitions"></a>
-
-<code>MERGE PARTITIONS (</code><em>partition_name1</em><code>, </code><em>partition_name2</em><code> [, ...]) INTO </code><em>partition_name</em>
-:   This form merges several partitions of the target table into a new partition. Hash-partitioned target table is not supported. Only simple, non-partitioned partitions can be merged. The new partition (*partition_name*) can have the same name as one of the merged partitions (<em>partition_name1</em><code>,
-          </code><em>partition_name2</em><code> [, ...]</code>).
 
 
-     If the `DEFAULT` partition is not in the list of merged partitions:
-
-    -  For range-partitioned tables, the ranges of merged partitions must be adjacent in order to be merged. The partition bounds of merged partitions are combined to form the new partition bound for *partition_name*.
-    -  For list-partitioned tables, the partition bounds of merged partitions are combined to form the new partition bound for *partition_name*.
-     If the `DEFAULT` partition is in the list of merged partitions:
-
-    -  The partition *partition_name* will be the new `DEFAULT` partition of the target table.
-    -  The partition bound specifications for merged partitions can be arbitrary.
-
-
-     All merged partitions must have the same owner. The owner of merged partitions will be the owner of the new partition. It is the user's responsibility to setup ACL on the new partition.
-
-
-     `ALTER TABLE MERGE PARTITION` uses the partitioned table itself as the template to construct the new partition. The new partition will inherit the same table access method, persistence type, and tablespace as the partitioned table. Constraints, column defaults, column generation expressions, identity columns, indexes, and triggers are copied from the partitioned table to the new partition. But extended statistics, security policies, etc, won't be copied from the partitioned table. Indexes and identity columns copied from the partitioned table will be created afterward, once the data has been moved into the new partition.
-
-
-     When partitions are merged, any objects depending on this partition, such as constraints, triggers, extended statistics, etc, will be dropped. Eventually, we will drop all the merged partitions (using `RESTRICT` mode) too; therefore, if any objects are still dependent on them, `ALTER TABLE MERGE PARTITION` would fail. (see [Dependency Tracking](../../the-sql-language/data-definition/dependency-tracking.md#ddl-depend)).
-
-
-     Extension dependencies on partition indexes (created via [`ALTER INDEX ... DEPENDS ON EXTENSION`](alter-index.md#sql-alterindex)) are preserved during merge operations. All source partition indexes must have the same extension dependencies; if they differ, an error is raised. This ensures that extension dependencies are not silently lost during merge.
-
-
-    !!! note
-
-        Merging partitions acquires an `ACCESS EXCLUSIVE` lock on the parent table, in addition to the `ACCESS EXCLUSIVE` locks on the tables being merged and on the default partition (if any).
-
-
-    !!! note
-
-        `ALTER TABLE MERGE PARTITIONS` creates a new partition and moves data from all merging partitions into it, which can take a long time. So it is not recommended to use the command to merge very big partitions with small ones.
-<a id="sql-altertable-split-partition"></a>
-
-<code>SPLIT PARTITION </code><em>partition_name</em><code> INTO (
-      PARTITION </code><em>partition_name1</em><code> { FOR VALUES </code><em>partition_bound_spec</em><code> | DEFAULT },
-      PARTITION </code><em>partition_name2</em><code> { FOR VALUES </code><em>partition_bound_spec</em><code> | DEFAULT }
-      [, ...])</code>
-:   This form splits a single partition of the target table into new partitions. Hash-partitioned target table is not supported. Only a simple, non-partitioned partition can be split. If the split partition is the `DEFAULT` partition, one of the new partitions must be `DEFAULT`. If the partitioned table does not have a `DEFAULT` partition, a `DEFAULT` partition can be defined as one of the new partitions.
-
-
-     The bounds of new partitions should not overlap with those of new or existing partitions (except *partition_name*). The combined bounds of new partitions <code>
-          </code><em>partition_name1</em><code>,
-          </code><em>partition_name2</em><code>[, ...]
-          </code> should be equal to the bounds of the split partition *partition_name*. One of the new partitions can have the same name as the split partition *partition_name* (this is suitable in case of splitting the `DEFAULT` partition: after the split, the `DEFAULT` partition remains with the same name, but its partition bound changes).
-
-
-     New partitions will have the same owner as the parent partition. It is the user's responsibility to setup ACL on new partitions.
-
-
-     `ALTER TABLE SPLIT PARTITION` uses the partitioned table itself as the template to construct new partitions. New partitions will inherit the same table access method, persistence type, and tablespace as the partitioned table.
-
-
-     Constraints, column defaults, column generation expressions, identity columns, indexes, and triggers are copied from the partitioned table to the new partitions. But extended statistics, security policies, etc, won't be copied from the partitioned table. Indexes and identity columns copied from the partitioned table will be created afterward, once the data has been moved into the new partitions.
-
-
-     When a partition is split, any objects that depend on this partition, such as constraints, triggers, extended statistics, etc, will be dropped. This occurs because `ALTER TABLE SPLIT PARTITION` uses the partitioned table itself as the template to reconstruct these objects later. Eventually, we will drop the split partition (using `RESTRICT` mode) too; therefore, if any objects are still dependent on it, `ALTER TABLE SPLIT PARTITION` would fail (see [Dependency Tracking](../../the-sql-language/data-definition/dependency-tracking.md#ddl-depend)).
-
-
-     Extension dependencies on partition indexes (created via [`ALTER INDEX ... DEPENDS ON EXTENSION`](alter-index.md#sql-alterindex)) are preserved during split operations. The new partitions' indexes will inherit the extension dependencies from the source partition's indexes.
-
-
-    !!! note
-
-        Split partition acquires an `ACCESS EXCLUSIVE` lock on the parent table, in addition to the `ACCESS EXCLUSIVE` lock on the table being split.
-
-
-    !!! note
-
-        `ALTER TABLE SPLIT PARTITION` creates new partitions and moves data from the split partition into them, which can take a long time. So it is not recommended to use the command for splitting a small fraction of rows out of a very big partition.
-
-
- All the forms of `ALTER TABLE` that act on a single table, except `RENAME`, `SET SCHEMA`, `ATTACH PARTITION`, `DETACH PARTITION`, `MERGE PARTITIONS`, and `SPLIT PARTITION` can be combined into a list of multiple alterations to be applied together. For example, it is possible to add several columns and/or alter the type of several columns in a single command. This is particularly useful with large tables, since only one pass over the table needs to be made.
+ All the forms of `ALTER TABLE` that act on a single table, except `RENAME`, `SET SCHEMA`, `ATTACH PARTITION`, and `DETACH PARTITION` can be combined into a list of multiple alterations to be applied together. For example, it is possible to add several columns and/or alter the type of several columns in a single command. This is particularly useful with large tables, since only one pass over the table need be made.
 
 
  You must own the table to use `ALTER TABLE`. To change the schema or tablespace of a table, you must also have `CREATE` privilege on the new schema or tablespace. To add the table as a new child of a parent table, you must own the parent table as well. Also, to attach a table as a new partition of the table, you must own the table being attached. To alter the owner, you must be able to `SET ROLE` to the new owning role, and that role must have `CREATE` privilege on the table's schema. (These restrictions enforce that altering the owner doesn't do anything you couldn't do by dropping and recreating the table. However, a superuser can alter ownership of any table anyway.) To add a column or alter a column type or use the `OF` clause, you must also have `USAGE` privilege on the data type.
@@ -624,11 +546,7 @@ REFERENTIAL_ACTION in a FOREIGN KEY/REFERENCES constraint is:
 <a id="sql-altertable-parms-partition-name"></a>
 
 *partition_name*
-:   The name of the table to attach as a new partition or to detach from this table, or the name of split partition, or the name of the new merged partition.
-<a id="sql-altertable-parms-partition-name1"></a>
-
-*partition_name1*, *partition_name2*
-:   The names of the tables being merged into the new partition or split into new partitions.
+:   The name of the table to attach as a new partition or to detach from this table.
 <a id="sql-altertable-parms-partition-bound-spec"></a>
 
 *partition_bound_spec*
@@ -940,37 +858,6 @@ ALTER TABLE cities
 
 ALTER TABLE measurement
     DETACH PARTITION measurement_y2015m12;
-```
-
-
- To split a single partition of the range-partitioned table:
-
-```sql
-
-ALTER TABLE sales_range SPLIT PARTITION sales_feb_mar_apr2023 INTO
-   (PARTITION sales_feb2023 FOR VALUES FROM ('2023-02-01') TO ('2023-03-01'),
-    PARTITION sales_mar2023 FOR VALUES FROM ('2023-03-01') TO ('2023-04-01'),
-    PARTITION sales_apr2023 FOR VALUES FROM ('2023-04-01') TO ('2023-05-01'));
-```
-
-
- To split a single partition of the list-partitioned table:
-
-```sql
-
-ALTER TABLE sales_list SPLIT PARTITION sales_all INTO
-   (PARTITION sales_west FOR VALUES IN ('Lisbon', 'New York', 'Madrid'),
-    PARTITION sales_east FOR VALUES IN ('Beijing', 'Delhi', 'Vladivostok'),
-    PARTITION sales_central FOR VALUES IN ('Warsaw', 'Berlin', 'Kyiv'));
-```
-
-
- To merge several partitions into one partition of the target table:
-
-```sql
-
-ALTER TABLE sales_list MERGE PARTITIONS (sales_west, sales_east, sales_central)
-    INTO sales_all;
 ```
 
 

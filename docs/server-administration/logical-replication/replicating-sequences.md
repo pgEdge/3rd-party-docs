@@ -6,7 +6,7 @@
  To synchronize sequences from a publisher to a subscriber, first publish them using [`CREATE PUBLICATION ... FOR ALL SEQUENCES`](../../reference/sql-commands/create-publication.md#sql-createpublication-params-for-all-sequences) and then on the subscriber:
 
 
--  use [`CREATE SUBSCRIPTION`](../../reference/sql-commands/create-subscription.md#sql-createsubscription) to initially synchronize the published sequences.
+-  use [`CREATE SUBSCRIPTION`](../../reference/sql-commands/create-subscription.md#sql-createsubscription) with [`copy_data = true`](../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-with-copy-data) (the default) to copy the initial sequence values from the publisher.
 -  use [`ALTER SUBSCRIPTION ... REFRESH PUBLICATION`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription-params-refresh-publication) to synchronize only newly added sequences.
 -  use [`ALTER SUBSCRIPTION ... REFRESH SEQUENCES`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription-params-refresh-sequences) to re-synchronize all sequences currently known to the subscription.
 
@@ -15,6 +15,11 @@
 
 
  The ability to launch a sequence synchronization worker is limited by the [`max_sync_workers_per_subscription`](../server-configuration/replication.md#guc-max-sync-workers-per-subscription) configuration.
+
+
+!!! note
+
+    Sequence synchronization requires the publisher to be running PostgreSQL 19 or later.
  <a id="sequence-definition-mismatches"></a>
 
 ### Sequence Definition Mismatches

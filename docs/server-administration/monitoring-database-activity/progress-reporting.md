@@ -3,7 +3,7 @@
 ## Progress Reporting
 
 
- PostgreSQL has the ability to report the progress of certain commands during command execution. Currently, the only commands which support progress reporting are `ANALYZE`, `COPY`, `CREATE INDEX`, `REPACK` (and its obsolete spelling `CLUSTER`), `VACUUM`, and [BASE_BACKUP](../../internals/frontend-backend-protocol/streaming-replication-protocol.md#protocol-replication-base-backup) (i.e., replication command that [app-pgbasebackup](../../reference/postgresql-client-applications/pg_basebackup.md#app-pgbasebackup) issues to take a base backup). This may be expanded in the future.
+ PostgreSQL has the ability to report the progress of certain commands during command execution. Currently, the only commands which support progress reporting are `ANALYZE`, `COPY`, `CREATE INDEX`, `REPACK` (and its obsolete spelling `CLUSTER`), `VACUUM` and [BASE_BACKUP](../../internals/frontend-backend-protocol/streaming-replication-protocol.md#protocol-replication-base-backup) (i.e., replication command that [app-pgbasebackup](../../reference/postgresql-client-applications/pg_basebackup.md#app-pgbasebackup) issues to take a base backup). This may be expanded in the future.
  <a id="analyze-progress-reporting"></a>
 
 ### ANALYZE Progress Reporting
@@ -104,7 +104,7 @@
 ### CLUSTER Progress Reporting
 
 
- Whenever `REPACK`, `CLUSTER` or `VACUUM FULL` is running, the backwards-compatibility `pg_stat_progress_cluster` view will contain a row for each backend that is currently running either command. The tables below describe the information that will be reported and provide information about how to interpret it.
+ Whenever `REPACK`, `CLUSTER` or `VACUUM FULL` is running, the backwards-compatibility `pg_stat_progress_cluster` view will contain a row for each backend that is currently running one of these commands. The tables below describe the information that will be reported and provide information about how to interpret it.
  <a id="pg-stat-progress-cluster-view"></a>
 
 **Table: `pg_stat_progress_cluster` View**
@@ -135,7 +135,7 @@
 </tr>
 <tr>
 <td><p><code>command</code> <code>text</code></p>
-<p>The command that is running. Either <code>CLUSTER</code> or <code>VACUUM FULL</code>. Because this view exists for backwards-compatibility purposes only, it will translate any <code>REPACK</code> command into one of these other two.</p></td>
+<p>The command that is running. Either <code>CLUSTER</code> or <code>VACUUM FULL</code>. Because this view exists for backwards-compatibility purposes only, it will translate a <code>REPACK</code> command into <code>CLUSTER</code> if index ordering is requested, or <code>VACUUM FULL</code> otherwise.</p></td>
 </tr>
 <tr>
 <td><p><code>phase</code> <code>text</code></p>
@@ -143,7 +143,7 @@
 </tr>
 <tr>
 <td><p><code>cluster_index_relid</code> <code>oid</code></p>
-<p>If the table is being scanned using an index, this is the OID of the index being used; otherwise, it is zero.</p></td>
+<p>OID of the index defining the order of the rewritten table, or zero if no index ordering is requested.</p></td>
 </tr>
 <tr>
 <td><p><code>heap_tuples_scanned</code> <code>bigint</code></p>
@@ -350,7 +350,7 @@
 ### REPACK Progress Reporting
 
 
- Whenever `REPACK` is running, the `pg_stat_progress_repack` view will contain a row for each backend that is currently running the command. The tables below describe the information that will be reported and provide information about how to interpret it.
+ Whenever `REPACK`, `CLUSTER`, or `VACUUM FULL` is running, the `pg_stat_progress_repack` view will contain a row for each backend that is currently running one of these commands. The tables below describe the information that will be reported and provide information about how to interpret it.
  <a id="pg-stat-progress-repack-view"></a>
 
 **Table: `pg_stat_progress_repack` View**
@@ -377,11 +377,11 @@
 </tr>
 <tr>
 <td><p><code>relid</code> <code>oid</code></p>
-<p>OID of the table being repacked.</p></td>
+<p>OID of the table being processed.</p></td>
 </tr>
 <tr>
 <td><p><code>command</code> <code>text</code></p>
-<p>The command that is running. Either <code>REPACK</code> or <code>VACUUM FULL</code>, or <code>CLUSTER</code>.</p></td>
+<p>The command that is running. One of <code>CLUSTER</code>, <code>REPACK</code>, or <code>VACUUM FULL</code>.</p></td>
 </tr>
 <tr>
 <td><p><code>phase</code> <code>text</code></p>
@@ -389,7 +389,7 @@
 </tr>
 <tr>
 <td><p><code>repack_index_relid</code> <code>oid</code></p>
-<p>If the table is being scanned using an index, this is the OID of the index being used; otherwise, it is zero.</p></td>
+<p>OID of the index defining the order of the rewritten table, or zero if no index ordering is requested.</p></td>
 </tr>
 <tr>
 <td><p><code>heap_tuples_scanned</code> <code>bigint</code></p>
@@ -427,12 +427,12 @@
 
 | Phase | Description |
 | --- | --- |
-| `initializing` | The command is preparing to begin scanning the heap. This phase is expected to be very brief. |
+| `initializing` | The command is preparing to begin scanning the heap. This phase is expected to be very brief, except for `REPACK CONCURRENTLY`, where it also covers enabling logical decoding and then initializing it. Enabling has nothing to do if [effective_wal_level](../server-configuration/preset-options.md#guc-effective-wal-level) is already `logical`; otherwise it waits for all processes to acknowledge that they started writing the additional WAL information that logical decoding requires. Initializing then waits for the transactions that have been assigned a transaction ID to end, including ones that started while this wait was in progress, so this phase can last longer than the longest transaction running when the command started. This includes any other `REPACK CONCURRENTLY`, which holds a transaction ID until it finishes. |
 | `seq scanning heap` | The command is currently scanning the table using a sequential scan. |
 | `index scanning heap` | `REPACK` is currently scanning the table using an index scan. |
 | `sorting tuples` | `REPACK` is currently sorting tuples. |
 | `writing new heap` | `REPACK` is currently writing the new heap. |
-| `catch-up` | `REPACK CONCURRENTLY` is currently processing the DML commands that other transactions executed during any of the preceding phases. |
+| `catch-up` | `REPACK CONCURRENTLY` is currently processing the DML commands that other transactions executed during any of the preceding phases. This phase also covers waiting for the `ACCESS EXCLUSIVE` lock needed to swap the files, so a command blocked by a conflicting lock stays in this phase. This phase is skipped when not in concurrent mode. |
 | `swapping relation files` | The command is currently swapping newly-built files into place. |
 | `rebuilding index` | The command is currently rebuilding an index. |
 | `performing final cleanup` | The command is performing final cleanup. When this phase is completed, `REPACK` will end. |
@@ -441,7 +441,7 @@
 ### VACUUM Progress Reporting
 
 
- Whenever `VACUUM` is running, the `pg_stat_progress_vacuum` view will contain one row for each backend (including autovacuum worker processes) that is currently vacuuming. The tables below describe the information that will be reported and provide information about how to interpret it. Progress for `VACUUM FULL` commands is reported via `pg_stat_progress_cluster` because both `VACUUM FULL` and `CLUSTER` rewrite the table, while regular `VACUUM` only modifies it in place. See [CLUSTER Progress Reporting](#cluster-progress-reporting).
+ Whenever `VACUUM` is running, the `pg_stat_progress_vacuum` view will contain one row for each backend (including autovacuum worker processes) that is currently vacuuming. The tables below describe the information that will be reported and provide information about how to interpret it. Progress for `VACUUM FULL` commands is reported via `pg_stat_progress_repack`, and is also visible via the backwards-compatibility `pg_stat_progress_cluster` because both `VACUUM FULL` and `CLUSTER` rewrite the table, while regular `VACUUM` only modifies it in place. See [REPACK Progress Reporting](#repack-progress-reporting) and [CLUSTER Progress Reporting](#cluster-progress-reporting).
  <a id="pg-stat-progress-vacuum-view"></a>
 
 **Table: `pg_stat_progress_vacuum` View**
@@ -571,11 +571,11 @@
 </tr>
 <tr>
 <td><p><code>backup_total</code> <code>bigint</code></p>
-<p>Total amount of data that will be streamed. This is estimated and reported as of the beginning of <code>streaming database files</code> phase. Note that this is only an approximation since the database may change during <code>streaming database files</code> phase and WAL log may be included in the backup later. This is always the same value as <code>backup_streamed</code> once the amount of data streamed exceeds the estimated total size. If the estimation is disabled in pg_basebackup (i.e., <code>--no-estimate-size</code> option is specified), this is <code>NULL</code>.</p></td>
+<p>Total amount of data that will be streamed. This counts archive data before any server-side compression. The estimate is reported as of the beginning of the <code>streaming database files</code> phase. Note that this is only an approximation since the database may change during <code>streaming database files</code> phase and WAL log may be included in the backup later. This is always the same value as <code>backup_streamed</code> once the amount of data streamed exceeds the estimated total size. If the estimation is disabled in pg_basebackup (i.e., <code>--no-estimate-size</code> option is specified), this is <code>NULL</code>.</p></td>
 </tr>
 <tr>
 <td><p><code>backup_streamed</code> <code>bigint</code></p>
-<p>Amount of data streamed. This counter only advances when the phase is <code>streaming database files</code> or <code>transferring wal files</code>.</p></td>
+<p>Amount of data streamed. This counts archive data before any server-side compression. This counter only advances when the phase is <code>streaming database files</code> or <code>transferring wal files</code>.</p></td>
 </tr>
 <tr>
 <td><p><code>tablespaces_total</code> <code>bigint</code></p>
@@ -603,74 +603,3 @@
 | `streaming database files` | The WAL sender process is currently streaming database files as a base backup. |
 | `waiting for wal archiving to finish` | The WAL sender process is currently performing `pg_backup_stop` to finish the backup, and waiting for all the WAL files required for the base backup to be successfully archived. If either `--wal-method=none` or `--wal-method=stream` is specified in pg_basebackup, the backup will end when this phase is completed. |
 | `transferring wal files` | The WAL sender process is currently transferring all WAL logs generated during the backup. This phase occurs after `waiting for wal archiving to finish` phase if `--wal-method=fetch` is specified in pg_basebackup. The backup will end when this phase is completed. |
-  <a id="data-checksum-progress-reporting"></a>
-
-### Data Checksum Progress Reporting
-
-
- When data checksums are being enabled on a running cluster, the `pg_stat_progress_data_checksums` view will contain a row for the launcher process, and one row for each worker process which is currently calculating and writing checksums for the data pages in a database. The launcher provides overview of the overall progress (how many databases have been processed, how many remain), while the workers track progress for currently processed databases.
- <a id="pg-stat-progress-data-checksums-view"></a>
-
-**Table: `pg_stat_progress_data_checksums` View**
-
-<table>
-<thead>
-<tr>
-<th><p>Column Type</p>
-<p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><p><code>pid</code> <code>integer</code></p>
-<p>Process ID of the data checksum process, launcher or worker.</p></td>
-</tr>
-<tr>
-<td><p><code>datid</code> <code>oid</code></p>
-<p>OID of this database, or <code>0</code> for the launcher process.</p></td>
-</tr>
-<tr>
-<td><p><code>datname</code> <code>name</code></p>
-<p>Name of this database, or <code>NULL</code> for the launcher process.</p></td>
-</tr>
-<tr>
-<td><p><code>phase</code> <code>text</code></p>
-<p>Current processing phase, see <a href="#datachecksum-phases">Data Checksum Phases</a> for description of the phases.</p></td>
-</tr>
-<tr>
-<td><p><code>databases_total</code> <code>integer</code></p>
-<p>The total number of databases which will be processed. Only the launcher process has this value set, the worker processes have this set to <code>NULL</code>.</p></td>
-</tr>
-<tr>
-<td><p><code>databases_done</code> <code>integer</code></p>
-<p>The number of databases which have been processed. Only the launcher process has this value set, the worker processes have this set to <code>NULL</code>.</p></td>
-</tr>
-<tr>
-<td><p><code>relations_total</code> <code>integer</code></p>
-<p>The total number of relations which will be processed, or <code>NULL</code> if the worker process hasn't calculated the number of relations yet. The launcher process has this set to <code>NULL</code> since it isn't responsible for processing relations, only launching worker processes.</p></td>
-</tr>
-<tr>
-<td><p><code>relations_done</code> <code>integer</code></p>
-<p>The number of relations which have been processed. The launcher process has this set to <code>NULL</code>.</p></td>
-</tr>
-<tr>
-<td><p><code>blocks_total</code> <code>integer</code></p>
-<p>The number of blocks in the current relation which will be processed, or <code>NULL</code> if the worker process hasn't calculated the number of blocks yet. The launcher process has this set to <code>NULL</code>.</p></td>
-</tr>
-<tr>
-<td><p><code>blocks_done</code> <code>integer</code></p>
-<p>The number of blocks in the current relation which have been processed. The launcher process has this set to <code>NULL</code>.</p></td>
-</tr>
-</tbody>
-</table>
- <a id="datachecksum-phases"></a>
-
-**Table: Data Checksum Phases**
-
-| Phase | Description |
-| --- | --- |
-| `enabling` | The command is currently enabling data checksums on the cluster. |
-| `disabling` | The command is currently disabling data checksums on the cluster. |
-| `done` | The command is done and the data checksum state in the cluster has changed. |
-| `waiting on barrier` | The command is currently waiting for the current active backends to acknowledge the change in data checksum state. |
-| `waiting on temporary tables` | The command is currently waiting for all temporary tables which existed at the time the command was started to be removed. |

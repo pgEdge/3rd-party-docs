@@ -214,7 +214,6 @@ Visit https://example.com/device and enter the code: ABCD-EFGH
 PGOAUTHDEBUG=option1,option2,...         for safe options only
 PGOAUTHDEBUG=UNSAFE:option1,option2,...  when using unsafe options
 PGOAUTHDEBUG=UNSAFE                      legacy format; enables all options
-
 ```
 
 
@@ -246,7 +245,6 @@ PGOAUTHDEBUG=UNSAFE                      legacy format; enables all options
 PGOAUTHDEBUG=call-count              safe options only
 PGOAUTHDEBUG=UNSAFE:http,trace       enable HTTP and traffic logging
 PGOAUTHDEBUG=UNSAFE:http,call-count  mix of unsafe and safe
-
 ```
 
 

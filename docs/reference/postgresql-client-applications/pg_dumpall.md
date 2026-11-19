@@ -2,7 +2,7 @@
 
 # pg_dumpall
 
-export a PostgreSQL database cluster as an SQL script or to other formats
+extract a PostgreSQL database cluster into a script file
 
 ## Synopsis
 
@@ -15,16 +15,13 @@ pg_dumpall [CONNECTION-OPTION...] [OPTION...]
 ## Description
 
 
- pg_dumpall is a utility for writing out (“dumping”) all PostgreSQL databases of a cluster into an SQL script file or an archive. It does this by calling [app-pgdump](pg_dump.md#app-pgdump) for each database in the cluster. The output contains SQL commands that can be used as input to [app-psql](psql.md#app-psql) or [app-pgrestore](pg_restore.md#app-pgrestore) to restore the databases. pg_dumpall also dumps global objects that are common to all databases, namely database roles, tablespaces, and privilege grants for configuration parameters. (pg_dump does not save these objects.) The only parts of a database cluster's state that are *not* included in the default output of pg_dumpall are the configuration files and any database parameter setting changes made with [sql-altersystem](../sql-commands/alter-system.md#sql-altersystem).
-
-
- If the output format is a plain text SQL script, it will be written to the standard output. Use the `-f`/`--file` option or shell operators to redirect it into a file.
-
-
- If another output format is selected, the archive will be placed in a directory named using the `-f`/`--file` option, which is required in this case.
+ pg_dumpall is a utility for writing out (“dumping”) all PostgreSQL databases of a cluster into one script file. The script file contains SQL commands that can be used as input to [app-psql](psql.md#app-psql) to restore the databases. It does this by calling [app-pgdump](pg_dump.md#app-pgdump) for each database in the cluster. pg_dumpall also dumps global objects that are common to all databases, namely database roles, tablespaces, and privilege grants for configuration parameters. (pg_dump does not save these objects.)
 
 
  Since pg_dumpall reads tables from all databases you will most likely have to connect as a database superuser in order to produce a complete dump. Also you will need superuser privileges to execute the saved script in order to be allowed to add roles and create databases.
+
+
+ The SQL script will be written to the standard output. Use the `-f`/`--file` option or shell operators to redirect it into a file.
 
 
  pg_dumpall needs to connect several times to the PostgreSQL server (once per database). If you use password authentication it will ask for a password each time. It is convenient to have a `~/.pgpass` file in such cases. See [The Password File](../../client-interfaces/libpq-c-library/the-password-file.md#libpq-pgpass) for more information.
@@ -50,26 +47,10 @@ pg_dumpall [CONNECTION-OPTION...] [OPTION...]
 :   Create the dump in the specified character set encoding. By default, the dump is created in the database encoding. (Another way to get the same result is to set the `PGCLIENTENCODING` environment variable to the desired dump encoding.)
 
 <code>-f </code><em>filename</em>, <code>--file=</code><em>filename</em>
-:   Send output to the specified file. If this is omitted, the standard output is used. This option can only be omitted when `--format` is plain.
-
-<code>-F </code><em>format</em>, <code>--format=</code><em>format</em>
-:   Specify the format of dump files. In plain format, all the dump data is sent in a single text stream. This is the default. In all other modes, pg_dumpall first creates two files, `toc.glo` and `map.dat`, in the directory specified by `--file`. The first file contains global data (roles and tablespaces) in custom format. The second contains a mapping between database OIDs and names. These files are used by pg_restore. Data for individual databases is placed in the `databases` subdirectory, named using the database's OID.
-
-    `d`, `directory`
-    :   Output directory-format archives for each database, suitable for input into pg_restore. The directory will have database `oid` as its name.
-
-    `p`, `plain`
-    :   Output a plain-text SQL script file (the default).
-
-    `c`, `custom`
-    :   Output a custom-format archive for each database, suitable for input into pg_restore. The archive will be named `dboid.dmp` where `dboid` is the `oid` of the database.
-
-    `t`, `tar`
-    :   Output a tar-format archive for each database, suitable for input into pg_restore. The archive will be named `dboid.tar` where `dboid` is the `oid` of the database.
-     See [app-pgdump](pg_dump.md#app-pgdump) for details on how the various non-plain-text archive formats work.
+:   Send output to the specified file. If this is omitted, the standard output is used.
 
 `-g`, `--globals-only`
-:   Dump only global objects (roles and tablespaces), no databases. Note: `--globals-only` cannot be used with `--clean` with non-text dump format.
+:   Dump only global objects (roles and tablespaces), no databases.
 
 `-O`, `--no-owner`
 :   Do not output commands to set ownership of objects to match the original database. By default, pg_dumpall issues `ALTER OWNER` or `SET SESSION AUTHORIZATION` statements to set ownership of created schema elements. These statements will fail when the script is run unless it is started by a superuser (or the same user that owns all of the objects in the script). To make a script that can be restored by any user, but will give that user ownership of all the objects, specify `-O`.
@@ -276,7 +257,7 @@ pg_dumpall [CONNECTION-OPTION...] [OPTION...]
  The `--clean` option can be useful even when your intention is to restore the dump script into a fresh cluster. Use of `--clean` authorizes the script to drop and re-create the built-in `postgres` and `template1` databases, ensuring that those databases will retain the same properties (for instance, locale and encoding) that they had in the source cluster. Without the option, those databases will retain their existing database-level properties, as well as any pre-existing contents.
 
 
- When `--statistics` is specified, `pg_dumpall` will include most optimizer statistics in the resulting dump file. This does not include all statistics, such as those created explicitly with [sql-createstatistics](../sql-commands/create-statistics.md#sql-createstatistics), custom statistics added by an extension, or statistics collected by the cumulative statistics system. Therefore, it may still be useful to run `ANALYZE` on each database after restoring from a dump file to ensure optimal performance. You can also run `vacuumdb -a -z` to analyze all databases.
+ When `--statistics` is specified, `pg_dumpall` will include most optimizer statistics in the resulting dump file. This does not include all statistics, such as custom statistics added by an extension, or statistics collected by the cumulative statistics system. Therefore, it may still be useful to run `ANALYZE` on each database after restoring from a dump file to ensure optimal performance. You can also run `vacuumdb -a -z` to analyze all databases.
 
 
  The dump script should not be expected to run completely without errors. In particular, because the script will issue `CREATE ROLE` for every role existing in the source cluster, it is certain to get a “role already exists” error for the bootstrap superuser, unless the destination cluster was initialized with a different bootstrap superuser name. This error is harmless and should be ignored. Use of the `--clean` option is likely to produce additional harmless error messages about non-existent objects, although you can minimize those by adding `--if-exists`.
@@ -291,21 +272,11 @@ pg_dumpall [CONNECTION-OPTION...] [OPTION...]
 ## Examples
 
 
- To dump all databases in plain text format (the default):
+ To dump all databases:
 
 ```
 
 $ pg_dumpall > db.out
-```
-
-
- To dump all databases using other formats:
-
-```
-
-$ pg_dumpall --format=directory -f db.out
-$ pg_dumpall --format=custom -f db.out
-$ pg_dumpall --format=tar -f db.out
 ```
 
 
@@ -316,15 +287,6 @@ $ pg_dumpall --format=tar -f db.out
 $ psql -X -f db.out -d postgres
 ```
  It is not important which database you connect to here since the script file created by pg_dumpall will contain the appropriate commands to create and connect to the saved databases. An exception is that if you specified `--clean`, you must connect to the `postgres` database initially; the script will attempt to drop other databases immediately, and that will fail for the database you are connected to.
-
-
- If the dump was taken in a non-plain-text format, use pg_restore to restore the databases:
-
-```
-
-$ pg_restore db.out -d postgres -C
-```
- This will restore all databases. To restore only some databases, use the `--exclude-database` option to skip those not wanted.
 
 
 ## See Also

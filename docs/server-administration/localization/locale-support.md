@@ -27,7 +27,7 @@ initdb --locale=sv_SE
 
 |  |  |
 | --- | --- |
-| `LC_COLLATE` | String sort order (ignored unless the provider is `libc`) |
+| `LC_COLLATE` | String sort order |
 | `LC_CTYPE` | Character classification (What is a letter? Its upper-case equivalent?) |
 | `LC_MESSAGES` | Language of messages |
 | `LC_MONETARY` | Formatting of currency amounts |

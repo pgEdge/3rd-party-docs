@@ -47,8 +47,8 @@
 | `text` |  | variable-length character string |
 | <code>time [ (</code><em>p</em><code>) ] [ without time zone ]</code> |  | time of day (no time zone) |
 | <code>time [ (</code><em>p</em><code>) ] with time zone</code> | `timetz` | time of day, including time zone |
-| <code>timestamp [ (</code><em>p</em><code>) ] [ without time zone ]</code> |  | date and time (no time zone) |
-| <code>timestamp [ (</code><em>p</em><code>) ] with time zone</code> | `timestamptz` | date and time, including time zone |
+| <code>timestamp [ (</code><em>p</em><code>) ] [ without time zone ]</code> |  | date and time (no time zone conversion) |
+| <code>timestamp [ (</code><em>p</em><code>) ] with time zone</code> | `timestamptz` | date and time, including time zone conversion |
 | `tsquery` |  | text search query |
 | `tsvector` |  | text search document |
 | `txid_snapshot` |  | user-level transaction ID snapshot (deprecated; see `pg_snapshot`) |

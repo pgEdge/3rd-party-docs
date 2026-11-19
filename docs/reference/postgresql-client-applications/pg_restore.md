@@ -2,7 +2,7 @@
 
 # pg_restore
 
-restore PostgreSQL databases from archives created by pg_dump or pg_dumpall
+restore a PostgreSQL database from an archive file created by pg_dump
 
 ## Synopsis
 
@@ -15,13 +15,10 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
 ## Description
 
 
- pg_restore is a utility for restoring a PostgreSQL database or cluster from an archive created by [app-pgdump](pg_dump.md#app-pgdump) or [app-pg-dumpall](pg_dumpall.md#app-pg-dumpall) in one of the non-plain-text formats. It will issue the commands necessary to reconstruct the database or cluster to the state it was in at the time it was saved. The archives also allow pg_restore to be selective about what is restored, or even to reorder the items prior to being restored. The archive formats are designed to be portable across architectures.
+ pg_restore is a utility for restoring a PostgreSQL database from an archive created by [app-pgdump](pg_dump.md#app-pgdump) in one of the non-plain-text formats. It will issue the commands necessary to reconstruct the database to the state it was in at the time it was saved. The archive files also allow pg_restore to be selective about what is restored, or even to reorder the items prior to being restored. The archive files are designed to be portable across architectures.
 
 
- pg_restore can operate in two modes. If a database name is specified, pg_restore connects to that database and restores archive contents directly into the database. When restoring from a dump made by pg_dumpall, each database will be created and then the restoration will be run in that database. Otherwise, when a database name is not specified, a script containing the SQL commands necessary to rebuild the database or cluster is created and written to a file or standard output. This script output is equivalent to the plain text output format of pg_dump or pg_dumpall. Some of the options controlling the output are therefore analogous to pg_dump options.
-
-
- A non-plain-text archive made using pg_dumpall is a directory containing a `toc.glo` file with global objects (roles and tablespaces), a `map.dat` file listing the databases, and a subdirectory for each database containing its archive. When restoring such an archive, pg_restore first restores global objects from `toc.glo`, then processes each database listed in `map.dat`. Lines in `map.dat` can be commented out with `#` to skip restoring specific databases.
+ pg_restore can operate in two modes. If a database name is specified, pg_restore connects to that database and restores archive contents directly into the database. Otherwise, a script containing the SQL commands necessary to rebuild the database is created and written to a file or standard output. This script output is equivalent to the plain text output format of pg_dump. Some of the options controlling the output are therefore analogous to pg_dump options.
 
 
  Obviously, pg_restore cannot restore information that is not present in the archive file. For instance, if the archive was made using the “dump data as `INSERT` commands” option, pg_restore will not be able to load the data using `COPY` statements.
@@ -49,14 +46,11 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
 `-c`, `--clean`
 :   Before restoring database objects, issue commands to `DROP` all the objects that will be restored. This option is useful for overwriting an existing database. If any of the objects do not exist in the destination database, ignorable error messages will be reported, unless `--if-exists` is also specified.
 
-
-     When restoring a pg_dumpall archive, `--if-exists` is implied by `--clean`, since global objects such as roles and tablespaces may not exist in the target cluster.
-
 `-C`, `--create`
 :   Create the database before restoring into it. If `--clean` is also specified, drop and recreate the target database before connecting to it.
 
 
-     With `--create`, pg_restore also restores the database's comment if any, and any configuration variable settings that are specific to this database, that is, any `ALTER DATABASE ... SET ...` and `ALTER ROLE ... IN DATABASE ... SET ...` commands that mention this database. Access privileges for the database itself are also restored, unless `--no-acl` is specified. `--create` is required when restoring multiple databases from a non-plain-text archive made using pg_dumpall.
+     With `--create`, pg_restore also restores the database's comment if any, and any configuration variable settings that are specific to this database, that is, any `ALTER DATABASE ... SET ...` and `ALTER ROLE ... IN DATABASE ... SET ...` commands that mention this database. Access privileges for the database itself are also restored, unless `--no-acl` is specified.
 
 
      When this option is used, the database named with `-d` is used only to issue the initial `DROP DATABASE` and `CREATE DATABASE` commands. All data is restored into the database name that appears in the archive.
@@ -84,18 +78,6 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
 
     `t`, `tar`
     :   The archive is a `tar` archive.
-
-`-g`, `--globals-only`
-:   Restore only global objects (roles and tablespaces), no databases.
-
-
-     This option is only relevant when restoring from a non-plain-text archive made using pg_dumpall. Note: `--globals-only` cannot be used with `--data-only`, `--schema-only`, `--statistics-only`, `--statistics`, `--exit-on-error`, `--single-transaction`, `--clean`, or `--transaction-size`, `--no-globals`.
-
-`--no-globals`
-:   Do not restore global objects (roles and tablespaces). When `-C`/`--create` is not specified, databases that do not already exist on the target server are skipped.
-
-
-     This option is only relevant when restoring from a non-plain-text archive made using pg_dumpall.
 
 <code>-I </code><em>index</em>, <code>--index=</code><em>index</em>
 :   Restore definition of named index only. Multiple indexes may be specified with multiple `-I` switches.
@@ -191,12 +173,6 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
 
      Note that this option currently also requires the dump be in `INSERT` format, as `COPY FROM` does not support row security.
 
-<code>--exclude-database=</code><em>pattern</em>
-:   Do not restore databases whose name matches *pattern*. Multiple patterns can be excluded by writing multiple `--exclude-database` switches. The *pattern* parameter is interpreted as a pattern according to the same rules used by psql's `\d` commands (see [Patterns](psql.md#app-psql-patterns)), so multiple databases can also be excluded by writing wildcard characters in the pattern. When using wildcards, be careful to quote the pattern if needed to prevent shell wildcard expansion.
-
-
-     This option is only relevant when restoring from a non-plain-text archive made using pg_dumpall.
-
 <code>--filter=</code><em>filename</em>
 :   Specify a filename from which to read patterns for objects excluded or included from restore. The patterns are interpreted according to the same rules as `-n`/`--schema` for including objects in schemas, `-N`/`--exclude-schema` for excluding objects in schemas, `-P`/`--function` for restoring named functions, `-I`/`--index` for restoring named indexes, `-t`/`--table` for restoring named tables or `-T`/`--trigger` for restoring triggers. To read from `STDIN`, use `-` as the filename. The `--filter` option can be specified in conjunction with the above listed options for including or excluding objects, and can also be specified more than once for multiple filter files.
 
@@ -212,7 +188,7 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
      The first keyword specifies whether the objects matched by the pattern are to be included or excluded. The second keyword specifies the type of object to be filtered using the pattern:
 
     -  `function`: functions, works like the `-P`/`--function` option. This keyword can only be used with the `include` keyword.
-    -  `index`: indexes, works like the `-I`/`--indexes` option. This keyword can only be used with the `include` keyword.
+    -  `index`: indexes, works like the `-I`/`--index` option. This keyword can only be used with the `include` keyword.
     -  `schema`: schemas, works like the `-n`/`--schema` and `-N`/`--exclude-schema` options.
     -  `table`: tables, works like the `-t`/`--table` option. This keyword can only be used with the `include` keyword.
     -  `trigger`: triggers, works like the `-T`/`--trigger` option. This keyword can only be used with the `include` keyword.
@@ -221,7 +197,7 @@ pg_restore [CONNECTION-OPTION...] [OPTION...] [FILENAME]
      Lines starting with `#` are considered comments and ignored. Comments can be placed after an object pattern row as well. Blank lines are also ignored. See [Patterns](psql.md#app-psql-patterns) for how to perform quoting in patterns.
 
 `--if-exists`
-:   Use `DROP ... IF EXISTS` commands to drop objects in `--clean` mode. This suppresses “does not exist” errors that might otherwise be reported. This option is not valid unless `--clean` is also specified. This option is implied when restoring a pg_dumpall archive with `--clean`.
+:   Use `DROP ... IF EXISTS` commands to drop objects in `--clean` mode. This suppresses “does not exist” errors that might otherwise be reported. This option is not valid unless `--clean` is also specified.
 
 `--no-comments`
 :   Do not output commands to restore comments, even if the archive contains them.
@@ -355,7 +331,6 @@ CREATE DATABASE foo WITH TEMPLATE template0;
 -  When restoring data to a pre-existing table and the option `--disable-triggers` is used, pg_restore emits commands to disable triggers on user tables before inserting the data, then emits commands to re-enable them after the data has been inserted. If the restore is stopped in the middle, the system catalogs might be left in the wrong state.
 -  Parallel restore (`--jobs` greater than 1) requires applying dependency information from the archive file to ensure that an object is not restored before other objects it depends on. This information will be incomplete, leading to unexpected restore failures, if the archive does not include object definitions (the `pre-data` section). Therefore, avoid using pg_dump options such as `--no-schema`, `-a/--data-only`, or `--section` without `pre-data` when creating an archive you wish to restore in parallel. Instead, you may provide such options to pg_restore.
 - pg_restore cannot restore large objects selectively; for instance, only those for a specific table. If an archive contains large objects, then all large objects will be restored, or none of them if they are excluded via `-L`, `-t`, or other options.
--  The following options cannot be used when restoring from a non-plain-text archive made using pg_dumpall: `-a/--data-only`, `-l/--list`, `-L/--use-list`, `--no-schema`, `--statistics-only`, and `--strict-names`. Also, if the `--section` option is used, it must include `pre-data`.
 
 
  See also the [app-pgdump](pg_dump.md#app-pgdump) documentation for details on limitations of pg_dump.

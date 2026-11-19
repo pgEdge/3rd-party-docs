@@ -1143,7 +1143,7 @@ my_shmem_init(void *arg)
  An example of allocating shared memory can be found in `contrib/pg_stat_statements/pg_stat_statements.c` in the PostgreSQL source tree.
   <a id="xfunc-shared-addin-after-startup"></a>
 
-#### Requesting Shared Memory After Startup with `ShmemRequestStruct`
+#### Requesting Shared Memory after Startup with `ShmemRequestStruct`
 
 
  The `ShmemRequestStruct()` can also be called after system startup, which is useful to allow small allocations in add-in libraries that are not specified in [shared_preload_libraries](../../server-administration/server-configuration/client-connection-defaults.md#guc-shared-preload-libraries). However, after startup the allocation can fail if there is not enough shared memory available. The system reserves some memory for allocations after startup, but that reservation is small.
@@ -1152,10 +1152,13 @@ my_shmem_init(void *arg)
  By default, `RegisterShmemCallbacks()` fails with an error if called after system startup. To use it after startup, you must set the `SHMEM_CALLBACKS_ALLOW_AFTER_STARTUP` flag in the argument `ShmemCallbacks` struct to acknowledge the risk.
 
 
- When `RegisterShmemCallbacks()` is called after startup, it will immediately call the appropriate callbacks, depending on whether the requested memory areas were already initialized by another backend. The callbacks will be called while holding an internal lock, which prevents concurrent two backends from initializing the memory area concurrently.
+ When `RegisterShmemCallbacks()` is called after startup, it will immediately call the appropriate callbacks, depending on whether the requested memory areas were already initialized by another backend. The callbacks will be called while holding an internal lock (ShmemIndexLock), which prevents the race condition of two backends trying to initialize the memory area at the same time. If the allocation or initialization fails for any reason, the shared memory areas are left in an abandoned state and any attempt to attach or re-initialize them will fail until the server is restarted.
+
+
+ A backend attaching to an already allocated shared memory area must normally pass the same `size` that was used to allocate it to `ShmemRequestStruct()`; a mismatch results in an error. If the attaching backend does not know the size in advance, it can pass `SHMEM_ATTACH_UNKNOWN_SIZE` instead, to skip this cross-check. `SHMEM_ATTACH_UNKNOWN_SIZE` can only be used to attach to an area that already exists; using it before allocating the area results in an error.
   <a id="xfunc-shared-addin-dynamic"></a>
 
-#### Allocating Dynamic Shared Memory After Startup
+#### Allocating Dynamic Shared Memory after Startup
 
 
  There is another, more flexible method of reserving shared memory that can be done after server startup. To do so, each backend that will use the shared memory should obtain a pointer to it by calling:
@@ -1196,7 +1199,7 @@ LWLockPadded *GetNamedLWLockTranche(const char *tranche_name)
 
   <a id="xfunc-addin-lwlocks-after-startup"></a>
 
-#### Requesting LWLocks After Startup
+#### Requesting LWLocks after Startup
 
 
  There is another, more flexible method of obtaining LWLocks that can be done after server startup and outside a `shmem_request_hook`. To do so, first allocate a `tranche_id` by calling:

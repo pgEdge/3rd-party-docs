@@ -15,6 +15,9 @@
  Because `pg_stash_advice` works on the basis of query identifiers, you will need to determine the query identifier for each query whose plan you wish to control. You will also need to determine the advice string that you wish to store for each query. One way to do this is to use `EXPLAIN`: the `VERBOSE` option will show the query ID, and the `PLAN_ADVICE` option will show plan advice. Query identifiers can also be obtained through tools such as [pg_stat_statements](pg_stat_statements-track-statistics-of-sql-planning-and-execution.md#pgstatstatements) or [`pg_stat_activity`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-activity-view), but these tools will not provide plan advice strings. Note that [compute_query_id](../../server-administration/server-configuration/run-time-statistics.md#guc-compute-query-id) must be enabled for query identifiers to be computed; if set to `auto`, loading `pg_stash_advice` will enable it automatically.
 
 
+ Stashed advice is applied only when a query is planned. Adding, replacing, or removing a stash entry, or changing `pg_stash_advice.stash_name`, does not affect plans that have already been cached. See [Limitations](pg_plan_advice-help-the-planner-get-the-right-plan.md#pgplanadvice-limitations).
+
+
  Generally, the fact that the planner is able to change query plans as the underlying distribution of data changes is a feature, not a bug. Moreover, applying plan advice can have a noticeable performance cost even when it does not result in a change to the query plan. Therefore, it is a good idea to use this feature only when and to the extent needed. Plan advice strings can be trimmed down to mention only those aspects of the plan that need to be controlled, and used only for queries where there is believed to be a significant risk of planner error.
 
 

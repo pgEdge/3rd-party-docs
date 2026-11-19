@@ -203,7 +203,7 @@ create a row by replacing selected fields of a given row
 ```
 
 HeapTuple SPI_modifytuple(Relation rel, HeapTuple row, int ncols,
-                          int * colnum, Datum * values, const char * nulls)
+                          int * colnum, const Datum * values, const char * nulls)
 ```
 
 

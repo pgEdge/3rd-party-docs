@@ -6,7 +6,10 @@
  The role used for the replication connection must have the `REPLICATION` attribute (or be a superuser). If the role lacks `SUPERUSER` and `BYPASSRLS`, publisher row security policies can execute. If the role does not trust all table owners, include `options=-crow_security=off` in the connection string; if a table owner then adds a row security policy, that setting will cause replication to halt rather than execute the policy. Access for the role must be configured in `pg_hba.conf` and it must have the `LOGIN` attribute.
 
 
- In order to be able to copy the initial table or sequence data, the role used for the replication connection must have the `SELECT` privilege on a published table or sequence (or be a superuser).
+ The name of the output plugin used by the replication connection must be included in the server's [output_plugin_libraries](../server-configuration/replication.md#guc-output-plugin-libraries). (For subscriptions, the plugin name that is used is `pgoutput`.) Superusers may modify the trusted list per-connection, by including `options=-coutput_plugin_libraries=...` in the connection string.
+
+
+ In order to be able to copy the initial table data or synchronize sequences, the role used for the replication connection must have the `SELECT` privilege on a published table or sequence (or be a superuser).
 
 
  To create a publication, the user must have the `CREATE` privilege in the database.
@@ -25,6 +28,9 @@
 
 
  If the subscription has been configured with `run_as_owner = true`, then no user switching will occur. Instead, all operations will be performed with the permissions of the subscription owner. In this case, the subscription owner only needs privileges to `SELECT`, `INSERT`, `UPDATE`, and `DELETE` from the target table, and does not need privileges to `SET ROLE` to the table owner. However, this also means that any user who owns a table into which replication is happening can execute arbitrary code with the privileges of the subscription owner. For example, they could do this by simply attaching a trigger to one of the tables which they own. Because it is usually undesirable to allow one role to freely assume the privileges of another, this option should be avoided unless user security within the database is of no concern.
+
+
+ When synchronizing sequences with `run_as_owner = true`, the subscription owner similarly needs `UPDATE` privilege on the target sequence and does not need privileges to `SET ROLE` to the sequence owner.
 
 
  On the publisher, privileges are only checked once at the start of a replication connection and are not re-checked as each change record is read.

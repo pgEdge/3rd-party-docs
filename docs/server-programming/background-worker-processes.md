@@ -47,13 +47,13 @@ typedef struct BackgroundWorker
 :   Requests the ability to establish a database connection through which it can later run transactions and queries. A background worker using `BGWORKER_BACKEND_DATABASE_CONNECTION` to connect to a database must also attach shared memory using `BGWORKER_SHMEM_ACCESS`, or worker start-up will fail.
 
 `BGWORKER_INTERRUPTIBLE`
-:   Requests termination of the background worker when its connected database is dropped, renamed, moved to a different tablespace, or used as a template for `CREATE DATABASE`. Specifically, the postmaster sends a termination signal when any of these commands affect the worker's database:
+:   Requests termination of the background worker when its connected database is dropped, renamed, moved to a different tablespace, or used as a template for `CREATE DATABASE`. Specifically, a termination signal is sent when any of these commands affect the worker's database:
 
     - `DROP DATABASE`
     - `ALTER DATABASE RENAME TO`
     - `ALTER DATABASE SET TABLESPACE`
     - `CREATE DATABASE`
-     Requires both `BGWORKER_SHMEM_ACCESS` and `BGWORKER_BACKEND_DATABASE_CONNECTION`.
+     The worker is then restarted or unregistered as after any other exit, depending on its exit code and `bgw_restart_time`. Requires both `BGWORKER_SHMEM_ACCESS` and `BGWORKER_BACKEND_DATABASE_CONNECTION`.
 
 
  `bgw_start_time` is the server state during which `postgres` should start the process; it can be one of `BgWorkerStart_PostmasterStart` (start as soon as `postgres` itself has finished its own initialization; processes requesting this are not eligible for database connections), `BgWorkerStart_ConsistentState` (start as soon as a consistent state has been reached in a hot standby, allowing processes to connect to databases and run read-only queries), and `BgWorkerStart_RecoveryFinished` (start as soon as the system has entered normal read-write state). Note the last two values are equivalent in a server that's not a hot standby. Note that this setting only indicates when the processes are to be started; they do not stop when a different state is reached.

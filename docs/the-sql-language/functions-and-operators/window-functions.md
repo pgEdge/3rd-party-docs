@@ -94,8 +94,8 @@
 
 ```
 
-  RESPECT NULLS
-  IGNORE NULLS
+RESPECT NULLS
+IGNORE NULLS
 ```
  If unspecified, the default is `RESPECT NULLS` which includes NULL values in any result calculation. `IGNORE NULLS` ignores NULL values. This option is only allowed for the following functions: `lag`, `lead`, `first_value`, `last_value`, `nth_value`.
 

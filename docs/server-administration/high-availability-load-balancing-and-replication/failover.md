@@ -28,3 +28,15 @@
 
 
  To trigger failover of a log-shipping standby server, run `pg_ctl promote` or call `pg_promote()`. If you're setting up reporting servers that are only used to offload read-only queries from the primary, not for high availability purposes, you don't need to promote.
+
+
+!!! note
+
+    On a standby with [wal_level](../server-configuration/write-ahead-log.md#guc-wal-level) set to `replica` that has a valid logical replication slot at the end of recovery, including a failover slot synchronized from the primary, promotion waits until every process has refreshed its setting for whether to include logical decoding information in WAL records. A backend that is blocked sending data to a client that has stopped reading cannot do that, so promotion waits until the client goes away or the connection is dropped, which can take a long time. While it waits, the startup process logs a message of the form <code>still waiting for backend with
+         PID </code><em>nnn</em><code> to accept ProcSignalBarrier</code> every 5 seconds.
+
+
+     If promotion is already waiting, calling `pg_terminate_backend()` on the logged process ID lets promotion finish. This does not work if the backend is blocked sending an error message, because the error is sent with interrupts held. In that case, close the client connection.
+
+
+     To bound such waits, configure [tcp_user_timeout](../server-configuration/connections-and-authentication.md#guc-tcp-user-timeout) on the standby ahead of time, for example in `postgresql.conf`, where supported by the operating system. Setting it after a backend is already blocked sending data has no effect on that backend.

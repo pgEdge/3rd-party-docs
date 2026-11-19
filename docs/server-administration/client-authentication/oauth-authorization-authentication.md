@@ -36,7 +36,7 @@ Issuer
     For small deployments, there may not be a meaningful distinction between the "provider", "authorization server", and "issuer". However, for more complicated setups, there may be a one-to-many (or many-to-many) relationship: a provider may rent out multiple issuer identifiers to separate tenants, then provide multiple authorization servers, possibly with different supported feature sets, to interact with their clients.
 
 
- PostgreSQL supports bearer tokens, defined in [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750), which are a type of access token used with OAuth 2.0 where the token is an opaque string. The format of the access token is implementation specific and is chosen by each authorization server.
+ PostgreSQL supports bearer tokens, defined in [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750), which are a type of access token used with OAuth 2.0 where the token is an opaque string. The format of the access token is implementation specific and is chosen by each authorization server. The bearer token is sent in clear-text, and is vulnerable to network sniffing. For this reason OAuth should only be used over SSL connections.
 
 
  The following configuration options are supported for OAuth:

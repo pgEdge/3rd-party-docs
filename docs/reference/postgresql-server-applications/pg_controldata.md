@@ -9,9 +9,9 @@ display control information of a PostgreSQL database cluster
 
 ```
 pg_controldata [OPTION] [
-     -D
-     --pgdata
-     | DATADIR]
+     [-D | --pgdata]
+    DATADIR
+   ]
 ```
  <a id="r1-app-pgcontroldata-1"></a>
 

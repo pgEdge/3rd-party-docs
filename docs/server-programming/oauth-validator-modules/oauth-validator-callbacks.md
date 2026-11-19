@@ -40,10 +40,10 @@ typedef struct ValidatorModuleResult
     char       *error_detail;
 } ValidatorModuleResult;
 ```
- The connection will only proceed if the module sets `result->authorized` to `true`. To authenticate the user, the authenticated user name (as determined using the token) shall be palloc'd and returned in the `result->authn_id` field. Alternatively, `result->authn_id` may be set to NULL if the token is valid but the associated user identity cannot be determined.
+ The connection will only proceed if the module sets `result->authorized` to `true`. To authenticate the user, the authenticated user name (as determined using the token) shall be palloc'd and returned in the `result->authn_id` field. Alternatively, `result->authn_id` may be set to NULL if the token is valid but the associated user identity cannot be determined. If the validator returns `true` and sets `result->authn_id` then the identity appears in the server log when [log_connections](../../server-administration/server-configuration/error-reporting-and-logging.md#guc-log-connections) includes `authentication`. This happens before authorization and will log authentication even if the connection is later rejected due to authorization.
 
 
- A validator may return `false` to signal an internal error, in which case any result parameters are ignored and the connection fails. Otherwise the validator should return `true` to indicate that it has processed the token and made an authorization decision.
+ A validator may return `false` to signal an internal error, in which case the connection fails. Otherwise the validator should return `true` to indicate that it has processed the token and made an authorization decision.
 
 
  In either failure case (validation error or internal error) the module may store a user-readable reason for the failure in `result->error_detail`. This will be printed to the server logs (not sent to the client) as a `DETAIL` entry for the authentication failure. The memory pointed to by `error_detail` may be either palloc'd or of static duration. `error_detail` is ignored on success.
@@ -55,7 +55,7 @@ typedef struct ValidatorModuleResult
 ### Shutdown Callback
 
 
- The `shutdown_cb` callback is executed when the backend process associated with the connection exits. If the validator module has any allocated state, this callback should free it to avoid resource leaks.
+ The `shutdown_cb` callback is executed when the server backend has finished validating tokens for the connection. If the validator module has any allocated state, this callback should free it to avoid resource leaks.
 
 ```
 

@@ -90,7 +90,7 @@ where OPTION can be one of:
 :   Include information on memory consumption by the query planning phase. Specifically, include the precise amount of storage used by planner in-memory structures, as well as total memory considering allocation overhead. This parameter defaults to `FALSE`.
 
 `IO`
-:   Include information on I/O performed by scan nodes proving such information. This parameter may only be used when `ANALYZE` is also enabled. It defaults to `FALSE`.
+:   Include information on I/O performed by scan nodes providing such information. Specifically, include information about the prefetch queue (the average and the maximum distance, and the queue capacity), and information about issued I/O requests (the total number of requests, the average request size, the number of I/O waits, and the average number of concurrent I/O requests). The request size is reported in blocks. In text format, only non-zero values are printed. This parameter may only be used when `ANALYZE` is also enabled. It defaults to `FALSE`.
 
 `FORMAT`
 :   Specify the output format, which can be TEXT, XML, JSON, or YAML. Non-text output contains the same information as the text output format, but is easier for programs to parse. This parameter defaults to `TEXT`.

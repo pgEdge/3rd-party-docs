@@ -57,7 +57,7 @@ and TABLE_OBJECT is:
  The third variant either modifies the included tables/schemas or marks the publication as `FOR ALL SEQUENCES` or `FOR ALL TABLES`, optionally using `EXCEPT` to exclude specific tables. The `SET ALL TABLES` clause can transform an empty publication, or one defined for `ALL SEQUENCES` (or both `ALL TABLES` and `ALL SEQUENCES`), into a publication defined for ALL TABLES. Likewise, `SET ALL SEQUENCES` can convert an empty publication, or one defined for `ALL TABLES` (or both `ALL TABLES` and `ALL SEQUENCES`), into a publication defined for `ALL SEQUENCES`. In addition, `SET ALL TABLES` can be used to update the tables specified in the `EXCEPT` clause of a `FOR ALL TABLES` publication. If `EXCEPT` is specified with a list of tables, the existing exclusion list is replaced with the specified tables. If `EXCEPT` is omitted, the existing exclusion list is cleared. The `SET` clause, when used with a publication defined with `FOR TABLE` or `FOR TABLES IN SCHEMA`, replaces the list of tables/schemas in the publication with the specified list; the existing tables or schemas that were present in the publication will be removed.
 
 
- Note that adding tables/except tables/schemas to a publication that is already subscribed to will require an [`ALTER SUBSCRIPTION ... REFRESH PUBLICATION`](alter-subscription.md#sql-altersubscription-params-refresh-publication) action on the subscribing side in order to become effective. Likewise altering a publication to set `ALL TABLES` or to set or unset `ALL SEQUENCES` also requires the subscriber to refresh the publication. Note also that `DROP TABLES IN SCHEMA` will not drop any schema tables that were specified using [`FOR TABLE`](create-publication.md#sql-createpublication-params-for-table)/ `ADD TABLE`.
+ Note that adding, dropping, or setting tables or schemas in a publication that is already subscribed to will require an [`ALTER SUBSCRIPTION ... REFRESH PUBLICATION`](alter-subscription.md#sql-altersubscription-params-refresh-publication) action on the subscribing side in order to become effective. Likewise altering a publication to set `ALL TABLES`, to change the `EXCEPT` list, or to set `ALL SEQUENCES` also requires the subscriber to refresh the publication. Note also that `DROP TABLES IN SCHEMA` will not drop any schema tables that were specified using [`FOR TABLE`](create-publication.md#sql-createpublication-params-for-table)/ `ADD TABLE`.
 
 
  The fourth variant of this command listed in the synopsis can change all of the publication properties specified in [sql-createpublication](create-publication.md#sql-createpublication). Properties not mentioned in the command retain their previous settings.
@@ -135,7 +135,7 @@ ALTER PUBLICATION mypublication SET TABLE users (user_id, firstname, lastname), 
 ```
 
 
- Replace the table list in the publication's EXCEPT clause:
+ Replace the table list in the publication's `EXCEPT` clause:
 
 ```sql
 
@@ -143,7 +143,7 @@ ALTER PUBLICATION mypublication SET ALL TABLES EXCEPT (TABLE users, departments)
 ```
 
 
- Reset the publication to be a FOR ALL TABLES publication with no excluded tables:
+ Reset the publication to be a `FOR ALL TABLES` publication with no excluded tables:
 
 ```sql
 

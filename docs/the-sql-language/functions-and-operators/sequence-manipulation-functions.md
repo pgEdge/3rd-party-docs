@@ -42,8 +42,8 @@ SELECT setval('myseq', 42, false);    Next nextval will return 42</code></pre></
 </tr>
 <tr id="func-pg-get-sequence-data">
 <td><code>pg_get_sequence_data</code> ( <code>regclass</code> ) <code>record</code> ( <code>last_value</code> <code>bigint</code>, <code>is_called</code> <code>bool</code>, <code>page_lsn</code> <code>pg_lsn</code> )</td>
-<td>Returns information about the sequence. <code>last_value</code> is the last sequence value written to disk. If caching is used, this value can be greater than the last value handed out from the sequence. <code>is_called</code> indicates whether the sequence has been used. <code>page_lsn</code> is the LSN corresponding to the most recent WAL record that modified this sequence relation.</td>
-<td>This function is primarily intended for internal use by pg_dump and by logical replication to synchronize sequences. It requires <code>USAGE</code> or <code>SELECT</code> privilege on the sequence.</td>
+<td>Returns information about the sequence. <code>last_value</code> is the last sequence value written to disk. If caching is used, this value can be greater than the last value handed out from the sequence. <code>is_called</code> indicates whether the sequence has been used. <code>page_lsn</code> is the LSN corresponding to the most recent WAL record that modified this sequence relation. This function returns a row of NULL values if the specified relation OID does not exist, if it is not a sequence, if the current user lacks <code>SELECT</code> privilege on the sequence, if the sequence is another session's temporary sequence, or if it is an unlogged sequence on a standby server.</td>
+<td>This function is primarily intended for internal use by pg_dump and by logical replication to synchronize sequences.</td>
 </tr>
 </tbody>
 </table>

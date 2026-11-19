@@ -52,7 +52,7 @@ REVOKE ALL ON accounts FROM PUBLIC;
 <a id="ddl-priv-select"></a>
 
 `SELECT`
-:   Allows `SELECT` from any column, or specific column(s), of a table, view, materialized view, or other table-like object. Also allows use of `COPY TO`. This privilege is also needed to reference existing column values in `UPDATE`, `DELETE`, or `MERGE`. For property graphs, this privilege allows the object to be referenced in a `GRAPH_TABLE` clause. For sequences, this privilege also allows use of the `currval` function. For large objects, this privilege allows the object to be read.
+:   Allows `SELECT` from any column, or specific column(s), of a table, view, materialized view, or other table-like object. Also allows use of `COPY TO`. This privilege is also needed to reference existing column values in `UPDATE`, `DELETE`, or `MERGE`. For sequences, this privilege also allows use of the `currval` function. For large objects, this privilege allows the object to be read.
 <a id="ddl-priv-insert"></a>
 
 `INSERT`
@@ -72,11 +72,11 @@ REVOKE ALL ON accounts FROM PUBLIC;
 <a id="ddl-priv-references"></a>
 
 `REFERENCES`
-:   Allows creation of a foreign key constraint referencing a table, or specific column(s) of a table.
+:   Allows creation of a foreign key constraint referencing a table, or specific column(s) of a table. Great care should be taken when granting this privilege, since a user who creates a foreign key can arrange for enforcement of that foreign key to call an arbitrary function, such as a cast function, and such functions will be called with the privileges of the table owner.
 <a id="ddl-priv-trigger"></a>
 
 `TRIGGER`
-:   Allows creation of a trigger on a table, view, etc.
+:   Allows creation of a trigger on a table, view, etc. Great care should be taken when granting this privilege, since any triggers added to a table or view will be executed with the privileges of users who modify it.
 <a id="ddl-priv-create"></a>
 
 `CREATE`
@@ -132,7 +132,7 @@ REVOKE ALL ON accounts FROM PUBLIC;
 <a id="ddl-priv-maintain"></a>
 
 `MAINTAIN`
-:   Allows `VACUUM`, `ANALYZE`, `CLUSTER`, `REFRESH MATERIALIZED VIEW`, `REINDEX`, `LOCK TABLE`, and database object statistics manipulation functions (see [Database Object Statistics Manipulation Functions](../functions-and-operators/system-administration-functions.md#functions-admin-statsmod)) on a relation.
+:   Allows `VACUUM`, `ANALYZE`, `CLUSTER`, `REPACK`, `REFRESH MATERIALIZED VIEW`, `REINDEX`, `LOCK TABLE`, and database object statistics manipulation functions (see [Database Object Statistics Manipulation Functions](../functions-and-operators/system-administration-functions.md#functions-admin-statsmod)) on a relation.
  The privileges required by other commands are listed on the reference page of the respective command.
  <a id="ddl-priv-default"></a>
 

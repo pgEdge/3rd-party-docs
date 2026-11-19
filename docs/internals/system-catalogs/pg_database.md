@@ -69,7 +69,7 @@
 </tr>
 <tr>
 <td><p><code>datcollate</code> <code>text</code></p>
-<p>LC_COLLATE for this database (ignored unless <code>datlocprovider</code> is <code>c</code>)</p></td>
+<p>LC_COLLATE for this database</p></td>
 </tr>
 <tr>
 <td><p><code>datctype</code> <code>text</code></p>

@@ -43,7 +43,7 @@
 :   Specifies how to behave when encountering an error converting a column's input value into its data type, the same as `COPY`'s `ON_ERROR` option.
 
 `reject_limit`
-:   Specifies the maximum number of errors tolerated while converting a column's input value to its data type, the same as `COPY`'s `REJECT_LIMIT` option.
+:   Specifies the maximum number of errors tolerated while converting a column's input value to its data type, the same as `COPY`'s `REJECT_LIMIT` option. This limit is not enforced when `ANALYZE` samples rows from the foreign table, so that statistics can still be collected from valid rows.
 
 `log_verbosity`
 :   Specifies the amount of messages emitted by `file_fdw`, the same as `COPY`'s `LOG_VERBOSITY` option.

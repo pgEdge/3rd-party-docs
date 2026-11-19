@@ -29,7 +29,7 @@
 <a id="ddl-system-columns-ctid"></a>
 
 `ctid`
-:   The physical location of the row version within its table. Note that although the `ctid` can be used to locate the row version very quickly, a row's `ctid` will change if it is updated or moved by `VACUUM FULL`. Therefore `ctid` should not be used as a row identifier. A primary key should be used to identify logical rows.
+:   The physical location of the row version within its table. Note that although the `ctid` can be used to locate the row version very quickly, a row's `ctid` will change if it is updated, or moved by a table-rewriting operation such as `VACUUM FULL`, `CLUSTER`, or `REPACK`. Therefore `ctid` should not be used as a row identifier. A primary key should be used to identify logical rows.
 
 
  Transaction identifiers are also 32-bit quantities. In a long-lived database it is possible for transaction IDs to wrap around. This is not a fatal problem given appropriate maintenance procedures; see [Routine Database Maintenance Tasks](../../server-administration/routine-database-maintenance-tasks/index.md#maintenance) for details. It is unwise, however, to depend on the uniqueness of transaction IDs over the long term (more than one billion transactions).

@@ -107,7 +107,7 @@ alias_name#occurrence_number/partition_schema.partition_name@plan_name
 ```
 
 
- All components except for the `alias_name` are optional and are included only when required. When a component is omitted, the preceding punctuation must also be omitted. For the first occurrence of a relation within a given subquery, generated advice will omit the occurrence number, but it is legal to write `#1`, if desired. The partition schema and partition name are included only for children of partitioned tables. In generated advice, `pg_plan_advice` always includes both, but it is legal to omit the schema. The plan name is omitted for the top-level plan, and must be included for any subplan.
+ All components except for the `alias_name` are optional and are included only when required. When a component is omitted, the preceding punctuation must also be omitted. For the first occurrence of a relation within a given subquery, generated advice will omit the occurrence number, but it is legal to write `#1`, if desired. For children of partitioned tables, the partition schema and partition name are required; otherwise, both are omitted. The plan name is omitted for the top-level plan, and must be included for any subplan.
 
 
  It is not always easy to determine the correct advice target by examining the query. For instance, if the planner pulls up a subquery into the parent query level, everything inside of it becomes part of the parent query level, and uses the parent query's subplan name (or no subplan name, if pulled up to the top level). Furthermore, the correct subquery name is sometimes not obvious. For example, when two queries are joined using an operation such as `UNION` or `INTERSECT`, no name for the subqueries is present in the SQL syntax; instead, a system-generated name is assigned to each branch. The easiest way to discover the proper advice targets is to use `EXPLAIN (PLAN_ADVICE)` and examine the generated advice.
@@ -269,19 +269,19 @@ where GATHER_ITEM is:
  `GATHER` or `GATHER_MERGE` specifies that `Gather` or `Gather Merge`, respectively, should be placed on top of the single relation specified as a target, or on top of the join between the list of relations specified as a target. This means that `GATHER(a b c)` is a request for three different `Gather` nodes, while `GATHER((a b c))` is a request for a single `Gather` node on top of a 3-way join.
 
 
- `NO_GATHER` specifies that no `Gather` or `Gather Merge` node should appear above any of the targets, but it only constrains the planning of an individual subquery, and outer subquery levels can still use parallel query. For example, `NO_GATHER(inner_example@any_1)` precludes using a `Parallel Seq Scan` to access the `inner_example` table within the `any_1` subquery, but it does not prevent the planner from placing `SubPlan any_1` beneath a `Gather` or `Gather Merge` node. The following plan is compatible with `NO_GATHER(inner_example@any_1)`, but not with `NO_GATHER(outer_example)`:
+ `NO_GATHER` specifies that no `Gather` or `Gather Merge` node should appear above any of the targets, but it only constrains planning within a given join problem, and parent tables or outer subquery levels can still use parallel query. For example, `NO_GATHER(inner_example@any_1)` precludes using a `Parallel Seq Scan` to access the `inner_example` table within the `any_1` subquery, but it does not prevent the planner from placing `SubPlan any_1` beneath a `Gather` or `Gather Merge` node. The following plan is compatible with `NO_GATHER(inner_example@any_1)`, but not with `NO_GATHER(outer_example)`:
 
 
 ```
 
- Finalize Aggregate
-   ->  Gather
-         ->  Partial Aggregate
-               ->  Parallel Seq Scan on outer_example
-                     Filter: (something = (hashed SubPlan any_1).col1)
-                     SubPlan any_1
-                       ->  Seq Scan on inner_example
-                             Filter: (something_else > 100)
+Finalize Aggregate
+  ->  Gather
+        ->  Partial Aggregate
+              ->  Parallel Seq Scan on outer_example
+                    Filter: (something = (hashed SubPlan any_1).col1)
+                    SubPlan any_1
+                      ->  Seq Scan on inner_example
+                            Filter: (something_else > 100)
 ```
 
 
@@ -290,14 +290,17 @@ where GATHER_ITEM is:
 
 ```
 
- Aggregate
-   ->  Seq Scan on outer_example
-         Filter: (something = (hashed SubPlan any_1).col1)
-         SubPlan any_1
-           ->  Gather
-                 -> Parallel Seq Scan on inner_example
-                      Filter: (something_else > 100)
+Aggregate
+  ->  Seq Scan on outer_example
+        Filter: (something = (hashed SubPlan any_1).col1)
+        SubPlan any_1
+          ->  Gather
+                -> Parallel Seq Scan on inner_example
+                     Filter: (something_else > 100)
 ```
+
+
+ Similarly, when `NO_GATHER` is applied to an individual partition, it precludes a parallel scan of that particular partition, but it is still possible for a `Parallel Append` node to use a non-parallel scan of that partition. To rule out that possibility, use `NO_GATHER` on the parent rather than on the child.
    <a id="pgplanadvice-feedback"></a>
 
 ### Advice Feedback
@@ -380,6 +383,12 @@ EXPLAIN (COSTS OFF)
 
 
  As discussed above under [How It Works](#pgplanadvice-how-it-works), the use of plan advice can only affect which plan the planner chooses from among those it believes to be viable. It can never force the choice of a plan which the planner refused to consider in the first place.
+
+
+ One consequence of the limitation described in the previous paragraph is that plan advice works only probabilistically when [GEQO](../../internals/genetic-query-optimizer/index.md#geqo) is used. Even if plans compatible with the supplied advice exist, there is no guarantee that any of them will be a part of the randomly generated pool of candidates. If not, the planner will generate a plan that does not comply with the supplied advice, with some parts of that plan marked disabled. If you supply advice that only mildly constrains join planning, GEQO will usually manage to find a plan that conforms with it; but if you wish to constrain it more substantially, you may need to disable GEQO in order to obtain satisfactory results. Note that scan advice is not affected by this limitation because it does not constrain the join order.
+
+
+ Plan advice is consulted only when a query is planned. If a prepared statement is re-executed under a different value of `pg_plan_advice.advice`, or with different advice supplied by another module such as [pg_stash_advice](pg_stash_advice-store-and-automatically-apply-plan-advice.md#pgstashadvice), it can still make use of a previously cached plan. The same thing can happen when re-executing a statement within a PL/pgSQL block, where plans can also be cached. Sessions that do not wish to reuse previously-cached plans can use [`DISCARD PLANS`](../../reference/sql-commands/discard.md#sql-discard).
   <a id="pgplanadvice-author"></a>
 
 ### Author

@@ -68,6 +68,11 @@
  This mechanism is client-initiated, like SCRAM. The client initial response consists of the standard "GS2" header used by SCRAM, followed by a list of `key=value` pairs. The only key currently supported by the server is `auth`, which contains the bearer token. `OAUTHBEARER` additionally specifies three optional components of the client initial response (the `authzid` of the GS2 header, and the `host` and `port` keys) which are currently ignored by the server.
 
 
+!!! note
+
+    The bearer token is sent across the connection, as part of the client initial response, and grants access to the database like a clear-text password. On an unencrypted connection it can be captured by network sniffing. For this reason `OAUTHBEARER` should only be used over SSL connections.
+
+
  `OAUTHBEARER` does not support channel binding, and there is no "OAUTHBEARER-PLUS" mechanism. This mechanism does not make use of server data during a successful authentication, so the AuthenticationSASLFinal message is not used in the exchange.
 
 

@@ -29,6 +29,7 @@ CREATE [ OR REPLACE ] AGGREGATE NAME ( [ ARGMODE ] [ ARGNAME ] ARG_DATA_TYPE [ ,
     [ , MFINALFUNC_MODIFY = { READ_ONLY | SHAREABLE | READ_WRITE } ]
     [ , MINITCOND = MINITIAL_CONDITION ]
     [ , SORTOP = SORT_OPERATOR ]
+    [ , SUPPORT = SUPPORT_FUNCTION ]
     [ , PARALLEL = { SAFE | RESTRICTED | UNSAFE } ]
 )
 
@@ -41,6 +42,7 @@ CREATE [ OR REPLACE ] AGGREGATE NAME ( [ [ ARGMODE ] [ ARGNAME ] ARG_DATA_TYPE [
     [ , FINALFUNC_EXTRA ]
     [ , FINALFUNC_MODIFY = { READ_ONLY | SHAREABLE | READ_WRITE } ]
     [ , INITCOND = INITIAL_CONDITION ]
+    [ , SUPPORT = SUPPORT_FUNCTION ]
     [ , PARALLEL = { SAFE | RESTRICTED | UNSAFE } ]
     [ , HYPOTHETICAL ]
 )
@@ -68,6 +70,7 @@ CREATE [ OR REPLACE ] AGGREGATE NAME (
     [ , MFINALFUNC_MODIFY = { READ_ONLY | SHAREABLE | READ_WRITE } ]
     [ , MINITCOND = MINITIAL_CONDITION ]
     [ , SORTOP = SORT_OPERATOR ]
+    [ , SUPPORT = SUPPORT_FUNCTION ]
 )
 ```
 
@@ -224,6 +227,9 @@ SELECT col FROM tab ORDER BY col USING sortop LIMIT 1;
 
 *sort_operator*
 :   The associated sort operator for a `MIN`- or `MAX`-like aggregate. This is just an operator name (possibly schema-qualified). The operator is assumed to have the same input data types as the aggregate (which must be a single-argument normal aggregate).
+
+*support_function*
+:   The name (optionally schema-qualified) of a *planner support function* to use for this aggregate. See [Function Optimization Information](../../server-programming/extending-sql/function-optimization-information.md#xfunc-optimization) for details. You must be superuser to use this option.
 
 `PARALLEL =` { `SAFE` | `RESTRICTED` | `UNSAFE` }
 :   The meanings of `PARALLEL SAFE`, `PARALLEL RESTRICTED`, and `PARALLEL UNSAFE` are the same as in [`CREATE FUNCTION`](create-function.md#sql-createfunction). An aggregate will not be considered for parallelization if it is marked `PARALLEL UNSAFE` (which is the default!) or `PARALLEL RESTRICTED`. Note that the parallel-safety markings of the aggregate's support functions are not consulted by the planner, only the marking of the aggregate itself.

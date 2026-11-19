@@ -3,7 +3,7 @@
 # SQL Key Words
 
 
- [SQL Key Words](#keywords-table) lists all tokens that are key words in the SQL standard and in PostgreSQL 19devel. Background information can be found in [Identifiers and Key Words](../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-identifiers). (For space reasons, only the latest two versions of the SQL standard, and SQL-92 for historical comparison, are included. The differences between those and the other intermediate standard versions are small.)
+ [SQL Key Words](#keywords-table) lists all tokens that are key words in the SQL standard and in PostgreSQL 19.0. Background information can be found in [Identifiers and Key Words](../the-sql-language/sql-syntax/lexical-structure.md#sql-syntax-identifiers). (For space reasons, only the latest two versions of the SQL standard, and SQL-92 for historical comparison, are included. The differences between those and the other intermediate standard versions are small.)
 
 
  SQL distinguishes between *reserved* and *non-reserved* key words. According to the standard, reserved key words are the only real key words; they are never allowed as identifiers. Non-reserved key words only have a special meaning in particular contexts and can be used as identifiers in other contexts. Most non-reserved key words are actually the names of built-in tables and functions specified by SQL. The concept of non-reserved key words essentially only exists to declare that some predefined meaning is attached to a word in some contexts.
@@ -37,7 +37,6 @@
 | `ACCORDING` |  | non-reserved | non-reserved |  |
 | `ACOS` |  | reserved | reserved |  |
 | `ACTION` | non-reserved | non-reserved | non-reserved | reserved |
-| `ACYCLIC` |  | non-reserved |  |  |
 | `ADA` |  | non-reserved | non-reserved | non-reserved |
 | `ADD` | non-reserved | non-reserved | non-reserved | reserved |
 | `ADMIN` | non-reserved | non-reserved | non-reserved |  |
@@ -45,7 +44,6 @@
 | `AGGREGATE` | non-reserved |  |  |  |
 | `ALL` | reserved | reserved | reserved | reserved |
 | `ALLOCATE` |  | reserved | reserved | reserved |
-| `ALL_DIFFERENT` |  | reserved |  |  |
 | `ALSO` | non-reserved |  |  |  |
 | `ALTER` | non-reserved | reserved | reserved | reserved |
 | `ALWAYS` | non-reserved | non-reserved | non-reserved |  |
@@ -83,8 +81,6 @@
 | `BETWEEN` | non-reserved (cannot be function or type) | reserved | reserved | reserved |
 | `BIGINT` | non-reserved (cannot be function or type) | reserved | reserved |  |
 | `BINARY` | reserved (can be function or type) | reserved | reserved |  |
-| `BINDINGS` |  | non-reserved |  |  |
-| `BINDING_COUNT` |  | reserved |  |  |
 | `BIT` | non-reserved (cannot be function or type) |  |  | reserved |
 | `BIT_LENGTH` |  |  |  | reserved |
 | `BLOB` |  | reserved | reserved |  |
@@ -92,7 +88,6 @@
 | `BOM` |  | non-reserved | non-reserved |  |
 | `BOOLEAN` | non-reserved (cannot be function or type) | reserved | reserved |  |
 | `BOTH` | reserved | reserved | reserved | reserved |
-| `BOUND` |  | non-reserved |  |  |
 | `BREADTH` | non-reserved | non-reserved | non-reserved |  |
 | `BTRIM` |  | reserved |  |  |
 | `BY` | non-reserved | reserved | reserved | reserved |
@@ -229,13 +224,10 @@
 | `DESC` | reserved | non-reserved | non-reserved | reserved |
 | `DESCRIBE` |  | reserved | reserved | reserved |
 | `DESCRIPTOR` |  | non-reserved | non-reserved | reserved |
-| `DESTINATION` | non-reserved | non-reserved |  |  |
 | `DETACH` | non-reserved |  |  |  |
 | `DETERMINISTIC` |  | reserved | reserved |  |
 | `DIAGNOSTICS` |  | non-reserved | non-reserved | reserved |
 | `DICTIONARY` | non-reserved |  |  |  |
-| `DIFFERENT` |  | non-reserved |  |  |
-| `DIRECTED` |  | non-reserved |  |  |
 | `DISABLE` | non-reserved |  |  |  |
 | `DISCARD` | non-reserved |  |  |  |
 | `DISCONNECT` |  | reserved | reserved | reserved |
@@ -261,12 +253,7 @@
 | `DYNAMIC_FUNCTION` |  | non-reserved | non-reserved | non-reserved |
 | `DYNAMIC_​FUNCTION_​CODE` |  | non-reserved | non-reserved |  |
 | `EACH` | non-reserved | reserved | reserved |  |
-| `EDGE` | non-reserved | non-reserved |  |  |
-| `EDGES` |  | non-reserved |  |  |
 | `ELEMENT` |  | reserved | reserved |  |
-| `ELEMENTS` |  | non-reserved |  |  |
-| `ELEMENT_ID` |  | reserved |  |  |
-| `ELEMENT_NUMBER` |  | reserved |  |  |
 | `ELSE` | reserved | reserved | reserved | reserved |
 | `EMPTY` | non-reserved | reserved | reserved |  |
 | `ENABLE` | non-reserved |  |  |  |
@@ -293,7 +280,6 @@
 | `EXISTS` | non-reserved (cannot be function or type) | reserved | reserved | reserved |
 | `EXP` |  | reserved | reserved |  |
 | `EXPLAIN` | non-reserved |  |  |  |
-| `EXPORT` |  | reserved |  |  |
 | `EXPRESSION` | non-reserved | non-reserved | non-reserved |  |
 | `EXTENSION` | non-reserved |  |  |  |
 | `EXTERNAL` | non-reserved | reserved | reserved | reserved |
@@ -338,8 +324,6 @@
 | `GOTO` |  | non-reserved | non-reserved | reserved |
 | `GRANT` | reserved, requires `AS` | reserved | reserved | reserved |
 | `GRANTED` | non-reserved | non-reserved | non-reserved |  |
-| `GRAPH` | non-reserved | reserved |  |  |
-| `GRAPH_TABLE` | non-reserved (cannot be function or type) | reserved |  |  |
 | `GREATEST` | non-reserved (cannot be function or type) | reserved |  |  |
 | `GROUP` | reserved, requires `AS` | reserved | reserved | reserved |
 | `GROUPING` | non-reserved (cannot be function or type) | reserved | reserved |  |
@@ -413,8 +397,7 @@
 | `KEYS` | non-reserved | non-reserved | non-reserved |  |
 | `KEY_MEMBER` |  | non-reserved | non-reserved |  |
 | `KEY_TYPE` |  | non-reserved | non-reserved |  |
-| `LABEL` | non-reserved | non-reserved |  |  |
-| `LABELED` |  | non-reserved |  |  |
+| `LABEL` | non-reserved |  |  |  |
 | `LAG` |  | reserved | reserved |  |
 | `LANGUAGE` | non-reserved | reserved | reserved | reserved |
 | `LARGE` | non-reserved | reserved | reserved |  |
@@ -457,7 +440,6 @@
 | `MATCH` | non-reserved | reserved | reserved | reserved |
 | `MATCHED` | non-reserved | non-reserved | non-reserved |  |
 | `MATCHES` |  | reserved | reserved |  |
-| `MATCHNUM` |  | reserved |  |  |
 | `MATCH_NUMBER` |  | reserved | reserved |  |
 | `MATCH_RECOGNIZE` |  | reserved | reserved |  |
 | `MATERIALIZED` | non-reserved |  |  |  |
@@ -500,7 +482,6 @@
 | `NFKD` | non-reserved | non-reserved | non-reserved |  |
 | `NIL` |  | non-reserved | non-reserved |  |
 | `NO` | non-reserved | reserved | reserved | reserved |
-| `NODE` | non-reserved | non-reserved |  |  |
 | `NONE` | non-reserved (cannot be function or type) | reserved | reserved |  |
 | `NORMALIZE` | non-reserved (cannot be function or type) | reserved | reserved |  |
 | `NORMALIZED` | non-reserved | non-reserved | non-reserved |  |
@@ -565,7 +546,6 @@
 | `PARSER` | non-reserved |  |  |  |
 | `PARTIAL` | non-reserved | non-reserved | non-reserved | reserved |
 | `PARTITION` | non-reserved | reserved | reserved |  |
-| `PARTITIONS` | non-reserved |  |  |  |
 | `PASCAL` |  | non-reserved | non-reserved | non-reserved |
 | `PASS` |  | non-reserved | non-reserved |  |
 | `PASSING` | non-reserved | non-reserved | non-reserved |  |
@@ -573,9 +553,6 @@
 | `PASSWORD` | non-reserved |  |  |  |
 | `PAST` |  | non-reserved | non-reserved |  |
 | `PATH` | non-reserved | non-reserved | non-reserved |  |
-| `PATHS` |  | non-reserved |  |  |
-| `PATH_LENGTH` |  | reserved |  |  |
-| `PATH_NAME` |  | reserved |  |  |
 | `PATTERN` |  | reserved | reserved |  |
 | `PER` |  | reserved | reserved |  |
 | `PERCENT` |  | reserved | reserved |  |
@@ -591,7 +568,7 @@
 | `PLANS` | non-reserved |  |  |  |
 | `PLI` |  | non-reserved | non-reserved | non-reserved |
 | `POLICY` | non-reserved |  |  |  |
-| `PORTION` | non-reserved | reserved | reserved |  |
+| `PORTION` |  | reserved | reserved |  |
 | `POSITION` | non-reserved (cannot be function or type) | reserved | reserved | reserved |
 | `POSITION_REGEX` |  | reserved | reserved |  |
 | `POWER` |  | reserved | reserved |  |
@@ -610,12 +587,6 @@
 | `PROCEDURE` | non-reserved | reserved | reserved | reserved |
 | `PROCEDURES` | non-reserved |  |  |  |
 | `PROGRAM` | non-reserved |  |  |  |
-| `PROPERTIES` | non-reserved | non-reserved |  |  |
-| `PROPERTY` | non-reserved | non-reserved |  |  |
-| `PROPERTY_EXISTS` |  | reserved |  |  |
-| `PROPERTY_​GRAPH_​CATALOG` |  | non-reserved |  |  |
-| `PROPERTY_GRAPH_NAME` |  | non-reserved |  |  |
-| `PROPERTY_​GRAPH_​SCHEMA` |  | non-reserved |  |  |
 | `PRUNE` |  | non-reserved | non-reserved |  |
 | `PTF` |  | reserved | reserved |  |
 | `PUBLIC` |  | non-reserved | non-reserved | reserved |
@@ -644,8 +615,6 @@
 | `REGR_SXY` |  | reserved | reserved |  |
 | `REGR_SYY` |  | reserved | reserved |  |
 | `REINDEX` | non-reserved |  |  |  |
-| `RELATIONSHIP` | non-reserved | non-reserved |  |  |
-| `RELATIONSHIPS` |  | non-reserved |  |  |
 | `RELATIVE` | non-reserved | non-reserved | non-reserved | reserved |
 | `RELEASE` | non-reserved | reserved | reserved |  |
 | `RENAME` | non-reserved |  |  |  |
@@ -685,7 +654,6 @@
 | `RTRIM` |  | reserved |  |  |
 | `RULE` | non-reserved |  |  |  |
 | `RUNNING` |  | reserved | reserved |  |
-| `SAME` |  | reserved |  |  |
 | `SAVEPOINT` | non-reserved | reserved | reserved |  |
 | `SCALAR` | non-reserved | non-reserved | non-reserved |  |
 | `SCALE` |  | non-reserved | non-reserved | non-reserved |
@@ -718,12 +686,10 @@
 | `SETOF` | non-reserved (cannot be function or type) |  |  |  |
 | `SETS` | non-reserved | non-reserved | non-reserved |  |
 | `SHARE` | non-reserved |  |  |  |
-| `SHORTEST` |  | non-reserved |  |  |
 | `SHOW` | non-reserved | reserved | reserved |  |
 | `SIMILAR` | reserved (can be function or type) | reserved | reserved |  |
 | `SIMPLE` | non-reserved | non-reserved | non-reserved |  |
 | `SIN` |  | reserved | reserved |  |
-| `SINGLETONS` |  | non-reserved |  |  |
 | `SINH` |  | reserved | reserved |  |
 | `SIZE` |  | non-reserved | non-reserved | reserved |
 | `SKIP` | non-reserved | reserved | reserved |  |
@@ -736,7 +702,6 @@
 | `SPECIFIC` |  | reserved | reserved |  |
 | `SPECIFICTYPE` |  | reserved | reserved |  |
 | `SPECIFIC_NAME` |  | non-reserved | non-reserved |  |
-| `SPLIT` | non-reserved |  |  |  |
 | `SQL` | non-reserved | reserved | reserved | reserved |
 | `SQLCODE` |  |  |  | reserved |
 | `SQLERROR` |  |  |  | reserved |
@@ -755,7 +720,6 @@
 | `STDDEV_SAMP` |  | reserved | reserved |  |
 | `STDIN` | non-reserved |  |  |  |
 | `STDOUT` | non-reserved |  |  |  |
-| `STEP` |  | non-reserved |  |  |
 | `STORAGE` | non-reserved |  |  |  |
 | `STORED` | non-reserved |  |  |  |
 | `STRICT` | non-reserved |  |  |  |
@@ -779,7 +743,7 @@
 | `SYSTEM_USER` | reserved | reserved | reserved | reserved |
 | `T` |  | non-reserved | non-reserved |  |
 | `TABLE` | reserved | reserved | reserved | reserved |
-| `TABLES` | non-reserved | non-reserved |  |  |
+| `TABLES` | non-reserved |  |  |  |
 | `TABLESAMPLE` | reserved (can be function or type) | reserved | reserved |  |
 | `TABLESPACE` | non-reserved |  |  |  |
 | `TABLE_NAME` |  | non-reserved | non-reserved | non-reserved |
@@ -800,7 +764,6 @@
 | `TO` | reserved, requires `AS` | reserved | reserved | reserved |
 | `TOKEN` |  | non-reserved | non-reserved |  |
 | `TOP_LEVEL_COUNT` |  | non-reserved | non-reserved |  |
-| `TRAIL` |  | non-reserved |  |  |
 | `TRAILING` | reserved | reserved | reserved | reserved |
 | `TRANSACTION` | non-reserved | non-reserved | non-reserved | reserved |
 | `TRANSACTIONS_​COMMITTED` |  | non-reserved | non-reserved |  |
@@ -869,13 +832,11 @@
 | `VERBOSE` | reserved (can be function or type) |  |  |  |
 | `VERSION` | non-reserved | non-reserved | non-reserved |  |
 | `VERSIONING` |  | reserved | reserved |  |
-| `VERTEX` | non-reserved | non-reserved |  |  |
 | `VIEW` | non-reserved | non-reserved | non-reserved | reserved |
 | `VIEWS` | non-reserved |  |  |  |
 | `VIRTUAL` | non-reserved |  |  |  |
 | `VOLATILE` | non-reserved |  |  |  |
 | `WAIT` | non-reserved |  |  |  |
-| `WALK` |  | non-reserved |  |  |
 | `WHEN` | reserved | reserved | reserved | reserved |
 | `WHENEVER` |  | reserved | reserved | reserved |
 | `WHERE` | reserved, requires `AS` | reserved | reserved | reserved |

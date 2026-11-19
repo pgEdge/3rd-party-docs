@@ -79,10 +79,10 @@ pg_combinebackup [OPTION...] [BACKUP_DIRECTORY...]
 :   Disables generation of a backup manifest. If this option is not specified, a backup manifest for the reconstructed backup will be written to the output directory.
 
 <code>--sync-method=</code><em>method</em>
-:   When set to `fsync`, which is the default, `pg_combinebackup` will recursively open and synchronize all files in the backup directory. When the plain format is used, the search for files will follow symbolic links for the WAL directory and each configured tablespace.
+:   When set to `fsync`, which is the default, `pg_combinebackup` will recursively open and synchronize all files in the output directory. The search for files will follow symbolic links for the WAL directory and each configured tablespace.
 
 
-     On Linux, `syncfs` may be used instead to ask the operating system to synchronize the whole file system that contains the backup directory. When the plain format is used, `pg_combinebackup` will also synchronize the file systems that contain the WAL files and each tablespace. See [recovery_init_sync_method](../../server-administration/server-configuration/error-handling.md#guc-recovery-init-sync-method) for information about the caveats to be aware of when using `syncfs`.
+     On Linux, `syncfs` may be used instead to ask the operating system to synchronize the whole file system that contains the output directory. `pg_combinebackup` will also synchronize the file systems that contain the WAL files and each tablespace. See [recovery_init_sync_method](../../server-administration/server-configuration/error-handling.md#guc-recovery-init-sync-method) for information about the caveats to be aware of when using `syncfs`.
 
 
      This option has no effect when `--no-sync` is used.
@@ -105,9 +105,6 @@ pg_combinebackup [OPTION...] [BACKUP_DIRECTORY...]
 
 
 ## Environment
-
-
- This utility, like most other PostgreSQL utilities, uses the environment variables supported by libpq (see [Environment Variables](../../client-interfaces/libpq-c-library/environment-variables.md#libpq-envars)).
 
 
  The environment variable `PG_COLOR` specifies whether to use color in diagnostic messages. Possible values are `always`, `auto` and `never`.

@@ -6,7 +6,7 @@
 **Release date:.**
 
 
-2026-??-??, AS OF 2026-04-13
+2026-11-19
   <a id="release-19-highlights"></a>
 
 ### Overview
@@ -15,7 +15,13 @@
  PostgreSQL 19 contains many new features and enhancements, including:
 
 
-- *fill in later*
+-  New [sql-repack](../../reference/sql-commands/repack.md#sql-repack) command that reclaims disk space and reorganizes table contents, which can improve query performance. `REPACK (CONCURRENTLY)` allows repacking without blocking reads and writes to the table.
+-  [pg_plan_advice](../additional-supplied-modules-and-extensions/pg_plan_advice-help-the-planner-get-the-right-plan.md#pgplanadvice) extension for controlling query planner decisions and [pg_stash_advice](../additional-supplied-modules-and-extensions/pg_stash_advice-store-and-automatically-apply-plan-advice.md#pgstashadvice) extension that applies plan advice automatically based on the query.
+-  Better performance in many areas, including automatic scaling of the number of I/O worker processes, quicker foreign-key checks, and further planning and execution optimizations.
+-  Logical replication can now be enabled without a server restart when [wal_level](../../server-administration/server-configuration/write-ahead-log.md#guc-wal-level) is set to `replica`.
+-  Logical replication of [sequence values](../../server-administration/logical-replication/replicating-sequences.md#logical-replication-sequences).
+-  Support for “read-your-writes” consistency on standbys via the new [sql-wait](../../reference/sql-commands/wait.md#sql-wait) command.
+-  [Parallel autovacuum of table indexes](../../server-administration/server-configuration/vacuuming.md#guc-autovacuum-max-parallel-workers) and [autovacuum prioritization](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum-priority) through a new scoring system.
 
 
  The above items and other new features of PostgreSQL 19 are explained in more detail in the sections below.
@@ -30,45 +36,62 @@
  Version 19 contains a number of changes that may affect compatibility with previous releases. Observe the following incompatibilities:
 
 
--  Add server variable password_expiration_warning_threshold to warn about password expiration (Gilles Darold, Nathan Bossart) [&sect;](https://postgr.es/c/1d92e0c2c)
+-  Add server variable [`password_expiration_warning_threshold`](../../server-administration/server-configuration/connections-and-authentication.md#guc-password-expiration-warning-threshold) to warn about password expiration (Gilles Darold, Nathan Bossart) [&sect;](https://postgr.es/c/1d92e0c2c)
 
    The default warning period is seven days.
 -  Issue a warning after successful MD5 password authentication (Nathan Bossart) [&sect;](https://postgr.es/c/bc60ee860)
 
-   The warning can be disabled via server variable md5_password_warnings. MD5 passwords were marked marked as deprecated in Postgres 18.
+   The warning can be disabled via server variable [`md5_password_warnings`](../../server-administration/server-configuration/connections-and-authentication.md#guc-md5-password-warnings). MD5 passwords were marked as deprecated in PostgreSQL 18.
 -  Remove RADIUS support (Thomas Munro) [&sect;](https://postgr.es/c/a1643d40b)
 
-   Postgres only supported RADIUS over UDP, which is unfixably insecure.
--  Force standard_conforming_strings to always be "on" in the database server (Tom Lane) [&sect;](https://postgr.es/c/457620845)
+   PostgreSQL only supported RADIUS over UDP, which is unfixably insecure.
+-  Force [`standard_conforming_strings`](../../server-administration/server-configuration/version-and-platform-compatibility.md#guc-standard-conforming-strings) to always be `on` in the database server (Tom Lane) [&sect;](https://postgr.es/c/457620845)
 
-   Server variable escape_string_warning has been removed as unnecessary. Client applications still support "standard_conforming_strings = off" for compatibility with old servers.
--  Prevent carriage returns and line feeds in database, role, and tablespace names (Mahendra Singh Thalor) [&sect;](https://postgr.es/c/b380a56a3)
+   Dumps created using pre-PostgreSQL 19 versions of [pg_dump](../../reference/postgresql-client-applications/pg_dump.md#app-pgdump) or [pg_dumpall](../../reference/postgresql-client-applications/pg_dumpall.md#app-pg-dumpall), and using `standard_conforming_strings = off`, will not properly load into PostgreSQL 19 and later servers. Users should create dumps using PostgreSQL 19 or later versions of these applications, or use `standard_conforming_strings = on`.
 
-   This was changed to avoid security problems. pg_upgrade will also disallow upgrading from clusters that use such names.
--  Change the default index opclasses for inet and cidr data types from btree_gist to GiST (Tom Lane) [&sect;](https://postgr.es/c/b3b0b4571) [&sect;](https://postgr.es/c/b352d3d80)
+   Client applications still support operations with servers having `standard_conforming_strings = off`, for compatibility with old servers. The server variable `escape_string_warning` has been removed as unnecessary.
+-  Disallow carriage returns and line feeds in database, role, and tablespace names (Mahendra Singh Thalor) [&sect;](https://postgr.es/c/b380a56a3)
 
-   The btree_gist inet/cidr opclasses are broken because they can exclude rows that should be returned. Pg_upgrade will fail to upgrade if btree_gist inet/cidr indexes exist in the old server.
--  Stop reordering non-schema objects created by CREATE SCHEMA (Tom Lane, Jian He) [&sect;](https://postgr.es/c/a9c350d9e) [&sect;](https://postgr.es/c/404db8f9e)
+   [pg_upgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade) will also disallow upgrading of clusters that use such names. This was changed to avoid security problems.
+-  Change the default index opclasses for [`inet`](../../the-sql-language/data-types/network-address-types.md#datatype-net-types) and [`cidr`](../../the-sql-language/data-types/network-address-types.md#datatype-net-types) data types from [btree_gist](../additional-supplied-modules-and-extensions/btree_gist-gist-operator-classes-with-b-tree-behavior.md#btree-gist) to [GiST](../../internals/built-in-index-access-methods/gist-indexes.md#gist) (Tom Lane) [&sect;](https://postgr.es/c/b3b0b4571) [&sect;](https://postgr.es/c/b352d3d80)
 
-   The goal of the reordering was to avoid dependencies, but it was imperfect. Postgres now uses the specified object ordering, except for foreign keys which are created last.
--  Disallow system columns from being used in COPY FROM ... WHERE (Tom Lane) [&sect;](https://postgr.es/c/21c69dc73)
+   The [btree_gist](../additional-supplied-modules-and-extensions/btree_gist-gist-operator-classes-with-b-tree-behavior.md#btree-gist) `inet`/`cidr` opclasses are broken because they can exclude rows that should be returned. [pg_upgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade) will disallow upgrading of clusters with [btree_gist](../additional-supplied-modules-and-extensions/btree_gist-gist-operator-classes-with-b-tree-behavior.md#btree-gist) `inet`/`cidr` indexes.
+-  Disallow system columns from being used in [`COPY FROM ... WHERE`](../../reference/sql-commands/copy.md#sql-copy) (Tom Lane) [&sect;](https://postgr.es/c/21c69dc73)
 
    The values of such columns were not well-defined.
--  Cause transactions to pass their READ ONLY and DEFERRABLE status to postgres_fdw sessions (Etsuro Fujita) [&sect;](https://postgr.es/c/de28140de)
+-  Change a [`json_array()`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-json) call which returns no rows to return an empty JSON array (Richard Guo) [&sect;](https://postgr.es/c/8d829f5a0)
 
-   This means READ ONLY transactions can no longer modify rows processed by postgres_fdw sessions.
--  Change default of max_locks_per_transactions from 64 to 128 (Heikki Linnakangas) [&sect;](https://postgr.es/c/79534f906)
+   This previously returned `NULL`.
+-  Cause transactions to pass their `READ ONLY` and `DEFERRABLE` status to [postgres_fdw](../additional-supplied-modules-and-extensions/postgres_fdw-access-data-stored-in-external-postgresql-servers.md#postgres-fdw) sessions (Etsuro Fujita) [&sect;](https://postgr.es/c/de28140de)
+
+   This means `READ ONLY` transactions can no longer modify rows processed by [postgres_fdw](../additional-supplied-modules-and-extensions/postgres_fdw-access-data-stored-in-external-postgresql-servers.md#postgres-fdw) sessions.
+-  Change default of [`max_locks_per_transaction`](../../server-administration/server-configuration/lock-management.md#guc-max-locks-per-transaction) from 64 to 128 (Heikki Linnakangas) [&sect;](https://postgr.es/c/79534f906)
 
    Lock size allocation has changed, so effectively settings must now be doubled to match their capacity in previous releases.
--  Change JIT to be disabled by default (Jelte Fennema-Nio) [&sect;](https://postgr.es/c/7f8c88c2b)
+-  Remove server variable `io_workers` (Thomas Munro) [&sect;](https://postgr.es/c/d1c01b79d)
 
-   Previously JIT was enabled by default, and activated based on optimizer costs. Unfortunately, this costing has been determined to be unreliable, so require sites that are doing many large analytical queries to manually enable JIT.
--  Rename wait event type BUFFERPIN to BUFFER (Andres Freund) [&sect;](https://postgr.es/c/6c5c393b7)
--  Change index access method handlers to use a static IndexAmRoutines structure, rather than dynamically allocated ones (Matthias van de Meent) [&sect;](https://postgr.es/c/bc6374cd7)
+   This has been replaced by four new variables; see [General Performance](#release-19-performance).
+-  Change [JIT](../../server-administration/just-in-time-compilation-jit/index.md#jit) to be disabled by default (Jelte Fennema-Nio) [&sect;](https://postgr.es/c/7f8c88c2b)
 
-   This is a backwardly incompatible.
+   Previously JIT was enabled by default, and activated based on optimizer costs, but this costing has been determined to be unreliable. This change requires sites that are doing many large analytical queries to manually enable JIT.
+-  Change [parallel vacuum](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#parallel-vacuum) leaders and workers to share the cost-based vacuum delay limit (Bharath Rupireddy) [&sect;](https://postgr.es/c/8628df889)
+
+   Previously each worker process slept based only on the cost it incurred itself, so a parallel vacuum could consume several times the budget set by [`vacuum_cost_limit`](../../server-administration/server-configuration/vacuuming.md#guc-vacuum-cost-limit). With this change, [`VACUUM`](../../reference/sql-commands/vacuum.md#sql-vacuum) with parallel workers and cost-based delay enabled might run slower than in previous releases.
+-  Rename column `sync_error_count` to `sync_table_error_count` in system view [`pg_stat_subscription_stats`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-subscription-stats) (Vignesh C) [&sect;](https://postgr.es/c/3edaf29fa)
+
+   This is necessary since sequence errors are now tracked separately.
+-  Rename wait event *type* `BUFFERPIN` to `BUFFER` and rename wait event `BufferPin` to `BufferCleanup` (Andres Freund) [&sect;](https://postgr.es/c/6c5c393b7)
+-  Remove wait event `BufferContent` and add more precise wait events `BufferShared`, `BufferShareExclusive`, and `BufferExclusive` (Andres Freund) [&sect;](https://postgr.es/c/fcb9c977a)
+-  Change index access method handlers to use a static [`IndexAmRoutines`](../../internals/index-access-method-interface-definition/index.md#indexam) structure, rather than dynamically allocated ones (Matthias van de Meent) [&sect;](https://postgr.es/c/bc6374cd7)
 -  Remove optimizer hook get_relation_info_hook and add better-placed hook build_simple_rel_hook (Robert Haas) [&sect;](https://postgr.es/c/91f33a2ae)
--  Remove MULE_INTERNAL encoding (Thomas Munro) [&sect;](https://postgr.es/c/77645d44e)
+-  Change [psql](../../reference/postgresql-client-applications/psql.md#app-psql)'s `\crosstabview` command to honor the `\pset null` setting (Chao Li) [&sect;](https://postgr.es/c/4df5fe383)
+-  Change [full text search](../../the-sql-language/full-text-search/index.md#textsearch) and [pg_trgm](../additional-supplied-modules-and-extensions/pg_trgm-support-for-similarity-of-text-using-trigram-matching.md#pgtrgm) to use the database's locale provider for character classification when parsing text (Jeff Davis) [&sect;](https://postgr.es/c/e113f9c102b)
+
+   Previously, characters were classified using libc, regardless of the locale provider. In databases with a locale provider other than libc (e.g., `ICU`, `builtin`) and where the locale configured through that locale provider behaves differently from the `LC_CTYPE` setting configured for the database, particularly a LC_CTYPE of `C`, the output of some full text search and pg_trgm functions could change. When upgrading such databases using [pg_upgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade), it is recommended to reindex all indexes which use full text search and pg_trgm after the upgrade, and to recompute any stored `tsvector` values.
+-  Change how [fuzzystrmatch](../additional-supplied-modules-and-extensions/fuzzystrmatch-determine-string-similarities-and-distance.md#fuzzystrmatch) functions handle non-ASCII characters (Peter Eisentraut, Jeff Davis) [&sect;](https://postgr.es/c/e39ece034) [&sect;](https://postgr.es/c/b96a9fd76f3)
+
+   `dmetaphone()` and `dmetaphone_alt()` now upper-case their input using the database's default collation rather than always using libc, and `soundex()`, `metaphone()`, and `difference()` now treat only ASCII letters as letters. When upgrading with [pg_upgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade), it is recommended to reindex any indexes that use these functions after the upgrade.
+-  Remove `MULE_INTERNAL` encoding (Thomas Munro) [&sect;](https://postgr.es/c/77645d44e)
 
    This encoding was complex and rarely used. Databases using it will need to be dumped and restored with a different encoding.
   <a id="release-19-changes"></a>
@@ -85,166 +108,170 @@
 ##### Optimizer
 
 
--  Allow NOT INs to be converted to more efficient ANTI JOINs when NULLs are not present (Richard Guo) [&sect;](https://postgr.es/c/383eb21eb)
--  Allow more LEFT JOINs to be converted to ANTI JOINs (Tender Wang, Richard Guo) [&sect;](https://postgr.es/c/cf74558fe)
--  Allow use of Memoize for ANTI JOINS with unique inner sides (Richard Guo) [&sect;](https://postgr.es/c/0da29e4cb)
--  Improve the planning of semijoins (Richard Guo) [&sect;](https://postgr.es/c/24225ad9a)
--  Improve hash join's handling of tuples with NULL join keys (Tom Lane) [&sect;](https://postgr.es/c/1811f1af9)
--  Convert IS [NOT] DISTINCT FROM NULL to IS [NOT] NULL during constant folding (Richard Guo) [&sect;](https://postgr.es/c/f41ab5157)
-
-   The latter form is more easily optimized.
--  Perform earlier constant folding of "Var IS [NOT] NULL" in the optimizer (Richard Guo) [&sect;](https://postgr.es/c/e2debb643)
-
-   This allows for later optimizations.
--  Allow Append and MergeAppend to consider explicit incremental sorts (Richard Guo) [&sect;](https://postgr.es/c/55a780e94)
+-  Allow `NOT IN` clauses to be converted to more efficient `ANTI JOIN`s when NULLs are not present (Richard Guo) [&sect;](https://postgr.es/c/383eb21eb)
+-  Allow more `LEFT JOIN`s to be converted to `ANTI JOIN`s (Tender Wang, Richard Guo) [&sect;](https://postgr.es/c/cf74558fe)
+-  Allow use of Memoize for `ANTI JOIN`s with unique inner sides (Richard Guo) [&sect;](https://postgr.es/c/0da29e4cb)
 -  Allow some aggregate processing to be performed before joins (Richard Guo, Antonin Houska) [&sect;](https://postgr.es/c/8e1185910) [&sect;](https://postgr.es/c/bd94845e8) [&sect;](https://postgr.es/c/3a08a2a8b)
 
    This can reduce the number of rows needed to be processed.
--  Allow negative values of pg_aggregate.aggtransspace to indicate unbounded memory usage (Richard Guo) [&sect;](https://postgr.es/c/185e30426)
+-  Improve hash join's handling of tuples with `NULL` join keys (Tom Lane) [&sect;](https://postgr.es/c/1811f1af9)
+-  Improve the planning of semijoins (Richard Guo) [&sect;](https://postgr.es/c/24225ad9a)
+-  Allow Append and MergeAppend to consider explicit incremental sorts (Richard Guo) [&sect;](https://postgr.es/c/55a780e94)
+-  Convert [`IS [NOT] DISTINCT FROM NULL`](../../the-sql-language/functions-and-operators/comparison-functions-and-operators.md#functions-comparison-pred-table) to `IS [NOT] NULL` during constant folding (Richard Guo) [&sect;](https://postgr.es/c/f41ab5157)
+
+   The latter form is more easily optimized.
+-  Simplify [`IS [NOT] DISTINCT FROM`](../../the-sql-language/functions-and-operators/comparison-functions-and-operators.md#functions-comparison-pred-table) to equality/inequality operators when inputs are proven non-nullable (Richard Guo) [&sect;](https://postgr.es/c/0a3796125)
+-  Perform earlier constant folding of *var* `IS [NOT] NULL` in the optimizer (Richard Guo) [&sect;](https://postgr.es/c/e2debb643)
+
+   This allows for later optimizations.
+-  Simplify [`COALESCE()`](../../the-sql-language/functions-and-operators/conditional-expressions.md#functions-coalesce-nvl-ifnull) and `ROW(...) IS [NOT] NULL` to avoid evaluating unnecessary arguments (Richard Guo) [&sect;](https://postgr.es/c/10c4fe074) [&sect;](https://postgr.es/c/cb7b7ec7a)
+-  Simplify `IS [NOT] TRUE/FALSE/UNKNOWN` to plain boolean expressions when the input is proven non-nullable (Richard Guo) [&sect;](https://postgr.es/c/0aaf0de7f)
+-  Speed up join selectivity computations for large optimizer statistics targets (Ilia Evdokimov, David Geier) [&sect;](https://postgr.es/c/057012b20)
+-  Add proper optimizer statistics for functions returning boolean values (Tom Lane) [&sect;](https://postgr.es/c/1eccb9315)
+-  Allow [extended statistics](../../reference/sql-commands/create-statistics.md#sql-createstatistics) on virtual generated columns (Yugo Nagata) [&sect;](https://postgr.es/c/f7f4052a4)
+-  Allow function [`pg_restore_extended_stats()`](../../the-sql-language/functions-and-operators/system-administration-functions.md#functions-admin-statsmod) to restore optimizer extended statistics (Corey Huinker, Michael Paquier, Chao Li) [&sect;](https://postgr.es/c/0e80f3f88) [&sect;](https://postgr.es/c/302879bd6) [&sect;](https://postgr.es/c/efbebb4e8) [&sect;](https://postgr.es/c/ba97bf9cb)
+-  Add function [`pg_clear_extended_stats()`](../../the-sql-language/functions-and-operators/system-administration-functions.md#functions-admin-statsmod) to remove extended statistics (Corey Huinker, Michael Paquier) [&sect;](https://postgr.es/c/d756fa101)
+-  Adjust the optimizer to consider startup costs of partial paths (Robert Haas, Tomas Vondra) [&sect;](https://postgr.es/c/8300d3ad4)
+-  Allow negative values of [`pg_aggregate`](../../internals/system-catalogs/pg_aggregate.md#catalog-pg-aggregate).[`aggtransspace`](../../internals/system-catalogs/pg_aggregate.md#catalog-pg-aggregate) to indicate unbounded memory usage (Richard Guo) [&sect;](https://postgr.es/c/185e30426)
 
    This information is used by the optimizer in planning memory usage.
--  Simplify IS [NOT] TRUE/FALSE/UNKNOWN to plain boolean expressions when the input is proven non-nullable (Richard Guo) [&sect;](https://postgr.es/c/0aaf0de7f)
--  Simplify COALESCE and ROW(...) IS [NOT] NULL to avoid evaluating unnecessary arguments (Richard Guo) [&sect;](https://postgr.es/c/10c4fe074) [&sect;](https://postgr.es/c/cb7b7ec7a)
--  Simplify IS [NOT] DISTINCT FROM to equality/inequality operators when inputs are proven non-nullable (Richard Guo) [&sect;](https://postgr.es/c/0a3796125)
--  Speed up join selectivity computations for large optimizer statistics targets (Ilia Evdokimov, David Geier) [&sect;](https://postgr.es/c/057012b20)
--  Enable proper optimizer statistics for functions returning boolean values (Tom Lane) [&sect;](https://postgr.es/c/1eccb9315)
--  Allow extended statistics on virtual generated columns (Yugo Nagata) [&sect;](https://postgr.es/c/f7f4052a4)
--  Allow function pg_restore_extended_stats() to restore optimizer extended statistics (Corey Huinker, Michael Paquier, Chao Li) [&sect;](https://postgr.es/c/0e80f3f88) [&sect;](https://postgr.es/c/302879bd6) [&sect;](https://postgr.es/c/efbebb4e8) [&sect;](https://postgr.es/c/ba97bf9cb)
--  Add function pg_clear_extended_stats() to remove extended statistics (Corey Huinker, Michael Paquier) [&sect;](https://postgr.es/c/d756fa101)
--  Adjust the optimizer to consider startup costs of partial paths (Robert Haas, Tomas Vondra) [&sect;](https://postgr.es/c/8300d3ad4)
   <a id="release-19-performance"></a>
 
 ##### General Performance
 
 
--  Improve performance of foreign key constraint checks (Junwang Zhao, Amit Langote, Chao Li) [&sect;](https://postgr.es/c/2da86c1ef) [&sect;](https://postgr.es/c/e484b0eea) [&sect;](https://postgr.es/c/b7b27eb41) [&sect;](https://postgr.es/c/5c54c3ed1)
--  Improve asynchronous I/O read-ahead scheduling for large requests (Andres Freund) [&sect;](https://postgr.es/c/a9ee66881) [&sect;](https://postgr.es/c/8ca147d58) [&sect;](https://postgr.es/c/f63ca3379)
--  Allow io_method method "worker" to automatically control needed background workers (Thomas Munro) [&sect;](https://postgr.es/c/d1c01b79d)
+-  Improve performance of foreign key constraint checks (Junwang Zhao, Amit Langote, Chao Li) [&sect;](https://postgr.es/c/2da86c1ef) [&sect;](https://postgr.es/c/e484b0eea)
+-  Improve [asynchronous I/O](../../server-administration/server-configuration/resource-consumption.md#guc-io-method) read-ahead scheduling for large requests (Andres Freund) [&sect;](https://postgr.es/c/a9ee66881) [&sect;](https://postgr.es/c/8ca147d58) [&sect;](https://postgr.es/c/f63ca3379)
+-  Allow [`io_method`](../../server-administration/server-configuration/resource-consumption.md#guc-io-method) method `worker` to automatically control needed background workers (Thomas Munro) [&sect;](https://postgr.es/c/d1c01b79d)
 
-   New server variables are io_min_workers, io_max_workers, io_worker_idle_timeout, and io_worker_launch_interval.
--  Allow query table scans to mark pages as all-visible in the visibility map (Melanie Plageman) [&sect;](https://postgr.es/c/b46e1e54d)
+   The new server variables are [`io_min_workers`](../../server-administration/server-configuration/resource-consumption.md#guc-io-min-workers), [`io_max_workers`](../../server-administration/server-configuration/resource-consumption.md#guc-io-max-workers), [`io_worker_idle_timeout`](../../server-administration/server-configuration/resource-consumption.md#guc-io-worker-idle-timeout), and [`io_worker_launch_interval`](../../server-administration/server-configuration/resource-consumption.md#guc-io-worker-launch-interval).
+-  Allow query table scans to mark pages as all-visible in the [visibility map](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-visibility-map) (Melanie Plageman) [&sect;](https://postgr.es/c/b46e1e54d)
 
-   Previously only VACUUM and COPY FREEZE could do this.
--  Allow autovacuum to use parallel vacuum workers (Daniil Davydov) [&sect;](https://postgr.es/c/1ff3180ca) [&sect;](https://postgr.es/c/2a3d2f9f6)
+   Previously only [`VACUUM`](../../reference/sql-commands/vacuum.md#sql-vacuum) and [`COPY ... FREEZE`](../../reference/sql-commands/copy.md#sql-copy) could do this.
+-  Allow [autovacuum](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) to use [`parallel autovacuum workers`](../../reference/sql-commands/create-table.md#reloption-autovacuum-parallel-workers) (Daniil Davydov) [&sect;](https://postgr.es/c/1ff3180ca) [&sect;](https://postgr.es/c/2a3d2f9f6)
 
-   This is enabled via server variable autovacuum_max_parallel_workers and per-table storage parameter autovacuum_parallel_workers.
--  Allow TID Range Scans to be parallelized (Cary Huang, David Rowley) [&sect;](https://postgr.es/c/0ca3b1697)
--  Improve COPY FROM performance for text and CSV output using SIMD CPU instructions (Nazir Bilal Yavuz, Shinya Kato) [&sect;](https://postgr.es/c/e0a3a3fd5)
--  Improve NOTIFY to only wake up backends that are listening to specified notifications (Joel Jacobson) [&sect;](https://postgr.es/c/282b1cde9)
+   The maximum number of workers is controlled by server variable [`autovacuum_max_parallel_workers`](../../server-administration/server-configuration/vacuuming.md#guc-autovacuum-max-parallel-workers) and per-table storage parameter `autovacuum_parallel_workers`.
+-  Allow [`TID`](../../the-sql-language/data-types/object-identifier-types.md#datatype-oid) Range Scans to be parallelized (Cary Huang, David Rowley) [&sect;](https://postgr.es/c/0ca3b1697)
+-  Improve [`COPY FROM`](../../reference/sql-commands/copy.md#sql-copy) performance for text and CSV input using SIMD CPU instructions (Nazir Bilal Yavuz, Shinya Kato) [&sect;](https://postgr.es/c/e0a3a3fd5)
+-  Improve [`NOTIFY`](../../reference/sql-commands/notify.md#sql-notify) to only wake up backends that are listening to specified notifications (Joel Jacobson) [&sect;](https://postgr.es/c/282b1cde9)
 
-   Previously most backends were woken by NOTIFY.
--  Allow the addition of columns based on domains containing constraints to usually avoid a table rewrite (Jian He) [&sect;](https://postgr.es/c/a0b6ef29a)
+   Previously most backends were woken by [`NOTIFY`](../../reference/sql-commands/notify.md#sql-notify).
+-  Change [`wal_compression`](../../server-administration/server-configuration/write-ahead-log.md#guc-wal-compression) equals `on` to use the best WAL compression method available (wenhui qiu) [&sect;](https://postgr.es/c/5838806ce)
 
-   Previously this always required a table rewrite.
--  Change the default TOAST compression method from pglz to the more efficient lz4 (Euler Taveira) [&sect;](https://postgr.es/c/34dfca293)
+   Previously this always used `pglz`.
+-  Change the default [TOAST](../../internals/database-physical-storage/toast.md#storage-toast) compression method from `pglz` to the more efficient `lz4` (Euler Taveira) [&sect;](https://postgr.es/c/34dfca293)
 
-   This is done by changing the default for server variable default_toast_compression.
+   This is done by changing the default for server variable [`default_toast_compression`](../../server-administration/server-configuration/client-connection-defaults.md#guc-default-toast-compression).
 -  Improve performance of internal row deformation (David Rowley) [&sect;](https://postgr.es/c/c456e3911)
--  Improve performance of hash index bulk-deletion by using streaming reads (Xuneng Zhou) [&sect;](https://postgr.es/c/bfa3c4f10)
--  Improve sort performance using radix sorts (John Naylor) [&sect;](https://postgr.es/c/ef3c3cf6d)
+-  Improve performance of repeated UTF-8 case-folding operations (Andreas Karlsson) [&sect;](https://postgr.es/c/c4ff35f10)
+-  Improve performance of hash index bulk-deletion and [`GIN`](../../internals/built-in-index-access-methods/gin-indexes.md#gin) index vacuuming using streaming reads (Xuneng Zhou) [&sect;](https://postgr.es/c/bfa3c4f10) [&sect;](https://postgr.es/c/6c228755a)
+-  Improve sort performance using radix sort (John Naylor) [&sect;](https://postgr.es/c/ef3c3cf6d)
 -  Improve timing performance measurements (Lukas Fittl, Andres Freund, David Geier) [&sect;](https://postgr.es/c/294520c44) [&sect;](https://postgr.es/c/16fca4825)
 
-   This benefits EXPLAIN (ANALYZE, TIMING) and pg_test_timing, and is controlled via server variable timing_clock_source.
--  Optimize plpgsql syntax SELECT simple-expression INTO var (Tom Lane) [&sect;](https://postgr.es/c/ce8d5fe0e)
--  Improve performance of numeric operations on platforms without 128-bit integer support (Dean Rasheed) [&sect;](https://postgr.es/c/d699687b3)
+   This benefits [`EXPLAIN (ANALYZE, TIMING)`](../../reference/sql-commands/explain.md#sql-explain) and [pg_test_timing](../../reference/postgresql-server-applications/pg_test_timing.md#pgtesttiming), and is controlled via server variable [`timing_clock_source`](../../server-administration/server-configuration/resource-consumption.md#guc-timing-clock-source).
+-  Optimize [plpgsql](../../server-programming/pl-pgsql-sql-procedural-language/index.md#plpgsql) syntax `SELECT simple-expression INTO` *var* (Tom Lane) [&sect;](https://postgr.es/c/ce8d5fe0e)
   <a id="release-19-system-views"></a>
 
 ##### System Views
 
 
--  Add system view pg_stat_lock and function pg_stat_get_lock() to report per-lock type statistics (Bertrand Drouvot) [&sect;](https://postgr.es/c/4019f725f)
--  Add system view pg_stat_recovery to report recovery status (Xuneng Zhou, Shinya Kato) [&sect;](https://postgr.es/c/01d485b14) [&sect;](https://postgr.es/c/2d4ead6f4)
--  Add mem_exceeded_count column to system view pg_stat_replication_slots (Bertrand Drouvot) [&sect;](https://postgr.es/c/d3b6183dd)
+-  Add system view [`pg_stat_lock`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-lock-view) and function [`pg_stat_get_lock()`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-lock-view) to report per-lock-type statistics (Bertrand Drouvot) [&sect;](https://postgr.es/c/4019f725f)
+-  Add system view [`pg_stat_recovery`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-recovery-view) to report recovery status (Xuneng Zhou, Shinya Kato) [&sect;](https://postgr.es/c/01d485b14) [&sect;](https://postgr.es/c/2d4ead6f4)
+-  Add system view [`pg_stat_progress_repack`](../../server-administration/monitoring-database-activity/progress-reporting.md#pg-stat-progress-repack-view) to report the progress of `REPACK`, `CLUSTER`, and `VACUUM FULL` (Álvaro Herrera) [&sect;](https://postgr.es/c/ac58465e0)
+-  Add system view [`pg_stat_autovacuum_scores`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-autovacuum-scores-view) to report per-table [autovacuum](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) details (Sami Imseih) [&sect;](https://postgr.es/c/87f61f0c8)
+-  Add vacuum initiation details to system view [`pg_stat_progress_vacuum`](../../server-administration/monitoring-database-activity/progress-reporting.md#pg-stat-progress-vacuum-view) (Shinya Kato) [&sect;](https://postgr.es/c/0d7895206)
 
-   This reports the number of times that logical_decoding_work_mem was exceeded.
--  Add stats_reset column to system views pg_stat_all_tables, pg_stat_all_indexes, and pg_statio_all_sequences (Bertrand Drouvot, Sami Imseih, Shihao Zhong) [&sect;](https://postgr.es/c/a5b543258)
+   The new `started_by` column reports the initiator of the vacuum, and `mode` indicates its aggressiveness.
+-  Add analyze initiation details to system view [`pg_stat_progress_analyze`](../../server-administration/monitoring-database-activity/progress-reporting.md#pg-stat-progress-analyze-view) (Shinya Kato) [&sect;](https://postgr.es/c/ab40db385)
 
-   It also appears in the "sys" and "user" view variants.
--  Add stats_reset column to system views pg_stat_user_functions and pg_stat_database_conflicts (Bertrand Drouvot, Shihao Zhong) [&sect;](https://postgr.es/c/b71bae41a) [&sect;](https://postgr.es/c/8fe315f18)
--  Add system view pg_stat_autovacuum_scores to report per-table autovacuum details (Sami Imseih) [&sect;](https://postgr.es/c/87f61f0c8)
--  Add vacuum initiation details to system view pg_stat_progress_vacuum (Shinya Kato) [&sect;](https://postgr.es/c/0d7895206)
+   The new `started_by` column reports the initiator of the analyze.
+-  Add system view [`pg_dsm_registry_allocations`](../../internals/system-views/pg_dsm_registry_allocations.md#view-pg-dsm-registry-allocations) to report [dynamic shared memory](../../server-administration/server-configuration/resource-consumption.md#guc-dynamic-shared-memory-type) details (Florents Tselai, Nathan Bossart) [&sect;](https://postgr.es/c/167ed8082) [&sect;](https://postgr.es/c/f894acb24)
+-  Add `mem_exceeded_count` column to system view [`pg_stat_replication_slots`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-replication-slots-view) (Bertrand Drouvot) [&sect;](https://postgr.es/c/d3b6183dd)
 
-   The new "started_by" column reports the initiator of the vacuum, and "mode" indicates its aggressiveness.
--  Add analyze initiation details to system view pg_stat_progress_analyze (Shinya Kato) [&sect;](https://postgr.es/c/ab40db385)
+   This reports the number of times that [`logical_decoding_work_mem`](../../server-administration/server-configuration/resource-consumption.md#guc-logical-decoding-work-mem) was exceeded.
+-  Add slot synchronization skip information to [`pg_stat_replication_slots`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-replication-slots-view) and [`pg_replication_slots`](../../internals/system-views/pg_replication_slots.md#view-pg-replication-slots) (Shlok Kyal) [&sect;](https://postgr.es/c/76b78721c) [&sect;](https://postgr.es/c/e68b6adad) [&sect;](https://postgr.es/c/5db6a344a)
 
-   The new "started_by" column reports the initiator of the analyze.
--  Add a column to system view pg_stat_progress_basebackup to report the type of backup (Shinya Kato) [&sect;](https://postgr.es/c/deb674454)
+   The new columns are `slotsync_skip_count`, `slotsync_last_skip`, and `slotsync_skip_reason`.
+-  Add `update_deleted` column to system view [`pg_stat_subscription_stats`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#monitoring-pg-stat-subscription-stats) (Zhijie Hou) [&sect;](https://postgr.es/c/fd5a1a0c3)
 
-   Possible values are "full" or "incremental".
+   This reports the number of rows where updates were ignored due to concurrent deletes. This requires the subscriber have `retain_dead_tuples` enabled.
+-  Add `sync_seq_error_count` column to system view [`pg_stat_subscription_stats`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-subscription-stats) to report sequence synchronization errors (Vignesh C) [&sect;](https://postgr.es/c/f6a4c498d) [&sect;](https://postgr.es/c/3edaf29fa)
+-  Add `stats_reset` column to system views [`pg_stat_all_tables`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-all-tables-view), [`pg_stat_all_indexes`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-all-indexes-view), and [`pg_statio_all_sequences`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-statio-all-sequences-view) (Bertrand Drouvot, Sami Imseih, Shihao Zhong) [&sect;](https://postgr.es/c/a5b543258)
+
+   It also appears in the `sys` and `user` view variants.
+-  Add `stats_reset` column to system views [`pg_stat_user_functions`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-user-functions-view) and [`pg_stat_database_conflicts`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-database-conflicts-view) (Bertrand Drouvot, Shihao Zhong) [&sect;](https://postgr.es/c/b71bae41a) [&sect;](https://postgr.es/c/8fe315f18)
+-  Add `location` column to system views [`pg_available_extensions`](../../internals/system-views/pg_available_extensions.md#view-pg-available-extensions) and [`pg_available_extension_versions`](../../internals/system-views/pg_available_extension_versions.md#view-pg-available-extension-versions) to report the file system directory of extensions (Matheus Alcantara) [&sect;](https://postgr.es/c/f3c9e341c)
+-  Add `backup_type` column to system view [`pg_stat_progress_basebackup`](../../server-administration/monitoring-database-activity/progress-reporting.md#pg-stat-progress-basebackup-view) to report the type of backup (Shinya Kato) [&sect;](https://postgr.es/c/deb674454)
+
+   Possible values are `full` or `incremental`.
+-  Add `connecting` value to system view column [`pg_stat_wal_receiver`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-wal-receiver-view).[`status`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-wal-receiver-view) (Xuneng Zhou) [&sect;](https://postgr.es/c/a36164e74)
 -  Add reporting of the bytes written to WAL for full page images (Shinya Kato) [&sect;](https://postgr.es/c/f9a09aa29)
 
-   This is accessible via system view pg_stat_wal and function pg_stat_get_backend_wal().
--  Add "connecting" status to system view column pg_stat_wal_receiver.status (Xuneng Zhou) [&sect;](https://postgr.es/c/a36164e74)
--  Add columns to system views pg_stats, pg_stats_ext, and pg_stats_ext_exprs (Corey Huinker) [&sect;](https://postgr.es/c/3b88e50d6)
+   This is accessible via system view [`pg_stat_wal`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-wal-view) and function [`pg_stat_get_backend_wal()`](../../server-administration/monitoring-database-activity/the-cumulative-statistics-system.md#pg-stat-get-backend-wal).
+-  Add columns to system views [`pg_stats`](../../internals/system-views/pg_stats.md#view-pg-stats), [`pg_stats_ext`](../../internals/system-views/pg_stats_ext.md#view-pg-stats-ext), and [`pg_stats_ext_exprs`](../../internals/system-views/pg_stats_ext_exprs.md#view-pg-stats-ext-exprs) (Corey Huinker) [&sect;](https://postgr.es/c/3b88e50d6)
 
-   Adds table OID and attribute number columns to pg_stats, and table OID and statistics object OID columns to the other two.
--  Add information about range type extended statistics to system view pg_stats_ext_exprs (Corey Huinker, Michael Paquier) [&sect;](https://postgr.es/c/307447e6d)
--  Add system view pg_dsm_registry_allocations to report dynamic shared memory details (Florents Tselai, Nathan Bossart) [&sect;](https://postgr.es/c/167ed8082) [&sect;](https://postgr.es/c/f894acb24)
--  Add column "location" to system views pg_available_extensions and pg_available_extension_versions to report the file system directory of extensions (Matheus Alcantara) [&sect;](https://postgr.es/c/f3c9e341c)
+   Adds table `OID` and attribute number columns to [`pg_stats`](../../internals/system-views/pg_stats.md#view-pg-stats), and table `OID` and statistics object `OID` columns to the other two.
+-  Add information about range type [extended statistics](../../reference/sql-commands/create-statistics.md#sql-createstatistics) to system view [`pg_stats_ext_exprs`](../../internals/system-views/pg_stats_ext_exprs.md#view-pg-stats-ext-exprs) (Corey Huinker, Michael Paquier) [&sect;](https://postgr.es/c/307447e6d)
   <a id="release-19-monitoring"></a>
 
 ##### Monitoring
 
 
--  Allow log_min_messages log levels to be specified by process type (Euler Taveira) [&sect;](https://postgr.es/c/38e0190ce)
+-  Allow [`log_min_messages`](../../server-administration/server-configuration/error-reporting-and-logging.md#guc-log-min-messages) log levels to be specified by process type (Euler Taveira) [&sect;](https://postgr.es/c/38e0190ce)
 
-   The new format is "type:level". A value without a colon controls unspecified process types, enabling backward compatibility.
--  Add server variable log_autoanalyze_min_duration to log long-running autoanalyze operations (Shinya Kato) [&sect;](https://postgr.es/c/dd3ae3783)
+   The new format is *type*:*level*. A value without a colon controls all process types, allowing backward compatibility.
+-  Add server variable [`log_autoanalyze_min_duration`](../../server-administration/server-configuration/error-reporting-and-logging.md#guc-log-autoanalyze-min-duration) to log long-running analyze operations by [autovacuum](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) operations (Shinya Kato) [&sect;](https://postgr.es/c/dd3ae3783)
 
-   Server variable log_autovacuum_min_duration now only controls logging of automatic vacuum operations.
--  Enable server variable log_lock_waits by default (Laurenz Albe) [&sect;](https://postgr.es/c/2aac62be8)
--  Add server variable debug_print_raw_parse to log the raw parse tree (Chao Li) [&sect;](https://postgr.es/c/06473f5a3)
+   Server variable [`log_autovacuum_min_duration`](../../server-administration/server-configuration/error-reporting-and-logging.md#guc-log-autovacuum-min-duration) now only controls logging of vacuum operations by autovacuum.
+-  Enable server variable [`log_lock_waits`](../../server-administration/server-configuration/error-reporting-and-logging.md#guc-log-lock-waits) by default (Laurenz Albe) [&sect;](https://postgr.es/c/2aac62be8)
+-  Add server variable [`debug_print_raw_parse`](../../server-administration/server-configuration/error-reporting-and-logging.md#guc-debug-print-raw-parse) to log raw parse trees (Chao Li) [&sect;](https://postgr.es/c/06473f5a3)
 
-   This is also enabled when the server is started with debug level 3 and higher.
+   This is also enabled when the server is started with debug level three and higher.
 -  Make messages coming from remote servers appear in the server logs in the same format as local server messages (Vignesh C) [&sect;](https://postgr.es/c/112faf137)
 
-   These include replication, postgres_fdw, and dblink servers.
--  Add WAL full page write bytes reporting to VACUUM and ANALYZE logging (Shinya Kato) [&sect;](https://postgr.es/c/ad25744f4)
--  Add IO wait events for COPY FROM/TO on a pipe/file/program (Nikolay Samokhvalov) [&sect;](https://postgr.es/c/e05a24c2d)
--  Add wait events for WAL write and flush LSNs (Xuneng Zhou) [&sect;](https://postgr.es/c/7a39f43d8)
--  Have pg_get_sequence_data function return the sequence page LSN (Vignesh C) [&sect;](https://postgr.es/c/b93172ca5)
--  Add function pg_get_multixact_stats() to report multixact activity (Naga Appani) [&sect;](https://postgr.es/c/97b101776)
--  Issue warnings when the wraparound of xid and multi-xids is less then 100 million (Nathan Bossart) [&sect;](https://postgr.es/c/48f11bfa0)
+   These include replication, [postgres_fdw](../additional-supplied-modules-and-extensions/postgres_fdw-access-data-stored-in-external-postgresql-servers.md#postgres-fdw), and [dblink](../additional-supplied-modules-and-extensions/dblink-connect-to-other-postgresql-databases.md#dblink) servers.
+-  Add reporting of WAL [full-page write](../../server-administration/server-configuration/write-ahead-log.md#guc-full-page-writes) bytes to [`VACUUM`](../../reference/sql-commands/vacuum.md#sql-vacuum) and [`ANALYZE`](../../reference/sql-commands/analyze.md#sql-analyze) logging (Shinya Kato) [&sect;](https://postgr.es/c/ad25744f4)
+-  Add IO wait events for [`COPY FROM/TO`](../../reference/sql-commands/copy.md#sql-copy) on a pipe, file, or program (Nikolay Samokhvalov) [&sect;](https://postgr.es/c/e05a24c2d)
+-  Add wait events for [commit_delay](../../server-administration/server-configuration/write-ahead-log.md#guc-commit-delay) and for WAL write and flush [LSN](../../server-administration/reliability-and-the-write-ahead-log/wal-internals.md#wal-internals)s (Xuneng Zhou) [&sect;](https://postgr.es/c/7a39f43d8) [&sect;](https://postgr.es/c/3cb5808bd)
+-  Have [`pg_get_sequence_data()`](../../the-sql-language/functions-and-operators/sequence-manipulation-functions.md#func-pg-get-sequence-data) return the sequence page [LSN](../../server-administration/reliability-and-the-write-ahead-log/wal-internals.md#wal-internals) (Vignesh C) [&sect;](https://postgr.es/c/b93172ca5)
+-  Add function [`pg_get_multixact_stats()`](../../the-sql-language/functions-and-operators/system-information-functions-and-operators.md#functions-info-snapshot) to report [multixact](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-multixact-wraparound) activity (Naga Appani) [&sect;](https://postgr.es/c/97b101776)
+-  Issue warnings when the [wraparound](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-wraparound) of transaction IDs or multixacts is less than 100 million away (Nathan Bossart) [&sect;](https://postgr.es/c/48f11bfa0)
 
-   The previous warning was 40 million. Warnings are issued to clients and the server log.
+   The previous warning was 40 million. Warnings are issued to clients and in the server log.
   <a id="release-19-server-config"></a>
 
 ##### Server Configuration
 
 
--  Allow online enabling and disabling of data checksums (Daniel Gustafsson, Magnus Hagander, Tomas Vondra) [&sect;](https://postgr.es/c/f19c0ecca) [&sect;](https://postgr.es/c/b364828f8)
+-  Add scoring system to control the order that tables are processed by [autovacuum](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) (Nathan Bossart) [&sect;](https://postgr.es/c/d7965d65f)
 
-   Previously the checksum status could only be set at initialization and changed only while the cluster was offline using pg_checksums.
--  Add scoring system to control the order that tables are autovacuumed (Nathan Bossart) [&sect;](https://postgr.es/c/d7965d65f)
+   The new server variables are [`autovacuum_freeze_score_weight`](../../server-administration/server-configuration/vacuuming.md#guc-autovacuum-freeze-score-weight), [`autovacuum_multixact_freeze_score_weight`](../../server-administration/server-configuration/vacuuming.md#guc-autovacuum-multixact-freeze-score-weight), [`autovacuum_vacuum_score_weight`](../../server-administration/server-configuration/vacuuming.md#guc-autovacuum-vacuum-score-weight), [`autovacuum_vacuum_insert_score_weight`](../../server-administration/server-configuration/vacuuming.md#guc-autovacuum-vacuum-insert-score-weight), and [`autovacuum_analyze_score_weight`](../../server-administration/server-configuration/vacuuming.md#guc-autovacuum-analyze-score-weight).
+-  Add server-side support for [SNI](../../server-administration/server-setup-and-operation/secure-tcp-ip-connections-with-ssl.md#ssl-sni) (Server Name Indication) (Daniel Gustafsson, Jacob Champion) [&sect;](https://postgr.es/c/4f433025f)
 
-   The new server variables are autovacuum_freeze_score_weight, autovacuum_multixact_freeze_score_weight, autovacuum_vacuum_score_weight, autovacuum_vacuum_insert_score_weight, and autovacuum_analyze_score_weight.
--  Add server-side report for SNI (Server Name Indication) (Daniel Gustafsson, Jacob Champion) [&sect;](https://postgr.es/c/4f433025f)
+   New configuration file [`PGDATA/pg_hosts.conf`](../../server-administration/server-configuration/file-locations.md#guc-hosts-file) specifies hostname/key pairs.
+-  Allow OAuth validators to register custom [`pg_hba.conf`](../../server-administration/client-authentication/the-pg_hba-conf-file.md#auth-pg-hba-conf) authentication options (Jacob Champion, Zsolt Parragi) [&sect;](https://postgr.es/c/b977bd308)
+-  Allow roles [`pg_read_all_data`](../../server-administration/database-roles/predefined-roles.md#predefined-role-pg-read-all-data) and [`pg_write_all_data`](../../server-administration/database-roles/predefined-roles.md#predefined-role-pg-read-all-data) to read/write large objects (Nitin Motiani, Nathan Bossart) [&sect;](https://postgr.es/c/d98197602)
 
-   New configuration file PGDATA/pg_hosts.conf specifies hostname/key pairs.
--  Add a new OAUTH flow hook PQAUTHDATA_OAUTH_BEARER_TOKEN_V2 (Jacob Champion) [&sect;](https://postgr.es/c/e982331b5) [&sect;](https://postgr.es/c/0af4d402c)
-
-   This is an improved version of PQAUTHDATA_OAUTH_BEARER_TOKEN by adding the issuer identifier and error message specification.
+   These roles are designed to allow non-super users to run [pg_dump](../../reference/postgresql-client-applications/pg_dump.md#app-pgdump).
 -  Allow background workers to be configured to terminate before database-level operations (Aya Iwata) [&sect;](https://postgr.es/c/f1e251be8)
--  Allow server variables that represent lists to be emptied by setting the value to NULL (Tom Lane) [&sect;](https://postgr.es/c/ff4597acd)
--  Update GB18030 encoding from version 2000 to 2022 (Chao Li, Zheng Tao) [&sect;](https://postgr.es/c/5334620ee)
+
+   This allows database-level operations to complete more quickly since blocking background workers can now be terminated.
+-  Allow [server variables](../../server-administration/server-configuration/setting-parameters.md#config-setting) that represent lists to be emptied by setting the value to `NULL` (Tom Lane) [&sect;](https://postgr.es/c/ff4597acd)
+-  Update [GB18030 encoding](../../server-administration/localization/character-set-support.md#multibyte-charset-supported) from version 2000 to 2022 (Chao Li, Zheng Tao) [&sect;](https://postgr.es/c/5334620ee)
 
    See the commit message for compatibility details.
   <a id="release-19-replication"></a>
 
-##### Streaming Replication and Recovery
+##### [Streaming Replication and Recovery]
 
 
--  Allow standbys to wait for LSN values to be replayed via WAIT FOR (Kartyshov Ivan, Alexander Korotkov, Xuneng Zhou) [&sect;](https://postgr.es/c/447aae13b) [&sect;](https://postgr.es/c/49a181b5d)
--  Improve function pg_sync_replication_slots() to wait for the synchronization completion (Ajin Cherian, Zhijie Hou) [&sect;](https://postgr.es/c/0d2d4a0ec)
+-  Add [`WAIT`](../../reference/sql-commands/wait.md#sql-wait) command to allow standbys to wait for [LSN](../../server-administration/reliability-and-the-write-ahead-log/wal-internals.md#wal-internals) values to be written, flushed, or replayed (Kartyshov Ivan, Alexander Korotkov, Xuneng Zhou) [&sect;](https://postgr.es/c/447aae13b) [&sect;](https://postgr.es/c/49a181b5d)
+-  Improve function [`pg_sync_replication_slots()`](../../the-sql-language/functions-and-operators/system-administration-functions.md#pg-sync-replication-slots) to wait for replication synchronization completion (Ajin Cherian, Zhijie Hou) [&sect;](https://postgr.es/c/0d2d4a0ec)
 
    Previously, certain synchronization failures would not be reported.
--  Add server variable wal_sender_shutdown_timeout to limit replica synchronization waits during shutdown (Andrey Silitskiy, Hayato Kuroda) [&sect;](https://postgr.es/c/a8f45dee9)
+-  Add server variable [`wal_sender_shutdown_timeout`](../../server-administration/server-configuration/replication.md#guc-wal-sender-shutdown-timeout) to limit replica synchronization waits during shutdown (Andrey Silitskiy, Hayato Kuroda) [&sect;](https://postgr.es/c/a8f45dee9)
 
    By default, senders still wait forever for synchronization.
--  Allow wal_receiver_timeout to be set per subscription and user (Fujii Masao) [&sect;](https://postgr.es/c/8a6af3ad0) [&sect;](https://postgr.es/c/fb80f388f)
-
-   This allows subscriptions to use different wal_receiver_timeout values.
--  Add optional pid parameter to pg_replication_origin_session_setup() to allow parallelization of SQL-level replication solutions (Doruk Yilmaz, Hayato Kuroda) [&sect;](https://postgr.es/c/5b148706c)
   <a id="release-19-logical"></a>
 
 ##### [Logical Replication]
@@ -252,316 +279,275 @@
 
 -  Allow sequence values stored in subscribers to match the publisher (Vignesh C) [&sect;](https://postgr.es/c/f0b3573c3) [&sect;](https://postgr.es/c/5509055d6) [&sect;](https://postgr.es/c/55cefadde)
 
-   This is enabled during CREATE SUBSCRIPTION, ALTER SUBSCRIPTION ... REFRESH PUBLICATION, and ALTER SUBSCRIPTION ... REFRESH SEQUENCES. The latter only updates values, not sequence existence. Function pg_get_sequence_data() allows inspection of sequence synchronization.
--  Allow publications to publish all sequences via the ALL SEQUENCES clause (Vignesh C, Tomas Vondra) [&sect;](https://postgr.es/c/96b378497)
--  Enhance ALTER SUBSCRIPTION on publications to synchronize the existence of sequences on subscribers to match the publisher (Vignesh C) [&sect;](https://postgr.es/c/f0b3573c3)
--  Allow CREATE/ALTER PUBLICATION to exclude some tables using the EXCEPT clause (Vignesh C, Shlok Kyal) [&sect;](https://postgr.es/c/493f8c643) [&sect;](https://postgr.es/c/6b0550c45) [&sect;](https://postgr.es/c/fd366065e) [&sect;](https://postgr.es/c/5984ea868)
+   This occurs during [`ALTER SUBSCRIPTION ... [ADD|SET|REFRESH|DROP] PUBLICATION`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription). Function [`pg_get_sequence_data()`](../../the-sql-language/functions-and-operators/sequence-manipulation-functions.md#func-pg-get-sequence-data) allows inspection of sequence synchronization.
+-  Allow [`CREATE`](../../reference/sql-commands/create-publication.md#sql-createpublication)/[`ALTER PUBLICATION`](../../reference/sql-commands/alter-publication.md#sql-alterpublication) to publish all sequences (Vignesh C, Tomas Vondra) [&sect;](https://postgr.es/c/96b378497)
 
-   This is useful when specifying ALL TABLES.
--  Allow CREATE SUBSCRIPTION to use postgres_fdw foreign data wrapper connection parameters (Jeff Davis) [&sect;](https://postgr.es/c/8185bb534)
+   This is enabled with the `ALL SEQUENCES` clause.
+-  Allow [`ALTER SUBSCRIPTION`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription) on publications to synchronize the existence of sequences on subscribers to match the publisher (Vignesh C) [&sect;](https://postgr.es/c/f0b3573c3)
 
-   The connection parameters are referenced via CREATE SUBSCRIPTION ... SERVER.
--  When server variable wal_level is "replica", allow the automatic enablement of logical replication when needed (Masahiko Sawada) [&sect;](https://postgr.es/c/67c20979c)
+   This is enabled with the `REFRESH SEQUENCES` clause.
+-  Allow [`CREATE`](../../reference/sql-commands/create-publication.md#sql-createpublication)/[`ALTER PUBLICATION`](../../reference/sql-commands/alter-publication.md#sql-alterpublication) to exclude some tables (Vignesh C, Shlok Kyal) [&sect;](https://postgr.es/c/493f8c643) [&sect;](https://postgr.es/c/6b0550c45) [&sect;](https://postgr.es/c/fd366065e) [&sect;](https://postgr.es/c/5984ea868)
 
-   New server variable effective_wal_level reports the effective WAL level.
--  Add logical subscriber setting retain_conflict_info to retain information needed for conflict resolution (Zhijie Hou) [&sect;](https://postgr.es/c/228c37086)
--  Report cases where an update is applied to a row that was already deleted on a subscriber (Zhijie Hou) [&sect;](https://postgr.es/c/fd5a1a0c3)
+   This is controlled with the `EXCEPT` clause, and is useful when specifying `ALL TABLES`.
+-  Add [`CREATE`](../../reference/sql-commands/create-subscription.md#sql-createsubscription)/[`ALTER SUBSCRIPTION`](../../reference/sql-commands/alter-subscription.md#sql-altersubscription) setting [`retain_dead_tuples`](../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-with-retain-dead-tuples) to retain information needed for conflict detection (Zhijie Hou) [&sect;](https://postgr.es/c/228c37086) [&sect;](https://postgr.es/c/0d48d393d) [&sect;](https://postgr.es/c/a850be2fe)
 
-   This requires the subscriber have retain_dead_tuples enabled.
--  Re-enable retain_dead_tuples when the necessary transaction retention falls below max_retention_duration (Zhijie Hou) [&sect;](https://postgr.es/c/0d48d393d)
--  Add subscription option max_retention_duration to limit retain_dead_tuples retention (Zhijie Hou) [&sect;](https://postgr.es/c/a850be2fe)
+   Also add setting [`max_retention_duration`](../../reference/sql-commands/create-subscription.md#sql-createsubscription-params-with-max-retention-duration) to limit `retain_dead_tuples` retention.
+-  Allow [`CREATE SUBSCRIPTION`](../../reference/sql-commands/create-subscription.md#sql-createsubscription) to use [postgres_fdw](../additional-supplied-modules-and-extensions/postgres_fdw-access-data-stored-in-external-postgresql-servers.md#postgres-fdw) foreign data wrapper connection parameters (Jeff Davis) [&sect;](https://postgr.es/c/8185bb534)
 
-   When the limit is reached, dead tuple retention until manually re-enabled or a new subscription is created.
--  Add column pg_stat_subscription_stats.sync_seq_error_count to report sequence synchronization errors (Vignesh C) [&sect;](https://postgr.es/c/f6a4c498d) [&sect;](https://postgr.es/c/3edaf29fa)
--  Rename column sync_error_count to sync_table_error_count in system view pg_stat_subscription_stats (Vignesh C) [&sect;](https://postgr.es/c/3edaf29fa)
+   The connection parameters are referenced via [`CREATE SUBSCRIPTION ... SERVER`](../../reference/sql-commands/create-subscription.md#sql-createsubscription).
+-  When server variable [`wal_level`](../../server-administration/server-configuration/write-ahead-log.md#guc-wal-level) is `replica`, allow automatic enablement of logical replication when needed (Masahiko Sawada) [&sect;](https://postgr.es/c/67c20979c)
 
-   This is necessary since sequences errors are now also tracked.
--  Add slot synchronization skip information to pg_stat_replication_slots (Shlok Kyal) [&sect;](https://postgr.es/c/76b78721c) [&sect;](https://postgr.es/c/e68b6adad) [&sect;](https://postgr.es/c/5db6a344a)
+   New server variable [`effective_wal_level`](../../server-administration/server-configuration/preset-options.md#guc-effective-wal-level), application [pg_controldata](../../reference/postgresql-server-applications/pg_controldata.md#app-pgcontroldata), and function [`pg_control_checkpoint()`](../../the-sql-language/functions-and-operators/system-information-functions-and-operators.md#functions-pg-control-checkpoint) report the effective WAL level.
+-  Allow [`wal_receiver_timeout`](../../server-administration/server-configuration/replication.md#guc-wal-receiver-timeout) to be set per-subscription and user (Fujii Masao) [&sect;](https://postgr.es/c/8a6af3ad0) [&sect;](https://postgr.es/c/fb80f388f)
 
-   The new columns are slotsync_skip_count, slotsync_last_skip, and slotsync_skip_reason.
+   This allows subscribers to use different [`wal_receiver_timeout`](../../server-administration/server-configuration/replication.md#guc-wal-receiver-timeout) values.
+-  Add optional pid parameter to [`pg_replication_origin_session_setup()`](../../the-sql-language/functions-and-operators/system-administration-functions.md#pg-replication-origin-session-setup) to allow parallelization of SQL-level replication solutions (Doruk Yilmaz, Hayato Kuroda) [&sect;](https://postgr.es/c/5b148706c)
    <a id="release-19-query"></a>
 
 #### Query Commands
 
 
--  Add support for SQL Property Graph Queries (SQL/PGQ) (Peter Eisentraut, Ashutosh Bapat) [&sect;](https://postgr.es/c/2f094e7ac) [&sect;](https://postgr.es/c/c5b3253b8) [&sect;](https://postgr.es/c/a0dd0702e)
+-  Allow `GROUP BY` to process target list subqueries that have expressions referencing non-subquery columns (Tom Lane) [&sect;](https://postgr.es/c/415100aa6)
 
-   Internally these are processed like views so are written as standard relational queries.
--  Add UPDATE/DELETE FOR PORTION OF (Paul A. Jungwirth) [&sect;](https://postgr.es/c/8e72d914c) [&sect;](https://postgr.es/c/b6ccd30d8)
+   Also fix a bug in how [`GROUPING()`](../../the-sql-language/functions-and-operators/aggregate-functions.md#functions-grouping-table) handles target list subquery aliases.
+-  Allow [window functions](../../the-sql-language/functions-and-operators/window-functions.md#functions-window) to ignore NULLs with the `IGNORE NULLS`/`RESPECT NULLS` clause (Oliver Ford, Tatsuo Ishii) [&sect;](https://postgr.es/c/25a30bbd4)
 
-   This allows operations on a temporal range.
--  Add GROUP BY ALL syntax to automatically group all non-aggregate and non-window function target list parameters (David Christensen) [&sect;](https://postgr.es/c/ef38a4d97)
--  Allow GROUP BY to process target list subqueries that have expressions referencing non-subquery columns (Tom Lane) [&sect;](https://postgr.es/c/415100aa6)
+   Supported window functions are `lead()`, `lag()`, `first_value()`, `last_value()`, and `nth_value()`.
+-  Add support for [`INSERT ... ON CONFLICT DO SELECT ... RETURNING`](../../reference/sql-commands/insert.md#sql-insert) (Andreas Karlsson, Marko Tiikkaja, Viktor Holmberg) [&sect;](https://postgr.es/c/88327092f)
 
-   Also fix a bug in how GROUPING() handles target list subquery aliases.
--  Allow window functions to ignore NULLs with IGNORE NULLS/RESPECT NULLS option (Oliver Ford, Tatsuo Ishii) [&sect;](https://postgr.es/c/25a30bbd4)
-
-   Supported window functions are lead, lag, first_value, last_value and nth_value.
--  Add support for INSERT ... ON CONFLICT DO SELECT ... RETURNING (Andreas Karlsson, Marko Tiikkaja, Viktor Holmberg) [&sect;](https://postgr.es/c/88327092f)
-
-   This allows conflicting rows to be returned, and optionally locked with FOR UPDATE/SHARE.
+   This allows conflicting rows to be returned, and optionally locked with `FOR UPDATE`/`SHARE`.
   <a id="release-19-utility"></a>
 
 #### Utility Commands
 
 
--  Create a REPACK command that replaces VACUUM FULL and CLUSTER (Antonin Houska) [&sect;](https://postgr.es/c/ac58465e0)
+-  Add [`REPACK`](../../reference/sql-commands/repack.md#sql-repack) command which replaces [`VACUUM FULL`](../../reference/sql-commands/vacuum.md#sql-vacuum) and [`CLUSTER`](../../reference/sql-commands/cluster.md#sql-cluster) (Antonin Houska) [&sect;](https://postgr.es/c/ac58465e0)
 
-   The two former commands did similar things, but with confusing names, so unify them as REPACK.
--  Allow REPACK to rebuild tables without access-exclusive locking (Antonin Houska, Mihail Nikalayeu, Álvaro Herrera) [&sect;](https://postgr.es/c/28d534e2a) [&sect;](https://postgr.es/c/8fb95a8ab) [&sect;](https://postgr.es/c/e76d8c749)
+   The two former commands did similar things, but with confusing names, so unify them as [`REPACK`](../../reference/sql-commands/repack.md#sql-repack). The old commands have been retained for compatibility.
+-  Allow [`REPACK`](../../reference/sql-commands/repack.md#sql-repack) to rebuild tables without access-exclusive locking (Antonin Houska, Mihail Nikalayeu, Álvaro Herrera) [&sect;](https://postgr.es/c/28d534e2a) [&sect;](https://postgr.es/c/8fb95a8ab) [&sect;](https://postgr.es/c/e76d8c749)
 
-   This is enabled via the CONCURRENTLY option. Server variables max_repack_replication_slots was also added.
--  Allow partitions to be merged and split using ALTER TABLE ... MERGE/SPLIT PARTITIONS (Dmitry Koval, Alexander Korotkov, Tender Wang, Richard Guo, Dagfinn Ilmari Mannsåker, Fujii Masao, Jian He) [&sect;](https://postgr.es/c/f2e4cc427) [&sect;](https://postgr.es/c/4b3d17362)
--  Allow GRANT/REVOKE to specify the effective role performing the privileges adjustment (Nathan Bossart, Tom Lane) [&sect;](https://postgr.es/c/dd1398f13)
+   This is enabled via the `CONCURRENTLY` option. Server variable [`max_repack_replication_slots`](../../server-administration/server-configuration/replication.md#guc-max-repack-replication-slots) was also added.
+-  Allow [`GRANT`](../../reference/sql-commands/grant.md#sql-grant)/[`REVOKE`](../../reference/sql-commands/revoke.md#sql-revoke) to specify the effective role performing the privileges adjustment (Nathan Bossart, Tom Lane) [&sect;](https://postgr.es/c/dd1398f13)
 
-   The GRANTED BY clause controls this.
--  Allow CREATE SCHEMA to create more types of non-schema objects (Kirill Reshke, Jian He, Tom Lane) [&sect;](https://postgr.es/c/d51697484)
--  Allow CHECKPOINT to accept a list of options (Christoph Berg) [&sect;](https://postgr.es/c/a4f126516) [&sect;](https://postgr.es/c/2f698d7f4) [&sect;](https://postgr.es/c/8d33fbacb)
+   The `GRANTED BY` clause controls this.
+-  Support forward references in `FOREIGN KEY` constraint clauses within [`CREATE SCHEMA`](../../reference/sql-commands/create-schema.md#sql-createschema) (Jian He, Tom Lane) [&sect;](https://postgr.es/c/404db8f9e)
+-  Allow [`CHECKPOINT`](../../reference/sql-commands/checkpoint.md#sql-checkpoint) to accept a list of options (Christoph Berg) [&sect;](https://postgr.es/c/a4f126516) [&sect;](https://postgr.es/c/2f698d7f4) [&sect;](https://postgr.es/c/8d33fbacb)
 
-   Supported options are MODE and FLUSH_UNLOGGED.
--  Add CONNECTION clause to CREATE FOREIGN DATA WRAPPER to specify a function to be called for subscription connection parameters (Jeff Davis, Noriyoshi Shinoda) [&sect;](https://postgr.es/c/8185bb534) [&sect;](https://postgr.es/c/90630ec42)
--  Add memory usage and parallelism reporting to VACUUM (VERBOSE) and autovacuum logs (Tatsuya Kawata, Daniil Davydov) [&sect;](https://postgr.es/c/736f754ee) [&sect;](https://postgr.es/c/adcdbe938)
+   Supported options are `MODE` and `FLUSH_UNLOGGED`.
+-  Add `CONNECTION` clause to [`CREATE FOREIGN DATA WRAPPER`](../../reference/sql-commands/create-foreign-data-wrapper.md#sql-createforeigndatawrapper) to specify a function to be called for subscription connection parameters (Jeff Davis, Noriyoshi Shinoda) [&sect;](https://postgr.es/c/8185bb534) [&sect;](https://postgr.es/c/90630ec42)
+-  Add `SUPPORT` clause to [`CREATE AGGREGATE`](../../reference/sql-commands/create-aggregate.md#sql-createaggregate) so extensions can specify support functions to optimize aggregate calls (Tom Lane) [&sect;](https://postgr.es/c/165aa5040)
+-  Add memory usage and parallelism reporting to [`VACUUM (VERBOSE)`](../../reference/sql-commands/vacuum.md#sql-vacuum) and [autovacuum](../../server-administration/routine-database-maintenance-tasks/routine-vacuuming.md#autovacuum) logs (Tatsuya Kawata, Daniil Davydov) [&sect;](https://postgr.es/c/736f754ee) [&sect;](https://postgr.es/c/adcdbe938)
  <a id="release-19-constraints"></a>
 
 ##### [Constraints]
 
 
--  Allow ALTER TABLE ALTER CONSTRAINT ... [NOT] ENFORCED for CHECK constraints (Jian He) [&sect;](https://postgr.es/c/342051d73)
+-  Allow [`ALTER TABLE ALTER CONSTRAINT ... [NOT] ENFORCED`](../../reference/sql-commands/alter-table.md#sql-altertable) for `CHECK` constraints (Jian He) [&sect;](https://postgr.es/c/342051d73)
 
    Previously enforcement changes were only supported for foreign key constraints.
--  Allow ALTER COLUMN SET EXPRESSION to succeed on virtual columns with CHECK constraints (Jian He) [&sect;](https://postgr.es/c/f80bedd52)
+-  Allow [`ALTER TABLE ... COLUMN SET EXPRESSION`](../../reference/sql-commands/alter-table.md#sql-altertable) to succeed on virtual columns with `CHECK` constraints (Jian He) [&sect;](https://postgr.es/c/f80bedd52)
 
    This was previously prohibited.
--  Reduce lock level of ALTER DOMAIN ... VALIDATE CONSTRAINT to match ALTER TABLE ... VALIDATE CONSTRAINT (Jian He) [&sect;](https://postgr.es/c/16a0039dc)
   <a id="release-19-copy"></a>
 
 ##### [sql-copy]
 
 
--  Allow multiple headers lines be skipped by COPY FROM (Shinya Kato, Fujii Masao) [&sect;](https://postgr.es/c/bc2f348e8)
+-  Allow multiple headers lines to be skipped by [`COPY FROM`](../../reference/sql-commands/copy.md#sql-copy) (Shinya Kato, Fujii Masao) [&sect;](https://postgr.es/c/bc2f348e8)
 
    Previously only a single header line could be skipped.
--  Allow COPY FROM to set invalid input values to NULL (Jian He, Kirill Reshke) [&sect;](https://postgr.es/c/2a525cc97)
+-  Allow [`COPY FROM`](../../reference/sql-commands/copy.md#sql-copy) to set invalid input values to `NULL` (Jian He, Kirill Reshke) [&sect;](https://postgr.es/c/2a525cc97)
 
-   This is done using the COPY option ON_ERROR SET_NULL.
--  Allow COPY TO to output JSON format (Joe Conway, Jian He, Andrew Dunstan) [&sect;](https://postgr.es/c/7dadd38cd)
--  Allow COPY TO in JSON format to output its results as a single JSON array (Joe Conway, Jian He) [&sect;](https://postgr.es/c/4c0390ac5)
+   This is done using the [`COPY`](../../reference/sql-commands/copy.md#sql-copy) option `ON_ERROR SET_NULL`.
+-  Allow [`COPY TO`](../../reference/sql-commands/copy.md#sql-copy) to output JSON format (Joe Conway, Jian He, Andrew Dunstan) [&sect;](https://postgr.es/c/7dadd38cd) [&sect;](https://postgr.es/c/4c0390ac5)
 
-   The COPY option is FORCE_ARRAY.
--  Allow COPY TO to output partitioned tables (Jian He, Ajin Cherian) [&sect;](https://postgr.es/c/4bea91f21) [&sect;](https://postgr.es/c/266543a62)
+   JSON output can also be a single JSON array using the [`COPY`](../../reference/sql-commands/copy.md#sql-copy) option `FORCE_ARRAY`.
+-  Allow [`COPY TO`](../../reference/sql-commands/copy.md#sql-copy) to process partitioned tables (Jian He, Ajin Cherian) [&sect;](https://postgr.es/c/4bea91f21) [&sect;](https://postgr.es/c/266543a62)
 
-   Previously COPY (SELECT ...) had to be used to output partitioned tables. This also improves logical replication table synchronization.
+   Previously [`COPY (SELECT ...)`](../../reference/sql-commands/copy.md#sql-copy) had to be used to output partitioned tables. This also improves logical replication table synchronization.
   <a id="release-19-explain"></a>
 
 ##### [sql-explain]
 
 
--  Add EXPLAIN ANALYZE option IO to report asynchronous IO activity (Tomas Vondra) [&sect;](https://postgr.es/c/681daed93) [&sect;](https://postgr.es/c/3b1117d6e) [&sect;](https://postgr.es/c/e157fe6f7)
--  Add WAL full page write bytes reporting to EXPLAIN (ANALYZE, WAL) (Shinya Kato) [&sect;](https://postgr.es/c/5ab0b6a24)
--  Add Memoize cache and lookup estimates to EXPLAIN output (Ilia Evdokimov, Lukas Fittl) [&sect;](https://postgr.es/c/4bc62b868)
+-  Add [`EXPLAIN ANALYZE`](../../reference/sql-commands/explain.md#sql-explain) option `IO` to report asynchronous IO activity (Tomas Vondra) [&sect;](https://postgr.es/c/681daed93) [&sect;](https://postgr.es/c/3b1117d6e) [&sect;](https://postgr.es/c/e157fe6f7)
+-  Add reporting of WAL [full-page write](../../server-administration/server-configuration/write-ahead-log.md#guc-full-page-writes) bytes to [`EXPLAIN (ANALYZE, WAL)`](../../reference/sql-commands/explain.md#sql-explain) output (Shinya Kato) [&sect;](https://postgr.es/c/5ab0b6a24)
+-  Add Memoize cache and lookup estimates to [`EXPLAIN`](../../reference/sql-commands/explain.md#sql-explain) output (Ilia Evdokimov, Lukas Fittl) [&sect;](https://postgr.es/c/4bc62b868)
 
-   This will help illustrate why Memoize was chosen.
+   This can show why Memoize was chosen.
    <a id="release-19-datatypes"></a>
 
 #### Data Types
 
 
--  Add the 64-bit unsigned data type oid8 (Michael Paquier) [&sect;](https://postgr.es/c/b139bd3b6)
--  Add more jsonpath string methods (Florents Tselai, David E. Wheeler) [&sect;](https://postgr.es/c/bd4f879a9)
+-  Add the 64-bit unsigned data type [`oid8`](../../the-sql-language/data-types/object-identifier-types.md#datatype-oid) (Michael Paquier) [&sect;](https://postgr.es/c/b139bd3b6)
+-  Add more [`jsonpath`](../../the-sql-language/data-types/json-types.md#datatype-jsonpath) string methods (Florents Tselai, David E. Wheeler) [&sect;](https://postgr.es/c/bd4f879a9)
 
-   They are l/r/btrim(), lower(), upper(), initcap(), replace(), and split_part(). These are immutable like their non-JSON string variants.
--  Allow casts between bytea and uuid data types (Dagfinn Ilmari Mannsåker, Aleksander Alekseev) [&sect;](https://postgr.es/c/ba21f5bf8)
--  Add ability to cast between database names and oids using regdatabase (Ian Lawrence Barwick) [&sect;](https://postgr.es/c/bd09f024a)
--  Add functions tid_block() and tid_offset() to extract block numbers and offsets from tid values (Ayush Tiwari) [&sect;](https://postgr.es/c/df6949ccf)
+   They are [`ltrim()`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-sqljson-path-operators), [`rtrim()`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-sqljson-path-operators), [`btrim()`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-sqljson-path-operators), [`lower()`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-sqljson-path-operators), [`upper()`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-sqljson-path-operators), [`initcap()`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-sqljson-path-operators), [`replace()`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-sqljson-path-operators), and [`split_part()`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-sqljson-path-operators). These are immutable like their non-JSON string variants.
+-  Allow casts between [`bytea`](../../the-sql-language/data-types/binary-data-types.md#datatype-binary) and [`uuid`](../../the-sql-language/data-types/uuid-type.md#datatype-uuid) data types (Dagfinn Ilmari Mannsåker, Aleksander Alekseev) [&sect;](https://postgr.es/c/ba21f5bf8)
+-  Add ability to cast between database names and [`oid`](../../the-sql-language/data-types/object-identifier-types.md#datatype-oid)s using [`regdatabase`](../../the-sql-language/data-types/object-identifier-types.md#datatype-oid) (Ian Lawrence Barwick) [&sect;](https://postgr.es/c/bd09f024a)
+-  Add functions [`tid_block()`](../../the-sql-language/functions-and-operators/tid-functions.md#functions-tid) and [`tid_offset()`](../../the-sql-language/functions-and-operators/tid-functions.md#functions-tid) to extract block numbers and offsets from [`tid`](../../the-sql-language/data-types/object-identifier-types.md#datatype-oid) values (Ayush Tiwari) [&sect;](https://postgr.es/c/df6949ccf)
   <a id="release-19-functions"></a>
 
 #### Functions
 
 
--  Add date, timestamp, and timestamptz versions of random(min, max) (Damien Clochard, Dean Rasheed) [&sect;](https://postgr.es/c/faf071b55) [&sect;](https://postgr.es/c/9c24111c4)
--  Allow encode() and decode() to process data in base64url and base32hex formats (Andrey Borodin, Aleksander Alekseev, Florents Tselai) [&sect;](https://postgr.es/c/497c1170c) [&sect;](https://postgr.es/c/e752a2ccc) [&sect;](https://postgr.es/c/e1d917182)
+-  Add [`date`](../../the-sql-language/data-types/date-time-types.md#datatype-datetime), [`timestamp`](../../the-sql-language/data-types/date-time-types.md#datatype-datetime), and [`timestamptz`](../../the-sql-language/data-types/date-time-types.md#datatype-datetime) versions of [`random(min, max)`](../../the-sql-language/functions-and-operators/mathematical-functions-and-operators.md#functions-math-random-table) (Damien Clochard, Dean Rasheed) [&sect;](https://postgr.es/c/faf071b55) [&sect;](https://postgr.es/c/9c24111c4)
+-  Allow [`encode()`](../../the-sql-language/functions-and-operators/binary-string-functions-and-operators.md#functions-binarystring-conversions) and [`decode()`](../../the-sql-language/functions-and-operators/binary-string-functions-and-operators.md#functions-binarystring-conversions) to process data in `base64url` and `base32hex` formats (Andrey Borodin, Aleksander Alekseev, Florents Tselai) [&sect;](https://postgr.es/c/497c1170c) [&sect;](https://postgr.es/c/e752a2ccc) [&sect;](https://postgr.es/c/e1d917182)
 
-   This format retains ordering, unlike base32.
+   This format retains ordering, unlike `base32`.
 -  Add functions to return a set of ranges resulting from range subtraction (Paul A. Jungwirth) [&sect;](https://postgr.es/c/5eed8ce50)
 
-   The functions are range_minus_multi() and multirange_minus_multi(). This is useful to represent range subtractions results with gaps.
--  Add function error_on_null() to return the supplied parameter, or error on NULL input (Joel Jacobson) [&sect;](https://postgr.es/c/2b75c38b7)
--  Allow IS JSON to work on domains defined over supported base types (Jian He) [&sect;](https://postgr.es/c/3b4c2b9db)
+   The functions are [`range_minus_multi()`](../../the-sql-language/functions-and-operators/range-multirange-functions-and-operators.md#range-functions-table) and [`multirange_minus_multi()`](../../the-sql-language/functions-and-operators/range-multirange-functions-and-operators.md#multirange-functions-table). This is useful to represent range subtraction results with gaps.
+-  Add function [`error_on_null()`](../../the-sql-language/functions-and-operators/comparison-functions-and-operators.md#functions-comparison-func-table) to return the supplied parameter, or error on `NULL` input (Joel Jacobson) [&sect;](https://postgr.es/c/2b75c38b7)
+-  Allow [`IS JSON`](../../the-sql-language/functions-and-operators/json-functions-and-operators.md#functions-sqljson-misc) to work on domains defined over supported base types (Jian He) [&sect;](https://postgr.es/c/3b4c2b9db)
 
-   The supported base domains are TEXT, JSON, JSONB, and BYTEA.
--  Add full text stemmers for Polish and Esperanto (Tom Lane) [&sect;](https://postgr.es/c/7dc95cc3b)
+   The supported base types are [`TEXT`](../../the-sql-language/data-types/character-types.md#datatype-character), [`JSON`](../../the-sql-language/data-types/json-types.md#datatype-json), [`JSONB`](../../the-sql-language/data-types/json-types.md#datatype-json), and [`BYTEA`](../../the-sql-language/data-types/binary-data-types.md#datatype-binary).
+-  Add [full text stemmers](../../the-sql-language/full-text-search/dictionaries.md#textsearch-snowball-dictionary) for Polish and Esperanto (Tom Lane) [&sect;](https://postgr.es/c/7dc95cc3b)
 
-   The Dutch stemmer has also been updated. The old Dutch stemmer is available via "dutch_porter".
--  Modify pg_read_all_data() and pg_write_all_data() to read/write large objects (Nitin Motiani, Nathan Bossart) [&sect;](https://postgr.es/c/d98197602)
+   The Dutch stemmer now uses a different algorithm, which changes the stems of many words; the previous algorithm is available via [`dutch_porter`](../../the-sql-language/full-text-search/dictionaries.md#textsearch-snowball-dictionary).
 
-   These functions are designed to allow non-super users to run pg_dump.
--  Add function pg_get_role_ddl() to output role creation commands (Mario Gonzalez, Bryan Green, Andrew Dunstan, Euler Taveira) [&sect;](https://postgr.es/c/76e514ebb)
--  Add function pg_get_tablespace_ddl() to output tablespace creation commands (Nishant Sharma, Manni Wood, Andrew Dunstan, Euler Taveira) [&sect;](https://postgr.es/c/b99fd9fd7)
--  Add function pg_get_database_ddl() to output database creation commands (Akshay Joshi, Andrew Dunstan, Euler Taveira) [&sect;](https://postgr.es/c/a4f774cf1)
--  Allow event triggers to be written using PL/Python (Euler Taveira, Dimitri Fontaine) [&sect;](https://postgr.es/c/53eff471c)
+   The English, French, German, Lithuanian, Norwegian, Spanish, Swedish, and Turkish stemmers have also been updated and produce different stems for some words.
+-  Allow event triggers to be written using [PL/Python](../../server-programming/pl-python-python-procedural-language/index.md#plpython) (Euler Taveira, Dimitri Fontaine) [&sect;](https://postgr.es/c/53eff471c)
   <a id="release-19-libpq"></a>
 
 #### [Libpq]
 
 
--  Allow libpq connections to specify a service file via "servicefile" (Torsten Förtsch, Ryo Kanbayashi) [&sect;](https://postgr.es/c/092f3c63e)
--  Add special libpq protocol version 3.9999 for version testing (Jelte Fennema-Nio) [&sect;](https://postgr.es/c/d8d7c5dc8)
--  Add libpq function PQgetThreadLock() to retrieve the current locking callback (Jacob Champion) [&sect;](https://postgr.es/c/b8d768583)
--  Add libpq connection setting oauth_ca_file to specify the OAUTH certificate authority file (Jonathan Gonzalez V., Jacob Champion) [&sect;](https://postgr.es/c/993368113)
+-  Add special libpq protocol parameters for compatibility testing (Jelte Fennema-Nio, Jacob Champion) [&sect;](https://postgr.es/c/d8d7c5dc8)
 
-   This can also be set via the PGOAUTHCAFILE environment variable. The default is to use curl's built-in certificates.
--  Allow custom OAUTH validators to register custom pg_hba.conf authentication options (Jacob Champion) [&sect;](https://postgr.es/c/b977bd308)
--  Allow OAUTH validators to supply failure details (Jacob Champion) [&sect;](https://postgr.es/c/d438a3659)
+   Otherwise known as [protocol grease](https://wiki.postgresql.org/wiki/Grease), which was active during the 19 beta period. These will no longer be sent as of the PostgreSQL 19 official release, but the parameter reservations will remain for potential use in the future.
+-  Add libpq connection parameter [`oauth_ca_file`](../../client-interfaces/libpq-c-library/database-connection-control-functions.md#libpq-connect-oauth-ca-file) to specify an alternate certificate authority when communicating with OAuth providers (Jonathan Gonzalez V., Jacob Champion) [&sect;](https://postgr.es/c/993368113)
 
-   This is done by setting the ValidatorModuleResult structure member error_detail.
--  Allow libpq environment variable PGOAUTHDEBUG to specify specific debug options (Zsolt Parragi, Jacob Champion) [&sect;](https://postgr.es/c/6d00fb904)
+   This can also be set via the [`PGOAUTHCAFILE`](../../client-interfaces/libpq-c-library/environment-variables.md#libpq-envars) environment variable. The default is to use curl's built-in certificates.
+-  Allow libpq environment variable [`PGOAUTHDEBUG`](../../client-interfaces/libpq-c-library/environment-variables.md#libpq-envars) to specify particular debug options (Zsolt Parragi, Jacob Champion) [&sect;](https://postgr.es/c/6d00fb904)
 
-   The UNSAFE option still generates all debugging output.
+   The `UNSAFE` option still generates all debugging output.
+-  Improve custom OAuth client flows (Jacob Champion) [&sect;](https://postgr.es/c/e982331b5) [&sect;](https://postgr.es/c/0af4d402c)
+
+   Previously, libpq reported only a generic error message during custom flow failures, and each flow implementation was required to calculate the issuer identifier independently. Add a new authdata hook type [`PQAUTHDATA_OAUTH_BEARER_TOKEN_V2`](../../client-interfaces/libpq-c-library/oauth-support.md#libpq-oauth-authdata-oauth-bearer-token-v2) that precomputes the issuer ID and lets hooks provide error details.
+-  Add libpq function [`PQgetThreadLock()`](../../client-interfaces/libpq-c-library/behavior-in-threaded-programs.md#libpq-threading) to retrieve the current locking callback (Jacob Champion) [&sect;](https://postgr.es/c/b8d768583)
   <a id="release-19-psql"></a>
 
 #### [app-psql]
 
 
--  Allow the search path to appear in the psql prompt via "%S" (Florents Tselai) [&sect;](https://postgr.es/c/b3ce55f41)
+-  Allow the search path to appear in the [psql](../../reference/postgresql-client-applications/psql.md#app-psql) prompt via [`%S`](../../reference/postgresql-client-applications/psql.md#app-psql-prompting-S) (Florents Tselai) [&sect;](https://postgr.es/c/b3ce55f41)
 
-   This works when psql is connected to Postgres 18 or later.
--  Allow the hot standby status to appear in the psql prompt via "%i" (Jim Jones) [&sect;](https://postgr.es/c/dddbbc253)
--  Modify psql backslash commands to show comments for publications, subscriptions, and extended statistics (Fujii Masao, Jim Jones) [&sect;](https://postgr.es/c/aecc55866)
+   This works when [psql](../../reference/postgresql-client-applications/psql.md#app-psql) is connected to PostgreSQL 18 or later.
+-  Allow the hot standby status to appear in the [psql](../../reference/postgresql-client-applications/psql.md#app-psql) prompt via [`%i`](../../reference/postgresql-client-applications/psql.md#app-psql-prompting-i) (Jim Jones) [&sect;](https://postgr.es/c/dddbbc253)
+-  Modify [psql](../../reference/postgresql-client-applications/psql.md#app-psql) backslash commands to show comments for publications, subscriptions, and extended statistics (Fujii Masao, Jim Jones) [&sect;](https://postgr.es/c/aecc55866)
 
-   The modified commands are \dRp+, \dRs+, and \dX+.
--  Allow control over how booleans are displayed in psql (David G. Johnston) [&sect;](https://postgr.es/c/645cb44c5)
+   The modified commands are [`\dRp+`](../../reference/postgresql-client-applications/psql.md#app-psql-meta-command-drp), [`\dRs+`](../../reference/postgresql-client-applications/psql.md#app-psql-meta-command-drs), and [`\dX+`](../../reference/postgresql-client-applications/psql.md#app-psql-meta-command-dx-uc).
+-  Allow control over how booleans are displayed in [psql](../../reference/postgresql-client-applications/psql.md#app-psql) (David G. Johnston) [&sect;](https://postgr.es/c/645cb44c5)
 
-   The \pset variables are display_true and display_false.
--  Add psql variable SERVICEFILE to reference the service file location (Ryo Kanbayashi) [&sect;](https://postgr.es/c/6b1c4d326)
--  Allow psql to more accurately determine if the pager is needed (Erik Wienhold) [&sect;](https://postgr.es/c/27da1a796)
--  Add or improve psql tab completion (Yamaguchi Atsuo, Yugo Nagata, Haruna Miwa, Xuneng Zhou, Yugo Nagata, Dagfinn Ilmari Mannsåker, Fujii Masao, Álvaro Herrera, Jian He, Fujii Masao, Tatsuya Kawata, Ian Lawrence Barwick, Vasuki M) [&sect;](https://postgr.es/c/5fa7837d9) [&sect;](https://postgr.es/c/c6a7d3bab) [&sect;](https://postgr.es/c/81966c545) [&sect;](https://postgr.es/c/a1f7f91be) [&sect;](https://postgr.es/c/6d2ff1de4) [&sect;](https://postgr.es/c/02fd47dbf) [&sect;](https://postgr.es/c/14ee8e640) [&sect;](https://postgr.es/c/ff0bcb248) [&sect;](https://postgr.es/c/86c539c5a) [&sect;](https://postgr.es/c/a604affad) [&sect;](https://postgr.es/c/a4c10de92) [&sect;](https://postgr.es/c/28c4b8a05) [&sect;](https://postgr.es/c/0bf7d4ca9) [&sect;](https://postgr.es/c/344b572e3)
+   The \pset variables are [`display_true`](../../reference/postgresql-client-applications/psql.md#app-psql-meta-command-pset-display-true) and [`display_false`](../../reference/postgresql-client-applications/psql.md#app-psql-meta-command-pset-display-false).
+-  Allow [psql](../../reference/postgresql-client-applications/psql.md#app-psql) to more accurately determine if the [pager](../../reference/postgresql-client-applications/psql.md#app-psql-meta-command-pset-pager) is needed (Erik Wienhold) [&sect;](https://postgr.es/c/27da1a796)
+-  Add or improve [psql](../../reference/postgresql-client-applications/psql.md#app-psql) tab completion (Yamaguchi Atsuo, Yugo Nagata, Haruna Miwa, Xuneng Zhou, Dagfinn Ilmari Mannsåker, Fujii Masao, Álvaro Herrera, Jian He, Tatsuya Kawata, Ian Lawrence Barwick, Vasuki M) [&sect;](https://postgr.es/c/5fa7837d9) [&sect;](https://postgr.es/c/c6a7d3bab) [&sect;](https://postgr.es/c/81966c545) [&sect;](https://postgr.es/c/a1f7f91be) [&sect;](https://postgr.es/c/6d2ff1de4) [&sect;](https://postgr.es/c/02fd47dbf) [&sect;](https://postgr.es/c/14ee8e640) [&sect;](https://postgr.es/c/ff0bcb248) [&sect;](https://postgr.es/c/86c539c5a) [&sect;](https://postgr.es/c/a604affad) [&sect;](https://postgr.es/c/a4c10de92) [&sect;](https://postgr.es/c/28c4b8a05) [&sect;](https://postgr.es/c/0bf7d4ca9) [&sect;](https://postgr.es/c/344b572e3)
   <a id="release-19-server-apps"></a>
 
 #### Server Applications
 
 
--  Change vacuumdb's --analyze-only option to analyze partitioned tables when no targets are specified (Laurenz Albe, Mircea Cadariu) [&sect;](https://postgr.es/c/6429e5b77)
+-  Allow [pg_dump](../../reference/postgresql-client-applications/pg_dump.md#app-pgdump) to include restorable extended statistics (Corey Huinker) [&sect;](https://postgr.es/c/c32fb29e9)
+-  Change [vacuumdb](../../reference/postgresql-client-applications/vacuumdb.md#app-vacuumdb)'s `--analyze-only` and `--analyze-in-stages` options to analyze partitioned tables when no targets are specified (Laurenz Albe, Mircea Cadariu, Chao Li) [&sect;](https://postgr.es/c/6429e5b77) [&sect;](https://postgr.es/c/95b6ec52e)
 
-   Previously it skipped partitioned tables. This now matches the behavior of ANALYZE.
--  Allow vacuumdb to report its commands without running them using option --dry-run (Corey Huinker) [&sect;](https://postgr.es/c/d107176d2)
--  Allow pg_verifybackup to read WAL files stored in tar archives (Amul Sul) [&sect;](https://postgr.es/c/b3cf461b3)
+   Previously it skipped partitioned tables. This now matches the behavior of [`ANALYZE`](../../reference/sql-commands/analyze.md#sql-analyze).
+-  Allow [vacuumdb](../../reference/postgresql-client-applications/vacuumdb.md#app-vacuumdb) to report its commands without running them using option `--dry-run` (Corey Huinker) [&sect;](https://postgr.es/c/d107176d2)
+-  Allow [pg_verifybackup](../../reference/postgresql-client-applications/pg_verifybackup.md#app-pgverifybackup) to read WAL files stored in tar archives (Amul Sul) [&sect;](https://postgr.es/c/b3cf461b3)
 
-   Add option --wal-path as an alias for the existing and deprecated --wal-directory option.
--  Allow pg_waldump to read WAL files stored in tar archives (Amul Sul) [&sect;](https://postgr.es/c/b15c15139)
--  Add pgbench option --continue-on-error to continue after SQL errors (Rintaro Ikeda, Yugo Nagata, Fujii Masao) [&sect;](https://postgr.es/c/0ab208fa5)
--  Improve the usability of pg_test_timing (Hannu Krosing, Tom Lane) [&sect;](https://postgr.es/c/0b096e379) [&sect;](https://postgr.es/c/9dcc76414)
+   Add option `--wal-path` as an alias for the existing and deprecated `--wal-directory` option.
+-  Allow [pg_waldump](../../reference/postgresql-server-applications/pg_waldump.md#pgwaldump) to read WAL files stored in tar archives (Amul Sul) [&sect;](https://postgr.es/c/b15c15139)
+-  Improve performance of [pg_upgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade) copying large object metadata (Nathan Bossart) [&sect;](https://postgr.es/c/3bcfcd815) [&sect;](https://postgr.es/c/158408fef) [&sect;](https://postgr.es/c/161a3e8b6) [&sect;](https://postgr.es/c/b33f75361)
 
-   Report nanoseconds instead of microseconds. In addition to histogram output, output a second table that reports exact timings, with an optional cutoff set by --cutoff.
- <a id="release-19-pgdump"></a>
-
-##### [pg_dump]/[pg_dumpall]/[pg_restore]
-
-
--  Allow pg_dumpall to product output in non-text formats (Mahendra Singh Thalor, Andrew Dunstan) [&sect;](https://postgr.es/c/763aaa06f) [&sect;](https://postgr.es/c/3c19983cc)
-
-   The new output formats are custom, directory, or tar.
--  Allow pg_dump to include restorable extended statistics (Corey Huinker) [&sect;](https://postgr.es/c/c32fb29e9)
-  <a id="release-19-pgupgrade"></a>
-
-##### [pgupgrade]
-
-
--  Have pg_upgrade copy large object metadata files rather than use COPY (Nathan Bossart) [&sect;](https://postgr.es/c/3bcfcd815) [&sect;](https://postgr.es/c/158408fef)
-
-   This is possible when upgrading from Postgres 16 and later.
--  Allow pg_upgrade to use COPY for large object metadata (Nathan Bossart) [&sect;](https://postgr.es/c/161a3e8b6)
-
-   This is used when upgrading from Postgres major versions 12-15.
--  Improve pg_upgrade performance when restoring large object metadata for origin servers version 11 and earlier (Nathan Bossart) [&sect;](https://postgr.es/c/b33f75361)
--  Allow pg_upgrade to process non-default tablespaces stored in the PGDATA directory (Nathan Bossart) [&sect;](https://postgr.es/c/412036c22)
+   Various methods are used, depending on the PostgreSQL version of the old cluster.
+-  Allow [pg_upgrade](../../reference/postgresql-server-applications/pg_upgrade.md#pgupgrade) to process non-default tablespaces stored in the `PGDATA` directory (Nathan Bossart) [&sect;](https://postgr.es/c/412036c22)
 
    Previously such tablespaces generated an error.
-  <a id="release-19-logicalrep-app"></a>
+-  Add [pgbench](../../reference/postgresql-client-applications/pgbench.md#pgbench) option `--continue-on-error` to continue after SQL errors (Rintaro Ikeda, Yugo Nagata, Fujii Masao) [&sect;](https://postgr.es/c/0ab208fa5)
+-  Improve the usability of [pg_test_timing](../../reference/postgresql-server-applications/pg_test_timing.md#pgtesttiming) (Hannu Krosing, Tom Lane) [&sect;](https://postgr.es/c/0b096e379) [&sect;](https://postgr.es/c/9dcc76414)
 
-##### Logical Replication Applications
+   Report nanoseconds instead of microseconds. In addition to histogram output, output a second table that reports exact timings, with an optional cutoff set by `--cutoff`.
+ <a id="release-19-pg-createsubscriber"></a>
+
+##### [pg_createsubscriber]
 
 
--  Allow pg_createsubscriber to ignore specified publications that already exist (Shubham Khanna) [&sect;](https://postgr.es/c/85ddcc2f4)
+-  Allow [pg_createsubscriber](../../reference/postgresql-server-applications/pg_createsubscriber.md#app-pgcreatesubscriber) to ignore specified publications that already exist (Shubham Khanna) [&sect;](https://postgr.es/c/85ddcc2f4)
 
    Previously this generated an error.
--  Change the way pg_createsubscriber stores recovery parameters (Alyona Vinter) [&sect;](https://postgr.es/c/639352d90)
+-  Change the way [pg_createsubscriber](../../reference/postgresql-server-applications/pg_createsubscriber.md#app-pgcreatesubscriber) stores recovery parameters (Alyona Vinter) [&sect;](https://postgr.es/c/639352d90)
 
-   Changes are stored in optionally-included pg_createsubscriber.conf rather than directly in postgresql.auto.conf.
--  Add pg_createsubscriber option -l/--logdir to redirect output to files (Gyan Sreejith, Hayato Kuroda) [&sect;](https://postgr.es/c/6b5b7eae3)
+   Changes are stored in optionally-included `pg_createsubscriber.conf` rather than directly in `postgresql.auto.conf`.
+-  Add [pg_createsubscriber](../../reference/postgresql-server-applications/pg_createsubscriber.md#app-pgcreatesubscriber) option `-l`/`--logdir` to redirect output to files (Gyan Sreejith, Hayato Kuroda) [&sect;](https://postgr.es/c/6b5b7eae3)
    <a id="release-19-source-code"></a>
 
 #### Source Code
 
 
--  Restore support for AIX (Aditya Kamath, Srirama Kucherlapati, Peter Eisentraut) [&sect;](https://postgr.es/c/ecae09725) [&sect;](https://postgr.es/c/4a1b05caa)
+-  Restore support for [`AIX`](../../server-administration/installation-from-source-code/platform-specific-notes.md#installation-notes-aix) (Aditya Kamath, Srirama Kucherlapati, Peter Eisentraut) [&sect;](https://postgr.es/c/ecae09725) [&sect;](https://postgr.es/c/4a1b05caa)
 
    This uses gcc and only supports 64-bit builds.
--  Change Solaris to use unnamed POSIX semaphores (Tom Lane) [&sect;](https://postgr.es/c/0123ce131)
+-  Change [`Solaris`](../../server-administration/installation-from-source-code/platform-specific-notes.md#installation-notes-solaris) to use unnamed POSIX semaphores (Tom Lane) [&sect;](https://postgr.es/c/0123ce131)
 
    Previously it used System V semaphores.
--  Require Visual Studio 2019 or later (Peter Eisentraut) [&sect;](https://postgr.es/c/8fd9bb1d9)
--  Allow MSVC to create PL/Python using the Python Limited API (Bryan Green) [&sect;](https://postgr.es/c/2bc60f862)
--  Allow building on AArch64 using MSVC (Niyas Sait, Greg Burd, Dave Cramer) [&sect;](https://postgr.es/c/a516b3f00)
--  Allow execution stack backtraces on Windows using DbgHelp (Bryan Green) [&sect;](https://postgr.es/c/65707ed9a)
+-  Require [Visual Studio 2019](../../server-administration/installation-from-source-code/platform-specific-notes.md#installation-notes-visual-studio) or later (Peter Eisentraut) [&sect;](https://postgr.es/c/8fd9bb1d9)
+-  Allow [MSVC](../../server-administration/installation-from-source-code/platform-specific-notes.md#installation-notes-visual-studio) to create [PL/Python](../../server-programming/pl-python-python-procedural-language/index.md#plpython) using the Python Limited API (Bryan Green) [&sect;](https://postgr.es/c/2bc60f862)
+-  Allow building on AArch64 using [MSVC](../../server-administration/installation-from-source-code/platform-specific-notes.md#installation-notes-visual-studio) (Niyas Sait, Greg Burd, Dave Cramer) [&sect;](https://postgr.es/c/a516b3f00)
+-  Allow execution stack backtraces on [Windows](../../server-administration/installation-from-source-code/platform-specific-notes.md#installation-notes-visual-studio) using `DbgHelp` (Bryan Green) [&sect;](https://postgr.es/c/65707ed9a)
 -  Change the supported C language version to C11 (Peter Eisentraut) [&sect;](https://postgr.es/c/f5e0186f8) [&sect;](https://postgr.es/c/4fbe01514)
 
    Previously C99 was used.
 -  Use standard C23 and C++ attributes if available (Peter Eisentraut) [&sect;](https://postgr.es/c/76f4b92ba)
--  Allow C++ compiler mode to be used with ICU (John Naylor) [&sect;](https://postgr.es/c/ed26c4e25)
--  Optionally use AVX2 CPU instructions for calculating page checksums (Matthew Sterrett, Andrew Kim) [&sect;](https://postgr.es/c/5e13b0f24)
--  Optionally use ARM Crypto Extension to Compute CRC32C (John Naylor) [&sect;](https://postgr.es/c/fbc57f2bc)
--  Change hex_encode() and hex_decode() to use SIMD CPU instructions (Nathan Bossart, Chiranmoy Bhattacharya) [&sect;](https://postgr.es/c/ec8719ccb)
--  Require Meson version 0.57.2 or later (Peter Eisentraut) [&sect;](https://postgr.es/c/f039c2244)
+-  Use AVX2 CPU instructions for calculating [page checksums](../../server-administration/reliability-and-the-write-ahead-log/data-checksums.md#checksums) (Matthew Sterrett, Andrew Kim) [&sect;](https://postgr.es/c/5e13b0f24)
+-  Use ARM Crypto Extension to Compute CRC32C (John Naylor) [&sect;](https://postgr.es/c/fbc57f2bc)
+-  Change [`hex_encode()`](../../the-sql-language/functions-and-operators/binary-string-functions-and-operators.md#functions-binarystring) and [`hex_decode()`](../../the-sql-language/functions-and-operators/binary-string-functions-and-operators.md#functions-binarystring) to use SIMD CPU instructions (Nathan Bossart, Chiranmoy Bhattacharya) [&sect;](https://postgr.es/c/ec8719ccb)
+-  Require [Meson](../../server-administration/installation-from-source-code/building-and-installation-with-meson.md#install-meson) version 0.57.2 or later (Peter Eisentraut) [&sect;](https://postgr.es/c/f039c2244)
 -  Add Meson option to build both shared and static libraries, or only shared (Peter Eisentraut) [&sect;](https://postgr.es/c/78727dcba)
--  Update Unicode data to version 17.0.0 (Peter Eisentraut) [&sect;](https://postgr.es/c/57ee39795)
--  Add hooks planner_setup_hook and planner_shutdown_hook (Robert Haas) [&sect;](https://postgr.es/c/94f3ad396)
--  Allow extensions to replace set-returning functions in the FROM clause with SQL queries (Paul A. Jungwirth) [&sect;](https://postgr.es/c/b140c8d7a)
--  Make multixid members 64-bit (Maxim Orlov) [&sect;](https://postgr.es/c/bd8d9c9bd)
--  Add fake LSN support to hash index AM (Peter Geoghegan) [&sect;](https://postgr.es/c/e5836f7b7)
--  Change FDW function prototypes to use uint* instead of bit* typedefs (Nathan Bossart) [&sect;](https://postgr.es/c/bab2f27ea)
--  Allow logical decoding plugins to specify if they do not access shared catalogs (Antonin Houska) [&sect;](https://postgr.es/c/0d3dba38c)
--  Add simplified and improved shared memory registration function ShmemRequestStruct (Heikki Linnakangas, Ashutosh Bapat) [&sect;](https://postgr.es/c/283e823f9)
+-  Update [Unicode](../../server-administration/localization/collation-support.md#collation-managing-standard) data to version 17.0.0 (Peter Eisentraut) [&sect;](https://postgr.es/c/57ee39795)
+-  Add hooks `planner_setup_hook`, `planner_shutdown_hook`, `joinrel_setup_hook`, and `join_path_setup_hook` (Robert Haas) [&sect;](https://postgr.es/c/94f3ad396) [&sect;](https://postgr.es/c/4020b370f)
+-  Allow extensions to replace [set-returning functions](../../server-programming/extending-sql/query-language-sql-functions.md#xfunc-sql-functions-returning-set) in the `FROM` clause with SQL queries (Paul A. Jungwirth) [&sect;](https://postgr.es/c/b140c8d7a)
+-  Make [multixact members](../../the-sql-language/functions-and-operators/system-information-functions-and-operators.md#functions-info-snapshot) 64-bit (Maxim Orlov) [&sect;](https://postgr.es/c/bd8d9c9bd)
+-  Change function prototypes to use `uint*` instead of `bit*` typedefs (Nathan Bossart) [&sect;](https://postgr.es/c/bab2f27ea)
+-  Allow OAuth validators to supply failure details (Jacob Champion) [&sect;](https://postgr.es/c/d438a3659)
 
-   Functions ShmemInitStruct() and ShmemInitHash() remain for backward compatibility.
--  Add server variable debug_exec_backend to report how parameters are passed to new backends (Daniel Gustafsson) [&sect;](https://postgr.es/c/b3fe098d3)
--  Document the environment variables that control the regression tests (Michael Paquier) [&sect;](https://postgr.es/c/02976b0a1)
--  Add documentation section about temporal tables (Paul A. Jungwirth) [&sect;](https://postgr.es/c/e4d8a2af0)
--  Update documented systemd example to include a restart setting (Andrew Jackson) [&sect;](https://postgr.es/c/b30656ce0)
+   This is done by setting the [`ValidatorModuleResult`](../../server-programming/oauth-validator-modules/oauth-validator-callbacks.md#oauth-validator-callback-validate) structure member error_detail.
+-  Add simplified and improved shared memory registration function [`ShmemRequestStruct()`](../../server-programming/extending-sql/c-language-functions.md#xfunc-shared-addin-at-startup) (Heikki Linnakangas, Ashutosh Bapat) [&sect;](https://postgr.es/c/283e823f9)
+
+   Functions [`ShmemInitStruct()`](../../server-programming/extending-sql/c-language-functions.md#xfunc-shared-addin-at-startup) and [`ShmemInitHash()`](../../server-programming/extending-sql/c-language-functions.md#xfunc-shared-addin-at-startup) remain for backward compatibility.
+-  Add server variable [`debug_exec_backend`](../../server-administration/server-configuration/preset-options.md#guc-debug-exec-backend) to report how parameters are passed to new backends (Daniel Gustafsson) [&sect;](https://postgr.es/c/b3fe098d3)
+-  Add documentation section about [temporal tables](../../the-sql-language/data-definition/temporal-tables.md#ddl-temporal-tables) (Paul A. Jungwirth) [&sect;](https://postgr.es/c/e4d8a2af0)
+-  Document the environment variables that control the [regression tests](../../server-administration/regression-tests/running-the-tests.md#regress-run-path-substitution) (Michael Paquier) [&sect;](https://postgr.es/c/02976b0a1)
+-  Update documented [systemd example](../../server-administration/server-setup-and-operation/starting-the-database-server.md#server-start) to include a restart setting (Andrew Jackson) [&sect;](https://postgr.es/c/b30656ce0)
   <a id="release-19-modules"></a>
 
 #### Additional Modules
 
 
--  Add pg_plan_advice module to stabilize and control planner decisions (Robert Haas) [&sect;](https://postgr.es/c/5883ff30b) [&sect;](https://postgr.es/c/6455e55b0)
--  Add extension pg_stash_advice to allow per-query-id advice to be specified (Robert Haas, Lukas Fittl) [&sect;](https://postgr.es/c/e8ec19aa3) [&sect;](https://postgr.es/c/c10edb102)
--  Refactor pg_buffercache reporting of shared memory mapping (Bertrand Drouvot) [&sect;](https://postgr.es/c/4b203d499)
+-  Add [pg_plan_advice](../additional-supplied-modules-and-extensions/pg_plan_advice-help-the-planner-get-the-right-plan.md#pgplanadvice) module to stabilize and control planner decisions (Robert Haas) [&sect;](https://postgr.es/c/5883ff30b) [&sect;](https://postgr.es/c/6455e55b0)
+-  Add extension [pg_stash_advice](../additional-supplied-modules-and-extensions/pg_stash_advice-store-and-automatically-apply-plan-advice.md#pgstashadvice) to allow per-query-id advice to be specified (Robert Haas, Lukas Fittl) [&sect;](https://postgr.es/c/e8ec19aa3) [&sect;](https://postgr.es/c/c10edb102)
+-  Show sizes of [`FETCH`](../../reference/sql-commands/fetch.md#sql-fetch) queries as constants in [pg_stat_statements](../additional-supplied-modules-and-extensions/pg_stat_statements-track-statistics-of-sql-planning-and-execution.md#pgstatstatements) (Sami Imseih) [&sect;](https://postgr.es/c/bee23ea4d)
 
-   New function pg_buffercache_os_pages() and system view pg_buffercache_os_pages allow reporting of shared memory mapping; the function optionally includes NUMA details. Function pg_buffercache_numa_pages() remains for backward compatibility.
--  Add functions to pg_buffercache to mark buffers as dirty (Nazir Bilal Yavuz) [&sect;](https://postgr.es/c/9ccc049df)
+   Fetches of different sizes will now be grouped together in [pg_stat_statements](../additional-supplied-modules-and-extensions/pg_stat_statements-track-statistics-of-sql-planning-and-execution.md#pgstatstatements) output.
+-  Add [generic and custom plan](../../reference/sql-commands/prepare.md#sql-prepare) counts to [pg_stat_statements](../additional-supplied-modules-and-extensions/pg_stat_statements-track-statistics-of-sql-planning-and-execution.md#pgstatstatements) (Sami Imseih) [&sect;](https://postgr.es/c/3357471cf)
+-  Refactor [pg_buffercache](../additional-supplied-modules-and-extensions/pg_buffercache-inspect-postgresql-buffer-cache-state.md#pgbuffercache) reporting of shared memory mapping (Bertrand Drouvot) [&sect;](https://postgr.es/c/4b203d499)
 
-   The functions are pg_buffercache_mark_dirty(), pg_buffercache_mark_dirty_relation(), and pg_buffercache_mark_dirty_all().
--  Allow pushdown of array comparisons in prepared statements to postgres_fdw foreign servers (Alexander Pyhalov) [&sect;](https://postgr.es/c/62c3b4cd9)
--  Allow the retrieval of statistics from foreign data wrapper servers (Corey Huinker, Etsuro Fujita) [&sect;](https://postgr.es/c/28972b6fc)
+   New function `pg_buffercache_os_pages()` and system view `pg_buffercache_os_pages` allow reporting of shared memory mapping; the function optionally includes NUMA details. Function `pg_buffercache_numa_pages()` remains for backward compatibility.
+-  Add functions to [pg_buffercache](../additional-supplied-modules-and-extensions/pg_buffercache-inspect-postgresql-buffer-cache-state.md#pgbuffercache) to mark buffers as dirty (Nazir Bilal Yavuz) [&sect;](https://postgr.es/c/9ccc049df)
 
-   This is enabled for postgres_fdw by using the option restore_stats. The default is for ANALYZE to retrieve rows from the remote server to locally generate statistics.
--  Allow file_fdw to read files or program output that uses multi-line headers (Shinya Kato) [&sect;](https://postgr.es/c/26cb14aea)
--  Add server variable auto_explain.log_io to add IO reporting to auto_explain (Tomas Vondra) [&sect;](https://postgr.es/c/61c36a34a)
--  Allow auto_explain to add extension-specific EXPLAIN options via server variable auto_explain.log_extension_options (Robert Haas) [&sect;](https://postgr.es/c/e972dff6c)
--  Allow btree_gin to match partial qualifications (Tom Lane) [&sect;](https://postgr.es/c/e2b64fcef) [&sect;](https://postgr.es/c/fc896821c)
--  Improve performance of bloom indexes by using streaming reads (Xuneng Zhou) [&sect;](https://postgr.es/c/4c910f3bb) [&sect;](https://postgr.es/c/d841ca2d1)
--  Improve performance of pgstattuple by using streaming reads (Xuneng Zhou) [&sect;](https://postgr.es/c/213f0079b)
--  Allow fuzzystrmatch's dmetaphone to use single-byte encodings beyond ASCII (Peter Eisentraut) [&sect;](https://postgr.es/c/e39ece034)
--  Modify oid2name --extended to report the relation file path (David Bidoc) [&sect;](https://postgr.es/c/3c5ec35de)
- <a id="release-19-pgstatstatements"></a>
+   The functions are `pg_buffercache_mark_dirty()`, `pg_buffercache_mark_dirty_relation()`, and `pg_buffercache_mark_dirty_all()`.
+-  Allow pushdown of array comparisons in [prepared statements](../../reference/sql-commands/prepare.md#sql-prepare) to [postgres_fdw](../additional-supplied-modules-and-extensions/postgres_fdw-access-data-stored-in-external-postgresql-servers.md#postgres-fdw) foreign servers (Alexander Pyhalov) [&sect;](https://postgr.es/c/62c3b4cd9)
+-  Allow the retrieval of statistics from [foreign data wrapper servers](../../reference/sql-commands/create-foreign-data-wrapper.md#sql-createforeigndatawrapper) (Corey Huinker, Etsuro Fujita) [&sect;](https://postgr.es/c/28972b6fc) [&sect;](https://postgr.es/c/48965e146)
 
-##### [pgstatstatements]
-
-
--  Show sizes of FETCH queries as constants in pg_stat_statements (Sami Imseih) [&sect;](https://postgr.es/c/bee23ea4d)
-
-   Fetches of different sizes will now be grouped together in pg_stat_statements output.
--  Add generic and custom plans counts to pg_stat_statements (Sami Imseih) [&sect;](https://postgr.es/c/3357471cf)
-    <a id="release-19-acknowledgements"></a>
+   This is enabled for [postgres_fdw](../additional-supplied-modules-and-extensions/postgres_fdw-access-data-stored-in-external-postgresql-servers.md#postgres-fdw) by using the option `import_stats`. The default is for [`ANALYZE`](../../reference/sql-commands/analyze.md#sql-analyze) to retrieve rows from the remote server to locally generate statistics.
+-  Allow [file_fdw](../additional-supplied-modules-and-extensions/file_fdw-access-data-files-in-the-servers-file-system.md#file-fdw) to read files or program output that uses multi-line headers (Shinya Kato) [&sect;](https://postgr.es/c/26cb14aea)
+-  Add server variable `auto_explain.log_io` to add IO reporting to [auto_explain](../additional-supplied-modules-and-extensions/auto_explain-log-execution-plans-of-slow-queries.md#auto-explain) (Tomas Vondra) [&sect;](https://postgr.es/c/61c36a34a)
+-  Allow [auto_explain](../additional-supplied-modules-and-extensions/auto_explain-log-execution-plans-of-slow-queries.md#auto-explain) to add extension-specific [`EXPLAIN`](../../reference/sql-commands/explain.md#sql-explain) options via server variable `auto_explain.log_extension_options` (Robert Haas) [&sect;](https://postgr.es/c/e972dff6c)
+-  Change [btree_gin](../additional-supplied-modules-and-extensions/btree_gin-gin-operator-classes-with-b-tree-behavior.md#btree-gin) to support all btree-supported cross-type comparisons (Tom Lane) [&sect;](https://postgr.es/c/e2b64fcef) [&sect;](https://postgr.es/c/fc896821c)
+-  Improve performance of [bloom](../additional-supplied-modules-and-extensions/bloom-bloom-filter-index-access-method.md#bloom) indexes by using streaming reads (Xuneng Zhou) [&sect;](https://postgr.es/c/4c910f3bb) [&sect;](https://postgr.es/c/d841ca2d1)
+-  Improve performance of [pgstattuple](../additional-supplied-modules-and-extensions/pgstattuple-obtain-tuple-level-statistics.md#pgstattuple) by using streaming reads (Xuneng Zhou) [&sect;](https://postgr.es/c/213f0079b) [&sect;](https://postgr.es/c/ae58189a4)
+-  Modify [oid2name](../additional-supplied-programs/client-applications.md#oid2name) `--extended` to report the relation file path (David Bidoc) [&sect;](https://postgr.es/c/3c5ec35de)
+   <a id="release-19-acknowledgements"></a>
 
 ### Acknowledgments
 
@@ -569,4 +555,658 @@
  The following individuals (in alphabetical order) have contributed to this release as patch authors, committers, reviewers, testers, or reporters of issues.
 
 
-- *fill in later*
+- Adam Lee
+- Adam Pickering
+- Adam Warland
+- Aditya Gollamudi
+- Aditya Kamath
+- Afrah Razzak
+- Aidar Imamov
+- Ajay Pal
+- Ajin Cherian
+- Akshay Joshi
+- Alberto Piai
+- Aleksander Alekseev
+- Aleksey Solovev
+- Alex Guo
+- Alex Shapalov
+- Alex Young
+- Alexander Borisov
+- Alexander Kjäll
+- Alexander Korotkov
+- Alexander Kozhemyakin
+- Alexander Kukushkin
+- Alexander Kuzmenkov
+- Alexander Kuznetsov
+- Alexander Lakhin
+- Alexander Pyhalov
+- Alexandra Wang
+- Alexandre Felipe
+- Alexey Makhmutov
+- Alexey Shishkin
+- Ali Akbar
+- Altan Birler
+- Álvaro Herrera
+- Alyona Vinter
+- Amit Kapila
+- Amit Langote
+- Amjad Shahzad
+- Amul Sul
+- Amy Burnett
+- Andreas Karlsson
+- Andreas Lind
+- Andrei Klychkov
+- Andrei Lepikhov
+- Andrei Varashen
+- Andres Freund
+- Andrew Bille
+- Andrew Dunstan
+- Andrew Gierth
+- Andrew Jackson
+- Andrew Kim
+- Andrew Krylosov
+- Andrew Watkins
+- Andrey Borodin
+- Andrey Chernyy
+- Andrey Rachitskiy
+- Andrey Rudometov
+- Andrey Silitskiy
+- Andrzej Doros
+- Andy Fan
+- Anh Khoa
+- Ante Kresic
+- Anthonin Bonnefoy
+- Antoine Violin
+- Anton Voloshin
+- Antonin Houska
+- Ants Aasma
+- Arne Roland
+- Arseniy Mukhin
+- Artem Gavrilov
+- Arthur Nascimento
+- Artur Zakirov
+- Ashutosh Bapat
+- Ashutosh Sharma
+- Atsuo Yamaguchi
+- Atsushi Torikoshi
+- Aya Iwata
+- Ayoub Kazar
+- Ayush Tiwari
+- Ayush Vatsa
+- Baji Shaik
+- Ben Morris
+- Benoit Lobréau
+- Bernd Helmle
+- Bernd Reiß
+- Bernice Southey
+- Bertrand Drouvot
+- Bharath Rupireddy
+- Bihua Wang
+- Bill Kim
+- Bing Tian
+- Bing’e Jin
+- Bob Kline
+- Bowen Shi
+- Brian Carpenter
+- Bruce Dang
+- Bruce Momjian
+- Bryan Fox
+- Bryan Green
+- Bykov Ivan
+- Cai Mengjuan
+- Cándido Antonio Martínez Descalzo
+- Cary Huang
+- Casey Shobe
+- Chaitanya Choudhary
+- ChangAo Chen
+- Changhong Fei
+- Chao Li
+- Charles Samborski
+- Chee Wooson
+- Chengpeng Yan
+- Chengxi Sun
+- Chi Zhang
+- Chiranmoy Bhattacharya
+- Chong Peng
+- Christian Ullrich
+- Christoph Berg
+- Christophe Pettus
+- Chuanwen Hu
+- Corey Huinker
+- DaeMyung Kang
+- Dagfinn Ilmari Mannsåker
+- Daisuke Higuchi
+- Damien Clochard
+- Dan Stefura
+- Daniel Bakker
+- Daniel Bauman
+- Daniel Farkaš
+- Daniel Firer
+- Daniel Gustafsson
+- Daniel Vérité
+- Daniel Woelfel
+- Daniele Varrazzo
+- Daniil Davydov
+- Dapeng Wang
+- Daria Shanina
+- Dave Cramer
+- David Bidoc
+- David Christensen
+- David Fetter
+- David G. Johnston
+- David Geier
+- David Rowley
+- David Steele
+- David Wheeler
+- Davin Shearer
+- Dean Rasheed
+- Dennis Björklund
+- Devanga Susmitha
+- Devrim Gündüz
+- Dewei Dai
+- Dharin Shah
+- Dhruv Chauhan
+- Dian Fay
+- Diego Frias
+- Dilip Kumar
+- Dimitre Radoulov
+- Dimitri Fontaine
+- Dimitrios Apostolou
+- Dipesh Dhameliya
+- Dmitriy Kuzmin
+- Dmitry Astapov
+- Dmitry Dolgov
+- Dmitry Fomin
+- Dmitry Igrishin
+- Dmitry Koval
+- Dmitry Kovalenko
+- Dmitry Mityugov
+- Dmitry Yurichev
+- Domenico Sgarbossa
+- Dominique Devienne
+- Donghang Lin
+- Doruk Yilmaz
+- Egor Chindyaskin
+- Ekaterina Sokolova
+- Emmanuel Sibi
+- Emmanuel Touzery
+- Eric Ridge
+- Erik Nordström
+- Erik Rijkers
+- Erik Wienhold
+- Ethan Mertz
+- Etsuro Fujita
+- Eugene Morgunov
+- Euler Taveira
+- Evan Montgomery-Recht
+- Evan Si
+- Evgeniy Gorbanev
+- Evgeny Voropaev
+- Ewan Young
+- Fabrice Chapuis
+- Fabrízio de Royes Mello
+- Feilong Meng
+- Feng Wu
+- Filip Janus
+- Florents Tselai
+- Florin Irion
+- Francesco Verardi
+- François Jehl
+- Frédéric Yhuel
+- Fredrik Widlert
+- Gabriel Gibson
+- Gaurav Singh
+- Gavin Panella
+- George Tarasov
+- Gilles Darold
+- Gilles Parc
+- Giovanni Fabris
+- Glauber Batista
+- Gleb Kashkin
+- Greg Burd
+- Greg Sabino Mullane
+- Gregory Smith
+- Grem Snoort
+- Grigorev Jurij
+- Grigory Smolkin
+- Guillaume Lelarge
+- Gunnar Morling
+- Guoqing Yang
+- Gurjeet Singh
+- Gyan Sreejith
+- Haibo Yan
+- Haiyang Li
+- Hang Ammmkilo
+- Hannu Krosing
+- Hans Buschmann
+- Haowu Ge
+- Haoyan Wang
+- Haruka Takatsuka
+- Haruna Miwa
+- Hayato Kuroda
+- Heewon Song
+- Heikki Linnakangas
+- Henrik TJ
+- Henson Choi
+- Hillai Ben Sasson
+- Holger Hoffstätte
+- Hubert Lubaczewski
+- Hugo Dubois
+- Hüseyin Demir
+- Ian Barwick
+- Ignat Remizov
+- Igor Stepansky
+- Ilia Evdokimov
+- Ilia Kashintsev
+- Ilya Cherdakov
+- Ilya Portnov
+- Ilya Staroverov
+- Ilyasov Ian
+- Imran Zaheer
+- Ivan Kush
+- Izumi Igi
+- Jack Bonatakis
+- Jacob Brazeal
+- Jacob Champion
+- Jacques Combrink
+- Jakob Egger
+- Jakub Wartak
+- Jan Nidzwetzki
+- Japin Li
+- Jasper Smit
+- Javier Maestro
+- Jeevan Chalke
+- Jeff Davis
+- Jeff Janes
+- Jehan-Guillaume de Rorthais
+- Jelte Fennema-Nio
+- Jérémie Hodnik
+- Jeroen Gui
+- Ji Xu
+- Jian He
+- Jianghua Yang
+- Jiao Shuntian
+- Jie Wang
+- Jihe Wang
+- Jim Jones
+- Jim Nasby
+- Jingtang Zhang
+- Jingzhou Fu
+- Jinhui Lai
+- Jinyang Liu
+- João Costa
+- Jochen Bandhauer
+- Joe Conway
+- Joel Jacobson
+- John Hsu
+- John Naylor
+- Jonas Boberg
+- Jonathan Gonzalez V.
+- Jonathan S. Katz
+- Jorge Solórzano
+- Josef Šimánek
+- Joseph Koshakow
+- Joshua Shanks
+- Julien Rouhaud
+- Julien Tachoires
+- Junwang Zhao
+- Junwen An
+- Justin Kwan
+- Justin Pryzby
+- Kamil Monicz
+- Karavaev Alexey
+- Karina Litskevich
+- Karthik S
+- Kartyshov Ivan
+- Ke Lan
+- Keisuke Kuroda
+- Keith Paskett
+- Kenny Chen
+- Kentaro Sato
+- Kevin K Biju
+- Kevin Oommen Anish
+- Kiran Kaki
+- Kirill Reshke
+- Konstantin Knizhnik
+- Krasiyan Andreev
+- Kristian Lejao
+- Kuan-Ting Kuo
+- Kunpeng Yi
+- Kuntal Ghosh
+- Kyotaro Horiguchi
+- Lakshmi G
+- Lakshmi N
+- Lars Kanis
+- Laurenz Albe
+- Lauri Siltanen
+- Lev Nikolaev
+- Lihui Zhang
+- Lori Corbani
+- Lu Feng
+- Lucas Velgus
+- Lucio Chiessi
+- Lukas Eder
+- Lukas Fittl
+- Maciek Sakrejda
+- Madhukar Prasad
+- Magnus Hagander
+- Mahendra Singh Thalor
+- Maksim Logvinenko
+- Maksim Melnikov
+- Maksim Milyutin
+- Man Zeng
+- Manni Wood
+- Manuel Reyes Bravo
+- Marco Nenciarini
+- Marcos Pegoraro
+- Marcus Gartner
+- Marian Muller Rebeyrol
+- Mario González
+- Mark Callaghan
+- Mark Dilger
+- Mark Frost
+- Mark Wong
+- Marko Grujic
+- Marko Tiikkaja
+- Martin Heistermann
+- Martin Rakhmanov
+- Masahiko Sawada
+- Masahiro Ikeda
+- Masao Fujii
+- Masashi Kamura
+- Matheus Alcantara
+- Mats Kindahl
+- Matt Long
+- Matthew Sterrett
+- Matthias van de Meent
+- Matthieu Denais
+- Matthijs van der Vleuten
+- Maxim Boguk
+- Maxim Orlov
+- Maxime Schoemans
+- Mehmet D. Ince
+- Melanie Plageman
+- Melih Mutlu
+- Meng Zhang
+- Merlin Moncure
+- Mert Alev
+- Michael Banck
+- Michael Malis
+- Michael Paquier
+- Michael Schönitzer
+- Mikael Gustavsson
+- Mikhail Gribkov
+- Mikhail Kot
+- Mikhail Litsarev
+- Mikhail Nikalayeu
+- Milosz Bieniek
+- Mingyang Zhen
+- Mircea Cadariu
+- Mohamed Ali
+- Moritz Sanft
+- Muhammad Taha Naveed
+- Mutaamba Maasha
+- Naga Appani
+- Natalya Aksman
+- Nathan Bossart
+- Nazir Bilal Yavuz
+- Neil Chen
+- Neil Conway
+- Niall Newman
+- Niccolò Fei
+- Nick Ivanov
+- Nicolas Adenis-Lamarre
+- Nikhil Kumar Veldanda
+- Nikhil Sontakke
+- Nikita Kalinin
+- Nikolay Samokhvalov
+- Nikolay Shaplov
+- Ning Sun
+- Ning Wu
+- Nisha Moond
+- Nishant Sharma
+- Nitin Jadhav
+- Nitin Motiani
+- Niyas Sait
+- Noah Misch
+- Noboru Saito
+- Noriyoshi Shinoda
+- Oleg Ivanov
+- Oleg Samoylov
+- Oleg Sibiryakov
+- Oleg Tkachenko
+- Oleg Tselebrovskiy
+- Oli Sennhauser
+- Oliver Ford
+- Oreo Yang
+- Orestis Markou
+- Osama Abdul Qader
+- Palak Chaturvedi
+- Palayret Jacques
+- Patrick Reynolds
+- Patrick Stählin
+- Paul Bunn
+- Paul Gerste
+- Paul Jungwirth
+- Paul Kim
+- Paul Ramsey
+- Pavel Borisov
+- Pavel Kohout
+- Pavel Kopylov
+- Pavel Luzanov
+- Pavel Seleznev
+- Pavel Stehule
+- Pavel Tyslacki
+- Pavlo Golub
+- Pedro Brantes
+- Peng Wang
+- Peter Eisentraut
+- Peter Geoghegen
+- Peter Mitteregger
+- Peter Smith
+- Pierre Ducroquet
+- Pierre Forstmann
+- Pierre Senellart
+- Pierrick Chovelon
+- Potapov Alexander
+- Pradeep Kumar
+- Przemyslaw Sztoch
+- Qifan Liu
+- Qing Zhang
+- Quan Zongliang
+- Radim Marek
+- Rafia Sabih
+- Rahila Syed
+- Rambabu V
+- Ran Benita
+- Ranier Vilela
+- Renan Davanzo
+- Renli Zou
+- Renzo Dani
+- Richard Guo
+- Richard Neill
+- Rick de Jager
+- Rintaro Ikeda
+- Rithvika Devisetti
+- Robert Haas
+- Robert Pang
+- Robert Treat
+- Rogers Wang
+- Rohit Prasad
+- Roman Khapov
+- Ronan Dunklau
+- Ruben Ruiz
+- Rui Zhao
+- Ruikai Peng
+- Runyuan He
+- Ruohang Feng
+- Rustam Allakov
+- Rustam Khamidullin
+- Ryan Bird
+- Ryo Kanbayashi
+- Ryo Matsumura
+- Sadhuprasad Patro
+- Sahitya Chandra
+- Sajeeb Lohani
+- Sami Imseih
+- Samuel Thibault
+- Sandeep Thakkar
+- Sandro Santilli
+- Sanjaya Waruna
+- Sarath Kumar
+- Satya Narlapuram
+- Satyanarayana Narlapuram
+- Sehrope Sarkuni
+- Semih Dogan
+- Sergei Glukhov
+- Sergei Kornilov
+- Sergei Patiakin
+- Sergey Fukanchik
+- Sergey Koposov
+- Sergey Prokhorenko
+- Sergey Shinderuk
+- Sergey Soloviev
+- Sergey Tatarintsev
+- Sergey Zhuravlev
+- Shengbin Zhao
+- Shenhao Wang
+- Shihao Zhong
+- Shinya Kato
+- Shinya Sugamoto
+- Shishir Sharma
+- Shixin Wang
+- Shiyu Qin
+- Shlok Kyal
+- Shruthi Gowda
+- Shubham Khanna
+- Shveta Malik
+- Siddharth Kothari
+- Sirisha Chamarthi
+- Solaimurugan V
+- Songjin Zhou
+- Sophie Alpert
+- Soumya S Murali
+- Srinath Reddy Sadipiralla
+- Srirama Kucherlapati
+- Stepan Neretin
+- Stephan Springl
+- Stéphane Schildknecht
+- Stephane Tachoires
+- Stephen Frost
+- Steve Baldwin
+- Steve Lau
+- Steven Niu
+- Stolpovskikh Danil
+- Sungwoo Chang
+- Sunil S
+- Surya Poondla
+- Suyang Zhong
+- Sven Klemm
+- Swirl Smog Dowry
+- Sylvie Mayer
+- Taiki Koshino
+- Takamichi Osumi
+- Tan Yang
+- Tan Zhen
+- Tatsuhito Kasahara
+- Tatsuo Ishii
+- Tatsuro Yamada
+- Tatsuya Kawata
+- Temuri Doghonadze
+- Tender Wang
+- Tenglong Gu
+- Thom Brown
+- Thomas Gabriel de Medeiros Silva
+- Thomas Kellerer
+- Thomas Munro
+- Tianchen Zhang
+- Tiancheng Ge
+- Tim Wood
+- Timur Magomedov
+- Tingchuan Sun
+- Tobias Bussmann
+- Todd Lang
+- Todd Liebenschutz-Jones
+- Tom Lane
+- Tomas Vondra
+- Tomer Fichman
+- Torsten Förtsch
+- Torsten Rupp
+- Tristan Partin
+- Tushar Ahuja
+- Tyler Smart
+- Ulisses de Mello dos Santos
+- Vaibhav Dalvi
+- Vaibhav Jain
+- Vaibhave Sekar
+- Valery Gubanov
+- Varik Matevosyan
+- Vasuki M
+- Victor Yegorov
+- Vignesh C
+- Vik Fearing
+- Viktor Holmberg
+- Viktor Leis
+- Vinod Sridharan
+- Vishal Prasanna
+- Vismay Tiwari
+- Vitaly Davydov
+- Vlad Lesin
+- Vladimir Tokarev
+- Walid Ibrahim
+- Wenhui Qiu
+- Xiangyu Liang
+- Xiaohui Liu
+- Xiaopeng Wang
+- Xing Guo
+- Xingbin She
+- Xingwang Xiang
+- Xueyu Gao
+- Xuneng Zhou
+- Xunqi Hu
+- Yang Zhu
+- Yanjie Zhao
+- Yanliang Lei
+- Yaroslav Saburov
+- Yaroslav Syrytsia
+- Yasuo Honda
+- Yi Ding
+- Yilin Zhang
+- Yingying Chen
+- Yiyang Liu
+- Yonghao Lee
+- Yonghwa Lee
+- Yu Wang
+- Yuan Li
+- Yuanchao Zhang
+- Yuanzhou Yang
+- Yuchen Li
+- Yuefei Shi
+- Yuelin Wang
+- Yugo Nagata
+- Yuhang Qiu
+- Yuhang Wu
+- Yura Sokolov
+- Yuri Zamyatin
+- Yuxiao Guo
+- Zane Duffield
+- Zechman, Derek S
+- Zengqi Gao
+- Zepeng Zhang
+- Zexin Li
+- Zhang Hu
+- Zhang Mingli
+- Zheng Tao
+- Zheng Wang
+- Zheng Yu
+- Zhenpeng Lin
+- Zhenwei Shang
+- Zhibai Song
+- Zhibin Wang
+- Zhihong Yu
+- Zhijie Hou
+- Zhiyuan Su
+- Zhou Digoal
+- Zizhen Qiao
+- Zizhuan Liu
+- Zsolt Parragi

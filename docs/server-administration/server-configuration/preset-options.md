@@ -12,8 +12,8 @@
 :   Reports the size of a disk block. It is determined by the value of `BLCKSZ` when building the server. The default value is 8192 bytes. The meaning of some configuration variables (such as [shared_buffers](resource-consumption.md#guc-shared-buffers)) is influenced by `block_size`. See [Resource Consumption](resource-consumption.md#runtime-config-resource) for information.
 <a id="guc-data-checksums"></a>
 
-`data_checksums` (`enum`)
-:   Reports the state of data checksums for this cluster. Possible values are `on`, `off`, `inprogress-on` and `inprogress-off`. See [Data Checksums](../reliability-and-the-write-ahead-log/data-checksums.md#checksums) for more information.
+`data_checksums` (`bool`)
+:   Reports the state of data checksums for this cluster. See [Data Checksums](../reliability-and-the-write-ahead-log/data-checksums.md#checksums) for more information.
 <a id="guc-data-directory-mode"></a>
 
 `data_directory_mode` (`integer`)

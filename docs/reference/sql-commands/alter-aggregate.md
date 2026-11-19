@@ -62,6 +62,9 @@ where AGGREGATE_SIGNATURE is:
  The recommended syntax for referencing an ordered-set aggregate is to write `ORDER BY` between the direct and aggregated argument specifications, in the same style as in [`CREATE AGGREGATE`](create-aggregate.md#sql-createaggregate). However, it will also work to omit `ORDER BY` and just run the direct and aggregated argument specifications into a single list. In this abbreviated form, if `VARIADIC "any"` was used in both the direct and aggregated argument lists, write `VARIADIC "any"` only once.
 
 
+ `ALTER AGGREGATE` deals only with generic properties of an aggregate, such as its name. To change the aggregate-specific properties of an aggregate such as its support functions, replace its definition entirely with `CREATE OR REPLACE AGGREGATE`.
+
+
 ## Examples
 
 

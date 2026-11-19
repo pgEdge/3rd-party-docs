@@ -1,6 +1,6 @@
 <a id="postgres"></a>
 
-# PostgreSQL 19devel Documentation
+# PostgreSQL 19.0 Documentation
 
 *The PostgreSQL Global Development Group*
 

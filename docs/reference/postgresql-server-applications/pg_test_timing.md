@@ -29,11 +29,11 @@ pg_test_timing [OPTION...]
 
  pg_test_timing accepts the following command-line options:
 
-<code>-d </code><em>duration</em>, <code>--duration=</code><em>duration</em>
-:   Specifies the test duration, in seconds. Longer durations give slightly better accuracy, and are more likely to discover problems with the system clock moving backwards. The default test duration is 3 seconds.
-
 <code>-c </code><em>cutoff</em>, <code>--cutoff=</code><em>cutoff</em>
 :   Specifies the cutoff percentage for the list of exact observed timing durations (that is, the changes in the system clock value from one reading to the next). The list will end once the running percentage total reaches or exceeds this value, except that the largest observed duration will always be printed. The default cutoff is 99.99.
+
+<code>-d </code><em>duration</em>, <code>--duration=</code><em>duration</em>
+:   Specifies the test duration, in seconds. Longer durations give slightly better accuracy, and are more likely to discover problems with the system clock moving backwards. The default test duration is 3 seconds.
 
 `-V`, `--version`
 :   Print the pg_test_timing version and exit.
@@ -171,8 +171,10 @@ Observed timing durations up to 99.9900%:
 ...
 61594291       0.0000   100.0000          1
 
+TSC frequency source: x86, cpuid 0x15
 TSC frequency in use: 2449228 kHz
 TSC frequency from calibration: 2448603 kHz
+
 TSC clock source will be used by default, unless timing_clock_source is set to 'system'.
 ```
 

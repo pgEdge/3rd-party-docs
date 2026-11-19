@@ -8,13 +8,12 @@ synchronize a PostgreSQL data directory with another data directory that was for
 
 
 ```
-pg_rewind [OPTION...] {
-     -D
-     --target-pgdata
-     |  DATADIR |
-     --source-pgdata=DATADIR
-     --source-server=CONNSTR
-    }
+pg_rewind [OPTION...]
+     {-D | --target-pgdata}
+    DATADIR
+
+     {--source-pgdata=datadir | --source-server=connstr}
+
 ```
 
 

@@ -9,7 +9,7 @@ change the definition of a subscription
 
 ```
 
-ALTER SUBSCRIPTION NAME SERVER SERVERNAME
+ALTER SUBSCRIPTION NAME SERVER SERVER_NAME
 ALTER SUBSCRIPTION NAME CONNECTION 'CONNINFO'
 ALTER SUBSCRIPTION NAME SET PUBLICATION PUBLICATION_NAME [, ...] [ WITH ( PUBLICATION_OPTION [= VALUE] [, ... ] ) ]
 ALTER SUBSCRIPTION NAME ADD PUBLICATION PUBLICATION_NAME [, ...] [ WITH ( PUBLICATION_OPTION [= VALUE] [, ... ] ) ]
@@ -52,8 +52,8 @@ ALTER SUBSCRIPTION NAME RENAME TO NEW_NAME
 :   The name of a subscription whose properties are to be altered.
 <a id="sql-altersubscription-params-server"></a>
 
-<code>SERVER </code><em>servername</em>
-:   This clause replaces the foreign server or connection string originally set by [sql-createsubscription](create-subscription.md#sql-createsubscription) with the foreign server *servername*.
+<code>SERVER </code><em>server_name</em>
+:   This clause replaces the foreign server or connection string originally set by [sql-createsubscription](create-subscription.md#sql-createsubscription) with the foreign server *server_name*.
 <a id="sql-altersubscription-params-connection"></a>
 
 <code>CONNECTION '</code><em>conninfo</em><code>'</code>
@@ -100,7 +100,12 @@ ALTER SUBSCRIPTION NAME RENAME TO NEW_NAME
 <a id="sql-altersubscription-params-refresh-sequences"></a>
 
 `REFRESH SEQUENCES`
-:   Re-synchronize sequence data with the publisher. Unlike [`ALTER SUBSCRIPTION ... REFRESH PUBLICATION`](#sql-altersubscription-params-refresh-publication) which only has the ability to synchronize newly added sequences, `REFRESH SEQUENCES` will re-synchronize the sequence data for all currently subscribed sequences. It does not add or remove sequences from the subscription to match the publication.
+:   Re-synchronize sequence data with the publisher. Unlike [`ALTER SUBSCRIPTION ... REFRESH PUBLICATION`](#sql-altersubscription-params-refresh-publication), which synchronizes the subscription's set of sequences with the publication (adding new and removing dropped sequences), `REFRESH SEQUENCES` will re-synchronize the sequence data for all currently subscribed sequences without changing which sequences are subscribed. Run `REFRESH PUBLICATION` first if the publication's set of sequences has changed.
+
+
+    !!! note
+
+        Sequence replication requires the publisher to be running PostgreSQL 19 or later.
 
 
      See [Sequence Definition Mismatches](../../server-administration/logical-replication/replicating-sequences.md#sequence-definition-mismatches) for recommendations on how to handle any warnings about sequence definition differences between the publisher and the subscriber.

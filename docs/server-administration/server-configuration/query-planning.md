@@ -29,7 +29,7 @@
 
 `enable_gathermerge` (`boolean`)
 :   Enables or disables the query planner's use of gather merge plan types. The default is `on`.
-<a id="guc-enable-groupby-reordering"></a>
+<a id="guc-enable-group-by-reordering"></a>
 
 `enable_group_by_reordering` (`boolean`)
 :   Controls if the query planner will produce a plan which will provide `GROUP BY` keys sorted in the order of keys of a child node of the plan, such as an index scan. When disabled, the query planner will produce a plan with `GROUP BY` keys only sorted to match the `ORDER BY` clause, if any. When enabled, the planner will try to produce a more efficient plan. The default value is `on`.

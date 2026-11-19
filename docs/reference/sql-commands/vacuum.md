@@ -146,7 +146,7 @@ and TABLE_AND_COLUMNS is:
  The `PARALLEL` option is used only for vacuum purposes. If this option is specified with the `ANALYZE` option, it does not affect `ANALYZE`.
 
 
- `VACUUM` causes a substantial increase in I/O traffic, which might cause poor performance for other active sessions. Therefore, it is sometimes advisable to use the cost-based vacuum delay feature. For parallel vacuum, each worker sleeps in proportion to the work done by that worker. See [Cost-based Vacuum Delay](../../server-administration/server-configuration/vacuuming.md#runtime-config-resource-vacuum-cost) for details.
+ `VACUUM` causes a substantial increase in I/O traffic, which might cause poor performance for other active sessions. Therefore, it is sometimes advisable to use the cost-based vacuum delay feature. For parallel vacuum, the leader and its parallel workers use the same cost delay but share the cost limit. Each of them sleeps in proportion to the work it has done, and sleeps longer when more of them are working at the same time. See [Cost-based Vacuum Delay](../../server-administration/server-configuration/vacuuming.md#runtime-config-resource-vacuum-cost) for details.
 
 
  Each backend running `VACUUM` without the `FULL` option will report its progress in the `pg_stat_progress_vacuum` view. Backends running `VACUUM FULL` will instead report their progress in the `pg_stat_progress_cluster` view. See [VACUUM Progress Reporting](../../server-administration/monitoring-database-activity/progress-reporting.md#vacuum-progress-reporting) and [CLUSTER Progress Reporting](../../server-administration/monitoring-database-activity/progress-reporting.md#cluster-progress-reporting) for details.

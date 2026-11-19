@@ -107,11 +107,14 @@ OPTIONS (ADD password_required 'false');
 `analyze_sampling` (`string`)
 :   This option, which can be specified for a foreign table or a foreign server, determines if `ANALYZE` on a foreign table samples the data on the remote side, or reads and transfers all data and performs the sampling locally. The supported values are `off`, `random`, `system`, `bernoulli` and `auto`. `off` disables remote sampling, so all data are transferred and sampled locally. `random` performs remote sampling using the `random()` function to choose returned rows, while `system` and `bernoulli` rely on the built-in `TABLESAMPLE` methods of those names. `random` works on all remote server versions, while `TABLESAMPLE` is supported only since 9.5. `auto` (the default) picks the recommended sampling method automatically; currently it means either `bernoulli` or `random` depending on the remote server version.
 
-`restore_stats` (`boolean`)
-:   This option, which can be specified for a foreign table or a foreign server, determines if `ANALYZE` on a foreign table will instead attempt to fetch the existing statistics for the foreign table on the remote server, and restore those statistics directly to the local server. If the attempt failed, statistics are collected by row sampling on the foreign table. This option is only useful if the remote table is one that can have regular statistics (tables and materialized views). When using this option, *it is the user's responsibility * to ensure that the existing statistics for the foreign table are up-to-date. The default is `false`.
+`import_stats` (`boolean`)
+:   This option, which can be specified for a foreign table or a foreign server, determines if `ANALYZE` on a foreign table will instead attempt to fetch the existing statistics for the remote table, and import those statistics directly to the local server (without applying the foreign table columns' `n_distinct` option). If the attempt failed, statistics are collected by row sampling on the foreign table. This option is only useful if the remote table is one that can have regular statistics (tables, not inherited, and materialized views). When using this option, *it is the user's responsibility * to ensure that the existing statistics for the remote table are up-to-date. The default is `false`.
 
 
-     If the foreign table is a partition of a partitioned table, analyzing the partitioned table will still result in row sampling on the foreign table regardless of this setting, though direct analysis of the foreign table would have attempted to fetch and restore remote statistics first.
+     If the foreign table is a partition of a partitioned table, analyzing the partitioned table will still result in row sampling on the foreign table regardless of this setting, though direct analysis of the foreign table would have attempted to fetch and import the remote statistics first if this option was enabled.
+
+
+     Note that this option doesn't currently support the case where the remote table is (or was once) inherited. This is an implementation restriction that might be fixed in a future release.
   <a id="postgres-fdw-options-remote-execution"></a>
 
 #### Remote Execution Options
@@ -244,7 +247,7 @@ OPTIONS (ADD password_required 'false');
 <a id="postgres-fdw-option-use-scram-passthrough"></a>
 
 `use_scram_passthrough` (`boolean`)
-:   This option controls whether `postgres_fdw` will use the SCRAM pass-through authentication to connect to the foreign server. With SCRAM pass-through authentication, `postgres_fdw` uses SCRAM-hashed secrets instead of plain-text user passwords to connect to the remote server. This avoids storing plain-text user passwords in PostgreSQL system catalogs.
+:   This option controls whether `postgres_fdw` will use the SCRAM pass-through authentication to connect to the foreign server. It can be specified for a foreign server or a user mapping. A user mapping setting overrides the foreign server setting. With SCRAM pass-through authentication, `postgres_fdw` uses SCRAM-hashed secrets instead of plain-text user passwords to connect to the remote server. This avoids storing plain-text user passwords in PostgreSQL system catalogs.
 
 
      To use SCRAM pass-through authentication:
@@ -256,6 +259,7 @@ OPTIONS (ADD password_required 'false');
 
        As a corollary, if FDW connections to multiple hosts are to be made, for example for partitioned foreign tables/sharding, then all hosts must have identical SCRAM secrets for the users involved.
     -  The current session on the PostgreSQL instance that makes the outgoing FDW connections also must also use SCRAM authentication for its incoming client connection. (Hence “pass-through”: SCRAM must be used going in and out.) This is a technical requirement of the SCRAM protocol.
+    -  The foreign server must not be used for subscription connections (see [Subscription Management](#postgres-fdw-server-subscription)).
    <a id="postgres-fdw-functions"></a>
 
 ### Functions
@@ -356,10 +360,10 @@ CREATE SUBSCRIPTION my_subscription SERVER subscription_server PUBLICATION testp
  The remote transaction uses `SERIALIZABLE` isolation level when the local transaction has `SERIALIZABLE` isolation level; otherwise it uses `REPEATABLE READ` isolation level. This choice ensures that if a query performs multiple table scans on the remote server, it will get snapshot-consistent results for all the scans. A consequence is that successive queries within a single transaction will see the same data from the remote server, even if concurrent updates are occurring on the remote server due to other activities. That behavior would be expected anyway if the local transaction uses `SERIALIZABLE` or `REPEATABLE READ` isolation level, but it might be surprising for a `READ COMMITTED` local transaction. A future PostgreSQL release might modify these rules.
 
 
- The remote transaction is opened in the same read/write mode as the local transaction: if the local transaction is `READ ONLY`, the remote transaction is opened in `READ ONLY` mode, otherwise it is opened in `READ WRITE` mode. (This rule is also applied to remote and local subtransactions.) Note that this does not prevent login triggers executed on the remote server from writing.
+ Local `READ ONLY` transactions propagate their read-only mode to remote sessions. (This rule is also applied to local subtransactions.) Note that this does not prevent login triggers executed on the remote server from writing.
 
 
- The remote transaction is also opened in the same deferrable mode as the local transaction: if the local transaction is `DEFERRABLE`, the remote transaction is opened in `DEFERRABLE` mode, otherwise it is opened in `NOT DEFERRABLE` mode.
+ Also, local `DEFERRABLE` transactions propagate their deferrable mode to remote sessions. (This rule is only applied to remote servers 9.1 and newer.)
 
 
  Note that it is currently not supported by `postgres_fdw` to prepare the remote transaction for two-phase commit.

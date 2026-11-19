@@ -29,7 +29,7 @@ DROP SERVER [ IF EXISTS ] NAME [, ...] [ CASCADE | RESTRICT ]
 :   The name of an existing server.
 
 `CASCADE`
-:   Automatically drop objects that depend on the server (such as user mappings), and in turn all objects that depend on those objects (see [Dependency Tracking](../../the-sql-language/data-definition/dependency-tracking.md#ddl-depend)).
+:   Automatically drop objects that depend on the server (such as user mappings), and in turn all objects that depend on those objects (see [Dependency Tracking](../../the-sql-language/data-definition/dependency-tracking.md#ddl-depend)). However, a subscription that uses the server is never dropped automatically; it must be dropped with [`DROP SUBSCRIPTION`](drop-subscription.md#sql-dropsubscription) before the server can be dropped.
 
 `RESTRICT`
 :   Refuse to drop the server if any objects depend on it. This is the default.

@@ -9,7 +9,7 @@ force a write-ahead log checkpoint
 
 ```
 
-CHECKPOINT [ ( option [, ...] ) ]
+CHECKPOINT [ ( OPTION [, ...] ) ]
 
 where OPTION can be one of:
 
@@ -21,7 +21,7 @@ where OPTION can be one of:
 ## Description
 
 
- A checkpoint is a point in the write-ahead log sequence at which all data files have been updated to reflect the information in the log. All data files will be flushed to disk. Refer to [WAL Configuration](../../server-administration/reliability-and-the-write-ahead-log/wal-configuration.md#wal-configuration) for more details about what happens during a checkpoint.
+ A checkpoint is a point in the write-ahead log sequence at which all data files for permanent relations have been updated to reflect the information in the log. All data for permanent relation files will be flushed to disk. Dirty buffers of unlogged relations are not flushed unless `FLUSH_UNLOGGED` is specified. Refer to [WAL Configuration](../../server-administration/reliability-and-the-write-ahead-log/wal-configuration.md#wal-configuration) for more details about what happens during a checkpoint.
 
 
  By default, the `CHECKPOINT` command forces a fast checkpoint when the command is issued, without waiting for a regular checkpoint scheduled by the system (controlled by the settings in [Checkpoints](../../server-administration/server-configuration/write-ahead-log.md#runtime-config-wal-checkpoints)). To request the checkpoint be spread over a longer interval, set the `MODE` option to `SPREAD`. `CHECKPOINT` is not intended for use during normal operation.

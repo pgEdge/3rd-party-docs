@@ -110,7 +110,7 @@
 <a id="guc-autovacuum-max-parallel-workers"></a>
 
 `autovacuum_max_parallel_workers` (`integer`)
-:   Sets the maximum number of parallel workers that can be used by a single autovacuum worker to process indexes. This limit applies specifically to the index vacuuming and index cleanup phases (for the details of each autovacuum phase, please refer to [VACUUM Phases](../monitoring-database-activity/progress-reporting.md#vacuum-phases)). The actual number of parallel workers is further limited by [max_parallel_workers](resource-consumption.md#guc-max-parallel-workers). This is the per-autovacuum worker equivalent of the `PARALLEL` option of the [`VACUUM`](../../reference/sql-commands/vacuum.md#sql-vacuum) command. Setting this value to 0 disables parallel vacuum during autovacuum. The default is 0.
+:   Sets the maximum number of parallel workers that can be used by a single autovacuum worker to process indexes. This limit applies specifically to the index vacuuming and index cleanup phases (for the details of each autovacuum phase, please refer to [VACUUM Phases](../monitoring-database-activity/progress-reporting.md#vacuum-phases)). The actual number of parallel workers is further limited by [max_parallel_workers](resource-consumption.md#guc-max-parallel-workers). This is the per-autovacuum worker equivalent of the `PARALLEL` option of the [`VACUUM`](../../reference/sql-commands/vacuum.md#sql-vacuum) command. Setting this value to 0 disables parallel vacuum during autovacuum. The default is 0. This parameter can only be set in the `postgresql.conf` file or on the server command line; but the setting can be reduced for individual tables by changing the [corresponding table storage parameter](../../reference/sql-commands/create-table.md#reloption-autovacuum-parallel-workers).
   <a id="runtime-config-resource-vacuum-cost"></a>
 
 ### Cost-based Vacuum Delay
@@ -152,7 +152,7 @@
 
 !!! note
 
-    There are certain operations that hold critical locks and should therefore complete as quickly as possible. Cost-based vacuum delays do not occur during such operations. Therefore it is possible that the cost accumulates far higher than the specified limit. To avoid uselessly long delays in such cases, the actual delay is calculated as `vacuum_cost_delay` * `accumulated_balance` / `vacuum_cost_limit` with a maximum of `vacuum_cost_delay` * 4.
+    There are certain operations that hold critical locks and should therefore complete as quickly as possible. Cost-based vacuum delays do not occur during such operations. Therefore it is possible that the cost accumulates far higher than the specified limit. To avoid uselessly long delays in such cases, the actual delay is calculated as `vacuum_cost_delay` * `accumulated_balance` / `vacuum_cost_limit` with a maximum of `vacuum_cost_delay` * 4 for a non-parallel vacuum. For [Parallel Vacuum](../routine-database-maintenance-tasks/routine-vacuuming.md#parallel-vacuum), each process uses a share of the limit, so the delay is calculated as `vacuum_cost_delay` * `accumulated_balance` * `active_processes` / `vacuum_cost_limit` with a maximum of `vacuum_cost_delay` * 4 * `active_processes`, and never more than one second at once.
   <a id="runtime-config-vacuum-default"></a>
 
 ### Default Behavior
@@ -215,4 +215,4 @@
      Note that when eager scanning is enabled, only freeze failures count against the cap, not successful freezing. Successful page freezes are capped internally at 20% of the all-visible but not all-frozen pages in the relation. Capping successful page freezes helps amortize the overhead across multiple normal vacuums and limits the potential downside of wasted eager freezes of pages that are modified again before the next aggressive vacuum.
 
 
-     This parameter can only be set in the `postgresql.conf` file or on the server command line; but the setting can be overridden for individual tables by changing the [corresponding table storage parameter](../../reference/sql-commands/create-table.md#reloption-vacuum-max-eager-freeze-failure-rate). For more information on tuning vacuum's freezing behavior, see [Preventing Transaction ID Wraparound Failures](../routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-wraparound).
+     The setting can be overridden for individual tables by changing the [corresponding table storage parameter](../../reference/sql-commands/create-table.md#reloption-vacuum-max-eager-freeze-failure-rate). For more information on tuning vacuum's freezing behavior, see [Preventing Transaction ID Wraparound Failures](../routine-database-maintenance-tasks/routine-vacuuming.md#vacuum-for-wraparound).
