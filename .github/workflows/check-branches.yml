@@ -352,15 +352,18 @@ jobs:
                   """Replace `field: old` with `field: new` inside one branch block only.
 
                   The match stops at the next `- branch:` line, and `old` must be the
-                  whole value (optionally quoted) up to the end of the line, so "19"
-                  never matches the start of "19.0".
+                  whole value (optionally quoted), followed only by an optional
+                  trailing comment, which is kept. So "19" never matches the start
+                  of "19.0", and `ref: REL_16_16  # pinned` is still updated.
                   """
                   pattern = (
                       rf'(^[ \t]*- branch:[ \t]*{re.escape(branch)}[ \t]*\n'
                       rf'(?:(?![ \t]*- branch:)[^\n]*\n)*?'
-                      rf'[ \t]*{field}:[ \t]*)["\']?{re.escape(old)}["\']?[ \t]*$'
+                      rf'[ \t]*{field}:[ \t]*)["\']?{re.escape(old)}["\']?'
+                      rf'([ \t]+#[^\n]*)?[ \t]*$'
                   )
-                  return re.sub(pattern, lambda m: m.group(1) + new, text, count=1, flags=re.MULTILINE)
+                  return re.sub(pattern, lambda m: m.group(1) + new + (m.group(2) or ""),
+                                text, count=1, flags=re.MULTILINE)
 
               # Fix SSH URLs in-place (any org)
               fixed = re.sub(r'git@github\.com:([^/]+)/', r'https://github.com/\1/', fixed)
