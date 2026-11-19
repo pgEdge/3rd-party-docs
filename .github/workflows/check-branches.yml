@@ -349,21 +349,30 @@ jobs:
                   return value if yaml.safe_load(f"v: {value}")["v"] == value else f'"{value}"'
 
               def set_field(text, branch, field, old, new):
-                  """Replace `field: old` with `field: new` inside one branch block only.
+                  """Replace the value of `field` with `new` inside one branch block only.
 
-                  The match stops at the next `- branch:` line, and `old` must be the
-                  whole value (optionally quoted), followed only by an optional
-                  trailing comment, which is kept. So "19" never matches the start
-                  of "19.0", and `ref: REL_16_16  # pinned` is still updated.
+                  The match stops at the next `- branch:` line and covers the whole
+                  scalar; a trailing comment is kept. The value is replaced only when
+                  it equals `old`, either as written or as YAML loads it, because the
+                  caller's `old` comes from the loaded file: an unquoted 16.10 arrives
+                  as 16.1. A prefix never matches, so "19" leaves "19.0" alone.
                   """
                   pattern = (
                       rf'(^[ \t]*- branch:[ \t]*{re.escape(branch)}[ \t]*\n'
                       rf'(?:(?![ \t]*- branch:)[^\n]*\n)*?'
-                      rf'[ \t]*{field}:[ \t]*)["\']?{re.escape(old)}["\']?'
+                      rf'[ \t]*{field}:[ \t]*)'
+                      rf'("[^"\n]*"|\'[^\'\n]*\'|[^\s#"\'][^\n#]*?)'
                       rf'([ \t]+#[^\n]*)?[ \t]*$'
                   )
-                  return re.sub(pattern, lambda m: m.group(1) + new + (m.group(2) or ""),
-                                text, count=1, flags=re.MULTILINE)
+
+                  def replace(m):
+                      raw = m.group(2)
+                      loaded = yaml.safe_load(f"v: {raw}")["v"]
+                      if raw.strip("\"'") != str(old) and str(loaded) != str(old):
+                          return m.group(0)
+                      return m.group(1) + new + (m.group(3) or "")
+
+                  return re.sub(pattern, replace, text, count=1, flags=re.MULTILINE)
 
               # Fix SSH URLs in-place (any org)
               fixed = re.sub(r'git@github\.com:([^/]+)/', r'https://github.com/\1/', fixed)
