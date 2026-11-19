@@ -72,7 +72,7 @@ jobs:
 
           def ssot_key(entry):
               url = normalize_url(entry.get("upstream_git_source", ""))
-              ref = entry.get("upstream_tag") or entry.get("upstream_branch", "")
+              ref = str(entry.get("upstream_tag") or entry.get("upstream_branch", ""))
               doc_path = normalize_path(entry.get("upstream_doc_path", ""))
               return (url, ref, doc_path)
 
@@ -108,15 +108,23 @@ jobs:
               gk = (e.get("name", ""), normalize_url(e.get("upstream_git_source", "")))
               groups.setdefault(gk, []).append(e)
 
+          # Only pinned releases (a version and an upstream_tag) count against
+          # max_versions. An entry that tracks a branch (pgaudit-dev on master,
+          # postgresql-dev) is always kept and never takes a release's slot:
+          # version_key() sorts "dev" above every number, so counting it would
+          # silently drop the oldest wanted release.
+          def is_pinned(entry):
+              return bool(entry.get("version", "")) and bool(entry.get("upstream_tag"))
+
           ssot_map, excluded = {}, {}
           for entries in groups.values():
               versioned = sorted(
-                  [e for e in entries if e.get("version", "")],
+                  [e for e in entries if is_pinned(e)],
                   key=lambda entry: version_key(entry.get("version", "")),
                   reverse=True,
               )
               for e in entries:
-                  if not e.get("version", ""):
+                  if not is_pinned(e):
                       ssot_map[ssot_key(e)] = e
               for i, e in enumerate(versioned):
                   key = ssot_key(e)
@@ -129,7 +137,8 @@ jobs:
               if raw_url.startswith("git@"):
                   url_issues.append((b.get("branch", "?"), raw_url))
               url = normalize_url(raw_url)
-              ref = b.get("ref", "")
+              # str(): an unquoted `ref: 19.0` loads as a float.
+              ref = str(b.get("ref", ""))
               src = normalize_path(b.get("src_subdir", ""))
               key = (url, ref, src)
               consumer_map[key] = b
@@ -333,6 +342,26 @@ jobs:
           if actionable:
               fixed = consumer_text
 
+              def yaml_scalar(value):
+                  """Quote a value that YAML would not load back as this string
+                  (19.0 is a float, 2.60 loses its zero)."""
+                  value = str(value)
+                  return value if yaml.safe_load(f"v: {value}")["v"] == value else f'"{value}"'
+
+              def set_field(text, branch, field, old, new):
+                  """Replace `field: old` with `field: new` inside one branch block only.
+
+                  The match stops at the next `- branch:` line, and `old` must be the
+                  whole value (optionally quoted) up to the end of the line, so "19"
+                  never matches the start of "19.0".
+                  """
+                  pattern = (
+                      rf'(^[ \t]*- branch:[ \t]*{re.escape(branch)}[ \t]*\n'
+                      rf'(?:(?![ \t]*- branch:)[^\n]*\n)*?'
+                      rf'[ \t]*{field}:[ \t]*)["\']?{re.escape(old)}["\']?[ \t]*$'
+                  )
+                  return re.sub(pattern, lambda m: m.group(1) + new, text, count=1, flags=re.MULTILINE)
+
               # Fix SSH URLs in-place (any org)
               fixed = re.sub(r'git@github\.com:([^/]+)/', r'https://github.com/\1/', fixed)
 
@@ -341,18 +370,9 @@ jobs:
                   branch_name = consumer_b.get('branch', '')
                   old_url = consumer_b.get('upstream', '')
                   new_url = ssot_e.get('upstream_git_source', '')
-                  # Replace upstream URL scoped to this branch block
-                  fixed = re.sub(
-                      rf'(- branch: {re.escape(branch_name)}\b.*?upstream: ){re.escape(old_url)}',
-                      rf'\g<1>{new_url}',
-                      fixed, flags=re.DOTALL
-                  )
-                  # Replace ref scoped to this branch block
-                  fixed = re.sub(
-                      rf'(- branch: {re.escape(branch_name)}\b.*?ref: ){re.escape(old_ref)}',
-                      rf'\g<1>{new_ref}',
-                      fixed, flags=re.DOTALL
-                  )
+                  # Replace upstream URL and ref scoped to this branch block
+                  fixed = set_field(fixed, branch_name, 'upstream', old_url, new_url)
+                  fixed = set_field(fixed, branch_name, 'ref', old_ref, yaml_scalar(new_ref))
                   # For point-release bumps (URL unchanged), update the version
                   # field. A REL_x_y tag carries the full point release, which
                   # is more precise than SSOT's major-only version (SSOT says
@@ -367,28 +387,29 @@ jobs:
                           new_ver = f"{ver_m.group(1)}.{ver_m.group(2)}"
                       else:
                           new_ver = str(ssot_e.get('version', '')) or new_ref.lstrip('v')
-                      if old_ver and old_ver != new_ver:
-                          fixed = re.sub(
-                              rf'(- branch: {re.escape(branch_name)}\b.*?version: )["\']?{re.escape(old_ver)}["\']?',
-                              rf'\g<1>"{new_ver}"',
-                              fixed, flags=re.DOTALL
-                          )
+                      if old_ver and str(old_ver) != new_ver:
+                          fixed = set_field(fixed, branch_name, 'version', str(old_ver), f'"{new_ver}"')
 
-              # Apply version field + branch-name renames for dev branch version drift
+              # Apply version field + branch-name renames for dev branch version drift.
+              # Versions first, while every block still has its old name. A rename
+              # that only follows kb_branch carries the same version on both sides
+              # and must leave the version alone: an earlier in-place ref update may
+              # already have set a more precise one (REL_19_0 → "19.0", SSOT "19").
               for b, e, old_ver, new_ver, old_branch, new_branch in version_updates:
-                  # Update version field scoped to this branch block
+                  if old_ver != new_ver:
+                      fixed = set_field(fixed, old_branch, 'version', old_ver, f'"{new_ver}"')
+              # Then rename in two passes through placeholders, so that the result
+              # does not depend on order when one branch takes another's old name
+              # (pg19 → pg20 while postgresql19rc2 → pg19).
+              renames = [(ob, nb) for _, _, _, _, ob, nb in version_updates if ob != nb]
+              for i, (old_branch, _) in enumerate(renames):
                   fixed = re.sub(
-                      rf'(- branch: {re.escape(old_branch)}\b.*?version: )["\']?{re.escape(old_ver)}["\']?',
-                      rf'\g<1>"{new_ver}"',
-                      fixed, flags=re.DOTALL
+                      rf'^([ \t]*- branch:[ \t]*){re.escape(old_branch)}[ \t]*$',
+                      lambda m, i=i: f"{m.group(1)}__sync_rename_{i}__",
+                      fixed, flags=re.MULTILINE
                   )
-                  # Rename the branch field itself if the derived name changed
-                  if old_branch != new_branch:
-                      fixed = re.sub(
-                          rf'(- branch: ){re.escape(old_branch)}\b',
-                          rf'\g<1>{new_branch}',
-                          fixed
-                      )
+              for i, (_, new_branch) in enumerate(renames):
+                  fixed = fixed.replace(f"__sync_rename_{i}__", new_branch)
 
               # Append missing entries grouped by component
               if missing_entries:
@@ -396,7 +417,7 @@ jobs:
                   seen_components = {}
                   for k, e in missing_entries.items():
                       url      = e.get("upstream_git_source", "")
-                      ref      = e.get("upstream_tag") or e.get("upstream_branch", "")
+                      ref      = str(e.get("upstream_tag") or e.get("upstream_branch", ""))
                       src      = e.get("upstream_doc_path", "")
                       mode     = e.get("mode", "md")
                       version  = e.get("version", "")
@@ -412,7 +433,7 @@ jobs:
                           f"\n    mode: {mode}"
                           f"\n    version: \"{version}\""
                           f"\n    upstream: {url}"
-                          f"\n    ref: {ref}"
+                          f"\n    ref: {yaml_scalar(ref)}"
                           f"\n    src_subdir: {src if src else '.'}"
                       )
                       # Optional 3rd-party-docs fields
